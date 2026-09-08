@@ -709,5 +709,17 @@ def main():
     print(f"Successfully wrote {data_dir / 'sp500_constituents.json'}")
 
 if __name__ == "__main__":
-    main()
+    import sys
+    import warnings
+    repo_root = Path(__file__).resolve().parent.parent
+    if str(repo_root) not in sys.path:
+        sys.path.insert(0, str(repo_root))
+    warnings.warn(
+        "scripts/generate_datasets.py is deprecated and superseded by scripts/build_datasets_from_raw.py. "
+        "Redirecting to build_datasets_from_raw.py using verified raw market data.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    from scripts.build_datasets_from_raw import main as build_main
+    build_main()
 

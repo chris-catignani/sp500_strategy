@@ -75,10 +75,18 @@ class TestDatasetIntegrity(unittest.TestCase):
         p_2009 = loader.get_price("AIG", 2009)
         ret_2008 = (p_2008 - p_2007) / p_2007
         ret_2009 = (p_2009 - p_2008) / p_2008
-        # AIG crashed ~-97.3% in 2008 and rebounded ~+23.5% in 2009 (not +2370%)
+        # AIG crashed ~-97.3% in 2008 and stabilized in 2009 (~-4.5%)
         self.assertLess(ret_2008, -0.95)
-        self.assertGreater(ret_2009, 0.20)
-        self.assertLess(ret_2009, 0.30)
+        self.assertGreater(ret_2009, -0.10)
+        self.assertLess(ret_2009, 0.05)
+
+    def test_raw_cache_files_exist(self):
+        raw_tickers_dir = self.data_dir / "raw" / "tickers"
+        raw_benchmarks_dir = self.data_dir / "raw" / "benchmarks"
+        self.assertTrue(raw_tickers_dir.exists())
+        self.assertTrue(raw_benchmarks_dir.exists())
+        self.assertEqual(len(list(raw_tickers_dir.glob("*.json"))), 33)
+        self.assertEqual(len(list(raw_benchmarks_dir.glob("*.json"))), 2)
 
 
 if __name__ == "__main__":
