@@ -354,6 +354,33 @@ class TestExporters(unittest.TestCase):
         self.assertIn("=L19", code)  # Card 4 Alpha
         self.assertIn("=K19", code)  # Card 5 Tax Drag
 
+    def test_google_apps_script_performance_charts_and_regimes(self):
+        code = generate_google_apps_script()
+        # Check tab presence
+        self.assertIn("'Performance & Tradeoffs'", code)
+        self.assertIn("buildPerformanceAndTradeoffsSheet", code)
+
+        # Check regime attribution
+        self.assertIn("ERA_HEADERS", code)
+        self.assertIn("ERA_DATA", code)
+        self.assertIn("Late '90s Dot-Com Boom", code)
+        self.assertIn("The 'Lost Decade' (Tech Bust & GFC)", code)
+        self.assertIn("ZIRP & Tech Expansion", code)
+        self.assertIn("Mega-Cap Tech & AI Concentration", code)
+
+        # Check trajectory and drawdown series
+        self.assertIn("TRAJECTORY_HEADERS", code)
+        self.assertIn("TRAJECTORY_DATA", code)
+        self.assertIn("DRAWDOWN_HEADERS", code)
+        self.assertIn("DRAWDOWN_DATA", code)
+
+        # Check Google Sheets ChartBuilder integration
+        self.assertIn("asLineChart()", code)
+        self.assertIn("insertChart", code)
+        self.assertIn("Growth of $10,000 Initial Investment (1994–2024)", code)
+        self.assertIn("Historical Drawdown from Peak (1994–2024)", code)
+        self.assertIn("removeChart", code)
+
     def test_report_exporter_coordinator(self):
         """Test ReportExporter class and export_all convenience function."""
         exporter = ReportExporter(

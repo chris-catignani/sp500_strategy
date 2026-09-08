@@ -456,9 +456,11 @@ def build_default_scenario_data() -> Dict[str, Any]:
     # 30-Year Annual histories & trades at 30% baseline tax rate
     annual_data: Dict[str, List[List[Any]]] = {}
     trade_rows: List[List[Any]] = []
+    res_30y_map: Dict[int, StrategyResult] = {}
 
     for n in [3, 5, 10]:
         res_30y = sim.run_simulation(1994, 2024, n=n, is_after_tax=True, tax_rate=0.30)
+        res_30y_map[n] = res_30y
         trades_30y = sim.get_trades()
 
         ledger_rows: List[List[Any]] = []
@@ -506,6 +508,92 @@ def build_default_scenario_data() -> Dict[str, Any]:
             comp_growth = 10000.0 * (lvl / base_level)
             spx_rows.append([y, round(lvl, 2), round(ann_ret, 6), round(comp_growth, 2)])
 
+    # Historical Market Regime Breakdown (4 Eras + Full 30-Year)
+    eras = [
+        ("1995-1999", 1995, 1999, "Late '90s Dot-Com Boom"),
+        ("2000-2009", 2000, 2009, "The 'Lost Decade' (Tech Bust & GFC)"),
+        ("2010-2019", 2010, 2019, "ZIRP & Tech Expansion"),
+        ("2020-2024", 2020, 2024, "Mega-Cap Tech & AI Concentration"),
+        ("1995-2024", 1995, 2024, "Full 30-Year Horizon"),
+    ]
+    t3_pre = pretax_results[(3, 1994, 2024)]
+    t5_pre = pretax_results[(5, 1994, 2024)]
+    t10_pre = pretax_results[(10, 1994, 2024)]
+
+    era_rows: List[List[Any]] = []
+    for label, sy, ey, desc in eras:
+        ny = ey - sy + 1
+        t3_sub = [e.gross_return for e in t3_pre.annual_history if sy <= e.year <= ey]
+        t5_sub = [e.gross_return for e in t5_pre.annual_history if sy <= e.year <= ey]
+        t10_sub = [e.gross_return for e in t10_pre.annual_history if sy <= e.year <= ey]
+        spx_sub = [e.spx_return for e in t10_pre.annual_history if sy <= e.year <= ey]
+
+        def _cagr(rets: List[float]) -> float:
+            p = 1.0
+            for r in rets:
+                p *= (1.0 + r)
+            return (p ** (1.0 / len(rets)) - 1.0) if rets else 0.0
+
+        c3, c5, c10, cspx = _cagr(t3_sub), _cagr(t5_sub), _cagr(t10_sub), _cagr(spx_sub)
+        wins10 = sum(1 for a, b in zip(t10_sub, spx_sub) if a > b)
+        win_rate = wins10 / ny if ny > 0 else 0.0
+        alpha10 = c10 - cspx
+        era_rows.append([
+            label,
+            desc,
+            round(c3, 6),
+            round(c5, 6),
+            round(c10, 6),
+            round(cspx, 6),
+            round(alpha10, 6),
+            round(win_rate, 4),
+        ])
+
+    # 30-Year Wealth Accumulation & Drawdown Trajectories (After-Tax 30% Baseline)
+    pr_30y = [dl.get_spx_level(y) for y in range(1994, 2025)]
+    tr_30y = [dl.get_spx_tr_level(y) for y in range(1994, 2025)]
+    spx_bench_30y = calculate_benchmark_annual_series(
+        pr_levels=pr_30y,
+        tr_levels=tr_30y,
+        tax_rate=0.30,
+        initial_capital=10000.0,
+        is_after_tax=True,
+    )
+    spx_val = 10000.0
+    spx_traj = [10000.0]
+    for r_spx in spx_bench_30y["annual_returns"]:
+        spx_val *= (1.0 + r_spx)
+        spx_traj.append(spx_val)
+
+    t3_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[3].annual_history]
+    t5_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[5].annual_history]
+    t10_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[10].annual_history]
+
+    years_30y = list(range(1994, 2025))
+    trajectory_rows = [
+        [y, round(v3, 2), round(v5, 2), round(v10, 2), round(vspx, 2)]
+        for y, v3, v5, v10, vspx in zip(years_30y, t3_traj, t5_traj, t10_traj, spx_traj)
+    ]
+
+    def _calc_dd(vals: List[float]) -> List[float]:
+        peak = vals[0]
+        dds: List[float] = []
+        for v in vals:
+            if v > peak:
+                peak = v
+            dds.append((v - peak) / peak if peak > 0 else 0.0)
+        return dds
+
+    dd3 = _calc_dd(t3_traj)
+    dd5 = _calc_dd(t5_traj)
+    dd10 = _calc_dd(t10_traj)
+    ddspx = _calc_dd(spx_traj)
+
+    drawdown_rows = [
+        [y, round(d3, 6), round(d5, 6), round(d10, 6), round(dspx, 6)]
+        for y, d3, d5, d10, dspx in zip(years_30y, dd3, dd5, dd10, ddspx)
+    ]
+
     return {
         "scenario_rows": scenario_rows,
         "top3_annual": annual_data["top_3"],
@@ -513,6 +601,9 @@ def build_default_scenario_data() -> Dict[str, Any]:
         "top10_annual": annual_data["top_10"],
         "spx_data": spx_rows,
         "trades_data": trade_rows,
+        "era_data": era_rows,
+        "trajectory_data": trajectory_rows,
+        "drawdown_data": drawdown_rows,
     }
 
 
@@ -552,11 +643,17 @@ def generate_google_apps_script(
             top5_annual = defaults["top5_annual"]
             top10_annual = defaults["top10_annual"]
             spx_data = defaults["spx_data"]
+            era_data = defaults["era_data"]
+            trajectory_data = defaults["trajectory_data"]
+            drawdown_data = defaults["drawdown_data"]
         else:
             top3_annual = annual_data.get("top_3", defaults["top3_annual"])
             top5_annual = annual_data.get("top_5", defaults["top5_annual"])
             top10_annual = annual_data.get("top_10", defaults["top10_annual"])
             spx_data = annual_data.get("spx", defaults["spx_data"])
+            era_data = annual_data.get("era_data", defaults["era_data"])
+            trajectory_data = annual_data.get("trajectory_data", defaults["trajectory_data"])
+            drawdown_data = annual_data.get("drawdown_data", defaults["drawdown_data"])
 
         if trades_data is None:
             final_trade_rows = defaults["trades_data"]
@@ -589,6 +686,18 @@ def generate_google_apps_script(
         top5_annual = annual_data.get("top_5", [])
         top10_annual = annual_data.get("top_10", [])
         spx_data = annual_data.get("spx", [])
+        era_data = annual_data.get("era_data")
+        trajectory_data = annual_data.get("trajectory_data")
+        drawdown_data = annual_data.get("drawdown_data")
+        if era_data is None or trajectory_data is None or drawdown_data is None:
+            defaults = build_default_scenario_data()
+            if era_data is None:
+                era_data = defaults["era_data"]
+            if trajectory_data is None:
+                trajectory_data = defaults["trajectory_data"]
+            if drawdown_data is None:
+                drawdown_data = defaults["drawdown_data"]
+
         final_trade_rows = []
         for t in trades_data:
             if isinstance(t, dict):
@@ -618,6 +727,9 @@ def generate_google_apps_script(
     top10_json = json.dumps(top10_annual)
     spx_json = json.dumps(spx_data)
     trades_json = json.dumps(final_trade_rows)
+    era_json = json.dumps(era_data)
+    trajectory_json = json.dumps(trajectory_data)
+    drawdown_json = json.dumps(drawdown_data)
 
     js_template = f"""/**
  * Google Apps Script for S&P 500 Top N Strategy Interactive Dashboard
@@ -657,6 +769,18 @@ var SPX_DATA = {spx_json};
 var TRADE_HEADERS = ["Year", "Strategy", "Ticker", "Action", "Shares", "Execution Price", "Realized Gain"];
 var TRADE_DATA = {trades_json};
 
+var ERA_HEADERS = [
+  "Market Regime Era", "Historical Context / Regime", "Top 3 CAGR", "Top 5 CAGR",
+  "Top 10 CAGR", "S&P 500 CAGR", "Top 10 Alpha vs SPX", "Top 10 Win Rate"
+];
+var ERA_DATA = {era_json};
+
+var TRAJECTORY_HEADERS = ["Year", "Top 3 ($)", "Top 5 ($)", "Top 10 ($)", "S&P 500 ($)"];
+var TRAJECTORY_DATA = {trajectory_json};
+
+var DRAWDOWN_HEADERS = ["Year", "Top 3 Drawdown", "Top 5 Drawdown", "Top 10 Drawdown", "S&P 500 Drawdown"];
+var DRAWDOWN_DATA = {drawdown_json};
+
 // ==========================================
 // Google Sheets UI & Menu Triggers
 // ==========================================
@@ -680,20 +804,24 @@ function buildAllSheets() {{
   // 2. Executive Summary Dashboard Tab
   buildExecutiveSummarySheet(ss);
 
-  // 3. Strategy Tabs
+  // 3. Performance & Tradeoffs Tab (Charts & Regime Attribution)
+  buildPerformanceAndTradeoffsSheet(ss);
+
+  // 4. Strategy Tabs
   buildAnnualSheet(ss, 'Top 3 Strategy', TOP3_ANNUAL_DATA);
   buildAnnualSheet(ss, 'Top 5 Strategy', TOP5_ANNUAL_DATA);
   buildAnnualSheet(ss, 'Top 10 Strategy', TOP10_ANNUAL_DATA);
 
-  // 4. Benchmark Tab
+  // 5. Benchmark Tab
   buildBenchmarkSheet(ss);
 
-  // 5. Holdings & Trades Tab
+  // 6. Holdings & Trades Tab
   buildTradesSheet(ss);
 
   // Organize tab order: Executive Summary is always tab 1
   var tabOrder = [
     'Executive Summary',
+    'Performance & Tradeoffs',
     'Top 3 Strategy',
     'Top 5 Strategy',
     'Top 10 Strategy',
@@ -998,6 +1126,183 @@ function buildExecutiveSummarySheet(ss) {{
 }}
 
 // ==========================================
+// Tab 2: Performance & Tradeoffs (Charts & Regimes)
+// ==========================================
+function buildPerformanceAndTradeoffsSheet(ss) {{
+  var sheet = getOrCreateSheet(ss, 'Performance & Tradeoffs');
+  sheet.setHiddenGridlines(false);
+
+  // 1. Banner Header
+  sheet.getRange('A1:L1').merge()
+       .setValue('S&P 500 TOP N STRATEGY - HISTORICAL CHARTS & TRADEOFF ANALYSIS')
+       .setBackground('#1B365D')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(14)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(1, 40);
+
+  // 2. Subtitle Description
+  sheet.getRange('A2:L2').merge()
+       .setValue('Visualizing 30-year compounded wealth trajectories ($10k initial basis), peak-to-trough drawdowns, and regime attribution (1994–2024).')
+       .setFontStyle('italic')
+       .setFontColor('#4A5568')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(2, 24);
+
+  // 3. Section Title: Market Regime Attribution
+  sheet.getRange('A4:H4').merge()
+       .setValue('HISTORICAL MARKET REGIME ATTRIBUTION (4 ERAS)')
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(11)
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(4, 28);
+
+  // 4. Market Regime Table Headers
+  sheet.getRange(5, 1, 1, ERA_HEADERS.length).setValues([ERA_HEADERS])
+       .setBackground('#2B6CB0')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(5, 26);
+
+  // 5. Market Regime Data Rows
+  sheet.getRange(6, 1, ERA_DATA.length, ERA_HEADERS.length).setValues(ERA_DATA);
+  for (var er = 0; er < ERA_DATA.length; er++) {{
+    var rowNum = 6 + er;
+    var bg = (er === ERA_DATA.length - 1) ? '#EDF2F7' : ((er % 2 === 0) ? '#FFFFFF' : '#F7FAFC');
+    sheet.getRange(rowNum, 1, 1, ERA_HEADERS.length).setBackground(bg);
+    sheet.setRowHeight(rowNum, 22);
+  }}
+
+  // Regime Table Formatting
+  sheet.getRange(6, 1, ERA_DATA.length, 1).setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(6, 2, ERA_DATA.length, 1).setVerticalAlignment('middle');
+  sheet.getRange(6, 3, ERA_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(6, 7, ERA_DATA.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(6, 8, ERA_DATA.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(5, 1, ERA_DATA.length + 1, ERA_HEADERS.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  sheet.getRange(6 + ERA_DATA.length - 1, 1, 1, ERA_HEADERS.length).setFontWeight('bold');
+
+  // Spacer
+  sheet.setRowHeight(11, 12);
+
+  // 6. Embedded Native Charts (Rows 12 to 29)
+  // Chart 1: Growth of $10,000 Line Chart
+  var growthRange = sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length);
+  var growthChart = sheet.newChart()
+    .asLineChart()
+    .addRange(growthRange)
+    .setNumHeaders(1)
+    .setOption('useFirstColumnAsDomain', true)
+    .setOption('title', 'Growth of $10,000 Initial Investment (1994–2024)')
+    .setOption('titleTextStyle', {{fontSize: 13, bold: true, color: '#1A202C'}})
+    .setOption('legend', {{position: 'top', textStyle: {{fontSize: 10}}}})
+    .setOption('hAxis', {{title: 'Year', format: '####', gridlines: {{count: 8}}}})
+    .setOption('vAxis', {{title: 'Portfolio Value ($)', format: '$#,##0'}})
+    .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
+    .setOption('width', 580)
+    .setOption('height', 360)
+    .setPosition(12, 1, 0, 0)
+    .build();
+  sheet.insertChart(growthChart);
+
+  // Chart 2: Historical Drawdowns from Peak Line Chart
+  var ddRange = sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length);
+  var ddChart = sheet.newChart()
+    .asLineChart()
+    .addRange(ddRange)
+    .setNumHeaders(1)
+    .setOption('useFirstColumnAsDomain', true)
+    .setOption('title', 'Historical Drawdown from Peak (1994–2024)')
+    .setOption('titleTextStyle', {{fontSize: 13, bold: true, color: '#1A202C'}})
+    .setOption('legend', {{position: 'top', textStyle: {{fontSize: 10}}}})
+    .setOption('hAxis', {{title: 'Year', format: '####', gridlines: {{count: 8}}}})
+    .setOption('vAxis', {{title: 'Drawdown (%)', format: '0.0%'}})
+    .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
+    .setOption('width', 580)
+    .setOption('height', 360)
+    .setPosition(12, 7, 0, 0)
+    .build();
+  sheet.insertChart(ddChart);
+
+  for (var cr = 12; cr <= 29; cr++) {{
+    sheet.setRowHeight(cr, 20);
+  }}
+  sheet.setRowHeight(30, 14);
+
+  // 7. Section Titles for Time Series Data
+  sheet.getRange('A31:E31').merge()
+       .setValue('30-YEAR WEALTH ACCUMULATION DATA ($10,000 BASIS)')
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(10)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+
+  sheet.getRange('G31:K31').merge()
+       .setValue('HISTORICAL DRAWDOWN FROM PEAK DATA')
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(10)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(31, 26);
+
+  // Table Headers (Row 32)
+  sheet.getRange(32, 1, 1, TRAJECTORY_HEADERS.length).setValues([TRAJECTORY_HEADERS])
+       .setBackground('#4A5568')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+
+  sheet.getRange(32, 7, 1, DRAWDOWN_HEADERS.length).setValues([DRAWDOWN_HEADERS])
+       .setBackground('#4A5568')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(32, 24);
+
+  // Trajectory & Drawdown Data (Rows 33 to 63, length 31)
+  sheet.getRange(33, 1, TRAJECTORY_DATA.length, TRAJECTORY_HEADERS.length).setValues(TRAJECTORY_DATA);
+  sheet.getRange(33, 7, DRAWDOWN_DATA.length, DRAWDOWN_HEADERS.length).setValues(DRAWDOWN_DATA);
+
+  // Formatting Trajectory Table
+  sheet.getRange(33, 1, TRAJECTORY_DATA.length, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(33, 2, TRAJECTORY_DATA.length, 4).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+
+  // Formatting Drawdown Table
+  sheet.getRange(33, 7, DRAWDOWN_DATA.length, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(33, 8, DRAWDOWN_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+
+  for (var tr = 0; tr < TRAJECTORY_DATA.length; tr++) {{
+    var rowN = 33 + tr;
+    var bgRow = (tr % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
+    sheet.getRange(rowN, 1, 1, TRAJECTORY_HEADERS.length).setBackground(bgRow);
+    sheet.getRange(rowN, 7, 1, DRAWDOWN_HEADERS.length).setBackground(bgRow);
+    sheet.setRowHeight(rowN, 20);
+  }}
+
+  // Set explicit column widths
+  var pColWidths = [75, 110, 110, 110, 115, 30, 75, 105, 105, 105, 105, 30];
+  for (var pw = 0; pw < pColWidths.length; pw++) {{
+    sheet.setColumnWidth(pw + 1, pColWidths[pw]);
+  }}
+}}
+
+// ==========================================
 // Strategy Tabs (Top 3, Top 5, Top 10)
 // ==========================================
 function buildAnnualSheet(ss, sheetName, annualData) {{
@@ -1197,6 +1502,10 @@ function getOrCreateSheet(ss, name) {{
   var sheet = ss.getSheetByName(name);
   if (sheet) {{
     sheet.clear();
+    var charts = sheet.getCharts();
+    for (var i = 0; i < charts.length; i++) {{
+      sheet.removeChart(charts[i]);
+    }}
   }} else {{
     sheet = ss.insertSheet(name);
   }}
