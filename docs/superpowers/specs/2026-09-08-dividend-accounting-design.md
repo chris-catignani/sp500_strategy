@@ -220,7 +220,7 @@ def calculate_benchmark_annual_series(
 * **Controls & Instructions**: `A2:B2` (Tax Rate selector), `C2:L2` (Instructions)
 * **KPI Scorecards (Rows 4–6)**: 5 cards balanced across Cols A–L:
   * Card 1: Top 5 (30y) Final Wealth: `A4:B6`, formula `=G19`
-  * Card 2: S&P 500 (30y) Wealth: `C4:D6`, formula `=G22`
+  * Card 2: S&P 500 (30y) Wealth: `C4:D6`, formula `=G21`
   * Card 3: Top 5 (30y) Annual Return: `E4:F6`, formula `=E19`
   * Card 4: 30-Year Excess Return (Alpha): `G4:I6`, formula `=L19`
   * Card 5: 30-Year Tax Drag: `J4:L6`, formula `=K19`
