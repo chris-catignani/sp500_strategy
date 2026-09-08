@@ -1,7 +1,7 @@
 # Design Document: Dividend Accounting & Dynamic After-Tax Benchmarking
 
 **Date**: 2026-09-08  
-**Status**: Proposed (Pending User Review)  
+**Status**: Approved (Incorporating Reviewer Improvements)  
 **Author**: Antigravity Agent & User  
 **Target Repository**: `/Users/chriscatignani/Developer/sp500_strategy`  
 **Target Google Sheet**: [Top N vs S&P500](https://docs.google.com/spreadsheets/d/1v8Ig7ZeresaJNX35W2VCrBmarWgYgLxKQD9wPg4O0Ao/edit?usp=sharing)  
@@ -12,9 +12,11 @@
 
 This design integrates cash dividend flows and dynamic after-tax benchmarking into the S&P 500 Top N ($N \in \{3, 5, 10\}$) quantitative backtesting engine and interactive Google Sheets dashboard.
 
-Previously, the backtesting engine evaluated strategies on a split-adjusted pure price-return basis against the S&P 500 Price Return index (`^GSPC`), excluding cash dividends for both. This upgrade incorporates historical cash dividends per share (`DPS`) across 1994–2024, tracks cumulative dividend income, incorporates dividend taxation in after-tax portfolio runs, and upgrades the benchmark comparison to a dynamic after-tax S&P 500 benchmark utilizing both S&P 500 Price Return (`^GSPC`) and S&P 500 Total Return (`^SP500TR`).
-
-Additionally, because the engine runs on an annual discrete frequency, the timing difference between intra-year distributions and year-end rebalancing is explicitly documented in the codebase, reports, and Google Sheets UI.
+Previously, the backtesting engine evaluated strategies on a split-adjusted pure price-return basis against the S&P 500 Price Return index (`^GSPC`), excluding cash dividends for both. This upgrade:
+1. Incorporates historical split-adjusted cash dividends per share (`DPS`) across 1994–2024.
+2. Models pre-rebalance cash pooling and dual tax settlement (segregating capital loss carryforwards from dividend income).
+3. Upgrades benchmark evaluation to a dynamic after-tax S&P 500 benchmark utilizing both S&P 500 Price Return (`^GSPC`) and S&P 500 Total Return (`^SP500TR`), adapting dynamically to user-selected tax rates ($\tau \in \{0.0\%, 15.0\%, 20.0\%, 30.0\%, 37.0\%\}$).
+4. Expands reports, CSV exports, and the Google Sheets dashboard with dividend metrics, updated formulas, and a prominent timing methodology callout.
 
 ---
 
@@ -24,8 +26,8 @@ Additionally, because the engine runs on an annual discrete frequency, the timin
 * **Real-World Reality**: In live trading, corporate dividends are declared and distributed periodically (typically quarterly) and reinvested at prevailing intra-year market prices.
 * **Model Convention**: The engine operates on an annual discrete time-step (December 31 year-ends from 1994 to 2024). Cash dividends earned throughout calendar year $t$ are calculated based on shares held during year $t$ and split-adjusted annual cash dividends per share ($\text{DPS}_t$). These dividends are received and pooled into portfolio cash at year-end $t$ immediately prior to rebalancing.
 * **Documentation & UI Callouts**:
-  * Added to `README.md` and `AGENTS.md`.
-  * Displayed as an informational **Methodology Callout Card** on the Google Sheet Executive Summary tab.
+  * Documented in `README.md` and `AGENTS.md`.
+  * Displayed as an informational **Methodology Callout Card** on the Google Sheet Executive Summary tab across Rows 31–36.
 
 ---
 
@@ -34,7 +36,7 @@ Additionally, because the engine runs on an annual discrete frequency, the timin
 ### 3.1 Pre-Rebalance Dividend Receipt & Cash Pooling
 At the close of trading on year-end $t$, before any rebalancing sells or buys occur:
 1. Identify all positions held from the previous period: $\{S_i^{\text{held}}\}$.
-2. For each held constituent $i$, query the annual split-adjusted cash dividend per share $\text{DPS}_{i, t}$ from `data/sp500_dividends.json` (defaults to $0.0$ if no dividend was paid).
+2. For each held constituent $i$, query the annual split-adjusted cash dividend per share $\text{DPS}_{i, t}$ from `data/sp500_dividends.json` (defaults strictly to $0.0$ if no dividend was paid).
 3. Calculate total gross dividend income for year $t$:
    $$\text{DivIncome}_t = \sum_{i} S_i^{\text{held}} \times \text{DPS}_{i, t}$$
 4. Pool gross dividend income directly into portfolio cash:
@@ -58,27 +60,37 @@ $$R_{\text{gross}, t} = \frac{V_{\text{pretax}, t} - V_{\text{start}, t-1}}{V_{\
 5. Gross sell proceeds are added to $\text{Cash}_t$.
 
 ### 3.4 Phase 2: Dual Tax Settlement, Secondary Trims, and Buys
-In taxable simulations (`is_after_tax=True` with tax rate $\tau$):
-1. **Dividend Tax**:
-   Dividends are taxed annually as current income:
+To prevent race conditions and ensure cash non-negativity without circularity, the settlement sequence is explicitly decoupled:
+
+1. **Pre-Loop Dividend Tax Settlement**:
+   Compute dividend tax once:
    $$\text{Tax}_{\text{div}, t} = \text{DivIncome}_t \times \tau$$
-2. **Capital Gains Tax**:
-   Net realized capital gains are offset by cumulative loss carryforwards $L_t$:
-   $$\text{NetTaxableGain}_t = \max(0.0, \text{RealizedGain}_t - L_t)$$
-   $$\text{Tax}_{\text{cap}, t} = \text{NetTaxableGain}_t \times \tau$$
-   $$L_{t+1} = \max(0.0, L_t - \text{RealizedGain}_t) + \max(0.0, -\text{RealizedGain}_t)$$
-   *(Note: Net capital losses offset future capital gains; they do not offset dividend income).*
-3. **Total Annual Tax**:
-   $$\text{Tax}_{\text{total}, t} = \text{Tax}_{\text{cap}, t} + \text{Tax}_{\text{div}, t}$$
-4. **Secondary Trim Convergence**:
-   Tax is paid out of cash: $\text{Cash}_t \leftarrow \text{Cash}_t - \text{Tax}_{\text{total}, t}$.
-   If cash is insufficient to satisfy $\text{Tax}_{\text{total}, t}$, secondary trims iteratively liquidate overweight positions down to net investable equity:
-   $$V_{\text{net}, t} = V_{\text{pretax}, t} - \text{Tax}_{\text{total}, t}$$
-   guaranteeing that the unleveraged cash invariant $\text{Cash}_t \ge 0.0$ holds strictly.
-5. **Phase 2 Buys**:
-   Target shares are updated based on net investable equity:
+   Deduct from cash immediately:
+   $$\text{Cash}_t \leftarrow \text{Cash}_t - \text{Tax}_{\text{div}, t}$$
+   Initialize cumulative tax tracker:
+   $$\text{total\_tax\_paid} \leftarrow \text{Tax}_{\text{div}, t}$$
+   *(Note: Capital loss carryforwards $L_t$ are strictly preserved to offset capital gains; they never offset dividend income).*
+
+2. **Iterative Capital Gains Settlement & Secondary Trims**:
+   For up to 20 convergence iterations:
+   a. Settle incremental capital gains tax via `FIFOTaxLotManager`:
+      $$(\text{tax\_cap\_step}, \text{net\_taxable}, \text{loss\_cf}) \leftarrow \text{tax\_manager.settle\_annual\_taxes}(\tau, t)$$
+   b. Accumulate capital gains tax:
+      $$\text{total\_tax\_paid} \leftarrow \text{total\_tax\_paid} + \text{tax\_cap\_step}$$
+      $$\text{Cash}_t \leftarrow \text{Cash}_t - \text{tax\_cap\_step}$$
+   c. If $\text{tax\_cap\_step} \le 10^{-7}$ on this step, convergence is achieved; break.
+   d. Compute net investable equity accounting for all taxes paid:
+      $$V_{\text{net}, t} = V_{\text{pretax}, t} - \text{total\_tax\_paid}$$
+   e. Compute updated target shares:
+      $$\text{TargetShares}_{i, \text{final}} = \frac{V_{\text{net}, t} \times w_i}{P_{i, t}}$$
+   f. If any held position exceeds $\text{TargetShares}_{i, \text{final}} + 10^{-4}$, sell the excess, add proceeds to $\text{Cash}_t$, record realized capital gain/loss in `tax_manager`, and continue iteration. If no positions required trimming, break.
+
+3. **Phase 2 Buys**:
+   Target shares are finalized based on $V_{\text{net}, t}$:
    $$\text{TargetShares}_{i, \text{final}} = \frac{V_{\text{net}, t} \times w_i}{P_{i, t}}$$
-   Underweight constituents are purchased using available cash, with purchases cash-clamped to guarantee non-negative cash.
+   For any constituent where held shares are less than target shares, buy required shares clamped to available cash:
+   $$\text{Cost} = \min((\text{TargetShares}_{i, \text{final}} - S_i) \times P_{i, t}, \max(0.0, \text{Cash}_t))$$
+   guaranteeing that $\text{Cash}_t \ge 0.0$ holds unconditionally.
 
 ---
 
@@ -101,21 +113,39 @@ To preserve a mathematically authentic comparison against a passive S&P 500 buy-
 A passive index investor pays annual tax on index dividends, while deferring capital gains until the end of the horizon:
 1. **Annual Yield Decomposition**:
    $$R_{\text{PR}, t} = \frac{\text{SPX\_PR}_t}{\text{SPX\_PR}_{t-1}} - 1, \quad R_{\text{TR}, t} = \frac{\text{SPX\_TR}_t}{\text{SPX\_TR}_{t-1}} - 1$$
-   $$y_t = R_{\text{TR}, t} - R_{\text{PR}, t}$$
+   $$y_t = \max(0.0, R_{\text{TR}, t} - R_{\text{PR}, t})$$
 2. **Annual After-Tax Compounding**:
    $$R_{\text{SPX, After-Tax}, t} = R_{\text{PR}, t} + y_t \times (1 - \tau)$$
    Starting from $V_{\text{SPX}, 0} = \text{Initial Capital}$:
    $$V_{\text{SPX}, t} = V_{\text{SPX}, t-1} \times (1 + R_{\text{SPX, After-Tax}, t})$$
    Reinvested net dividends added to cost basis:
    $$\text{Basis}_{\text{SPX}, t} = \text{Basis}_{\text{SPX}, t-1} + [V_{\text{SPX}, t-1} \times y_t \times (1 - \tau)]$$
+   Annual dividend tax paid:
+   $$\text{Tax}_{\text{div, SPX}, t} = V_{\text{SPX}, t-1} \times y_t \times \tau$$
 3. **Terminal Liquidation**:
    At horizon end year $Y$:
    $$\text{UnrealizedGain}_{\text{SPX}} = \max(0.0, V_{\text{SPX}, Y} - \text{Basis}_{\text{SPX}, Y})$$
    $$\text{LiqTax}_{\text{SPX}} = \text{UnrealizedGain}_{\text{SPX}} \times \tau$$
    $$W_{\text{post-liq}, \text{SPX}} = V_{\text{SPX}, Y} - \text{LiqTax}_{\text{SPX}}$$
    $$\text{CAGR}_{\text{post-liq}, \text{SPX}} = \left(\frac{W_{\text{post-liq}, \text{SPX}}}{V_{\text{SPX}, 0}}\right)^{1/Y} - 1$$
+   $$\text{TotalTaxes}_{\text{SPX}} = \sum_{t=1}^Y \text{Tax}_{\text{div, SPX}, t} + \text{LiqTax}_{\text{SPX}}$$
+   $$\text{TaxDrag}_{\text{SPX}} = \text{CAGR}_{\text{SP500TR}} - \text{CAGR}_{\text{post-liq}, \text{SPX}}$$
 4. **After-Tax Alpha**:
    $$\alpha = \text{Strategy Post-Liquidation CAGR} - \text{Benchmark Post-Liquidation CAGR}$$
+
+### 4.4 S&P 500 Benchmark Row Schema in Scenario Data & Summary Reports
+In all reporting tables and `Scenario Data`:
+* `Strategy`: `"S&P 500"`
+* `PreTaxCAGR`: SP500TR CAGR ($R_{\text{TR}}$)
+* `AfterTaxCAGR`: Benchmark annual after-tax CAGR (after annual dividend taxes)
+* `PostLiqCAGR`: Benchmark post-liquidation CAGR ($R_{\text{post-liq}, \text{SPX}}$)
+* `CumReturn`: Benchmark cumulative return
+* `FinalEquity`: Benchmark post-liquidation wealth ($W_{\text{post-liq}, \text{SPX}}$)
+* `TotalDividends`: Cumulative gross dollar dividends earned by the benchmark investment
+* `MaxDrawdown`: Benchmark maximum drawdown (using after-tax valuation series in after-tax runs)
+* `TotalTaxes`: Cumulative annual dividend taxes + terminal liquidation tax paid
+* `TaxDrag`: SP500TR CAGR minus Benchmark Post-Liquidation CAGR
+* `Alpha`: Exactly `0.00%`
 
 ---
 
@@ -141,47 +171,86 @@ Add `^SP500TR` alongside `^GSPC`:
 ```
 
 ### 5.3 `engine/data_loader.py` Interface Additions
-* `get_dividend(ticker: str, year: int) -> float`: Returns split-adjusted cash dividend per share (returns `0.0` if ticker paid no dividends).
+* `__init__(self, constituents_path=None, prices_path=None, dividends_path=None)`: Supports test fixture injection.
+* `get_dividend(ticker: str, year: int) -> float`: Returns split-adjusted cash dividend per share (returns `0.0` if ticker paid no dividends or has no entry).
 * `get_spx_tr_level(year: int) -> float`: Returns `^SP500TR` level for year.
-* `get_spx_dividend_yield(year: int) -> float`: Computes annual index dividend yield.
+* `get_spx_dividend_yield(year: int) -> float`: Returns $\max(0.0, R_{\text{TR}, \text{year}} - R_{\text{PR}, \text{year}})$.
+
+### 5.4 Dataset Generation Script: `scripts/generate_datasets.py`
+Update dataset builder to parse and output `^SP500TR` in `sp500_prices.json` and generate `sp500_dividends.json` to maintain full reproducibility.
 
 ---
 
 ## 6. Component Architecture & Code Modifications
 
 ### 6.1 `engine/models.py`
-* `AnnualLedgerEntry`:
+* [`AnnualLedgerEntry`](file:///Users/chriscatignani/Developer/sp500_strategy/engine/models.py#L52):
   * `dividend_income: float = 0.0`
   * `dividend_tax_paid: float = 0.0`
   * `capital_gains_tax_paid: float = 0.0`
-* `StrategyResult`:
+  * `tax_paid: float = 0.0` (Sum of capital gains tax and dividend tax)
+  * `spx_return: float = 0.0` (Reflects active benchmark return: $R_{\text{TR}}$ for pre-tax, $R_{\text{SPX, After-Tax}}$ for after-tax)
+* [`StrategyResult`](file:///Users/chriscatignani/Developer/sp500_strategy/engine/models.py#L70):
   * `total_dividends_received: float = 0.0`
   * `total_dividend_taxes_paid: float = 0.0`
 
 ### 6.2 `engine/backtest.py`
-* Compute pre-rebalance annual dividends:
-  $$\text{div\_cash} = \sum (\text{shares} \times \text{dps})$$
-  and add to `self.cash`.
-* Settle dividend tax in Phase 2 alongside capital gains.
-* Record dividend metrics in ledger entries and strategy result.
+* Pre-rebalance cash pooling of dividends.
+* Decoupled dual tax settlement in Phase 2 ensuring cash non-negativity and correct target allocation buys.
+* Dynamic benchmark return recording in annual ledger entries.
 
 ### 6.3 `engine/metrics.py`
-* Add benchmark helper functions:
-  * `calculate_benchmark_annual_series(...)`
-  * `calculate_benchmark_terminal_metrics(...)`
+Pure numeric functions for benchmark metrics without I/O dependencies:
+```python
+def calculate_benchmark_annual_series(
+    pr_levels: Sequence[float],
+    tr_levels: Sequence[float],
+    tax_rate: float = 0.30,
+    initial_capital: float = 10000.0,
+    is_after_tax: bool = True,
+) -> Dict[str, Any]:
+    """Compute annual returns, valuation, basis, dividend taxes, and liquidation metrics."""
+    ...
+```
 
 ### 6.4 `engine/exporters.py` & `scripts/google_apps_script.js`
-* Add `total_dividends_received` to `summary_metrics.csv`.
-* Add `dividend_income` and `dividend_tax_paid` to `annual_breakdown.csv`.
-* Executive Summary Google Sheet Tab:
-  * Add "Total Dividends Received" column to multi-horizon comparison table.
-  * Embed "Methodology Note — Dividend Timing Convention" card.
-  * Update scenario matrices in Scenario Data tab to support dynamic after-tax benchmark and dividend totals.
-* Annual Breakdown Google Sheet Tabs:
-  * Add "Dividends Received ($)" and "Dividend Tax ($)" columns to annual tables.
+
+#### Executive Summary Tab Grid (12 Columns: A through L)
+* **Header Banner**: `A1:L1`
+* **Controls & Instructions**: `A2:B2` (Tax Rate selector), `C2:L2` (Instructions)
+* **KPI Scorecards (Rows 4–6)**: 5 cards balanced across Cols A–L:
+  * Card 1: Top 5 (30y) Final Wealth: `A4:B6`, formula `=G19`
+  * Card 2: S&P 500 (30y) Wealth: `C4:D6`, formula `=G22`
+  * Card 3: Top 5 (30y) Annual Return: `E4:F6`, formula `=E19`
+  * Card 4: 30-Year Excess Return (Alpha): `G4:I6`, formula `=L19`
+  * Card 5: 30-Year Tax Drag: `J4:L6`, formula `=K19`
+* **Table Banner**: `A8:L8`
+* **Comparison Table (Row 9 Header, Rows 10–22 Data)**:
+  * Col 1 (A): Horizon (`10y`, `20y`, `30y`)
+  * Col 2 (B): Strategy (`Top 3`, `Top 5`, `Top 10`, `S&P 500`)
+  * Col 3 (C): Annual Return (Pre-Tax)
+  * Col 4 (D): Annual Return (After-Tax)
+  * Col 5 (E): Annual Return (Post-Liq)
+  * Col 6 (F): Total Return (Cumulative)
+  * Col 7 (G): Ending Wealth ($10k Start)
+  * Col 8 (H): Total Dividends Received ($)
+  * Col 9 (I): Max Drawdown (Worst Drop)
+  * Col 10 (J): Total Taxes Paid ($)
+  * Col 11 (K): Annual Tax Drag
+  * Col 12 (L): Excess vs S&P 500 (Alpha)
+* **Methodology Callout Card (Rows 31–36, Cols A–L)**:
+  * Title: "METHODOLOGY NOTE — DIVIDEND TIMING & BENCHMARK CONVENTIONS"
+  * Text: Explains annual discrete cash-flow pooling at year-end vs live quarterly distribution, along with dynamic after-tax benchmark compounding.
+
+#### Annual Breakdown Tabs (15 Columns)
+Headers: `Year, Start Value, Gross Return, Dividends Received ($), Ending Value (Pre-Tax), Realized Capital Gain, Net Taxable Gain, Capital Gains Tax ($), Dividend Tax ($), Total Tax Paid ($), Loss Carryforward, Ending Value (After-Tax), Cash Reserve, S&P 500 Return, Annual Turnover`.
+
+#### CSV Exporters
+* `summary_metrics.csv`: Add `total_dividends_received` column; update `spx_benchmarks` mapping to accept `(horizon, tax_rate)` pairs or a benchmark result object.
+* `annual_breakdown.csv`: Add `dividend_income`, `dividend_tax_paid`, and `capital_gains_tax_paid`.
 
 ### 6.5 Documentation
-* Update `README.md` and `AGENTS.md` with dividend architecture, formulas, and timing notes.
+* [`README.md`](file:///Users/chriscatignani/Developer/sp500_strategy/README.md) & [`AGENTS.md`](file:///Users/chriscatignani/Developer/sp500_strategy/AGENTS.md) updated with full dividend mechanics, dynamic benchmark methodology, and timing notes.
 
 ---
 
@@ -190,9 +259,8 @@ Add `^SP500TR` alongside `^GSPC`:
 1. **Unit Tests**:
    * `test_dividend_data_loader`: Verify `sp500_dividends.json` loads cleanly and returns accurate DPS or `0.0` defaults.
    * `test_dividend_cash_flow`: Verify holdings receive exact dividends, cash pools correctly, and pre-tax valuation reflects dividend income.
-   * `test_dividend_taxation`: Verify dividend income is taxed at tax rate $\tau$, separate from capital loss carryforwards.
-   * `test_unleveraged_cash_invariant`: Verify `cash >= 0.0` holds under all combinations of heavy dividend taxes and rebalancing sells/buys.
-   * `test_dynamic_benchmark`: Verify after-tax benchmark compounding and terminal liquidation across $0\%$, $15\%$, $20\%$, $30\%$, and $37\%$ tax rates.
+   * `test_secondary_trim_dual_tax`: Verify `Tax_div` is deducted once, secondary trims settle capital gains tax, and `cash >= 0.0` holds strictly without circularity.
+   * `test_dynamic_benchmark_math`: Verify hand-calculated benchmark values for known $R_{\text{PR}}$, $R_{\text{TR}}$, and $\tau$ across $0\%$, $15\%$, $20\%$, $30\%$, and $37\%$.
 2. **Regression & Integration Tests**:
    * Run full test suite (`python3 -m unittest discover tests`).
    * Run CLI runner across all horizons: `python3 run_backtest.py`.
