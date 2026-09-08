@@ -7,6 +7,7 @@ from engine.models import AnnualLedgerEntry, StrategyResult, TradeOrder
 from engine.selector import BaseSelector, MarketCapSelector
 from engine.tax_lots import FIFOTaxLotManager
 from engine.metrics import (
+    calculate_benchmark_annual_series,
     calculate_cagr,
     calculate_cumulative_return,
     calculate_max_drawdown,
@@ -111,8 +112,15 @@ class PortfolioSimulator:
 
         # Annual Rebalancing Loop for subsequent years
         for current_year in range(start_year + 1, end_year + 1):
-            # Step 1: Pre-Tax Valuation
+            # Step 1: Pre-Rebalance Dividend Receipt & Cash Pooling
             positions = self.tax_manager.get_all_positions()
+            annual_dividends = sum(
+                shares * self.data_loader.get_dividend(ticker, current_year)
+                for ticker, shares in positions.items()
+            )
+            self.cash += annual_dividends
+
+            # Step 2: Pre-Tax Valuation
             holdings_value_pretax = sum(
                 shares * self.data_loader.get_price(ticker, current_year)
                 for ticker, shares in positions.items()
@@ -124,7 +132,7 @@ class PortfolioSimulator:
                 else 0.0
             )
 
-            # Step 2: Provisional Target Weights
+            # Step 3: Provisional Target Weights
             u_curr = self.data_loader.load_universe(current_year)
             targets_curr = selector.select(u_curr, n=n)
             target_weights: Dict[str, float] = {
@@ -140,7 +148,7 @@ class PortfolioSimulator:
                 for ticker, weight in target_weights.items()
             }
 
-            # Step 3: Phase 1 (Sells: Full Exits & Overweight Trims)
+            # Step 4: Phase 1 (Sells: Full Exits & Overweight Trims)
             gross_sell_proceeds = 0.0
             annual_realized_gain = 0.0
 
@@ -186,23 +194,22 @@ class PortfolioSimulator:
                         )
                     )
 
-            # Step 4: Phase 2 (Tax Settlement, Secondary Trims & Buys)
+            # Step 5: Phase 2 (Tax Settlement, Secondary Trims & Buys)
             if is_after_tax:
-                total_tax_paid = 0.0
+                tax_div = annual_dividends * tax_rate
+                self.cash -= tax_div
+                total_tax_paid = tax_div
                 last_loss_cf = 0.0
                 last_net_taxable = 0.0
-                # Rebalance secondary trims and tax settlements until convergence
-                for _ in range(20):
-                    tax_paid_step, net_taxable, loss_cf = (
+
+                for iteration in range(20):
+                    tax_cap_step, net_taxable, loss_cf = (
                         self.tax_manager.settle_annual_taxes(tax_rate, current_year)
                     )
-                    total_tax_paid += tax_paid_step
-                    self.cash -= tax_paid_step
+                    total_tax_paid += tax_cap_step
+                    self.cash -= tax_cap_step
                     last_loss_cf = loss_cf
                     last_net_taxable += net_taxable
-
-                    if tax_paid_step <= 1e-7:
-                        break
 
                     net_investable_equity = total_pretax_value - total_tax_paid
                     final_target_shares = {
@@ -235,16 +242,20 @@ class PortfolioSimulator:
                             )
                             trimmed_any = True
 
-                    if not trimmed_any:
+                    if not trimmed_any and (iteration > 0 or tax_cap_step <= 1e-7):
                         break
 
                 tax_paid = total_tax_paid
+                dividend_tax_paid = tax_div
+                capital_gains_tax_paid = total_tax_paid - tax_div
                 net_taxable_gain = last_net_taxable
                 loss_carryforward = last_loss_cf
-                net_investable_equity = total_pretax_value - tax_paid
+                net_investable_equity = total_pretax_value - total_tax_paid
             else:
                 self.tax_manager.settle_annual_taxes(0.0, current_year)
                 tax_paid = 0.0
+                dividend_tax_paid = 0.0
+                capital_gains_tax_paid = 0.0
                 net_taxable_gain = annual_realized_gain
                 loss_carryforward = 0.0
                 net_investable_equity = total_pretax_value
@@ -295,11 +306,24 @@ class PortfolioSimulator:
             ending_value_aftertax = net_investable_equity
 
             # Benchmark S&P 500 return
-            spx_curr = self.data_loader.get_spx_level(current_year)
-            spx_prev = self.data_loader.get_spx_level(current_year - 1)
-            spx_return = (spx_curr - spx_prev) / spx_prev
+            if is_after_tax:
+                pr_prev = self.data_loader.get_spx_level(current_year - 1)
+                pr_curr = self.data_loader.get_spx_level(current_year)
+                tr_prev = self.data_loader.get_spx_tr_level(current_year - 1)
+                tr_curr = self.data_loader.get_spx_tr_level(current_year)
+                bench_series = calculate_benchmark_annual_series(
+                    pr_levels=[pr_prev, pr_curr],
+                    tr_levels=[tr_prev, tr_curr],
+                    tax_rate=tax_rate,
+                    is_after_tax=True,
+                )
+                spx_return = bench_series["annual_returns"][0]
+            else:
+                tr_prev = self.data_loader.get_spx_tr_level(current_year - 1)
+                tr_curr = self.data_loader.get_spx_tr_level(current_year)
+                spx_return = (tr_curr - tr_prev) / tr_prev if tr_prev > 0.0 else 0.0
 
-            # Step 5: Annual Ledger Entry
+            # Step 6: Annual Ledger Entry
             final_holdings = self.tax_manager.get_all_positions()
             entry = AnnualLedgerEntry(
                 year=current_year,
@@ -315,6 +339,9 @@ class PortfolioSimulator:
                 turnover=turnover,
                 holdings=dict(final_holdings),
                 cash=self.cash,
+                dividend_income=annual_dividends,
+                dividend_tax_paid=dividend_tax_paid,
+                capital_gains_tax_paid=capital_gains_tax_paid,
             )
             annual_history.append(entry)
 
@@ -361,6 +388,8 @@ class PortfolioSimulator:
         post_liquidation_wealth = term_metrics["post_liquidation_wealth"]
         post_liquidation_cagr = term_metrics["post_liquidation_cagr"]
 
+        total_dividends_received = sum(e.dividend_income for e in annual_history)
+        total_dividend_taxes_paid = sum(e.dividend_tax_paid for e in annual_history)
 
         return StrategyResult(
             strategy_name=strategy_name,
@@ -379,4 +408,6 @@ class PortfolioSimulator:
             post_liquidation_wealth=post_liquidation_wealth,
             post_liquidation_cagr=post_liquidation_cagr,
             annual_history=annual_history,
+            total_dividends_received=total_dividends_received,
+            total_dividend_taxes_paid=total_dividend_taxes_paid,
         )

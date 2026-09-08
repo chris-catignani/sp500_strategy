@@ -236,18 +236,24 @@ class TestPortfolioSimulator(unittest.TestCase):
             is_after_tax=False,
         )
 
-        # MSFT and XOM were held from 2014 and trimmed in 2015
-        sell_orders = [o for o in self.simulator.trade_history if o.year == 2015 and o.action == "SELL"]
-        sell_dict = {o.ticker: o for o in sell_orders}
+        # MSFT was held from 2014 and trimmed in 2015 down to provisional target
+        sell_orders_2015 = [o for o in self.simulator.trade_history if o.year == 2015 and o.action == "SELL"]
+        sell_dict_2015 = {o.ticker: o for o in sell_orders_2015}
 
-        # Verify XOM and MSFT were trimmed
-        self.assertIn("XOM", sell_dict)
-        self.assertIn("MSFT", sell_dict)
-        self.assertGreater(sell_dict["XOM"].shares, 0.0)
-        self.assertGreater(sell_dict["MSFT"].shares, 0.0)
+        # Verify MSFT was trimmed (while remaining in Top 5)
+        self.assertIn("MSFT", sell_dict_2015)
+        self.assertGreater(sell_dict_2015["MSFT"].shares, 0.0)
 
         # Verify realized gains were recorded
-        self.assertNotEqual(sell_dict["MSFT"].realized_gain, 0.0)
+        self.assertNotEqual(sell_dict_2015["MSFT"].realized_gain, 0.0)
+
+        # Run multi-year to 2016 where XOM is also trimmed down to provisional target
+        sim_2016 = PortfolioSimulator(data_loader=self.data_loader)
+        sim_2016.run_simulation(start_year=2014, end_year=2016, n=5, is_after_tax=False)
+        sell_orders_2016 = [o for o in sim_2016.trade_history if o.year == 2016 and o.action == "SELL"]
+        sell_dict_2016 = {o.ticker: o for o in sell_orders_2016}
+        self.assertIn("XOM", sell_dict_2016)
+        self.assertGreater(sell_dict_2016["XOM"].shares, 0.0)
 
     def test_multi_year_backtest_run_n3_n5_n10(self):
         """Test multi-year backtest run across N in (3, 5, 10) for 2014-2024."""
@@ -359,6 +365,18 @@ class TestPortfolioSimulator(unittest.TestCase):
         # Check initial buys at 2014
         buys_2014 = [t for t in trades if t.year == 2014 and t.action == "BUY"]
         self.assertEqual(len(buys_2014), 3)
+
+    def test_dividend_cash_pooling_and_tax_separation(self):
+        """Test dividend cash pooling, decoupled dual tax separation, and non-negative cash invariant."""
+        sim = PortfolioSimulator()
+        result = sim.run_simulation(start_year=2023, end_year=2024, n=3, is_after_tax=True, tax_rate=0.30)
+        self.assertGreater(result.total_dividends_received, 0.0)
+        entry_2024 = result.annual_history[0]
+        self.assertGreater(entry_2024.dividend_income, 0.0)
+        self.assertAlmostEqual(entry_2024.dividend_tax_paid, entry_2024.dividend_income * 0.30, places=4)
+        self.assertAlmostEqual(entry_2024.tax_paid, entry_2024.capital_gains_tax_paid + entry_2024.dividend_tax_paid, places=4)
+        for c in sim.cash_history:
+            self.assertGreaterEqual(c, 0.0)
 
 
 if __name__ == "__main__":
