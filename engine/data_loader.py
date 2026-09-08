@@ -14,6 +14,7 @@ class DataLoader:
         self,
         constituents_path: Optional[Union[str, Path]] = None,
         prices_path: Optional[Union[str, Path]] = None,
+        dividends_path: Optional[Union[str, Path]] = None,
     ) -> None:
         """Initialize DataLoader with dataset paths.
 
@@ -22,6 +23,8 @@ class DataLoader:
                 Defaults to data/sp500_constituents.json relative to project root.
             prices_path: Optional path to sp500_prices.json.
                 Defaults to data/sp500_prices.json relative to project root.
+            dividends_path: Optional path to sp500_dividends.json.
+                Defaults to data/sp500_dividends.json relative to project root.
         """
         project_root = Path(__file__).resolve().parent.parent
 
@@ -35,18 +38,28 @@ class DataLoader:
         else:
             prices_path = Path(prices_path)
 
+        if dividends_path is None:
+            dividends_path = project_root / "data" / "sp500_dividends.json"
+        else:
+            dividends_path = Path(dividends_path)
+
         if not constituents_path.exists():
             raise FileNotFoundError(
                 f"Constituents dataset file not found: {constituents_path}"
             )
         if not prices_path.exists():
             raise FileNotFoundError(f"Prices dataset file not found: {prices_path}")
+        if not dividends_path.exists():
+            raise FileNotFoundError(f"Dividends dataset file not found: {dividends_path}")
 
         with open(constituents_path, "r", encoding="utf-8") as f:
             self._raw_constituents: Dict[str, list] = json.load(f)
 
         with open(prices_path, "r", encoding="utf-8") as f:
             self._raw_prices: Dict[str, Dict[str, float]] = json.load(f)
+
+        with open(dividends_path, "r", encoding="utf-8") as f:
+            self._raw_dividends: Dict[str, Dict[str, float]] = json.load(f)
 
         # Parse available years
         self._available_years: List[int] = sorted(
@@ -133,3 +146,48 @@ class DataLoader:
             KeyError: If year is not available for benchmark index.
         """
         return self.get_price("^GSPC", year)
+
+    def get_dividend(self, ticker: str, year: int) -> float:
+        """Retrieve split-adjusted cash dividend per share for a ticker and year.
+
+        Args:
+            ticker: Stock ticker symbol (e.g. 'AAPL').
+            year: Calendar year.
+
+        Returns:
+            Annual cash dividend per share as float, or 0.0 if not paid or missing.
+        """
+        ticker_divs = self._raw_dividends.get(ticker, {})
+        return float(ticker_divs.get(str(year), 0.0))
+
+    def get_spx_tr_level(self, year: int) -> float:
+        """Retrieve S&P 500 Total Return (^SP500TR) index level for a given year.
+
+        Args:
+            year: Calendar year.
+
+        Returns:
+            Total Return index level as float.
+        """
+        return self.get_price("^SP500TR", year)
+
+    def get_spx_dividend_yield(self, year: int) -> float:
+        """Calculate the benchmark S&P 500 dividend yield for a given year.
+
+        Yield is calculated as max(0.0, r_tr - r_pr) where:
+            r_tr = (SPX_TR_t - SPX_TR_{t-1}) / SPX_TR_{t-1}
+            r_pr = (SPX_PR_t - SPX_PR_{t-1}) / SPX_PR_{t-1}
+
+        Args:
+            year: Calendar year (>= 1994).
+
+        Returns:
+            Benchmark dividend yield as float.
+        """
+        tr_curr = self.get_spx_tr_level(year)
+        tr_prev = self.get_spx_tr_level(year - 1)
+        r_tr = (tr_curr - tr_prev) / tr_prev
+        pr_curr = self.get_spx_level(year)
+        pr_prev = self.get_spx_level(year - 1)
+        r_pr = (pr_curr - pr_prev) / pr_prev
+        return max(0.0, r_tr - r_pr)

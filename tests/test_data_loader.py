@@ -75,6 +75,13 @@ class TestDataLoader(unittest.TestCase):
                 prices_path="nonexistent_prices.json",
             )
 
+        with self.assertRaises(FileNotFoundError):
+            DataLoader(
+                constituents_path=constituents_file,
+                prices_path=prices_file,
+                dividends_path="nonexistent_dividends.json",
+            )
+
     def test_available_years_coverage(self):
         """Verify DataLoader covers 31 years from 1994 through 2024 inclusive."""
         years = self.loader.get_available_years()
@@ -217,8 +224,24 @@ class TestDataLoader(unittest.TestCase):
             self.loader.get_price("NONEXISTENT_TICKER", 2020)
 
         # Invalid year for valid ticker
-        with self.assertRaises((KeyError, ValueError)):
+        with self.assertRaises(KeyError):
             self.loader.get_price("AAPL", 1950)
+
+    def test_get_dividend(self):
+        aapl_div = self.loader.get_dividend("AAPL", 2024)
+        self.assertGreater(aapl_div, 0.0)
+        unknown_div = self.loader.get_dividend("NONEXISTENT", 2024)
+        self.assertEqual(unknown_div, 0.0)
+
+    def test_spx_tr_and_dividend_yield(self):
+        tr_2024 = self.loader.get_spx_tr_level(2024)
+        self.assertGreater(tr_2024, 0.0)
+        yield_2024 = self.loader.get_spx_dividend_yield(2024)
+        self.assertGreaterEqual(yield_2024, 0.0)
+        self.assertLess(yield_2024, 0.10)
+        # Check 1994 yield calculation using 1993 base
+        yield_1994 = self.loader.get_spx_dividend_yield(1994)
+        self.assertGreaterEqual(yield_1994, 0.0)
 
 
 if __name__ == "__main__":
