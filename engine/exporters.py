@@ -1194,18 +1194,18 @@ function buildPerformanceAndTradeoffsSheet(ss) {{
   sheet.setRowHeight(11, 12);
 
   // 6. Embedded Native Charts (Rows 12 to 29)
-  // Chart 1: Growth of $10,000 Line Chart
+  // Chart 1: Growth of $10,000 Line Chart (Logarithmic Scale)
   var growthRange = sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length);
   var growthChart = sheet.newChart()
     .asLineChart()
     .addRange(growthRange)
     .setNumHeaders(1)
     .setOption('useFirstColumnAsDomain', true)
-    .setOption('title', 'Growth of $10,000 Initial Investment (1994–2024)')
+    .setOption('title', 'Growth of $10,000 Initial Investment (Log Scale, 1994–2024)')
     .setOption('titleTextStyle', {{fontSize: 13, bold: true, color: '#1A202C'}})
     .setOption('legend', {{position: 'top', textStyle: {{fontSize: 10}}}})
     .setOption('hAxis', {{title: 'Year', format: '####', gridlines: {{count: 8}}}})
-    .setOption('vAxis', {{title: 'Portfolio Value ($)', format: '$#,##0'}})
+    .setOption('vAxis', {{title: 'Portfolio Value ($) - Log Scale', scaleType: 'log', logScale: true, format: '$#,##0'}})
     .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
     .setOption('width', 580)
     .setOption('height', 360)

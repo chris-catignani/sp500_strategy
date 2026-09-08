@@ -377,7 +377,8 @@ class TestExporters(unittest.TestCase):
         # Check Google Sheets ChartBuilder integration
         self.assertIn("asLineChart()", code)
         self.assertIn("insertChart", code)
-        self.assertIn("Growth of $10,000 Initial Investment (1994–2024)", code)
+        self.assertIn("Growth of $10,000 Initial Investment (Log Scale, 1994–2024)", code)
+        self.assertIn("scaleType: 'log'", code)
         self.assertIn("Historical Drawdown from Peak (1994–2024)", code)
         self.assertIn("removeChart", code)
 
