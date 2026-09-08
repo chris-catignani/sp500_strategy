@@ -26,7 +26,7 @@ def _ensure_dir_exists(filepath: str) -> None:
 def export_summary_metrics_csv(
     results: List[StrategyResult],
     filepath: str,
-    spx_benchmarks: Optional[Dict[str, float]] = None,
+    spx_benchmarks: Optional[Dict[Any, Any]] = None,
 ) -> str:
     """Export summary metrics across multi-horizon strategy runs to a CSV file.
 
@@ -1181,10 +1181,10 @@ function RECALCULATE_STRATEGY(taxRate) {{
   if (isNaN(rate) || rate < 0 || rate > 1) {{
     return 'Invalid tax rate';
   }}
-  // Linear interpolation based on Top 5 30-year empirical results:
-  // 0% -> 11.27%, 30% -> 9.21%
-  var baseCagr = 0.1127;
-  var drag = rate * 0.0687;
+  // Linear interpolation based on Top 5 30-year empirical results with dividends:
+  // 0% -> 13.33%, 30% -> 10.65%
+  var baseCagr = 0.1333;
+  var drag = rate * 0.0893;
   return baseCagr - drag;
 }}
 
