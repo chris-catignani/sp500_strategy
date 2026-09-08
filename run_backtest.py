@@ -16,6 +16,7 @@ from engine.data_loader import DataLoader
 from engine.exporters import ReportExporter
 from engine.metrics import (
     calculate_alpha,
+    calculate_benchmark_annual_series,
     calculate_cagr,
     calculate_cumulative_return,
     calculate_max_drawdown,
@@ -157,39 +158,76 @@ def build_scenario_and_apps_script_data(
     scenario_rows: List[List[Any]] = []
     for rate, rate_str in tax_rates:
         for h_label, s_yr, e_yr in horizons:
-            p_start = data_loader.get_spx_level(s_yr)
-            p_end = data_loader.get_spx_level(e_yr)
-            spx_cagr = calculate_cagr(p_start, p_end, e_yr - s_yr)
-            spx_cum = calculate_cumulative_return(p_start, p_end)
-            spx_series = [data_loader.get_spx_level(y) for y in range(s_yr, e_yr + 1)]
-            spx_max_dd = calculate_max_drawdown(spx_series)
-            spx_final = initial_capital * (1.0 + spx_cum)
+            pr_levels = [data_loader.get_spx_level(y) for y in range(s_yr, e_yr + 1)]
+            tr_levels = [data_loader.get_spx_tr_level(y) for y in range(s_yr, e_yr + 1)]
+            horizon_years = e_yr - s_yr
+            spx_tr_cagr = calculate_cagr(tr_levels[0], tr_levels[-1], horizon_years)
 
-            # S&P 500 entry
+            if rate == 0.0:
+                bench = calculate_benchmark_annual_series(
+                    pr_levels=pr_levels,
+                    tr_levels=tr_levels,
+                    tax_rate=0.0,
+                    initial_capital=initial_capital,
+                    is_after_tax=False,
+                )
+                spx_after_cagr = spx_tr_cagr
+                spx_post_liq_cagr = spx_tr_cagr
+                spx_cum = calculate_cumulative_return(initial_capital, bench["post_liquidation_wealth"])
+                spx_final = bench["post_liquidation_wealth"]
+                spx_max_dd = calculate_max_drawdown(tr_levels)
+                spx_taxes = 0.0
+                spx_tax_drag = 0.0
+                spx_divs = bench["total_dividends_received"]
+            else:
+                bench = calculate_benchmark_annual_series(
+                    pr_levels=pr_levels,
+                    tr_levels=tr_levels,
+                    tax_rate=rate,
+                    initial_capital=initial_capital,
+                    is_after_tax=True,
+                )
+                val_series = [initial_capital]
+                curr_v = initial_capital
+                for r_ann in bench["annual_returns"]:
+                    curr_v *= (1.0 + r_ann)
+                    val_series.append(curr_v)
+                spx_max_dd = calculate_max_drawdown(val_series)
+                spx_after_cagr = calculate_cagr(initial_capital, bench["pre_liquidation_wealth"], horizon_years)
+                spx_post_liq_cagr = calculate_cagr(initial_capital, bench["post_liquidation_wealth"], horizon_years)
+                spx_cum = calculate_cumulative_return(initial_capital, bench["post_liquidation_wealth"])
+                spx_final = bench["post_liquidation_wealth"]
+                spx_taxes = bench["total_taxes_paid"]
+                spx_tax_drag = spx_tr_cagr - spx_post_liq_cagr
+                spx_divs = bench["total_dividends_received"]
+
+            # S&P 500 entry (14 columns)
             spx_key = f"{h_label}_S&P 500_{rate_str}"
             scenario_rows.append([
                 spx_key,
                 h_label,
                 "S&P 500",
                 rate,
-                round(spx_cagr, 6),
-                round(spx_cagr, 6),
-                round(spx_cagr, 6),
+                round(spx_tr_cagr, 6),
+                round(spx_after_cagr, 6),
+                round(spx_post_liq_cagr, 6),
                 round(spx_cum, 6),
                 round(spx_final, 2),
+                round(spx_divs, 2),
                 round(spx_max_dd, 6),
-                0.0,
-                0.0,
+                round(spx_taxes, 2),
+                round(spx_tax_drag, 6),
                 0.0,
             ])
 
-            # Top N entries
+            # Top N entries (14 columns)
             for n in target_n_values:
                 pre_res = pretax_cache[(n, s_yr, e_yr)]
                 sel = resolve_selector(strategy_name, n=n)
                 if rate == 0.0:
                     post_res = pre_res
                     tax_drag = 0.0
+                    alpha = post_res.cagr - spx_tr_cagr
                 else:
                     post_res = simulator.run_simulation(
                         s_yr,
@@ -201,8 +239,8 @@ def build_scenario_and_apps_script_data(
                         initial_capital=initial_capital,
                     )
                     tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
+                    alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
 
-                alpha = post_res.cagr - spx_cagr
                 strat_label = f"Top {n}"
                 key = f"{h_label}_{strat_label}_{rate_str}"
                 scenario_rows.append([
@@ -215,6 +253,7 @@ def build_scenario_and_apps_script_data(
                     round(post_res.post_liquidation_cagr, 6),
                     round(post_res.cumulative_return, 6),
                     round(post_res.final_equity, 2),
+                    round(post_res.total_dividends_received, 2),
                     round(post_res.max_drawdown, 6),
                     round(post_res.total_taxes_paid, 2),
                     round(tax_drag, 6),
@@ -460,14 +499,75 @@ def run_backtest(args: argparse.Namespace) -> int:
     horizons = resolve_horizons(args.horizons)
     n_values = resolve_n_values(args.n)
 
-    # Pre-calculate benchmark CAGRs for reporting
-    spx_benchmarks: Dict[str, float] = {}
+    # Pre-calculate benchmark metrics for reporting
+    spx_benchmarks: Dict[Any, Any] = {}
+    benchmark_metrics_by_horizon: Dict[str, Dict[str, Any]] = {}
+
     for h_label, s_yr, e_yr in horizons:
-        p_start = data_loader.get_spx_level(s_yr)
-        p_end = data_loader.get_spx_level(e_yr)
-        cagr = calculate_cagr(p_start, p_end, e_yr - s_yr)
-        spx_benchmarks[h_label] = cagr
-        spx_benchmarks[str(e_yr - s_yr)] = cagr
+        horizon_years = e_yr - s_yr
+        pr_levels = [data_loader.get_spx_level(y) for y in range(s_yr, e_yr + 1)]
+        tr_levels = [data_loader.get_spx_tr_level(y) for y in range(s_yr, e_yr + 1)]
+        spx_tr_cagr = calculate_cagr(tr_levels[0], tr_levels[-1], horizon_years)
+        spx_tr_cum = calculate_cumulative_return(tr_levels[0], tr_levels[-1])
+        spx_tr_max_dd = calculate_max_drawdown(tr_levels)
+
+        # Pre-tax benchmark calculation
+        bench_pre = calculate_benchmark_annual_series(
+            pr_levels=pr_levels,
+            tr_levels=tr_levels,
+            tax_rate=0.0,
+            initial_capital=args.initial_capital,
+            is_after_tax=False,
+        )
+
+        # After-tax benchmark calculation
+        bench_post = calculate_benchmark_annual_series(
+            pr_levels=pr_levels,
+            tr_levels=tr_levels,
+            tax_rate=args.tax_rate,
+            initial_capital=args.initial_capital,
+            is_after_tax=True,
+        )
+
+        val_series = [args.initial_capital]
+        curr_val = args.initial_capital
+        for r_ann in bench_post["annual_returns"]:
+            curr_val *= (1.0 + r_ann)
+            val_series.append(curr_val)
+        spx_post_max_dd = calculate_max_drawdown(val_series)
+
+        spx_after_cagr = calculate_cagr(args.initial_capital, bench_post["pre_liquidation_wealth"], horizon_years)
+        spx_post_liq_cagr = calculate_cagr(args.initial_capital, bench_post["post_liquidation_wealth"], horizon_years)
+        spx_post_cum = calculate_cumulative_return(args.initial_capital, bench_post["post_liquidation_wealth"])
+        spx_post_taxes = bench_post["total_taxes_paid"]
+        spx_post_divs = bench_post["total_dividends_received"]
+        spx_tax_drag = spx_tr_cagr - spx_post_liq_cagr
+
+        benchmark_metrics_by_horizon[h_label] = {
+            "tr_cagr": spx_tr_cagr,
+            "after_cagr": spx_after_cagr,
+            "post_liq_cagr": spx_post_liq_cagr,
+            "cum_return": spx_post_cum,
+            "final_equity": bench_post["post_liquidation_wealth"],
+            "max_dd": spx_post_max_dd,
+            "total_taxes": spx_post_taxes,
+            "total_dividends": spx_post_divs,
+            "tax_drag": spx_tax_drag,
+            "bench_pre": bench_pre,
+            "bench_post": bench_post,
+            "tr_cum": spx_tr_cum,
+            "tr_max_dd": spx_tr_max_dd,
+        }
+
+        # Store in spx_benchmarks for exporter lookups
+        spx_benchmarks[h_label] = spx_tr_cagr
+        spx_benchmarks[str(horizon_years)] = spx_tr_cagr
+        spx_benchmarks[horizon_years] = spx_tr_cagr
+        spx_benchmarks[(h_label, False)] = spx_tr_cagr
+        spx_benchmarks[(h_label, 0.0)] = spx_tr_cagr
+        spx_benchmarks[(h_label, True)] = spx_post_liq_cagr
+        spx_benchmarks[(h_label, args.tax_rate)] = spx_post_liq_cagr
+        spx_benchmarks[(horizon_years, args.tax_rate)] = spx_post_liq_cagr
 
     all_results: List[StrategyResult] = []
     trade_records: List[Dict[str, Any]] = []
@@ -475,12 +575,9 @@ def run_backtest(args: argparse.Namespace) -> int:
 
     # Run simulations for each horizon and N
     for h_label, s_yr, e_yr in horizons:
-        p_start = data_loader.get_spx_level(s_yr)
-        p_end = data_loader.get_spx_level(e_yr)
-        spx_cagr = calculate_cagr(p_start, p_end, e_yr - s_yr)
-        spx_cum = calculate_cumulative_return(p_start, p_end)
-        spx_series = [data_loader.get_spx_level(y) for y in range(s_yr, e_yr + 1)]
-        spx_max_dd = calculate_max_drawdown(spx_series)
+        bm = benchmark_metrics_by_horizon[h_label]
+        spx_tr_cagr = bm["tr_cagr"]
+        spx_post_liq_cagr = bm["post_liq_cagr"]
 
         for n in n_values:
             selector = resolve_selector(args.strategy, n=n)
@@ -522,7 +619,7 @@ def run_backtest(args: argparse.Namespace) -> int:
                 })
 
             tax_drag = res_pre.cagr - res_post.post_liquidation_cagr
-            alpha = calculate_alpha(res_post.cagr, spx_cagr)
+            alpha = calculate_alpha(res_post.post_liquidation_cagr, spx_post_liq_cagr)
 
             table_rows.append({
                 "horizon": h_label,
@@ -538,20 +635,64 @@ def run_backtest(args: argparse.Namespace) -> int:
                 "alpha": alpha,
             })
 
-        # S&P 500 benchmark row
+        # S&P 500 benchmark row in terminal table
         table_rows.append({
             "horizon": h_label,
             "strategy": "S&P 500",
-            "pre_cagr": spx_cagr,
-            "post_cagr": spx_cagr,
-            "post_liq_cagr": spx_cagr,
-            "cum_return": spx_cum,
-            "final_equity": args.initial_capital * (1.0 + spx_cum),
-            "max_dd": spx_max_dd,
-            "total_taxes": 0.0,
-            "tax_drag": 0.0,
+            "pre_cagr": spx_tr_cagr,
+            "post_cagr": bm["after_cagr"],
+            "post_liq_cagr": spx_post_liq_cagr,
+            "cum_return": bm["cum_return"],
+            "final_equity": bm["final_equity"],
+            "max_dd": bm["max_dd"],
+            "total_taxes": bm["total_taxes"],
+            "tax_drag": bm["tax_drag"],
             "alpha": 0.0,
         })
+
+        # Pre-tax benchmark StrategyResult for summary_metrics.csv
+        spx_res_pre = StrategyResult(
+            strategy_name="S&P 500",
+            n=0,
+            start_year=s_yr,
+            end_year=e_yr,
+            is_after_tax=False,
+            tax_rate=0.0,
+            initial_capital=args.initial_capital,
+            final_equity=bm["bench_pre"]["final_equity"],
+            cagr=spx_tr_cagr,
+            cumulative_return=bm["tr_cum"],
+            max_drawdown=bm["tr_max_dd"],
+            total_taxes_paid=0.0,
+            pre_liquidation_wealth=bm["bench_pre"]["pre_liquidation_wealth"],
+            post_liquidation_wealth=bm["bench_pre"]["post_liquidation_wealth"],
+            post_liquidation_cagr=spx_tr_cagr,
+            total_dividends_received=bm["bench_pre"]["total_dividends_received"],
+            annual_history=[],
+        )
+        all_results.append(spx_res_pre)
+
+        # After-tax benchmark StrategyResult for summary_metrics.csv
+        spx_res_post = StrategyResult(
+            strategy_name="S&P 500",
+            n=0,
+            start_year=s_yr,
+            end_year=e_yr,
+            is_after_tax=True,
+            tax_rate=args.tax_rate,
+            initial_capital=args.initial_capital,
+            final_equity=bm["final_equity"],
+            cagr=bm["after_cagr"],
+            cumulative_return=bm["cum_return"],
+            max_drawdown=bm["max_dd"],
+            total_taxes_paid=bm["total_taxes"],
+            pre_liquidation_wealth=bm["bench_post"]["pre_liquidation_wealth"],
+            post_liquidation_wealth=bm["bench_post"]["post_liquidation_wealth"],
+            post_liquidation_cagr=spx_post_liq_cagr,
+            total_dividends_received=bm["total_dividends"],
+            annual_history=[],
+        )
+        all_results.append(spx_res_post)
 
     # Prepare Google Apps Script data across tax tiers
     scenario_data, annual_data, trades_data = build_scenario_and_apps_script_data(

@@ -40,6 +40,9 @@ class TestExporters(unittest.TestCase):
             turnover=0.30,
             holdings={"AAPL": 20.0, "MSFT": 15.0},
             cash=0.0,
+            dividend_income=100.0,
+            dividend_tax_paid=30.0,
+            capital_gains_tax_paid=120.0,
         )
         self.entry_2024 = AnnualLedgerEntry(
             year=2024,
@@ -55,6 +58,9 @@ class TestExporters(unittest.TestCase):
             turnover=0.25,
             holdings={"AAPL": 22.0, "NVDA": 10.0},
             cash=0.0,
+            dividend_income=50.0,
+            dividend_tax_paid=15.0,
+            capital_gains_tax_paid=45.0,
         )
 
         self.res_aftertax = StrategyResult(
@@ -74,6 +80,8 @@ class TestExporters(unittest.TestCase):
             post_liquidation_wealth=12500.0,
             post_liquidation_cagr=0.1180,
             annual_history=[self.entry_2023, self.entry_2024],
+            total_dividends_received=150.0,
+            total_dividend_taxes_paid=45.0,
         )
 
         self.res_pretax = StrategyResult(
@@ -94,9 +102,28 @@ class TestExporters(unittest.TestCase):
             post_liquidation_cagr=0.1489,
             annual_history=[self.entry_2023, self.entry_2024],
         )
+        self.results = [self.res_pretax, self.res_aftertax]
 
     def tearDown(self):
         shutil.rmtree(self.test_dir, ignore_errors=True)
+
+    def test_summary_csv_has_dividend_column(self):
+        tmp_path = os.path.join(self.test_dir, "test_summary.csv")
+        export_summary_metrics_csv(self.results, tmp_path)
+        with open(tmp_path, "r", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            headers = next(reader)
+        self.assertIn("total_dividends_received", headers)
+
+    def test_annual_csv_has_dividend_columns(self):
+        tmp_path = os.path.join(self.test_dir, "test_annual.csv")
+        export_annual_breakdown_csv(self.results, tmp_path)
+        with open(tmp_path, "r", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            headers = next(reader)
+        self.assertIn("dividend_income", headers)
+        self.assertIn("dividend_tax_paid", headers)
+        self.assertIn("capital_gains_tax_paid", headers)
 
     def test_engine_reexports(self):
         """Verify exporter functions and classes are re-exported by the engine module."""
@@ -135,6 +162,7 @@ class TestExporters(unittest.TestCase):
             "cagr",
             "max_drawdown",
             "total_taxes_paid",
+            "total_dividends_received",
             "pre_liquidation_wealth",
             "post_liquidation_wealth",
             "post_liquidation_cagr",
@@ -159,9 +187,10 @@ class TestExporters(unittest.TestCase):
         row_post = rows[1]
         self.assertEqual(row_post["is_after_tax"], "True")
         self.assertAlmostEqual(float(row_post["total_taxes_paid"]), 210.0, places=2)
+        self.assertAlmostEqual(float(row_post["total_dividends_received"]), 150.0, places=2)
         # Tax drag = pretax CAGR (0.1489) - post_liquidation_cagr (0.1180) ~ 0.0309
         self.assertAlmostEqual(float(row_post["tax_drag"]), 0.1489 - 0.1180, places=4)
-        self.assertAlmostEqual(float(row_post["alpha_vs_spx"]), 0.1390 - 0.125, places=4)
+        self.assertAlmostEqual(float(row_post["alpha_vs_spx"]), 0.1180 - 0.125, places=4)
 
     def test_export_annual_breakdown_csv(self):
         """Test annual breakdown CSV output schema and row-level accounting values."""
@@ -183,9 +212,12 @@ class TestExporters(unittest.TestCase):
             "year",
             "start_value",
             "gross_return",
+            "dividend_income",
             "ending_value_pretax",
             "realized_capital_gain",
             "net_taxable_gain",
+            "capital_gains_tax_paid",
+            "dividend_tax_paid",
             "tax_paid",
             "loss_carryforward",
             "ending_value_aftertax",
@@ -198,12 +230,18 @@ class TestExporters(unittest.TestCase):
 
         self.assertEqual(rows[0]["year"], "2023")
         self.assertAlmostEqual(float(rows[0]["start_value"]), 10000.0, places=2)
+        self.assertAlmostEqual(float(rows[0]["dividend_income"]), 100.0, places=2)
+        self.assertAlmostEqual(float(rows[0]["dividend_tax_paid"]), 30.0, places=2)
+        self.assertAlmostEqual(float(rows[0]["capital_gains_tax_paid"]), 120.0, places=2)
         self.assertAlmostEqual(float(rows[0]["tax_paid"]), 150.0, places=2)
         self.assertAlmostEqual(float(rows[0]["spx_return"]), 0.15, places=4)
         self.assertAlmostEqual(float(rows[0]["turnover"]), 0.30, places=4)
 
         self.assertEqual(rows[1]["year"], "2024")
         self.assertAlmostEqual(float(rows[1]["start_value"]), 11850.0, places=2)
+        self.assertAlmostEqual(float(rows[1]["dividend_income"]), 50.0, places=2)
+        self.assertAlmostEqual(float(rows[1]["dividend_tax_paid"]), 15.0, places=2)
+        self.assertAlmostEqual(float(rows[1]["capital_gains_tax_paid"]), 45.0, places=2)
         self.assertAlmostEqual(float(rows[1]["tax_paid"]), 60.0, places=2)
 
     def test_export_trade_log_csv(self):

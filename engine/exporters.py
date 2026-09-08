@@ -60,6 +60,7 @@ def export_summary_metrics_csv(
         "cagr",
         "max_drawdown",
         "total_taxes_paid",
+        "total_dividends_received",
         "pre_liquidation_wealth",
         "post_liquidation_wealth",
         "post_liquidation_cagr",
@@ -90,25 +91,64 @@ def export_summary_metrics_csv(
             tax_drag = 0.0
 
         # Alpha vs S&P 500 Benchmark
-        spx_cagr: Optional[float] = None
-        if spx_benchmarks is not None:
-            if horizon_str in spx_benchmarks:
-                spx_cagr = spx_benchmarks[horizon_str]
-            elif horizon_years in spx_benchmarks:
-                spx_cagr = spx_benchmarks[horizon_years]
-            elif str(horizon_years) in spx_benchmarks:
-                spx_cagr = spx_benchmarks[str(horizon_years)]
+        if r.strategy_name == "S&P 500":
+            alpha_vs_spx = 0.0
+        else:
+            spx_cagr: Optional[float] = None
+            if spx_benchmarks is not None:
+                candidates = []
+                if r.is_after_tax:
+                    candidates.extend([
+                        (horizon_str, r.tax_rate),
+                        (horizon_years, r.tax_rate),
+                        (horizon_str, round(r.tax_rate, 4)),
+                        (horizon_years, round(r.tax_rate, 4)),
+                        (horizon_str, True),
+                        (horizon_years, True),
+                    ])
+                else:
+                    candidates.extend([
+                        (horizon_str, 0.0),
+                        (horizon_years, 0.0),
+                        (horizon_str, False),
+                        (horizon_years, False),
+                    ])
+                candidates.extend([
+                    horizon_str,
+                    horizon_years,
+                    str(horizon_years),
+                ])
 
-        if spx_cagr is None and r.annual_history:
-            cum_spx = 1.0
-            for entry in r.annual_history:
-                cum_spx *= (1.0 + entry.spx_return)
-            spx_cagr = calculate_cagr(1.0, cum_spx, horizon_years)
+                for cand in candidates:
+                    if cand in spx_benchmarks:
+                        val = spx_benchmarks[cand]
+                        if isinstance(val, dict):
+                            spx_cagr = val.get(
+                                "post_liquidation_cagr" if r.is_after_tax else "cagr",
+                                val.get("cagr"),
+                            )
+                        elif hasattr(val, "post_liquidation_cagr") and r.is_after_tax:
+                            spx_cagr = val.post_liquidation_cagr
+                        elif hasattr(val, "cagr"):
+                            spx_cagr = val.cagr
+                        elif isinstance(val, (int, float)):
+                            spx_cagr = float(val)
+                        if spx_cagr is not None:
+                            break
 
-        if spx_cagr is None:
-            spx_cagr = 0.0
+            if spx_cagr is None and r.annual_history:
+                cum_spx = 1.0
+                for entry in r.annual_history:
+                    cum_spx *= (1.0 + entry.spx_return)
+                spx_cagr = calculate_cagr(1.0, cum_spx, horizon_years)
 
-        alpha_vs_spx = calculate_alpha(r.cagr, spx_cagr)
+            if spx_cagr is None:
+                spx_cagr = 0.0
+
+            if r.is_after_tax:
+                alpha_vs_spx = calculate_alpha(r.post_liquidation_cagr, spx_cagr)
+            else:
+                alpha_vs_spx = calculate_alpha(r.cagr, spx_cagr)
 
         rows.append(
             {
@@ -125,6 +165,7 @@ def export_summary_metrics_csv(
                 "cagr": r.cagr,
                 "max_drawdown": r.max_drawdown,
                 "total_taxes_paid": r.total_taxes_paid,
+                "total_dividends_received": getattr(r, "total_dividends_received", 0.0),
                 "pre_liquidation_wealth": r.pre_liquidation_wealth,
                 "post_liquidation_wealth": r.post_liquidation_wealth,
                 "post_liquidation_cagr": r.post_liquidation_cagr,
@@ -149,8 +190,9 @@ def export_annual_breakdown_csv(
 
     Columns:
         strategy_name, n, is_after_tax, tax_rate, year, start_value, gross_return,
-        ending_value_pretax, realized_capital_gain, net_taxable_gain, tax_paid,
-        loss_carryforward, ending_value_aftertax, cash, spx_return, turnover
+        dividend_income, ending_value_pretax, realized_capital_gain, net_taxable_gain,
+        capital_gains_tax_paid, dividend_tax_paid, tax_paid, loss_carryforward,
+        ending_value_aftertax, cash, spx_return, turnover
 
     Args:
         results: List of StrategyResult objects containing annual_history.
@@ -169,9 +211,12 @@ def export_annual_breakdown_csv(
         "year",
         "start_value",
         "gross_return",
+        "dividend_income",
         "ending_value_pretax",
         "realized_capital_gain",
         "net_taxable_gain",
+        "capital_gains_tax_paid",
+        "dividend_tax_paid",
         "tax_paid",
         "loss_carryforward",
         "ending_value_aftertax",
@@ -192,9 +237,12 @@ def export_annual_breakdown_csv(
                     "year": entry.year,
                     "start_value": entry.start_value,
                     "gross_return": entry.gross_return,
+                    "dividend_income": getattr(entry, "dividend_income", 0.0),
                     "ending_value_pretax": entry.ending_value_pretax,
                     "realized_capital_gain": entry.realized_capital_gain,
                     "net_taxable_gain": entry.net_taxable_gain,
+                    "capital_gains_tax_paid": getattr(entry, "capital_gains_tax_paid", 0.0),
+                    "dividend_tax_paid": getattr(entry, "dividend_tax_paid", 0.0),
                     "tax_paid": entry.tax_paid,
                     "loss_carryforward": entry.loss_carryforward,
                     "ending_value_aftertax": entry.ending_value_aftertax,
@@ -292,7 +340,11 @@ def build_default_scenario_data() -> Dict[str, Any]:
     """
     from engine.data_loader import DataLoader
     from engine.backtest import PortfolioSimulator
-    from engine.metrics import calculate_cumulative_return, calculate_max_drawdown
+    from engine.metrics import (
+        calculate_benchmark_annual_series,
+        calculate_cumulative_return,
+        calculate_max_drawdown,
+    )
 
     dl = DataLoader()
     sim = PortfolioSimulator(dl)
@@ -309,44 +361,80 @@ def build_default_scenario_data() -> Dict[str, Any]:
     scenario_rows: List[List[Any]] = []
     for rate, rate_str in tax_rates:
         for h_label, s_yr, e_yr in horizons:
-            # Benchmark metrics
-            p_start = dl.get_spx_level(s_yr)
-            p_end = dl.get_spx_level(e_yr)
-            spx_cagr = calculate_cagr(p_start, p_end, e_yr - s_yr)
-            spx_cum = calculate_cumulative_return(p_start, p_end)
-            spx_series = [dl.get_spx_level(y) for y in range(s_yr, e_yr + 1)]
-            spx_max_dd = calculate_max_drawdown(spx_series)
-            spx_final = 10000.0 * (1.0 + spx_cum)
+            pr_levels = [dl.get_spx_level(y) for y in range(s_yr, e_yr + 1)]
+            tr_levels = [dl.get_spx_tr_level(y) for y in range(s_yr, e_yr + 1)]
+            horizon_years = e_yr - s_yr
+            spx_tr_cagr = calculate_cagr(tr_levels[0], tr_levels[-1], horizon_years)
 
-            # S&P 500 entry
+            if rate == 0.0:
+                bench = calculate_benchmark_annual_series(
+                    pr_levels=pr_levels,
+                    tr_levels=tr_levels,
+                    tax_rate=0.0,
+                    initial_capital=10000.0,
+                    is_after_tax=False,
+                )
+                spx_after_cagr = spx_tr_cagr
+                spx_post_liq_cagr = spx_tr_cagr
+                spx_cum = calculate_cumulative_return(10000.0, bench["post_liquidation_wealth"])
+                spx_final = bench["post_liquidation_wealth"]
+                spx_max_dd = calculate_max_drawdown(tr_levels)
+                spx_taxes = 0.0
+                spx_tax_drag = 0.0
+                spx_divs = bench["total_dividends_received"]
+            else:
+                bench = calculate_benchmark_annual_series(
+                    pr_levels=pr_levels,
+                    tr_levels=tr_levels,
+                    tax_rate=rate,
+                    initial_capital=10000.0,
+                    is_after_tax=True,
+                )
+                val_series = [10000.0]
+                curr_v = 10000.0
+                for r_ann in bench["annual_returns"]:
+                    curr_v *= (1.0 + r_ann)
+                    val_series.append(curr_v)
+                spx_max_dd = calculate_max_drawdown(val_series)
+                spx_after_cagr = calculate_cagr(10000.0, bench["pre_liquidation_wealth"], horizon_years)
+                spx_post_liq_cagr = calculate_cagr(10000.0, bench["post_liquidation_wealth"], horizon_years)
+                spx_cum = calculate_cumulative_return(10000.0, bench["post_liquidation_wealth"])
+                spx_final = bench["post_liquidation_wealth"]
+                spx_taxes = bench["total_taxes_paid"]
+                spx_tax_drag = spx_tr_cagr - spx_post_liq_cagr
+                spx_divs = bench["total_dividends_received"]
+
+            # S&P 500 entry (14 columns)
             spx_key = f"{h_label}_S&P 500_{rate_str}"
             scenario_rows.append([
                 spx_key,
                 h_label,
                 "S&P 500",
                 rate,
-                round(spx_cagr, 6),
-                round(spx_cagr, 6),
-                round(spx_cagr, 6),
+                round(spx_tr_cagr, 6),
+                round(spx_after_cagr, 6),
+                round(spx_post_liq_cagr, 6),
                 round(spx_cum, 6),
                 round(spx_final, 2),
+                round(spx_divs, 2),
                 round(spx_max_dd, 6),
-                0.0,
-                0.0,
+                round(spx_taxes, 2),
+                round(spx_tax_drag, 6),
                 0.0,
             ])
 
-            # Top N strategies
+            # Top N strategies (14 columns)
             for n in [3, 5, 10]:
                 pre_res = pretax_results[(n, s_yr, e_yr)]
                 if rate == 0.0:
                     post_res = pre_res
                     tax_drag = 0.0
+                    alpha = post_res.cagr - spx_tr_cagr
                 else:
                     post_res = sim.run_simulation(s_yr, e_yr, n=n, is_after_tax=True, tax_rate=rate)
                     tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
+                    alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
 
-                alpha = post_res.cagr - spx_cagr
                 key = f"{h_label}_Top {n}_{rate_str}"
                 scenario_rows.append([
                     key,
@@ -358,6 +446,7 @@ def build_default_scenario_data() -> Dict[str, Any]:
                     round(post_res.post_liquidation_cagr, 6),
                     round(post_res.cumulative_return, 6),
                     round(post_res.final_equity, 2),
+                    round(post_res.total_dividends_received, 2),
                     round(post_res.max_drawdown, 6),
                     round(post_res.total_taxes_paid, 2),
                     round(tax_drag, 6),
@@ -545,7 +634,7 @@ def generate_google_apps_script(
 var SCENARIO_HEADERS = [
   "LookupKey", "Horizon", "Strategy", "TaxRate", "PreTaxCAGR",
   "AfterTaxCAGR", "PostLiqCAGR", "CumReturn", "FinalEquity",
-  "MaxDD", "TotalTaxes", "TaxDrag", "Alpha"
+  "TotalDividends", "MaxDD", "TotalTaxes", "TaxDrag", "Alpha"
 ];
 var SCENARIO_DATA = {scenario_json};
 
@@ -647,10 +736,10 @@ function buildScenarioDataSheet(ss) {{
   // Number Formatting
   if (SCENARIO_DATA.length > 0) {{
     sheet.getRange(2, 5, SCENARIO_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
-    sheet.getRange(2, 9, SCENARIO_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
-    sheet.getRange(2, 10, SCENARIO_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
-    sheet.getRange(2, 11, SCENARIO_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
-    sheet.getRange(2, 12, SCENARIO_DATA.length, 2).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 9, SCENARIO_DATA.length, 2).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 11, SCENARIO_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 12, SCENARIO_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 13, SCENARIO_DATA.length, 2).setNumberFormat('0.00%').setHorizontalAlignment('right');
   }}
 
   sheet.autoResizeColumns(1, SCENARIO_HEADERS.length);
