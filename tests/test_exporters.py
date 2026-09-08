@@ -297,9 +297,10 @@ class TestExporters(unittest.TestCase):
         export_google_apps_script(output_js)
         self.assertTrue(os.path.exists(output_js))
 
-        # Check syntax using Node.js
-        result = subprocess.run(["node", "-c", output_js], capture_output=True, text=True)
-        self.assertEqual(result.returncode, 0, f"Node syntax check failed: {result.stderr}")
+        # Check syntax using Node.js if available in PATH
+        if shutil.which("node"):
+            result = subprocess.run(["node", "-c", output_js], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, f"Node syntax check failed: {result.stderr}")
 
     def test_report_exporter_coordinator(self):
         """Test ReportExporter class and export_all convenience function."""
