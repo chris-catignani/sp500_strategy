@@ -340,6 +340,20 @@ class TestExporters(unittest.TestCase):
             result = subprocess.run(["node", "-c", output_js], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, f"Node syntax check failed: {result.stderr}")
 
+    def test_google_apps_script_12_column_dashboard(self):
+        code = generate_google_apps_script()
+        # Executive Summary checks
+        self.assertIn("Total Dividends Received", code)
+        self.assertIn("'A1:L1'", code)
+        self.assertIn("'A8:L8'", code)
+        self.assertIn("METHODOLOGY NOTE — DIVIDEND TIMING", code)
+        # KPI formulas
+        self.assertIn("=G19", code)
+        self.assertIn("=G21", code)  # Card 2 S&P 500 Wealth on Row 21
+        self.assertIn("=E19", code)
+        self.assertIn("=L19", code)  # Card 4 Alpha
+        self.assertIn("=K19", code)  # Card 5 Tax Drag
+
     def test_report_exporter_coordinator(self):
         """Test ReportExporter class and export_all convenience function."""
         exporter = ReportExporter(
