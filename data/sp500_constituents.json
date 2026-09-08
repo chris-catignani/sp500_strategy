@@ -1,0 +1,2668 @@
+{
+  "1994": [
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.1591,
+      "year": 1994
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.028,
+      "trailing_1y_return": -0.0833,
+      "year": 1994
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.025,
+      "trailing_1y_return": -0.0484,
+      "year": 1994
+    },
+    {
+      "ticker": "KO",
+      "name": "The Coca-Cola Company",
+      "market_cap_weight": 0.022,
+      "trailing_1y_return": 0.1054,
+      "year": 1994
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.02,
+      "trailing_1y_return": 0.1782,
+      "year": 1994
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.1696,
+      "year": 1994
+    },
+    {
+      "ticker": "MO",
+      "name": "Altria Group Inc.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.1981,
+      "year": 1994
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.0412,
+      "year": 1994
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.243,
+      "year": 1994
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.5886,
+      "year": 1994
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.6,
+      "year": 1994
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.011,
+      "trailing_1y_return": 0.2853,
+      "year": 1994
+    }
+  ],
+  "1995": [
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.4118,
+      "year": 1995
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.028,
+      "trailing_1y_return": 0.2121,
+      "year": 1995
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.025,
+      "trailing_1y_return": 0.3123,
+      "year": 1995
+    },
+    {
+      "ticker": "KO",
+      "name": "The Coca-Cola Company",
+      "market_cap_weight": 0.022,
+      "trailing_1y_return": 0.454,
+      "year": 1995
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.02,
+      "trailing_1y_return": 0.5849,
+      "year": 1995
+    },
+    {
+      "ticker": "MO",
+      "name": "Altria Group Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.5691,
+      "year": 1995
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.373,
+      "year": 1995
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.4356,
+      "year": 1995
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.048,
+      "year": 1995
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.6853,
+      "year": 1995
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.597,
+      "year": 1995
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.011,
+      "trailing_1y_return": 0.6307,
+      "year": 1995
+    }
+  ],
+  "1996": [
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.3733,
+      "year": 1996
+    },
+    {
+      "ticker": "KO",
+      "name": "The Coca-Cola Company",
+      "market_cap_weight": 0.028,
+      "trailing_1y_return": 0.4187,
+      "year": 1996
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.025,
+      "trailing_1y_return": 0.2171,
+      "year": 1996
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.022,
+      "trailing_1y_return": 0.075,
+      "year": 1996
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.02,
+      "trailing_1y_return": 0.2132,
+      "year": 1996
+    },
+    {
+      "ticker": "MO",
+      "name": "Altria Group Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.2523,
+      "year": 1996
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.8816,
+      "year": 1996
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.6331,
+      "year": 1996
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.2888,
+      "year": 1996
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.1987,
+      "year": 1996
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.0216,
+      "year": 1996
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.011,
+      "trailing_1y_return": 0.3168,
+      "year": 1996
+    }
+  ],
+  "1997": [
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": -0.2579,
+      "year": 1997
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.028,
+      "trailing_1y_return": 0.5639,
+      "year": 1997
+    },
+    {
+      "ticker": "KO",
+      "name": "The Coca-Cola Company",
+      "market_cap_weight": 0.025,
+      "trailing_1y_return": 0.2979,
+      "year": 1997
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.022,
+      "trailing_1y_return": 0.2486,
+      "year": 1997
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.02,
+      "trailing_1y_return": 0.4469,
+      "year": 1997
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.4781,
+      "year": 1997
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.2836,
+      "year": 1997
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.3428,
+      "year": 1997
+    },
+    {
+      "ticker": "MO",
+      "name": "Altria Group Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.2012,
+      "year": 1997
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.7971,
+      "year": 1997
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.7335,
+      "year": 1997
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.011,
+      "trailing_1y_return": 0.4419,
+      "year": 1997
+    }
+  ],
+  "1998": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 1.1446,
+      "year": 1998
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.028,
+      "trailing_1y_return": 0.3901,
+      "year": 1998
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.025,
+      "trailing_1y_return": 0.9636,
+      "year": 1998
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.022,
+      "trailing_1y_return": 1.5073,
+      "year": 1998
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.02,
+      "trailing_1y_return": 1.0654,
+      "year": 1998
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.1952,
+      "year": 1998
+    },
+    {
+      "ticker": "KO",
+      "name": "The Coca-Cola Company",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.0094,
+      "year": 1998
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.3598,
+      "year": 1998
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.6763,
+      "year": 1998
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.545,
+      "year": 1998
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.3057,
+      "year": 1998
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.011,
+      "trailing_1y_return": 0.6597,
+      "year": 1998
+    }
+  ],
+  "1999": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.6829,
+      "year": 1999
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.028,
+      "trailing_1y_return": 0.5172,
+      "year": 1999
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.025,
+      "trailing_1y_return": 1.3104,
+      "year": 1999
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.022,
+      "trailing_1y_return": 0.6979,
+      "year": 1999
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.02,
+      "trailing_1y_return": 0.1719,
+      "year": 1999
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.1018,
+      "year": 1999
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": -0.3891,
+      "year": 1999
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": -0.2216,
+      "year": 1999
+    },
+    {
+      "ticker": "KO",
+      "name": "The Coca-Cola Company",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": -0.1291,
+      "year": 1999
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.1411,
+      "year": 1999
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.6799,
+      "year": 1999
+    },
+    {
+      "ticker": "AIG",
+      "name": "American International Group Inc.",
+      "market_cap_weight": 0.011,
+      "trailing_1y_return": 0.3987,
+      "year": 1999
+    }
+  ],
+  "2000": [
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": -0.5353,
+      "year": 2000
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.0792,
+      "year": 2000
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.029,
+      "trailing_1y_return": 0.4182,
+      "year": 2000
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.026,
+      "trailing_1y_return": -0.2867,
+      "year": 2000
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": -0.6284,
+      "year": 2000
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": -0.6159,
+      "year": 2000
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.2985,
+      "year": 2000
+    },
+    {
+      "ticker": "AIG",
+      "name": "American International Group Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.3673,
+      "year": 2000
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.257,
+      "year": 2000
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": -0.2477,
+      "year": 2000
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.2757,
+      "year": 2000
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.1552,
+      "year": 2000
+    }
+  ],
+  "2001": [
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": -0.1639,
+      "year": 2001
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.5246,
+      "year": 2001
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.029,
+      "trailing_1y_return": -0.0959,
+      "year": 2001
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.026,
+      "trailing_1y_return": 0.0836,
+      "year": 2001
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.0116,
+      "year": 2001
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": -0.1339,
+      "year": 2001
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.1742,
+      "year": 2001
+    },
+    {
+      "ticker": "AIG",
+      "name": "American International Group Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": -0.1945,
+      "year": 2001
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.018,
+      "year": 2001
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.1231,
+      "year": 2001
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": -0.278,
+      "year": 2001
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": -0.5195,
+      "year": 2001
+    }
+  ],
+  "2002": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": -0.2197,
+      "year": 2002
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": -0.3925,
+      "year": 2002
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.029,
+      "trailing_1y_return": -0.1109,
+      "year": 2002
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.026,
+      "trailing_1y_return": -0.122,
+      "year": 2002
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": -0.2328,
+      "year": 2002
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": -0.072,
+      "year": 2002
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": -0.2473,
+      "year": 2002
+    },
+    {
+      "ticker": "AIG",
+      "name": "American International Group Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": -0.2715,
+      "year": 2002
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.0748,
+      "year": 2002
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": -0.4992,
+      "year": 2002
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": -0.3443,
+      "year": 2002
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": -0.2777,
+      "year": 2002
+    }
+  ],
+  "2003": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": -0.4607,
+      "year": 2003
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.2723,
+      "year": 2003
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.029,
+      "trailing_1y_return": 0.1734,
+      "year": 2003
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.026,
+      "trailing_1y_return": 0.1557,
+      "year": 2003
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.0499,
+      "year": 2003
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.3706,
+      "year": 2003
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": -0.0496,
+      "year": 2003
+    },
+    {
+      "ticker": "AIG",
+      "name": "American International Group Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.1456,
+      "year": 2003
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.982,
+      "year": 2003
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.6353,
+      "year": 2003
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.1534,
+      "year": 2003
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.1467,
+      "year": 2003
+    }
+  ],
+  "2004": [
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": 0.1782,
+      "year": 2004
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.2502,
+      "year": 2004
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.029,
+      "trailing_1y_return": -0.0234,
+      "year": 2004
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "market_cap_weight": 0.026,
+      "trailing_1y_return": 0.0184,
+      "year": 2004
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": -0.2387,
+      "year": 2004
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": -0.0045,
+      "year": 2004
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.2518,
+      "year": 2004
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.1198,
+      "year": 2004
+    },
+    {
+      "ticker": "AIG",
+      "name": "American International Group Inc.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.0092,
+      "year": 2004
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel Corporation",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": -0.231,
+      "year": 2004
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America Corporation",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.0327,
+      "year": 2004
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.0385,
+      "year": 2004
+    }
+  ],
+  "2005": [
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": 0.0958,
+      "year": 2005
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": -0.0397,
+      "year": 2005
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.029,
+      "trailing_1y_return": 0.0037,
+      "year": 2005
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "market_cap_weight": 0.026,
+      "trailing_1y_return": 0.0443,
+      "year": 2005
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.0223,
+      "year": 2005
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": -0.0255,
+      "year": 2005
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": -0.1327,
+      "year": 2005
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America Corporation",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.0201,
+      "year": 2005
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.0262,
+      "year": 2005
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": -0.0998,
+      "year": 2005
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.0676,
+      "year": 2005
+    },
+    {
+      "ticker": "AIG",
+      "name": "American International Group Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.039,
+      "year": 2005
+    }
+  ],
+  "2006": [
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": 0.3643,
+      "year": 2006
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.032,
+      "trailing_1y_return": 0.0616,
+      "year": 2006
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.029,
+      "trailing_1y_return": 0.1129,
+      "year": 2006
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup Inc.",
+      "market_cap_weight": 0.026,
+      "trailing_1y_return": 0.1773,
+      "year": 2006
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.1482,
+      "year": 2006
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America Corporation",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.2159,
+      "year": 2006
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.0962,
+      "year": 2006
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.2829,
+      "year": 2006
+    },
+    {
+      "ticker": "AIG",
+      "name": "American International Group Inc.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.0502,
+      "year": 2006
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.5964,
+      "year": 2006
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.1106,
+      "year": 2006
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.2956,
+      "year": 2006
+    }
+  ],
+  "2007": [
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": 0.2226,
+      "year": 2007
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": -0.0038,
+      "year": 2007
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": 0.1922,
+      "year": 2007
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.1528,
+      "year": 2007
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.0901,
+      "year": 2007
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.0308,
+      "year": 2007
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.5022,
+      "year": 2007
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": -0.073,
+      "year": 2007
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.2693,
+      "year": 2007
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": -0.0118,
+      "year": 2007
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America Corporation",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": -0.2051,
+      "year": 2007
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 1.3633,
+      "year": 2007
+    }
+  ],
+  "2008": [
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": -0.1479,
+      "year": 2008
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.1793,
+      "year": 2008
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": -0.0652,
+      "year": 2008
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": -0.0678,
+      "year": 2008
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": -0.563,
+      "year": 2008
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": -0.4539,
+      "year": 2008
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": -0.3012,
+      "year": 2008
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": -0.2225,
+      "year": 2008
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.1818,
+      "year": 2008
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": -0.0124,
+      "year": 2008
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": -0.3922,
+      "year": 2008
+    },
+    {
+      "ticker": "HPQ",
+      "name": "HP Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": -0.2811,
+      "year": 2008
+    }
+  ],
+  "2009": [
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": -0.1458,
+      "year": 2009
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.5679,
+      "year": 2009
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": 1.47,
+      "year": 2009
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": -0.0754,
+      "year": 2009
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.0984,
+      "year": 2009
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.1903,
+      "year": 2009
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": -0.066,
+      "year": 2009
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": -0.046,
+      "year": 2009
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 1.0104,
+      "year": 2009
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America Corporation",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.1733,
+      "year": 2009
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.2624,
+      "year": 2009
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.0408,
+      "year": 2009
+    }
+  ],
+  "2010": [
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": 0.0723,
+      "year": 2010
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.5293,
+      "year": 2010
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": -0.0843,
+      "year": 2010
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.2089,
+      "year": 2010
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.1268,
+      "year": 2010
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.149,
+      "year": 2010
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.1673,
+      "year": 2010
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": -0.0058,
+      "year": 2010
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.0262,
+      "year": 2010
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.219,
+      "year": 2010
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.009,
+      "year": 2010
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": -0.0422,
+      "year": 2010
+    }
+  ],
+  "2011": [
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": 0.1592,
+      "year": 2011
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.2563,
+      "year": 2011
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": -0.0699,
+      "year": 2011
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.1139,
+      "year": 2011
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.1665,
+      "year": 2011
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.0862,
+      "year": 2011
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.0775,
+      "year": 2011
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": -0.0208,
+      "year": 2011
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.1867,
+      "year": 2011
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.1079,
+      "year": 2011
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.0867,
+      "year": 2011
+    },
+    {
+      "ticker": "PFE",
+      "name": "Pfizer Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.6659,
+      "year": 2011
+    }
+  ],
+  "2012": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": 0.3142,
+      "year": 2012
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.0211,
+      "year": 2012
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": 0.0953,
+      "year": 2012
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.0297,
+      "year": 2012
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.1756,
+      "year": 2012
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.073,
+      "year": 2012
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.172,
+      "year": 2012
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.1416,
+      "year": 2012
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.2949,
+      "year": 2012
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.018,
+      "year": 2012
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.0784,
+      "year": 2012
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corp.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.0482,
+      "year": 2012
+    }
+  ],
+  "2013": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": 0.1025,
+      "year": 2013
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.1693,
+      "year": 2013
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": 0.5836,
+      "year": 2013
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.3996,
+      "year": 2013
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.3217,
+      "year": 2013
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.3324,
+      "year": 2013
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.3354,
+      "year": 2013
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.3765,
+      "year": 2013
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo & Company",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.3147,
+      "year": 2013
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.2496,
+      "year": 2013
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.1543,
+      "year": 2013
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.1539,
+      "year": 2013
+    }
+  ],
+  "2014": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": 0.4178,
+      "year": 2014
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": -0.0865,
+      "year": 2014
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": 0.2416,
+      "year": 2014
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.2664,
+      "year": 2014
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.1808,
+      "year": 2014
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": -0.0521,
+      "year": 2014
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo & Company",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.2427,
+      "year": 2014
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.0568,
+      "year": 2014
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.091,
+      "year": 2014
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": -0.0985,
+      "year": 2014
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron Corporation",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": -0.0816,
+      "year": 2014
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.0907,
+      "year": 2014
+    }
+  ],
+  "2015": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": -0.0453,
+      "year": 2015
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.1944,
+      "year": 2015
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": -0.1568,
+      "year": 2015
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 1.1806,
+      "year": 2015
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.3415,
+      "year": 2015
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": -0.1206,
+      "year": 2015
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": -0.0463,
+      "year": 2015
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.2327,
+      "year": 2015
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.4358,
+      "year": 2015
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.0842,
+      "year": 2015
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo & Company",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.0083,
+      "year": 2015
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": -0.1566,
+      "year": 2015
+    }
+  ],
+  "2016": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": 0.0596,
+      "year": 2016
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.12,
+      "year": 2016
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": 0.1089,
+      "year": 2016
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.1579,
+      "year": 2016
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.0993,
+      "year": 2016
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.2343,
+      "year": 2016
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.1481,
+      "year": 2016
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.3543,
+      "year": 2016
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.0433,
+      "year": 2016
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric Company",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.0151,
+      "year": 2016
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo & Company",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.014,
+      "year": 2016
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.2381,
+      "year": 2016
+    }
+  ],
+  "2017": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.044,
+      "trailing_1y_return": 0.5159,
+      "year": 2017
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.036,
+      "trailing_1y_return": 0.3766,
+      "year": 2017
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.031,
+      "trailing_1y_return": 0.5862,
+      "year": 2017
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.5338,
+      "year": 2017
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.2162,
+      "year": 2017
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.021,
+      "trailing_1y_return": 0.2424,
+      "year": 2017
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.2191,
+      "year": 2017
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.3339,
+      "year": 2017
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.0733,
+      "year": 2017
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America Corporation",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 0.3582,
+      "year": 2017
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.4616,
+      "year": 2017
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo & Company",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.0844,
+      "year": 2017
+    }
+  ],
+  "2018": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.071,
+      "trailing_1y_return": 0.1874,
+      "year": 2018
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.065,
+      "trailing_1y_return": -0.0678,
+      "year": 2018
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.061,
+      "trailing_1y_return": 0.2634,
+      "year": 2018
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": -0.0116,
+      "year": 2018
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.0301,
+      "year": 2018
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": -0.0997,
+      "year": 2018
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": -0.2571,
+      "year": 2018
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": -0.0595,
+      "year": 2018
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.1572,
+      "year": 2018
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.0711,
+      "year": 2018
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": -0.1657,
+      "year": 2018
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Inc.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.13,
+      "year": 2018
+    }
+  ],
+  "2019": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.071,
+      "trailing_1y_return": 0.8613,
+      "year": 2019
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.065,
+      "trailing_1y_return": 0.5526,
+      "year": 2019
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.061,
+      "trailing_1y_return": 0.2635,
+      "year": 2019
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": 0.5657,
+      "year": 2019
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.2818,
+      "year": 2019
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.1093,
+      "year": 2019
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.4212,
+      "year": 2019
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.1561,
+      "year": 2019
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.4251,
+      "year": 2019
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.3153,
+      "year": 2019
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.1801,
+      "year": 2019
+    },
+    {
+      "ticker": "HD",
+      "name": "The Home Depot Inc.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.2917,
+      "year": 2019
+    }
+  ],
+  "2020": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.071,
+      "trailing_1y_return": 0.8075,
+      "year": 2020
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.065,
+      "trailing_1y_return": 0.4104,
+      "year": 2020
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.061,
+      "trailing_1y_return": 0.716,
+      "year": 2020
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": 0.3122,
+      "year": 2020
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.3309,
+      "year": 2020
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 7.4338,
+      "year": 2020
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.0237,
+      "year": 2020
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.0677,
+      "year": 2020
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.0807,
+      "year": 2020
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.1606,
+      "year": 2020
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.1871,
+      "year": 2020
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Inc.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.1929,
+      "year": 2020
+    }
+  ],
+  "2021": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.071,
+      "trailing_1y_return": 0.3072,
+      "year": 2021
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.065,
+      "trailing_1y_return": 0.4539,
+      "year": 2021
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.061,
+      "trailing_1y_return": 0.6359,
+      "year": 2021
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": 0.0238,
+      "year": 2021
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla Inc.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.4976,
+      "year": 2021
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.2313,
+      "year": 2021
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA Corporation",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 1.2942,
+      "year": 2021
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.2895,
+      "year": 2021
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Inc.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 0.4319,
+      "year": 2021
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.0581,
+      "year": 2021
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.2261,
+      "year": 2021
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.1613,
+      "year": 2021
+    }
+  ],
+  "2022": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.071,
+      "trailing_1y_return": -0.2641,
+      "year": 2022
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.065,
+      "trailing_1y_return": -0.2803,
+      "year": 2022
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.061,
+      "trailing_1y_return": -0.3868,
+      "year": 2022
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": -0.4962,
+      "year": 2022
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.0331,
+      "year": 2022
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Inc.",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.0558,
+      "year": 2022
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil Corporation",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.8744,
+      "year": 2022
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.0597,
+      "year": 2022
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.1264,
+      "year": 2022
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA Corporation",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": -0.5027,
+      "year": 2022
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc.",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": -0.0404,
+      "year": 2022
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble Co.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": -0.0505,
+      "year": 2022
+    }
+  ],
+  "2023": [
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.071,
+      "trailing_1y_return": 0.5819,
+      "year": 2023
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.065,
+      "trailing_1y_return": 0.4901,
+      "year": 2023
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA Corporation",
+      "market_cap_weight": 0.061,
+      "trailing_1y_return": 2.3903,
+      "year": 2023
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": 0.8088,
+      "year": 2023
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 1.9413,
+      "year": 2023
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.5884,
+      "year": 2023
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.1546,
+      "year": 2023
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla Inc.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 1.0172,
+      "year": 2023
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Inc.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": -0.007,
+      "year": 2023
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.3063,
+      "year": 2023
+    },
+    {
+      "ticker": "LLY",
+      "name": "Eli Lilly and Company",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.5934,
+      "year": 2023
+    },
+    {
+      "ticker": "V",
+      "name": "Visa Inc.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.2531,
+      "year": 2023
+    }
+  ],
+  "2024": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "market_cap_weight": 0.071,
+      "trailing_1y_return": 0.3071,
+      "year": 2024
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA Corporation",
+      "market_cap_weight": 0.065,
+      "trailing_1y_return": 1.7127,
+      "year": 2024
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "market_cap_weight": 0.061,
+      "trailing_1y_return": 0.1293,
+      "year": 2024
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com Inc.",
+      "market_cap_weight": 0.038,
+      "trailing_1y_return": 0.4439,
+      "year": 2024
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.027,
+      "trailing_1y_return": 0.6749,
+      "year": 2024
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc. (Class A)",
+      "market_cap_weight": 0.023,
+      "trailing_1y_return": 0.3561,
+      "year": 2024
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": 0.2709,
+      "year": 2024
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla Inc.",
+      "market_cap_weight": 0.017,
+      "trailing_1y_return": 0.6252,
+      "year": 2024
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom Inc.",
+      "market_cap_weight": 0.016,
+      "trailing_1y_return": 1.105,
+      "year": 2024
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase & Co.",
+      "market_cap_weight": 0.014,
+      "trailing_1y_return": 0.4429,
+      "year": 2024
+    },
+    {
+      "ticker": "LLY",
+      "name": "Eli Lilly and Company",
+      "market_cap_weight": 0.013,
+      "trailing_1y_return": 0.3244,
+      "year": 2024
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Inc.",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": -0.0391,
+      "year": 2024
+    }
+  ]
+}

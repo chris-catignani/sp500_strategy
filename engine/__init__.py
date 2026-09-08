@@ -14,6 +14,7 @@ from engine.selector import (
     MarketCapSelector,
     PerformanceSelector,
 )
+from engine.data_loader import DataLoader
 
 __all__ = [
     "AnnualLedgerEntry",
@@ -26,4 +27,5 @@ __all__ = [
     "BaseSelector",
     "MarketCapSelector",
     "PerformanceSelector",
+    "DataLoader",
 ]
