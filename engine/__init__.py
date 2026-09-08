@@ -8,6 +8,7 @@ from engine.models import (
     TaxLot,
     TradeOrder,
 )
+from engine.tax_lots import FIFOTaxLotManager
 
 __all__ = [
     "AnnualLedgerEntry",
@@ -16,4 +17,5 @@ __all__ = [
     "StrategyResult",
     "TaxLot",
     "TradeOrder",
+    "FIFOTaxLotManager",
 ]
