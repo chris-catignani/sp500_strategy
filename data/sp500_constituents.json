@@ -262,7 +262,7 @@
       "ticker": "GE",
       "name": "General Electric Company",
       "market_cap_weight": 0.032,
-      "trailing_1y_return": -0.2579,
+      "trailing_1y_return": 0.4842,
       "year": 1997
     },
     {
@@ -355,7 +355,7 @@
       "ticker": "GE",
       "name": "General Electric Company",
       "market_cap_weight": 0.028,
-      "trailing_1y_return": 0.3901,
+      "trailing_1y_return": 0.39,
       "year": 1998
     },
     {
@@ -520,7 +520,7 @@
       "ticker": "GE",
       "name": "General Electric Company",
       "market_cap_weight": 0.038,
-      "trailing_1y_return": -0.5353,
+      "trailing_1y_return": -0.0707,
       "year": 2000
     },
     {
@@ -555,7 +555,7 @@
       "ticker": "WMT",
       "name": "Walmart Inc.",
       "market_cap_weight": 0.021,
-      "trailing_1y_return": -0.6159,
+      "trailing_1y_return": -0.2318,
       "year": 2000
     },
     {

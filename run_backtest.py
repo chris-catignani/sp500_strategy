@@ -228,6 +228,8 @@ def build_scenario_and_apps_script_data(
                     post_res = pre_res
                     tax_drag = 0.0
                     alpha = post_res.cagr - spx_tr_cagr
+                    strat_cum = post_res.cumulative_return
+                    strat_final = post_res.final_equity
                 else:
                     post_res = simulator.run_simulation(
                         s_yr,
@@ -240,6 +242,8 @@ def build_scenario_and_apps_script_data(
                     )
                     tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
                     alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
+                    strat_cum = calculate_cumulative_return(initial_capital, post_res.post_liquidation_wealth)
+                    strat_final = post_res.post_liquidation_wealth
 
                 strat_label = f"Top {n}"
                 key = f"{h_label}_{strat_label}_{rate_str}"
@@ -251,8 +255,8 @@ def build_scenario_and_apps_script_data(
                     round(pre_res.cagr, 6),
                     round(post_res.cagr, 6),
                     round(post_res.post_liquidation_cagr, 6),
-                    round(post_res.cumulative_return, 6),
-                    round(post_res.final_equity, 2),
+                    round(strat_cum, 6),
+                    round(strat_final, 2),
                     round(post_res.total_dividends_received, 2),
                     round(post_res.max_drawdown, 6),
                     round(post_res.total_taxes_paid, 2),
@@ -630,8 +634,8 @@ def run_backtest(args: argparse.Namespace) -> int:
                 "pre_cagr": res_pre.cagr,
                 "post_cagr": res_post.cagr,
                 "post_liq_cagr": res_post.post_liquidation_cagr,
-                "cum_return": res_post.cumulative_return,
-                "final_equity": res_post.final_equity,
+                "cum_return": calculate_cumulative_return(args.initial_capital, res_post.post_liquidation_wealth),
+                "final_equity": res_post.post_liquidation_wealth,
                 "max_dd": res_post.max_drawdown,
                 "total_taxes": res_post.total_taxes_paid,
                 "tax_drag": tax_drag,
@@ -685,7 +689,7 @@ def run_backtest(args: argparse.Namespace) -> int:
             tax_rate=args.tax_rate,
             initial_capital=args.initial_capital,
             final_equity=bm["final_equity"],
-            cagr=bm["after_cagr"],
+            cagr=spx_post_liq_cagr,
             cumulative_return=bm["cum_return"],
             max_drawdown=bm["max_dd"],
             total_taxes_paid=bm["total_taxes"],

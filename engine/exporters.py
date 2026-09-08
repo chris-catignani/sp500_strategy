@@ -1182,9 +1182,9 @@ function RECALCULATE_STRATEGY(taxRate) {{
     return 'Invalid tax rate';
   }}
   // Linear interpolation based on Top 5 30-year empirical results with dividends:
-  // 0% -> 13.33%, 30% -> 10.65%
-  var baseCagr = 0.1333;
-  var drag = rate * 0.0893;
+  // 0% -> 14.95%, 30% -> 12.04%
+  var baseCagr = 0.1495;
+  var drag = rate * 0.0970;
   return baseCagr - drag;
 }}
 

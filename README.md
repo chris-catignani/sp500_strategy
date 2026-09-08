@@ -139,18 +139,20 @@ At the conclusion of the investment horizon (2024):
 
 | Horizon | Strategy | Pre-Tax CAGR (Annual) | After-Tax CAGR (Annual) | Post-Liq CAGR (Annual) | Total Return (Cumulative) | Max Drawdown (Worst Drop) | Tax Drag (Annual) | Alpha vs SPX (Annual) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **10-Year** (2014–2024) | **Top 3** | **28.02%** | **25.54%** | **22.92%** | **+872.37%** | -31.04% | 5.10% | **+13.37%** |
-| | Top 5 | 23.50% | 21.47% | 18.96% | +599.20% | -36.76% | 4.55% | +9.40% |
-| | Top 10 | 21.53% | 19.39% | 17.13% | +488.28% | -33.55% | 4.40% | +7.58% |
+| **10-Year** (2014–2024) | **Top 3** | **28.02%** | **25.54%** | **22.92%** | **+687.61%** | -31.04% | 5.10% | **+13.37%** |
+| | Top 5 | 23.50% | 21.47% | 18.96% | +467.42% | -36.76% | 4.55% | +9.40% |
+| | Top 10 | 21.53% | 19.39% | 17.13% | +385.96% | -33.55% | 4.40% | +7.58% |
 | | S&P 500 Index | 12.24% | 11.89% | 9.55% | +149.02% | -18.68% | 2.69% | *Benchmark* |
-| **20-Year** (2004–2024) | **Top 3** | **17.42%** | **15.56%** | **14.32%** | **+1,705.03%** | -38.69% | 3.10% | **+6.60%** |
-| | Top 5 | 15.48% | 13.74% | 12.52% | +1,213.28% | -36.76% | 2.96% | +4.80% |
-| | Top 10 | 14.63% | 12.78% | 11.68% | +1,007.93% | -33.55% | 2.95% | +3.96% |
+| **20-Year** (2004–2024) | **Top 3** | **17.30%** | **15.49%** | **14.24%** | **+1,334.18%** | -39.56% | 3.06% | **+6.52%** |
+| | Top 5 | 15.41% | 13.69% | 12.47% | +949.41% | -36.76% | 2.93% | +4.75% |
+| | Top 10 | 14.50% | 12.69% | 11.59% | +796.31% | -33.55% | 2.91% | +3.87% |
 | | S&P 500 Index | 9.53% | 9.14% | 7.72% | +342.65% | -37.04% | 1.81% | *Benchmark* |
-| **30-Year** (1994–2024) | Top 3 | 13.20% | 11.44% | 10.64% | +2,475.66% | -66.74% | 2.56% | +2.00% |
-| | Top 5 | 13.33% | 11.45% | 10.65% | +2,481.57% | -64.14% | 2.68% | +2.01% |
-| | **Top 10** | **13.95%** | **11.88%** | **11.15%** | **+2,801.01%** | -48.08% | 2.80% | **+2.52%** |
+| **30-Year** (1994–2024) | **Top 3** | **15.18%** | **13.20%** | **12.38%** | **+3,220.82%** | -56.50% | 2.79% | **+3.75%** |
+| | Top 5 | 14.95% | 12.85% | 12.04% | +2,932.26% | -54.82% | 2.91% | +3.41% |
+| | Top 10 | 14.74% | 12.58% | 11.85% | +2,778.09% | -40.32% | 2.89% | +3.21% |
 | | S&P 500 Index | 10.11% | 9.74% | 8.64% | +1,100.36% | -38.64% | 1.47% | *Benchmark* |
+
+*Note: Total Return (Cumulative) reflects true post-liquidation net wealth for both strategy and benchmark under the baseline 30% tax rate.*
 
 ---
 
@@ -343,13 +345,20 @@ The test suite covers models, FIFO lot accounting, tax netting, universe data lo
 python3 -m unittest discover tests
 
 # Run specific test suites
+python3 -m unittest tests/test_dataset_integrity.py
 python3 -m unittest tests/test_cli.py
 python3 -m unittest tests/test_tax_lots.py
 python3 -m unittest tests/test_rebalancing.py
 python3 -m unittest tests/test_exporters.py
 ```
 
-All 110 tests execute in under 0.5 seconds with 100% test pass rate.
+All 114 tests execute in under 0.5 seconds with 100% test pass rate.
+
+---
+
+## Historical Data Sources & Provenance
+
+For detailed documentation on benchmark index levels (`^GSPC`, `^SP500TR`), constituent point-in-time rankings, corporate action split adjustments (`WMT`, `GE`, `AIG`, `UNH`), and dividend cash accounting, see [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md).
 
 ---
 

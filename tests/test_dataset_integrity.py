@@ -34,6 +34,52 @@ class TestDatasetIntegrity(unittest.TestCase):
             self.assertGreater(prices["^SP500TR"][str_yr], 0.0)
             self.assertGreaterEqual(prices["^SP500TR"][str_yr], prices["^GSPC"][str_yr])
 
+    def test_benchmark_1994_dividend_yield(self):
+        from engine.data_loader import DataLoader
+        loader = DataLoader()
+        y_1994 = loader.get_spx_dividend_yield(1994)
+        # Yield should reflect the historical ~2.86% dividend yield, not an erroneous 17.17%
+        self.assertGreaterEqual(y_1994, 0.025)
+        self.assertLessEqual(y_1994, 0.032)
+        self.assertAlmostEqual(y_1994, 0.0286, places=3)
+
+    def test_walmart_split_adjustment(self):
+        from engine.data_loader import DataLoader
+        loader = DataLoader()
+        p_2023 = loader.get_price("WMT", 2023)
+        p_2024 = loader.get_price("WMT", 2024)
+        ret_2024 = (p_2024 - p_2023) / p_2023
+        # 2023 to 2024 return should be ~+69.2%, not an unadjusted +238%
+        self.assertGreater(ret_2024, 0.65)
+        self.assertLess(ret_2024, 0.75)
+
+    def test_ge_historical_returns(self):
+        from engine.data_loader import DataLoader
+        loader = DataLoader()
+        p_1998 = loader.get_price("GE", 1998)
+        p_1999 = loader.get_price("GE", 1999)
+        p_2000 = loader.get_price("GE", 2000)
+        ret_1999 = (p_1999 - p_1998) / p_1998
+        ret_2000 = (p_2000 - p_1999) / p_1999
+        # GE gained ~+51.7% in 1999 and dropped ~-7.07% in 2000 (not -53.5%)
+        self.assertGreater(ret_1999, 0.48)
+        self.assertLess(ret_1999, 0.55)
+        self.assertGreater(ret_2000, -0.10)
+        self.assertLess(ret_2000, -0.05)
+
+    def test_aig_crisis_and_recovery_returns(self):
+        from engine.data_loader import DataLoader
+        loader = DataLoader()
+        p_2007 = loader.get_price("AIG", 2007)
+        p_2008 = loader.get_price("AIG", 2008)
+        p_2009 = loader.get_price("AIG", 2009)
+        ret_2008 = (p_2008 - p_2007) / p_2007
+        ret_2009 = (p_2009 - p_2008) / p_2008
+        # AIG crashed ~-97.3% in 2008 and rebounded ~+23.5% in 2009 (not +2370%)
+        self.assertLess(ret_2008, -0.95)
+        self.assertGreater(ret_2009, 0.20)
+        self.assertLess(ret_2009, 0.30)
+
 
 if __name__ == "__main__":
     unittest.main()
