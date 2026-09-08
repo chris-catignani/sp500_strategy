@@ -393,9 +393,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--strategy",
         type=str,
-        choices=["market_cap", "performance"],
+        choices=["market_cap", "performance", "momentum", "marketcap"],
         default="market_cap",
-        help="Constituent selection algorithm (market_cap or performance).",
+        help="Constituent selection algorithm (market_cap, performance, momentum).",
     )
     parser.add_argument(
         "--tax-rate",
