@@ -70,6 +70,24 @@ function buildAllSheets() {
   // 5. Holdings & Trades Tab
   buildTradesSheet(ss);
 
+  // Organize tab order: Executive Summary is always tab 1
+  var tabOrder = [
+    'Executive Summary',
+    'Top 3 Strategy',
+    'Top 5 Strategy',
+    'Top 10 Strategy',
+    'S&P 500 Benchmark',
+    'Historical Holdings & Trades',
+    'Scenario Data'
+  ];
+  for (var i = 0; i < tabOrder.length; i++) {
+    var sheet = ss.getSheetByName(tabOrder[i]);
+    if (sheet) {
+      ss.setActiveSheet(sheet);
+      ss.moveActiveSheet(i + 1);
+    }
+  }
+
   // Activate Executive Summary
   var execSheet = ss.getSheetByName('Executive Summary');
   if (execSheet) {
@@ -160,33 +178,33 @@ function buildExecutiveSummarySheet(ss) {
   // 3. KPI Summary Scorecards (Rows 4-6)
   // 5 cards balanced seamlessly across columns A through K:
   // Card 1: Top 5 (30y) Final Wealth (Cols A-B)
-  sheet.getRange('A4:B4').merge().setValue('Top 5 (30y) Final Wealth').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A4:B4').merge().setValue('Top 5 Final Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('A5:B5').merge().setFormula('=G19').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('A6:B6').merge().setValue('$10,000 start capital').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A6:B6').merge().setValue('After all taxes ($10k start)').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('A4:B6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 2: S&P 500 (30y) Net Wealth (Cols C-D)
-  sheet.getRange('C4:D4').merge().setValue('S&P 500 (30y) Wealth').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  // Card 2: S&P 500 (30y) Wealth (Cols C-D)
+  sheet.getRange('C4:D4').merge().setValue('S&P 500 Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('C5:D5').merge().setFormula('=G21').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('C6:D6').merge().setValue('Passive benchmark').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C6:D6').merge().setValue('Passive buy & hold').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('C4:D6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 3: Top 5 (30y) Post-Liq CAGR (Cols E-F)
-  sheet.getRange('E4:F4').merge().setValue('Top 5 (30y) Post-Liq CAGR').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  // Card 3: Top 5 (30y) Annual Return (Cols E-F)
+  sheet.getRange('E4:F4').merge().setValue('Top 5 Annual Return (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('E5:F5').merge().setFormula('=E19').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('E6:F6').merge().setValue('Net after all taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('E6:F6').merge().setValue('Net post-liquidation CAGR').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('E4:F6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 4: 30-Year Alpha (Cols G-H)
-  sheet.getRange('G4:H4').merge().setValue('30-Year Net Alpha').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  // Card 4: 30-Year Excess Return (Cols G-H)
+  sheet.getRange('G4:H4').merge().setValue('30-Year Excess Return').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('G5:H5').merge().setFormula('=K19').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('G6:H6').merge().setValue('Excess vs S&P 500').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G6:H6').merge().setValue('Annual Alpha vs S&P 500').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('G4:H6').setBackground('#F0FFF4').setBorder(true, true, true, true, false, false, '#C6F6D5', SpreadsheetApp.BorderStyle.SOLID);
 
   // Card 5: 30-Year Tax Drag (Cols I-K)
   sheet.getRange('I4:K4').merge().setValue('30-Year Tax Drag').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('I5:K5').merge().setFormula('=J19').setFontWeight('bold').setFontSize(14).setFontColor('#9B2C2C').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('I6:K6').merge().setValue('Annual & terminal drag').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('I6:K6').merge().setValue('Annual return lost to taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('I4:K6').setBackground('#FFF5F5').setBorder(true, true, true, true, false, false, '#FED7D7', SpreadsheetApp.BorderStyle.SOLID);
 
   // 4. Multi-Horizon Strategy Comparison Table
@@ -203,9 +221,9 @@ function buildExecutiveSummarySheet(ss) {
 
   // Row 9: Table Header
   var tableHeaders = [
-    'Horizon', 'Strategy', 'Pre-Tax CAGR', 'After-Tax CAGR', 'Post-Liq CAGR',
-    'Cumulative Return', 'Final Wealth ($10k Start)', 'Max Drawdown',
-    'Total Taxes Paid', 'Tax Drag', 'Alpha vs S&P 500'
+    'Horizon', 'Strategy', 'Annual Return (Pre-Tax)', 'Annual Return (After-Tax)', 'Annual Return (Post-Liq)',
+    'Total Return (Cumulative)', 'Ending Wealth ($10k Start)', 'Max Drawdown (Worst Drop)',
+    'Total Taxes Paid', 'Annual Tax Drag', 'Excess vs S&P 500 (Alpha)'
   ];
   sheet.getRange(9, 1, 1, tableHeaders.length).setValues([tableHeaders])
        .setBackground('#2C5282')
@@ -264,7 +282,7 @@ function buildExecutiveSummarySheet(ss) {
   sheet.getRange(9, 1, tableRows.length + 1, tableHeaders.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
   // Explicit, proportional column widths (avoids autoResize stretching from merged headers/banners)
-  var colWidths = [80, 105, 110, 110, 110, 130, 145, 110, 125, 105, 130];
+  var colWidths = [80, 105, 125, 125, 125, 130, 135, 125, 115, 115, 135];
   for (var c = 0; c < colWidths.length; c++) {
     sheet.setColumnWidth(c + 1, colWidths[c]);
   }
@@ -281,6 +299,44 @@ function buildExecutiveSummarySheet(ss) {
   sheet.setRowHeight(9, 36);
   for (var dr = 10; dr <= 21; dr++) {
     sheet.setRowHeight(dr, 24);
+  }
+
+  // 5. Key Metrics Glossary & Explanations (Rows 23-29)
+  sheet.getRange('A23:K23').merge()
+       .setValue('KEY METRIC DEFINITIONS & GLOSSARY')
+       .setBackground('#EDF2F7')
+       .setFontColor('#2D3748')
+       .setFontWeight('bold')
+       .setFontSize(10)
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(23, 24);
+
+  var explanations = [
+    ['Annual Return (CAGR):', 'Compound Annual Growth Rate — the smoothed annual percentage your money grew every year compounded steadily.'],
+    ['Total Return (Cumulative):', 'The total unannualized percentage gain over the entire period (e.g. +795.6% means $10k turned into $89.5k).'],
+    ['Post-Liquidation Return:', 'True net annual return assuming all remaining stock holdings are sold at the end and all final taxes paid.'],
+    ['Annual Tax Drag:', 'Annual percentage of return lost to taxes. Calculated as Pre-Tax Annual Return minus Post-Liquidation Annual Return.'],
+    ['Excess vs S&P 500 (Alpha):', 'Additional annual return earned above the S&P 500 benchmark (+5.81% means beating the market by 5.81%/yr).'],
+    ['Max Drawdown:', 'Worst percentage drop from peak to trough during market downturns before a new high was reached.']
+  ];
+
+  for (var e = 0; e < explanations.length; e++) {
+    var r = 24 + e;
+    sheet.getRange('A' + r + ':B' + r).merge()
+         .setValue(explanations[e][0])
+         .setFontWeight('bold')
+         .setFontSize(9)
+         .setFontColor('#4A5568')
+         .setHorizontalAlignment('right')
+         .setVerticalAlignment('middle');
+    sheet.getRange('C' + r + ':K' + r).merge()
+         .setValue(explanations[e][1])
+         .setFontSize(9)
+         .setFontColor('#718096')
+         .setHorizontalAlignment('left')
+         .setVerticalAlignment('middle');
+    sheet.setRowHeight(r, 20);
   }
 
   sheet.setFrozenRows(9);

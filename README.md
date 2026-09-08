@@ -6,25 +6,38 @@ The engine features rigorous **two-phase annual rebalancing**, full **FIFO (Firs
 
 ---
 
+## How This Project Works: Python Simulation + Google Apps Script
+
+A common question when opening this repository is: **"Why is the project written in Python, but there is also a JavaScript file (`scripts/google_apps_script.js`)? What is the purpose of both?"**
+
+Here is how the system works together:
+
+1. **The Python Simulation Engine (`engine/` & `run_backtest.py`)**:
+   - Google Sheets cannot execute heavy historical backtests or process 31 years of point-in-time constituent data natively.
+   - The **Python engine** handles all the quantitative computation: it processes 31 years of split-adjusted S&P 500 constituent weights and prices (1994–2024), simulates annual rebalancing for Top 3, Top 5, and Top 10 portfolios, tracks FIFO tax lots, calculates capital loss carryforwards, and computes multi-horizon performance across multiple tax tiers ($0\%, 15\%, 20\%, 30\%, 37\%$).
+   - Built with **zero external dependencies** (uses only the Python 3 standard library: no `pip install`, `pandas`, or `numpy` required).
+
+2. **The Standalone JavaScript File (`scripts/google_apps_script.js`)**:
+   - Google Sheets is powered by **Google Apps Script** (a cloud-based JavaScript runtime built into Google Workspace).
+   - When Python runs, it automatically compiles all simulation matrices, 30-year annual accounting ledgers, trade audit logs, and dashboard styling formulas into a single, self-contained JavaScript file: [`scripts/google_apps_script.js`](scripts/google_apps_script.js).
+   - **For the user**: You don't need to know JavaScript or configure APIs. You simply copy and paste this one file into Google Sheets (`Extensions > Apps Script`), click run, and it instantly builds a complete, interactive, beautifully formatted financial dashboard with dynamic dropdowns.
+
+3. **CSV Audit Exports (`outputs/`)**:
+   - Python simultaneously exports clean CSV files (`summary_metrics.csv`, `annual_breakdown.csv`, `trade_log.csv`) for independent spreadsheet analysis, reporting, or automated workflows.
+
+---
+
 ## Table of Contents
 
+- [How This Project Works: Python + Apps Script](#how-this-project-works-python-simulation--google-apps-script)
 - [Executive Summary & Strategy Logic](#executive-summary--strategy-logic)
 - [Two-Phase Rebalancing & Tax Model](#two-phase-rebalancing--tax-model)
-  - [1. Phase 1: Portfolio Valuation & Sell Execution](#1-phase-1-portfolio-valuation--sell-execution)
-  - [2. Phase 2: FIFO Tax Settlement & Reinvestment](#2-phase-2-fifo-tax-settlement--reinvestment)
-  - [3. Terminal Liquidation & Tax Drag](#3-terminal-liquidation--tax-drag)
 - [Key Empirical Results (1994–2024)](#key-empirical-results-19942024)
-- [Architecture & Directory Layout](#architecture--directory-layout)
+- [Financial Metrics & Acronym Guide](#financial-metrics--acronym-guide)
 - [Getting Started](#getting-started)
 - [CLI Runner Usage](#cli-runner-usage)
-  - [Basic Execution](#basic-execution)
-  - [Custom Strategies & Parameters](#custom-strategies--parameters)
-  - [All Available Flags](#all-available-flags)
 - [Extensibility: Adding Custom Selectors](#extensibility-adding-custom-selectors)
 - [Google Sheets Integration Guide](#google-sheets-integration-guide)
-  - [Target Spreadsheet](#target-spreadsheet)
-  - [Deployment Instructions](#deployment-instructions)
-  - [Interactive Dashboard Controls](#interactive-dashboard-controls)
 - [Running Unit Tests](#running-unit-tests)
 - [License](#license)
 
@@ -81,57 +94,38 @@ At the end of the investment horizon (2024), we calculate:
 
 *Baseline: \$10,000 Initial Capital | 30% Capital Gains Tax Rate*
 
-| Horizon | Strategy | Pre-Tax CAGR | After-Tax CAGR | Post-Liq CAGR | Cumulative Return | Max Drawdown | Tax Drag | Alpha vs SPX |
+| Horizon | Strategy | Pre-Tax CAGR (Annual) | After-Tax CAGR (Annual) | Post-Liq CAGR (Annual) | Total Return (Cumulative) | Max Drawdown (Worst Drop) | Tax Drag (Annual) | Alpha vs SPX (Annual) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **10-Year** (2014–2024) | **Top 3** | **26.64%** | **24.51%** | **21.91%** | **795.64%** | -31.44% | 4.73% | **+13.45%** |
-| | Top 5 | 22.41% | 20.67% | 18.17% | 554.67% | -37.01% | 4.25% | +9.60% |
-| | Top 10 | 20.20% | 18.41% | 16.16% | 441.87% | -33.86% | 4.04% | +7.34% |
-| | S&P 500 Index | 11.07% | 11.07% | 11.07% | 185.67% | -19.44% | 0.00% | *Benchmark* |
-| **20-Year** (2004–2024) | **Top 3** | **15.29%** | **14.03%** | **12.80%** | **1,282.25%** | -42.73% | 2.49% | **+5.81%** |
-| | Top 5 | 13.33% | 12.21% | 11.00% | 901.64% | -37.01% | 2.33% | +3.99% |
-| | Top 10 | 12.22% | 11.05% | 9.96% | 713.94% | -33.86% | 2.26% | +2.83% |
-| | S&P 500 Index | 8.22% | 8.22% | 8.22% | 385.32% | -38.49% | 0.00% | *Benchmark* |
-| **30-Year** (1994–2024) | Top 3 | 11.12% | 9.98% | 9.19% | 1,636.90% | -72.21% | 1.94% | +1.11% |
-| | Top 5 | 11.27% | 10.00% | 9.21% | 1,644.15% | -70.65% | 2.06% | +1.13% |
-| | **Top 10** | **11.73%** | **10.28%** | **9.55%** | **1,781.59%** | -54.28% | 2.18% | **+1.41%** |
-| | S&P 500 Index | 8.87% | 8.87% | 8.87% | 1,180.65% | -40.12% | 0.00% | *Benchmark* |
+| **10-Year** (2014–2024) | **Top 3** | **26.64%** | **24.51%** | **21.91%** | **+795.64%** | -31.44% | 4.73% | **+13.45%** |
+| | Top 5 | 22.41% | 20.67% | 18.17% | +554.67% | -37.01% | 4.25% | +9.60% |
+| | Top 10 | 20.20% | 18.41% | 16.16% | +441.87% | -33.86% | 4.04% | +7.34% |
+| | S&P 500 Index | 11.07% | 11.07% | 11.07% | +185.67% | -19.44% | 0.00% | *Benchmark* |
+| **20-Year** (2004–2024) | **Top 3** | **15.29%** | **14.03%** | **12.80%** | **+1,282.25%** | -42.73% | 2.49% | **+5.81%** |
+| | Top 5 | 13.33% | 12.21% | 11.00% | +901.64% | -37.01% | 2.33% | +3.99% |
+| | Top 10 | 12.22% | 11.05% | 9.96% | +713.94% | -33.86% | 2.26% | +2.83% |
+| | S&P 500 Index | 8.22% | 8.22% | 8.22% | +385.32% | -38.49% | 0.00% | *Benchmark* |
+| **30-Year** (1994–2024) | Top 3 | 11.12% | 9.98% | 9.19% | +1,636.90% | -72.21% | 1.94% | +1.11% |
+| | Top 5 | 11.27% | 10.00% | 9.21% | +1,644.15% | -70.65% | 2.06% | +1.13% |
+| | **Top 10** | **11.73%** | **10.28%** | **9.55%** | **+1,781.59%** | -54.28% | 2.18% | **+1.41%** |
+| | S&P 500 Index | 8.87% | 8.87% | 8.87% | +1,180.65% | -40.12% | 0.00% | *Benchmark* |
 
 ---
 
-## Architecture & Directory Layout
+## Financial Metrics & Acronym Guide
 
-```
-sp500_strategy/
-├── run_backtest.py                 # Primary executable CLI runner and table presenter
-├── data/
-│   ├── sp500_constituents.json     # Point-in-time constituent weights and returns (1994–2024)
-│   └── sp500_prices.json           # Split-adjusted year-end close prices and S&P 500 levels
-├── engine/
-│   ├── __init__.py                 # Package exports
-│   ├── models.py                   # Data models (ConstituentSnapshot, TaxLot, TradeOrder, etc.)
-│   ├── tax_lots.py                 # FIFO lot queue, depletion, and loss carryforward engine
-│   ├── selector.py                 # Strategy selectors (MarketCapSelector, PerformanceSelector)
-│   ├── data_loader.py              # JSON point-in-time universe and price loader
-│   ├── backtest.py                 # Two-phase simulation coordinator and trade ledger
-│   ├── metrics.py                  # CAGR, cumulative returns, max drawdown, alpha, tax drag
-│   └── exporters.py                # CSV exporters and Google Apps Script dashboard generator
-├── outputs/
-│   ├── summary_metrics.csv         # Multi-horizon summary table across all strategies
-│   ├── annual_breakdown.csv        # Year-by-year valuation, turnover, taxes, and cash history
-│   └── trade_log.csv               # Complete audit trail of all buy/sell transactions
-├── scripts/
-│   ├── google_apps_script.js       # Complete self-contained Google Apps Script dashboard
-│   └── generate_datasets.py        # Historical data builder and validator
-└── tests/
-    ├── test_models.py              # Unit tests for core data models
-    ├── test_tax_lots.py            # Unit tests for FIFO lot queue and loss netting
-    ├── test_selector.py            # Unit tests for weighting and selection logic
-    ├── test_data_loader.py         # Unit tests for data loading and pricing lookups
-    ├── test_rebalancing.py         # Unit tests for two-phase rebalancing simulation
-    ├── test_metrics.py             # Unit tests for quantitative calculations
-    ├── test_exporters.py           # Unit tests for CSVs and Google Apps Script export
-    └── test_cli.py                 # Unit tests for CLI runner and parameter parsing
-```
+Every metric reported in the CLI, CSV files, and Google Sheets dashboard is defined below, including whether it represents an **annualized rate** or a **total cumulative return**:
+
+| Metric | Frequency | Plain-English Definition | Example |
+| :--- | :---: | :--- | :--- |
+| **CAGR** *(Compound Annual Growth Rate)* | **Annual** | The smoothed annual return your money grew each year, assuming steady compound interest. It answers: *"What constant annual return would turn my starting capital into my ending wealth?"* | A 10-year CAGR of 24.51% means your portfolio grew at an effective pace of 24.51% per year. |
+| **Pre-Tax CAGR** | **Annual** | Annual compounded growth before deducting any taxes on rebalancing gains. | 26.64% / year |
+| **After-Tax CAGR** | **Annual** | Annual compounded growth of your live portfolio after paying taxes on realized capital gains each rebalancing year. | 24.51% / year |
+| **Post-Liquidation CAGR** | **Annual** | True net "walk-away" annual return assuming you sell 100% of remaining holdings at the end of the horizon and pay all final taxes on unrealized gains. | 21.91% / year |
+| **Cumulative Return** | **Total** | The complete percentage gain over the entire 10, 20, or 30 year horizon. | **+795.64%** over 10 years means $\$10,000$ turned into $\$89,564$ total. |
+| **Alpha vs S&P 500** | **Annual** | The excess annual return earned above the passive S&P 500 benchmark. | An alpha of **+5.81%** means beating the market by 5.81% each year. |
+| **Tax Drag** | **Annual** | The annual percentage of return lost to taxes each year. Calculated as $\text{Pre-Tax CAGR} - \text{Post-Liquidation CAGR}$. | A tax drag of 4.73% means taxes reduced annual compounding from 26.64% to 21.91%. |
+| **Max Drawdown** | **Total** | The worst peak-to-trough decline during market crashes before recovering to new highs. | -37.01% drop during the 2022 bear market. |
+| **SPX / `^GSPC`** | *Index* | The standard ticker symbol for the S&P 500 Price Return Index. | Official benchmark |
 
 ---
 
@@ -276,14 +270,14 @@ Access the live target Google Sheet here:
    - If prompted by Google for authorization ("Authorization Required"), click **Continue**, select your account, click **Advanced**, and then click **Go to Untitled project (unsafe)** to grant permissions.
    - Click **S&P 500 Strategy** > **Build All Sheets** once more.
 5. **Sheets Created**:
-   The script will automatically format and generate 6 polished tabs:
-   - **Executive Summary**: Interactive dashboard with KPI cards, multi-horizon comparison, and dropdowns.
-   - **Top 3 Strategy**: Full 30-year annual accounting ledger (start value, gross return, taxes paid, carryforward, turnover).
-   - **Top 5 Strategy**: Full 30-year annual accounting ledger.
-   - **Top 10 Strategy**: Full 30-year annual accounting ledger.
-   - **S&P 500 Benchmark**: 30-year historical index levels, annual returns, and compounded growth.
-   - **Historical Holdings & Trades**: Comprehensive audit trail of every buy and sell order executed.
-   - **Scenario Data**: Pre-computed matrix across tax tiers (0%, 15%, 20%, 30%, 37%).
+   The script automatically creates and orders 7 sheets, ensuring **Executive Summary** is the first tab:
+   1. **Executive Summary** (Tab 1): Interactive dashboard with KPI cards, multi-horizon comparison, dynamic tax rate selector, and key terms glossary.
+   2. **Top 3 Strategy** (Tab 2): Full 30-year annual accounting ledger (start value, gross return, taxes paid, carryforward, turnover).
+   3. **Top 5 Strategy** (Tab 3): Full 30-year annual accounting ledger.
+   4. **Top 10 Strategy** (Tab 4): Full 30-year annual accounting ledger.
+   5. **S&P 500 Benchmark** (Tab 5): 30-year historical index levels, annual returns, and compounded growth.
+   6. **Historical Holdings & Trades** (Tab 6): Comprehensive audit trail of every buy and sell order executed.
+   7. **Scenario Data** (Tab 7): Pre-computed lookup matrix powering dynamic formula recalculations.
 
 ### Interactive Dashboard Controls
 
