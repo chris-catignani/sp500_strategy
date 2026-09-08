@@ -45,8 +45,9 @@ class TestPortfolioSimulator(unittest.TestCase):
             self.simulator.run_simulation(start_year=2014, end_year=2024, n=5, tax_rate=1.5)
 
     def test_target_weights_and_normalization(self):
-        """Test Phase 1 & Phase 2 matching target weights (100% normalization)."""
-        result = self.simulator.run_simulation(
+        """Test Phase 1 & Phase 2 matching target weights (100% normalization) for pre-tax and after-tax."""
+        # 1. Pre-tax test
+        result_pretax = self.simulator.run_simulation(
             start_year=2014,
             end_year=2015,
             n=5,
@@ -54,30 +55,59 @@ class TestPortfolioSimulator(unittest.TestCase):
             initial_capital=10000.0,
         )
 
-        self.assertEqual(len(result.annual_history), 1)
-        entry_2015 = result.annual_history[0]
+        self.assertEqual(len(result_pretax.annual_history), 1)
+        entry_2015 = result_pretax.annual_history[0]
         self.assertEqual(entry_2015.year, 2015)
 
         # Universe at 2015 Top 5 targets
         u2015 = self.data_loader.load_universe(2015)
         selector = MarketCapSelector(n=5)
-        expected_targets = selector.select(u2015)
-        expected_weights = {t.ticker: t.target_weight for t in expected_targets}
+        expected_targets_2015 = selector.select(u2015)
+        expected_weights_2015 = {t.ticker: t.target_weight for t in expected_targets_2015}
 
         # Verify all expected tickers are in holdings
-        self.assertEqual(set(entry_2015.holdings.keys()), set(expected_weights.keys()))
+        self.assertEqual(set(entry_2015.holdings.keys()), set(expected_weights_2015.keys()))
 
         # Verify holding weights match expected normalized target weights
-        total_val = entry_2015.ending_value_pretax
-        computed_weights = {}
+        total_val_pretax = entry_2015.ending_value_pretax
+        computed_weights_pretax = {}
         for ticker, shares in entry_2015.holdings.items():
             price = self.data_loader.get_price(ticker, 2015)
             val = shares * price
-            computed_weights[ticker] = val / total_val
-            self.assertAlmostEqual(computed_weights[ticker], expected_weights[ticker], places=5)
+            computed_weights_pretax[ticker] = val / total_val_pretax
+            self.assertAlmostEqual(computed_weights_pretax[ticker], expected_weights_2015[ticker], places=5)
 
-        # Weights sum to 100%
-        self.assertAlmostEqual(sum(computed_weights.values()), 1.0, places=5)
+        self.assertAlmostEqual(sum(computed_weights_pretax.values()), 1.0, places=5)
+
+        # 2. After-tax test with realized capital gains and taxes paid (e.g. 2014-2021)
+        result_aftertax = self.simulator.run_simulation(
+            start_year=2014,
+            end_year=2021,
+            n=5,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+        )
+
+        entry_2021 = result_aftertax.annual_history[-1]
+        self.assertEqual(entry_2021.year, 2021)
+        self.assertGreater(entry_2021.tax_paid, 0.0)
+
+        u2021 = self.data_loader.load_universe(2021)
+        expected_targets_2021 = selector.select(u2021)
+        expected_weights_2021 = {t.ticker: t.target_weight for t in expected_targets_2021}
+
+        self.assertEqual(set(entry_2021.holdings.keys()), set(expected_weights_2021.keys()))
+
+        total_val_aftertax = entry_2021.ending_value_aftertax
+        computed_weights_aftertax = {}
+        for ticker, shares in entry_2021.holdings.items():
+            price = self.data_loader.get_price(ticker, 2021)
+            val = shares * price
+            computed_weights_aftertax[ticker] = val / total_val_aftertax
+            self.assertAlmostEqual(computed_weights_aftertax[ticker], expected_weights_2021[ticker], places=4)
+
+        self.assertAlmostEqual(sum(computed_weights_aftertax.values()), 1.0, places=4)
 
     def test_cash_neutrality_pretax(self):
         """Test cash neutrality: total portfolio value equals sum of holding values (zero cash drag)."""
@@ -97,6 +127,7 @@ class TestPortfolioSimulator(unittest.TestCase):
             # In pre-tax, cash is 0 and sum of holdings equals pretax ending value
             self.assertAlmostEqual(entry.ending_value_pretax, sum_holdings, places=4)
             self.assertAlmostEqual(entry.ending_value_aftertax, entry.ending_value_pretax, places=4)
+            self.assertGreaterEqual(entry.cash, -1e-6)
 
         self.assertAlmostEqual(self.simulator.cash, 0.0, places=4)
 
@@ -112,6 +143,8 @@ class TestPortfolioSimulator(unittest.TestCase):
         )
 
         for entry, cash in zip(result.annual_history, self.simulator.cash_history):
+            self.assertGreaterEqual(cash, -1e-6)
+            self.assertGreaterEqual(entry.cash, -1e-6)
             sum_holdings = sum(
                 shares * self.data_loader.get_price(ticker, entry.year)
                 for ticker, shares in entry.holdings.items()
@@ -122,6 +155,12 @@ class TestPortfolioSimulator(unittest.TestCase):
                 sum_holdings + cash,
                 places=4,
             )
+            self.assertAlmostEqual(
+                entry.ending_value_aftertax,
+                sum_holdings + entry.cash,
+                places=4,
+            )
+        self.assertGreaterEqual(self.simulator.cash, -1e-6)
 
     def test_pretax_vs_aftertax(self):
         """Test Pre-Tax vs After-Tax: after-tax wealth <= pre-tax wealth when capital gains occur."""
@@ -243,6 +282,55 @@ class TestPortfolioSimulator(unittest.TestCase):
                 else:
                     self.assertAlmostEqual(res.post_liquidation_wealth, res.pre_liquidation_wealth, places=5)
                     self.assertAlmostEqual(res.post_liquidation_cagr, res.cagr, places=5)
+
+                for entry in res.annual_history:
+                    self.assertGreaterEqual(entry.cash, -1e-6)
+
+    def test_multi_year_horizons_20y_30y(self):
+        """Test 20-Year (2004-2024) and 30-Year (1994-2024) multi-decade horizons."""
+        horizons = [(2004, 2024), (1994, 2024)]
+        for start_year, end_year in horizons:
+            expected_years = end_year - start_year
+            for is_after_tax in [False, True]:
+                res = self.simulator.run_simulation(
+                    start_year=start_year,
+                    end_year=end_year,
+                    n=5,
+                    is_after_tax=is_after_tax,
+                    tax_rate=0.30,
+                    initial_capital=10000.0,
+                )
+
+                self.assertEqual(len(res.annual_history), expected_years)
+                self.assertEqual(res.start_year, start_year)
+                self.assertEqual(res.end_year, end_year)
+                self.assertGreater(res.final_equity, 0.0)
+                self.assertGreater(res.cagr, 0.0)
+                self.assertGreater(res.cumulative_return, 0.0)
+                self.assertLessEqual(res.max_drawdown, 0.0)
+                self.assertGreater(res.pre_liquidation_wealth, 0.0)
+                self.assertGreater(res.post_liquidation_wealth, 0.0)
+
+                if is_after_tax:
+                    self.assertLessEqual(res.post_liquidation_wealth, res.pre_liquidation_wealth)
+                    self.assertLessEqual(res.post_liquidation_cagr, res.cagr)
+                    self.assertGreater(res.total_taxes_paid, 0.0)
+                else:
+                    self.assertAlmostEqual(res.post_liquidation_wealth, res.pre_liquidation_wealth, places=5)
+                    self.assertAlmostEqual(res.post_liquidation_cagr, res.cagr, places=5)
+
+                for entry in res.annual_history:
+                    self.assertGreaterEqual(entry.cash, -1e-6)
+                    sum_holdings = sum(
+                        shares * self.data_loader.get_price(ticker, entry.year)
+                        for ticker, shares in entry.holdings.items()
+                    )
+                    expected_equity = (
+                        entry.ending_value_aftertax
+                        if is_after_tax
+                        else entry.ending_value_pretax
+                    )
+                    self.assertAlmostEqual(expected_equity, sum_holdings + entry.cash, places=4)
 
     def test_selector_override(self):
         """Test passing a custom PerformanceSelector."""

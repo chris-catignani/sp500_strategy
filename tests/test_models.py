@@ -122,6 +122,24 @@ class TestModels(unittest.TestCase):
         self.assertEqual(entry.spx_return, 0.184)
         self.assertEqual(entry.turnover, 0.25)
         self.assertEqual(entry.holdings, {"AAPL": 50.0, "MSFT": 40.0})
+        self.assertEqual(entry.cash, 0.0)
+
+        entry_with_cash = AnnualLedgerEntry(
+            year=2021,
+            start_value=113500.0,
+            gross_return=0.10,
+            ending_value_pretax=124850.0,
+            realized_capital_gain=2000.0,
+            net_taxable_gain=2000.0,
+            tax_paid=600.0,
+            loss_carryforward=0.0,
+            ending_value_aftertax=124250.0,
+            spx_return=0.15,
+            turnover=0.10,
+            holdings={"AAPL": 55.0},
+            cash=150.75,
+        )
+        self.assertEqual(entry_with_cash.cash, 150.75)
 
     def test_strategy_result(self):
         result = StrategyResult(

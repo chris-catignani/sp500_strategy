@@ -180,18 +180,61 @@ class PortfolioSimulator:
                         )
                     )
 
-            turnover = (
-                gross_sell_proceeds / total_pretax_value
-                if total_pretax_value > 0.0
-                else 0.0
-            )
-
-            # Step 4: Phase 2 (Tax Settlement & Buys)
+            # Step 4: Phase 2 (Tax Settlement, Secondary Trims & Buys)
             if is_after_tax:
-                tax_paid, net_taxable_gain, loss_carryforward = (
-                    self.tax_manager.settle_annual_taxes(tax_rate, current_year)
-                )
-                self.cash -= tax_paid
+                total_tax_paid = 0.0
+                last_loss_cf = 0.0
+                last_net_taxable = 0.0
+                # Rebalance secondary trims and tax settlements until convergence
+                for _ in range(20):
+                    tax_paid_step, net_taxable, loss_cf = (
+                        self.tax_manager.settle_annual_taxes(tax_rate, current_year)
+                    )
+                    total_tax_paid += tax_paid_step
+                    self.cash -= tax_paid_step
+                    last_loss_cf = loss_cf
+                    last_net_taxable += net_taxable
+
+                    if tax_paid_step <= 1e-7:
+                        break
+
+                    net_investable_equity = total_pretax_value - total_tax_paid
+                    final_target_shares = {
+                        ticker: (net_investable_equity * weight) / prices_curr[ticker]
+                        for ticker, weight in target_weights.items()
+                    }
+
+                    trimmed_any = False
+                    for ticker in final_target_shares:
+                        curr_sh = self.tax_manager.get_position_shares(ticker)
+                        if curr_sh > final_target_shares[ticker] + 1e-7:
+                            sec_delta = curr_sh - final_target_shares[ticker]
+                            p = prices_curr[ticker]
+                            gain, _ = self.tax_manager.sell_shares(
+                                ticker, sec_delta, p, current_year
+                            )
+                            proceeds = sec_delta * p
+                            gross_sell_proceeds += proceeds
+                            self.cash += proceeds
+                            annual_realized_gain += gain
+                            self.trade_history.append(
+                                TradeOrder(
+                                    ticker=ticker,
+                                    action="SELL",
+                                    shares=sec_delta,
+                                    price=p,
+                                    year=current_year,
+                                    realized_gain=gain,
+                                )
+                            )
+                            trimmed_any = True
+
+                    if not trimmed_any:
+                        break
+
+                tax_paid = total_tax_paid
+                net_taxable_gain = last_net_taxable
+                loss_carryforward = last_loss_cf
                 net_investable_equity = total_pretax_value - tax_paid
             else:
                 self.tax_manager.settle_annual_taxes(0.0, current_year)
@@ -200,7 +243,13 @@ class PortfolioSimulator:
                 loss_carryforward = 0.0
                 net_investable_equity = total_pretax_value
 
-            final_target_shares: Dict[str, float] = {
+            turnover = (
+                gross_sell_proceeds / total_pretax_value
+                if total_pretax_value > 0.0
+                else 0.0
+            )
+
+            final_target_shares = {
                 ticker: (net_investable_equity * weight) / prices_curr[ticker]
                 for ticker, weight in target_weights.items()
             }
@@ -212,6 +261,9 @@ class PortfolioSimulator:
                     shares_to_buy = final_sh - curr_sh
                     price = prices_curr[ticker]
                     cost = shares_to_buy * price
+                    # Clamp Phase 2 buys to available cash so self.cash can NEVER become negative
+                    cost = min(cost, max(0.0, self.cash))
+                    shares_to_buy = cost / price
                     self.cash -= cost
                     self.tax_manager.add_lot(
                         ticker, shares_to_buy, price, current_year
@@ -227,9 +279,10 @@ class PortfolioSimulator:
                         )
                     )
 
-            # In Pre-Tax simulation, any floating-point dust in cash is snapped to 0.0
-            if not is_after_tax and abs(self.cash) < 1e-5:
+            # Snap floating-point dust in cash to 0.0 and guard against negative cash
+            if abs(self.cash) < 1e-5:
                 self.cash = 0.0
+            self.cash = max(0.0, self.cash)
 
             self.cash_history.append(self.cash)
             ending_value_aftertax = net_investable_equity
@@ -254,6 +307,7 @@ class PortfolioSimulator:
                 spx_return=spx_return,
                 turnover=turnover,
                 holdings=dict(final_holdings),
+                cash=self.cash,
             )
             annual_history.append(entry)
 

@@ -63,6 +63,7 @@ class AnnualLedgerEntry:
     spx_return: float
     turnover: float
     holdings: Dict[str, Any] = field(default_factory=dict)
+    cash: float = 0.0
 
 
 @dataclass
