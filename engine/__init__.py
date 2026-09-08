@@ -15,6 +15,7 @@ from engine.selector import (
     PerformanceSelector,
 )
 from engine.data_loader import DataLoader
+from engine.backtest import PortfolioSimulator
 
 __all__ = [
     "AnnualLedgerEntry",
@@ -28,4 +29,5 @@ __all__ = [
     "MarketCapSelector",
     "PerformanceSelector",
     "DataLoader",
+    "PortfolioSimulator",
 ]
