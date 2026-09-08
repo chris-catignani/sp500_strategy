@@ -1,8 +1,8 @@
 # S&P 500 Top N Investment Strategy & Tax-Aware Backtesting Engine
 
-An institutional-grade, zero-dependency quantitative backtesting engine and reporting suite that models, simulates, and evaluates an active equity strategy against the S&P 500 price return benchmark (`^GSPC`) across 10-year (2014–2024), 20-year (2004–2024), and 30-year (1994–2024) investment horizons.
+An institutional-grade, zero-dependency quantitative backtesting engine and reporting suite that models, simulates, and evaluates an active equity strategy against the S&P 500 Total Return benchmark (`^GSPC` price return + `^SP500TR` total return) across 10-year (2014–2024), 20-year (2004–2024), and 30-year (1994–2024) investment horizons.
 
-The engine features rigorous **two-phase annual rebalancing**, full **FIFO (First-In, First-Out) tax lot depletion**, **loss carryforward netting**, **terminal liquidation accounting**, and export pipelines for both audit CSVs and an interactive **Google Apps Script dashboard**.
+The engine features rigorous **two-phase annual rebalancing**, **pre-rebalance cash dividend pooling**, **decoupled dual tax settlement** (capital loss carryforwards only offset capital gains), full **FIFO (First-In, First-Out) tax lot depletion**, **loss carryforward netting**, **terminal liquidation accounting**, and export pipelines for both audit CSVs and an interactive **Google Apps Script dashboard**.
 
 ---
 
@@ -14,7 +14,7 @@ Here is how the system works together:
 
 1. **The Python Simulation Engine (`engine/` & `run_backtest.py`)**:
    - Google Sheets cannot execute heavy historical backtests or process 31 years of point-in-time constituent data natively.
-   - The **Python engine** handles all the quantitative computation: it processes 31 years of split-adjusted S&P 500 constituent weights and prices (1994–2024), simulates annual rebalancing for Top 3, Top 5, and Top 10 portfolios, tracks FIFO tax lots, calculates capital loss carryforwards, and computes multi-horizon performance across multiple tax tiers ($0\%, 15\%, 20\%, 30\%, 37\%$).
+   - The **Python engine** handles all the quantitative computation: it processes 31 years of split-adjusted S&P 500 constituent weights, prices, and cash dividends (1994–2024), simulates annual rebalancing for Top 3, Top 5, and Top 10 portfolios, pools cash dividends pre-rebalance, tracks FIFO tax lots, calculates capital loss carryforwards, and computes multi-horizon performance across multiple tax tiers ($0\%, 15\%, 20\%, 30\%, 37\%$) against dynamic pre-tax and after-tax S&P 500 Total Return benchmarks.
    - Built with **zero external dependencies** (uses only the Python 3 standard library: no `pip install`, `pandas`, or `numpy` required).
 
 2. **The Standalone JavaScript File (`scripts/google_apps_script.js`)**:
@@ -32,6 +32,7 @@ Here is how the system works together:
 - [How This Project Works: Python + Apps Script](#how-this-project-works-python-simulation--google-apps-script)
 - [Executive Summary & Strategy Logic](#executive-summary--strategy-logic)
 - [Two-Phase Rebalancing & Tax Model](#two-phase-rebalancing--tax-model)
+- [Methodology Note: Dividend Timing Convention](#methodology-note-dividend-timing-convention)
 - [Key Empirical Results (1994–2024)](#key-empirical-results-19942024)
 - [Financial Metrics & Acronym Guide](#financial-metrics--acronym-guide)
 - [Getting Started](#getting-started)
@@ -52,62 +53,104 @@ Passive market-cap-weighted indices are dominated by their largest constituents 
    $$w_i = \frac{W_i}{\sum_{j=1}^N W_j}$$
    where $W_i$ is the constituent's S&P 500 index weight.
 3. **Holding Period**: Holdings are held undisturbed for exactly one full calendar year.
-4. **Apples-to-Apples Comparison**: Returns are calculated on a pure price-return basis (split-adjusted, dividends excluded) against the official S&P 500 price return index (`^GSPC`).
+4. **Apples-to-Apples Comparison**: Returns are calculated on a total return basis (split-adjusted prices and cash dividends from `data/sp500_dividends.json` included for all strategy constituents) against the official S&P 500 Total Return benchmark (`^SP500TR`). In after-tax runs, the benchmark is modeled dynamically (`^GSPC` price return + `^SP500TR` synthetic dividend yield) with annual dividend taxation and terminal capital gains liquidation tax.
 
 ---
 
-## Two-Phase Rebalancing & Tax Model
+### Two-Phase Rebalancing & Tax Model
 
-Real-world rebalancing incurs capital gains taxes when winners are trimmed or exited. A naïve simulation encounters circular dependency: tax liabilities depend on sell proceeds, but target share quantities depend on net available capital. To solve this mathematically, the engine implements a **Two-Phase Rebalancing Protocol**:
+Real-world rebalancing incurs capital gains and dividend taxes when winners are trimmed, exits occur, or cash distributions are paid. A naïve simulation encounters circular dependency: tax liabilities depend on sell proceeds and dividend receipts, but target share quantities depend on net available capital. To solve this mathematically while enforcing strict self-financing (`cash >= 0.0`), the engine implements a **Two-Phase Rebalancing Protocol**:
 
-### 1. Phase 1: Portfolio Valuation & Sell Execution
-At year-end $t+1$:
-1. Mark all existing positions to market: $V_{\text{total}, t+1} = \sum_{i} S_{i}^{\text{held}} \times P_{i, t+1}$.
-2. Determine provisional target dollar allocations: $\text{TargetDollar}_{i, \text{prov}} = V_{\text{total}, t+1} \times w_{i, t+1}$.
-3. Execute necessary sells:
+### 1. Pre-Rebalance Cash Dividend Collection & Pooling
+At year-end $t+1$, prior to executing rebalancing trades:
+1. **Gross Dividend Calculation**: Cash dividends are computed for all held positions based on the year's split-adjusted dividend per share from `data/sp500_dividends.json`:
+   $$\text{Div}_{t+1} = \sum_{i} S_{i}^{\text{held}} \times \text{DPS}_{i, t+1}$$
+2. **Cash Pooling**: Gross dividend proceeds are added directly to available portfolio cash:
+   $$\text{Cash}_{t+1} = \text{Cash}_t + \text{Div}_{t+1}$$
+3. **Pre-Tax Valuation**: The portfolio is marked to market with pooled cash:
+   $$V_{\text{total}, t+1} = \sum_{i} (S_{i}^{\text{held}} \times P_{i, t+1}) + \text{Cash}_{t+1}$$
+
+### 2. Phase 1: Portfolio Valuation & Provisional Sell Execution
+1. Determine provisional target dollar allocations based on pre-tax wealth:
+   $$\text{TargetDollar}_{i, \text{prov}} = V_{\text{total}, t+1} \times w_{i, t+1}$$
+2. Execute provisional sells:
    - **Full Exits**: Liquidate 100% of any stock no longer in the Top $N$.
    - **Overweight Trims**: If $S_{i}^{\text{held}} \times P_{i, t+1} > \text{TargetDollar}_{i, \text{prov}}$, sell the excess shares.
    - Retain all underweight holdings without selling.
 
-### 2. Phase 2: FIFO Tax Settlement & Reinvestment
-1. **FIFO Lot Depletion**: Realized gain/loss is computed for each sold share by matching against the earliest tax lots in the portfolio queue:
-   $$\text{RealizedGain}_i = (\Delta S_i \times P_{i, t+1}) - \text{CostBasis}_{\text{FIFO}}(\Delta S_i)$$
-2. **Loss Carryforward Netting**: Current-year realized gains are offset against any accumulated prior-year losses:
-   $$\text{NetTaxableGain}_{t+1} = \sum \text{RealizedGain} - \text{LossCarryforward}_{t}$$
-   - If $\text{NetTaxableGain} > 0$: $\text{TaxPaid} = \text{NetTaxableGain} \times \tau$, and carryforward resets to $\$0$.
-   - If $\text{NetTaxableGain} \le 0$: $\text{TaxPaid} = \$0$, and remainder becomes new loss carryforward.
-3. **Net Reinvestment**: In after-tax simulations, taxes are deducted immediately from cash proceeds:
-   $$\text{NetInvestableEquity} = V_{\text{total}, t+1} - \text{TaxPaid}$$
-   Final buy orders are executed to bring underweight and newly entered constituents to their exact target weights.
-4. **Default Tax Rate**: $\tau = 30.0\%$ flat (modeling 20% federal long-term capital gains + 3.8% Net Investment Income Tax + California state capital gains).
+### 3. Phase 2: Decoupled Dual Tax Settlement & Net Reinvestment
+1. **Decoupled Tax Architecture**:
+   - **Dividend Tax**: Under IRS tax code rules, dividend income is taxable in the calendar year received and *cannot* be offset by capital loss carryforwards:
+     $$\text{Tax}_{\text{div}} = \text{Div}_{t+1} \times \tau$$
+   - **Capital Gains Tax**: Realized gain/loss for each sold share is computed via FIFO tax lot matching:
+     $$\text{RealizedGain}_i = (\Delta S_i \times P_{i, t+1}) - \text{CostBasis}_{\text{FIFO}}(\Delta S_i)$$
+   - **Loss Carryforward Netting**: Capital loss carryforwards offset only realized capital gains:
+     $$\text{NetTaxableGain}_{t+1} = \max(0, \sum \text{RealizedGain} - \text{LossCarryforward}_{t})$$
+     - If $\text{NetTaxableGain}_{t+1} > 0$: $\text{Tax}_{\text{cap}} = \text{NetTaxableGain}_{t+1} \times \tau$, and carryforward resets to $\$0$.
+     - If $\text{NetTaxableGain}_{t+1} \le 0$: $\text{Tax}_{\text{cap}} = \$0$, and unused losses carry forward to year $t+2$.
+   - **Total Annual Tax**:
+     $$\text{TaxPaid} = \text{Tax}_{\text{div}} + \text{Tax}_{\text{cap}}$$
+2. **Iterative Secondary Trims**:
+   - In after-tax runs, paying taxes reduces investable equity: $V_{\text{net}} = V_{\text{total}, t+1} - \text{TaxPaid}$.
+   - Positions held above their final net target allocation ($V_{\text{net}} \times w_i$) are iteratively trimmed, settling any additional realized capital gains taxes until equilibrium is achieved.
+3. **Cash-Clamped Buys (Unleveraged Invariant)**:
+   - Final buy orders bring underweight and newly entered constituents to their target allocations.
+   - To strictly preserve the unleveraged invariant (`cash >= 0.0`), all buy orders are clamped to available cash proceeds:
+     $$\text{BuyCost}_i = \min(\text{DesiredCost}_i, \max(0, \text{Cash}))$$
+4. **Default Tax Rate**: $\tau = 30.0\%$ flat (modeling 20% federal long-term capital gains + 3.8% Net Investment Income Tax + state capital gains).
 
-### 3. Terminal Liquidation & Tax Drag
-At the end of the investment horizon (2024), we calculate:
-- **Pre-Liquidation Wealth**: Final portfolio value before closing open positions.
-- **Post-Liquidation Wealth**: True after-tax wealth assuming all unrealized capital gains in open positions are fully liquidated and taxed at rate $\tau$ (net of remaining carryforward).
+### 4. Dynamic After-Tax S&P 500 Benchmark Modeling
+To achieve a true apples-to-apples after-tax comparison, the S&P 500 benchmark is modeled dynamically using both price return (`^GSPC`) and total return (`^SP500TR`) indices:
+1. **Synthetic Annual Dividend Yield**:
+   $$r_{\text{PR}, t} = \frac{\text{SPX\_PR}_t - \text{SPX\_PR}_{t-1}}{\text{SPX\_PR}_{t-1}}, \quad r_{\text{TR}, t} = \frac{\text{SPX\_TR}_t - \text{SPX\_TR}_{t-1}}{\text{SPX\_TR}_{t-1}}$$
+   $$y_t = \max(0, r_{\text{TR}, t} - r_{\text{PR}, t})$$
+2. **After-Tax Compounding**:
+   $$r_{\text{benchmark}, t} = r_{\text{PR}, t} + y_t \times (1 - \tau)$$
+3. **Basis Tracking & Terminal Tax**:
+   - Reinvested after-tax dividends increase the benchmark cost basis each year: $\text{Basis}_{t} = \text{Basis}_{t-1} + \text{Wealth}_{t-1} \times y_t \times (1 - \tau)$.
+   - Upon terminal liquidation, unrealized benchmark capital gains are taxed:
+     $$\text{TerminalTax}_{\text{bench}} = \max(0, V_{\text{pre-liq}} - \text{Basis}_T) \times \tau$$
+
+### 5. Terminal Liquidation & Tax Drag
+At the conclusion of the investment horizon (2024):
+- **Pre-Liquidation Wealth**: Portfolio value before liquidating remaining holdings.
+- **Post-Liquidation Wealth**: True after-tax net wealth assuming 100% liquidation of all open positions and payment of all remaining taxes on unrealized gains (net of unused carryforward).
 - **Tax Drag**: The annualized percentage return lost to tax friction:
   $$\text{Tax Drag} = \text{CAGR}_{\text{Pre-Tax}} - \text{Post-Liquidation CAGR}_{\text{After-Tax}}$$
 
 ---
 
+## Methodology Note: Dividend Timing Convention
+
+> [!NOTE]
+> **Annual Discrete Dividend Timing**:
+> In this simulation engine, constituent cash dividends are credited once annually at each rebalance date based on the positions held over the preceding year and the annual dividend distribution rate.
+>
+> In live markets, companies distribute dividends quarterly or monthly, which could be held in cash or reinvested incrementally throughout the year. The annual discrete convention is standard in long-term quantitative factor models:
+> 1. It eliminates the need to introduce arbitrary intra-year reinvestment timing assumptions or high-frequency pricing dependencies.
+> 2. It preserves the zero-external-dependency standard library design of the engine.
+> 3. It provides a conservative and realistic assessment of after-tax compounding drag, properly taxing all dividend distributions in their earned tax year while maintaining strict self-financing rebalancing without margin debt.
+
+---
+
 ## Key Empirical Results (1994–2024)
 
-*Baseline: \$10,000 Initial Capital | 30% Capital Gains Tax Rate*
+*Baseline: \$10,000 Initial Capital | 30% Capital Gains & Dividend Tax Rate*
 
 | Horizon | Strategy | Pre-Tax CAGR (Annual) | After-Tax CAGR (Annual) | Post-Liq CAGR (Annual) | Total Return (Cumulative) | Max Drawdown (Worst Drop) | Tax Drag (Annual) | Alpha vs SPX (Annual) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **10-Year** (2014–2024) | **Top 3** | **26.64%** | **24.51%** | **21.91%** | **+795.64%** | -31.44% | 4.73% | **+13.45%** |
-| | Top 5 | 22.41% | 20.67% | 18.17% | +554.67% | -37.01% | 4.25% | +9.60% |
-| | Top 10 | 20.20% | 18.41% | 16.16% | +441.87% | -33.86% | 4.04% | +7.34% |
-| | S&P 500 Index | 11.07% | 11.07% | 11.07% | +185.67% | -19.44% | 0.00% | *Benchmark* |
-| **20-Year** (2004–2024) | **Top 3** | **15.29%** | **14.03%** | **12.80%** | **+1,282.25%** | -42.73% | 2.49% | **+5.81%** |
-| | Top 5 | 13.33% | 12.21% | 11.00% | +901.64% | -37.01% | 2.33% | +3.99% |
-| | Top 10 | 12.22% | 11.05% | 9.96% | +713.94% | -33.86% | 2.26% | +2.83% |
-| | S&P 500 Index | 8.22% | 8.22% | 8.22% | +385.32% | -38.49% | 0.00% | *Benchmark* |
-| **30-Year** (1994–2024) | Top 3 | 11.12% | 9.98% | 9.19% | +1,636.90% | -72.21% | 1.94% | +1.11% |
-| | Top 5 | 11.27% | 10.00% | 9.21% | +1,644.15% | -70.65% | 2.06% | +1.13% |
-| | **Top 10** | **11.73%** | **10.28%** | **9.55%** | **+1,781.59%** | -54.28% | 2.18% | **+1.41%** |
-| | S&P 500 Index | 8.87% | 8.87% | 8.87% | +1,180.65% | -40.12% | 0.00% | *Benchmark* |
+| **10-Year** (2014–2024) | **Top 3** | **28.02%** | **25.54%** | **22.92%** | **+872.37%** | -31.04% | 5.10% | **+13.37%** |
+| | Top 5 | 23.50% | 21.47% | 18.96% | +599.20% | -36.76% | 4.55% | +9.40% |
+| | Top 10 | 21.53% | 19.39% | 17.13% | +488.28% | -33.55% | 4.40% | +7.58% |
+| | S&P 500 Index | 12.24% | 11.89% | 9.55% | +149.02% | -18.68% | 2.69% | *Benchmark* |
+| **20-Year** (2004–2024) | **Top 3** | **17.42%** | **15.56%** | **14.32%** | **+1,705.03%** | -38.69% | 3.10% | **+6.60%** |
+| | Top 5 | 15.48% | 13.74% | 12.52% | +1,213.28% | -36.76% | 2.96% | +4.80% |
+| | Top 10 | 14.63% | 12.78% | 11.68% | +1,007.93% | -33.55% | 2.95% | +3.96% |
+| | S&P 500 Index | 9.53% | 9.14% | 7.72% | +342.65% | -37.04% | 1.81% | *Benchmark* |
+| **30-Year** (1994–2024) | Top 3 | 13.20% | 11.44% | 10.64% | +2,475.66% | -66.74% | 2.56% | +2.00% |
+| | Top 5 | 13.33% | 11.45% | 10.65% | +2,481.57% | -64.14% | 2.68% | +2.01% |
+| | **Top 10** | **13.95%** | **11.88%** | **11.15%** | **+2,801.01%** | -48.08% | 2.80% | **+2.52%** |
+| | S&P 500 Index | 10.11% | 9.74% | 8.64% | +1,100.36% | -38.64% | 1.47% | *Benchmark* |
 
 ---
 
@@ -117,15 +160,19 @@ Every metric reported in the CLI, CSV files, and Google Sheets dashboard is defi
 
 | Metric | Frequency | Plain-English Definition | Example |
 | :--- | :---: | :--- | :--- |
-| **CAGR** *(Compound Annual Growth Rate)* | **Annual** | The smoothed annual return your money grew each year, assuming steady compound interest. It answers: *"What constant annual return would turn my starting capital into my ending wealth?"* | A 10-year CAGR of 24.51% means your portfolio grew at an effective pace of 24.51% per year. |
-| **Pre-Tax CAGR** | **Annual** | Annual compounded growth before deducting any taxes on rebalancing gains. | 26.64% / year |
-| **After-Tax CAGR** | **Annual** | Annual compounded growth of your live portfolio after paying taxes on realized capital gains each rebalancing year. | 24.51% / year |
-| **Post-Liquidation CAGR** | **Annual** | True net "walk-away" annual return assuming you sell 100% of remaining holdings at the end of the horizon and pay all final taxes on unrealized gains. | 21.91% / year |
-| **Cumulative Return** | **Total** | The complete percentage gain over the entire 10, 20, or 30 year horizon. | **+795.64%** over 10 years means $\$10,000$ turned into $\$89,564$ total. |
-| **Alpha vs S&P 500** | **Annual** | The excess annual return earned above the passive S&P 500 benchmark. | An alpha of **+5.81%** means beating the market by 5.81% each year. |
-| **Tax Drag** | **Annual** | The annual percentage of return lost to taxes each year. Calculated as $\text{Pre-Tax CAGR} - \text{Post-Liquidation CAGR}$. | A tax drag of 4.73% means taxes reduced annual compounding from 26.64% to 21.91%. |
-| **Max Drawdown** | **Total** | The worst peak-to-trough decline during market crashes before recovering to new highs. | -37.01% drop during the 2022 bear market. |
-| **SPX / `^GSPC`** | *Index* | The standard ticker symbol for the S&P 500 Price Return Index. | Official benchmark |
+| **CAGR** *(Compound Annual Growth Rate)* | **Annual** | The smoothed annual return your money grew each year, assuming steady compound interest. It answers: *"What constant annual return would turn my starting capital into my ending wealth?"* | A 10-year CAGR of 25.54% means your portfolio grew at an effective pace of 25.54% per year. |
+| **Pre-Tax CAGR** | **Annual** | Annual compounded growth before deducting any taxes on rebalancing gains and dividends. | 28.02% / year (Top 3, 10y) |
+| **After-Tax CAGR** | **Annual** | Annual compounded growth of your live portfolio after paying annual taxes on dividends and net realized capital gains. | 25.54% / year (Top 3, 10y) |
+| **Post-Liquidation CAGR** | **Annual** | True net "walk-away" annual return assuming you sell 100% of remaining holdings at the end of the horizon and pay all final taxes on unrealized gains. | 22.92% / year (Top 3, 10y) |
+| **Cumulative Return** | **Total** | The complete percentage gain over the entire 10, 20, or 30 year horizon. | **+872.37%** over 10 years means $\$10,000$ turned into $\$97,237$ total. |
+| **Alpha vs S&P 500** | **Annual** | The excess annual return earned above the dynamic after-tax S&P 500 Total Return benchmark. | An alpha of **+13.37%** means beating the benchmark by 13.37% each year. |
+| **Tax Drag** | **Annual** | The annual percentage of return lost to taxes each year. Calculated as $\text{Pre-Tax CAGR} - \text{Post-Liquidation CAGR}$. | A tax drag of 5.10% means taxes reduced annual compounding from 28.02% to 22.92%. |
+| **Max Drawdown** | **Total** | The worst peak-to-trough decline during market crashes before recovering to new highs. | -36.76% drop during the 2022 bear market. |
+| **Total Dividends Received** | **Total** | Cumulative gross dollar dividends credited to the portfolio from constituent holdings. | $\$1,245.50$ in dividends received over the horizon. |
+| **Dividend Tax Paid** | **Annual** | Annual tax paid on gross dividend distributions ($\text{Div} \times \tau$). Per IRS rules, dividends cannot be offset by capital loss carryforwards. | Taxed annually at rate $\tau$. |
+| **Capital Gains Tax Paid** | **Annual** | Annual tax paid on net realized capital gains after FIFO lot depletion and loss carryforward offsets. | Taxed annually at rate $\tau$. |
+| **SPX / `^GSPC`** | *Index* | The standard ticker symbol for the S&P 500 Price Return Index. | Historical price levels |
+| **`^SP500TR`** | *Index* | The standard ticker symbol for the S&P 500 Total Return Index (reinvested gross dividends). | Total return benchmark |
 
 ---
 
@@ -271,13 +318,13 @@ Access the live target Google Sheet here:
    - Click **S&P 500 Strategy** > **Build All Sheets** once more.
 5. **Sheets Created**:
    The script automatically creates and orders 7 sheets, ensuring **Executive Summary** is the first tab:
-   1. **Executive Summary** (Tab 1): Interactive dashboard with KPI cards, multi-horizon comparison, dynamic tax rate selector, and key terms glossary.
-   2. **Top 3 Strategy** (Tab 2): Full 30-year annual accounting ledger (start value, gross return, taxes paid, carryforward, turnover).
-   3. **Top 5 Strategy** (Tab 3): Full 30-year annual accounting ledger.
-   4. **Top 10 Strategy** (Tab 4): Full 30-year annual accounting ledger.
+   1. **Executive Summary** (Tab 1): 12-column interactive dashboard (Columns A through L) featuring 5 balanced KPI summary cards, a multi-horizon comparison table driven by dynamic `=INDEX(..., MATCH(...))` formulas linked to cell B2, a financial metric glossary, and an explicit dividend timing methodology callout card.
+   2. **Top 3 Strategy** (Tab 2): Full 30-year 15-column annual accounting ledger (Year, Start Value, Gross Return, Dividends Received ($), Ending Value (Pre-Tax), Realized Capital Gain, Net Taxable Gain, Capital Gains Tax ($), Dividend Tax ($), Total Tax Paid ($), Loss Carryforward, Ending Value (After-Tax), Cash Reserve, S&P 500 Return, Annual Turnover).
+   3. **Top 5 Strategy** (Tab 3): Full 30-year 15-column annual accounting ledger.
+   4. **Top 10 Strategy** (Tab 4): Full 30-year 15-column annual accounting ledger.
    5. **S&P 500 Benchmark** (Tab 5): 30-year historical index levels, annual returns, and compounded growth.
-   6. **Historical Holdings & Trades** (Tab 6): Comprehensive audit trail of every buy and sell order executed.
-   7. **Scenario Data** (Tab 7): Pre-computed lookup matrix powering dynamic formula recalculations.
+   6. **Historical Holdings & Trades** (Tab 6): Comprehensive audit trail of every buy and sell order executed (Year, Strategy, Ticker, Action, Shares, Execution Price, Realized Gain).
+   7. **Scenario Data** (Tab 7): 14-column pre-computed lookup matrix across 5 tax tiers (`0.0%`, `15.0%`, `20.0%`, `30.0%`, `37.0%`) powering dynamic formula recalculations.
 
 ### Interactive Dashboard Controls
 
@@ -289,7 +336,7 @@ Access the live target Google Sheet here:
 
 ## Running Unit Tests
 
-The test suite covers models, FIFO lot accounting, tax netting, universe data loaders, rebalancing mechanics, exporter pipelines, and CLI argument handling:
+The test suite covers models, FIFO lot accounting, tax netting, universe data loaders, dividend queries, dynamic benchmark analytics, rebalancing mechanics, exporter pipelines, and CLI argument handling:
 
 ```bash
 # Run the entire test suite
@@ -302,7 +349,7 @@ python3 -m unittest tests/test_rebalancing.py
 python3 -m unittest tests/test_exporters.py
 ```
 
-All 98 tests execute in under 0.5 seconds with 100% test pass rate.
+All 110 tests execute in under 0.5 seconds with 100% test pass rate.
 
 ---
 
