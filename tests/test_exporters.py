@@ -1,0 +1,343 @@
+"""Unit tests for reporting and exporters suite (CSVs & Google Apps Script)."""
+
+import csv
+import os
+import shutil
+import subprocess
+import tempfile
+import unittest
+from engine.models import AnnualLedgerEntry, StrategyResult, TradeOrder
+from engine.exporters import (
+    export_summary_metrics_csv,
+    export_annual_breakdown_csv,
+    export_trade_log_csv,
+    generate_google_apps_script,
+    export_google_apps_script,
+    ReportExporter,
+    export_all,
+)
+import engine
+
+
+class TestExporters(unittest.TestCase):
+    """Test suite for engine/exporters.py reporting and export utilities."""
+
+    def setUp(self):
+        self.test_dir = tempfile.mkdtemp()
+
+        # Sample StrategyResult fixtures
+        self.entry_2023 = AnnualLedgerEntry(
+            year=2023,
+            start_value=10000.0,
+            gross_return=0.20,
+            ending_value_pretax=12000.0,
+            realized_capital_gain=500.0,
+            net_taxable_gain=500.0,
+            tax_paid=150.0,
+            loss_carryforward=0.0,
+            ending_value_aftertax=11850.0,
+            spx_return=0.15,
+            turnover=0.30,
+            holdings={"AAPL": 20.0, "MSFT": 15.0},
+            cash=0.0,
+        )
+        self.entry_2024 = AnnualLedgerEntry(
+            year=2024,
+            start_value=11850.0,
+            gross_return=0.10,
+            ending_value_pretax=13035.0,
+            realized_capital_gain=200.0,
+            net_taxable_gain=200.0,
+            tax_paid=60.0,
+            loss_carryforward=0.0,
+            ending_value_aftertax=12975.0,
+            spx_return=0.10,
+            turnover=0.25,
+            holdings={"AAPL": 22.0, "NVDA": 10.0},
+            cash=0.0,
+        )
+
+        self.res_aftertax = StrategyResult(
+            strategy_name="top_5_market_cap",
+            n=5,
+            start_year=2022,
+            end_year=2024,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            final_equity=12975.0,
+            cagr=0.1390,
+            cumulative_return=0.2975,
+            max_drawdown=-0.05,
+            total_taxes_paid=210.0,
+            pre_liquidation_wealth=12975.0,
+            post_liquidation_wealth=12500.0,
+            post_liquidation_cagr=0.1180,
+            annual_history=[self.entry_2023, self.entry_2024],
+        )
+
+        self.res_pretax = StrategyResult(
+            strategy_name="top_5_market_cap",
+            n=5,
+            start_year=2022,
+            end_year=2024,
+            is_after_tax=False,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            final_equity=13200.0,
+            cagr=0.1489,
+            cumulative_return=0.3200,
+            max_drawdown=-0.05,
+            total_taxes_paid=0.0,
+            pre_liquidation_wealth=13200.0,
+            post_liquidation_wealth=13200.0,
+            post_liquidation_cagr=0.1489,
+            annual_history=[self.entry_2023, self.entry_2024],
+        )
+
+    def tearDown(self):
+        shutil.rmtree(self.test_dir, ignore_errors=True)
+
+    def test_engine_reexports(self):
+        """Verify exporter functions and classes are re-exported by the engine module."""
+        self.assertIs(engine.export_summary_metrics_csv, export_summary_metrics_csv)
+        self.assertIs(engine.export_annual_breakdown_csv, export_annual_breakdown_csv)
+        self.assertIs(engine.export_trade_log_csv, export_trade_log_csv)
+        self.assertIs(engine.generate_google_apps_script, generate_google_apps_script)
+        self.assertIs(engine.export_google_apps_script, export_google_apps_script)
+        self.assertIs(engine.ReportExporter, ReportExporter)
+        self.assertIs(engine.export_all, export_all)
+
+    def test_export_summary_metrics_csv(self):
+        """Test summary metrics CSV generation, column headers, and calculations."""
+        filepath = os.path.join(self.test_dir, "outputs", "summary_metrics.csv")
+        results = [self.res_pretax, self.res_aftertax]
+        spx_benchmarks = {"2y": 0.125}
+
+        export_summary_metrics_csv(results, filepath, spx_benchmarks=spx_benchmarks)
+        self.assertTrue(os.path.exists(filepath))
+
+        with open(filepath, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+
+        expected_columns = [
+            "strategy_name",
+            "n",
+            "horizon",
+            "start_year",
+            "end_year",
+            "is_after_tax",
+            "tax_rate",
+            "initial_capital",
+            "final_equity",
+            "cumulative_return",
+            "cagr",
+            "max_drawdown",
+            "total_taxes_paid",
+            "pre_liquidation_wealth",
+            "post_liquidation_wealth",
+            "post_liquidation_cagr",
+            "tax_drag",
+            "alpha_vs_spx",
+        ]
+        self.assertEqual(reader.fieldnames, expected_columns)
+        self.assertEqual(len(rows), 2)
+
+        # Pre-tax row checks
+        row_pre = rows[0]
+        self.assertEqual(row_pre["strategy_name"], "top_5_market_cap")
+        self.assertEqual(row_pre["n"], "5")
+        self.assertEqual(row_pre["horizon"], "2y")
+        self.assertEqual(row_pre["start_year"], "2022")
+        self.assertEqual(row_pre["end_year"], "2024")
+        self.assertEqual(row_pre["is_after_tax"], "False")
+        self.assertAlmostEqual(float(row_pre["tax_drag"]), 0.0, places=4)
+        self.assertAlmostEqual(float(row_pre["alpha_vs_spx"]), 0.1489 - 0.125, places=4)
+
+        # After-tax row checks
+        row_post = rows[1]
+        self.assertEqual(row_post["is_after_tax"], "True")
+        self.assertAlmostEqual(float(row_post["total_taxes_paid"]), 210.0, places=2)
+        # Tax drag = pretax CAGR (0.1489) - post_liquidation_cagr (0.1180) ~ 0.0309
+        self.assertAlmostEqual(float(row_post["tax_drag"]), 0.1489 - 0.1180, places=4)
+        self.assertAlmostEqual(float(row_post["alpha_vs_spx"]), 0.1390 - 0.125, places=4)
+
+    def test_export_annual_breakdown_csv(self):
+        """Test annual breakdown CSV output schema and row-level accounting values."""
+        filepath = os.path.join(self.test_dir, "outputs", "annual_breakdown.csv")
+        results = [self.res_aftertax]
+
+        export_annual_breakdown_csv(results, filepath)
+        self.assertTrue(os.path.exists(filepath))
+
+        with open(filepath, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+
+        expected_columns = [
+            "strategy_name",
+            "n",
+            "is_after_tax",
+            "tax_rate",
+            "year",
+            "start_value",
+            "gross_return",
+            "ending_value_pretax",
+            "realized_capital_gain",
+            "net_taxable_gain",
+            "tax_paid",
+            "loss_carryforward",
+            "ending_value_aftertax",
+            "cash",
+            "spx_return",
+            "turnover",
+        ]
+        self.assertEqual(reader.fieldnames, expected_columns)
+        self.assertEqual(len(rows), 2)
+
+        self.assertEqual(rows[0]["year"], "2023")
+        self.assertAlmostEqual(float(rows[0]["start_value"]), 10000.0, places=2)
+        self.assertAlmostEqual(float(rows[0]["tax_paid"]), 150.0, places=2)
+        self.assertAlmostEqual(float(rows[0]["spx_return"]), 0.15, places=4)
+        self.assertAlmostEqual(float(rows[0]["turnover"]), 0.30, places=4)
+
+        self.assertEqual(rows[1]["year"], "2024")
+        self.assertAlmostEqual(float(rows[1]["start_value"]), 11850.0, places=2)
+        self.assertAlmostEqual(float(rows[1]["tax_paid"]), 60.0, places=2)
+
+    def test_export_trade_log_csv(self):
+        """Test trade log CSV with both dictionary records and TradeOrder instances."""
+        filepath = os.path.join(self.test_dir, "outputs", "trade_log.csv")
+        trade_dict = {
+            "strategy_name": "top_5_market_cap",
+            "n": 5,
+            "year": 2023,
+            "ticker": "AAPL",
+            "action": "BUY",
+            "shares": 20.0,
+            "price": 150.0,
+            "realized_gain": 0.0,
+        }
+        trade_order = TradeOrder(
+            ticker="MSFT",
+            action="SELL",
+            shares=5.0,
+            price=300.0,
+            year=2024,
+            realized_gain=250.0,
+        )
+        trade_order.strategy_name = "top_5_market_cap"
+        trade_order.n = 5
+
+        records = [trade_dict, trade_order]
+        export_trade_log_csv(records, filepath)
+        self.assertTrue(os.path.exists(filepath))
+
+        with open(filepath, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+
+        expected_columns = [
+            "strategy_name",
+            "n",
+            "year",
+            "ticker",
+            "action",
+            "shares",
+            "price",
+            "realized_gain",
+        ]
+        self.assertEqual(reader.fieldnames, expected_columns)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(rows[0]["ticker"], "AAPL")
+        self.assertEqual(rows[0]["action"], "BUY")
+        self.assertEqual(rows[1]["ticker"], "MSFT")
+        self.assertEqual(rows[1]["action"], "SELL")
+        self.assertAlmostEqual(float(rows[1]["realized_gain"]), 250.0, places=2)
+
+    def test_directory_auto_creation(self):
+        """Test automatic directory hierarchy creation if paths do not exist."""
+        nested_path = os.path.join(self.test_dir, "nested", "level2", "test.csv")
+        export_summary_metrics_csv([self.res_pretax], nested_path)
+        self.assertTrue(os.path.exists(nested_path))
+
+    def test_generate_google_apps_script(self):
+        """Test Google Apps Script generator creates valid JS with required sheets and styling."""
+        js_code = generate_google_apps_script()
+        self.assertIsInstance(js_code, str)
+        self.assertGreater(len(js_code), 500)
+
+        # Essential functions and menu
+        self.assertIn("function onOpen()", js_code)
+        self.assertIn("function buildAllSheets()", js_code)
+        self.assertIn("function recalculateSheet()", js_code)
+        self.assertIn("function RECALCULATE_STRATEGY", js_code)
+        self.assertIn("S&P 500 Strategy", js_code)
+        self.assertIn("Build All Sheets", js_code)
+        self.assertIn("Recalculate Sheet", js_code)
+
+        # Required tabs
+        self.assertIn("Executive Summary", js_code)
+        self.assertIn("Top 3 Strategy", js_code)
+        self.assertIn("Top 5 Strategy", js_code)
+        self.assertIn("Top 10 Strategy", js_code)
+        self.assertIn("S&P 500 Benchmark", js_code)
+        self.assertIn("Historical Holdings & Trades", js_code)
+
+        # Styling & formatting elements
+        self.assertIn("#1B365D", js_code)  # Navy header
+        self.assertIn("$#,##0.00", js_code)  # Currency format
+        self.assertIn("0.00%", js_code)  # Percentage format
+        self.assertIn("30.0%", js_code)  # Default tax rate
+        self.assertIn("autoResizeColumns", js_code)
+
+        # Test writing to file
+        output_js = os.path.join(self.test_dir, "scripts", "google_apps_script.js")
+        export_google_apps_script(output_js)
+        self.assertTrue(os.path.exists(output_js))
+
+        # Check syntax using Node.js
+        result = subprocess.run(["node", "-c", output_js], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, f"Node syntax check failed: {result.stderr}")
+
+    def test_report_exporter_coordinator(self):
+        """Test ReportExporter class and export_all convenience function."""
+        exporter = ReportExporter(
+            output_dir=os.path.join(self.test_dir, "outputs"),
+            scripts_dir=os.path.join(self.test_dir, "scripts"),
+        )
+        trade_record = {
+            "strategy_name": "top_5_market_cap",
+            "n": 5,
+            "year": 2023,
+            "ticker": "AAPL",
+            "action": "BUY",
+            "shares": 10.0,
+            "price": 100.0,
+            "realized_gain": 0.0,
+        }
+        results = [self.res_pretax, self.res_aftertax]
+        generated_files = exporter.export_all(results=results, trade_records=[trade_record])
+
+        self.assertIn("summary_metrics", generated_files)
+        self.assertIn("annual_breakdown", generated_files)
+        self.assertIn("trade_log", generated_files)
+        self.assertIn("google_apps_script", generated_files)
+
+        for name, path in generated_files.items():
+            self.assertTrue(os.path.exists(path), f"File {path} for {name} was not created")
+
+        # Also test export_all standalone function
+        generated_files_2 = export_all(
+            results=results,
+            trade_records=[trade_record],
+            output_dir=os.path.join(self.test_dir, "out2"),
+            scripts_dir=os.path.join(self.test_dir, "scripts2"),
+        )
+        for name, path in generated_files_2.items():
+            self.assertTrue(os.path.exists(path), f"Standalone export_all failed for {name}")
+
+
+if __name__ == "__main__":
+    unittest.main()
