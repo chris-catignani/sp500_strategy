@@ -1,7 +1,7 @@
 """Quantitative performance analytics and tax drag calculators."""
 
-from typing import Dict, Sequence, Optional
-from engine.models import AnnualLedgerEntry, StrategyResult
+from typing import Dict, Sequence
+from engine.models import AnnualLedgerEntry
 
 
 def calculate_cagr(start_value: float, end_value: float, years: int) -> float:
