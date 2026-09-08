@@ -213,7 +213,7 @@ class PortfolioSimulator:
                     trimmed_any = False
                     for ticker in final_target_shares:
                         curr_sh = self.tax_manager.get_position_shares(ticker)
-                        if curr_sh > final_target_shares[ticker] + 1e-7:
+                        if curr_sh > final_target_shares[ticker] + 1e-4:
                             sec_delta = curr_sh - final_target_shares[ticker]
                             p = prices_curr[ticker]
                             gain, _ = self.tax_manager.sell_shares(
@@ -271,19 +271,20 @@ class PortfolioSimulator:
                     cost = min(cost, max(0.0, self.cash))
                     shares_to_buy = cost / price
                     self.cash -= cost
-                    self.tax_manager.add_lot(
-                        ticker, shares_to_buy, price, current_year
-                    )
-                    self.trade_history.append(
-                        TradeOrder(
-                            ticker=ticker,
-                            action="BUY",
-                            shares=shares_to_buy,
-                            price=price,
-                            year=current_year,
-                            realized_gain=0.0,
+                    if shares_to_buy > 1e-7:
+                        self.tax_manager.add_lot(
+                            ticker, shares_to_buy, price, current_year
                         )
-                    )
+                        self.trade_history.append(
+                            TradeOrder(
+                                ticker=ticker,
+                                action="BUY",
+                                shares=shares_to_buy,
+                                price=price,
+                                year=current_year,
+                                realized_gain=0.0,
+                            )
+                        )
 
             # Snap floating-point dust in cash to 0.0 and guard against negative cash
             if abs(self.cash) < 1e-5:
