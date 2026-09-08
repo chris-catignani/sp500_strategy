@@ -124,12 +124,16 @@ function buildExecutiveSummarySheet(ss) {
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
        .setFontSize(14)
-       .setHorizontalAlignment('center');
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle')
+       .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
 
   // 2. Interactive Tax Rate Parameter Control in B2
-  sheet.getRange('A2').setValue('Capital Gains Tax Rate:')
+  sheet.getRange('A2').setValue('Tax Rate:')
        .setFontWeight('bold')
-       .setHorizontalAlignment('right');
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle')
+       .setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
 
   var b2 = sheet.getRange('B2');
   b2.setValue(0.30)
@@ -137,7 +141,8 @@ function buildExecutiveSummarySheet(ss) {
     .setFontWeight('bold')
     .setFontSize(12)
     .setBackground('#FEFCBF')
-    .setHorizontalAlignment('center');
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
 
   var rule = SpreadsheetApp.newDataValidation()
     .requireValueInList(['0.0%', '15.0%', '20.0%', '30.0%', '37.0%'], true)
@@ -146,47 +151,43 @@ function buildExecutiveSummarySheet(ss) {
   b2.setDataValidation(rule);
 
   sheet.getRange('C2:K2').merge()
-       .setValue('Select a tax rate to update after-tax returns, ending wealth, and tax drag dynamically across all horizons.')
+       .setValue('Select a tax rate in B2 to dynamically update after-tax returns, ending wealth, and tax drag across all horizons.')
        .setFontStyle('italic')
        .setFontColor('#4A5568')
-       .setVerticalAlignment('middle');
+       .setVerticalAlignment('middle')
+       .setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
 
   // 3. KPI Summary Scorecards (Rows 4-6)
-  // Card 1: Top 5 (30y) Post-Liq CAGR
-  sheet.getRange('B4').setValue('Top 5 (30y) Post-Liq CAGR').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center');
-  sheet.getRange('B5').setFormula('=E19').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center');
-  sheet.getRange('B6').setValue('Net after all taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center');
-  sheet.getRange('B4:B6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
+  // 5 cards balanced seamlessly across columns A through K:
+  // Card 1: Top 5 (30y) Final Wealth (Cols A-B)
+  sheet.getRange('A4:B4').merge().setValue('Top 5 (30y) Final Wealth').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A5:B5').merge().setFormula('=G19').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A6:B6').merge().setValue('$10,000 start capital').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A4:B6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 2: S&P 500 (30y) Benchmark CAGR
-  sheet.getRange('D4').setValue('S&P 500 (30y) CAGR').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center');
-  sheet.getRange('D5').setFormula('=C21').setFontWeight('bold').setFontSize(14).setFontColor('#2B6CB0').setNumberFormat('0.00%').setHorizontalAlignment('center');
-  sheet.getRange('D6').setValue('Passive benchmark').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center');
-  sheet.getRange('D4:D6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 2: S&P 500 (30y) Net Wealth (Cols C-D)
+  sheet.getRange('C4:D4').merge().setValue('S&P 500 (30y) Wealth').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C5:D5').merge().setFormula('=G21').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C6:D6').merge().setValue('Passive benchmark').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C4:D6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 3: Top 5 (30y) Net Wealth
-  sheet.getRange('F4').setValue('Top 5 (30y) Final Wealth').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center');
-  sheet.getRange('F5').setFormula('=G19').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center');
-  sheet.getRange('F6').setValue('$10,000 start capital').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center');
-  sheet.getRange('F4:F6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 3: Top 5 (30y) Post-Liq CAGR (Cols E-F)
+  sheet.getRange('E4:F4').merge().setValue('Top 5 (30y) Post-Liq CAGR').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('E5:F5').merge().setFormula('=E19').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('E6:F6').merge().setValue('Net after all taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('E4:F6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 4: S&P 500 (30y) Net Wealth
-  sheet.getRange('H4').setValue('S&P 500 (30y) Wealth').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center');
-  sheet.getRange('H5').setFormula('=G21').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center');
-  sheet.getRange('H6').setValue('$10,000 start capital').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center');
-  sheet.getRange('H4:H6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 4: 30-Year Alpha (Cols G-H)
+  sheet.getRange('G4:H4').merge().setValue('30-Year Net Alpha').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G5:H5').merge().setFormula('=K19').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G6:H6').merge().setValue('Excess vs S&P 500').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G4:H6').setBackground('#F0FFF4').setBorder(true, true, true, true, false, false, '#C6F6D5', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 5: 30-Year Tax Drag
-  sheet.getRange('J4').setValue('30-Year Tax Drag').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center');
-  sheet.getRange('J5').setFormula('=J19').setFontWeight('bold').setFontSize(14).setFontColor('#9B2C2C').setNumberFormat('0.00%').setHorizontalAlignment('center');
-  sheet.getRange('J6').setValue('Annual & terminal drag').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center');
-  sheet.getRange('J4:J6').setBackground('#FFF5F5').setBorder(true, true, true, true, false, false, '#FED7D7', SpreadsheetApp.BorderStyle.SOLID);
-
-  // Card 6: 30-Year Alpha
-  sheet.getRange('K4').setValue('30-Year Alpha').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center');
-  sheet.getRange('K5').setFormula('=K19').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('0.00%').setHorizontalAlignment('center');
-  sheet.getRange('K6').setValue('Excess vs S&P 500').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center');
-  sheet.getRange('K4:K6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 5: 30-Year Tax Drag (Cols I-K)
+  sheet.getRange('I4:K4').merge().setValue('30-Year Tax Drag').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('I5:K5').merge().setFormula('=J19').setFontWeight('bold').setFontSize(14).setFontColor('#9B2C2C').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('I6:K6').merge().setValue('Annual & terminal drag').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('I4:K6').setBackground('#FFF5F5').setBorder(true, true, true, true, false, false, '#FED7D7', SpreadsheetApp.BorderStyle.SOLID);
 
   // 4. Multi-Horizon Strategy Comparison Table
   // Row 8: Title
@@ -196,7 +197,9 @@ function buildExecutiveSummarySheet(ss) {
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
        .setFontSize(11)
-       .setHorizontalAlignment('left');
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle')
+       .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
 
   // Row 9: Table Header
   var tableHeaders = [
@@ -208,7 +211,9 @@ function buildExecutiveSummarySheet(ss) {
        .setBackground('#2C5282')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
-       .setHorizontalAlignment('center');
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle')
+       .setWrap(true);
 
   // Rows 10 to 21 (Dynamic lookup formulas pointing to Scenario Data tab)
   var horizons = ['10y', '20y', '30y'];
@@ -239,13 +244,15 @@ function buildExecutiveSummarySheet(ss) {
   sheet.getRange(10, 1, tableRows.length, tableHeaders.length).setValues(tableRows);
 
   // Formatting comparison table
-  sheet.getRange(10, 1, tableRows.length, 1).setHorizontalAlignment('center').setFontWeight('bold');
-  sheet.getRange(10, 2, tableRows.length, 1).setFontWeight('bold');
-  sheet.getRange(10, 3, tableRows.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
-  sheet.getRange(10, 7, tableRows.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
-  sheet.getRange(10, 8, tableRows.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
-  sheet.getRange(10, 9, tableRows.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
-  sheet.getRange(10, 10, tableRows.length, 2).setNumberFormat('0.00%').setHorizontalAlignment('right');
+  sheet.getRange(10, 1, tableRows.length, 1).setHorizontalAlignment('center').setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange(10, 2, tableRows.length, 1).setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange(10, 3, tableRows.length, 3).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 6, tableRows.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 7, tableRows.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 8, tableRows.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 9, tableRows.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 10, tableRows.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 11, tableRows.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
 
   // Alternating background colors
   for (var r = 0; r < tableRows.length; r++) {
@@ -256,7 +263,26 @@ function buildExecutiveSummarySheet(ss) {
   // Borders
   sheet.getRange(9, 1, tableRows.length + 1, tableHeaders.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  sheet.autoResizeColumns(1, tableHeaders.length);
+  // Explicit, proportional column widths (avoids autoResize stretching from merged headers/banners)
+  var colWidths = [80, 105, 110, 110, 110, 130, 145, 110, 125, 105, 130];
+  for (var c = 0; c < colWidths.length; c++) {
+    sheet.setColumnWidth(c + 1, colWidths[c]);
+  }
+
+  // Explicit row heights for polished vertical rhythm
+  sheet.setRowHeight(1, 40);
+  sheet.setRowHeight(2, 32);
+  sheet.setRowHeight(3, 10);
+  sheet.setRowHeight(4, 22);
+  sheet.setRowHeight(5, 32);
+  sheet.setRowHeight(6, 20);
+  sheet.setRowHeight(7, 14);
+  sheet.setRowHeight(8, 30);
+  sheet.setRowHeight(9, 36);
+  for (var dr = 10; dr <= 21; dr++) {
+    sheet.setRowHeight(dr, 24);
+  }
+
   sheet.setFrozenRows(9);
 }
 
@@ -275,43 +301,51 @@ function buildAnnualSheet(ss, sheetName, annualData) {
   headerRange.setBackground('#1B365D')
              .setFontColor('#FFFFFF')
              .setFontWeight('bold')
-             .setHorizontalAlignment('center');
+             .setHorizontalAlignment('center')
+             .setVerticalAlignment('middle')
+             .setWrap(true);
+
+  sheet.setRowHeight(1, 36);
 
   if (annualData.length > 0) {
     // Col 1: Year
-    sheet.getRange(2, 1, annualData.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center');
+    sheet.getRange(2, 1, annualData.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center').setVerticalAlignment('middle');
     // Col 2: Start Value
-    sheet.getRange(2, 2, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 2, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 3: Gross Return
-    sheet.getRange(2, 3, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 3, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 4: Pre-Tax Ending
-    sheet.getRange(2, 4, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 4, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 5: Realized Gain
-    sheet.getRange(2, 5, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 5, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 6: Net Taxable Gain
-    sheet.getRange(2, 6, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 6, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 7: Tax Paid
-    sheet.getRange(2, 7, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 7, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 8: Loss Carryforward
-    sheet.getRange(2, 8, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 8, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 9: Ending Value (After-Tax)
-    sheet.getRange(2, 9, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 9, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 10: Cash Reserve
-    sheet.getRange(2, 10, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 10, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 11: SPX Return
-    sheet.getRange(2, 11, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 11, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
     // Col 12: Turnover
-    sheet.getRange(2, 12, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 12, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
 
     // Alternating rows
     for (var r = 0; r < annualData.length; r++) {
       var bg = (r % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
       sheet.getRange(2 + r, 1, 1, ANNUAL_HEADERS.length).setBackground(bg);
+      sheet.setRowHeight(2 + r, 22);
     }
     sheet.getRange(1, 1, annualData.length + 1, ANNUAL_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
   }
 
-  sheet.autoResizeColumns(1, ANNUAL_HEADERS.length);
+  var annualColWidths = [70, 110, 95, 115, 115, 115, 105, 120, 125, 105, 100, 95];
+  for (var ac = 0; ac < annualColWidths.length; ac++) {
+    sheet.setColumnWidth(ac + 1, annualColWidths[ac]);
+  }
   sheet.setFrozenRows(1);
 }
 
@@ -330,22 +364,30 @@ function buildBenchmarkSheet(ss) {
   headerRange.setBackground('#1B365D')
              .setFontColor('#FFFFFF')
              .setFontWeight('bold')
-             .setHorizontalAlignment('center');
+             .setHorizontalAlignment('center')
+             .setVerticalAlignment('middle')
+             .setWrap(true);
+
+  sheet.setRowHeight(1, 36);
 
   if (SPX_DATA.length > 0) {
-    sheet.getRange(2, 1, SPX_DATA.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center');
-    sheet.getRange(2, 2, SPX_DATA.length, 1).setNumberFormat('#,##0.00').setHorizontalAlignment('right');
-    sheet.getRange(2, 3, SPX_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
-    sheet.getRange(2, 4, SPX_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 1, SPX_DATA.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 2, SPX_DATA.length, 1).setNumberFormat('#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    sheet.getRange(2, 3, SPX_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    sheet.getRange(2, 4, SPX_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
 
     for (var r = 0; r < SPX_DATA.length; r++) {
       var bg = (r % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
       sheet.getRange(2 + r, 1, 1, SPX_HEADERS.length).setBackground(bg);
+      sheet.setRowHeight(2 + r, 22);
     }
     sheet.getRange(1, 1, SPX_DATA.length + 1, SPX_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
   }
 
-  sheet.autoResizeColumns(1, SPX_HEADERS.length);
+  var spxColWidths = [80, 115, 140, 175];
+  for (var sc = 0; sc < spxColWidths.length; sc++) {
+    sheet.setColumnWidth(sc + 1, spxColWidths[sc]);
+  }
   sheet.setFrozenRows(1);
 }
 
@@ -364,27 +406,36 @@ function buildTradesSheet(ss) {
   headerRange.setBackground('#1B365D')
              .setFontColor('#FFFFFF')
              .setFontWeight('bold')
-             .setHorizontalAlignment('center');
+             .setHorizontalAlignment('center')
+             .setVerticalAlignment('middle')
+             .setWrap(true);
+
+  sheet.setRowHeight(1, 36);
 
   if (TRADE_DATA.length > 0) {
-    sheet.getRange(2, 1, TRADE_DATA.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center');
-    sheet.getRange(2, 2, TRADE_DATA.length, 1).setHorizontalAlignment('center');
-    sheet.getRange(2, 3, TRADE_DATA.length, 1).setFontWeight('bold').setHorizontalAlignment('center');
-    sheet.getRange(2, 4, TRADE_DATA.length, 1).setHorizontalAlignment('center');
-    sheet.getRange(2, 5, TRADE_DATA.length, 1).setNumberFormat('#,##0.0000').setHorizontalAlignment('right');
-    sheet.getRange(2, 6, TRADE_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
-    sheet.getRange(2, 7, TRADE_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 1, TRADE_DATA.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 2, TRADE_DATA.length, 1).setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 3, TRADE_DATA.length, 1).setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 4, TRADE_DATA.length, 1).setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 5, TRADE_DATA.length, 1).setNumberFormat('#,##0.0000').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    sheet.getRange(2, 6, TRADE_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    sheet.getRange(2, 7, TRADE_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
 
     for (var r = 0; r < TRADE_DATA.length; r++) {
       var bg = (r % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
       sheet.getRange(2 + r, 1, 1, TRADE_HEADERS.length).setBackground(bg);
+      sheet.setRowHeight(2 + r, 20);
     }
     sheet.getRange(1, 1, TRADE_DATA.length + 1, TRADE_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
   }
 
-  sheet.autoResizeColumns(1, TRADE_HEADERS.length);
+  var tradeColWidths = [75, 140, 85, 80, 110, 125, 125];
+  for (var tc = 0; tc < tradeColWidths.length; tc++) {
+    sheet.setColumnWidth(tc + 1, tradeColWidths[tc]);
+  }
   sheet.setFrozenRows(1);
 }
+
 
 // ==========================================
 // Utility & Custom Spreadsheet Functions
