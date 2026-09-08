@@ -10,6 +10,7 @@ from engine.metrics import (
     calculate_tax_drag,
     calculate_terminal_metrics,
     calculate_alpha,
+    calculate_benchmark_annual_series,
 )
 import engine
 
@@ -25,6 +26,7 @@ class TestMetrics(unittest.TestCase):
         self.assertIs(engine.calculate_tax_drag, calculate_tax_drag)
         self.assertIs(engine.calculate_terminal_metrics, calculate_terminal_metrics)
         self.assertIs(engine.calculate_alpha, calculate_alpha)
+        self.assertIs(engine.calculate_benchmark_annual_series, calculate_benchmark_annual_series)
 
 
     # 1. CAGR Tests
@@ -261,6 +263,90 @@ class TestMetrics(unittest.TestCase):
     def test_alpha(self):
         self.assertAlmostEqual(calculate_alpha(0.15, 0.10), 0.05)
         self.assertAlmostEqual(calculate_alpha(0.08, 0.10), -0.02)
+
+    # 8. Benchmark Annual Series Tests
+    def test_calculate_benchmark_annual_series_pretax(self):
+        pr_levels = [100.0, 110.0]   # 10% price return
+        tr_levels = [100.0, 112.0]   # 12% total return (2% dividend yield)
+        res = calculate_benchmark_annual_series(
+            pr_levels=pr_levels,
+            tr_levels=tr_levels,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            is_after_tax=False,
+        )
+        self.assertAlmostEqual(res["annual_returns"][0], 0.12, places=6)
+        self.assertAlmostEqual(res["final_equity"], 11200.0, places=2)
+        self.assertAlmostEqual(res["pre_liquidation_wealth"], 11200.0, places=2)
+        self.assertAlmostEqual(res["total_taxes_paid"], 0.0, places=2)
+        self.assertAlmostEqual(res["post_liquidation_wealth"], 11200.0, places=2)
+
+    def test_calculate_benchmark_annual_series_aftertax(self):
+        pr_levels = [100.0, 110.0]   # 10% price return
+        tr_levels = [100.0, 112.0]   # 12% total return (2% dividend yield)
+        res = calculate_benchmark_annual_series(
+            pr_levels=pr_levels,
+            tr_levels=tr_levels,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            is_after_tax=True,
+        )
+        self.assertAlmostEqual(res["annual_returns"][0], 0.114, places=6)
+        self.assertAlmostEqual(res["pre_liquidation_wealth"], 11140.0, places=2)
+        self.assertAlmostEqual(res["final_equity"], 10840.0, places=2)
+        self.assertAlmostEqual(res["post_liquidation_wealth"], 10840.0, places=2)
+        self.assertAlmostEqual(res["total_taxes_paid"], 360.0, places=2)
+        self.assertAlmostEqual(res["total_dividends_received"], 200.0, places=2)
+
+    def test_calculate_benchmark_annual_series_multi_year(self):
+        # 2 years:
+        # Year 1: PR 100 -> 110 (10%), TR 100 -> 112 (12%), yield = 2%
+        # Year 2: PR 110 -> 121 (10%), TR 112 -> 126.56, r_tr = (126.56 - 112) / 112 = 0.13, yield = 3%
+        pr_levels = [100.0, 110.0, 121.0]
+        tr_levels = [100.0, 112.0, 126.56]
+        res = calculate_benchmark_annual_series(
+            pr_levels=pr_levels,
+            tr_levels=tr_levels,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            is_after_tax=True,
+        )
+        self.assertEqual(len(res["annual_returns"]), 2)
+        # Year 1 return: 0.10 + 0.02 * 0.7 = 0.114
+        self.assertAlmostEqual(res["annual_returns"][0], 0.114, places=6)
+        # Year 2 return: 0.10 + 0.03 * 0.7 = 0.121
+        self.assertAlmostEqual(res["annual_returns"][1], 0.121, places=6)
+        v1 = 10000.0 * 1.114  # 11140.0
+        v2 = v1 * 1.121       # 12487.94
+        self.assertAlmostEqual(res["pre_liquidation_wealth"], v2, places=2)
+        # Div 1: 10000 * 0.02 = 200. Div 2: 11140 * 0.03 = 334.20. Total div = 534.20
+        self.assertAlmostEqual(res["total_dividends_received"], 534.20, places=2)
+
+    def test_calculate_benchmark_annual_series_edge_cases(self):
+        # Mismatched lengths
+        with self.assertRaises(ValueError):
+            calculate_benchmark_annual_series([100.0], [100.0, 110.0])
+
+        # Empty or single level (< 2)
+        res_empty = calculate_benchmark_annual_series([], [], initial_capital=5000.0)
+        self.assertEqual(res_empty["annual_returns"], [])
+        self.assertEqual(res_empty["final_equity"], 5000.0)
+        self.assertEqual(res_empty["total_taxes_paid"], 0.0)
+        self.assertEqual(res_empty["total_dividends_received"], 0.0)
+        self.assertEqual(res_empty["cost_basis"], 5000.0)
+
+        # Zero tax rate matches pretax
+        pr_levels = [100.0, 110.0]
+        tr_levels = [100.0, 112.0]
+        res_zero_tax = calculate_benchmark_annual_series(
+            pr_levels, tr_levels, tax_rate=0.0, initial_capital=10000.0, is_after_tax=True
+        )
+        res_pretax = calculate_benchmark_annual_series(
+            pr_levels, tr_levels, tax_rate=0.30, initial_capital=10000.0, is_after_tax=False
+        )
+        self.assertEqual(res_zero_tax["annual_returns"], res_pretax["annual_returns"])
+        self.assertEqual(res_zero_tax["final_equity"], res_pretax["final_equity"])
+        self.assertEqual(res_zero_tax["total_taxes_paid"], 0.0)
 
 
 if __name__ == "__main__":

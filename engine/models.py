@@ -64,6 +64,9 @@ class AnnualLedgerEntry:
     turnover: float
     holdings: Dict[str, Any] = field(default_factory=dict)
     cash: float = 0.0
+    dividend_income: float = 0.0
+    dividend_tax_paid: float = 0.0
+    capital_gains_tax_paid: float = 0.0
 
 
 @dataclass
@@ -85,3 +88,5 @@ class StrategyResult:
     post_liquidation_wealth: float
     post_liquidation_cagr: float
     annual_history: List[AnnualLedgerEntry] = field(default_factory=list)
+    total_dividends_received: float = 0.0
+    total_dividend_taxes_paid: float = 0.0

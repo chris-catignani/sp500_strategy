@@ -24,6 +24,7 @@ from engine.metrics import (
     calculate_tax_drag,
     calculate_terminal_metrics,
     calculate_alpha,
+    calculate_benchmark_annual_series,
 )
 from engine.exporters import (
     export_summary_metrics_csv,
@@ -55,6 +56,7 @@ __all__ = [
     "calculate_tax_drag",
     "calculate_terminal_metrics",
     "calculate_alpha",
+    "calculate_benchmark_annual_series",
     "export_summary_metrics_csv",
     "export_annual_breakdown_csv",
     "export_trade_log_csv",

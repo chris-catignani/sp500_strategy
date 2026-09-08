@@ -1,6 +1,6 @@
 """Quantitative performance analytics and tax drag calculators."""
 
-from typing import Dict, Sequence
+from typing import Any, Dict, List, Sequence
 from engine.models import AnnualLedgerEntry
 
 
@@ -185,3 +185,99 @@ def calculate_alpha(strategy_cagr: float, benchmark_cagr: float) -> float:
         Alpha as a float.
     """
     return strategy_cagr - benchmark_cagr
+
+
+def calculate_benchmark_annual_series(
+    pr_levels: Sequence[float],
+    tr_levels: Sequence[float],
+    tax_rate: float = 0.30,
+    initial_capital: float = 10000.0,
+    is_after_tax: bool = True,
+) -> Dict[str, Any]:
+    """Calculate dynamic pre-tax or after-tax benchmark returns, basis tracking, and liquidation metrics.
+
+    Args:
+        pr_levels: Chronological sequence of benchmark Price Return levels (length T + 1).
+        tr_levels: Chronological sequence of benchmark Total Return levels (length T + 1).
+        tax_rate: Applicable dividend and capital gains tax rate.
+        initial_capital: Initial investment capital.
+        is_after_tax: Whether annual dividend taxes and terminal capital gains tax apply.
+
+    Returns:
+        Dictionary containing standardized keys:
+        - 'annual_returns': List of annual return rates.
+        - 'final_equity': Terminal equity value (post-liquidation).
+        - 'pre_liquidation_wealth': Ending wealth before terminal liquidation tax.
+        - 'post_liquidation_wealth': Ending cash wealth after terminal liquidation tax.
+        - 'total_taxes_paid': Total taxes paid (annual dividend taxes + terminal liquidation tax).
+        - 'total_dividends_received': Cumulative gross dollar dividends received.
+        - 'cost_basis': Final adjusted cost basis.
+    """
+    if len(pr_levels) != len(tr_levels):
+        raise ValueError("pr_levels and tr_levels must have the same length")
+
+    if len(pr_levels) < 2:
+        return {
+            "annual_returns": [],
+            "final_equity": initial_capital,
+            "pre_liquidation_wealth": initial_capital,
+            "post_liquidation_wealth": initial_capital,
+            "total_taxes_paid": 0.0,
+            "total_dividends_received": 0.0,
+            "cost_basis": initial_capital,
+        }
+
+    annual_returns: List[float] = []
+    current_wealth = initial_capital
+    current_basis = initial_capital
+    total_dividends_received = 0.0
+    total_annual_div_taxes = 0.0
+
+    eff_tax_rate = tax_rate if is_after_tax else 0.0
+
+    for t in range(1, len(pr_levels)):
+        pr_prev, pr_curr = pr_levels[t - 1], pr_levels[t]
+        tr_prev, tr_curr = tr_levels[t - 1], tr_levels[t]
+
+        r_pr = (pr_curr - pr_prev) / pr_prev if pr_prev > 0.0 else 0.0
+        r_tr = (tr_curr - tr_prev) / tr_prev if tr_prev > 0.0 else 0.0
+        yield_t = max(0.0, r_tr - r_pr)
+
+        r_annual = r_pr + yield_t * (1.0 - eff_tax_rate)
+        annual_returns.append(r_annual)
+
+        gross_div = current_wealth * yield_t
+        total_dividends_received += gross_div
+
+        if is_after_tax:
+            div_tax = gross_div * eff_tax_rate
+            total_annual_div_taxes += div_tax
+            net_div = gross_div * (1.0 - eff_tax_rate)
+            current_basis += net_div
+        else:
+            current_basis += gross_div
+
+        current_wealth = current_wealth * (1.0 + r_annual)
+
+    pre_liquidation_wealth = current_wealth
+
+    if is_after_tax:
+        unrealized_gain = max(0.0, pre_liquidation_wealth - current_basis)
+        terminal_liq_tax = unrealized_gain * eff_tax_rate
+        post_liquidation_wealth = pre_liquidation_wealth - terminal_liq_tax
+        total_taxes_paid = total_annual_div_taxes + terminal_liq_tax
+    else:
+        post_liquidation_wealth = pre_liquidation_wealth
+        total_taxes_paid = 0.0
+
+    final_equity = post_liquidation_wealth
+
+    return {
+        "annual_returns": annual_returns,
+        "final_equity": final_equity,
+        "pre_liquidation_wealth": pre_liquidation_wealth,
+        "post_liquidation_wealth": post_liquidation_wealth,
+        "total_taxes_paid": total_taxes_paid,
+        "total_dividends_received": total_dividends_received,
+        "cost_basis": current_basis,
+    }

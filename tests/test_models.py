@@ -140,6 +140,29 @@ class TestModels(unittest.TestCase):
             cash=150.75,
         )
         self.assertEqual(entry_with_cash.cash, 150.75)
+        self.assertEqual(entry_with_cash.dividend_income, 0.0)
+        self.assertEqual(entry_with_cash.dividend_tax_paid, 0.0)
+        self.assertEqual(entry_with_cash.capital_gains_tax_paid, 0.0)
+
+        entry_with_dividends = AnnualLedgerEntry(
+            year=2022,
+            start_value=124250.0,
+            gross_return=0.12,
+            ending_value_pretax=139160.0,
+            realized_capital_gain=3000.0,
+            net_taxable_gain=3000.0,
+            tax_paid=1200.0,
+            loss_carryforward=0.0,
+            ending_value_aftertax=137960.0,
+            spx_return=0.12,
+            turnover=0.15,
+            dividend_income=1000.0,
+            dividend_tax_paid=300.0,
+            capital_gains_tax_paid=900.0,
+        )
+        self.assertEqual(entry_with_dividends.dividend_income, 1000.0)
+        self.assertEqual(entry_with_dividends.dividend_tax_paid, 300.0)
+        self.assertEqual(entry_with_dividends.capital_gains_tax_paid, 900.0)
 
     def test_strategy_result(self):
         result = StrategyResult(
@@ -176,6 +199,31 @@ class TestModels(unittest.TestCase):
         self.assertEqual(result.post_liquidation_wealth, 310000.0)
         self.assertEqual(result.post_liquidation_cagr, 0.120)
         self.assertEqual(result.annual_history, [])
+        self.assertEqual(result.total_dividends_received, 0.0)
+        self.assertEqual(result.total_dividend_taxes_paid, 0.0)
+
+        result_with_dividends = StrategyResult(
+            strategy_name="Top_5_MarketCap",
+            n=5,
+            start_year=2014,
+            end_year=2024,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+            final_equity=350000.0,
+            cagr=0.133,
+            cumulative_return=2.50,
+            max_drawdown=-0.22,
+            total_taxes_paid=45000.0,
+            pre_liquidation_wealth=350000.0,
+            post_liquidation_wealth=310000.0,
+            post_liquidation_cagr=0.120,
+            annual_history=[],
+            total_dividends_received=15000.0,
+            total_dividend_taxes_paid=4500.0,
+        )
+        self.assertEqual(result_with_dividends.total_dividends_received, 15000.0)
+        self.assertEqual(result_with_dividends.total_dividend_taxes_paid, 4500.0)
 
 
 if __name__ == "__main__":
