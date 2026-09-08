@@ -6,6 +6,12 @@ from engine.data_loader import DataLoader
 from engine.models import AnnualLedgerEntry, StrategyResult, TradeOrder
 from engine.selector import BaseSelector, MarketCapSelector
 from engine.tax_lots import FIFOTaxLotManager
+from engine.metrics import (
+    calculate_cagr,
+    calculate_cumulative_return,
+    calculate_max_drawdown,
+    calculate_terminal_metrics,
+)
 
 
 class PortfolioSimulator:
@@ -323,30 +329,16 @@ class PortfolioSimulator:
         final_equity = pre_liquidation_wealth
         total_years = end_year - start_year
 
-        cumulative_return = (
-            (pre_liquidation_wealth - initial_capital) / initial_capital
-            if initial_capital > 0.0
-            else 0.0
-        )
-
-        cagr = (
-            (pre_liquidation_wealth / initial_capital) ** (1.0 / total_years) - 1.0
-            if total_years > 0 and pre_liquidation_wealth > 0.0
-            else (-1.0 if pre_liquidation_wealth <= 0.0 else 0.0)
-        )
-
+        cumulative_return = calculate_cumulative_return(initial_capital, pre_liquidation_wealth)
+        cagr = calculate_cagr(initial_capital, pre_liquidation_wealth, total_years)
         total_taxes_paid = sum(e.tax_paid for e in annual_history)
 
         # Maximum Drawdown
-        peak = initial_capital
-        max_dd = 0.0
-        for e in annual_history:
-            val = e.ending_value_aftertax if is_after_tax else e.ending_value_pretax
-            if val > peak:
-                peak = val
-            dd = (val - peak) / peak if peak > 0.0 else 0.0
-            if dd < max_dd:
-                max_dd = dd
+        valuation_series = [initial_capital] + [
+            e.ending_value_aftertax if is_after_tax else e.ending_value_pretax
+            for e in annual_history
+        ]
+        max_dd = calculate_max_drawdown(valuation_series)
 
         # Embedded unrealized capital gains at terminal year
         terminal_positions = self.tax_manager.get_all_positions()
@@ -356,23 +348,18 @@ class PortfolioSimulator:
         }
         unrealized_gain = self.tax_manager.get_unrealized_gain(terminal_prices)
 
-        if is_after_tax:
-            terminal_loss_carryforward = self.tax_manager.loss_carryforward
-            net_taxable_terminal_gain = max(
-                0.0, unrealized_gain - terminal_loss_carryforward
-            )
-            terminal_liquidation_tax = net_taxable_terminal_gain * tax_rate
-            post_liquidation_wealth = (
-                pre_liquidation_wealth - terminal_liquidation_tax
-            )
-        else:
-            post_liquidation_wealth = pre_liquidation_wealth
-
-        post_liquidation_cagr = (
-            (post_liquidation_wealth / initial_capital) ** (1.0 / total_years) - 1.0
-            if total_years > 0 and post_liquidation_wealth > 0.0
-            else (-1.0 if post_liquidation_wealth <= 0.0 else 0.0)
+        term_metrics = calculate_terminal_metrics(
+            pre_liquidation_wealth=pre_liquidation_wealth,
+            unrealized_gain=unrealized_gain,
+            loss_carryforward=self.tax_manager.loss_carryforward,
+            tax_rate=tax_rate,
+            initial_capital=initial_capital,
+            years=total_years,
+            is_after_tax=is_after_tax,
         )
+        post_liquidation_wealth = term_metrics["post_liquidation_wealth"]
+        post_liquidation_cagr = term_metrics["post_liquidation_cagr"]
+
 
         return StrategyResult(
             strategy_name=strategy_name,
