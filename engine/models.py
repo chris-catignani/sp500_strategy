@@ -19,8 +19,8 @@ class HoldingTarget:
     """Target portfolio allocation for a single constituent."""
     ticker: str
     target_weight: float
-    target_dollar: float
-    target_shares: float
+    target_dollar: float = 0.0
+    target_shares: float = 0.0
 
 
 @dataclass

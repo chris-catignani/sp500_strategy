@@ -9,6 +9,11 @@ from engine.models import (
     TradeOrder,
 )
 from engine.tax_lots import FIFOTaxLotManager
+from engine.selector import (
+    BaseSelector,
+    MarketCapSelector,
+    PerformanceSelector,
+)
 
 __all__ = [
     "AnnualLedgerEntry",
@@ -18,4 +23,7 @@ __all__ = [
     "TaxLot",
     "TradeOrder",
     "FIFOTaxLotManager",
+    "BaseSelector",
+    "MarketCapSelector",
+    "PerformanceSelector",
 ]
