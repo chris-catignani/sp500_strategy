@@ -460,54 +460,12 @@ function buildPerformanceAndTradeoffsSheet(ss) {
   // Spacer
   sheet.setRowHeight(11, 12);
 
-  // 6. Embedded Native Charts (Rows 12 to 29)
-  // Chart 1: Growth of $10,000 Line Chart (Logarithmic Scale)
-  var growthRange = sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length);
-  var growthChart = sheet.newChart()
-    .asLineChart()
-    .addRange(growthRange)
-    .setNumHeaders(1)
-    .setOption('useFirstColumnAsDomain', true)
-    .setOption('title', 'Growth of $10,000 Initial Investment (Log Scale, 1994–2024)')
-    .setOption('titleTextStyle', {fontSize: 13, bold: true, color: '#1A202C'})
-    .setOption('legend', {position: 'top', textStyle: {fontSize: 10}})
-    .setOption('hAxis', {title: 'Year', format: '####', gridlines: {count: 8}})
-    .setOption('vAxis', {title: 'Portfolio Value ($) - Log Scale', logScale: true, scaleType: 'log', format: '$#,##0'})
-    .setOption('vAxis.logScale', true)
-    .setOption('vAxis.scaleType', 'log')
-    .setOption('vAxes.0.logScale', true)
-    .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
-    .setOption('width', 580)
-    .setOption('height', 360)
-    .setPosition(12, 1, 0, 0)
-    .build();
-  sheet.insertChart(growthChart);
-
-  // Chart 2: Historical Drawdowns from Peak Line Chart
-  var ddRange = sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length);
-  var ddChart = sheet.newChart()
-    .asLineChart()
-    .addRange(ddRange)
-    .setNumHeaders(1)
-    .setOption('useFirstColumnAsDomain', true)
-    .setOption('title', 'Historical Drawdown from Peak (1994–2024)')
-    .setOption('titleTextStyle', {fontSize: 13, bold: true, color: '#1A202C'})
-    .setOption('legend', {position: 'top', textStyle: {fontSize: 10}})
-    .setOption('hAxis', {title: 'Year', format: '####', gridlines: {count: 8}})
-    .setOption('vAxis', {title: 'Drawdown (%)', format: '0.0%'})
-    .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
-    .setOption('width', 580)
-    .setOption('height', 360)
-    .setPosition(12, 7, 0, 0)
-    .build();
-  sheet.insertChart(ddChart);
-
   for (var cr = 12; cr <= 29; cr++) {
     sheet.setRowHeight(cr, 20);
   }
   sheet.setRowHeight(30, 14);
 
-  // 7. Section Titles for Time Series Data
+  // 6. Section Titles for Time Series Data
   sheet.getRange('A31:E31').merge()
        .setValue('30-YEAR WEALTH ACCUMULATION DATA ($10,000 BASIS)')
        .setBackground('#2C5282')
@@ -570,6 +528,55 @@ function buildPerformanceAndTradeoffsSheet(ss) {
   for (var pw = 0; pw < pColWidths.length; pw++) {
     sheet.setColumnWidth(pw + 1, pColWidths[pw]);
   }
+
+  // Flush all cell values and formats to spreadsheet before creating charts
+  SpreadsheetApp.flush();
+
+  // 7. Embedded Native Charts (Rows 12 to 29)
+  // Chart 1: Growth of $10,000 Line Chart (Logarithmic Scale)
+  var growthRange = sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length);
+  var growthChart = sheet.newChart()
+    .asLineChart()
+    .addRange(growthRange)
+    .setNumHeaders(1)
+    .useLogScale()
+    .setOption('useFirstColumnAsDomain', true)
+    .setOption('title', 'Growth of $10,000 Initial Investment (Log Scale, 1994–2024)')
+    .setOption('titleTextStyle', {fontSize: 13, bold: true, color: '#1A202C'})
+    .setOption('legend', {position: 'top', textStyle: {fontSize: 10}})
+    .setOption('hAxis', {title: 'Year', format: '####', gridlines: {count: 8}})
+    .setOption('vAxis', {title: 'Portfolio Value ($) - Log Scale', scaleType: 'log', logScale: true, format: '$#,##0'})
+    .setOption('vAxes.0.logScale', true)
+    .setOption('vAxes.0.scaleType', 'log')
+    .setOption('vAxes.0.title', 'Portfolio Value ($) - Log Scale')
+    .setOption('vAxis.logScale', true)
+    .setOption('vAxis.scaleType', 'log')
+    .setOption('vAxis.title', 'Portfolio Value ($) - Log Scale')
+    .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
+    .setOption('width', 580)
+    .setOption('height', 360)
+    .setPosition(12, 1, 0, 0)
+    .build();
+  sheet.insertChart(growthChart);
+
+  // Chart 2: Historical Drawdowns from Peak Line Chart
+  var ddRange = sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length);
+  var ddChart = sheet.newChart()
+    .asLineChart()
+    .addRange(ddRange)
+    .setNumHeaders(1)
+    .setOption('useFirstColumnAsDomain', true)
+    .setOption('title', 'Historical Drawdown from Peak (1994–2024)')
+    .setOption('titleTextStyle', {fontSize: 13, bold: true, color: '#1A202C'})
+    .setOption('legend', {position: 'top', textStyle: {fontSize: 10}})
+    .setOption('hAxis', {title: 'Year', format: '####', gridlines: {count: 8}})
+    .setOption('vAxis', {title: 'Drawdown (%)', format: '0.0%'})
+    .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
+    .setOption('width', 580)
+    .setOption('height', 360)
+    .setPosition(12, 7, 0, 0)
+    .build();
+  sheet.insertChart(ddChart);
 }
 
 // ==========================================
