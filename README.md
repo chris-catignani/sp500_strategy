@@ -59,64 +59,20 @@ Passive market-cap-weighted indices are dominated by their largest constituents 
 
 ### Two-Phase Rebalancing & Tax Model
 
-Real-world rebalancing incurs capital gains and dividend taxes when winners are trimmed, exits occur, or cash distributions are paid. A naïve simulation encounters circular dependency: tax liabilities depend on sell proceeds and dividend receipts, but target share quantities depend on net available capital. To solve this mathematically while enforcing strict self-financing (`cash >= 0.0`), the engine implements a **Two-Phase Rebalancing Protocol**:
+Real-world rebalancing incurs capital gains and dividend taxes when winners are trimmed, exits occur, or cash distributions are paid. A naïve simulation encounters circular dependency: tax liabilities depend on sell proceeds and dividend receipts, but target share quantities depend on net available capital.
 
-### 1. Pre-Rebalance Cash Dividend Collection & Pooling
-At year-end $t+1$, prior to executing rebalancing trades:
-1. **Gross Dividend Calculation**: Cash dividends are computed for all held positions based on the year's split-adjusted dividend per share from `data/sp500_dividends.json`:
-   $$\text{Div}_{t+1} = \sum_{i} S_{i}^{\text{held}} \times \text{DPS}_{i, t+1}$$
-2. **Cash Pooling**: Gross dividend proceeds are added directly to available portfolio cash:
-   $$\text{Cash}_{t+1} = \text{Cash}_t + \text{Div}_{t+1}$$
-3. **Pre-Tax Valuation**: The portfolio is marked to market with pooled cash:
-   $$V_{\text{total}, t+1} = \sum_{i} (S_{i}^{\text{held}} \times P_{i, t+1}) + \text{Cash}_{t+1}$$
+To solve this mathematically while enforcing strict self-financing without leverage (`cash >= 0.0`), the engine implements a **deterministic two-phase rebalancing cycle**:
+1. **Pre-Rebalance Cash Dividend Pooling**: Annual cash dividends from `data/sp500_dividends.json` are credited to available cash prior to rebalancing trades.
+2. **Phase 1 (Provisional Exits & Trims)**: Overweight positions and exited constituents are provisionally trimmed based on pre-tax wealth.
+3. **Phase 2 (Decoupled Tax Settlement & Net Reinvestment)**:
+   - **Dividend income** is taxed separately at rate $\tau$ (cannot be offset by capital loss carryforwards under IRS rules).
+   - **Realized capital gains** are computed via FIFO lot accounting and netted against prior capital loss carryforwards.
+   - Secondary trims bring overweight positions down to net equity ($V_{\text{net}} \times w_i$).
+   - Buy orders are clamped to available cash (`cash >= 0.0`).
+4. **Dynamic After-Tax Benchmark Modeling**: The S&P 500 benchmark is modeled dynamically using `^GSPC` price return + `^SP500TR` synthetic dividend yield with annual dividend taxation and terminal capital gains liquidation tax.
 
-### 2. Phase 1: Portfolio Valuation & Provisional Sell Execution
-1. Determine provisional target dollar allocations based on pre-tax wealth:
-   $$\text{TargetDollar}_{i, \text{prov}} = V_{\text{total}, t+1} \times w_{i, t+1}$$
-2. Execute provisional sells:
-   - **Full Exits**: Liquidate 100% of any stock no longer in the Top $N$.
-   - **Overweight Trims**: If $S_{i}^{\text{held}} \times P_{i, t+1} > \text{TargetDollar}_{i, \text{prov}}$, sell the excess shares.
-   - Retain all underweight holdings without selling.
-
-### 3. Phase 2: Decoupled Dual Tax Settlement & Net Reinvestment
-1. **Decoupled Tax Architecture**:
-   - **Dividend Tax**: Under IRS tax code rules, dividend income is taxable in the calendar year received and *cannot* be offset by capital loss carryforwards:
-     $$\text{Tax}_{\text{div}} = \text{Div}_{t+1} \times \tau$$
-   - **Capital Gains Tax**: Realized gain/loss for each sold share is computed via FIFO tax lot matching:
-     $$\text{RealizedGain}_i = (\Delta S_i \times P_{i, t+1}) - \text{CostBasis}_{\text{FIFO}}(\Delta S_i)$$
-   - **Loss Carryforward Netting**: Capital loss carryforwards offset only realized capital gains:
-     $$\text{NetTaxableGain}_{t+1} = \max(0, \sum \text{RealizedGain} - \text{LossCarryforward}_{t})$$
-     - If $\text{NetTaxableGain}_{t+1} > 0$: $\text{Tax}_{\text{cap}} = \text{NetTaxableGain}_{t+1} \times \tau$, and carryforward resets to $\$0$.
-     - If $\text{NetTaxableGain}_{t+1} \le 0$: $\text{Tax}_{\text{cap}} = \$0$, and unused losses carry forward to year $t+2$.
-   - **Total Annual Tax**:
-     $$\text{TaxPaid} = \text{Tax}_{\text{div}} + \text{Tax}_{\text{cap}}$$
-2. **Iterative Secondary Trims**:
-   - In after-tax runs, paying taxes reduces investable equity: $V_{\text{net}} = V_{\text{total}, t+1} - \text{TaxPaid}$.
-   - Positions held above their final net target allocation ($V_{\text{net}} \times w_i$) are iteratively trimmed, settling any additional realized capital gains taxes until equilibrium is achieved.
-3. **Cash-Clamped Buys (Unleveraged Invariant)**:
-   - Final buy orders bring underweight and newly entered constituents to their target allocations.
-   - To strictly preserve the unleveraged invariant (`cash >= 0.0`), all buy orders are clamped to available cash proceeds:
-     $$\text{BuyCost}_i = \min(\text{DesiredCost}_i, \max(0, \text{Cash}))$$
-4. **Default Tax Rate**: $\tau = 30.0\%$ flat (modeling 20% federal long-term capital gains + 3.8% Net Investment Income Tax + state capital gains).
-
-### 4. Dynamic After-Tax S&P 500 Benchmark Modeling
-To achieve a true apples-to-apples after-tax comparison, the S&P 500 benchmark is modeled dynamically using both price return (`^GSPC`) and total return (`^SP500TR`) indices:
-1. **Synthetic Annual Dividend Yield**:
-   $$r_{\text{PR}, t} = \frac{\text{SPX\_PR}_t - \text{SPX\_PR}_{t-1}}{\text{SPX\_PR}_{t-1}}, \quad r_{\text{TR}, t} = \frac{\text{SPX\_TR}_t - \text{SPX\_TR}_{t-1}}{\text{SPX\_TR}_{t-1}}$$
-   $$y_t = \max(0, r_{\text{TR}, t} - r_{\text{PR}, t})$$
-2. **After-Tax Compounding**:
-   $$r_{\text{benchmark}, t} = r_{\text{PR}, t} + y_t \times (1 - \tau)$$
-3. **Basis Tracking & Terminal Tax**:
-   - Reinvested after-tax dividends increase the benchmark cost basis each year: $\text{Basis}_{t} = \text{Basis}_{t-1} + \text{Wealth}_{t-1} \times y_t \times (1 - \tau)$.
-   - Upon terminal liquidation, unrealized benchmark capital gains are taxed:
-     $$\text{TerminalTax}_{\text{bench}} = \max(0, V_{\text{pre-liq}} - \text{Basis}_T) \times \tau$$
-
-### 5. Terminal Liquidation & Tax Drag
-At the conclusion of the investment horizon (2024):
-- **Pre-Liquidation Wealth**: Portfolio value before liquidating remaining holdings.
-- **Post-Liquidation Wealth**: True after-tax net wealth assuming 100% liquidation of all open positions and payment of all remaining taxes on unrealized gains (net of unused carryforward).
-- **Tax Drag**: The annualized percentage return lost to tax friction:
-  $$\text{Tax Drag} = \text{CAGR}_{\text{Pre-Tax}} - \text{Post-Liquidation CAGR}_{\text{After-Tax}}$$
+For full mathematical derivations, sequence diagrams, and tax-loss carryforward formulas, see:
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 
 ---
 
@@ -352,13 +308,13 @@ python3 -m unittest tests/test_rebalancing.py
 python3 -m unittest tests/test_exporters.py
 ```
 
-All 114 tests execute in under 0.5 seconds with 100% test pass rate.
+All 126 tests execute in ~1.4 seconds with 100% test pass rate.
 
 ---
 
 ## Historical Data Sources & Provenance
 
-For detailed documentation on benchmark index levels (`^GSPC`, `^SP500TR`), constituent point-in-time rankings, corporate action split adjustments (`WMT`, `GE`, `AIG`, `UNH`), and dividend cash accounting, see [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md).
+For detailed technical specifications on benchmark index levels (`^GSPC`, `^SP500TR`), constituent point-in-time rankings, corporate action split adjustments (`WMT`, `GE`, `AIG`, `UNH`), and dividend cash accounting, see [`docs/DATA_PROVENANCE.md`](docs/DATA_PROVENANCE.md).
 
 ---
 
