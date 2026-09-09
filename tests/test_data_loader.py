@@ -243,6 +243,28 @@ class TestDataLoader(unittest.TestCase):
         yield_1994 = self.loader.get_spx_dividend_yield(1994)
         self.assertGreaterEqual(yield_1994, 0.0)
 
+    def test_available_universes(self):
+        """Verify get_available_universes returns registered universes including sp500 and world."""
+        universes = self.loader.get_available_universes()
+        self.assertIn("sp500", universes)
+        self.assertIn("world", universes)
+
+    def test_load_world_universe(self):
+        """Verify load_universe loads world dataset with valid snapshots and ADR tickers."""
+        # Test default world loading
+        world_2024 = self.loader.load_universe(2024, universe="world")
+        self.assertGreater(len(world_2024), 0)
+        tickers = {s.ticker for s in world_2024}
+        self.assertTrue("TSM" in tickers or "ASML" in tickers or "NVO" in tickers)
+
+        # Test alias 'all_world'
+        world_alias = self.loader.load_universe(2024, universe="all_world")
+        self.assertEqual(len(world_alias), len(world_2024))
+
+        # Test invalid universe raises ValueError
+        with self.assertRaises(ValueError):
+            self.loader.load_universe(2024, universe="invalid_universe")
+
 
 if __name__ == "__main__":
     unittest.main()

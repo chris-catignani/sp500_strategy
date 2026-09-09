@@ -340,19 +340,33 @@ class TestExporters(unittest.TestCase):
             result = subprocess.run(["node", "-c", output_js], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, f"Node syntax check failed: {result.stderr}")
 
-    def test_google_apps_script_12_column_dashboard(self):
+    def test_google_apps_script_interactive_dashboard(self):
         code = generate_google_apps_script()
-        # Executive Summary checks
+        # Executive Summary checks (13-column layout A1:M1)
         self.assertIn("Total Dividends Received", code)
-        self.assertIn("'A1:L1'", code)
-        self.assertIn("'A8:L8'", code)
-        self.assertIn("METHODOLOGY NOTE — DIVIDEND TIMING", code)
-        # KPI formulas
-        self.assertIn("=G19", code)
-        self.assertIn("=G21", code)  # Card 2 S&P 500 Wealth on Row 21
-        self.assertIn("=E19", code)
-        self.assertIn("=L19", code)  # Card 4 Alpha
-        self.assertIn("=K19", code)  # Card 5 Tax Drag
+        self.assertIn("'A1:M1'", code)
+        self.assertIn("'A8:M8'", code)
+        self.assertIn("METHODOLOGY NOTE — DIVIDEND TIMING & MULTI-UNIVERSE SELECTION", code)
+        # 15-Column SCENARIO_HEADERS
+        self.assertIn('"LookupKey"', code)
+        self.assertIn('"TaxRate"', code)
+        self.assertIn('"Universe"', code)
+        self.assertIn('"Horizon"', code)
+        self.assertIn('"Strategy"', code)
+        # Decoupled KPI formulas querying Scenario Data
+        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$J:$J, MATCH(\"30y_\"", code)
+        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$H:$H, MATCH(\"30y_\"", code)
+        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$O:$O, MATCH(\"30y_\"", code)
+        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$N:$N, MATCH(\"30y_\"", code)
+        # Dynamic FILTER formula in A10
+        self.assertIn("=IFNA(FILTER(\\'Scenario Data\\'!$C$2:$O", code)
+        # Multi-universe tabs and menus
+        self.assertIn("'World Top 3 Strategy'", code)
+        self.assertIn("'World Top 5 Strategy'", code)
+        self.assertIn("'World Top 10 Strategy'", code)
+        self.assertIn("Show S&P 500 Tabs Only", code)
+        self.assertIn("Show All World Tabs Only", code)
+        self.assertIn("Show All Tabs", code)
 
     def test_google_apps_script_performance_charts_and_regimes(self):
         code = generate_google_apps_script()

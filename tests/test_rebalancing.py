@@ -378,6 +378,32 @@ class TestPortfolioSimulator(unittest.TestCase):
         for c in sim.cash_history:
             self.assertGreaterEqual(c, 0.0)
 
+    def test_world_simulation_invariants(self):
+        """Verify unleveraged cash invariant (cash >= 0) and universe tagging for All-World strategy."""
+        sim = PortfolioSimulator()
+        for n in [3, 5, 10]:
+            for tax_rate in [0.0, 0.20, 0.30]:
+                result = sim.run_simulation(
+                    start_year=1994,
+                    end_year=2024,
+                    n=n,
+                    is_after_tax=(tax_rate > 0.0),
+                    tax_rate=tax_rate,
+                    initial_capital=10000.0,
+                    universe="world",
+                )
+                self.assertEqual(result.universe, "world")
+                self.assertTrue(result.strategy_name.startswith("World_"))
+                self.assertGreater(result.total_dividends_received, 0.0)
+                self.assertGreater(result.final_equity, 10000.0)
+                for entry in result.annual_history:
+                    self.assertEqual(entry.universe, "world")
+                    self.assertGreaterEqual(
+                        entry.cash,
+                        -1e-7,
+                        f"Cash deficit violation in year {entry.year} for World Top {n} at tax rate {tax_rate}",
+                    )
+
 
 if __name__ == "__main__":
     unittest.main()

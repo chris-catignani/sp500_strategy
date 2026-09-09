@@ -85,8 +85,36 @@ class TestDatasetIntegrity(unittest.TestCase):
         raw_benchmarks_dir = self.data_dir / "raw" / "benchmarks"
         self.assertTrue(raw_tickers_dir.exists())
         self.assertTrue(raw_benchmarks_dir.exists())
-        self.assertEqual(len(list(raw_tickers_dir.glob("*.json"))), 33)
-        self.assertEqual(len(list(raw_benchmarks_dir.glob("*.json"))), 2)
+        self.assertGreaterEqual(len(list(raw_tickers_dir.glob("*.json"))), 33)
+        self.assertGreaterEqual(len(list(raw_benchmarks_dir.glob("*.json"))), 2)
+        # Check key S&P 500 and Non-US ADR tickers
+        self.assertTrue((raw_tickers_dir / "AAPL.json").exists())
+        self.assertTrue((raw_tickers_dir / "TSM.json").exists())
+        self.assertTrue((raw_tickers_dir / "SHEL.json").exists())
+
+    def test_world_datasets_exist_and_valid(self):
+        world_prices_path = self.data_dir / "world_prices.json"
+        world_dividends_path = self.data_dir / "world_dividends.json"
+        world_constituents_path = self.data_dir / "world_constituents.json"
+
+        self.assertTrue(world_prices_path.exists())
+        self.assertTrue(world_dividends_path.exists())
+        self.assertTrue(world_constituents_path.exists())
+
+        with open(world_constituents_path, "r", encoding="utf-8") as f:
+            constituents = json.load(f)
+        with open(world_prices_path, "r", encoding="utf-8") as f:
+            prices = json.load(f)
+
+        for yr in range(1994, 2025):
+            str_yr = str(yr)
+            self.assertIn(str_yr, constituents)
+            self.assertEqual(len(constituents[str_yr]), 12)
+            for c in constituents[str_yr]:
+                ticker = c["ticker"]
+                self.assertIn(ticker, prices)
+                self.assertIn(str_yr, prices[ticker])
+                self.assertGreater(prices[ticker][str_yr], 0.0)
 
 
 if __name__ == "__main__":

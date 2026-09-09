@@ -19,7 +19,12 @@ TICKERS = [
     "GE", "PFE", "CSCO", "INTC", "KO", "MRK", "MO", "T", "HPQ",
 ]
 
-BENCHMARKS = ["^GSPC", "^SP500TR"]
+NON_US_TICKERS = [
+    "TSM", "ASML", "NVO", "BABA", "SAP", "TM", "SHEL", "AZN",
+    "NVS", "BP", "BHP", "RIO", "SONY", "TTE", "SNY",
+]
+
+BENCHMARKS = ["^GSPC", "^SP500TR", "URTH"]
 
 # Symbol translations for Yahoo Finance API
 SYMBOL_MAP = {
@@ -30,17 +35,14 @@ SYMBOL_MAP = {
 BENCHMARK_FILE_MAP = {
     "^GSPC": "GSPC.json",
     "^SP500TR": "SP500TR.json",
+    "URTH": "URTH.json",
 }
 
 # 1993-01-01 to 2024-12-31 UTC
 PERIOD1 = 725846400   # 1993-01-01 00:00:00 UTC
 PERIOD2 = 1735689600  # 2024-12-31 00:00:00 UTC
 
-USER_AGENT = (
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/120.0.0.0 Safari/537.36"
-)
+USER_AGENT = "Mozilla/5.0"
 
 
 def fetch_symbol_chart(symbol: str, retries: int = 3) -> dict:
@@ -58,21 +60,24 @@ def fetch_symbol_chart(symbol: str, retries: int = 3) -> dict:
         try:
             with urllib.request.urlopen(req, timeout=15) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
-                return data
-        except Exception:
-            # Fallback to curl
-            try:
-                out = subprocess.check_output(
-                    ["curl", "-s", "-A", USER_AGENT, url],
-                    timeout=15,
-                )
-                data = json.loads(out.decode("utf-8"))
                 if "chart" in data and data["chart"].get("result"):
                     return data
-            except Exception as e2:
-                if attempt == retries:
-                    raise RuntimeError(f"Failed to fetch {symbol}: {e2}") from e2
-            time.sleep(1.5 * attempt)
+        except Exception:
+            pass
+
+        # Fallback to curl with -L (follow redirects)
+        try:
+            out = subprocess.check_output(
+                ["curl", "-s", "-L", "-A", USER_AGENT, url],
+                timeout=15,
+            )
+            data = json.loads(out.decode("utf-8"))
+            if "chart" in data and data["chart"].get("result"):
+                return data
+        except Exception as e2:
+            if attempt == retries:
+                raise RuntimeError(f"Failed to fetch {symbol}: {e2}") from e2
+        time.sleep(1.5 * attempt)
 
 
 def main():
@@ -85,12 +90,16 @@ def main():
     raw_benchmarks_dir.mkdir(parents=True, exist_ok=True)
     raw_constituents_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Fetching raw data for {len(TICKERS)} tickers and {len(BENCHMARKS)} benchmarks...")
+    all_tickers = TICKERS + [t for t in NON_US_TICKERS if t not in TICKERS]
+    print(f"Fetching raw data for {len(all_tickers)} tickers and {len(BENCHMARKS)} benchmarks...")
 
     # Fetch benchmarks
     for bmk in BENCHMARKS:
         filename = BENCHMARK_FILE_MAP[bmk]
         target_path = raw_benchmarks_dir / filename
+        if target_path.exists() and target_path.stat().st_size > 100:
+            print(f"Benchmark already exists: {bmk} -> {target_path.name}")
+            continue
         print(f"Fetching benchmark: {bmk} -> {target_path.name}")
         data = fetch_symbol_chart(bmk)
         with open(target_path, "w", encoding="utf-8") as f:
@@ -98,9 +107,12 @@ def main():
         time.sleep(0.5)
 
     # Fetch tickers
-    for idx, ticker in enumerate(TICKERS, 1):
+    for idx, ticker in enumerate(all_tickers, 1):
         target_path = raw_tickers_dir / f"{ticker}.json"
-        print(f"[{idx}/{len(TICKERS)}] Fetching ticker: {ticker} -> {target_path.name}")
+        if target_path.exists() and target_path.stat().st_size > 100:
+            print(f"[{idx}/{len(all_tickers)}] Ticker already exists: {ticker} -> {target_path.name}")
+            continue
+        print(f"[{idx}/{len(all_tickers)}] Fetching ticker: {ticker} -> {target_path.name}")
         data = fetch_symbol_chart(ticker)
         with open(target_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)

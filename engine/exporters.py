@@ -331,12 +331,18 @@ def build_default_scenario_data() -> Dict[str, Any]:
 
     Returns:
         Dictionary containing:
-        - scenario_rows: 2D table for 'Scenario Data' tab
+        - scenario_rows: 2D table for 'Scenario Data' tab (15 columns)
         - top3_annual: 2D table for 'Top 3 Strategy' tab
         - top5_annual: 2D table for 'Top 5 Strategy' tab
         - top10_annual: 2D table for 'Top 10 Strategy' tab
+        - world_top3_annual: 2D table for 'World Top 3 Strategy' tab
+        - world_top5_annual: 2D table for 'World Top 5 Strategy' tab
+        - world_top10_annual: 2D table for 'World Top 10 Strategy' tab
         - spx_data: 2D table for 'S&P 500 Benchmark' tab
         - trades_data: 2D table for 'Historical Holdings & Trades' tab
+        - era_data: 2D table for 'Performance & Tradeoffs' tab
+        - trajectory_data: 2D table for 'Performance & Tradeoffs' tab
+        - drawdown_data: 2D table for 'Performance & Tradeoffs' tab
     """
     from engine.data_loader import DataLoader
     from engine.backtest import PortfolioSimulator
@@ -351,12 +357,17 @@ def build_default_scenario_data() -> Dict[str, Any]:
 
     horizons = [("10y", 2014, 2024), ("20y", 2004, 2024), ("30y", 1994, 2024)]
     tax_rates = [(0.0, "0.0%"), (0.15, "15.0%"), (0.20, "20.0%"), (0.30, "30.0%"), (0.37, "37.0%")]
+    target_n_values = [3, 5, 10]
+    universes = ["sp500", "world"]
 
-    # Cache pre-tax simulations
-    pretax_results: Dict[Tuple[int, int, int], StrategyResult] = {}
-    for n in [3, 5, 10]:
-        for h_label, s_yr, e_yr in horizons:
-            pretax_results[(n, s_yr, e_yr)] = sim.run_simulation(s_yr, e_yr, n=n, is_after_tax=False)
+    # Cache pre-tax simulations across universes
+    pretax_results: Dict[Tuple[str, int, int, int], StrategyResult] = {}
+    for univ in universes:
+        for n in target_n_values:
+            for h_label, s_yr, e_yr in horizons:
+                pretax_results[(univ, n, s_yr, e_yr)] = sim.run_simulation(
+                    s_yr, e_yr, n=n, is_after_tax=False, universe=univ
+                )
 
     scenario_rows: List[List[Any]] = []
     for rate, rate_str in tax_rates:
@@ -404,96 +415,110 @@ def build_default_scenario_data() -> Dict[str, Any]:
                 spx_tax_drag = spx_tr_cagr - spx_post_liq_cagr
                 spx_divs = bench["total_dividends_received"]
 
-            # S&P 500 entry (14 columns)
-            spx_key = f"{h_label}_S&P 500_{rate_str}"
-            scenario_rows.append([
-                spx_key,
-                h_label,
-                "S&P 500",
-                rate,
-                round(spx_tr_cagr, 6),
-                round(spx_after_cagr, 6),
-                round(spx_post_liq_cagr, 6),
-                round(spx_cum, 6),
-                round(spx_final, 2),
-                round(spx_divs, 2),
-                round(spx_max_dd, 6),
-                round(spx_taxes, 2),
-                round(spx_tax_drag, 6),
-                0.0,
-            ])
+            for univ in universes:
+                univ_label = "S&P 500" if univ == "sp500" else "All World"
 
-            # Top N strategies (14 columns)
-            for n in [3, 5, 10]:
-                pre_res = pretax_results[(n, s_yr, e_yr)]
-                if rate == 0.0:
-                    post_res = pre_res
-                    tax_drag = 0.0
-                    alpha = post_res.cagr - spx_tr_cagr
-                else:
-                    post_res = sim.run_simulation(s_yr, e_yr, n=n, is_after_tax=True, tax_rate=rate)
-                    tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
-                    alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
-
-                key = f"{h_label}_Top {n}_{rate_str}"
+                # S&P 500 benchmark entry for this universe (15 columns)
+                spx_key = f"{h_label}_{univ_label}_S&P 500_{rate_str}"
                 scenario_rows.append([
-                    key,
-                    h_label,
-                    f"Top {n}",
+                    spx_key,
                     rate,
-                    round(pre_res.cagr, 6),
-                    round(post_res.cagr, 6),
-                    round(post_res.post_liquidation_cagr, 6),
-                    round(post_res.cumulative_return, 6),
-                    round(post_res.final_equity, 2),
-                    round(post_res.total_dividends_received, 2),
-                    round(post_res.max_drawdown, 6),
-                    round(post_res.total_taxes_paid, 2),
-                    round(tax_drag, 6),
-                    round(alpha, 6),
+                    univ_label,
+                    h_label,
+                    "S&P 500",
+                    round(spx_tr_cagr, 6),
+                    round(spx_after_cagr, 6),
+                    round(spx_post_liq_cagr, 6),
+                    round(spx_cum, 6),
+                    round(spx_final, 2),
+                    round(spx_divs, 2),
+                    round(spx_max_dd, 6),
+                    round(spx_taxes, 2),
+                    round(spx_tax_drag, 6),
+                    0.0,
                 ])
 
-    # 30-Year Annual histories & trades at 30% baseline tax rate
+                # Top N strategies (15 columns)
+                for n in target_n_values:
+                    pre_res = pretax_results[(univ, n, s_yr, e_yr)]
+                    if rate == 0.0:
+                        post_res = pre_res
+                        tax_drag = 0.0
+                        alpha = post_res.cagr - spx_tr_cagr
+                        strat_cum = post_res.cumulative_return
+                        strat_final = post_res.final_equity
+                    else:
+                        post_res = sim.run_simulation(
+                            s_yr, e_yr, n=n, is_after_tax=True, tax_rate=rate, universe=univ
+                        )
+                        tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
+                        alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
+                        strat_cum = calculate_cumulative_return(10000.0, post_res.post_liquidation_wealth)
+                        strat_final = post_res.post_liquidation_wealth
+
+                    key = f"{h_label}_{univ_label}_Top {n}_{rate_str}"
+                    scenario_rows.append([
+                        key,
+                        rate,
+                        univ_label,
+                        h_label,
+                        f"Top {n}",
+                        round(pre_res.cagr, 6),
+                        round(post_res.cagr, 6),
+                        round(post_res.post_liquidation_cagr, 6),
+                        round(strat_cum, 6),
+                        round(strat_final, 2),
+                        round(post_res.total_dividends_received, 2),
+                        round(post_res.max_drawdown, 6),
+                        round(post_res.total_taxes_paid, 2),
+                        round(tax_drag, 6),
+                        round(alpha, 6),
+                    ])
+
+    # 30-Year Annual histories & trades at 30% baseline tax rate across universes
     annual_data: Dict[str, List[List[Any]]] = {}
     trade_rows: List[List[Any]] = []
-    res_30y_map: Dict[int, StrategyResult] = {}
+    res_30y_map: Dict[Tuple[str, int], StrategyResult] = {}
 
-    for n in [3, 5, 10]:
-        res_30y = sim.run_simulation(1994, 2024, n=n, is_after_tax=True, tax_rate=0.30)
-        res_30y_map[n] = res_30y
-        trades_30y = sim.get_trades()
+    for univ in universes:
+        prefix = "" if univ == "sp500" else "World "
+        key_prefix = "" if univ == "sp500" else "world_"
+        for n in target_n_values:
+            res_30y = sim.run_simulation(1994, 2024, n=n, is_after_tax=True, tax_rate=0.30, universe=univ)
+            res_30y_map[(univ, n)] = res_30y
+            trades_30y = sim.get_trades()
 
-        ledger_rows: List[List[Any]] = []
-        for entry in res_30y.annual_history:
-            ledger_rows.append([
-                entry.year,
-                round(entry.start_value, 2),
-                round(entry.gross_return, 6),
-                round(getattr(entry, "dividend_income", 0.0), 2),
-                round(entry.ending_value_pretax, 2),
-                round(entry.realized_capital_gain, 2),
-                round(entry.net_taxable_gain, 2),
-                round(getattr(entry, "capital_gains_tax_paid", 0.0), 2),
-                round(getattr(entry, "dividend_tax_paid", 0.0), 2),
-                round(entry.tax_paid, 2),
-                round(entry.loss_carryforward, 2),
-                round(entry.ending_value_aftertax, 2),
-                round(entry.cash, 2),
-                round(entry.spx_return, 6),
-                round(entry.turnover, 6),
-            ])
-        annual_data[f"top_{n}"] = ledger_rows
+            ledger_rows: List[List[Any]] = []
+            for entry in res_30y.annual_history:
+                ledger_rows.append([
+                    entry.year,
+                    round(entry.start_value, 2),
+                    round(entry.gross_return, 6),
+                    round(getattr(entry, "dividend_income", 0.0), 2),
+                    round(entry.ending_value_pretax, 2),
+                    round(entry.realized_capital_gain, 2),
+                    round(entry.net_taxable_gain, 2),
+                    round(getattr(entry, "capital_gains_tax_paid", 0.0), 2),
+                    round(getattr(entry, "dividend_tax_paid", 0.0), 2),
+                    round(entry.tax_paid, 2),
+                    round(entry.loss_carryforward, 2),
+                    round(entry.ending_value_aftertax, 2),
+                    round(entry.cash, 2),
+                    round(entry.spx_return, 6),
+                    round(entry.turnover, 6),
+                ])
+            annual_data[f"{key_prefix}top_{n}"] = ledger_rows
 
-        for t in trades_30y:
-            trade_rows.append([
-                t.year,
-                f"Top {n}",
-                t.ticker,
-                t.action,
-                round(t.shares, 4),
-                round(t.price, 2),
-                round(t.realized_gain, 2),
-            ])
+            for t in trades_30y:
+                trade_rows.append([
+                    t.year,
+                    f"{prefix}Top {n}",
+                    t.ticker,
+                    t.action,
+                    round(t.shares, 4),
+                    round(t.price, 2),
+                    round(t.realized_gain, 2),
+                ])
 
     # S&P 500 30-Year Benchmark Series
     spx_rows: List[List[Any]] = []
@@ -508,7 +533,7 @@ def build_default_scenario_data() -> Dict[str, Any]:
             comp_growth = 10000.0 * (lvl / base_level)
             spx_rows.append([y, round(lvl, 2), round(ann_ret, 6), round(comp_growth, 2)])
 
-    # Historical Market Regime Breakdown (4 Eras + Full 30-Year)
+    # Historical Market Regime Breakdown (4 Eras + Full 30-Year) based on S&P 500 baseline
     eras = [
         ("1995-1999", 1995, 1999, "Late '90s Dot-Com Boom"),
         ("2000-2009", 2000, 2009, "The 'Lost Decade' (Tech Bust & GFC)"),
@@ -516,9 +541,9 @@ def build_default_scenario_data() -> Dict[str, Any]:
         ("2020-2024", 2020, 2024, "Mega-Cap Tech & AI Concentration"),
         ("1995-2024", 1995, 2024, "Full 30-Year Horizon"),
     ]
-    t3_pre = pretax_results[(3, 1994, 2024)]
-    t5_pre = pretax_results[(5, 1994, 2024)]
-    t10_pre = pretax_results[(10, 1994, 2024)]
+    t3_pre = pretax_results[("sp500", 3, 1994, 2024)]
+    t5_pre = pretax_results[("sp500", 5, 1994, 2024)]
+    t10_pre = pretax_results[("sp500", 10, 1994, 2024)]
 
     era_rows: List[List[Any]] = []
     for label, sy, ey, desc in eras:
@@ -565,9 +590,9 @@ def build_default_scenario_data() -> Dict[str, Any]:
         spx_val *= (1.0 + r_spx)
         spx_traj.append(spx_val)
 
-    t3_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[3].annual_history]
-    t5_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[5].annual_history]
-    t10_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[10].annual_history]
+    t3_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[("sp500", 3)].annual_history]
+    t5_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[("sp500", 5)].annual_history]
+    t10_traj = [10000.0] + [e.ending_value_aftertax for e in res_30y_map[("sp500", 10)].annual_history]
 
     years_30y = list(range(1994, 2025))
     trajectory_rows = [
@@ -599,6 +624,9 @@ def build_default_scenario_data() -> Dict[str, Any]:
         "top3_annual": annual_data["top_3"],
         "top5_annual": annual_data["top_5"],
         "top10_annual": annual_data["top_10"],
+        "world_top3_annual": annual_data["world_top_3"],
+        "world_top5_annual": annual_data["world_top_5"],
+        "world_top10_annual": annual_data["world_top_10"],
         "spx_data": spx_rows,
         "trades_data": trade_rows,
         "era_data": era_rows,
@@ -642,6 +670,9 @@ def generate_google_apps_script(
             top3_annual = defaults["top3_annual"]
             top5_annual = defaults["top5_annual"]
             top10_annual = defaults["top10_annual"]
+            world_top3_annual = defaults["world_top3_annual"]
+            world_top5_annual = defaults["world_top5_annual"]
+            world_top10_annual = defaults["world_top10_annual"]
             spx_data = defaults["spx_data"]
             era_data = defaults["era_data"]
             trajectory_data = defaults["trajectory_data"]
@@ -650,6 +681,9 @@ def generate_google_apps_script(
             top3_annual = annual_data.get("top_3", defaults["top3_annual"])
             top5_annual = annual_data.get("top_5", defaults["top5_annual"])
             top10_annual = annual_data.get("top_10", defaults["top10_annual"])
+            world_top3_annual = annual_data.get("world_top_3", defaults.get("world_top3_annual", []))
+            world_top5_annual = annual_data.get("world_top_5", defaults.get("world_top5_annual", []))
+            world_top10_annual = annual_data.get("world_top_10", defaults.get("world_top10_annual", []))
             spx_data = annual_data.get("spx", defaults["spx_data"])
             era_data = annual_data.get("era_data", defaults["era_data"])
             trajectory_data = annual_data.get("trajectory_data", defaults["trajectory_data"])
@@ -685,6 +719,9 @@ def generate_google_apps_script(
         top3_annual = annual_data.get("top_3", [])
         top5_annual = annual_data.get("top_5", [])
         top10_annual = annual_data.get("top_10", [])
+        world_top3_annual = annual_data.get("world_top_3", [])
+        world_top5_annual = annual_data.get("world_top_5", [])
+        world_top10_annual = annual_data.get("world_top_10", [])
         spx_data = annual_data.get("spx", [])
         era_data = annual_data.get("era_data")
         trajectory_data = annual_data.get("trajectory_data")
@@ -697,6 +734,12 @@ def generate_google_apps_script(
                 trajectory_data = defaults["trajectory_data"]
             if drawdown_data is None:
                 drawdown_data = defaults["drawdown_data"]
+            if not world_top3_annual:
+                world_top3_annual = defaults.get("world_top3_annual", [])
+            if not world_top5_annual:
+                world_top5_annual = defaults.get("world_top5_annual", [])
+            if not world_top10_annual:
+                world_top10_annual = defaults.get("world_top10_annual", [])
 
         final_trade_rows = []
         for t in trades_data:
@@ -725,6 +768,9 @@ def generate_google_apps_script(
     top3_json = json.dumps(top3_annual)
     top5_json = json.dumps(top5_annual)
     top10_json = json.dumps(top10_annual)
+    world_top3_json = json.dumps(world_top3_annual)
+    world_top5_json = json.dumps(world_top5_annual)
+    world_top10_json = json.dumps(world_top10_annual)
     spx_json = json.dumps(spx_data)
     trades_json = json.dumps(final_trade_rows)
     era_json = json.dumps(era_data)
@@ -732,7 +778,7 @@ def generate_google_apps_script(
     drawdown_json = json.dumps(drawdown_data)
 
     js_template = f"""/**
- * Google Apps Script for S&P 500 Top N Strategy Interactive Dashboard
+ * Google Apps Script for S&P 500 & All-World Top N Strategy Interactive Dashboard
  * Generated automatically by engine/exporters.py
  *
  * Instructions:
@@ -740,14 +786,14 @@ def generate_google_apps_script(
  * 2. Go to Extensions > Apps Script.
  * 3. Replace all text in Code.gs with this script.
  * 4. Save and return to Google Sheets.
- * 5. Refresh the sheet, then click the new menu: "S&P 500 Strategy" > "Build All Sheets".
+ * 5. Refresh the sheet, then click the new menu: "S&P 500 & World Strategy" > "Build All Sheets".
  */
 
 // ==========================================
 // Embedded Simulation Data
 // ==========================================
 var SCENARIO_HEADERS = [
-  "LookupKey", "Horizon", "Strategy", "TaxRate", "PreTaxCAGR",
+  "LookupKey", "TaxRate", "Universe", "Horizon", "Strategy", "PreTaxCAGR",
   "AfterTaxCAGR", "PostLiqCAGR", "CumReturn", "FinalEquity",
   "TotalDividends", "MaxDD", "TotalTaxes", "TaxDrag", "Alpha"
 ];
@@ -762,6 +808,9 @@ var ANNUAL_HEADERS = [
 var TOP3_ANNUAL_DATA = {top3_json};
 var TOP5_ANNUAL_DATA = {top5_json};
 var TOP10_ANNUAL_DATA = {top10_json};
+var WORLD_TOP3_ANNUAL_DATA = {world_top3_json};
+var WORLD_TOP5_ANNUAL_DATA = {world_top5_json};
+var WORLD_TOP10_ANNUAL_DATA = {world_top10_json};
 
 var SPX_HEADERS = ["Year", "S&P 500 Level", "Annual Return", "Compounded Growth ($10,000 Invested)"];
 var SPX_DATA = {spx_json};
@@ -786,10 +835,60 @@ var DRAWDOWN_DATA = {drawdown_json};
 // ==========================================
 function onOpen() {{
   var ui = SpreadsheetApp.getUi();
-  ui.createMenu('S&P 500 Strategy')
+  ui.createMenu('S&P 500 & World Strategy')
     .addItem('Build All Sheets', 'buildAllSheets')
+    .addSeparator()
+    .addItem('Show S&P 500 Tabs Only', 'showSP500TabsOnly')
+    .addItem('Show All World Tabs Only', 'showWorldTabsOnly')
+    .addItem('Show All Tabs', 'showAllTabs')
+    .addSeparator()
     .addItem('Recalculate Sheet', 'recalculateSheet')
     .addToUi();
+}}
+
+function showSP500TabsOnly() {{
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var spTabs = ['Executive Summary', 'Performance & Tradeoffs', 'Top 3 Strategy', 'Top 5 Strategy', 'Top 10 Strategy', 'S&P 500 Benchmark', 'Historical Holdings & Trades', 'Scenario Data'];
+  var worldTabs = ['World Top 3 Strategy', 'World Top 5 Strategy', 'World Top 10 Strategy'];
+  for (var i = 0; i < spTabs.length; i++) {{
+    var s = ss.getSheetByName(spTabs[i]);
+    if (s) s.showSheet();
+  }}
+  for (var j = 0; j < worldTabs.length; j++) {{
+    var ws = ss.getSheetByName(worldTabs[j]);
+    if (ws) ws.hideSheet();
+  }}
+  ss.toast('Showing S&P 500 tabs only.', 'Filter Tabs', 3);
+}}
+
+function showWorldTabsOnly() {{
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var worldTabs = ['Executive Summary', 'Performance & Tradeoffs', 'World Top 3 Strategy', 'World Top 5 Strategy', 'World Top 10 Strategy', 'S&P 500 Benchmark', 'Historical Holdings & Trades', 'Scenario Data'];
+  var spTabs = ['Top 3 Strategy', 'Top 5 Strategy', 'Top 10 Strategy'];
+  for (var i = 0; i < worldTabs.length; i++) {{
+    var ws = ss.getSheetByName(worldTabs[i]);
+    if (ws) ws.showSheet();
+  }}
+  for (var j = 0; j < spTabs.length; j++) {{
+    var s = ss.getSheetByName(spTabs[j]);
+    if (s) s.hideSheet();
+  }}
+  ss.toast('Showing All-World tabs only.', 'Filter Tabs', 3);
+}}
+
+function showAllTabs() {{
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var allTabs = [
+    'Executive Summary', 'Performance & Tradeoffs',
+    'Top 3 Strategy', 'Top 5 Strategy', 'Top 10 Strategy',
+    'World Top 3 Strategy', 'World Top 5 Strategy', 'World Top 10 Strategy',
+    'S&P 500 Benchmark', 'Historical Holdings & Trades', 'Scenario Data'
+  ];
+  for (var i = 0; i < allTabs.length; i++) {{
+    var s = ss.getSheetByName(allTabs[i]);
+    if (s) s.showSheet();
+  }}
+  ss.toast('All tabs are now visible.', 'Filter Tabs', 3);
 }}
 
 // ==========================================
@@ -807,15 +906,20 @@ function buildAllSheets() {{
   // 3. Performance & Tradeoffs Tab (Charts & Regime Attribution)
   buildPerformanceAndTradeoffsSheet(ss);
 
-  // 4. Strategy Tabs
+  // 4. S&P 500 Strategy Tabs
   buildAnnualSheet(ss, 'Top 3 Strategy', TOP3_ANNUAL_DATA);
   buildAnnualSheet(ss, 'Top 5 Strategy', TOP5_ANNUAL_DATA);
   buildAnnualSheet(ss, 'Top 10 Strategy', TOP10_ANNUAL_DATA);
 
-  // 5. Benchmark Tab
+  // 5. All-World Strategy Tabs
+  buildAnnualSheet(ss, 'World Top 3 Strategy', WORLD_TOP3_ANNUAL_DATA);
+  buildAnnualSheet(ss, 'World Top 5 Strategy', WORLD_TOP5_ANNUAL_DATA);
+  buildAnnualSheet(ss, 'World Top 10 Strategy', WORLD_TOP10_ANNUAL_DATA);
+
+  // 6. Benchmark Tab
   buildBenchmarkSheet(ss);
 
-  // 6. Holdings & Trades Tab
+  // 7. Holdings & Trades Tab
   buildTradesSheet(ss);
 
   // Organize tab order: Executive Summary is always tab 1
@@ -825,6 +929,9 @@ function buildAllSheets() {{
     'Top 3 Strategy',
     'Top 5 Strategy',
     'Top 10 Strategy',
+    'World Top 3 Strategy',
+    'World Top 5 Strategy',
+    'World Top 10 Strategy',
     'S&P 500 Benchmark',
     'Historical Holdings & Trades',
     'Scenario Data'
@@ -864,13 +971,18 @@ function buildScenarioDataSheet(ss) {{
              .setFontWeight('bold')
              .setHorizontalAlignment('center');
 
-  // Number Formatting
+  // Number Formatting (15 columns)
   if (SCENARIO_DATA.length > 0) {{
-    sheet.getRange(2, 5, SCENARIO_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
-    sheet.getRange(2, 9, SCENARIO_DATA.length, 2).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
-    sheet.getRange(2, 11, SCENARIO_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
-    sheet.getRange(2, 12, SCENARIO_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
-    sheet.getRange(2, 13, SCENARIO_DATA.length, 2).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 1, SCENARIO_DATA.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 2, SCENARIO_DATA.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('center');
+    sheet.getRange(2, 3, SCENARIO_DATA.length, 2).setHorizontalAlignment('center');
+    sheet.getRange(2, 5, SCENARIO_DATA.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 6, SCENARIO_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 10, SCENARIO_DATA.length, 2).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 12, SCENARIO_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 13, SCENARIO_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 14, SCENARIO_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 15, SCENARIO_DATA.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right');
   }}
 
   sheet.autoResizeColumns(1, SCENARIO_HEADERS.length);
@@ -884,9 +996,9 @@ function buildExecutiveSummarySheet(ss) {{
   var sheet = getOrCreateSheet(ss, 'Executive Summary');
   sheet.setHiddenGridlines(false);
 
-  // 1. Banner Header
-  sheet.getRange('A1:L1').merge()
-       .setValue('S&P 500 TOP N STRATEGY - EXECUTIVE DASHBOARD')
+  // 1. Banner Header (A1:M1, 13 columns)
+  sheet.getRange('A1:M1').merge()
+       .setValue('S&P 500 & ALL-WORLD TOP N STRATEGY - EXECUTIVE DASHBOARD')
        .setBackground('#1B365D')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -895,70 +1007,122 @@ function buildExecutiveSummarySheet(ss) {{
        .setVerticalAlignment('middle')
        .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
 
-  // 2. Interactive Tax Rate Parameter Control in B2
+  // 2. Interactive Parameter Dropdowns in Row 2
+  // Control 1: Tax Rate (Cols A-B)
   sheet.getRange('A2').setValue('Tax Rate:')
        .setFontWeight('bold')
        .setHorizontalAlignment('right')
-       .setVerticalAlignment('middle')
-       .setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
-
+       .setVerticalAlignment('middle');
   var b2 = sheet.getRange('B2');
   b2.setValue(0.30)
     .setNumberFormat('0.0%')
     .setFontWeight('bold')
-    .setFontSize(12)
+    .setFontSize(11)
     .setBackground('#FEFCBF')
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
-
-  var rule = SpreadsheetApp.newDataValidation()
+  var taxRule = SpreadsheetApp.newDataValidation()
     .requireValueInList(['0.0%', '15.0%', '20.0%', '30.0%', '37.0%'], true)
     .setAllowInvalid(false)
     .build();
-  b2.setDataValidation(rule);
+  b2.setDataValidation(taxRule);
 
-  sheet.getRange('C2:L2').merge()
-       .setValue('Select a tax rate in B2 to dynamically update after-tax returns, ending wealth, and tax drag across all horizons.')
+  // Control 2: Universe (Cols C-D)
+  sheet.getRange('C2').setValue('Universe:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var d2 = sheet.getRange('D2');
+  d2.setValue('All')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var univRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['All', 'S&P 500 Only', 'All World Only'], true)
+    .setAllowInvalid(false)
+    .build();
+  d2.setDataValidation(univRule);
+
+  // Control 3: Strategy (Cols E-F)
+  sheet.getRange('E2').setValue('Strategy:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var f2 = sheet.getRange('F2');
+  f2.setValue('All')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var stratRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['All', 'Top 3', 'Top 5', 'Top 10', 'S&P 500'], true)
+    .setAllowInvalid(false)
+    .build();
+  f2.setDataValidation(stratRule);
+
+  // Control 4: Horizon (Cols G-H)
+  sheet.getRange('G2').setValue('Horizon:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var h2 = sheet.getRange('H2');
+  h2.setValue('All')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var horizRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['All', '10y', '20y', '30y'], true)
+    .setAllowInvalid(false)
+    .build();
+  h2.setDataValidation(horizRule);
+
+  sheet.getRange('I2:M2').merge()
+       .setValue('Filter universe, strategy, horizon, and tax rate. Table and KPI cards update dynamically.')
        .setFontStyle('italic')
        .setFontColor('#4A5568')
        .setVerticalAlignment('middle')
        .setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
 
   // 3. KPI Summary Scorecards (Rows 4-6)
-  // 5 cards balanced seamlessly across columns A through L:
-  // Card 1: Top 5 (30y) Final Wealth (Cols A-B)
+  // Decoupled formulas query 'Scenario Data' directly using INDEX/MATCH for robust filter resilience
+  // Card 1: Top 5 Final Wealth (30y) (Cols A-B)
   sheet.getRange('A4:B4').merge().setValue('Top 5 Final Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('A5:B5').merge().setFormula('=G19').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A5:B5').merge().setFormula('=IFERROR(INDEX(\\\'Scenario Data\\\'!$J:$J, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & TEXT($B$2, "0.0%"), \\\'Scenario Data\\\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('A6:B6').merge().setValue('After all taxes ($10k start)').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('A4:B6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 2: S&P 500 (30y) Wealth (Cols C-D)
-  sheet.getRange('C4:D4').merge().setValue('S&P 500 Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('C5:D5').merge().setFormula('=G21').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('C6:D6').merge().setValue('Passive buy & hold').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('C4:D6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 2: S&P 500 Wealth (30y) (Cols C-E)
+  sheet.getRange('C4:E4').merge().setValue('S&P 500 Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C5:E5').merge().setFormula('=IFERROR(INDEX(\\\'Scenario Data\\\'!$J:$J, MATCH("30y_S&P 500_S&P 500_" & TEXT($B$2, "0.0%"), \\\'Scenario Data\\\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C6:E6').merge().setValue('Passive buy & hold').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C4:E6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 3: Top 5 (30y) Annual Return (Cols E-F)
-  sheet.getRange('E4:F4').merge().setValue('Top 5 Annual Return (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('E5:F5').merge().setFormula('=E19').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('E6:F6').merge().setValue('Net post-liquidation CAGR').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('E4:F6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 3: Top 5 Annual Return (30y) (Cols F-G)
+  sheet.getRange('F4:G4').merge().setValue('Top 5 Annual Return (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('F5:G5').merge().setFormula('=IFERROR(INDEX(\\\'Scenario Data\\\'!$H:$H, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & TEXT($B$2, "0.0%"), \\\'Scenario Data\\\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('F6:G6').merge().setValue('Net post-liquidation CAGR').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('F4:G6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 4: 30-Year Excess Return (Cols G-I)
-  sheet.getRange('G4:I4').merge().setValue('30-Year Excess Return').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('G5:I5').merge().setFormula('=L19').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('G6:I6').merge().setValue('Annual Alpha vs S&P 500').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('G4:I6').setBackground('#F0FFF4').setBorder(true, true, true, true, false, false, '#C6F6D5', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 4: 30-Year Excess Return (Cols H-J)
+  sheet.getRange('H4:J4').merge().setValue('30-Year Excess Return').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('H5:J5').merge().setFormula('=IFERROR(INDEX(\\\'Scenario Data\\\'!$O:$O, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & TEXT($B$2, "0.0%"), \\\'Scenario Data\\\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('H6:J6').merge().setValue('Annual Alpha vs S&P 500').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('H4:J6').setBackground('#F0FFF4').setBorder(true, true, true, true, false, false, '#C6F6D5', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 5: 30-Year Tax Drag (Cols J-L)
-  sheet.getRange('J4:L4').merge().setValue('30-Year Tax Drag').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('J5:L5').merge().setFormula('=K19').setFontWeight('bold').setFontSize(14).setFontColor('#9B2C2C').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('J6:L6').merge().setValue('Annual return lost to taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('J4:L6').setBackground('#FFF5F5').setBorder(true, true, true, true, false, false, '#FED7D7', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 5: 30-Year Tax Drag (Cols K-M)
+  sheet.getRange('K4:M4').merge().setValue('30-Year Tax Drag').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('K5:M5').merge().setFormula('=IFERROR(INDEX(\\\'Scenario Data\\\'!$N:$N, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & TEXT($B$2, "0.0%"), \\\'Scenario Data\\\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#9B2C2C').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('K6:M6').merge().setValue('Annual return lost to taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('K4:M6').setBackground('#FFF5F5').setBorder(true, true, true, true, false, false, '#FED7D7', SpreadsheetApp.BorderStyle.SOLID);
 
   // 4. Multi-Horizon Strategy Comparison Table
   // Row 8: Title
-  sheet.getRange('A8:L8').merge()
+  sheet.getRange('A8:M8').merge()
        .setValue('MULTI-HORIZON PERFORMANCE & TAX COMPARISON (10Y, 20Y, 30Y)')
        .setBackground('#1B365D')
        .setFontColor('#FFFFFF')
@@ -968,9 +1132,9 @@ function buildExecutiveSummarySheet(ss) {{
        .setVerticalAlignment('middle')
        .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
 
-  // Row 9: Table Header
+  // Row 9: Table Header (13 columns matching 'Scenario Data'!$C:$O)
   var tableHeaders = [
-    'Horizon', 'Strategy', 'Annual Return (Pre-Tax)', 'Annual Return (After-Tax)', 'Annual Return (Post-Liq)',
+    'Universe', 'Horizon', 'Strategy', 'Annual Return (Pre-Tax)', 'Annual Return (After-Tax)', 'Annual Return (Post-Liq)',
     'Total Return (Cumulative)', 'Ending Wealth ($10k Start)', 'Total Dividends Received',
     'Max Drawdown (Worst Drop)', 'Total Taxes Paid', 'Annual Tax Drag', 'Excess vs S&P 500 (Alpha)'
   ];
@@ -982,58 +1146,41 @@ function buildExecutiveSummarySheet(ss) {{
        .setVerticalAlignment('middle')
        .setWrap(true);
 
-  // Rows 10 to 21 (Dynamic lookup formulas pointing to Scenario Data tab)
-  var horizons = ['10y', '20y', '30y'];
-  var strategies = ['Top 3', 'Top 5', 'Top 10', 'S&P 500'];
-  var tableRows = [];
-  var rowIdx = 10;
-  for (var h = 0; h < horizons.length; h++) {{
-    for (var s = 0; s < strategies.length; s++) {{
-      var horiz = horizons[h];
-      var strat = strategies[s];
-      tableRows.push([
-        horiz,
-        strat,
-        makeLookupFormula(rowIdx, 5),
-        makeLookupFormula(rowIdx, 6),
-        makeLookupFormula(rowIdx, 7),
-        makeLookupFormula(rowIdx, 8),
-        makeLookupFormula(rowIdx, 9),
-        makeLookupFormula(rowIdx, 10),
-        makeLookupFormula(rowIdx, 11),
-        makeLookupFormula(rowIdx, 12),
-        makeLookupFormula(rowIdx, 13),
-        makeLookupFormula(rowIdx, 14)
-      ]);
-      rowIdx++;
-    }}
-  }}
+  // Row 10: Dynamic Filter Formula spilling down Rows 10:52 (guarded by non-empty $A$2:$A to prevent spill on 0.0% tax rate)
+  var filterFormula = '=IFNA(FILTER(\\\'Scenario Data\\\'!$C$2:$O, (\\\'Scenario Data\\\'!$A$2:$A <> "") * (ROUND(\\\'Scenario Data\\\'!$B$2:$B, 4) = ROUND($B$2, 4)) * (($D$2 = "All") + (\\\'Scenario Data\\\'!$C$2:$C = SUBSTITUTE($D$2, " Only", ""))) * (($F$2 = "All") + (\\\'Scenario Data\\\'!$E$2:$E = $F$2)) * (($H$2 = "All") + (\\\'Scenario Data\\\'!$D$2:$D = $H$2))), "No matching records found")';
+  sheet.getRange('A10').setFormula(filterFormula);
 
-  sheet.getRange(10, 1, tableRows.length, tableHeaders.length).setValues(tableRows);
+  // Pre-formatting comparison table range (Rows 10 to 52, unmerged for spill protection)
+  sheet.getRange(10, 1, 43, 1).setHorizontalAlignment('center').setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange(10, 2, 43, 1).setHorizontalAlignment('center').setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange(10, 3, 43, 1).setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange(10, 4, 43, 3).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 7, 43, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 8, 43, 2).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 10, 43, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 11, 43, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 12, 43, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 13, 43, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
 
-  // Formatting comparison table
-  sheet.getRange(10, 1, tableRows.length, 1).setHorizontalAlignment('center').setFontWeight('bold').setVerticalAlignment('middle');
-  sheet.getRange(10, 2, tableRows.length, 1).setFontWeight('bold').setVerticalAlignment('middle');
-  sheet.getRange(10, 3, tableRows.length, 3).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 6, tableRows.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 7, tableRows.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 8, tableRows.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 9, tableRows.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 10, tableRows.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 11, tableRows.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 12, tableRows.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-
-  // Alternating background colors
-  for (var r = 0; r < tableRows.length; r++) {{
-    var bg = (Math.floor(r / 4) % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
-    sheet.getRange(10 + r, 1, 1, tableHeaders.length).setBackground(bg);
-  }}
+  // Alternating background colors via conditional formatting rules
+  var cfRange = sheet.getRange('A10:M52');
+  var ruleEven = SpreadsheetApp.newConditionalFormatRule()
+    .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", MOD(ROW(), 2)=0)')
+    .setBackground('#F7FAFC')
+    .setRanges([cfRange])
+    .build();
+  var ruleOdd = SpreadsheetApp.newConditionalFormatRule()
+    .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", MOD(ROW(), 2)=1)')
+    .setBackground('#FFFFFF')
+    .setRanges([cfRange])
+    .build();
+  sheet.setConditionalFormatRules([ruleEven, ruleOdd]);
 
   // Borders
-  sheet.getRange(9, 1, tableRows.length + 1, tableHeaders.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  sheet.getRange(9, 1, 44, tableHeaders.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Explicit, proportional column widths (avoids autoResize stretching from merged headers/banners)
-  var colWidths = [80, 95, 105, 105, 105, 105, 110, 110, 100, 100, 95, 95];
+  // Explicit, proportional column widths (13 columns)
+  var colWidths = [85, 75, 95, 105, 105, 105, 105, 110, 110, 100, 100, 95, 95];
   for (var c = 0; c < colWidths.length; c++) {{
     sheet.setColumnWidth(c + 1, colWidths[c]);
   }}
@@ -1048,12 +1195,14 @@ function buildExecutiveSummarySheet(ss) {{
   sheet.setRowHeight(7, 14);
   sheet.setRowHeight(8, 30);
   sheet.setRowHeight(9, 36);
-  for (var dr = 10; dr <= 21; dr++) {{
+  for (var dr = 10; dr <= 52; dr++) {{
     sheet.setRowHeight(dr, 24);
   }}
 
-  // 5. Key Metrics Glossary & Explanations (Rows 23-29)
-  sheet.getRange('A23:L23').merge()
+  // 5. Key Metrics Glossary & Explanations (Rows 55-61, leaving Rows 10:52 completely unmerged)
+  sheet.setRowHeight(53, 14);
+  sheet.setRowHeight(54, 10);
+  sheet.getRange('A55:M55').merge()
        .setValue('KEY METRIC DEFINITIONS & GLOSSARY')
        .setBackground('#EDF2F7')
        .setFontColor('#2D3748')
@@ -1061,7 +1210,7 @@ function buildExecutiveSummarySheet(ss) {{
        .setFontSize(10)
        .setHorizontalAlignment('left')
        .setVerticalAlignment('middle');
-  sheet.setRowHeight(23, 24);
+  sheet.setRowHeight(55, 24);
 
   var explanations = [
     ['Annual Return (CAGR):', 'Compound Annual Growth Rate — the smoothed annual percentage your money grew every year compounded steadily.'],
@@ -1073,7 +1222,7 @@ function buildExecutiveSummarySheet(ss) {{
   ];
 
   for (var e = 0; e < explanations.length; e++) {{
-    var r = 24 + e;
+    var r = 56 + e;
     sheet.getRange('A' + r + ':B' + r).merge()
          .setValue(explanations[e][0])
          .setFontWeight('bold')
@@ -1081,7 +1230,7 @@ function buildExecutiveSummarySheet(ss) {{
          .setFontColor('#4A5568')
          .setHorizontalAlignment('right')
          .setVerticalAlignment('middle');
-    sheet.getRange('C' + r + ':L' + r).merge()
+    sheet.getRange('C' + r + ':M' + r).merge()
          .setValue(explanations[e][1])
          .setFontSize(9)
          .setFontColor('#718096')
@@ -1090,25 +1239,27 @@ function buildExecutiveSummarySheet(ss) {{
     sheet.setRowHeight(r, 20);
   }}
 
-  // 6. Methodology Note Callout Card (Rows 31-36)
-  sheet.setRowHeight(30, 14);
-  sheet.getRange('A31:L31').merge()
-       .setValue('METHODOLOGY NOTE — DIVIDEND TIMING')
+  // 6. Methodology Note Callout Card (Rows 64-70)
+  sheet.setRowHeight(62, 14);
+  sheet.setRowHeight(63, 10);
+  sheet.getRange('A64:M64').merge()
+       .setValue('METHODOLOGY NOTE — DIVIDEND TIMING & MULTI-UNIVERSE SELECTION')
        .setBackground('#2D3748')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
        .setFontSize(10)
        .setHorizontalAlignment('left')
        .setVerticalAlignment('middle');
-  sheet.setRowHeight(31, 24);
+  sheet.setRowHeight(64, 24);
 
   var methodNote = '• Annual Discrete Dividends: Historical dividends are credited once annually at the rebalance date based on prior-year holdings and dividend distribution rates.\\n' +
                    '• Tax Settlement: Dividend and realized capital gains taxes are settled annually at the selected marginal tax rate, with capital loss carryforwards applied.\\n' +
                    '• Self-Financing Rebalancing: Net dividend income is reinvested into target holdings alongside rebalancing trade proceeds without margin borrowing (cash >= 0).\\n' +
                    '• Post-Liquidation Terminal Wealth: Terminal equity reflects a full simulated liquidation of all portfolio holdings with final capital gains taxes paid.\\n' +
-                   '• Benchmark Alignment: S&P 500 total return benchmark reflects split- and dividend-adjusted performance over identical holding periods.';
+                   '• Benchmark Alignment: S&P 500 total return benchmark reflects split- and dividend-adjusted performance over identical holding periods.\\n' +
+                   '• Multi-Universe Scope: S&P 500 represents domestic mega-caps; All World includes global market cap leaders accessible via US markets (ADRs / direct listings).';
 
-  sheet.getRange('A32:L36').merge()
+  sheet.getRange('A65:M70').merge()
        .setValue(methodNote)
        .setFontSize(9)
        .setFontColor('#4A5568')
@@ -1116,9 +1267,9 @@ function buildExecutiveSummarySheet(ss) {{
        .setVerticalAlignment('middle')
        .setWrap(true);
 
-  sheet.getRange('A31:L36').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
-  sheet.getRange('A32:L36').setBackground('#F7FAFC');
-  for (var mr = 32; mr <= 36; mr++) {{
+  sheet.getRange('A64:M70').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  sheet.getRange('A65:M70').setBackground('#F7FAFC');
+  for (var mr = 65; mr <= 70; mr++) {{
     sheet.setRowHeight(mr, 18);
   }}
 
@@ -1501,11 +1652,6 @@ function RECALCULATE_STRATEGY(taxRate) {{
   var baseCagr = 0.1495;
   var drag = rate * 0.0970;
   return baseCagr - drag;
-}}
-
-function makeLookupFormula(rowIdx, col) {{
-  var sheetRef = "'Scenario Data'!$A:$N";
-  return '=VLOOKUP($A' + rowIdx + ' & "_" & $B' + rowIdx + ' & "_" & TEXT($B$2, "0.0%"), ' + sheetRef + ', ' + col + ', FALSE)';
 }}
 
 function getOrCreateSheet(ss, name) {{

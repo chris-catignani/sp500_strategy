@@ -87,6 +87,39 @@ def resolve_n_values(raw_n: Union[str, Sequence[Any]]) -> List[int]:
     return parse_list_arg(raw_n, int)
 
 
+def resolve_universes(
+    raw_universes: Union[str, Sequence[str]],
+    available_universes: Optional[Sequence[str]] = None,
+) -> List[str]:
+    """Convert raw universe input into validated list of universe keys.
+
+    Args:
+        raw_universes: Comma-separated string or sequence of universe identifiers.
+        available_universes: Optional sequence of valid universe names.
+
+    Returns:
+        List of normalized universe keys (e.g. ['sp500', 'world']).
+    """
+    parsed = parse_list_arg(raw_universes, str)
+    normalized: List[str] = []
+    for u in parsed:
+        u_clean = u.strip().lower()
+        if u_clean in ("sp500", "sp_500", "s&p500", "s&p 500", "us"):
+            u_norm = "sp500"
+        elif u_clean in ("world", "all_world", "allworld", "global"):
+            u_norm = "world"
+        else:
+            u_norm = u_clean
+
+        if available_universes and u_norm not in available_universes:
+            raise ValueError(
+                f"Unknown universe '{u}'. Available universes: {list(available_universes)}"
+            )
+        if u_norm not in normalized:
+            normalized.append(u_norm)
+    return normalized or ["sp500"]
+
+
 def resolve_selector(strategy_name: str, n: int = 5) -> BaseSelector:
     """Instantiate constituent selector based on strategy name.
 
@@ -116,6 +149,7 @@ def build_scenario_and_apps_script_data(
     data_loader: DataLoader,
     strategy_name: str = "market_cap",
     initial_capital: float = 10000.0,
+    universes: Optional[List[str]] = None,
 ) -> Tuple[Dict[str, Any], Dict[str, Any], List[Dict[str, Any]]]:
     """Build multi-tier scenario tables and annual sheets for Google Apps Script.
 
@@ -127,10 +161,14 @@ def build_scenario_and_apps_script_data(
         data_loader: DataLoader instance.
         strategy_name: 'market_cap' or 'performance'.
         initial_capital: Starting capital basis.
+        universes: Optional list of constituent universe names (default: ['sp500', 'world']).
 
     Returns:
         Tuple of (scenario_data, annual_data, trades_data).
     """
+    if universes is None:
+        universes = ["sp500", "world"]
+
     horizons = [("10y", 2014, 2024), ("20y", 2004, 2024), ("30y", 1994, 2024)]
     tax_rates = [
         (0.0, "0.0%"),
@@ -141,19 +179,21 @@ def build_scenario_and_apps_script_data(
     ]
     target_n_values = [3, 5, 10]
 
-    # Pre-calculate pre-tax results
-    pretax_cache: Dict[Tuple[int, int, int], StrategyResult] = {}
-    for n in target_n_values:
-        sel = resolve_selector(strategy_name, n=n)
-        for _, s_yr, e_yr in horizons:
-            pretax_cache[(n, s_yr, e_yr)] = simulator.run_simulation(
-                s_yr,
-                e_yr,
-                n=n,
-                selector=sel,
-                is_after_tax=False,
-                initial_capital=initial_capital,
-            )
+    # Pre-calculate pre-tax results across universes
+    pretax_cache: Dict[Tuple[str, int, int, int], StrategyResult] = {}
+    for univ in universes:
+        for n in target_n_values:
+            sel = resolve_selector(strategy_name, n=n)
+            for _, s_yr, e_yr in horizons:
+                pretax_cache[(univ, n, s_yr, e_yr)] = simulator.run_simulation(
+                    s_yr,
+                    e_yr,
+                    n=n,
+                    selector=sel,
+                    is_after_tax=False,
+                    initial_capital=initial_capital,
+                    universe=univ,
+                )
 
     scenario_rows: List[List[Any]] = []
     for rate, rate_str in tax_rates:
@@ -201,119 +241,129 @@ def build_scenario_and_apps_script_data(
                 spx_tax_drag = spx_tr_cagr - spx_post_liq_cagr
                 spx_divs = bench["total_dividends_received"]
 
-            # S&P 500 entry (14 columns)
-            spx_key = f"{h_label}_S&P 500_{rate_str}"
-            scenario_rows.append([
-                spx_key,
-                h_label,
-                "S&P 500",
-                rate,
-                round(spx_tr_cagr, 6),
-                round(spx_after_cagr, 6),
-                round(spx_post_liq_cagr, 6),
-                round(spx_cum, 6),
-                round(spx_final, 2),
-                round(spx_divs, 2),
-                round(spx_max_dd, 6),
-                round(spx_taxes, 2),
-                round(spx_tax_drag, 6),
-                0.0,
-            ])
+            for univ in universes:
+                univ_label = "S&P 500" if univ == "sp500" else "All World"
 
-            # Top N entries (14 columns)
-            for n in target_n_values:
-                pre_res = pretax_cache[(n, s_yr, e_yr)]
-                sel = resolve_selector(strategy_name, n=n)
-                if rate == 0.0:
-                    post_res = pre_res
-                    tax_drag = 0.0
-                    alpha = post_res.cagr - spx_tr_cagr
-                    strat_cum = post_res.cumulative_return
-                    strat_final = post_res.final_equity
-                else:
-                    post_res = simulator.run_simulation(
-                        s_yr,
-                        e_yr,
-                        n=n,
-                        selector=sel,
-                        is_after_tax=True,
-                        tax_rate=rate,
-                        initial_capital=initial_capital,
-                    )
-                    tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
-                    alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
-                    strat_cum = calculate_cumulative_return(initial_capital, post_res.post_liquidation_wealth)
-                    strat_final = post_res.post_liquidation_wealth
-
-                strat_label = f"Top {n}"
-                key = f"{h_label}_{strat_label}_{rate_str}"
+                # S&P 500 entry (15 columns)
+                spx_key = f"{h_label}_{univ_label}_S&P 500_{rate_str}"
                 scenario_rows.append([
-                    key,
-                    h_label,
-                    strat_label,
+                    spx_key,
                     rate,
-                    round(pre_res.cagr, 6),
-                    round(post_res.cagr, 6),
-                    round(post_res.post_liquidation_cagr, 6),
-                    round(strat_cum, 6),
-                    round(strat_final, 2),
-                    round(post_res.total_dividends_received, 2),
-                    round(post_res.max_drawdown, 6),
-                    round(post_res.total_taxes_paid, 2),
-                    round(tax_drag, 6),
-                    round(alpha, 6),
+                    univ_label,
+                    h_label,
+                    "S&P 500",
+                    round(spx_tr_cagr, 6),
+                    round(spx_after_cagr, 6),
+                    round(spx_post_liq_cagr, 6),
+                    round(spx_cum, 6),
+                    round(spx_final, 2),
+                    round(spx_divs, 2),
+                    round(spx_max_dd, 6),
+                    round(spx_taxes, 2),
+                    round(spx_tax_drag, 6),
+                    0.0,
                 ])
 
-    # 30-Year Annual histories & trades at 30% baseline tax rate
+                # Top N entries (15 columns)
+                for n in target_n_values:
+                    pre_res = pretax_cache[(univ, n, s_yr, e_yr)]
+                    sel = resolve_selector(strategy_name, n=n)
+                    if rate == 0.0:
+                        post_res = pre_res
+                        tax_drag = 0.0
+                        alpha = post_res.cagr - spx_tr_cagr
+                        strat_cum = post_res.cumulative_return
+                        strat_final = post_res.final_equity
+                    else:
+                        post_res = simulator.run_simulation(
+                            s_yr,
+                            e_yr,
+                            n=n,
+                            selector=sel,
+                            is_after_tax=True,
+                            tax_rate=rate,
+                            initial_capital=initial_capital,
+                            universe=univ,
+                        )
+                        tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
+                        alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
+                        strat_cum = calculate_cumulative_return(initial_capital, post_res.post_liquidation_wealth)
+                        strat_final = post_res.post_liquidation_wealth
+
+                    strat_label = f"Top {n}"
+                    key = f"{h_label}_{univ_label}_{strat_label}_{rate_str}"
+                    scenario_rows.append([
+                        key,
+                        rate,
+                        univ_label,
+                        h_label,
+                        strat_label,
+                        round(pre_res.cagr, 6),
+                        round(post_res.cagr, 6),
+                        round(post_res.post_liquidation_cagr, 6),
+                        round(strat_cum, 6),
+                        round(strat_final, 2),
+                        round(post_res.total_dividends_received, 2),
+                        round(post_res.max_drawdown, 6),
+                        round(post_res.total_taxes_paid, 2),
+                        round(tax_drag, 6),
+                        round(alpha, 6),
+                    ])
+
+    # 30-Year Annual histories & trades at 30% baseline tax rate across universes
     annual_data: Dict[str, List[List[Any]]] = {}
     trade_rows: List[Dict[str, Any]] = []
-    res_30y_map: Dict[int, StrategyResult] = {}
+    res_30y_map: Dict[Tuple[str, int], StrategyResult] = {}
 
-    for n in target_n_values:
-        sel = resolve_selector(strategy_name, n=n)
-        res_30y = simulator.run_simulation(
-            1994,
-            2024,
-            n=n,
-            selector=sel,
-            is_after_tax=True,
-            tax_rate=0.30,
-            initial_capital=initial_capital,
-        )
-        res_30y_map[n] = res_30y
-        trades_30y = simulator.get_trades()
+    for univ in universes:
+        prefix = "" if univ == "sp500" else "World "
+        key_prefix = "" if univ == "sp500" else "world_"
+        for n in target_n_values:
+            sel = resolve_selector(strategy_name, n=n)
+            res_30y = simulator.run_simulation(
+                1994,
+                2024,
+                n=n,
+                selector=sel,
+                is_after_tax=True,
+                tax_rate=0.30,
+                initial_capital=initial_capital,
+                universe=univ,
+            )
+            res_30y_map[(univ, n)] = res_30y
+            trades_30y = simulator.get_trades()
 
-        ledger_rows: List[List[Any]] = []
-        for entry in res_30y.annual_history:
-            ledger_rows.append([
-                entry.year,
-                round(entry.start_value, 2),
-                round(entry.gross_return, 6),
-                round(getattr(entry, "dividend_income", 0.0), 2),
-                round(entry.ending_value_pretax, 2),
-                round(entry.realized_capital_gain, 2),
-                round(entry.net_taxable_gain, 2),
-                round(getattr(entry, "capital_gains_tax_paid", 0.0), 2),
-                round(getattr(entry, "dividend_tax_paid", 0.0), 2),
-                round(entry.tax_paid, 2),
-                round(entry.loss_carryforward, 2),
-                round(entry.ending_value_aftertax, 2),
-                round(entry.cash, 2),
-                round(entry.spx_return, 6),
-                round(entry.turnover, 6),
-            ])
-        annual_data[f"top_{n}"] = ledger_rows
+            ledger_rows: List[List[Any]] = []
+            for entry in res_30y.annual_history:
+                ledger_rows.append([
+                    entry.year,
+                    round(entry.start_value, 2),
+                    round(entry.gross_return, 6),
+                    round(getattr(entry, "dividend_income", 0.0), 2),
+                    round(entry.ending_value_pretax, 2),
+                    round(entry.realized_capital_gain, 2),
+                    round(entry.net_taxable_gain, 2),
+                    round(getattr(entry, "capital_gains_tax_paid", 0.0), 2),
+                    round(getattr(entry, "dividend_tax_paid", 0.0), 2),
+                    round(entry.tax_paid, 2),
+                    round(entry.loss_carryforward, 2),
+                    round(entry.ending_value_aftertax, 2),
+                    round(entry.cash, 2),
+                    round(entry.spx_return, 6),
+                    round(entry.turnover, 6),
+                ])
+            annual_data[f"{key_prefix}top_{n}"] = ledger_rows
 
-        for t in trades_30y:
-            trade_rows.append({
-                "year": t.year,
-                "strategy_name": f"Top {n}",
-                "ticker": t.ticker,
-                "action": t.action,
-                "shares": round(t.shares, 4),
-                "price": round(t.price, 2),
-                "realized_gain": round(t.realized_gain, 2),
-            })
+            for t in trades_30y:
+                trade_rows.append({
+                    "year": t.year,
+                    "strategy_name": f"{prefix}Top {n}",
+                    "ticker": t.ticker,
+                    "action": t.action,
+                    "shares": round(t.shares, 4),
+                    "price": round(t.price, 2),
+                    "realized_gain": round(t.realized_gain, 2),
+                })
 
     # S&P 500 30-Year Benchmark Series
     spx_rows: List[List[Any]] = []
@@ -336,9 +386,9 @@ def build_scenario_and_apps_script_data(
         ("2020-2024", 2020, 2024, "Mega-Cap Tech & AI Concentration"),
         ("1995-2024", 1995, 2024, "Full 30-Year Horizon"),
     ]
-    t3_pre = pretax_cache.get((3, 1994, 2024))
-    t5_pre = pretax_cache.get((5, 1994, 2024))
-    t10_pre = pretax_cache.get((10, 1994, 2024))
+    t3_pre = pretax_cache.get(("sp500", 3, 1994, 2024))
+    t5_pre = pretax_cache.get(("sp500", 5, 1994, 2024))
+    t10_pre = pretax_cache.get(("sp500", 10, 1994, 2024))
 
     era_rows: List[List[Any]] = []
     if t3_pre and t5_pre and t10_pre:
@@ -386,9 +436,9 @@ def build_scenario_and_apps_script_data(
         spx_val *= (1.0 + r_spx)
         spx_traj.append(spx_val)
 
-    t3_res = res_30y_map.get(3)
-    t5_res = res_30y_map.get(5)
-    t10_res = res_30y_map.get(10)
+    t3_res = res_30y_map.get(("sp500", 3))
+    t5_res = res_30y_map.get(("sp500", 5))
+    t10_res = res_30y_map.get(("sp500", 10))
 
     t3_traj = [initial_capital] + ([e.ending_value_aftertax for e in t3_res.annual_history] if t3_res else [])
     t5_traj = [initial_capital] + ([e.ending_value_aftertax for e in t5_res.annual_history] if t5_res else [])
@@ -453,22 +503,40 @@ def format_terminal_table(
         f"Tax Rate: {tax_rate:.1%} | Capital: ${initial_capital:,.2f}"
     )
 
-    col_headers = [
-        "Horizon",
-        "Strategy",
-        "Pre-Tax CAGR",
-        "After-Tax CAGR",
-        "Post-Liq CAGR",
-        "Cum Return",
-        "Max DD",
-        "Tax Drag",
-        "Alpha vs SPX",
-    ]
+    has_universe = any("universe" in r for r in rows)
+    if has_universe:
+        col_headers = [
+            "Universe",
+            "Horizon",
+            "Strategy",
+            "Pre-Tax CAGR",
+            "After-Tax CAGR",
+            "Post-Liq CAGR",
+            "Cum Return",
+            "Max DD",
+            "Tax Drag",
+            "Alpha vs SPX",
+        ]
+    else:
+        col_headers = [
+            "Horizon",
+            "Strategy",
+            "Pre-Tax CAGR",
+            "After-Tax CAGR",
+            "Post-Liq CAGR",
+            "Cum Return",
+            "Max DD",
+            "Tax Drag",
+            "Alpha vs SPX",
+        ]
 
     # Pre-format rows
     formatted_rows: List[List[str]] = []
     for r in rows:
-        formatted_rows.append([
+        row_vals: List[str] = []
+        if has_universe:
+            row_vals.append(r.get("universe", "S&P 500"))
+        row_vals.extend([
             r["horizon"],
             r["strategy"],
             f"{r['pre_cagr']:.2%}",
@@ -479,6 +547,7 @@ def format_terminal_table(
             f"{r['tax_drag']:.2%}",
             f"{r['alpha']:+.2%}" if r["strategy"] != "S&P 500" else "0.00%",
         ])
+        formatted_rows.append(row_vals)
 
     # Calculate column widths
     col_widths = [len(h) for h in col_headers]
@@ -495,10 +564,12 @@ def format_terminal_table(
     lines.append(header_title.center(total_width))
     lines.append("=" * total_width)
 
+    left_align_count = 3 if has_universe else 2
+
     # Header line
     hdr_line = ""
     for i, h in enumerate(col_headers):
-        if i == 0 or i == 1:
+        if i < left_align_count:
             hdr_line += h.ljust(col_widths[i])
         else:
             hdr_line += h.rjust(col_widths[i])
@@ -507,16 +578,16 @@ def format_terminal_table(
     lines.append(hdr_line)
     lines.append("-" * total_width)
 
-    current_horizon = None
+    current_group = None
     for r_idx, row in enumerate(formatted_rows):
-        horizon = row[0]
-        if current_horizon is not None and horizon != current_horizon:
+        group_key = (row[0], row[1]) if has_universe else row[0]
+        if current_group is not None and group_key != current_group:
             lines.append("-" * total_width)
-        current_horizon = horizon
+        current_group = group_key
 
         line_str = ""
         for i, val in enumerate(row):
-            if i == 0 or i == 1:
+            if i < left_align_count:
                 line_str += val.ljust(col_widths[i])
             else:
                 line_str += val.rjust(col_widths[i])
@@ -531,7 +602,7 @@ def format_terminal_table(
 def build_parser() -> argparse.ArgumentParser:
     """Construct command-line argument parser."""
     parser = argparse.ArgumentParser(
-        description="S&P 500 Top N Strategy Backtesting Engine and Report Generator.",
+        description="S&P 500 & World Top N Strategy Backtesting Engine and Report Generator.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
@@ -580,6 +651,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Number of portfolio constituents to select (comma or space separated).",
     )
     parser.add_argument(
+        "--universes",
+        type=str,
+        nargs="*",
+        default=["sp500", "world"],
+        help="Constituent universes to simulate ('sp500', 'world', or comma-separated list).",
+    )
+    parser.add_argument(
         "-q",
         "--quiet",
         action="store_true",
@@ -603,6 +681,10 @@ def run_backtest(args: argparse.Namespace) -> int:
 
     horizons = resolve_horizons(args.horizons)
     n_values = resolve_n_values(args.n)
+    universes = resolve_universes(
+        getattr(args, "universes", ["sp500", "world"]),
+        data_loader.get_available_universes(),
+    )
 
     # Pre-calculate benchmark metrics for reporting
     spx_benchmarks: Dict[Any, Any] = {}
@@ -678,70 +760,78 @@ def run_backtest(args: argparse.Namespace) -> int:
     trade_records: List[Dict[str, Any]] = []
     table_rows: List[Dict[str, Any]] = []
 
-    # Run simulations for each horizon and N
+    # Run simulations for each horizon, universe, and N
     for h_label, s_yr, e_yr in horizons:
         bm = benchmark_metrics_by_horizon[h_label]
         spx_tr_cagr = bm["tr_cagr"]
         spx_post_liq_cagr = bm["post_liq_cagr"]
 
-        for n in n_values:
-            selector = resolve_selector(args.strategy, n=n)
+        for univ in universes:
+            univ_label = "S&P 500" if univ == "sp500" else "All World"
+            prefix = "" if univ == "sp500" else "World "
 
-            # 1. Pre-tax simulation
-            res_pre = simulator.run_simulation(
-                start_year=s_yr,
-                end_year=e_yr,
-                n=n,
-                selector=selector,
-                is_after_tax=False,
-                initial_capital=args.initial_capital,
-            )
-            all_results.append(res_pre)
+            for n in n_values:
+                selector = resolve_selector(args.strategy, n=n)
 
-            # 2. After-tax simulation
-            res_post = simulator.run_simulation(
-                start_year=s_yr,
-                end_year=e_yr,
-                n=n,
-                selector=selector,
-                is_after_tax=True,
-                tax_rate=args.tax_rate,
-                initial_capital=args.initial_capital,
-            )
-            all_results.append(res_post)
+                # 1. Pre-tax simulation
+                res_pre = simulator.run_simulation(
+                    start_year=s_yr,
+                    end_year=e_yr,
+                    n=n,
+                    selector=selector,
+                    is_after_tax=False,
+                    initial_capital=args.initial_capital,
+                    universe=univ,
+                )
+                all_results.append(res_pre)
 
-            # Collect executed trade records
-            for t in simulator.get_trades():
-                trade_records.append({
-                    "strategy_name": res_post.strategy_name,
-                    "n": n,
-                    "year": t.year,
-                    "ticker": t.ticker,
-                    "action": t.action,
-                    "shares": round(t.shares, 4),
-                    "price": round(t.price, 2),
-                    "realized_gain": round(t.realized_gain, 2),
+                # 2. After-tax simulation
+                res_post = simulator.run_simulation(
+                    start_year=s_yr,
+                    end_year=e_yr,
+                    n=n,
+                    selector=selector,
+                    is_after_tax=True,
+                    tax_rate=args.tax_rate,
+                    initial_capital=args.initial_capital,
+                    universe=univ,
+                )
+                all_results.append(res_post)
+
+                # Collect executed trade records
+                for t in simulator.get_trades():
+                    trade_records.append({
+                        "strategy_name": res_post.strategy_name,
+                        "n": n,
+                        "year": t.year,
+                        "ticker": t.ticker,
+                        "action": t.action,
+                        "shares": round(t.shares, 4),
+                        "price": round(t.price, 2),
+                        "realized_gain": round(t.realized_gain, 2),
+                    })
+
+                tax_drag = res_pre.cagr - res_post.post_liquidation_cagr
+                alpha = calculate_alpha(res_post.post_liquidation_cagr, spx_post_liq_cagr)
+
+                table_rows.append({
+                    "universe": univ_label,
+                    "horizon": h_label,
+                    "strategy": f"{prefix}Top {n}",
+                    "pre_cagr": res_pre.cagr,
+                    "post_cagr": res_post.cagr,
+                    "post_liq_cagr": res_post.post_liquidation_cagr,
+                    "cum_return": calculate_cumulative_return(args.initial_capital, res_post.post_liquidation_wealth),
+                    "final_equity": res_post.post_liquidation_wealth,
+                    "max_dd": res_post.max_drawdown,
+                    "total_taxes": res_post.total_taxes_paid,
+                    "tax_drag": tax_drag,
+                    "alpha": alpha,
                 })
-
-            tax_drag = res_pre.cagr - res_post.post_liquidation_cagr
-            alpha = calculate_alpha(res_post.post_liquidation_cagr, spx_post_liq_cagr)
-
-            table_rows.append({
-                "horizon": h_label,
-                "strategy": f"Top {n}",
-                "pre_cagr": res_pre.cagr,
-                "post_cagr": res_post.cagr,
-                "post_liq_cagr": res_post.post_liquidation_cagr,
-                "cum_return": calculate_cumulative_return(args.initial_capital, res_post.post_liquidation_wealth),
-                "final_equity": res_post.post_liquidation_wealth,
-                "max_dd": res_post.max_drawdown,
-                "total_taxes": res_post.total_taxes_paid,
-                "tax_drag": tax_drag,
-                "alpha": alpha,
-            })
 
         # S&P 500 benchmark row in terminal table
         table_rows.append({
+            "universe": "S&P 500",
             "horizon": h_label,
             "strategy": "S&P 500",
             "pre_cagr": spx_tr_cagr,
@@ -805,6 +895,7 @@ def run_backtest(args: argparse.Namespace) -> int:
         data_loader=data_loader,
         strategy_name=args.strategy,
         initial_capital=args.initial_capital,
+        universes=universes,
     )
 
     # Export all report artifacts

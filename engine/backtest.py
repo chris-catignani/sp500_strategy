@@ -47,6 +47,7 @@ class PortfolioSimulator:
         is_after_tax: bool = False,
         tax_rate: float = 0.30,
         initial_capital: float = 10000.0,
+        universe: str = "sp500",
     ) -> StrategyResult:
         """Execute a multi-year backtest simulation.
 
@@ -58,6 +59,7 @@ class PortfolioSimulator:
             is_after_tax: Whether to deduct annual capital gains taxes and terminal tax.
             tax_rate: Flat capital gains tax rate applied to net taxable gains.
             initial_capital: Starting dollar capital basis (default 10,000.0).
+            universe: Identifier of target universe ('sp500' or 'world').
 
         Returns:
             StrategyResult with full metrics and annual ledger history.
@@ -85,10 +87,11 @@ class PortfolioSimulator:
         if selector is None:
             selector = MarketCapSelector(n=n)
 
-        strategy_name = f"Top_{n}_{selector.__class__.__name__.replace('Selector', '')}"
+        prefix = "World_" if universe in ("world", "all_world") else ""
+        strategy_name = f"{prefix}Top_{n}_{selector.__class__.__name__.replace('Selector', '')}"
 
         # Initial Allocation at start_year
-        u_start = self.data_loader.load_universe(start_year)
+        u_start = self.data_loader.load_universe(start_year, universe=universe)
         initial_targets = selector.select(u_start, n=n)
 
         for target in initial_targets:
@@ -133,7 +136,7 @@ class PortfolioSimulator:
             )
 
             # Step 3: Provisional Target Weights
-            u_curr = self.data_loader.load_universe(current_year)
+            u_curr = self.data_loader.load_universe(current_year, universe=universe)
             targets_curr = selector.select(u_curr, n=n)
             target_weights: Dict[str, float] = {
                 t.ticker: t.target_weight for t in targets_curr
@@ -342,6 +345,7 @@ class PortfolioSimulator:
                 dividend_income=annual_dividends,
                 dividend_tax_paid=dividend_tax_paid,
                 capital_gains_tax_paid=capital_gains_tax_paid,
+                universe=universe,
             )
             annual_history.append(entry)
 
@@ -410,4 +414,5 @@ class PortfolioSimulator:
             annual_history=annual_history,
             total_dividends_received=total_dividends_received,
             total_dividend_taxes_paid=total_dividend_taxes_paid,
+            universe=universe,
         )

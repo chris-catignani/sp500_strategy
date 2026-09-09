@@ -61,6 +61,39 @@ class DataLoader:
         with open(dividends_path, "r", encoding="utf-8") as f:
             self._raw_dividends: Dict[str, Dict[str, float]] = json.load(f)
 
+        # Multi-universe constituent registry
+        self._universes: Dict[str, Dict[str, list]] = {
+            "sp500": self._raw_constituents,
+        }
+
+        # Check for co-located All-World datasets
+        world_const_path = project_root / "data" / "world_constituents.json"
+        world_prices_path = project_root / "data" / "world_prices.json"
+        world_divs_path = project_root / "data" / "world_dividends.json"
+
+        if world_const_path.exists():
+            with open(world_const_path, "r", encoding="utf-8") as f:
+                self._universes["world"] = json.load(f)
+                self._universes["all_world"] = self._universes["world"]
+
+        if world_prices_path.exists():
+            with open(world_prices_path, "r", encoding="utf-8") as f:
+                world_prices = json.load(f)
+                for sym, y_data in world_prices.items():
+                    if sym not in self._raw_prices:
+                        self._raw_prices[sym] = y_data
+                    else:
+                        self._raw_prices[sym].update(y_data)
+
+        if world_divs_path.exists():
+            with open(world_divs_path, "r", encoding="utf-8") as f:
+                world_divs = json.load(f)
+                for sym, y_data in world_divs.items():
+                    if sym not in self._raw_dividends:
+                        self._raw_dividends[sym] = y_data
+                    else:
+                        self._raw_dividends[sym].update(y_data)
+
         # Parse available years
         self._available_years: List[int] = sorted(
             int(yr) for yr in self._raw_constituents.keys()
@@ -74,26 +107,38 @@ class DataLoader:
         """
         return list(self._available_years)
 
-    def load_universe(self, year: int) -> List[ConstituentSnapshot]:
-        """Load constituent snapshots for a given year.
+    def get_available_universes(self) -> List[str]:
+        """Return list of distinct registered universes."""
+        return [u for u in self._universes.keys() if u != "all_world"]
+
+    def load_universe(self, year: int, universe: str = "sp500") -> List[ConstituentSnapshot]:
+        """Load constituent snapshots for a given year and universe.
 
         Args:
             year: Four-digit calendar year (e.g. 1995, 2024).
+            universe: Identifier of target universe ('sp500' or 'world').
 
         Returns:
             List of ConstituentSnapshot instances.
 
         Raises:
-            ValueError: If year is outside the available dataset range.
+            ValueError: If year or universe is not available.
         """
-        str_year = str(year)
-        if str_year not in self._raw_constituents:
+        u_key = universe.lower().replace("-", "_")
+        if u_key not in self._universes:
             raise ValueError(
-                f"Year {year} is not available. Available years: "
+                f"Universe '{universe}' not recognized. Available: {self.get_available_universes()}"
+            )
+
+        universe_data = self._universes[u_key]
+        str_year = str(year)
+        if str_year not in universe_data:
+            raise ValueError(
+                f"Year {year} is not available in universe '{universe}'. Available years: "
                 f"{self._available_years[0]}..{self._available_years[-1]}"
             )
 
-        items = self._raw_constituents[str_year]
+        items = universe_data[str_year]
         return [
             ConstituentSnapshot(
                 ticker=c["ticker"],

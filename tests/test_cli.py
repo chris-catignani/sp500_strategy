@@ -205,6 +205,84 @@ class TestCLI(unittest.TestCase):
         self.assertIn("--strategy", res.stdout)
         self.assertIn("--tax-rate", res.stdout)
         self.assertIn("--initial-capital", res.stdout)
+        self.assertIn("--universes", res.stdout)
+
+    def test_resolve_universes(self):
+        """Test universe normalization and validation."""
+        import run_backtest
+
+        self.assertEqual(run_backtest.resolve_universes(["sp500", "world"]), ["sp500", "world"])
+        self.assertEqual(run_backtest.resolve_universes("sp500,world"), ["sp500", "world"])
+        self.assertEqual(run_backtest.resolve_universes("US,GLOBAL"), ["sp500", "world"])
+        self.assertEqual(run_backtest.resolve_universes(["all_world"]), ["world"])
+
+        # Error on invalid universe
+        with self.assertRaises(ValueError):
+            run_backtest.resolve_universes("crypto", available_universes=["sp500", "world"])
+
+    def test_format_terminal_table_with_universe(self):
+        """Test terminal table formatting with Universe column."""
+        import run_backtest
+
+        rows = [
+            {
+                "universe": "S&P 500",
+                "horizon": "10y",
+                "strategy": "Top 5",
+                "pre_cagr": 0.15,
+                "post_cagr": 0.13,
+                "post_liq_cagr": 0.12,
+                "cum_return": 2.10,
+                "max_dd": -0.20,
+                "tax_drag": 0.03,
+                "alpha": 0.02,
+            },
+            {
+                "universe": "All World",
+                "horizon": "10y",
+                "strategy": "World Top 5",
+                "pre_cagr": 0.16,
+                "post_cagr": 0.14,
+                "post_liq_cagr": 0.13,
+                "cum_return": 2.30,
+                "max_dd": -0.19,
+                "tax_drag": 0.03,
+                "alpha": 0.03,
+            },
+        ]
+        table = run_backtest.format_terminal_table(rows)
+        self.assertIn("Universe", table)
+        self.assertIn("All World", table)
+        self.assertIn("World Top 5", table)
+
+    def test_run_backtest_multi_universe_integration(self):
+        """Test programmatic execution with multiple universes."""
+        import run_backtest
+
+        parser = run_backtest.build_parser()
+        args = parser.parse_args(
+            [
+                "--strategy", "market_cap",
+                "--tax-rate", "0.30",
+                "--initial-capital", "10000.0",
+                "--output-dir", self.output_dir,
+                "--scripts-dir", self.scripts_dir,
+                "--horizons", "10y",
+                "--n", "3",
+                "--universes", "sp500,world",
+                "--quiet",
+            ]
+        )
+
+        exit_code = run_backtest.run_backtest(args)
+        self.assertEqual(exit_code, 0)
+
+        # Verify summary_metrics.csv contains both universes
+        summary_path = os.path.join(self.output_dir, "summary_metrics.csv")
+        with open(summary_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            self.assertIn("Top_3_MarketCap", content)
+            self.assertIn("World_Top_3_MarketCap", content)
 
 
 if __name__ == "__main__":

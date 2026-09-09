@@ -67,6 +67,7 @@ class AnnualLedgerEntry:
     dividend_income: float = 0.0
     dividend_tax_paid: float = 0.0
     capital_gains_tax_paid: float = 0.0
+    universe: str = "sp500"
 
 
 @dataclass
@@ -90,3 +91,4 @@ class StrategyResult:
     annual_history: List[AnnualLedgerEntry] = field(default_factory=list)
     total_dividends_received: float = 0.0
     total_dividend_taxes_paid: float = 0.0
+    universe: str = "sp500"
