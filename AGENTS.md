@@ -21,7 +21,13 @@ Quantitative backtesting engine and interactive Google Sheets dashboard for S&P 
   - Step 3-4 (Phase 1): Full exits and provisional trims of overweight positions.
   - Step 5 (Phase 2): Decoupled tax settlement (dividend tax + iterative capital gains tax with loss carryforward netting), secondary trims down to net equity $V_{\text{net}} \times w_i$, cash-clamped buys.
 - `engine/metrics.py`: Standard math functions (`calculate_cagr`, `calculate_cumulative_return`, `calculate_max_drawdown`, `calculate_turnover`, `calculate_tax_drag`, `calculate_alpha`, `calculate_terminal_metrics`, `calculate_benchmark_annual_series`).
-- `engine/exporters.py`: CSV report writers (19-column summary metrics, 19-column annual breakdown, 8-column trade log) and 12-column interactive Google Apps Script (`scripts/google_apps_script.js`) generator with 15-column annual strategy sheets and methodology callout.
+- `engine/scenarios.py`: Multi-tier scenario matrix builder (`build_scenario_and_apps_script_data`, `build_default_scenario_data`) across tax tiers and horizons.
+- `engine/terminal_view.py`: Terminal presentation utilities (`format_terminal_table`) for ASCII comparison tables.
+- `engine/templates/`: Standalone Google Apps Script dashboard template (`google_apps_script.template.js`).
+- `engine/exporters/`: Modular report writers:
+  - `csv.py`: CSV report writers (19-column summary metrics, 19-column annual breakdown, 8-column trade log).
+  - `apps_script.py`: Google Apps Script generator injecting simulation data into the external JS template.
+  - `pipeline.py`: `ReportExporter` and `export_all` orchestrating exports.
 - `run_backtest.py`: Primary CLI runner with multi-horizon simulation and dynamic benchmark analysis.
 
 ## Common Commands

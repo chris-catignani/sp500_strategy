@@ -142,3 +142,28 @@ class PerformanceSelector(BaseSelector):
             HoldingTarget(ticker=c.ticker, target_weight=w)
             for c, w in zip(selected, weights)
         ]
+
+
+def resolve_selector(strategy_name: str, n: int = 5) -> BaseSelector:
+    """Instantiate constituent selector based on strategy name.
+
+    Args:
+        strategy_name: 'market_cap' or 'performance'.
+        n: Number of constituents to select.
+
+    Returns:
+        Instance of BaseSelector.
+
+    Raises:
+        ValueError: If strategy_name is unrecognized.
+    """
+    normalized = strategy_name.strip().lower()
+    if normalized in ("market_cap", "marketcap"):
+        return MarketCapSelector(n=n)
+    elif normalized in ("performance", "momentum"):
+        return PerformanceSelector(n=n)
+    else:
+        raise ValueError(
+            f"Unknown strategy: '{strategy_name}'. Expected 'market_cap' or 'performance'."
+        )
+

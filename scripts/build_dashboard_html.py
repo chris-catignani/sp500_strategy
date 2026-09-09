@@ -7,10 +7,11 @@ Creates performance_dashboard.html in the artifact directory.
 import csv
 import json
 import math
+import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-ARTIFACT_DIR = Path("/Users/chriscatignani/.gemini/antigravity/brain/44295d28-f578-4f6c-9f73-dc32f0c6c6d4")
+OUTPUT_PATH = Path(sys.argv[1]) if len(sys.argv) > 1 else (REPO_ROOT / "outputs" / "performance_dashboard.html")
 
 with open(REPO_ROOT / "outputs" / "annual_breakdown.csv", "r", encoding="utf-8") as f:
     annual_rows = list(csv.DictReader(f))
@@ -670,8 +671,9 @@ html_content = f"""<!DOCTYPE html>
 </html>
 """
 
-target_path = ARTIFACT_DIR / "performance_dashboard.html"
+target_path = OUTPUT_PATH
+target_path.parent.mkdir(parents=True, exist_ok=True)
 with open(target_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print(f"Generated dashboard artifact at: {target_path}")
+print(f"Generated dashboard at: {target_path}")

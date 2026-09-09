@@ -13,6 +13,7 @@ from engine.selector import (
     BaseSelector,
     MarketCapSelector,
     PerformanceSelector,
+    resolve_selector,
 )
 from engine.data_loader import DataLoader
 from engine.backtest import PortfolioSimulator
@@ -47,6 +48,7 @@ __all__ = [
     "BaseSelector",
     "MarketCapSelector",
     "PerformanceSelector",
+    "resolve_selector",
     "DataLoader",
     "PortfolioSimulator",
     "calculate_cagr",

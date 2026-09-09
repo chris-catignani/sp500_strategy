@@ -1,6 +1,6 @@
 /**
  * Google Apps Script for S&P 500 & All-World Top N Strategy Interactive Dashboard
- * Generated automatically by engine/exporters.py
+ * Generated automatically by engine/exporters/apps_script.py
  *
  * Instructions:
  * 1. Open your Google Sheet.

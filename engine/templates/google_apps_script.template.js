@@ -1,0 +1,890 @@
+/**
+ * Google Apps Script for S&P 500 & All-World Top N Strategy Interactive Dashboard
+ * Generated automatically by engine/exporters/apps_script.py
+ *
+ * Instructions:
+ * 1. Open your Google Sheet.
+ * 2. Go to Extensions > Apps Script.
+ * 3. Replace all text in Code.gs with this script.
+ * 4. Save and return to Google Sheets.
+ * 5. Refresh the sheet, then click the new menu: "S&P 500 & World Strategy" > "Build All Sheets".
+ */
+
+// ==========================================
+// Embedded Simulation Data
+// ==========================================
+var SCENARIO_HEADERS = [
+  "LookupKey", "TaxRate", "Universe", "Horizon", "Strategy", "PreTaxCAGR",
+  "AfterTaxCAGR", "PostLiqCAGR", "CumReturn", "FinalEquity",
+  "TotalDividends", "MaxDD", "TotalTaxes", "TaxDrag", "Alpha"
+];
+var SCENARIO_DATA = /*__SCENARIO_DATA__*/[];
+
+var ANNUAL_HEADERS = [
+  "Year", "Start Value", "Gross Return", "Dividends Received ($)", "Ending Value (Pre-Tax)",
+  "Realized Capital Gain", "Net Taxable Gain", "Capital Gains Tax ($)", "Dividend Tax ($)",
+  "Total Tax Paid ($)", "Loss Carryforward", "Ending Value (After-Tax)", "Cash Reserve",
+  "S&P 500 Return", "Annual Turnover"
+];
+var TOP3_ANNUAL_DATA = /*__TOP3_ANNUAL_DATA__*/[];
+var TOP5_ANNUAL_DATA = /*__TOP5_ANNUAL_DATA__*/[];
+var TOP10_ANNUAL_DATA = /*__TOP10_ANNUAL_DATA__*/[];
+var WORLD_TOP3_ANNUAL_DATA = /*__WORLD_TOP3_ANNUAL_DATA__*/[];
+var WORLD_TOP5_ANNUAL_DATA = /*__WORLD_TOP5_ANNUAL_DATA__*/[];
+var WORLD_TOP10_ANNUAL_DATA = /*__WORLD_TOP10_ANNUAL_DATA__*/[];
+
+var SPX_HEADERS = ["Year", "S&P 500 Level", "Annual Return", "Compounded Growth ($10,000 Invested)"];
+var SPX_DATA = /*__SPX_DATA__*/[];
+
+var TRADE_HEADERS = ["Year", "Strategy", "Ticker", "Action", "Shares", "Execution Price", "Realized Gain"];
+var TRADE_DATA = /*__TRADE_DATA__*/[];
+
+var ERA_HEADERS = [
+  "Market Regime Era", "Historical Context / Regime", "Top 3 CAGR", "Top 5 CAGR",
+  "Top 10 CAGR", "S&P 500 CAGR", "Top 10 Alpha vs SPX", "Top 10 Win Rate"
+];
+var ERA_DATA = /*__ERA_DATA__*/[];
+
+var TRAJECTORY_HEADERS = ["Year", "Top 3 ($)", "Top 5 ($)", "Top 10 ($)", "S&P 500 ($)"];
+var TRAJECTORY_DATA = /*__TRAJECTORY_DATA__*/[];
+
+var DRAWDOWN_HEADERS = ["Year", "Top 3 Drawdown", "Top 5 Drawdown", "Top 10 Drawdown", "S&P 500 Drawdown"];
+var DRAWDOWN_DATA = /*__DRAWDOWN_DATA__*/[];
+
+// ==========================================
+// Google Sheets UI & Menu Triggers
+// ==========================================
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('S&P 500 & World Strategy')
+    .addItem('Build All Sheets', 'buildAllSheets')
+    .addSeparator()
+    .addItem('Show S&P 500 Tabs Only', 'showSP500TabsOnly')
+    .addItem('Show All World Tabs Only', 'showWorldTabsOnly')
+    .addItem('Show All Tabs', 'showAllTabs')
+    .addSeparator()
+    .addItem('Recalculate Sheet', 'recalculateSheet')
+    .addToUi();
+}
+
+function showSP500TabsOnly() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var spTabs = ['Executive Summary', 'Performance & Tradeoffs', 'Top 3 Strategy', 'Top 5 Strategy', 'Top 10 Strategy', 'S&P 500 Benchmark', 'Historical Holdings & Trades', 'Scenario Data'];
+  var worldTabs = ['World Top 3 Strategy', 'World Top 5 Strategy', 'World Top 10 Strategy'];
+  for (var i = 0; i < spTabs.length; i++) {
+    var s = ss.getSheetByName(spTabs[i]);
+    if (s) s.showSheet();
+  }
+  for (var j = 0; j < worldTabs.length; j++) {
+    var ws = ss.getSheetByName(worldTabs[j]);
+    if (ws) ws.hideSheet();
+  }
+  ss.toast('Showing S&P 500 tabs only.', 'Filter Tabs', 3);
+}
+
+function showWorldTabsOnly() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var worldTabs = ['Executive Summary', 'Performance & Tradeoffs', 'World Top 3 Strategy', 'World Top 5 Strategy', 'World Top 10 Strategy', 'S&P 500 Benchmark', 'Historical Holdings & Trades', 'Scenario Data'];
+  var spTabs = ['Top 3 Strategy', 'Top 5 Strategy', 'Top 10 Strategy'];
+  for (var i = 0; i < worldTabs.length; i++) {
+    var ws = ss.getSheetByName(worldTabs[i]);
+    if (ws) ws.showSheet();
+  }
+  for (var j = 0; j < spTabs.length; j++) {
+    var s = ss.getSheetByName(spTabs[j]);
+    if (s) s.hideSheet();
+  }
+  ss.toast('Showing All-World tabs only.', 'Filter Tabs', 3);
+}
+
+function showAllTabs() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var allTabs = [
+    'Executive Summary', 'Performance & Tradeoffs',
+    'Top 3 Strategy', 'Top 5 Strategy', 'Top 10 Strategy',
+    'World Top 3 Strategy', 'World Top 5 Strategy', 'World Top 10 Strategy',
+    'S&P 500 Benchmark', 'Historical Holdings & Trades', 'Scenario Data'
+  ];
+  for (var i = 0; i < allTabs.length; i++) {
+    var s = ss.getSheetByName(allTabs[i]);
+    if (s) s.showSheet();
+  }
+  ss.toast('All tabs are now visible.', 'Filter Tabs', 3);
+}
+
+// ==========================================
+// Primary Build Coordinator
+// ==========================================
+function buildAllSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // 1. Scenario Data Tab
+  buildScenarioDataSheet(ss);
+
+  // 2. Executive Summary Dashboard Tab
+  buildExecutiveSummarySheet(ss);
+
+  // 3. Performance & Tradeoffs Tab (Charts & Regime Attribution)
+  buildPerformanceAndTradeoffsSheet(ss);
+
+  // 4. S&P 500 Strategy Tabs
+  buildAnnualSheet(ss, 'Top 3 Strategy', TOP3_ANNUAL_DATA);
+  buildAnnualSheet(ss, 'Top 5 Strategy', TOP5_ANNUAL_DATA);
+  buildAnnualSheet(ss, 'Top 10 Strategy', TOP10_ANNUAL_DATA);
+
+  // 5. All-World Strategy Tabs
+  buildAnnualSheet(ss, 'World Top 3 Strategy', WORLD_TOP3_ANNUAL_DATA);
+  buildAnnualSheet(ss, 'World Top 5 Strategy', WORLD_TOP5_ANNUAL_DATA);
+  buildAnnualSheet(ss, 'World Top 10 Strategy', WORLD_TOP10_ANNUAL_DATA);
+
+  // 6. Benchmark Tab
+  buildBenchmarkSheet(ss);
+
+  // 7. Holdings & Trades Tab
+  buildTradesSheet(ss);
+
+  // Organize tab order: Executive Summary is always tab 1
+  var tabOrder = [
+    'Executive Summary',
+    'Performance & Tradeoffs',
+    'Top 3 Strategy',
+    'Top 5 Strategy',
+    'Top 10 Strategy',
+    'World Top 3 Strategy',
+    'World Top 5 Strategy',
+    'World Top 10 Strategy',
+    'S&P 500 Benchmark',
+    'Historical Holdings & Trades',
+    'Scenario Data'
+  ];
+  for (var i = 0; i < tabOrder.length; i++) {
+    var sheet = ss.getSheetByName(tabOrder[i]);
+    if (sheet) {
+      ss.setActiveSheet(sheet);
+      ss.moveActiveSheet(i + 1);
+    }
+  }
+
+  // Activate Executive Summary
+  var execSheet = ss.getSheetByName('Executive Summary');
+  if (execSheet) {
+    ss.setActiveSheet(execSheet);
+  }
+
+  SpreadsheetApp.flush();
+  ss.toast('All sheets successfully created and styled!', 'Build Complete', 4);
+}
+
+// ==========================================
+// Tab 1: Scenario Data (Lookup Engine)
+// ==========================================
+function buildScenarioDataSheet(ss) {
+  var sheet = getOrCreateSheet(ss, 'Scenario Data');
+  sheet.setHiddenGridlines(false);
+
+  var rows = [SCENARIO_HEADERS].concat(SCENARIO_DATA);
+  sheet.getRange(1, 1, rows.length, SCENARIO_HEADERS.length).setValues(rows);
+
+  // Header Styling
+  var headerRange = sheet.getRange(1, 1, 1, SCENARIO_HEADERS.length);
+  headerRange.setBackground('#1B365D')
+             .setFontColor('#FFFFFF')
+             .setFontWeight('bold')
+             .setHorizontalAlignment('center');
+
+  // Number Formatting (15 columns)
+  if (SCENARIO_DATA.length > 0) {
+    sheet.getRange(2, 1, SCENARIO_DATA.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 2, SCENARIO_DATA.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('center');
+    sheet.getRange(2, 3, SCENARIO_DATA.length, 2).setHorizontalAlignment('center');
+    sheet.getRange(2, 5, SCENARIO_DATA.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 6, SCENARIO_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 10, SCENARIO_DATA.length, 2).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 12, SCENARIO_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 13, SCENARIO_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+    sheet.getRange(2, 14, SCENARIO_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 15, SCENARIO_DATA.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right');
+  }
+
+  sheet.autoResizeColumns(1, SCENARIO_HEADERS.length);
+  sheet.setFrozenRows(1);
+}
+
+// ==========================================
+// Tab 2: Executive Summary Dashboard
+// ==========================================
+function buildExecutiveSummarySheet(ss) {
+  var sheet = getOrCreateSheet(ss, 'Executive Summary');
+  sheet.setHiddenGridlines(false);
+
+  // 1. Banner Header (A1:M1, 13 columns)
+  sheet.getRange('A1:M1').merge()
+       .setValue('S&P 500 & ALL-WORLD TOP N STRATEGY - EXECUTIVE DASHBOARD')
+       .setBackground('#1B365D')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(14)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle')
+       .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
+
+  // 2. Interactive Parameter Dropdowns in Row 2
+  // Control 1: Tax Rate (Cols A-B)
+  sheet.getRange('A2').setValue('Tax Rate:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var b2 = sheet.getRange('B2');
+  b2.setValue(0.30)
+    .setNumberFormat('0.0%')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var taxRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['0.0%', '15.0%', '20.0%', '30.0%', '37.0%'], true)
+    .setAllowInvalid(false)
+    .build();
+  b2.setDataValidation(taxRule);
+
+  // Control 2: Universe (Cols C-D)
+  sheet.getRange('C2').setValue('Universe:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var d2 = sheet.getRange('D2');
+  d2.setValue('All')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var univRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['All', 'S&P 500 Only', 'All World Only'], true)
+    .setAllowInvalid(false)
+    .build();
+  d2.setDataValidation(univRule);
+
+  // Control 3: Strategy (Cols E-F)
+  sheet.getRange('E2').setValue('Strategy:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var f2 = sheet.getRange('F2');
+  f2.setValue('All')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var stratRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['All', 'Top 3', 'Top 5', 'Top 10', 'S&P 500'], true)
+    .setAllowInvalid(false)
+    .build();
+  f2.setDataValidation(stratRule);
+
+  // Control 4: Horizon (Cols G-H)
+  sheet.getRange('G2').setValue('Horizon:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var h2 = sheet.getRange('H2');
+  h2.setValue('All')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var horizRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['All', '10y', '20y', '30y'], true)
+    .setAllowInvalid(false)
+    .build();
+  h2.setDataValidation(horizRule);
+
+  sheet.getRange('I2:M2').merge()
+       .setValue('Filter universe, strategy, horizon, and tax rate. Table and KPI cards update dynamically.')
+       .setFontStyle('italic')
+       .setFontColor('#4A5568')
+       .setVerticalAlignment('middle')
+       .setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
+
+  // 3. KPI Summary Scorecards (Rows 4-6)
+  // Decoupled formulas query 'Scenario Data' directly using INDEX/MATCH for robust filter resilience
+  // Card 1: Top 5 Final Wealth (30y) (Cols A-B)
+  sheet.getRange('A4:B4').merge().setValue('Top 5 Final Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A5:B5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$J:$J, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A6:B6').merge().setValue('After all taxes ($10k start)').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A4:B6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
+
+  // Card 2: S&P 500 Wealth (30y) (Cols C-E)
+  sheet.getRange('C4:E4').merge().setValue('S&P 500 Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C5:E5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$J:$J, MATCH("30y_S&P 500_S&P 500_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C6:E6').merge().setValue('Passive buy & hold').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C4:E6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+
+  // Card 3: Top 5 Annual Return (30y) (Cols F-G)
+  sheet.getRange('F4:G4').merge().setValue('Top 5 Annual Return (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('F5:G5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$H:$H, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('F6:G6').merge().setValue('Net post-liquidation CAGR').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('F4:G6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
+
+  // Card 4: 30-Year Excess Return (Cols H-J)
+  sheet.getRange('H4:J4').merge().setValue('30-Year Excess Return').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('H5:J5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$O:$O, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('H6:J6').merge().setValue('Annual Alpha vs S&P 500').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('H4:J6').setBackground('#F0FFF4').setBorder(true, true, true, true, false, false, '#C6F6D5', SpreadsheetApp.BorderStyle.SOLID);
+
+  // Card 5: 30-Year Tax Drag (Cols K-M)
+  sheet.getRange('K4:M4').merge().setValue('30-Year Tax Drag').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('K5:M5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$N:$N, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#9B2C2C').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('K6:M6').merge().setValue('Annual return lost to taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('K4:M6').setBackground('#FFF5F5').setBorder(true, true, true, true, false, false, '#FED7D7', SpreadsheetApp.BorderStyle.SOLID);
+
+  // 4. Multi-Horizon Strategy Comparison Table
+  // Row 8: Title
+  sheet.getRange('A8:M8').merge()
+       .setValue('MULTI-HORIZON PERFORMANCE & TAX COMPARISON (10Y, 20Y, 30Y)')
+       .setBackground('#1B365D')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(11)
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle')
+       .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
+
+  // Row 9: Table Header (13 columns matching 'Scenario Data'!$C:$O)
+  var tableHeaders = [
+    'Universe', 'Horizon', 'Strategy', 'Annual Return (Pre-Tax)', 'Annual Return (After-Tax)', 'Annual Return (Post-Liq)',
+    'Total Return (Cumulative)', 'Ending Wealth ($10k Start)', 'Total Dividends Received',
+    'Max Drawdown (Worst Drop)', 'Total Taxes Paid', 'Annual Tax Drag', 'Excess vs S&P 500 (Alpha)'
+  ];
+  sheet.getRange(9, 1, 1, tableHeaders.length).setValues([tableHeaders])
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle')
+       .setWrap(true);
+
+  // Row 10: Dynamic Filter Formula spilling down Rows 10:52 (guarded by non-empty $A$2:$A to prevent spill on 0.0% tax rate)
+  var filterFormula = '=IFNA(FILTER(\'Scenario Data\'!$C$2:$O, (\'Scenario Data\'!$A$2:$A <> "") * (ROUND(\'Scenario Data\'!$B$2:$B, 4) = ROUND($B$2, 4)) * (($D$2 = "All") + (\'Scenario Data\'!$C$2:$C = SUBSTITUTE($D$2, " Only", ""))) * (($F$2 = "All") + (\'Scenario Data\'!$E$2:$E = $F$2)) * (($H$2 = "All") + (\'Scenario Data\'!$D$2:$D = $H$2))), "No matching records found")';
+  sheet.getRange('A10').setFormula(filterFormula);
+
+  // Pre-formatting comparison table range (Rows 10 to 52, unmerged for spill protection)
+  sheet.getRange(10, 1, 43, 1).setHorizontalAlignment('center').setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange(10, 2, 43, 1).setHorizontalAlignment('center').setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange(10, 3, 43, 1).setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange(10, 4, 43, 3).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 7, 43, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 8, 43, 2).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 10, 43, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 11, 43, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 12, 43, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(10, 13, 43, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+
+  // Alternating background colors via conditional formatting rules
+  var cfRange = sheet.getRange('A10:M52');
+  var ruleEven = SpreadsheetApp.newConditionalFormatRule()
+    .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", MOD(ROW(), 2)=0)')
+    .setBackground('#F7FAFC')
+    .setRanges([cfRange])
+    .build();
+  var ruleOdd = SpreadsheetApp.newConditionalFormatRule()
+    .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", MOD(ROW(), 2)=1)')
+    .setBackground('#FFFFFF')
+    .setRanges([cfRange])
+    .build();
+  sheet.setConditionalFormatRules([ruleEven, ruleOdd]);
+
+  // Borders
+  sheet.getRange(9, 1, 44, tableHeaders.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+
+  // Explicit, proportional column widths (13 columns)
+  var colWidths = [85, 75, 95, 105, 105, 105, 105, 110, 110, 100, 100, 95, 95];
+  for (var c = 0; c < colWidths.length; c++) {
+    sheet.setColumnWidth(c + 1, colWidths[c]);
+  }
+
+  // Explicit row heights for polished vertical rhythm
+  sheet.setRowHeight(1, 40);
+  sheet.setRowHeight(2, 32);
+  sheet.setRowHeight(3, 10);
+  sheet.setRowHeight(4, 22);
+  sheet.setRowHeight(5, 32);
+  sheet.setRowHeight(6, 20);
+  sheet.setRowHeight(7, 14);
+  sheet.setRowHeight(8, 30);
+  sheet.setRowHeight(9, 36);
+  for (var dr = 10; dr <= 52; dr++) {
+    sheet.setRowHeight(dr, 24);
+  }
+
+  // 5. Key Metrics Glossary & Explanations (Rows 55-61, leaving Rows 10:52 completely unmerged)
+  sheet.setRowHeight(53, 14);
+  sheet.setRowHeight(54, 10);
+  sheet.getRange('A55:M55').merge()
+       .setValue('KEY METRIC DEFINITIONS & GLOSSARY')
+       .setBackground('#EDF2F7')
+       .setFontColor('#2D3748')
+       .setFontWeight('bold')
+       .setFontSize(10)
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(55, 24);
+
+  var explanations = [
+    ['Annual Return (CAGR):', 'Compound Annual Growth Rate — the smoothed annual percentage your money grew every year compounded steadily.'],
+    ['Total Return (Cumulative):', 'The total unannualized percentage gain over the entire period (e.g. +795.6% means $10k turned into $89.5k).'],
+    ['Post-Liquidation Return:', 'True net annual return assuming all remaining stock holdings are sold at the end and all final taxes paid.'],
+    ['Annual Tax Drag:', 'Annual percentage of return lost to taxes. Calculated as Pre-Tax Annual Return minus Post-Liquidation Annual Return.'],
+    ['Excess vs S&P 500 (Alpha):', 'Additional annual return earned above the S&P 500 benchmark (+5.81% means beating the market by 5.81%/yr).'],
+    ['Max Drawdown:', 'Worst percentage drop from peak to trough during market downturns before a new high was reached.']
+  ];
+
+  for (var e = 0; e < explanations.length; e++) {
+    var r = 56 + e;
+    sheet.getRange('A' + r + ':B' + r).merge()
+         .setValue(explanations[e][0])
+         .setFontWeight('bold')
+         .setFontSize(9)
+         .setFontColor('#4A5568')
+         .setHorizontalAlignment('right')
+         .setVerticalAlignment('middle');
+    sheet.getRange('C' + r + ':M' + r).merge()
+         .setValue(explanations[e][1])
+         .setFontSize(9)
+         .setFontColor('#718096')
+         .setHorizontalAlignment('left')
+         .setVerticalAlignment('middle');
+    sheet.setRowHeight(r, 20);
+  }
+
+  // 6. Methodology Note Callout Card (Rows 64-70)
+  sheet.setRowHeight(62, 14);
+  sheet.setRowHeight(63, 10);
+  sheet.getRange('A64:M64').merge()
+       .setValue('METHODOLOGY NOTE — DIVIDEND TIMING & MULTI-UNIVERSE SELECTION')
+       .setBackground('#2D3748')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(10)
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(64, 24);
+
+  var methodNote = '• Annual Discrete Dividends: Historical dividends are credited once annually at the rebalance date based on prior-year holdings and dividend distribution rates.\n' +
+                   '• Tax Settlement: Dividend and realized capital gains taxes are settled annually at the selected marginal tax rate, with capital loss carryforwards applied.\n' +
+                   '• Self-Financing Rebalancing: Net dividend income is reinvested into target holdings alongside rebalancing trade proceeds without margin borrowing (cash >= 0).\n' +
+                   '• Post-Liquidation Terminal Wealth: Terminal equity reflects a full simulated liquidation of all portfolio holdings with final capital gains taxes paid.\n' +
+                   '• Benchmark Alignment: S&P 500 total return benchmark reflects split- and dividend-adjusted performance over identical holding periods.\n' +
+                   '• Multi-Universe Scope: S&P 500 represents domestic mega-caps; All World includes global market cap leaders accessible via US markets (ADRs / direct listings).';
+
+  sheet.getRange('A65:M70').merge()
+       .setValue(methodNote)
+       .setFontSize(9)
+       .setFontColor('#4A5568')
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle')
+       .setWrap(true);
+
+  sheet.getRange('A64:M70').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  sheet.getRange('A65:M70').setBackground('#F7FAFC');
+  for (var mr = 65; mr <= 70; mr++) {
+    sheet.setRowHeight(mr, 18);
+  }
+
+  sheet.setFrozenRows(9);
+}
+
+// ==========================================
+// Tab 2: Performance & Tradeoffs (Charts & Regimes)
+// ==========================================
+function buildPerformanceAndTradeoffsSheet(ss) {
+  var sheet = getOrCreateSheet(ss, 'Performance & Tradeoffs');
+  sheet.setHiddenGridlines(false);
+
+  // 1. Banner Header
+  sheet.getRange('A1:L1').merge()
+       .setValue('S&P 500 TOP N STRATEGY - HISTORICAL CHARTS & TRADEOFF ANALYSIS')
+       .setBackground('#1B365D')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(14)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(1, 40);
+
+  // 2. Subtitle Description
+  sheet.getRange('A2:L2').merge()
+       .setValue('Visualizing 30-year compounded wealth trajectories ($10k initial basis), peak-to-trough drawdowns, and regime attribution (1994–2024).')
+       .setFontStyle('italic')
+       .setFontColor('#4A5568')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(2, 24);
+
+  // 3. Section Title: Market Regime Attribution
+  sheet.getRange('A4:H4').merge()
+       .setValue('HISTORICAL MARKET REGIME ATTRIBUTION (4 ERAS)')
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(11)
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(4, 28);
+
+  // 4. Market Regime Table Headers
+  sheet.getRange(5, 1, 1, ERA_HEADERS.length).setValues([ERA_HEADERS])
+       .setBackground('#2B6CB0')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(5, 26);
+
+  // 5. Market Regime Data Rows
+  sheet.getRange(6, 1, ERA_DATA.length, ERA_HEADERS.length).setValues(ERA_DATA);
+  for (var er = 0; er < ERA_DATA.length; er++) {
+    var rowNum = 6 + er;
+    var bg = (er === ERA_DATA.length - 1) ? '#EDF2F7' : ((er % 2 === 0) ? '#FFFFFF' : '#F7FAFC');
+    sheet.getRange(rowNum, 1, 1, ERA_HEADERS.length).setBackground(bg);
+    sheet.setRowHeight(rowNum, 22);
+  }
+
+  // Regime Table Formatting
+  sheet.getRange(6, 1, ERA_DATA.length, 1).setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(6, 2, ERA_DATA.length, 1).setVerticalAlignment('middle');
+  sheet.getRange(6, 3, ERA_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(6, 7, ERA_DATA.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(6, 8, ERA_DATA.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(5, 1, ERA_DATA.length + 1, ERA_HEADERS.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  sheet.getRange(6 + ERA_DATA.length - 1, 1, 1, ERA_HEADERS.length).setFontWeight('bold');
+
+  // Spacer
+  sheet.setRowHeight(11, 12);
+
+  for (var cr = 12; cr <= 29; cr++) {
+    sheet.setRowHeight(cr, 20);
+  }
+  sheet.setRowHeight(30, 14);
+
+  // 6. Section Titles for Time Series Data
+  sheet.getRange('A31:E31').merge()
+       .setValue('30-YEAR WEALTH ACCUMULATION DATA ($10,000 BASIS)')
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(10)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+
+  sheet.getRange('G31:K31').merge()
+       .setValue('HISTORICAL DRAWDOWN FROM PEAK DATA')
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(10)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(31, 26);
+
+  // Table Headers (Row 32)
+  sheet.getRange(32, 1, 1, TRAJECTORY_HEADERS.length).setValues([TRAJECTORY_HEADERS])
+       .setBackground('#4A5568')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+
+  sheet.getRange(32, 7, 1, DRAWDOWN_HEADERS.length).setValues([DRAWDOWN_HEADERS])
+       .setBackground('#4A5568')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(32, 24);
+
+  // Trajectory & Drawdown Data (Rows 33 to 63, length 31)
+  sheet.getRange(33, 1, TRAJECTORY_DATA.length, TRAJECTORY_HEADERS.length).setValues(TRAJECTORY_DATA);
+  sheet.getRange(33, 7, DRAWDOWN_DATA.length, DRAWDOWN_HEADERS.length).setValues(DRAWDOWN_DATA);
+
+  // Formatting Trajectory Table
+  sheet.getRange(33, 1, TRAJECTORY_DATA.length, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(33, 2, TRAJECTORY_DATA.length, 4).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+
+  // Formatting Drawdown Table
+  sheet.getRange(33, 7, DRAWDOWN_DATA.length, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(33, 8, DRAWDOWN_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+
+  for (var tr = 0; tr < TRAJECTORY_DATA.length; tr++) {
+    var rowN = 33 + tr;
+    var bgRow = (tr % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
+    sheet.getRange(rowN, 1, 1, TRAJECTORY_HEADERS.length).setBackground(bgRow);
+    sheet.getRange(rowN, 7, 1, DRAWDOWN_HEADERS.length).setBackground(bgRow);
+    sheet.setRowHeight(rowN, 20);
+  }
+
+  // Set explicit column widths
+  var pColWidths = [75, 110, 110, 110, 115, 30, 75, 105, 105, 105, 105, 30];
+  for (var pw = 0; pw < pColWidths.length; pw++) {
+    sheet.setColumnWidth(pw + 1, pColWidths[pw]);
+  }
+
+  // Flush all cell values and formats to spreadsheet before creating charts
+  SpreadsheetApp.flush();
+
+  // 7. Embedded Native Charts (Rows 12 to 29)
+  // Chart 1: Growth of $10,000 Line Chart (Logarithmic Scale)
+  var growthRange = sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length);
+  var growthChart = sheet.newChart()
+    .asLineChart()
+    .addRange(growthRange)
+    .setNumHeaders(1)
+    .useLogScale()
+    .setOption('useFirstColumnAsDomain', true)
+    .setOption('title', 'Growth of $10,000 Initial Investment (Log Scale, 1994–2024)')
+    .setOption('titleTextStyle', {fontSize: 13, bold: true, color: '#1A202C'})
+    .setOption('legend', {position: 'top', textStyle: {fontSize: 10}})
+    .setOption('hAxis', {title: 'Year', format: '####', gridlines: {count: 8}})
+    .setOption('vAxis', {title: 'Portfolio Value ($) - Log Scale', scaleType: 'log', logScale: true, format: '$#,##0'})
+    .setOption('vAxes.0.logScale', true)
+    .setOption('vAxes.0.scaleType', 'log')
+    .setOption('vAxes.0.title', 'Portfolio Value ($) - Log Scale')
+    .setOption('vAxis.logScale', true)
+    .setOption('vAxis.scaleType', 'log')
+    .setOption('vAxis.title', 'Portfolio Value ($) - Log Scale')
+    .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
+    .setOption('width', 580)
+    .setOption('height', 360)
+    .setPosition(12, 1, 0, 0)
+    .build();
+  sheet.insertChart(growthChart);
+
+  // Chart 2: Historical Drawdowns from Peak Line Chart
+  var ddRange = sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length);
+  var ddChart = sheet.newChart()
+    .asLineChart()
+    .addRange(ddRange)
+    .setNumHeaders(1)
+    .setOption('useFirstColumnAsDomain', true)
+    .setOption('title', 'Historical Drawdown from Peak (1994–2024)')
+    .setOption('titleTextStyle', {fontSize: 13, bold: true, color: '#1A202C'})
+    .setOption('legend', {position: 'top', textStyle: {fontSize: 10}})
+    .setOption('hAxis', {title: 'Year', format: '####', gridlines: {count: 8}})
+    .setOption('vAxis', {title: 'Drawdown (%)', format: '0.0%'})
+    .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
+    .setOption('width', 580)
+    .setOption('height', 360)
+    .setPosition(12, 7, 0, 0)
+    .build();
+  sheet.insertChart(ddChart);
+}
+
+// ==========================================
+// Strategy Tabs (Top 3, Top 5, Top 10)
+// ==========================================
+function buildAnnualSheet(ss, sheetName, annualData) {
+  var sheet = getOrCreateSheet(ss, sheetName);
+  sheet.setHiddenGridlines(false);
+
+  var rows = [ANNUAL_HEADERS].concat(annualData);
+  sheet.getRange(1, 1, rows.length, ANNUAL_HEADERS.length).setValues(rows);
+
+  // Header Styling
+  var headerRange = sheet.getRange(1, 1, 1, ANNUAL_HEADERS.length);
+  headerRange.setBackground('#1B365D')
+             .setFontColor('#FFFFFF')
+             .setFontWeight('bold')
+             .setHorizontalAlignment('center')
+             .setVerticalAlignment('middle')
+             .setWrap(true);
+
+  sheet.setRowHeight(1, 36);
+
+  if (annualData.length > 0) {
+    // Col 1: Year
+    sheet.getRange(2, 1, annualData.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center').setVerticalAlignment('middle');
+    // Col 2: Start Value
+    sheet.getRange(2, 2, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 3: Gross Return
+    sheet.getRange(2, 3, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 4: Dividends Received ($)
+    sheet.getRange(2, 4, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 5: Pre-Tax Ending Value
+    sheet.getRange(2, 5, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 6: Realized Capital Gain
+    sheet.getRange(2, 6, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 7: Net Taxable Gain
+    sheet.getRange(2, 7, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 8: Capital Gains Tax ($)
+    sheet.getRange(2, 8, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 9: Dividend Tax ($)
+    sheet.getRange(2, 9, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 10: Total Tax Paid ($)
+    sheet.getRange(2, 10, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 11: Loss Carryforward
+    sheet.getRange(2, 11, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 12: Ending Value (After-Tax)
+    sheet.getRange(2, 12, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 13: Cash Reserve
+    sheet.getRange(2, 13, annualData.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 14: SPX Return
+    sheet.getRange(2, 14, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    // Col 15: Turnover
+    sheet.getRange(2, 15, annualData.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+
+    // Alternating rows
+    for (var r = 0; r < annualData.length; r++) {
+      var bg = (r % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
+      sheet.getRange(2 + r, 1, 1, ANNUAL_HEADERS.length).setBackground(bg);
+      sheet.setRowHeight(2 + r, 22);
+    }
+    sheet.getRange(1, 1, annualData.length + 1, ANNUAL_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+  }
+
+  var annualColWidths = [70, 110, 95, 115, 115, 115, 110, 110, 105, 105, 110, 120, 100, 95, 90];
+  for (var ac = 0; ac < annualColWidths.length; ac++) {
+    sheet.setColumnWidth(ac + 1, annualColWidths[ac]);
+  }
+  sheet.setFrozenRows(1);
+}
+
+// ==========================================
+// Benchmark Tab: S&P 500 Benchmark
+// ==========================================
+function buildBenchmarkSheet(ss) {
+  var sheet = getOrCreateSheet(ss, 'S&P 500 Benchmark');
+  sheet.setHiddenGridlines(false);
+
+  var rows = [SPX_HEADERS].concat(SPX_DATA);
+  sheet.getRange(1, 1, rows.length, SPX_HEADERS.length).setValues(rows);
+
+  // Header Styling
+  var headerRange = sheet.getRange(1, 1, 1, SPX_HEADERS.length);
+  headerRange.setBackground('#1B365D')
+             .setFontColor('#FFFFFF')
+             .setFontWeight('bold')
+             .setHorizontalAlignment('center')
+             .setVerticalAlignment('middle')
+             .setWrap(true);
+
+  sheet.setRowHeight(1, 36);
+
+  if (SPX_DATA.length > 0) {
+    sheet.getRange(2, 1, SPX_DATA.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 2, SPX_DATA.length, 1).setNumberFormat('#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    sheet.getRange(2, 3, SPX_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    sheet.getRange(2, 4, SPX_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+
+    for (var r = 0; r < SPX_DATA.length; r++) {
+      var bg = (r % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
+      sheet.getRange(2 + r, 1, 1, SPX_HEADERS.length).setBackground(bg);
+      sheet.setRowHeight(2 + r, 22);
+    }
+    sheet.getRange(1, 1, SPX_DATA.length + 1, SPX_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+  }
+
+  var spxColWidths = [80, 115, 140, 175];
+  for (var sc = 0; sc < spxColWidths.length; sc++) {
+    sheet.setColumnWidth(sc + 1, spxColWidths[sc]);
+  }
+  sheet.setFrozenRows(1);
+}
+
+// ==========================================
+// Tab 6: Historical Holdings & Trades
+// ==========================================
+function buildTradesSheet(ss) {
+  var sheet = getOrCreateSheet(ss, 'Historical Holdings & Trades');
+  sheet.setHiddenGridlines(false);
+
+  var rows = [TRADE_HEADERS].concat(TRADE_DATA);
+  sheet.getRange(1, 1, rows.length, TRADE_HEADERS.length).setValues(rows);
+
+  // Header Styling
+  var headerRange = sheet.getRange(1, 1, 1, TRADE_HEADERS.length);
+  headerRange.setBackground('#1B365D')
+             .setFontColor('#FFFFFF')
+             .setFontWeight('bold')
+             .setHorizontalAlignment('center')
+             .setVerticalAlignment('middle')
+             .setWrap(true);
+
+  sheet.setRowHeight(1, 36);
+
+  if (TRADE_DATA.length > 0) {
+    sheet.getRange(2, 1, TRADE_DATA.length, 1).setNumberFormat('#,##0').setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 2, TRADE_DATA.length, 1).setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 3, TRADE_DATA.length, 1).setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 4, TRADE_DATA.length, 1).setHorizontalAlignment('center').setVerticalAlignment('middle');
+    sheet.getRange(2, 5, TRADE_DATA.length, 1).setNumberFormat('#,##0.0000').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    sheet.getRange(2, 6, TRADE_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+    sheet.getRange(2, 7, TRADE_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+
+    for (var r = 0; r < TRADE_DATA.length; r++) {
+      var bg = (r % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
+      sheet.getRange(2 + r, 1, 1, TRADE_HEADERS.length).setBackground(bg);
+      sheet.setRowHeight(2 + r, 20);
+    }
+    sheet.getRange(1, 1, TRADE_DATA.length + 1, TRADE_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+  }
+
+  var tradeColWidths = [75, 140, 85, 80, 110, 125, 125];
+  for (var tc = 0; tc < tradeColWidths.length; tc++) {
+    sheet.setColumnWidth(tc + 1, tradeColWidths[tc]);
+  }
+  sheet.setFrozenRows(1);
+}
+
+
+// ==========================================
+// Utility & Custom Spreadsheet Functions
+// ==========================================
+function recalculateSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Executive Summary');
+  if (!sheet) {
+    SpreadsheetApp.getUi().alert('Executive Summary sheet not found.');
+    return;
+  }
+  var taxRateVal = sheet.getRange('B2').getValue();
+  var taxRateStr = (typeof taxRateVal === 'number') ? (taxRateVal * 100).toFixed(1) + '%' : String(taxRateVal);
+  SpreadsheetApp.flush();
+  ss.toast('Executive Summary updated for tax rate: ' + taxRateStr, 'Recalculation Complete', 3);
+}
+
+/**
+ * Custom formula to calculate estimated 30-year after-tax CAGR for an arbitrary tax rate.
+ * @param {number|string} taxRate Tax rate as decimal (e.g. 0.30) or percentage ("30%").
+ * @return {number|string} Estimated post-liquidation CAGR.
+ * @customfunction
+ */
+function RECALCULATE_STRATEGY(taxRate) {
+  var rate = (typeof taxRate === 'string') ? parseFloat(taxRate.replace('%', '')) / 100 : Number(taxRate);
+  if (isNaN(rate) || rate < 0 || rate > 1) {
+    return 'Invalid tax rate';
+  }
+  // Linear interpolation based on Top 5 30-year empirical results with dividends:
+  // 0% -> 14.95%, 30% -> 12.04%
+  var baseCagr = 0.1495;
+  var drag = rate * 0.0970;
+  return baseCagr - drag;
+}
+
+function getOrCreateSheet(ss, name) {
+  var sheet = ss.getSheetByName(name);
+  if (sheet) {
+    sheet.clear();
+    var charts = sheet.getCharts();
+    for (var i = 0; i < charts.length; i++) {
+      sheet.removeChart(charts[i]);
+    }
+  } else {
+    sheet = ss.insertSheet(name);
+  }
+  return sheet;
+}

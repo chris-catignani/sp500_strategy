@@ -196,13 +196,15 @@ class TestSelector(unittest.TestCase):
             selector.select(self.universe, n=-3)
 
     def test_package_level_exports(self):
-        """BaseSelector, MarketCapSelector, PerformanceSelector must be exported in engine."""
+        """BaseSelector, MarketCapSelector, PerformanceSelector, resolve_selector must be exported in engine."""
         self.assertTrue(hasattr(engine, "BaseSelector"))
         self.assertTrue(hasattr(engine, "MarketCapSelector"))
         self.assertTrue(hasattr(engine, "PerformanceSelector"))
+        self.assertTrue(hasattr(engine, "resolve_selector"))
         self.assertIn("BaseSelector", engine.__all__)
         self.assertIn("MarketCapSelector", engine.__all__)
         self.assertIn("PerformanceSelector", engine.__all__)
+        self.assertIn("resolve_selector", engine.__all__)
 
 
 if __name__ == "__main__":

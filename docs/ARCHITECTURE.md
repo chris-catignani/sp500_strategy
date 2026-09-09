@@ -20,7 +20,9 @@ graph TD
     DL --> DATA[(JSON Datasets<br>data/)]
     
     SIM --> MET[Metrics Engine<br>engine/metrics.py]
-    SIM --> EXP[Report Exporters<br>engine/exporters.py]
+    SIM --> SCN[Scenarios Engine<br>engine/scenarios.py]
+    SCN --> EXP[Report Exporters<br>engine/exporters/]
+    SCN --> GAS_TMPL[Apps Script Template<br>engine/templates/]
     
     EXP --> CSV[CSV Reports<br>outputs/]
     EXP --> GAS[Google Apps Script<br>scripts/google_apps_script.js]
@@ -33,10 +35,13 @@ graph TD
 | [`engine/models.py`](../engine/models.py) | Pure immutable/mutable typed dataclasses (`ConstituentSnapshot`, `HoldingTarget`, `TaxLot`, `TradeOrder`, `AnnualLedgerEntry`, `StrategyResult`). |
 | [`engine/data_loader.py`](../engine/data_loader.py) | Loads point-in-time constituent snapshots, split-adjusted close prices (1994–2024), and official `^GSPC` benchmark levels from JSON data stores. |
 | [`engine/tax_lots.py`](../engine/tax_lots.py) | Maintains FIFO tax-lot queues per ticker, executes partial lot depletion, accumulates realized gains, and nets gains against prior loss carryforwards. |
-| [`engine/selector.py`](../engine/selector.py) | Ranks constituents and calculates target weights normalized to 100% ($w_i = W_i / \sum W_j$). Supports market cap and 1-year trailing momentum rules. |
+| [`engine/selector.py`](../engine/selector.py) | Ranks constituents and calculates target weights normalized to 100% ($w_i = W_i / \sum W_j$). Selector resolution (`resolve_selector`). |
 | [`engine/backtest.py`](../engine/backtest.py) | Two-phase rebalance simulation engine enforcing cash neutrality, self-financing, and zero margin debt ($cash \ge 0.0$). |
 | [`engine/metrics.py`](../engine/metrics.py) | Pure mathematical calculation of CAGR, Cumulative Return, Max Drawdown, Turnover, Tax Drag, Alpha, and terminal liquidation metrics. |
-| [`engine/exporters.py`](../engine/exporters.py) | Formats CSV audit files and generates standalone Google Apps Script for interactive Google Sheets dashboards. |
+| [`engine/scenarios.py`](../engine/scenarios.py) | Multi-tier scenario matrix orchestrator (`build_scenario_and_apps_script_data`) across horizons, tax rates, and universes. |
+| [`engine/terminal_view.py`](../engine/terminal_view.py) | ASCII terminal presentation formatting (`format_terminal_table`). |
+| [`engine/templates/`](../engine/templates/) | Standalone Google Apps Script dashboard template (`google_apps_script.template.js`). |
+| [`engine/exporters/`](../engine/exporters/) | Modular export package (`csv.py`, `apps_script.py`, `pipeline.py`). Formats CSV audit files and generates Google Apps Script dashboards. |
 
 ---
 
