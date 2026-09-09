@@ -347,12 +347,16 @@ class TestExporters(unittest.TestCase):
         self.assertIn("'A1:M1'", code)
         self.assertIn("'A8:M8'", code)
         self.assertIn("METHODOLOGY NOTE — DIVIDEND TIMING & MULTI-UNIVERSE SELECTION", code)
-        # 15-Column SCENARIO_HEADERS
+        # 16-Column SCENARIO_HEADERS
         self.assertIn('"LookupKey"', code)
         self.assertIn('"TaxRate"', code)
         self.assertIn('"Universe"', code)
         self.assertIn('"Horizon"', code)
         self.assertIn('"Strategy"', code)
+        self.assertIn('"RowType"', code)
+        # Compare Index dropdown and controls
+        self.assertIn("'Compare Index:'", code)
+        self.assertIn("['None', 'S&P 500', 'MSCI World', 'Both']", code)
         # Decoupled KPI formulas querying Scenario Data
         self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$J:$J, MATCH(\"30y_\"", code)
         self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$H:$H, MATCH(\"30y_\"", code)

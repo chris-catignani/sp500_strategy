@@ -216,6 +216,7 @@ def run_backtest(args: argparse.Namespace) -> int:
     # Pre-calculate benchmark metrics for reporting
     spx_benchmarks: Dict[Any, Any] = {}
     benchmark_metrics_by_horizon: Dict[str, Dict[str, Any]] = {}
+    msci_metrics_by_horizon: Dict[str, Dict[str, Any]] = {}
 
     for h_label, s_yr, e_yr in horizons:
         horizon_years = e_yr - s_yr
@@ -271,6 +272,59 @@ def run_backtest(args: argparse.Namespace) -> int:
             "bench_post": bench_post,
             "tr_cum": spx_tr_cum,
             "tr_max_dd": spx_tr_max_dd,
+        }
+
+        # Pre-calculate MSCI World benchmark
+        msci_pr_levels = [data_loader.get_msci_world_level(y) for y in range(s_yr, e_yr + 1)]
+        msci_tr_levels = [data_loader.get_msci_world_tr_level(y) for y in range(s_yr, e_yr + 1)]
+        msci_tr_cagr = calculate_cagr(msci_tr_levels[0], msci_tr_levels[-1], horizon_years)
+        msci_tr_cum = calculate_cumulative_return(msci_tr_levels[0], msci_tr_levels[-1])
+        msci_tr_max_dd = calculate_max_drawdown(msci_tr_levels)
+
+        msci_bench_pre = calculate_benchmark_annual_series(
+            pr_levels=msci_pr_levels,
+            tr_levels=msci_tr_levels,
+            tax_rate=0.0,
+            initial_capital=args.initial_capital,
+            is_after_tax=False,
+        )
+        msci_bench_post = calculate_benchmark_annual_series(
+            pr_levels=msci_pr_levels,
+            tr_levels=msci_tr_levels,
+            tax_rate=args.tax_rate,
+            initial_capital=args.initial_capital,
+            is_after_tax=True,
+        )
+        m_series = [args.initial_capital]
+        m_curr = args.initial_capital
+        for r_ann in msci_bench_post["annual_returns"]:
+            m_curr *= (1.0 + r_ann)
+            m_series.append(m_curr)
+        msci_post_max_dd = calculate_max_drawdown(m_series)
+
+        msci_after_cagr = calculate_cagr(args.initial_capital, msci_bench_post["pre_liquidation_wealth"], horizon_years)
+        msci_post_liq_cagr = calculate_cagr(args.initial_capital, msci_bench_post["post_liquidation_wealth"], horizon_years)
+        msci_post_cum = calculate_cumulative_return(args.initial_capital, msci_bench_post["post_liquidation_wealth"])
+        msci_post_taxes = msci_bench_post["total_taxes_paid"]
+        msci_post_divs = msci_bench_post["total_dividends_received"]
+        msci_tax_drag = msci_tr_cagr - msci_post_liq_cagr
+        msci_alpha = msci_post_liq_cagr - spx_post_liq_cagr
+
+        msci_metrics_by_horizon[h_label] = {
+            "tr_cagr": msci_tr_cagr,
+            "after_cagr": msci_after_cagr,
+            "post_liq_cagr": msci_post_liq_cagr,
+            "cum_return": msci_post_cum,
+            "final_equity": msci_bench_post["post_liquidation_wealth"],
+            "max_dd": msci_post_max_dd,
+            "total_taxes": msci_post_taxes,
+            "total_dividends": msci_post_divs,
+            "tax_drag": msci_tax_drag,
+            "alpha": msci_alpha,
+            "bench_pre": msci_bench_pre,
+            "bench_post": msci_bench_post,
+            "tr_cum": msci_tr_cum,
+            "tr_max_dd": msci_tr_max_dd,
         }
 
         # Store in spx_benchmarks for exporter lookups
@@ -415,6 +469,67 @@ def run_backtest(args: argparse.Namespace) -> int:
             annual_history=[],
         )
         all_results.append(spx_res_post)
+
+        # MSCI World benchmark row in terminal table
+        msci = msci_metrics_by_horizon[h_label]
+        table_rows.append({
+            "universe": "All World",
+            "horizon": h_label,
+            "strategy": "MSCI World",
+            "pre_cagr": msci["tr_cagr"],
+            "post_cagr": msci["after_cagr"],
+            "post_liq_cagr": msci["post_liq_cagr"],
+            "cum_return": msci["cum_return"],
+            "final_equity": msci["final_equity"],
+            "max_dd": msci["max_dd"],
+            "total_taxes": msci["total_taxes"],
+            "tax_drag": msci["tax_drag"],
+            "alpha": msci["alpha"],
+        })
+
+        # Pre-tax MSCI World benchmark StrategyResult for summary_metrics.csv
+        msci_res_pre = StrategyResult(
+            strategy_name="MSCI World",
+            n=0,
+            start_year=s_yr,
+            end_year=e_yr,
+            is_after_tax=False,
+            tax_rate=0.0,
+            initial_capital=args.initial_capital,
+            final_equity=msci["bench_pre"]["final_equity"],
+            cagr=msci["tr_cagr"],
+            cumulative_return=msci["tr_cum"],
+            max_drawdown=msci["tr_max_dd"],
+            total_taxes_paid=0.0,
+            pre_liquidation_wealth=msci["bench_pre"]["pre_liquidation_wealth"],
+            post_liquidation_wealth=msci["bench_pre"]["post_liquidation_wealth"],
+            post_liquidation_cagr=msci["tr_cagr"],
+            total_dividends_received=msci["bench_pre"]["total_dividends_received"],
+            annual_history=[],
+        )
+        all_results.append(msci_res_pre)
+
+        # After-tax MSCI World benchmark StrategyResult for summary_metrics.csv
+        msci_res_post = StrategyResult(
+            strategy_name="MSCI World",
+            n=0,
+            start_year=s_yr,
+            end_year=e_yr,
+            is_after_tax=True,
+            tax_rate=args.tax_rate,
+            initial_capital=args.initial_capital,
+            final_equity=msci["final_equity"],
+            cagr=msci["post_liq_cagr"],
+            cumulative_return=msci["cum_return"],
+            max_drawdown=msci["max_dd"],
+            total_taxes_paid=msci["total_taxes"],
+            pre_liquidation_wealth=msci["bench_post"]["pre_liquidation_wealth"],
+            post_liquidation_wealth=msci["bench_post"]["post_liquidation_wealth"],
+            post_liquidation_cagr=msci["post_liq_cagr"],
+            total_dividends_received=msci["total_dividends"],
+            annual_history=[],
+        )
+        all_results.append(msci_res_post)
 
     # Prepare Google Apps Script data across tax tiers
     scenario_data, annual_data, trades_data = build_scenario_and_apps_script_data(

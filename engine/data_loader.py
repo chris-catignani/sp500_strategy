@@ -231,8 +231,51 @@ class DataLoader:
         """
         tr_curr = self.get_spx_tr_level(year)
         tr_prev = self.get_spx_tr_level(year - 1)
-        r_tr = (tr_curr - tr_prev) / tr_prev
+        r_tr = (tr_curr - tr_prev) / tr_prev if tr_prev > 0.0 else 0.0
         pr_curr = self.get_spx_level(year)
         pr_prev = self.get_spx_level(year - 1)
-        r_pr = (pr_curr - pr_prev) / pr_prev
+        r_pr = (pr_curr - pr_prev) / pr_prev if pr_prev > 0.0 else 0.0
+        return max(0.0, r_tr - r_pr)
+
+    def get_msci_world_level(self, year: int) -> float:
+        """Retrieve MSCI World Price Return (^MSCIWORLD_PR) index level for a given year.
+
+        Args:
+            year: Calendar year.
+
+        Returns:
+            Price Return index level as float.
+        """
+        return self.get_price("^MSCIWORLD_PR", year)
+
+    def get_msci_world_tr_level(self, year: int) -> float:
+        """Retrieve MSCI World Total Return (^MSCIWORLD_TR) index level for a given year.
+
+        Args:
+            year: Calendar year.
+
+        Returns:
+            Total Return index level as float.
+        """
+        return self.get_price("^MSCIWORLD_TR", year)
+
+    def get_msci_world_dividend_yield(self, year: int) -> float:
+        """Calculate the benchmark MSCI World dividend yield for a given year.
+
+        Yield is calculated as max(0.0, r_tr - r_pr) where:
+            r_tr = (MSCI_TR_t - MSCI_TR_{t-1}) / MSCI_TR_{t-1}
+            r_pr = (MSCI_PR_t - MSCI_PR_{t-1}) / MSCI_PR_{t-1}
+
+        Args:
+            year: Calendar year (>= 1994).
+
+        Returns:
+            Benchmark dividend yield as float.
+        """
+        tr_curr = self.get_msci_world_tr_level(year)
+        tr_prev = self.get_msci_world_tr_level(year - 1)
+        r_tr = (tr_curr - tr_prev) / tr_prev if tr_prev > 0.0 else 0.0
+        pr_curr = self.get_msci_world_level(year)
+        pr_prev = self.get_msci_world_level(year - 1)
+        r_pr = (pr_curr - pr_prev) / pr_prev if pr_prev > 0.0 else 0.0
         return max(0.0, r_tr - r_pr)

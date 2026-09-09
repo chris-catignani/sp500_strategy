@@ -120,30 +120,9 @@ def build_scenario_and_apps_script_data(
                 spx_tax_drag = spx_tr_cagr - spx_post_liq_cagr
                 spx_divs = bench["total_dividends_received"]
 
+            # 1. Active Strategy Portfolios for each universe
             for univ in universes:
                 univ_label = "S&P 500" if univ == "sp500" else "All World"
-
-                # S&P 500 entry (15 columns)
-                spx_key = f"{h_label}_{univ_label}_S&P 500_{rate_str}"
-                scenario_rows.append([
-                    spx_key,
-                    rate,
-                    univ_label,
-                    h_label,
-                    "S&P 500",
-                    round(spx_tr_cagr, 6),
-                    round(spx_after_cagr, 6),
-                    round(spx_post_liq_cagr, 6),
-                    round(spx_cum, 6),
-                    round(spx_final, 2),
-                    round(spx_divs, 2),
-                    round(spx_max_dd, 6),
-                    round(spx_taxes, 2),
-                    round(spx_tax_drag, 6),
-                    0.0,
-                ])
-
-                # Top N entries (15 columns)
                 for n in target_n_values:
                     pre_res = pretax_cache[(univ, n, s_yr, e_yr)]
                     sel = resolve_selector(strategy_name, n=n)
@@ -187,7 +166,93 @@ def build_scenario_and_apps_script_data(
                         round(post_res.total_taxes_paid, 2),
                         round(tax_drag, 6),
                         round(alpha, 6),
+                        "Strategy",
                     ])
+
+            # 2. S&P 500 Index Benchmark (16 columns)
+            spx_key = f"{h_label}_S&P 500_S&P 500_{rate_str}"
+            scenario_rows.append([
+                spx_key,
+                rate,
+                "S&P 500",
+                h_label,
+                "S&P 500",
+                round(spx_tr_cagr, 6),
+                round(spx_after_cagr, 6),
+                round(spx_post_liq_cagr, 6),
+                round(spx_cum, 6),
+                round(spx_final, 2),
+                round(spx_divs, 2),
+                round(spx_max_dd, 6),
+                round(spx_taxes, 2),
+                round(spx_tax_drag, 6),
+                0.0,
+                "Index",
+            ])
+
+            # 3. MSCI World Index Benchmark (16 columns)
+            msci_pr_levels = [data_loader.get_msci_world_level(y) for y in range(s_yr, e_yr + 1)]
+            msci_tr_levels = [data_loader.get_msci_world_tr_level(y) for y in range(s_yr, e_yr + 1)]
+            msci_tr_cagr = calculate_cagr(msci_tr_levels[0], msci_tr_levels[-1], horizon_years)
+
+            if rate == 0.0:
+                msci_bench = calculate_benchmark_annual_series(
+                    pr_levels=msci_pr_levels,
+                    tr_levels=msci_tr_levels,
+                    tax_rate=0.0,
+                    initial_capital=initial_capital,
+                    is_after_tax=False,
+                )
+                msci_after_cagr = msci_tr_cagr
+                msci_post_liq_cagr = msci_tr_cagr
+                msci_cum = calculate_cumulative_return(initial_capital, msci_bench["post_liquidation_wealth"])
+                msci_final = msci_bench["post_liquidation_wealth"]
+                msci_max_dd = calculate_max_drawdown(msci_tr_levels)
+                msci_taxes = 0.0
+                msci_tax_drag = 0.0
+                msci_divs = msci_bench["total_dividends_received"]
+            else:
+                msci_bench = calculate_benchmark_annual_series(
+                    pr_levels=msci_pr_levels,
+                    tr_levels=msci_tr_levels,
+                    tax_rate=rate,
+                    initial_capital=initial_capital,
+                    is_after_tax=True,
+                )
+                msci_val_series = [initial_capital]
+                m_curr_v = initial_capital
+                for r_ann in msci_bench["annual_returns"]:
+                    m_curr_v *= (1.0 + r_ann)
+                    msci_val_series.append(m_curr_v)
+                msci_max_dd = calculate_max_drawdown(msci_val_series)
+                msci_after_cagr = calculate_cagr(initial_capital, msci_bench["pre_liquidation_wealth"], horizon_years)
+                msci_post_liq_cagr = calculate_cagr(initial_capital, msci_bench["post_liquidation_wealth"], horizon_years)
+                msci_cum = calculate_cumulative_return(initial_capital, msci_bench["post_liquidation_wealth"])
+                msci_final = msci_bench["post_liquidation_wealth"]
+                msci_taxes = msci_bench["total_taxes_paid"]
+                msci_tax_drag = msci_tr_cagr - msci_post_liq_cagr
+                msci_divs = msci_bench["total_dividends_received"]
+
+            msci_alpha = round(msci_post_liq_cagr - spx_post_liq_cagr, 6)
+            msci_key = f"{h_label}_All World_MSCI World_{rate_str}"
+            scenario_rows.append([
+                msci_key,
+                rate,
+                "All World",
+                h_label,
+                "MSCI World",
+                round(msci_tr_cagr, 6),
+                round(msci_after_cagr, 6),
+                round(msci_post_liq_cagr, 6),
+                round(msci_cum, 6),
+                round(msci_final, 2),
+                round(msci_divs, 2),
+                round(msci_max_dd, 6),
+                round(msci_taxes, 2),
+                round(msci_tax_drag, 6),
+                msci_alpha,
+                "Index",
+            ])
 
     # 30-Year Annual histories & trades at 30% baseline tax rate across universes
     annual_data: Dict[str, List[List[Any]]] = {}

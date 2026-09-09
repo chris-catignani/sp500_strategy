@@ -277,12 +277,14 @@ class TestCLI(unittest.TestCase):
         exit_code = run_backtest.run_backtest(args)
         self.assertEqual(exit_code, 0)
 
-        # Verify summary_metrics.csv contains both universes
+        # Verify summary_metrics.csv contains both universes and both benchmarks
         summary_path = os.path.join(self.output_dir, "summary_metrics.csv")
         with open(summary_path, "r", encoding="utf-8") as f:
             content = f.read()
             self.assertIn("Top_3_MarketCap", content)
             self.assertIn("World_Top_3_MarketCap", content)
+            self.assertIn("S&P 500", content)
+            self.assertIn("MSCI World", content)
 
 
 if __name__ == "__main__":

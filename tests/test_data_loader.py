@@ -265,6 +265,27 @@ class TestDataLoader(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.loader.load_universe(2024, universe="invalid_universe")
 
+    def test_msci_world_benchmark_levels(self):
+        """Verify MSCI World benchmark levels and synthetic dividend yield calculation."""
+        pr_1993 = self.loader.get_msci_world_level(1993)
+        tr_1993 = self.loader.get_msci_world_tr_level(1993)
+        pr_2024 = self.loader.get_msci_world_level(2024)
+        tr_2024 = self.loader.get_msci_world_tr_level(2024)
+
+        self.assertEqual(pr_1993, 1000.00)
+        self.assertEqual(tr_1993, 1000.00)
+        self.assertGreater(pr_2024, pr_1993)
+        self.assertGreater(tr_2024, pr_2024)
+
+        # Check dividend yield calculation
+        yield_2024 = self.loader.get_msci_world_dividend_yield(2024)
+        self.assertGreaterEqual(yield_2024, 0.0)
+        self.assertLess(yield_2024, 0.10)
+
+        yield_1994 = self.loader.get_msci_world_dividend_yield(1994)
+        self.assertGreaterEqual(yield_1994, 0.0)
+        self.assertLess(yield_1994, 0.10)
+
 
 if __name__ == "__main__":
     unittest.main()

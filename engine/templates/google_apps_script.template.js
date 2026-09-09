@@ -16,7 +16,7 @@
 var SCENARIO_HEADERS = [
   "LookupKey", "TaxRate", "Universe", "Horizon", "Strategy", "PreTaxCAGR",
   "AfterTaxCAGR", "PostLiqCAGR", "CumReturn", "FinalEquity",
-  "TotalDividends", "MaxDD", "TotalTaxes", "TaxDrag", "Alpha"
+  "TotalDividends", "MaxDD", "TotalTaxes", "TaxDrag", "Alpha", "RowType"
 ];
 var SCENARIO_DATA = /*__SCENARIO_DATA__*/[];
 
@@ -192,7 +192,7 @@ function buildScenarioDataSheet(ss) {
              .setFontWeight('bold')
              .setHorizontalAlignment('center');
 
-  // Number Formatting (15 columns)
+  // Number Formatting (16 columns)
   if (SCENARIO_DATA.length > 0) {
     sheet.getRange(2, 1, SCENARIO_DATA.length, 1).setHorizontalAlignment('left');
     sheet.getRange(2, 2, SCENARIO_DATA.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('center');
@@ -204,6 +204,7 @@ function buildScenarioDataSheet(ss) {
     sheet.getRange(2, 13, SCENARIO_DATA.length, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
     sheet.getRange(2, 14, SCENARIO_DATA.length, 1).setNumberFormat('0.00%').setHorizontalAlignment('right');
     sheet.getRange(2, 15, SCENARIO_DATA.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 16, SCENARIO_DATA.length, 1).setHorizontalAlignment('center');
   }
 
   sheet.autoResizeColumns(1, SCENARIO_HEADERS.length);
@@ -279,7 +280,7 @@ function buildExecutiveSummarySheet(ss) {
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
   var stratRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['All', 'Top 3', 'Top 5', 'Top 10', 'S&P 500'], true)
+    .requireValueInList(['All', 'Top 3', 'Top 5', 'Top 10'], true)
     .setAllowInvalid(false)
     .build();
   f2.setDataValidation(stratRule);
@@ -302,8 +303,26 @@ function buildExecutiveSummarySheet(ss) {
     .build();
   h2.setDataValidation(horizRule);
 
-  sheet.getRange('I2:M2').merge()
-       .setValue('Filter universe, strategy, horizon, and tax rate. Table and KPI cards update dynamically.')
+  // Control 5: Compare Index (Cols I-J)
+  sheet.getRange('I2').setValue('Compare Index:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var j2 = sheet.getRange('J2');
+  j2.setValue('Both')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var indexRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['None', 'S&P 500', 'MSCI World', 'Both'], true)
+    .setAllowInvalid(false)
+    .build();
+  j2.setDataValidation(indexRule);
+
+  sheet.getRange('K2:M2').merge()
+       .setValue('Filter universe, strategy, horizon, and dynamically toggle benchmark comparisons.')
        .setFontStyle('italic')
        .setFontColor('#4A5568')
        .setVerticalAlignment('middle')
@@ -317,9 +336,9 @@ function buildExecutiveSummarySheet(ss) {
   sheet.getRange('A6:B6').merge().setValue('After all taxes ($10k start)').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('A4:B6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 2: S&P 500 Wealth (30y) (Cols C-E)
-  sheet.getRange('C4:E4').merge().setValue('S&P 500 Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('C5:E5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$J:$J, MATCH("30y_S&P 500_S&P 500_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  // Card 2: Benchmark Wealth (30y) (Cols C-E)
+  sheet.getRange('C4:E4').merge().setFormula('=IF($D$2="All World Only", "MSCI World Wealth (30y)", "S&P 500 Wealth (30y)")').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C5:E5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$J:$J, MATCH("30y_" & IF($D$2="All World Only","All World_MSCI World","S&P 500_S&P 500") & "_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('C6:E6').merge().setValue('Passive buy & hold').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('C4:E6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
@@ -368,7 +387,7 @@ function buildExecutiveSummarySheet(ss) {
        .setWrap(true);
 
   // Row 10: Dynamic Filter Formula spilling down Rows 10:52 (guarded by non-empty $A$2:$A to prevent spill on 0.0% tax rate)
-  var filterFormula = '=IFNA(FILTER(\'Scenario Data\'!$C$2:$O, (\'Scenario Data\'!$A$2:$A <> "") * (ROUND(\'Scenario Data\'!$B$2:$B, 4) = ROUND($B$2, 4)) * (($D$2 = "All") + (\'Scenario Data\'!$C$2:$C = SUBSTITUTE($D$2, " Only", ""))) * (($F$2 = "All") + (\'Scenario Data\'!$E$2:$E = $F$2)) * (($H$2 = "All") + (\'Scenario Data\'!$D$2:$D = $H$2))), "No matching records found")';
+  var filterFormula = '=IFNA(FILTER(\'Scenario Data\'!$C$2:$O, (\'Scenario Data\'!$A$2:$A <> "") * (ROUND(\'Scenario Data\'!$B$2:$B, 4) = ROUND($B$2, 4)) * (($H$2 = "All") + (\'Scenario Data\'!$D$2:$D = $H$2)) * (((\'Scenario Data\'!$P$2:$P = "Strategy") * (($D$2 = "All") + (\'Scenario Data\'!$C$2:$C = SUBSTITUTE($D$2, " Only", ""))) * (($F$2 = "All") + (\'Scenario Data\'!$E$2:$E = $F$2))) + ((\'Scenario Data\'!$P$2:$P = "Index") * ((($J$2 = "Both") * 1) + ((\'Scenario Data\'!$E$2:$E = $J$2) * 1))))), "No matching records found")';
   sheet.getRange('A10').setFormula(filterFormula);
 
   // Pre-formatting comparison table range (Rows 10 to 52, unmerged for spill protection)
@@ -383,8 +402,15 @@ function buildExecutiveSummarySheet(ss) {
   sheet.getRange(10, 12, 43, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
   sheet.getRange(10, 13, 43, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
 
-  // Alternating background colors via conditional formatting rules
+  // Alternating background colors and benchmark tint via conditional formatting rules
   var cfRange = sheet.getRange('A10:M52');
+  var ruleIndex = SpreadsheetApp.newConditionalFormatRule()
+    .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", OR($C10="S&P 500", $C10="MSCI World"))')
+    .setBackground('#EDF2F7')
+    .setFontColor('#2D3748')
+    .setItalic(true)
+    .setRanges([cfRange])
+    .build();
   var ruleEven = SpreadsheetApp.newConditionalFormatRule()
     .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", MOD(ROW(), 2)=0)')
     .setBackground('#F7FAFC')
@@ -395,7 +421,7 @@ function buildExecutiveSummarySheet(ss) {
     .setBackground('#FFFFFF')
     .setRanges([cfRange])
     .build();
-  sheet.setConditionalFormatRules([ruleEven, ruleOdd]);
+  sheet.setConditionalFormatRules([ruleIndex, ruleEven, ruleOdd]);
 
   // Borders
   sheet.getRange(9, 1, 44, tableHeaders.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
