@@ -17,20 +17,27 @@ class TestScenarios(unittest.TestCase):
         self.assertIn("scenario_rows", scenario_data)
         scenario_rows = scenario_data["scenario_rows"]
         self.assertGreater(len(scenario_rows), 0)
-        # 17 columns per scenario row ending with RowType
+        # 18 columns per scenario row ending with RowType
         for row in scenario_rows:
-            self.assertEqual(len(row), 17)
-            self.assertIn(row[16], ("Strategy", "Index"))
+            self.assertEqual(len(row), 18)
+            self.assertIn(row[17], ("Strategy", "Index"))
+            self.assertIn(row[5], ("Market Cap", "Equal Weight"))
 
         # Verify benchmark rows exist without duplicates (5 tax rates x 3 horizons x 2 frequencies = 30 rows each)
-        spx_bench_rows = [r for r in scenario_rows if r[4] == "S&P 500" and r[16] == "Index"]
-        msci_bench_rows = [r for r in scenario_rows if r[4] == "MSCI World" and r[16] == "Index"]
+        spx_bench_rows = [r for r in scenario_rows if r[4] == "S&P 500" and r[17] == "Index"]
+        msci_bench_rows = [r for r in scenario_rows if r[4] == "MSCI World" and r[17] == "Index"]
         self.assertEqual(len(spx_bench_rows), 30)
         self.assertEqual(len(msci_bench_rows), 30)
-        self.assertEqual(sum(1 for r in spx_bench_rows if r[5] == "Annual"), 15)
-        self.assertEqual(sum(1 for r in spx_bench_rows if r[5] == "Quarterly"), 15)
-        self.assertEqual(sum(1 for r in msci_bench_rows if r[5] == "Annual"), 15)
-        self.assertEqual(sum(1 for r in msci_bench_rows if r[5] == "Quarterly"), 15)
+        self.assertEqual(sum(1 for r in spx_bench_rows if r[6] == "Annual"), 15)
+        self.assertEqual(sum(1 for r in spx_bench_rows if r[6] == "Quarterly"), 15)
+        self.assertEqual(sum(1 for r in msci_bench_rows if r[6] == "Annual"), 15)
+        self.assertEqual(sum(1 for r in msci_bench_rows if r[6] == "Quarterly"), 15)
+
+        # Verify active strategy rows exist for both Market Cap and Equal Weight (180 each = 360 total)
+        strat_mc_rows = [r for r in scenario_rows if r[17] == "Strategy" and r[5] == "Market Cap"]
+        strat_ew_rows = [r for r in scenario_rows if r[17] == "Strategy" and r[5] == "Equal Weight"]
+        self.assertEqual(len(strat_mc_rows), 180)
+        self.assertEqual(len(strat_ew_rows), 180)
 
         # Annual data checks
         expected_keys = [

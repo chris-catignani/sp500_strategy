@@ -140,6 +140,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Constituent selection algorithm (market_cap, performance, momentum).",
     )
     parser.add_argument(
+        "--weight-by",
+        type=str,
+        choices=["market_cap", "equal"],
+        default="market_cap",
+        help="Constituent weighting algorithm ('market_cap' or 'equal').",
+    )
+    parser.add_argument(
         "--tax-rate",
         type=float,
         default=0.30,
@@ -483,8 +490,11 @@ def run_backtest(args: argparse.Namespace) -> int:
         for univ in universes:
             univ_label = "S&P 500" if univ == "sp500" else "All World"
             prefix = "" if univ == "sp500" else "World "
+            weight_by = getattr(args, "weight_by", "market_cap")
+            ew_suffix = " (EW)" if weight_by == "equal" else ""
+
             for n in n_values:
-                sel = resolve_selector(args.strategy, n=n)
+                sel = resolve_selector(args.strategy, n=n, weight_by=weight_by)
 
                 frequencies = ["annual", "quarterly"] if getattr(args, "compare_frequencies", False) else [getattr(args, "frequency", "annual")]
 
@@ -502,6 +512,8 @@ def run_backtest(args: argparse.Namespace) -> int:
                         universe=univ,
                         rebalance_frequency=freq,
                     )
+                    if weight_by == "equal":
+                        res_pre.strategy_name = f"{res_pre.strategy_name}_EW"
                     all_results.append(res_pre)
 
                     # 2. After-tax simulation
@@ -516,6 +528,8 @@ def run_backtest(args: argparse.Namespace) -> int:
                         universe=univ,
                         rebalance_frequency=freq,
                     )
+                    if weight_by == "equal":
+                        res_post.strategy_name = f"{res_post.strategy_name}_EW"
                     all_results.append(res_post)
 
                     # Collect executed trade records
@@ -529,6 +543,7 @@ def run_backtest(args: argparse.Namespace) -> int:
                             "shares": round(t.shares, 4),
                             "price": round(t.price, 2),
                             "realized_gain": round(t.realized_gain, 2),
+                            "weighting": weight_by,
                         })
 
                     ref_spx_after = (
@@ -542,7 +557,7 @@ def run_backtest(args: argparse.Namespace) -> int:
                     table_rows.append({
                         "universe": univ_label,
                         "horizon": h_label,
-                        "strategy": f"{prefix}Top {n}{freq_suffix}",
+                        "strategy": f"{prefix}Top {n}{ew_suffix}{freq_suffix}",
                         "pre_cagr": res_pre.cagr,
                         "post_cagr": res_post.cagr,
                         "post_liq_cagr": res_post.post_liquidation_cagr,
@@ -728,6 +743,7 @@ def run_backtest(args: argparse.Namespace) -> int:
                 tax_rate=args.tax_rate,
                 initial_capital=args.initial_capital,
                 strategy_name=args.strategy,
+                weight_by=getattr(args, "weight_by", "market_cap"),
             )
         )
         print()

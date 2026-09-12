@@ -161,24 +161,32 @@ class PerformanceSelector(BaseSelector):
         ]
 
 
-def resolve_selector(strategy_name: str, n: int = 5) -> BaseSelector:
-    """Instantiate constituent selector based on strategy name.
+def resolve_selector(
+    strategy_name: str, n: int = 5, weight_by: str = "market_cap"
+) -> BaseSelector:
+    """Instantiate constituent selector based on strategy name and weighting mode.
 
     Args:
         strategy_name: 'market_cap' or 'performance'.
         n: Number of constituents to select.
+        weight_by: Weighting mode, either 'market_cap' or 'equal'.
 
     Returns:
         Instance of BaseSelector.
 
     Raises:
-        ValueError: If strategy_name is unrecognized.
+        ValueError: If strategy_name or weight_by is unrecognized.
     """
+    if weight_by not in ("market_cap", "equal"):
+        raise ValueError(
+            f"Unknown weight_by mode: '{weight_by}'. Expected 'market_cap' or 'equal'."
+        )
+
     normalized = strategy_name.strip().lower()
     if normalized in ("market_cap", "marketcap"):
-        return MarketCapSelector(n=n)
+        return MarketCapSelector(n=n, weight_by=weight_by)
     elif normalized in ("performance", "momentum"):
-        return PerformanceSelector(n=n)
+        return PerformanceSelector(n=n, weight_by=weight_by)
     else:
         raise ValueError(
             f"Unknown strategy: '{strategy_name}'. Expected 'market_cap' or 'performance'."

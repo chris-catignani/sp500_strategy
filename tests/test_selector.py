@@ -2,7 +2,7 @@
 
 import unittest
 from engine.models import ConstituentSnapshot, HoldingTarget
-from engine.selector import BaseSelector, MarketCapSelector, PerformanceSelector
+from engine.selector import BaseSelector, MarketCapSelector, PerformanceSelector, resolve_selector
 import engine
 
 
@@ -194,6 +194,22 @@ class TestSelector(unittest.TestCase):
             selector.select(self.universe, n=0)
         with self.assertRaises(ValueError):
             selector.select(self.universe, n=-3)
+
+    def test_resolve_selector_weight_by(self):
+        """resolve_selector correctly handles weight_by parameter and validation."""
+        sel_default = resolve_selector("market_cap", 5)
+        self.assertEqual(sel_default.weight_by, "market_cap")
+
+        sel_mc_ew = resolve_selector("market_cap", 5, weight_by="equal")
+        self.assertEqual(sel_mc_ew.weight_by, "equal")
+        self.assertIsInstance(sel_mc_ew, MarketCapSelector)
+
+        sel_perf_ew = resolve_selector("performance", 3, weight_by="equal")
+        self.assertEqual(sel_perf_ew.weight_by, "equal")
+        self.assertIsInstance(sel_perf_ew, PerformanceSelector)
+
+        with self.assertRaises(ValueError):
+            resolve_selector("market_cap", 5, weight_by="invalid_mode")
 
     def test_package_level_exports(self):
         """BaseSelector, MarketCapSelector, PerformanceSelector, resolve_selector must be exported in engine."""

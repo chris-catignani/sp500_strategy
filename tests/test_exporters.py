@@ -314,6 +314,8 @@ class TestExporters(unittest.TestCase):
         self.assertIn("S&P 500 Strategy", js_code)
         self.assertIn("Build All Sheets", js_code)
         self.assertIn("Recalculate Sheet", js_code)
+        self.assertIn("sheet.getRange('F3').getValue()", js_code)
+        self.assertIn("sheet.getRange('H3').getValue()", js_code)
 
         # Required tabs
         self.assertIn("Executive Summary", js_code)
@@ -349,19 +351,22 @@ class TestExporters(unittest.TestCase):
         self.assertIn("HEAD-TO-HEAD PERFORMANCE & TAX SPOTLIGHT", code)
         self.assertIn("KEY METRIC DEFINITIONS & GLOSSARY", code)
         self.assertIn("METHODOLOGY NOTE — REBALANCING, TAXES & DIVIDENDS", code)
-        # 17-Column SCENARIO_HEADERS
+        # 18-Column SCENARIO_HEADERS
         self.assertIn('"LookupKey"', code)
         self.assertIn('"TaxRate"', code)
         self.assertIn('"Universe"', code)
         self.assertIn('"Horizon"', code)
         self.assertIn('"Strategy"', code)
+        self.assertIn('"Weighting"', code)
         self.assertIn('"Frequency"', code)
         self.assertIn('"RowType"', code)
-        # Controls in Row 2
+        # Controls in Row 2 & 3
         self.assertIn("'Universe:'", code)
         self.assertIn("['S&P 500', 'All World']", code)
         self.assertIn("'Strategy:'", code)
         self.assertIn("['Top 3', 'Top 5', 'Top 10']", code)
+        self.assertIn("'Weighting:'", code)
+        self.assertIn("['Market Cap', 'Equal Weight']", code)
         self.assertIn("'Horizon:'", code)
         self.assertIn("['10y', '20y', '30y']", code)
         self.assertIn("'Rebalance:'", code)
@@ -375,11 +380,11 @@ class TestExporters(unittest.TestCase):
         self.assertIn("BASE_INITIAL_CAPITAL = 10000;", code)
         self.assertIn("SCALE_EXPR", code)
         # Fully dynamic KPI formulas querying Scenario Data using user selections
-        self.assertIn("stratKeyExpr = '$F$2 & \"_\" & $B$2 & \"_\" & $D$2 & \"_\" & $H$2", code)
-        self.assertIn("benchKeyExpr = '$F$2 & \"_\" & IF($J$2=\"MSCI World\"", code)
+        self.assertIn("stratKeyExpr = '$H$2 & \"_\" & $B$2 & \"_\" & $D$2 & \"_\" & $F$2 & \"_\" & $B$3", code)
+        self.assertIn("benchKeyExpr = '$H$2 & \"_\" & IF($D$3=\"MSCI World\"", code)
         # Head-to-Head Spotlight & Net Advantage Delta Row
         self.assertIn("Net Advantage (Strategy vs", code)
-        self.assertIn("=(G10 - G11)", code)
+        self.assertIn("=(G11 - G12)", code)
         # Legacy spilling FILTER formula should NOT be in Executive Summary
         self.assertNotIn("=IFNA(FILTER('Scenario Data'!$C$2:$P", code)
         # Multi-universe tabs and menus
@@ -419,9 +424,9 @@ class TestExporters(unittest.TestCase):
         self.assertIn("DRAWDOWN_MATRIX_HEADERS", code)
 
         # Check dynamic filter formulas on Performance & Tradeoffs tab
-        self.assertIn("FILTER(\\'Scenario Data\\'!$AH$2:$AO$21", code)
-        self.assertIn("FILTER(\\'Scenario Data\\'!$T$2:$X$125", code)
-        self.assertIn("FILTER(\\'Scenario Data\\'!$AA$2:$AE$125", code)
+        self.assertIn("FILTER(\\'Scenario Data\\'!$AI$2:$AP$21", code)
+        self.assertIn("FILTER(\\'Scenario Data\\'!$U$2:$Y$125", code)
+        self.assertIn("FILTER(\\'Scenario Data\\'!$AB$2:$AF$125", code)
 
         # Check Rebalancing Frequency Tradeoff Table
         self.assertIn("REBALANCING FREQUENCY TRADEOFF ANALYSIS", code)

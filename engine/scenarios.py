@@ -57,24 +57,26 @@ def build_scenario_and_apps_script_data(
         (0.37, "37.0%"),
     ]
     target_n_values = [3, 5, 10]
+    weighting_schemes = [("market_cap", "Market Cap"), ("equal", "Equal Weight")]
 
-    # Pre-calculate pre-tax results across universes and frequencies
-    pretax_cache: Dict[Tuple[str, int, str, int, int], StrategyResult] = {}
+    # Pre-calculate pre-tax results across universes, weighting schemes, and frequencies
+    pretax_cache: Dict[Tuple[str, int, str, str, int, int], StrategyResult] = {}
     for univ in universes:
         for n in target_n_values:
-            sel = resolve_selector(strategy_name, n=n)
-            for freq in ("annual", "quarterly"):
-                for _, s_yr, e_yr in horizons:
-                    pretax_cache[(univ, n, freq, s_yr, e_yr)] = simulator.run_simulation(
-                        s_yr,
-                        e_yr,
-                        n=n,
-                        selector=sel,
-                        is_after_tax=False,
-                        initial_capital=initial_capital,
-                        universe=univ,
-                        rebalance_frequency=freq,
-                    )
+            for w_key, _ in weighting_schemes:
+                sel = resolve_selector(strategy_name, n=n, weight_by=w_key)
+                for freq in ("annual", "quarterly"):
+                    for _, s_yr, e_yr in horizons:
+                        pretax_cache[(univ, n, w_key, freq, s_yr, e_yr)] = simulator.run_simulation(
+                            s_yr,
+                            e_yr,
+                            n=n,
+                            selector=sel,
+                            is_after_tax=False,
+                            initial_capital=initial_capital,
+                            universe=univ,
+                            rebalance_frequency=freq,
+                        )
 
     scenario_rows: List[List[Any]] = []
     for rate, rate_str in tax_rates:
@@ -170,61 +172,63 @@ def build_scenario_and_apps_script_data(
                 spx_q_tax_drag = spx_q_tr_cagr - spx_q_after_cagr
                 spx_q_divs = spx_q_bench["total_dividends_received"]
 
-            # 1. Active Strategy Portfolios for each universe and frequency
+            # 1. Active Strategy Portfolios for each universe, weighting, and frequency
             for univ in universes:
                 univ_label = "S&P 500" if univ == "sp500" else "All World"
                 for n in target_n_values:
-                    for freq_str in ("Annual", "Quarterly"):
-                        freq_key = freq_str.lower()
-                        pre_res = pretax_cache[(univ, n, freq_key, s_yr, e_yr)]
-                        sel = resolve_selector(strategy_name, n=n)
-                        ref_spx_tr = spx_q_tr_cagr if freq_str == "Quarterly" else spx_tr_cagr
-                        ref_spx_after = spx_q_after_cagr if freq_str == "Quarterly" else spx_after_cagr
+                    for w_key, w_label in weighting_schemes:
+                        for freq_str in ("Annual", "Quarterly"):
+                            freq_key = freq_str.lower()
+                            pre_res = pretax_cache[(univ, n, w_key, freq_key, s_yr, e_yr)]
+                            sel = resolve_selector(strategy_name, n=n, weight_by=w_key)
+                            ref_spx_tr = spx_q_tr_cagr if freq_str == "Quarterly" else spx_tr_cagr
+                            ref_spx_after = spx_q_after_cagr if freq_str == "Quarterly" else spx_after_cagr
 
-                        if rate == 0.0:
-                            post_res = pre_res
-                            tax_drag = 0.0
-                            alpha = post_res.cagr - ref_spx_tr
-                            strat_cum = post_res.cumulative_return
-                            strat_final = post_res.final_equity
-                        else:
-                            post_res = simulator.run_simulation(
-                                s_yr,
-                                e_yr,
-                                n=n,
-                                selector=sel,
-                                is_after_tax=True,
-                                tax_rate=rate,
-                                initial_capital=initial_capital,
-                                universe=univ,
-                                rebalance_frequency=freq_key,
-                            )
-                            tax_drag = pre_res.cagr - post_res.cagr
-                            alpha = post_res.cagr - ref_spx_after
-                            strat_cum = post_res.cumulative_return
-                            strat_final = post_res.final_equity
+                            if rate == 0.0:
+                                post_res = pre_res
+                                tax_drag = 0.0
+                                alpha = post_res.cagr - ref_spx_tr
+                                strat_cum = post_res.cumulative_return
+                                strat_final = post_res.final_equity
+                            else:
+                                post_res = simulator.run_simulation(
+                                    s_yr,
+                                    e_yr,
+                                    n=n,
+                                    selector=sel,
+                                    is_after_tax=True,
+                                    tax_rate=rate,
+                                    initial_capital=initial_capital,
+                                    universe=univ,
+                                    rebalance_frequency=freq_key,
+                                )
+                                tax_drag = pre_res.cagr - post_res.cagr
+                                alpha = post_res.cagr - ref_spx_after
+                                strat_cum = post_res.cumulative_return
+                                strat_final = post_res.final_equity
 
-                        strat_label = f"Top {n}"
-                        key = f"{h_label}_{univ_label}_{strat_label}_{freq_str}_{rate_str}"
-                        scenario_rows.append([
-                            key,
-                            rate,
-                            univ_label,
-                            h_label,
-                            strat_label,
-                            freq_str,
-                            round(pre_res.cagr, 6),
-                            round(post_res.cagr, 6),
-                            round(post_res.post_liquidation_cagr, 6),
-                            round(strat_cum, 6),
-                            round(strat_final, 2),
-                            round(post_res.total_dividends_received, 2),
-                            round(post_res.max_drawdown, 6),
-                            round(post_res.total_taxes_paid, 2),
-                            round(tax_drag, 6),
-                            round(alpha, 6),
-                            "Strategy",
-                        ])
+                            strat_label = f"Top {n}"
+                            key = f"{h_label}_{univ_label}_{strat_label}_{w_label}_{freq_str}_{rate_str}"
+                            scenario_rows.append([
+                                key,
+                                rate,
+                                univ_label,
+                                h_label,
+                                strat_label,
+                                w_label,
+                                freq_str,
+                                round(pre_res.cagr, 6),
+                                round(post_res.cagr, 6),
+                                round(post_res.post_liquidation_cagr, 6),
+                                round(strat_cum, 6),
+                                round(strat_final, 2),
+                                round(post_res.total_dividends_received, 2),
+                                round(post_res.max_drawdown, 6),
+                                round(post_res.total_taxes_paid, 2),
+                                round(tax_drag, 6),
+                                round(alpha, 6),
+                                "Strategy",
+                            ])
 
             # 2a. S&P 500 Index Benchmark (Annual)
             spx_key = f"{h_label}_S&P 500_S&P 500_Annual_{rate_str}"
@@ -234,6 +238,7 @@ def build_scenario_and_apps_script_data(
                 "S&P 500",
                 h_label,
                 "S&P 500",
+                "Market Cap",
                 "Annual",
                 round(spx_tr_cagr, 6),
                 round(spx_after_cagr, 6),
@@ -256,6 +261,7 @@ def build_scenario_and_apps_script_data(
                 "S&P 500",
                 h_label,
                 "S&P 500",
+                "Market Cap",
                 "Quarterly",
                 round(spx_q_tr_cagr, 6),
                 round(spx_q_after_cagr, 6),
@@ -321,6 +327,7 @@ def build_scenario_and_apps_script_data(
                 "All World",
                 h_label,
                 "MSCI World",
+                "Market Cap",
                 "Annual",
                 round(msci_tr_cagr, 6),
                 round(msci_after_cagr, 6),
@@ -390,6 +397,7 @@ def build_scenario_and_apps_script_data(
                 "All World",
                 h_label,
                 "MSCI World",
+                "Market Cap",
                 "Quarterly",
                 round(msci_q_tr_cagr, 6),
                 round(msci_q_after_cagr, 6),
@@ -499,9 +507,9 @@ def build_scenario_and_apps_script_data(
         for f_key in ("annual", "quarterly"):
             f_label = "Annual" if f_key == "annual" else "Quarterly"
             lookup_key = f"{u_label}_{f_label}"
-            t3_p = pretax_cache.get((u, 3, f_key, 1994, 2024))
-            t5_p = pretax_cache.get((u, 5, f_key, 1994, 2024))
-            t10_p = pretax_cache.get((u, 10, f_key, 1994, 2024))
+            t3_p = pretax_cache.get((u, 3, "market_cap", f_key, 1994, 2024))
+            t5_p = pretax_cache.get((u, 5, "market_cap", f_key, 1994, 2024))
+            t10_p = pretax_cache.get((u, 10, "market_cap", f_key, 1994, 2024))
 
             # Benchmark annual return series for regime attribution
             bench_annual_rets: Dict[int, float] = {}

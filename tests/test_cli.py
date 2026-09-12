@@ -286,6 +286,72 @@ class TestCLI(unittest.TestCase):
             self.assertIn("S&P 500", content)
             self.assertIn("MSCI World", content)
 
+    def test_weight_by_argument(self):
+        """Test CLI --weight-by argument parsing and validation."""
+        import run_backtest
+
+        parser = run_backtest.build_parser()
+        args_default = parser.parse_args([])
+        self.assertEqual(args_default.weight_by, "market_cap")
+
+        args_ew = parser.parse_args(["--weight-by", "equal"])
+        self.assertEqual(args_ew.weight_by, "equal")
+
+    def test_format_terminal_table_with_weight_by(self):
+        """Test ASCII terminal table formatting includes weighting."""
+        import run_backtest
+
+        rows = [
+            {
+                "horizon": "10y",
+                "strategy": "Top 3 (EW)",
+                "pre_cagr": 0.152,
+                "post_cagr": 0.134,
+                "post_liq_cagr": 0.128,
+                "cum_return": 2.50,
+                "max_dd": -0.18,
+                "tax_drag": 0.024,
+                "alpha": 0.031,
+            },
+        ]
+        table_str = run_backtest.format_terminal_table(rows, weight_by="equal")
+        self.assertIn("Equal Weight", table_str)
+        self.assertIn("Top 3 (EW)", table_str)
+
+    def test_run_backtest_equal_weight_integration(self):
+        """Test programmatic execution with equal weighting."""
+        import run_backtest
+
+        parser = run_backtest.build_parser()
+        args = parser.parse_args(
+            [
+                "--strategy", "market_cap",
+                "--weight-by", "equal",
+                "--tax-rate", "0.30",
+                "--initial-capital", "10000.0",
+                "--output-dir", self.output_dir,
+                "--scripts-dir", self.scripts_dir,
+                "--horizons", "10y",
+                "--n", "3",
+                "--quiet",
+            ]
+        )
+
+        exit_code = run_backtest.run_backtest(args)
+        self.assertEqual(exit_code, 0)
+
+        summary_path = os.path.join(self.output_dir, "summary_metrics.csv")
+        self.assertTrue(os.path.exists(summary_path))
+        with open(summary_path, "r", encoding="utf-8") as f:
+            summary_content = f.read()
+            self.assertIn("Top_3_MarketCap_EW", summary_content)
+
+        trade_path = os.path.join(self.output_dir, "trade_log.csv")
+        self.assertTrue(os.path.exists(trade_path))
+        with open(trade_path, "r", encoding="utf-8") as f:
+            trade_content = f.read()
+            self.assertIn("Top_3_MarketCap_EW", trade_content)
+
 
 if __name__ == "__main__":
     unittest.main()

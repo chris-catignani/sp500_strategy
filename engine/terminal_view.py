@@ -11,6 +11,7 @@ def format_terminal_table(
     tax_rate: float = 0.30,
     initial_capital: float = 10000.0,
     strategy_name: str = "market_cap",
+    weight_by: str = "market_cap",
 ) -> str:
     """Format strategy performance metrics into an ASCII comparison table.
 
@@ -19,13 +20,15 @@ def format_terminal_table(
         tax_rate: Capital gains tax rate.
         initial_capital: Starting capital.
         strategy_name: Selector name.
+        weight_by: Weighting mode ('market_cap' or 'equal').
 
     Returns:
         Formatted ASCII table string.
     """
     strat_title = "Market Cap" if "cap" in strategy_name.lower() else "Performance"
+    weight_title = "Equal Weight" if weight_by == "equal" else "Market Cap"
     header_title = (
-        f"S&P 500 Top N Strategy Performance ({strat_title}) | "
+        f"S&P 500 Top N Strategy Performance ({strat_title} - {weight_title}) | "
         f"Tax Rate: {tax_rate:.1%} | Capital: ${initial_capital:,.2f}"
     )
 
