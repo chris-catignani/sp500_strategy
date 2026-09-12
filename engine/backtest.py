@@ -138,16 +138,17 @@ class PortfolioSimulator:
         if rebalance_frequency == "quarterly":
             for current_year in range(start_year + 1, end_year + 1):
                 year_start_value = start_value
+                year_initial_loss_cf = self.tax_manager.loss_carryforward
                 year_dividends = 0.0
                 year_div_tax = 0.0
                 year_realized_gain = 0.0
-                year_net_taxable_gain = 0.0
                 year_tax_paid = 0.0
                 year_cap_tax = 0.0
                 year_turnover_sum = 0.0
 
                 for q in (1, 2, 3, 4):
                     q_start_value = start_value
+                    q_initial_loss_cf = self.tax_manager.loss_carryforward
                     positions = self.tax_manager.get_all_positions()
                     q_dividends = sum(
                         shares * self.data_loader.get_quarterly_dividend(ticker, current_year, q)
@@ -202,7 +203,7 @@ class PortfolioSimulator:
                                     year=current_year,
                                     quarter=q,
                                     realized_gain=gain,
-                                )
+                                 )
                             )
                         elif held_shares > prov_target_shares[ticker] + 1e-7:
                             delta_shares = held_shares - prov_target_shares[ticker]
@@ -230,7 +231,6 @@ class PortfolioSimulator:
                         self.cash -= tax_div
                         total_tax_paid = tax_div
                         last_loss_cf = 0.0
-                        last_net_taxable = 0.0
 
                         for iteration in range(20):
                             tax_cap_step, net_taxable, loss_cf = (
@@ -239,7 +239,6 @@ class PortfolioSimulator:
                             total_tax_paid += tax_cap_step
                             self.cash -= tax_cap_step
                             last_loss_cf = loss_cf
-                            last_net_taxable += net_taxable
 
                             net_investable_equity = total_pretax_value - total_tax_paid
                             final_target_shares = {
@@ -276,11 +275,12 @@ class PortfolioSimulator:
                             if additional_trims == 0:
                                 break
                         capital_gains_tax_paid = total_tax_paid - tax_div
+                        q_net_taxable_gain = q_realized_gain - q_initial_loss_cf
                     else:
                         total_tax_paid = 0.0
                         tax_div = 0.0
                         capital_gains_tax_paid = 0.0
-                        last_net_taxable = 0.0
+                        q_net_taxable_gain = 0.0
                         last_loss_cf = self.tax_manager.loss_carryforward
                         net_investable_equity = total_pretax_value
                         final_target_shares = prov_target_shares
@@ -346,7 +346,7 @@ class PortfolioSimulator:
                         gross_return=gross_return,
                         ending_value_pretax=total_pretax_value,
                         realized_capital_gain=q_realized_gain,
-                        net_taxable_gain=last_net_taxable,
+                        net_taxable_gain=q_net_taxable_gain,
                         tax_paid=total_tax_paid,
                         loss_carryforward=last_loss_cf,
                         ending_value_aftertax=ending_value_aftertax,
@@ -364,7 +364,6 @@ class PortfolioSimulator:
                     year_dividends += q_dividends
                     year_div_tax += tax_div
                     year_realized_gain += q_realized_gain
-                    year_net_taxable_gain += last_net_taxable
                     year_tax_paid += total_tax_paid
                     year_cap_tax += capital_gains_tax_paid
                     year_turnover_sum += turnover
@@ -379,6 +378,9 @@ class PortfolioSimulator:
                     (quarterly_history[-1].ending_value_pretax - year_start_value) / year_start_value
                     if year_start_value > 0.0
                     else 0.0
+                )
+                year_net_taxable_gain = (
+                    year_realized_gain - year_initial_loss_cf if is_after_tax else 0.0
                 )
 
                 ann_entry = AnnualLedgerEntry(
@@ -492,8 +494,8 @@ class PortfolioSimulator:
                     tax_div = annual_dividends * tax_rate
                     self.cash -= tax_div
                     total_tax_paid = tax_div
+                    initial_loss_cf = self.tax_manager.loss_carryforward
                     last_loss_cf = 0.0
-                    last_net_taxable = 0.0
 
                     for iteration in range(20):
                         tax_cap_step, net_taxable, loss_cf = (
@@ -502,7 +504,6 @@ class PortfolioSimulator:
                         total_tax_paid += tax_cap_step
                         self.cash -= tax_cap_step
                         last_loss_cf = loss_cf
-                        last_net_taxable += net_taxable
 
                         net_investable_equity = total_pretax_value - total_tax_paid
                         final_target_shares = {
@@ -539,7 +540,7 @@ class PortfolioSimulator:
                             break
 
                     capital_gains_tax_paid = total_tax_paid - tax_div
-                    net_taxable_gain = last_net_taxable
+                    net_taxable_gain = annual_realized_gain - initial_loss_cf
                     loss_carryforward = last_loss_cf
                     tax_paid = total_tax_paid
                     dividend_tax_paid = tax_div
@@ -643,9 +644,14 @@ class PortfolioSimulator:
         total_taxes_paid = sum(e.tax_paid for e in annual_history)
 
         # Maximum Drawdown
+        history_for_dd = (
+            quarterly_history
+            if rebalance_frequency == "quarterly" and quarterly_history
+            else annual_history
+        )
         valuation_series = [initial_capital] + [
             e.ending_value_aftertax if is_after_tax else e.ending_value_pretax
-            for e in annual_history
+            for e in history_for_dd
         ]
         max_dd = calculate_max_drawdown(valuation_series)
 

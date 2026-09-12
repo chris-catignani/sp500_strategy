@@ -145,6 +145,7 @@ class FIFOTaxLotManager:
                     shares=shares_sold,
                     purchase_price=lot.purchase_price,
                     purchase_year=lot.purchase_year,
+                    purchase_quarter=lot.purchase_quarter,
                 )
                 depleted_lots.append(sold_lot_record)
                 remaining_to_sell = 0.0
@@ -189,6 +190,9 @@ class FIFOTaxLotManager:
         else:
             tax_paid = 0.0
             new_loss_carryforward = abs(net_taxable_gain)
+
+        if new_loss_carryforward < 1e-9:
+            new_loss_carryforward = 0.0
 
         self.current_annual_realized_gain = 0.0
         self.capital_loss_carryforward = new_loss_carryforward

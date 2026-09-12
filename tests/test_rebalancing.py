@@ -404,6 +404,25 @@ class TestPortfolioSimulator(unittest.TestCase):
                         f"Cash deficit violation in year {entry.year} for World Top {n} at tax rate {tax_rate}",
                     )
 
+    def test_annual_net_taxable_gain_not_doubled(self):
+        """Verify net_taxable_gain in annual history equals realized_gain minus prior loss carryforward without iterative doubling."""
+        sim = PortfolioSimulator()
+        result = sim.run_simulation(
+            start_year=2014,
+            end_year=2024,
+            n=5,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            universe="sp500",
+            rebalance_frequency="annual",
+        )
+        prev_loss_cf = 0.0
+        for entry in result.annual_history:
+            expected_net_taxable = entry.realized_capital_gain - prev_loss_cf
+            self.assertAlmostEqual(entry.net_taxable_gain, expected_net_taxable, places=2)
+            prev_loss_cf = entry.loss_carryforward
+
 
 if __name__ == "__main__":
     unittest.main()

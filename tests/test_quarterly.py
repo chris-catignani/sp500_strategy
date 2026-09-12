@@ -70,6 +70,7 @@ class TestQuarterlyTaxLotsAndTrades(unittest.TestCase):
         gain, depleted = self.tax_mgr.sell_shares("AAPL", shares_to_sell=5.0, current_price=170.0, current_year=2024, current_quarter=2)
         self.assertAlmostEqual(gain, 100.0)  # 5 * (170 - 150)
         self.assertEqual(len(depleted), 1)
+        self.assertEqual(depleted[0].purchase_quarter, 1)
         self.assertEqual(self.tax_mgr.get_position_shares("AAPL"), 5.0)
 
 
@@ -161,6 +162,41 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         self.assertNotEqual(res_ann.final_equity, res_qtr.final_equity)
         self.assertGreater(res_ann.cagr, 0.10)
         self.assertGreater(res_qtr.cagr, 0.10)
+
+    def test_quarterly_max_drawdown_intra_year(self) -> None:
+        """Verify quarterly max drawdown evaluates intra-year quarterly peaks and troughs."""
+        res_qtr = self.simulator.run_simulation(
+            start_year=2004,
+            end_year=2024,
+            n=5,
+            selector=MarketCapSelector(5),
+            is_after_tax=False,
+            initial_capital=10000.0,
+            universe="sp500",
+            rebalance_frequency="quarterly",
+        )
+        # Quarterly peak-to-trough during 2008 GFC reaches ~ -45.38%, strictly worse than annual -37.75%
+        self.assertLess(res_qtr.max_drawdown, -0.40)
+        self.assertAlmostEqual(res_qtr.max_drawdown, -0.4538, places=2)
+
+    def test_quarterly_annual_synthesis_net_taxable_gain(self) -> None:
+        """Verify synthesized annual net_taxable_gain correctly nets year's realized gains against entering carryforward."""
+        res = self.simulator.run_simulation(
+            start_year=2014,
+            end_year=2024,
+            n=5,
+            selector=MarketCapSelector(5),
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            universe="sp500",
+            rebalance_frequency="quarterly",
+        )
+        prev_loss_cf = 0.0
+        for entry in res.annual_history:
+            expected_net_taxable = entry.realized_capital_gain - prev_loss_cf
+            self.assertAlmostEqual(entry.net_taxable_gain, expected_net_taxable, places=2)
+            prev_loss_cf = entry.loss_carryforward
 
     def test_quarterly_index_dividend_reinvestment(self) -> None:
         """Verify quarterly index dividend reinvestment produces exact compounding metrics."""

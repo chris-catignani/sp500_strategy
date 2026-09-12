@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 from typing import List, Optional, Sequence
+import warnings
 from engine.models import ConstituentSnapshot, HoldingTarget
 
 EPSILON = 1e-9
@@ -94,6 +95,14 @@ class MarketCapSelector(BaseSelector):
         if not universe:
             return []
 
+        if eff_n > len(universe):
+            warnings.warn(
+                f"Requested Top {eff_n} constituents, but universe only contains {len(universe)}. "
+                f"Allocating across available {len(universe)} constituents.",
+                UserWarning,
+                stacklevel=2,
+            )
+
         # Sort descending by market_cap_weight
         sorted_constituents = sorted(
             universe, key=lambda c: c.market_cap_weight, reverse=True
@@ -130,6 +139,14 @@ class PerformanceSelector(BaseSelector):
 
         if not universe:
             return []
+
+        if eff_n > len(universe):
+            warnings.warn(
+                f"Requested Top {eff_n} constituents, but universe only contains {len(universe)}. "
+                f"Allocating across available {len(universe)} constituents.",
+                UserWarning,
+                stacklevel=2,
+            )
 
         # Sort descending by trailing_1y_return
         sorted_constituents = sorted(
