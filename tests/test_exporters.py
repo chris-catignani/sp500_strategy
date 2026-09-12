@@ -345,8 +345,9 @@ class TestExporters(unittest.TestCase):
         # Executive Summary checks (14-column layout A1:N1)
         self.assertIn("Total Dividends Received", code)
         self.assertIn("'A1:N1'", code)
-        self.assertIn("'A8:N8'", code)
-        self.assertIn("METHODOLOGY NOTE — DIVIDEND TIMING & MULTI-UNIVERSE SELECTION", code)
+        self.assertIn("HEAD-TO-HEAD PERFORMANCE & TAX SPOTLIGHT", code)
+        self.assertIn("KEY METRIC DEFINITIONS & GLOSSARY", code)
+        self.assertIn("METHODOLOGY NOTE — REBALANCING, TAXES & DIVIDENDS", code)
         # 17-Column SCENARIO_HEADERS
         self.assertIn('"LookupKey"', code)
         self.assertIn('"TaxRate"', code)
@@ -355,22 +356,30 @@ class TestExporters(unittest.TestCase):
         self.assertIn('"Strategy"', code)
         self.assertIn('"Frequency"', code)
         self.assertIn('"RowType"', code)
-        # Compare Index, Frequency, and Seed Capital dropdowns and controls
-        self.assertIn("'Compare Index:'", code)
-        self.assertIn("['None', 'S&P 500', 'MSCI World', 'Both']", code)
+        # Controls in Row 2
+        self.assertIn("'Universe:'", code)
+        self.assertIn("['S&P 500', 'All World']", code)
+        self.assertIn("'Strategy:'", code)
+        self.assertIn("['Top 3', 'Top 5', 'Top 10']", code)
+        self.assertIn("'Horizon:'", code)
+        self.assertIn("['10y', '20y', '30y']", code)
         self.assertIn("'Rebalance:'", code)
-        self.assertIn("['All', 'Annual Only', 'Quarterly Only']", code)
+        self.assertIn("['Annual', 'Quarterly']", code)
+        self.assertIn("'Benchmark:'", code)
+        self.assertIn("['S&P 500', 'MSCI World']", code)
+        self.assertIn("'Tax Rate:'", code)
+        self.assertIn("['0.0%', '15.0%', '20.0%', '30.0%', '37.0%']", code)
         self.assertIn("'Seed Capital:'", code)
         self.assertIn("requireNumberGreaterThan(0)", code)
         self.assertIn("BASE_INITIAL_CAPITAL = 10000;", code)
         self.assertIn("SCALE_EXPR", code)
-        # Decoupled KPI formulas querying Scenario Data
-        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$K:$K, MATCH(\"30y_\"", code)
-        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$I:$I, MATCH(\"30y_\"", code)
-        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$P:$P, MATCH(\"30y_\"", code)
-        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$O:$O, MATCH(\"30y_\"", code)
-        # Dynamic FILTER formula in A10
-        self.assertIn("=IFNA(FILTER(\\'Scenario Data\\'!$C$2:$P", code)
+        # Fully dynamic KPI formulas querying Scenario Data using user selections
+        self.assertIn("MATCH($F$2 & \"_\" & $B$2 & \"_\" & $D$2 & \"_\" & $H$2", code)
+        # Head-to-Head Spotlight & Net Advantage Delta Row
+        self.assertIn("Net Advantage (Strategy vs", code)
+        self.assertIn("=(G10 - G11)", code)
+        # Legacy spilling FILTER formula should NOT be in Executive Summary
+        self.assertNotIn("=IFNA(FILTER('Scenario Data'!$C$2:$P", code)
         # Multi-universe tabs and menus
         self.assertIn("'World Top 3 Strategy'", code)
         self.assertIn("'World Top 5 Strategy'", code)
