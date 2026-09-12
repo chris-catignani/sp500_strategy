@@ -66,16 +66,28 @@ All share prices and dividend-per-share values are normalized to share counts as
 - In Yahoo Finance's `/v8/finance/chart` engine, `indicators.quote[0].close` is already normalized to current share terms by this exact formula.
 - Year-end prices in `data/sp500_prices.json` are extracted from the December monthly candle (reflecting the final active trading session of December) and rounded to 2 decimal places (or 4 decimal places for base prices under \$1.00).
 
-### 4.2 Cash Dividend Aggregation
-- In Yahoo Finance's raw chart payload, `events.dividends[i].amount` records the cash dividend per share, normalized to 2024-12-31 share terms.
-- For each stock and calendar year $t \in [1994, 2024]$, the total annual cash dividend per share $\text{DPS}_t$ in `data/sp500_dividends.json` is computed by summing all distributions where the ex-dividend date falls within that calendar year:
-  $$\text{DPS}_t = \sum_{i: \text{Year}(T_{\text{ex}, i}) = t} \text{Amount}_i$$
-- Cash dividends are pooled into available portfolio cash prior to annual rebalancing, preserving the self-financing cash invariant ($C \ge 0$).
+### 4.2 Cash Dividend Aggregation (Annual and Quarterly)
+- In Yahoo Finance's raw chart payload, `events.dividends[i].amount` records the exact cash dividend per share, normalized to 2024-12-31 share terms, with Unix epoch `date` indicating the ex-dividend date.
+- **Quarterly Granularity (`data/sp500_quarterly_dividends.json` & `world_quarterly_dividends.json`)**:
+  - For each constituent, dividend distributions are assigned to their precise quarter:
+    $$q = \lfloor(\text{month} - 1) / 3\rfloor + 1, \quad \text{key} = \text{"YYYY-Q"}q$$
+  - Dividends are **never** estimated or divided by 4; they capture exact distribution dates and mid-year dividend raises in the specific quarter they occurred.
+- **Annual Granularity (`data/sp500_dividends.json` & `world_dividends.json`)**:
+  - For each stock and calendar year $t \in [1994, 2024]$, the total annual cash dividend per share $\text{DPS}_t$ is computed by summing all distributions where the ex-dividend date falls within that calendar year:
+    $$\text{DPS}_t = \sum_{i: \text{Year}(T_{\text{ex}, i}) = t} \text{Amount}_i$$
+- Cash dividends are pooled into available portfolio cash prior to rebalancing, preserving the self-financing cash invariant ($C \ge 0$).
 
-### 4.3 Benchmark Total Return & Synthetic Yield
-- Pre-tax benchmark returns are tracked directly via `^SP500TR`.
-- For after-tax benchmark comparisons, the annual dividend yield $y_t$ is determined dynamically from the relationship between Total Return (`^SP500TR`) and Price Return (`^GSPC`):
-  $$r_{\text{tr}, t} = \frac{\text{SP500TR}_t - \text{SP500TR}_{t-1}}{\text{SP500TR}_{t-1}}, \quad r_{\text{pr}, t} = \frac{\text{GSPC}_t - \text{GSPC}_{t-1}}{\text{GSPC}_{t-1}}$$
+### 4.3 Quarterly Pricing & Point-in-Time Constituent Composition
+- **Quarterly Prices (`data/sp500_quarterly_prices.json` & `world_quarterly_prices.json`)**: Extracted from March, June, September, and December month-end candles. Q4 prices align with year-end closes.
+- **Dynamic Weight Drift (Q1–Q3)**: Weights and rankings update dynamically based on price performance relative to the index:
+  $$W_{i, q} = W_{i, 0} \times \frac{P_{i, q} / P_{i, 0}}{P_{\text{index}, q} / P_{\text{index}, 0}}$$
+- **Q4 Factsheet Re-Anchoring**: At each Q4 (December 31), constituent rosters and weights re-anchor to official index factsheets, eliminating multi-year cumulative drift error.
+- **Pluggable Dataset Architecture**: [`DataLoader.load_quarterly_universe()`](../engine/data_loader.py) checks for registered quarterly universe files in `data/`, enabling external point-in-time constituent datasets to be dropped in without engine modifications.
+
+### 4.4 Benchmark Total Return & Synthetic Yield
+- Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
+- For after-tax benchmark comparisons, the dividend yield $y_t$ is determined dynamically from the relationship between Total Return and Price Return:
+  $$r_{\text{tr}, t} = \frac{\text{TR}_t - \text{TR}_{t-1}}{\text{TR}_{t-1}}, \quad r_{\text{pr}, t} = \frac{\text{PR}_t - \text{PR}_{t-1}}{\text{PR}_{t-1}}$$
   $$y_t = \max(0, r_{\text{tr}, t} - r_{\text{pr}, t})$$
 - For 1994, this yields:
   $$r_{\text{tr}, 1994} = \frac{575.71 - 568.20}{568.20} = +1.3216\%$$

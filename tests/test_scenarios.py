@@ -17,14 +17,14 @@ class TestScenarios(unittest.TestCase):
         self.assertIn("scenario_rows", scenario_data)
         scenario_rows = scenario_data["scenario_rows"]
         self.assertGreater(len(scenario_rows), 0)
-        # 16 columns per scenario row ending with RowType
+        # 17 columns per scenario row ending with RowType
         for row in scenario_rows:
-            self.assertEqual(len(row), 16)
-            self.assertIn(row[15], ("Strategy", "Index"))
+            self.assertEqual(len(row), 17)
+            self.assertIn(row[16], ("Strategy", "Index"))
 
         # Verify benchmark rows exist without duplicates (5 tax rates x 3 horizons = 15 rows each)
-        spx_bench_rows = [r for r in scenario_rows if r[4] == "S&P 500" and r[15] == "Index"]
-        msci_bench_rows = [r for r in scenario_rows if r[4] == "MSCI World" and r[15] == "Index"]
+        spx_bench_rows = [r for r in scenario_rows if r[4] == "S&P 500" and r[16] == "Index"]
+        msci_bench_rows = [r for r in scenario_rows if r[4] == "MSCI World" and r[16] == "Index"]
         self.assertEqual(len(spx_bench_rows), 15)
         self.assertEqual(len(msci_bench_rows), 15)
 

@@ -15,6 +15,9 @@ class DataLoader:
         constituents_path: Optional[Union[str, Path]] = None,
         prices_path: Optional[Union[str, Path]] = None,
         dividends_path: Optional[Union[str, Path]] = None,
+        quarterly_constituents_path: Optional[Union[str, Path]] = None,
+        quarterly_prices_path: Optional[Union[str, Path]] = None,
+        quarterly_dividends_path: Optional[Union[str, Path]] = None,
     ) -> None:
         """Initialize DataLoader with dataset paths.
 
@@ -25,6 +28,9 @@ class DataLoader:
                 Defaults to data/sp500_prices.json relative to project root.
             dividends_path: Optional path to sp500_dividends.json.
                 Defaults to data/sp500_dividends.json relative to project root.
+            quarterly_constituents_path: Optional path to quarterly constituents dataset.
+            quarterly_prices_path: Optional path to quarterly prices dataset.
+            quarterly_dividends_path: Optional path to quarterly dividends dataset.
         """
         project_root = Path(__file__).resolve().parent.parent
 
@@ -42,6 +48,21 @@ class DataLoader:
             dividends_path = project_root / "data" / "sp500_dividends.json"
         else:
             dividends_path = Path(dividends_path)
+
+        if quarterly_constituents_path is None:
+            quarterly_constituents_path = project_root / "data" / "sp500_quarterly_constituents.json"
+        else:
+            quarterly_constituents_path = Path(quarterly_constituents_path)
+
+        if quarterly_prices_path is None:
+            quarterly_prices_path = project_root / "data" / "sp500_quarterly_prices.json"
+        else:
+            quarterly_prices_path = Path(quarterly_prices_path)
+
+        if quarterly_dividends_path is None:
+            quarterly_dividends_path = project_root / "data" / "sp500_quarterly_dividends.json"
+        else:
+            quarterly_dividends_path = Path(quarterly_dividends_path)
 
         if not constituents_path.exists():
             raise FileNotFoundError(
@@ -66,15 +87,40 @@ class DataLoader:
             "sp500": self._raw_constituents,
         }
 
+        # Quarterly datasets registry
+        self._quarterly_universes: Dict[str, Dict[str, list]] = {}
+        self._raw_quarterly_prices: Dict[str, Dict[str, float]] = {}
+        self._raw_quarterly_dividends: Dict[str, Dict[str, float]] = {}
+
+        if quarterly_constituents_path.exists():
+            with open(quarterly_constituents_path, "r", encoding="utf-8") as f:
+                self._quarterly_universes["sp500"] = json.load(f)
+
+        if quarterly_prices_path.exists():
+            with open(quarterly_prices_path, "r", encoding="utf-8") as f:
+                self._raw_quarterly_prices = json.load(f)
+
+        if quarterly_dividends_path.exists():
+            with open(quarterly_dividends_path, "r", encoding="utf-8") as f:
+                self._raw_quarterly_dividends = json.load(f)
+
         # Check for co-located All-World datasets
         world_const_path = project_root / "data" / "world_constituents.json"
         world_prices_path = project_root / "data" / "world_prices.json"
         world_divs_path = project_root / "data" / "world_dividends.json"
+        world_q_const_path = project_root / "data" / "world_quarterly_constituents.json"
+        world_q_prices_path = project_root / "data" / "world_quarterly_prices.json"
+        world_q_divs_path = project_root / "data" / "world_quarterly_dividends.json"
 
         if world_const_path.exists():
             with open(world_const_path, "r", encoding="utf-8") as f:
                 self._universes["world"] = json.load(f)
                 self._universes["all_world"] = self._universes["world"]
+
+        if world_q_const_path.exists():
+            with open(world_q_const_path, "r", encoding="utf-8") as f:
+                self._quarterly_universes["world"] = json.load(f)
+                self._quarterly_universes["all_world"] = self._quarterly_universes["world"]
 
         if world_prices_path.exists():
             with open(world_prices_path, "r", encoding="utf-8") as f:
@@ -85,6 +131,15 @@ class DataLoader:
                     else:
                         self._raw_prices[sym].update(y_data)
 
+        if world_q_prices_path.exists():
+            with open(world_q_prices_path, "r", encoding="utf-8") as f:
+                world_q_prices = json.load(f)
+                for sym, q_data in world_q_prices.items():
+                    if sym not in self._raw_quarterly_prices:
+                        self._raw_quarterly_prices[sym] = q_data
+                    else:
+                        self._raw_quarterly_prices[sym].update(q_data)
+
         if world_divs_path.exists():
             with open(world_divs_path, "r", encoding="utf-8") as f:
                 world_divs = json.load(f)
@@ -93,6 +148,15 @@ class DataLoader:
                         self._raw_dividends[sym] = y_data
                     else:
                         self._raw_dividends[sym].update(y_data)
+
+        if world_q_divs_path.exists():
+            with open(world_q_divs_path, "r", encoding="utf-8") as f:
+                world_q_divs = json.load(f)
+                for sym, q_data in world_q_divs.items():
+                    if sym not in self._raw_quarterly_dividends:
+                        self._raw_quarterly_dividends[sym] = q_data
+                    else:
+                        self._raw_quarterly_dividends[sym].update(q_data)
 
         # Parse available years
         self._available_years: List[int] = sorted(
@@ -279,3 +343,104 @@ class DataLoader:
         pr_prev = self.get_msci_world_level(year - 1)
         r_pr = (pr_curr - pr_prev) / pr_prev if pr_prev > 0.0 else 0.0
         return max(0.0, r_tr - r_pr)
+
+    def get_quarterly_price(self, ticker: str, year: int, quarter: int) -> float:
+        """Retrieve split-adjusted close for a ticker at the end of (year, quarter).
+
+        Args:
+            ticker: Equity or index symbol.
+            year: Four-digit calendar year.
+            quarter: Calendar quarter (1..4).
+
+        Returns:
+            Closing price as float.
+        """
+        key = f"{year}-Q{quarter}"
+        if ticker in self._raw_quarterly_prices and key in self._raw_quarterly_prices[ticker]:
+            return float(self._raw_quarterly_prices[ticker][key])
+        if quarter == 4 and ticker in self._raw_prices and str(year) in self._raw_prices[ticker]:
+            return float(self._raw_prices[ticker][str(year)])
+        raise KeyError(f"Quarterly price not found for '{ticker}' at {key}")
+
+    def get_quarterly_dividend(self, ticker: str, year: int, quarter: int) -> float:
+        """Retrieve split-adjusted cash dividend per share for ticker during (year, quarter).
+
+        Args:
+            ticker: Equity symbol.
+            year: Four-digit calendar year.
+            quarter: Calendar quarter (1..4).
+
+        Returns:
+            Cash dividend per share as float, or 0.0 if not paid.
+        """
+        key = f"{year}-Q{quarter}"
+        if ticker in self._raw_quarterly_dividends and key in self._raw_quarterly_dividends[ticker]:
+            return float(self._raw_quarterly_dividends[ticker][key])
+        return 0.0
+
+    def load_quarterly_universe(
+        self, year: int, quarter: int, universe: str = "sp500"
+    ) -> List[ConstituentSnapshot]:
+        """Load point-in-time constituent snapshot for a specific quarter.
+
+        Supports pluggable external datasets via _quarterly_universes.
+
+        Args:
+            year: Four-digit calendar year.
+            quarter: Calendar quarter (1..4).
+            universe: Identifier of target universe ('sp500' or 'world').
+
+        Returns:
+            List of ConstituentSnapshot instances.
+        """
+        u_key = universe.lower()
+        if u_key not in self._quarterly_universes:
+            u_key = "world" if u_key in ("world", "all_world") else "sp500"
+
+        key = f"{year}-Q{quarter}"
+        if u_key in self._quarterly_universes and key in self._quarterly_universes[u_key]:
+            raw_entries = self._quarterly_universes[u_key][key]
+            return [
+                ConstituentSnapshot(
+                    ticker=item["ticker"],
+                    name=item["name"],
+                    market_cap_weight=float(item["market_cap_weight"]),
+                    trailing_1y_return=float(item["trailing_1y_return"]),
+                    year=int(item["year"]),
+                    quarter=int(item.get("quarter", quarter)),
+                )
+                for item in raw_entries
+            ]
+
+        # Fallback to annual universe if Q4
+        if quarter == 4:
+            ann_u = self.load_universe(year, universe=universe)
+            return [
+                ConstituentSnapshot(
+                    ticker=c.ticker,
+                    name=c.name,
+                    market_cap_weight=c.market_cap_weight,
+                    trailing_1y_return=c.trailing_1y_return,
+                    year=c.year,
+                    quarter=4,
+                )
+                for c in ann_u
+            ]
+
+        raise KeyError(f"No quarterly constituent data found for universe '{universe}' at {key}")
+
+    def get_spx_quarterly_level(self, year: int, quarter: int) -> float:
+        """Retrieve S&P 500 Price Return (^GSPC) level at end of (year, quarter)."""
+        return self.get_quarterly_price("^GSPC", year, quarter)
+
+    def get_spx_tr_quarterly_level(self, year: int, quarter: int) -> float:
+        """Retrieve S&P 500 Total Return (^SP500TR) level at end of (year, quarter)."""
+        return self.get_quarterly_price("^SP500TR", year, quarter)
+
+    def get_msci_world_quarterly_level(self, year: int, quarter: int) -> float:
+        """Retrieve MSCI World Price Return (^MSCIWORLD_PR) level at end of (year, quarter)."""
+        return self.get_quarterly_price("^MSCIWORLD_PR", year, quarter)
+
+    def get_msci_world_tr_quarterly_level(self, year: int, quarter: int) -> float:
+        """Retrieve MSCI World Total Return (^MSCIWORLD_TR) level at end of (year, quarter)."""
+        return self.get_quarterly_price("^MSCIWORLD_TR", year, quarter)

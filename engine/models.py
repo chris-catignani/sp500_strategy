@@ -1,17 +1,18 @@
 """Core data models and type schemas for S&P 500 Top N Strategy backtesting engine."""
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 
 @dataclass
 class ConstituentSnapshot:
-    """Point-in-time constituent information at year-end."""
+    """Point-in-time constituent information at year-end or quarter-end."""
     ticker: str
     name: str
     market_cap_weight: float
     trailing_1y_return: float
     year: int
+    quarter: Optional[int] = None
 
 
 @dataclass
@@ -25,12 +26,18 @@ class HoldingTarget:
 
 @dataclass
 class TaxLot:
-    """Individual tax lot purchased at a specific price and year for FIFO accounting."""
+    """Individual tax lot purchased at a specific price and period for FIFO accounting."""
     lot_id: str
     ticker: str
     shares: float
     purchase_price: float
     purchase_year: int
+    purchase_quarter: Optional[int] = None
+
+    @property
+    def quarter(self) -> Optional[int]:
+        """Alias for purchase_quarter."""
+        return self.purchase_quarter
 
     def cost_basis(self) -> float:
         """Calculate the total dollar cost basis for this lot."""
@@ -45,12 +52,13 @@ class TradeOrder:
     shares: float
     price: float
     year: int
+    quarter: Optional[int] = None
     realized_gain: float = 0.0
 
 
 @dataclass
 class AnnualLedgerEntry:
-    """Annual performance, cash flow, and tax ledger entry."""
+    """Annual or quarterly performance, cash flow, and tax ledger entry."""
     year: int
     start_value: float
     gross_return: float
@@ -68,6 +76,7 @@ class AnnualLedgerEntry:
     dividend_tax_paid: float = 0.0
     capital_gains_tax_paid: float = 0.0
     universe: str = "sp500"
+    quarter: Optional[int] = None
 
 
 @dataclass
@@ -89,6 +98,8 @@ class StrategyResult:
     post_liquidation_wealth: float
     post_liquidation_cagr: float
     annual_history: List[AnnualLedgerEntry] = field(default_factory=list)
+    quarterly_history: List[AnnualLedgerEntry] = field(default_factory=list)
     total_dividends_received: float = 0.0
     total_dividend_taxes_paid: float = 0.0
     universe: str = "sp500"
+    rebalance_frequency: str = "annual"

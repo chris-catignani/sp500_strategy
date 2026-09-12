@@ -58,21 +58,23 @@ def build_scenario_and_apps_script_data(
     ]
     target_n_values = [3, 5, 10]
 
-    # Pre-calculate pre-tax results across universes
-    pretax_cache: Dict[Tuple[str, int, int, int], StrategyResult] = {}
+    # Pre-calculate pre-tax results across universes and frequencies
+    pretax_cache: Dict[Tuple[str, int, str, int, int], StrategyResult] = {}
     for univ in universes:
         for n in target_n_values:
             sel = resolve_selector(strategy_name, n=n)
-            for _, s_yr, e_yr in horizons:
-                pretax_cache[(univ, n, s_yr, e_yr)] = simulator.run_simulation(
-                    s_yr,
-                    e_yr,
-                    n=n,
-                    selector=sel,
-                    is_after_tax=False,
-                    initial_capital=initial_capital,
-                    universe=univ,
-                )
+            for freq in ("annual", "quarterly"):
+                for _, s_yr, e_yr in horizons:
+                    pretax_cache[(univ, n, freq, s_yr, e_yr)] = simulator.run_simulation(
+                        s_yr,
+                        e_yr,
+                        n=n,
+                        selector=sel,
+                        is_after_tax=False,
+                        initial_capital=initial_capital,
+                        universe=univ,
+                        rebalance_frequency=freq,
+                    )
 
     scenario_rows: List[List[Any]] = []
     for rate, rate_str in tax_rates:
@@ -120,63 +122,68 @@ def build_scenario_and_apps_script_data(
                 spx_tax_drag = spx_tr_cagr - spx_post_liq_cagr
                 spx_divs = bench["total_dividends_received"]
 
-            # 1. Active Strategy Portfolios for each universe
+            # 1. Active Strategy Portfolios for each universe and frequency
             for univ in universes:
                 univ_label = "S&P 500" if univ == "sp500" else "All World"
                 for n in target_n_values:
-                    pre_res = pretax_cache[(univ, n, s_yr, e_yr)]
-                    sel = resolve_selector(strategy_name, n=n)
-                    if rate == 0.0:
-                        post_res = pre_res
-                        tax_drag = 0.0
-                        alpha = post_res.cagr - spx_tr_cagr
-                        strat_cum = post_res.cumulative_return
-                        strat_final = post_res.final_equity
-                    else:
-                        post_res = simulator.run_simulation(
-                            s_yr,
-                            e_yr,
-                            n=n,
-                            selector=sel,
-                            is_after_tax=True,
-                            tax_rate=rate,
-                            initial_capital=initial_capital,
-                            universe=univ,
-                        )
-                        tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
-                        alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
-                        strat_cum = calculate_cumulative_return(initial_capital, post_res.post_liquidation_wealth)
-                        strat_final = post_res.post_liquidation_wealth
+                    for freq_str in ("Annual", "Quarterly"):
+                        freq_key = freq_str.lower()
+                        pre_res = pretax_cache[(univ, n, freq_key, s_yr, e_yr)]
+                        sel = resolve_selector(strategy_name, n=n)
+                        if rate == 0.0:
+                            post_res = pre_res
+                            tax_drag = 0.0
+                            alpha = post_res.cagr - spx_tr_cagr
+                            strat_cum = post_res.cumulative_return
+                            strat_final = post_res.final_equity
+                        else:
+                            post_res = simulator.run_simulation(
+                                s_yr,
+                                e_yr,
+                                n=n,
+                                selector=sel,
+                                is_after_tax=True,
+                                tax_rate=rate,
+                                initial_capital=initial_capital,
+                                universe=univ,
+                                rebalance_frequency=freq_key,
+                            )
+                            tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
+                            alpha = post_res.post_liquidation_cagr - spx_post_liq_cagr
+                            strat_cum = calculate_cumulative_return(initial_capital, post_res.post_liquidation_wealth)
+                            strat_final = post_res.post_liquidation_wealth
 
-                    strat_label = f"Top {n}"
-                    key = f"{h_label}_{univ_label}_{strat_label}_{rate_str}"
-                    scenario_rows.append([
-                        key,
-                        rate,
-                        univ_label,
-                        h_label,
-                        strat_label,
-                        round(pre_res.cagr, 6),
-                        round(post_res.cagr, 6),
-                        round(post_res.post_liquidation_cagr, 6),
-                        round(strat_cum, 6),
-                        round(strat_final, 2),
-                        round(post_res.total_dividends_received, 2),
-                        round(post_res.max_drawdown, 6),
-                        round(post_res.total_taxes_paid, 2),
-                        round(tax_drag, 6),
-                        round(alpha, 6),
-                        "Strategy",
-                    ])
+                        strat_label = f"Top {n}"
+                        key = f"{h_label}_{univ_label}_{strat_label}_{freq_str}_{rate_str}"
+                        scenario_rows.append([
+                            key,
+                            rate,
+                            univ_label,
+                            h_label,
+                            strat_label,
+                            freq_str,
+                            round(pre_res.cagr, 6),
+                            round(post_res.cagr, 6),
+                            round(post_res.post_liquidation_cagr, 6),
+                            round(strat_cum, 6),
+                            round(strat_final, 2),
+                            round(post_res.total_dividends_received, 2),
+                            round(post_res.max_drawdown, 6),
+                            round(post_res.total_taxes_paid, 2),
+                            round(tax_drag, 6),
+                            round(alpha, 6),
+                            "Strategy",
+                        ])
 
-            # 2. S&P 500 Index Benchmark (16 columns)
-            spx_key = f"{h_label}_S&P 500_S&P 500_{rate_str}"
+            # 2. S&P 500 Index Benchmark (17 columns)
+            spx_key = f"{h_label}_S&P 500_S&P 500_Annual_{rate_str}"
             scenario_rows.append([
                 spx_key,
                 rate,
                 "S&P 500",
                 h_label,
                 "S&P 500",
+                "Annual",
                 round(spx_tr_cagr, 6),
                 round(spx_after_cagr, 6),
                 round(spx_post_liq_cagr, 6),
@@ -190,7 +197,7 @@ def build_scenario_and_apps_script_data(
                 "Index",
             ])
 
-            # 3. MSCI World Index Benchmark (16 columns)
+            # 3. MSCI World Index Benchmark (17 columns)
             msci_pr_levels = [data_loader.get_msci_world_level(y) for y in range(s_yr, e_yr + 1)]
             msci_tr_levels = [data_loader.get_msci_world_tr_level(y) for y in range(s_yr, e_yr + 1)]
             msci_tr_cagr = calculate_cagr(msci_tr_levels[0], msci_tr_levels[-1], horizon_years)
@@ -234,13 +241,14 @@ def build_scenario_and_apps_script_data(
                 msci_divs = msci_bench["total_dividends_received"]
 
             msci_alpha = round(msci_post_liq_cagr - spx_post_liq_cagr, 6)
-            msci_key = f"{h_label}_All World_MSCI World_{rate_str}"
+            msci_key = f"{h_label}_All World_MSCI World_Annual_{rate_str}"
             scenario_rows.append([
                 msci_key,
                 rate,
                 "All World",
                 h_label,
                 "MSCI World",
+                "Annual",
                 round(msci_tr_cagr, 6),
                 round(msci_after_cagr, 6),
                 round(msci_post_liq_cagr, 6),
@@ -331,9 +339,9 @@ def build_scenario_and_apps_script_data(
         ("1995-2024", 1995, 2024, "Full 30-Year Horizon"),
     ]
     baseline_univ = "sp500" if "sp500" in universes else (universes[0] if universes else "sp500")
-    t3_pre = pretax_cache.get((baseline_univ, 3, 1994, 2024))
-    t5_pre = pretax_cache.get((baseline_univ, 5, 1994, 2024))
-    t10_pre = pretax_cache.get((baseline_univ, 10, 1994, 2024))
+    t3_pre = pretax_cache.get((baseline_univ, 3, "annual", 1994, 2024))
+    t5_pre = pretax_cache.get((baseline_univ, 5, "annual", 1994, 2024))
+    t10_pre = pretax_cache.get((baseline_univ, 10, "annual", 1994, 2024))
 
     era_rows: List[List[Any]] = []
     if t3_pre and t5_pre and t10_pre:

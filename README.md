@@ -76,16 +76,18 @@ For full mathematical derivations, sequence diagrams, and tax-loss carryforward 
 
 ---
 
-## Methodology Note: Dividend Timing Convention
+## Methodology Note: Dividend Timing & Rebalancing Frequencies
 
 > [!NOTE]
-> **Annual Discrete Dividend Timing**:
-> In this simulation engine, constituent cash dividends are credited once annually at each rebalance date based on the positions held over the preceding year and the annual dividend distribution rate.
+> **Discrete Dividend Timing & Quarterly Rebalancing**:
+> This simulation engine supports both **Annual** and **Quarterly** discrete rebalancing cycles:
+> - **Quarterly Rebalancing**: At the end of each quarter (March 31, June 30, September 30, December 31), exact split-adjusted dividends paid across that 3-month window are credited to cash prior to rebalancing. This captures authentic intra-year dividend increases (e.g., Apple, Microsoft, ExxonMobil dividend raises) in the exact quarter they took effect.
+> - **Annual Rebalancing**: Constituent cash dividends are credited once annually at year-end based on the cumulative distributions over the calendar year.
 >
-> In live markets, companies distribute dividends quarterly or monthly, which could be held in cash or reinvested incrementally throughout the year. The annual discrete convention is standard in long-term quantitative factor models:
-> 1. It eliminates the need to introduce arbitrary intra-year reinvestment timing assumptions or high-frequency pricing dependencies.
-> 2. It preserves the zero-external-dependency standard library design of the engine.
-> 3. It provides a conservative and realistic assessment of after-tax compounding drag, properly taxing all dividend distributions in their earned tax year while maintaining strict self-financing rebalancing without margin debt.
+> In both modes:
+> 1. Dividends are derived directly from primary corporate action event logs (`data/raw/tickers/`) and are **never** simply divided by 4.
+> 2. Cash dividends are pooled into available cash prior to rebalancing, preserving the zero-external-dependency, self-financing invariant ($C \ge 0$) without margin debt.
+> 3. Dividend income is taxed in the exact period earned at marginal rate $\tau$, decoupled from capital gains under IRS rules.
 
 ---
 
@@ -180,7 +182,17 @@ Run a \$100,000 backtest strictly on the 10-year horizon for Top 5:
 python3 run_backtest.py --initial-capital 100000 --horizons 10y --n 5
 ```
 
-#### 4. Silent Execution (for CI/CD or Scripts)
+#### 4. Quarterly Rebalancing & Side-by-Side Frequency Comparison
+Run quarterly rebalancing or compare Annual vs. Quarterly side-by-side in the terminal:
+```bash
+# Run quarterly rebalancing
+python3 run_backtest.py --frequency quarterly
+
+# Run and display both Annual and Quarterly side-by-side
+python3 run_backtest.py --compare-frequencies
+```
+
+#### 5. Silent Execution (for CI/CD or Scripts)
 Suppress terminal table output:
 ```bash
 python3 run_backtest.py --quiet
@@ -191,10 +203,13 @@ python3 run_backtest.py --quiet
 | Flag | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `--strategy` | `str` | `market_cap` | Selector algorithm (`market_cap` or `performance`). |
+| `--frequency` | `str` | `annual` | Rebalancing frequency (`annual` or `quarterly`). |
+| `--compare-frequencies` | `flag` | `False` | Run and display both annual and quarterly rebalancing side-by-side. |
 | `--tax-rate` | `float` | `0.30` | Flat capital gains tax rate applied to net realized gains. |
 | `--initial-capital` | `float` | `10000.0` | Initial portfolio starting value in dollars. |
 | `--horizons` | `str` | `10y,20y,30y` | Investment evaluation periods (e.g. `10y,20y` or `10y 20y`). |
 | `--n` | `str` | `3,5,10` | Constituent portfolio sizes (e.g. `3,5,10` or `5`). |
+| `--universes` | `str` | `sp500,world` | Constituent universes to simulate (`sp500`, `world`). |
 | `--output-dir` | `str` | `outputs` | Target directory for CSV report artifacts. |
 | `--scripts-dir` | `str` | `scripts` | Target directory for generated Google Apps Script. |
 | `-q`, `--quiet` | `flag` | `False` | Suppress terminal ASCII summary table. |

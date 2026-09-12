@@ -1,7 +1,7 @@
 """FIFO Tax-Lot Manager with Capital Loss Carryforward tracking."""
 
 from collections import defaultdict
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 from engine.models import TaxLot
 
 EPSILON = 1e-7
@@ -27,7 +27,14 @@ class FIFOTaxLotManager:
         """Alias for capital_loss_carryforward."""
         return self.capital_loss_carryforward
 
-    def add_lot(self, ticker: str, shares: float, price: float, year: int) -> TaxLot:
+    def add_lot(
+        self,
+        ticker: str,
+        shares: float,
+        price: float,
+        year: int,
+        quarter: Optional[int] = None,
+    ) -> TaxLot:
         """Adds a new purchase tax lot to the FIFO queue.
 
         Args:
@@ -35,6 +42,7 @@ class FIFOTaxLotManager:
             shares: Number of shares purchased.
             price: Purchase price per share.
             year: Calendar year of purchase.
+            quarter: Optional calendar quarter of purchase (1..4).
 
         Returns:
             The created TaxLot instance.
@@ -45,13 +53,15 @@ class FIFOTaxLotManager:
             raise ValueError(f"Price must be non-negative, got {price}")
 
         self._lot_counter += 1
-        lot_id = f"{ticker}_{year}_{self._lot_counter}"
+        q_tag = f"Q{quarter}_" if quarter is not None else ""
+        lot_id = f"{ticker}_{year}_{q_tag}{self._lot_counter}"
         lot = TaxLot(
             lot_id=lot_id,
             ticker=ticker,
             shares=shares,
             purchase_price=price,
             purchase_year=year,
+            purchase_quarter=quarter,
         )
         self.lots[ticker].append(lot)
         return lot
@@ -70,7 +80,12 @@ class FIFOTaxLotManager:
         return positions
 
     def sell_shares(
-        self, ticker: str, shares_to_sell: float, current_price: float, current_year: int
+        self,
+        ticker: str,
+        shares_to_sell: float,
+        current_price: float,
+        current_year: int,
+        current_quarter: Optional[int] = None,
     ) -> Tuple[float, List[TaxLot]]:
         """Depletes lots FIFO. Partial lots are split (remaining shares stay in queue).
 

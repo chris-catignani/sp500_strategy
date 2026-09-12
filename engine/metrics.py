@@ -209,7 +209,8 @@ def calculate_benchmark_annual_series(
         - 'final_equity': Terminal equity value (post-liquidation).
         - 'pre_liquidation_wealth': Ending wealth before terminal liquidation tax.
         - 'post_liquidation_wealth': Ending cash wealth after terminal liquidation tax.
-        - 'total_taxes_paid': Total taxes paid (annual dividend taxes + terminal liquidation tax).
+        - 'total_taxes_paid': Total annual dividend taxes paid during holding period.
+        - 'terminal_liq_tax': Terminal capital gains liquidation tax upon full exit.
         - 'total_dividends_received': Cumulative gross dollar dividends received.
         - 'cost_basis': Final adjusted cost basis.
     """
@@ -223,6 +224,7 @@ def calculate_benchmark_annual_series(
             "pre_liquidation_wealth": initial_capital,
             "post_liquidation_wealth": initial_capital,
             "total_taxes_paid": 0.0,
+            "terminal_liq_tax": 0.0,
             "total_dividends_received": 0.0,
             "cost_basis": initial_capital,
         }
@@ -265,8 +267,9 @@ def calculate_benchmark_annual_series(
         unrealized_gain = max(0.0, pre_liquidation_wealth - current_basis)
         terminal_liq_tax = unrealized_gain * eff_tax_rate
         post_liquidation_wealth = pre_liquidation_wealth - terminal_liq_tax
-        total_taxes_paid = total_annual_div_taxes + terminal_liq_tax
+        total_taxes_paid = total_annual_div_taxes
     else:
+        terminal_liq_tax = 0.0
         post_liquidation_wealth = pre_liquidation_wealth
         total_taxes_paid = 0.0
 
@@ -278,6 +281,7 @@ def calculate_benchmark_annual_series(
         "pre_liquidation_wealth": pre_liquidation_wealth,
         "post_liquidation_wealth": post_liquidation_wealth,
         "total_taxes_paid": total_taxes_paid,
+        "terminal_liq_tax": terminal_liq_tax,
         "total_dividends_received": total_dividends_received,
         "cost_basis": current_basis,
     }

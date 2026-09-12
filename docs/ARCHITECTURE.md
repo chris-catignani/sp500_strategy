@@ -104,11 +104,11 @@ The net investable equity is $V_{\text{net}} = V_{\text{pre}} - T$.
 
 ## 3. FIFO Tax-Lot Accounting Model
 
-Each asset purchase creates an immutable `TaxLot(lot_id, ticker, shares, purchase_price, purchase_year)`.
+Each asset purchase creates an immutable `TaxLot(lot_id, ticker, shares, purchase_price, purchase_year, purchase_quarter)`.
 
 When shares are sold:
 1. **FIFO Depletion**: The earliest purchase lots are depleted first.
-2. **Partial Lot Splits**: If a sale depletes a fraction of a lot, the sold fraction is logged with realized capital gain $(P_{\text{sell}} - P_{\text{buy}}) \times \text{shares}$, while remaining shares stay in the lot with unchanged purchase price and year.
+2. **Partial Lot Splits**: If a sale depletes a fraction of a lot, the sold fraction is logged with realized capital gain $(P_{\text{sell}} - P_{\text{buy}}) \times \text{shares}$, while remaining shares stay in the lot with unchanged purchase price and period.
 3. **Loss Carryforward Netting**:
    $$NetTaxableGain_{t+1} = RealizedGain_{t+1} - LossCarryforward_{t}$$
    - If $NetTaxableGain_{t+1} > 0$: $TaxPaid = NetTaxableGain_{t+1} \times \tau$, $LossCarryforward_{t+1} = 0$.
@@ -122,7 +122,19 @@ When shares are sold:
 
 ---
 
-## 4. Pluggable Factor Selection
+## 4. Quarterly Rebalancing & Dynamic Weight Drift
+
+In addition to annual rebalancing, the engine supports **quarterly rebalancing** ($N \in \{3, 5, 10\}$):
+1. **Discrete Quarterly Dividend Pooling**: Split-adjusted dividends paid across the quarter are collected directly from `data/sp500_quarterly_dividends.json` (or `world_quarterly_dividends.json`) into cash at the end of each quarter (March 31, June 30, September 30, December 31).
+2. **Dynamic Weight Drift (Q1–Q3)**: Constituent weights drift dynamically based on price performance relative to the index:
+   $$W_{i, q} = W_{i, 0} \times \frac{P_{i, q} / P_{i, 0}}{P_{\text{index}, q} / P_{\text{index}, 0}}$$
+   Target holdings are re-ranked and rebalanced to $w_{i, q} = W_{i, q} / \sum_{j=1}^N W_{j, q}$.
+3. **Q4 Factsheet Re-Anchoring**: At the end of Q4 (December 31), constituent weights and universe rankings re-anchor directly to official annual factsheets, eliminating multi-year cumulative drift error.
+4. **Pluggable Dataset Ingestion**: [`DataLoader.load_quarterly_universe()`](../engine/data_loader.py) supports external point-in-time constituent files. If a third-party dataset is dropped into `data/`, the engine uses it automatically; otherwise it computes dynamic drift.
+
+---
+
+## 5. Pluggable Factor Selection
 
 New quantitative selection models extend [`BaseSelector`](../engine/selector.py):
 
@@ -145,15 +157,17 @@ class CustomQualitySelector(BaseSelector):
 
 ---
 
-## 5. Google Sheets Dynamic Integration Architecture
+## 6. Google Sheets Dynamic Integration Architecture
 
 The generated [`scripts/google_apps_script.js`](../scripts/google_apps_script.js) utilizes a multi-tier data pipeline:
 
-1. **Pre-Computed Scenario Matrix**: Simulations for standard tax brackets ($0.0\%, 15.0\%, 20.0\%, 30.0\%, 37.0\%$) across all horizons and $N \in \{3, 5, 10\}$ are pre-computed in Python and embedded into a hidden `Scenario Data` sheet.
-2. **Interactive Dropdown Trigger**: Cell `B2` on `Executive Summary` features a dropdown with data validation.
-3. **Dynamic Formula Linking**: Summary cards and comparison tables query the scenario matrix via dynamic lookup formulas:
-   ```excel
-   =VLOOKUP($A10 & "_" & $B10 & "_" & TEXT($B$2, "0.0%"), 'Scenario Data'!$A$2:$R$100, COLUMN(), FALSE)
-   ```
-   This provides instantaneous updates upon dropdown selection without lag or formula errors.
-4. **On-Demand Custom Recalculation**: A custom Google Apps Script function `RECALCULATE_STRATEGY(customRate)` is included for non-standard tax rates (e.g. $24.5\%$).
+1. **Pre-Computed Scenario Matrix**: Simulations for standard tax brackets ($0.0\%, 15.0\%, 20.0\%, 30.0\%, 37.0\%$) across all horizons, universes (`S&P 500`, `All World`), strategies (`Top 3`, `Top 5`, `Top 10`), and rebalancing frequencies (`Annual`, `Quarterly`) are embedded into the 17-column `Scenario Data` sheet.
+2. **Interactive Dropdown Controls (Row 2)**:
+   - Tax Rate (`B2`), Universe (`D2`), Strategy (`F2`), Horizon (`H2`), Compare Index (`J2`), and Rebalance Frequency (`L2`: `All`, `Annual Only`, `Quarterly Only`).
+3. **Spill-Safe Comparative Table (Rows 10–77)**:
+   - Executive Summary displays a 14-column table (`Universe`, `Horizon`, `Strategy`, `Frequency`, `Annual Return (Pre-Tax)`, ...).
+   - Dynamic `FILTER` formula handles both strategy rows and benchmark comparisons without `#SPILL!` errors by reserving Rows 10–77 completely unmerged.
+   - Glossary and Methodology cards are positioned at **Row 80+**.
+4. **Decoupled KPI Scorecards (Rows 4–6)**:
+   - Scorecards query `Scenario Data` via `{horizon}_{universe}_{strategy}_{freq}_{tax_rate}` composite keys and automatically reflect frequency and tax rate changes.
+5. **On-Demand Custom Recalculation**: A custom Google Apps Script function `RECALCULATE_STRATEGY(customRate)` is included for non-standard tax rates (e.g. $24.5\%$).

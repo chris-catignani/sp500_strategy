@@ -342,28 +342,31 @@ class TestExporters(unittest.TestCase):
 
     def test_google_apps_script_interactive_dashboard(self):
         code = generate_google_apps_script()
-        # Executive Summary checks (13-column layout A1:M1)
+        # Executive Summary checks (14-column layout A1:N1)
         self.assertIn("Total Dividends Received", code)
-        self.assertIn("'A1:M1'", code)
-        self.assertIn("'A8:M8'", code)
+        self.assertIn("'A1:N1'", code)
+        self.assertIn("'A8:N8'", code)
         self.assertIn("METHODOLOGY NOTE — DIVIDEND TIMING & MULTI-UNIVERSE SELECTION", code)
-        # 16-Column SCENARIO_HEADERS
+        # 17-Column SCENARIO_HEADERS
         self.assertIn('"LookupKey"', code)
         self.assertIn('"TaxRate"', code)
         self.assertIn('"Universe"', code)
         self.assertIn('"Horizon"', code)
         self.assertIn('"Strategy"', code)
+        self.assertIn('"Frequency"', code)
         self.assertIn('"RowType"', code)
-        # Compare Index dropdown and controls
+        # Compare Index and Frequency dropdowns and controls
         self.assertIn("'Compare Index:'", code)
         self.assertIn("['None', 'S&P 500', 'MSCI World', 'Both']", code)
+        self.assertIn("'Rebalance:'", code)
+        self.assertIn("['All', 'Annual Only', 'Quarterly Only']", code)
         # Decoupled KPI formulas querying Scenario Data
-        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$J:$J, MATCH(\"30y_\"", code)
-        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$H:$H, MATCH(\"30y_\"", code)
+        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$K:$K, MATCH(\"30y_\"", code)
+        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$I:$I, MATCH(\"30y_\"", code)
+        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$P:$P, MATCH(\"30y_\"", code)
         self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$O:$O, MATCH(\"30y_\"", code)
-        self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$N:$N, MATCH(\"30y_\"", code)
         # Dynamic FILTER formula in A10
-        self.assertIn("=IFNA(FILTER(\\'Scenario Data\\'!$C$2:$O", code)
+        self.assertIn("=IFNA(FILTER(\\'Scenario Data\\'!$C$2:$P", code)
         # Multi-universe tabs and menus
         self.assertIn("'World Top 3 Strategy'", code)
         self.assertIn("'World Top 5 Strategy'", code)

@@ -185,6 +185,19 @@ def build_parser() -> argparse.ArgumentParser:
         help="Constituent universes to simulate ('sp500', 'world', or comma-separated list).",
     )
     parser.add_argument(
+        "--frequency",
+        type=str,
+        choices=["annual", "quarterly"],
+        default="annual",
+        help="Rebalancing frequency ('annual' or 'quarterly').",
+    )
+    parser.add_argument(
+        "--compare-frequencies",
+        action="store_true",
+        default=False,
+        help="Run and display both annual and quarterly rebalancing side-by-side.",
+    )
+    parser.add_argument(
         "-q",
         "--quiet",
         action="store_true",
@@ -347,6 +360,8 @@ def run_backtest(args: argparse.Namespace) -> int:
         spx_tr_cagr = bm["tr_cagr"]
         spx_post_liq_cagr = bm["post_liq_cagr"]
 
+        frequencies = ["annual", "quarterly"] if getattr(args, "compare_frequencies", False) else [getattr(args, "frequency", "annual")]
+
         for univ in universes:
             univ_label = "S&P 500" if univ == "sp500" else "All World"
             prefix = "" if univ == "sp500" else "World "
@@ -354,61 +369,66 @@ def run_backtest(args: argparse.Namespace) -> int:
             for n in n_values:
                 selector = resolve_selector(args.strategy, n=n)
 
-                # 1. Pre-tax simulation
-                res_pre = simulator.run_simulation(
-                    start_year=s_yr,
-                    end_year=e_yr,
-                    n=n,
-                    selector=selector,
-                    is_after_tax=False,
-                    initial_capital=args.initial_capital,
-                    universe=univ,
-                )
-                all_results.append(res_pre)
+                for freq in frequencies:
+                    freq_suffix = f" ({freq.capitalize()})" if (len(frequencies) > 1 or freq == "quarterly") else ""
 
-                # 2. After-tax simulation
-                res_post = simulator.run_simulation(
-                    start_year=s_yr,
-                    end_year=e_yr,
-                    n=n,
-                    selector=selector,
-                    is_after_tax=True,
-                    tax_rate=args.tax_rate,
-                    initial_capital=args.initial_capital,
-                    universe=univ,
-                )
-                all_results.append(res_post)
+                    # 1. Pre-tax simulation
+                    res_pre = simulator.run_simulation(
+                        start_year=s_yr,
+                        end_year=e_yr,
+                        n=n,
+                        selector=selector,
+                        is_after_tax=False,
+                        initial_capital=args.initial_capital,
+                        universe=univ,
+                        rebalance_frequency=freq,
+                    )
+                    all_results.append(res_pre)
 
-                # Collect executed trade records
-                for t in simulator.get_trades():
-                    trade_records.append({
-                        "strategy_name": res_post.strategy_name,
-                        "n": n,
-                        "year": t.year,
-                        "ticker": t.ticker,
-                        "action": t.action,
-                        "shares": round(t.shares, 4),
-                        "price": round(t.price, 2),
-                        "realized_gain": round(t.realized_gain, 2),
+                    # 2. After-tax simulation
+                    res_post = simulator.run_simulation(
+                        start_year=s_yr,
+                        end_year=e_yr,
+                        n=n,
+                        selector=selector,
+                        is_after_tax=True,
+                        tax_rate=args.tax_rate,
+                        initial_capital=args.initial_capital,
+                        universe=univ,
+                        rebalance_frequency=freq,
+                    )
+                    all_results.append(res_post)
+
+                    # Collect executed trade records
+                    for t in simulator.get_trades():
+                        trade_records.append({
+                            "strategy_name": f"{res_post.strategy_name}{freq_suffix}",
+                            "n": n,
+                            "year": t.year,
+                            "ticker": t.ticker,
+                            "action": t.action,
+                            "shares": round(t.shares, 4),
+                            "price": round(t.price, 2),
+                            "realized_gain": round(t.realized_gain, 2),
+                        })
+
+                    tax_drag = res_pre.cagr - res_post.post_liquidation_cagr
+                    alpha = calculate_alpha(res_post.post_liquidation_cagr, spx_post_liq_cagr)
+
+                    table_rows.append({
+                        "universe": univ_label,
+                        "horizon": h_label,
+                        "strategy": f"{prefix}Top {n}{freq_suffix}",
+                        "pre_cagr": res_pre.cagr,
+                        "post_cagr": res_post.cagr,
+                        "post_liq_cagr": res_post.post_liquidation_cagr,
+                        "cum_return": calculate_cumulative_return(args.initial_capital, res_post.post_liquidation_wealth),
+                        "final_equity": res_post.post_liquidation_wealth,
+                        "max_dd": res_post.max_drawdown,
+                        "total_taxes": res_post.total_taxes_paid,
+                        "tax_drag": tax_drag,
+                        "alpha": alpha,
                     })
-
-                tax_drag = res_pre.cagr - res_post.post_liquidation_cagr
-                alpha = calculate_alpha(res_post.post_liquidation_cagr, spx_post_liq_cagr)
-
-                table_rows.append({
-                    "universe": univ_label,
-                    "horizon": h_label,
-                    "strategy": f"{prefix}Top {n}",
-                    "pre_cagr": res_pre.cagr,
-                    "post_cagr": res_post.cagr,
-                    "post_liq_cagr": res_post.post_liquidation_cagr,
-                    "cum_return": calculate_cumulative_return(args.initial_capital, res_post.post_liquidation_wealth),
-                    "final_equity": res_post.post_liquidation_wealth,
-                    "max_dd": res_post.max_drawdown,
-                    "total_taxes": res_post.total_taxes_paid,
-                    "tax_drag": tax_drag,
-                    "alpha": alpha,
-                })
 
         # S&P 500 benchmark row in terminal table
         table_rows.append({
