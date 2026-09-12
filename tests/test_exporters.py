@@ -188,9 +188,9 @@ class TestExporters(unittest.TestCase):
         self.assertEqual(row_post["is_after_tax"], "True")
         self.assertAlmostEqual(float(row_post["total_taxes_paid"]), 210.0, places=2)
         self.assertAlmostEqual(float(row_post["total_dividends_received"]), 150.0, places=2)
-        # Tax drag = pretax CAGR (0.1489) - post_liquidation_cagr (0.1180) ~ 0.0309
-        self.assertAlmostEqual(float(row_post["tax_drag"]), 0.1489 - 0.1180, places=4)
-        self.assertAlmostEqual(float(row_post["alpha_vs_spx"]), 0.1180 - 0.125, places=4)
+        # Tax drag = pretax CAGR (0.1489) - aftertax CAGR (0.1390) ~ 0.0099
+        self.assertAlmostEqual(float(row_post["tax_drag"]), 0.1489 - 0.1390, places=4)
+        self.assertAlmostEqual(float(row_post["alpha_vs_spx"]), 0.1390 - 0.125, places=4)
 
     def test_export_annual_breakdown_csv(self):
         """Test annual breakdown CSV output schema and row-level accounting values."""

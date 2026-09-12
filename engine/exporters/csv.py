@@ -79,12 +79,12 @@ def export_summary_metrics_csv(
         horizon_str = f"{horizon_years}y"
         key = (r.strategy_name, r.n, r.start_year, r.end_year)
 
-        # Tax drag
+        # Tax drag (Pre-tax CAGR minus After-tax CAGR)
         if r.is_after_tax:
             if key in pretax_cagr_map:
-                tax_drag = pretax_cagr_map[key] - r.post_liquidation_cagr
+                tax_drag = pretax_cagr_map[key] - r.cagr
             else:
-                tax_drag = r.cagr - r.post_liquidation_cagr
+                tax_drag = 0.0
         else:
             tax_drag = 0.0
 
@@ -122,11 +122,11 @@ def export_summary_metrics_csv(
                         val = spx_benchmarks[cand]
                         if isinstance(val, dict):
                             spx_cagr = val.get(
-                                "post_liquidation_cagr" if r.is_after_tax else "cagr",
+                                "after_cagr" if r.is_after_tax else "cagr",
                                 val.get("cagr"),
                             )
-                        elif hasattr(val, "post_liquidation_cagr") and r.is_after_tax:
-                            spx_cagr = val.post_liquidation_cagr
+                        elif hasattr(val, "after_cagr") and r.is_after_tax:
+                            spx_cagr = val.after_cagr
                         elif hasattr(val, "cagr"):
                             spx_cagr = val.cagr
                         elif isinstance(val, (int, float)):
@@ -143,10 +143,7 @@ def export_summary_metrics_csv(
             if spx_cagr is None:
                 spx_cagr = 0.0
 
-            if r.is_after_tax:
-                alpha_vs_spx = calculate_alpha(r.post_liquidation_cagr, spx_cagr)
-            else:
-                alpha_vs_spx = calculate_alpha(r.cagr, spx_cagr)
+            alpha_vs_spx = calculate_alpha(r.cagr, spx_cagr)
 
         rows.append(
             {

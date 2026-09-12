@@ -451,15 +451,15 @@ function buildExecutiveSummarySheet(ss) {
   sheet.getRange('D6:F6').merge().setValue('Passive buy & hold').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('D4:F6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 3: Selected Strategy Post-Liquidation CAGR (Cols G-H)
-  sheet.getRange('G4:H4').merge().setFormula('="Post-Liq CAGR (" & $D$2 & ")"').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('G5:H5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('G6:H6').merge().setValue('Net after-tax annual rate').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  // Card 3: Selected Strategy After-Tax CAGR (Cols G-H)
+  sheet.getRange('G4:H4').merge().setFormula('="Annual Return (After-Tax)"').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G5:H5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$H:$H, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G6:H6').merge().setValue('Net after-tax annual rate (pre-liq)').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('G4:H6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
 
   // Card 4: Annual Alpha vs Selected Benchmark (Cols I-K)
   sheet.getRange('I4:K4').merge().setFormula('="Annual Alpha vs " & $J$2').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('I5:K5').merge().setFormula('=(IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0) - IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0))').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('I5:K5').merge().setFormula('=(IFERROR(INDEX(\'Scenario Data\'!$H:$H, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0) - IFERROR(INDEX(\'Scenario Data\'!$H:$H, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0))').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('I6:K6').merge().setValue('Excess annual compound return').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('I4:K6').setBackground('#F0FFF4').setBorder(true, true, true, true, false, false, '#C6F6D5', SpreadsheetApp.BorderStyle.SOLID);
 
@@ -510,7 +510,7 @@ function buildExecutiveSummarySheet(ss) {
   sheet.getRange('K10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$M:$M, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
   sheet.getRange('L10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$N:$N, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
   sheet.getRange('M10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$O:$O, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange('N10').setFormula('=(G10 - G11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('N10').setFormula('=(F10 - F11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
   sheet.getRange('A10:N10').setBackground('#F0FFF4');
 
   // Row 11: Benchmark Row
@@ -542,7 +542,7 @@ function buildExecutiveSummarySheet(ss) {
   sheet.getRange('K12').setFormula('=(K10 - K11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
   sheet.getRange('L12').setFormula('=(L10 - L11)').setNumberFormat('+$#,##0.00;-$#,##0.00;$0.00').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
   sheet.getRange('M12').setFormula('=(M10 - M11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange('N12').setFormula('=(G10 - G11)').setNumberFormat('[Color10]+0.00%;[Red]-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('N12').setFormula('=(F10 - F11)').setNumberFormat('[Color10]+0.00%;[Red]-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
   sheet.getRange('A12:N12').setBackground('#FEFCBF');
 
   // Borders for table (Rows 9-12)
@@ -565,14 +565,14 @@ function buildExecutiveSummarySheet(ss) {
     ],
     [
       ['Total Return (Cumulative):', 'Unannualized percentage wealth gain over the entire holding horizon.'],
-      ['Annual Tax Drag:', 'Annual return lost to taxes (Pre-Tax CAGR minus Post-Liq CAGR).']
+      ['Annual Tax Drag:', 'Annual return lost to taxes (Pre-Tax CAGR minus After-Tax CAGR).']
     ],
     [
       ['Post-Liquidation Return:', 'True net annual return assuming full final portfolio sale and tax settlement.'],
       ['Max Drawdown:', 'Worst peak-to-trough percentage decline before a new high was reached.']
     ],
     [
-      ['Ending Wealth:', 'Final liquidated portfolio equity value scaled to active Seed Capital.'],
+      ['Ending Wealth:', 'Final portfolio equity value before terminal liquidation scaled to active Seed Capital.'],
       ['Dividends & Cash Pooling:', 'Split-adjusted discrete cash collections reinvested at rebalance dates.']
     ]
   ];

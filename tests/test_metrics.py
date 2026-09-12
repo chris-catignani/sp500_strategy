@@ -293,7 +293,7 @@ class TestMetrics(unittest.TestCase):
         )
         self.assertAlmostEqual(res["annual_returns"][0], 0.114, places=6)
         self.assertAlmostEqual(res["pre_liquidation_wealth"], 11140.0, places=2)
-        self.assertAlmostEqual(res["final_equity"], 10840.0, places=2)
+        self.assertAlmostEqual(res["final_equity"], 11140.0, places=2)
         self.assertAlmostEqual(res["post_liquidation_wealth"], 10840.0, places=2)
         self.assertAlmostEqual(res["total_taxes_paid"], 60.0, places=2)
         self.assertAlmostEqual(res["terminal_liq_tax"], 300.0, places=2)

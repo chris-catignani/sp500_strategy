@@ -273,7 +273,7 @@ def calculate_benchmark_annual_series(
         post_liquidation_wealth = pre_liquidation_wealth
         total_taxes_paid = 0.0
 
-    final_equity = post_liquidation_wealth
+    final_equity = pre_liquidation_wealth
 
     return {
         "annual_returns": annual_returns,

@@ -95,8 +95,8 @@ def build_scenario_and_apps_script_data(
                 )
                 spx_after_cagr = spx_tr_cagr
                 spx_post_liq_cagr = spx_tr_cagr
-                spx_cum = calculate_cumulative_return(initial_capital, bench["post_liquidation_wealth"])
-                spx_final = bench["post_liquidation_wealth"]
+                spx_cum = calculate_cumulative_return(initial_capital, bench["final_equity"])
+                spx_final = bench["final_equity"]
                 spx_max_dd = calculate_max_drawdown(tr_levels)
                 spx_taxes = 0.0
                 spx_tax_drag = 0.0
@@ -117,10 +117,10 @@ def build_scenario_and_apps_script_data(
                 spx_max_dd = calculate_max_drawdown(val_series)
                 spx_after_cagr = calculate_cagr(initial_capital, bench["pre_liquidation_wealth"], horizon_years)
                 spx_post_liq_cagr = calculate_cagr(initial_capital, bench["post_liquidation_wealth"], horizon_years)
-                spx_cum = calculate_cumulative_return(initial_capital, bench["post_liquidation_wealth"])
-                spx_final = bench["post_liquidation_wealth"]
+                spx_cum = calculate_cumulative_return(initial_capital, bench["final_equity"])
+                spx_final = bench["final_equity"]
                 spx_taxes = bench["total_taxes_paid"]
-                spx_tax_drag = spx_tr_cagr - spx_post_liq_cagr
+                spx_tax_drag = spx_tr_cagr - spx_after_cagr
                 spx_divs = bench["total_dividends_received"]
 
             # S&P 500 Quarterly Benchmark
@@ -142,8 +142,8 @@ def build_scenario_and_apps_script_data(
                 )
                 spx_q_after_cagr = spx_q_tr_cagr
                 spx_q_post_liq_cagr = spx_q_tr_cagr
-                spx_q_cum = calculate_cumulative_return(initial_capital, spx_q_bench["post_liquidation_wealth"])
-                spx_q_final = spx_q_bench["post_liquidation_wealth"]
+                spx_q_cum = calculate_cumulative_return(initial_capital, spx_q_bench["final_equity"])
+                spx_q_final = spx_q_bench["final_equity"]
                 spx_q_max_dd = calculate_max_drawdown(spx_q_tr)
                 spx_q_taxes = 0.0
                 spx_q_tax_drag = 0.0
@@ -164,10 +164,10 @@ def build_scenario_and_apps_script_data(
                 spx_q_max_dd = calculate_max_drawdown(spx_q_val_series)
                 spx_q_after_cagr = calculate_cagr(initial_capital, spx_q_bench["pre_liquidation_wealth"], horizon_years)
                 spx_q_post_liq_cagr = calculate_cagr(initial_capital, spx_q_bench["post_liquidation_wealth"], horizon_years)
-                spx_q_cum = calculate_cumulative_return(initial_capital, spx_q_bench["post_liquidation_wealth"])
-                spx_q_final = spx_q_bench["post_liquidation_wealth"]
+                spx_q_cum = calculate_cumulative_return(initial_capital, spx_q_bench["final_equity"])
+                spx_q_final = spx_q_bench["final_equity"]
                 spx_q_taxes = spx_q_bench["total_taxes_paid"]
-                spx_q_tax_drag = spx_q_tr_cagr - spx_q_post_liq_cagr
+                spx_q_tax_drag = spx_q_tr_cagr - spx_q_after_cagr
                 spx_q_divs = spx_q_bench["total_dividends_received"]
 
             # 1. Active Strategy Portfolios for each universe and frequency
@@ -179,7 +179,7 @@ def build_scenario_and_apps_script_data(
                         pre_res = pretax_cache[(univ, n, freq_key, s_yr, e_yr)]
                         sel = resolve_selector(strategy_name, n=n)
                         ref_spx_tr = spx_q_tr_cagr if freq_str == "Quarterly" else spx_tr_cagr
-                        ref_spx_post_liq = spx_q_post_liq_cagr if freq_str == "Quarterly" else spx_post_liq_cagr
+                        ref_spx_after = spx_q_after_cagr if freq_str == "Quarterly" else spx_after_cagr
 
                         if rate == 0.0:
                             post_res = pre_res
@@ -199,10 +199,10 @@ def build_scenario_and_apps_script_data(
                                 universe=univ,
                                 rebalance_frequency=freq_key,
                             )
-                            tax_drag = pre_res.cagr - post_res.post_liquidation_cagr
-                            alpha = post_res.post_liquidation_cagr - ref_spx_post_liq
-                            strat_cum = calculate_cumulative_return(initial_capital, post_res.post_liquidation_wealth)
-                            strat_final = post_res.post_liquidation_wealth
+                            tax_drag = pre_res.cagr - post_res.cagr
+                            alpha = post_res.cagr - ref_spx_after
+                            strat_cum = post_res.cumulative_return
+                            strat_final = post_res.final_equity
 
                         strat_label = f"Top {n}"
                         key = f"{h_label}_{univ_label}_{strat_label}_{freq_str}_{rate_str}"
@@ -285,8 +285,8 @@ def build_scenario_and_apps_script_data(
                 )
                 msci_after_cagr = msci_tr_cagr
                 msci_post_liq_cagr = msci_tr_cagr
-                msci_cum = calculate_cumulative_return(initial_capital, msci_bench["post_liquidation_wealth"])
-                msci_final = msci_bench["post_liquidation_wealth"]
+                msci_cum = calculate_cumulative_return(initial_capital, msci_bench["final_equity"])
+                msci_final = msci_bench["final_equity"]
                 msci_max_dd = calculate_max_drawdown(msci_tr_levels)
                 msci_taxes = 0.0
                 msci_tax_drag = 0.0
@@ -307,13 +307,13 @@ def build_scenario_and_apps_script_data(
                 msci_max_dd = calculate_max_drawdown(msci_val_series)
                 msci_after_cagr = calculate_cagr(initial_capital, msci_bench["pre_liquidation_wealth"], horizon_years)
                 msci_post_liq_cagr = calculate_cagr(initial_capital, msci_bench["post_liquidation_wealth"], horizon_years)
-                msci_cum = calculate_cumulative_return(initial_capital, msci_bench["post_liquidation_wealth"])
-                msci_final = msci_bench["post_liquidation_wealth"]
+                msci_cum = calculate_cumulative_return(initial_capital, msci_bench["final_equity"])
+                msci_final = msci_bench["final_equity"]
                 msci_taxes = msci_bench["total_taxes_paid"]
-                msci_tax_drag = msci_tr_cagr - msci_post_liq_cagr
+                msci_tax_drag = msci_tr_cagr - msci_after_cagr
                 msci_divs = msci_bench["total_dividends_received"]
 
-            msci_alpha = round(msci_post_liq_cagr - spx_post_liq_cagr, 6)
+            msci_alpha = round(msci_after_cagr - spx_after_cagr, 6)
             msci_key = f"{h_label}_All World_MSCI World_Annual_{rate_str}"
             scenario_rows.append([
                 msci_key,
@@ -354,8 +354,8 @@ def build_scenario_and_apps_script_data(
                 )
                 msci_q_after_cagr = msci_q_tr_cagr
                 msci_q_post_liq_cagr = msci_q_tr_cagr
-                msci_q_cum = calculate_cumulative_return(initial_capital, msci_q_bench["post_liquidation_wealth"])
-                msci_q_final = msci_q_bench["post_liquidation_wealth"]
+                msci_q_cum = calculate_cumulative_return(initial_capital, msci_q_bench["final_equity"])
+                msci_q_final = msci_q_bench["final_equity"]
                 msci_q_max_dd = calculate_max_drawdown(msci_q_tr)
                 msci_q_taxes = 0.0
                 msci_q_tax_drag = 0.0
@@ -376,13 +376,13 @@ def build_scenario_and_apps_script_data(
                 msci_q_max_dd = calculate_max_drawdown(msci_q_val_series)
                 msci_q_after_cagr = calculate_cagr(initial_capital, msci_q_bench["pre_liquidation_wealth"], horizon_years)
                 msci_q_post_liq_cagr = calculate_cagr(initial_capital, msci_q_bench["post_liquidation_wealth"], horizon_years)
-                msci_q_cum = calculate_cumulative_return(initial_capital, msci_q_bench["post_liquidation_wealth"])
-                msci_q_final = msci_q_bench["post_liquidation_wealth"]
+                msci_q_cum = calculate_cumulative_return(initial_capital, msci_q_bench["final_equity"])
+                msci_q_final = msci_q_bench["final_equity"]
                 msci_q_taxes = msci_q_bench["total_taxes_paid"]
-                msci_q_tax_drag = msci_q_tr_cagr - msci_q_post_liq_cagr
+                msci_q_tax_drag = msci_q_tr_cagr - msci_q_after_cagr
                 msci_q_divs = msci_q_bench["total_dividends_received"]
 
-            msci_q_alpha = round(msci_q_post_liq_cagr - spx_q_post_liq_cagr, 6)
+            msci_q_alpha = round(msci_q_after_cagr - spx_q_after_cagr, 6)
             msci_q_key = f"{h_label}_All World_MSCI World_Quarterly_{rate_str}"
             scenario_rows.append([
                 msci_q_key,

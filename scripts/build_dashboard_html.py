@@ -113,7 +113,7 @@ for h_name, h_info in horizons.items():
             if label in h_data["summary"]:
                 h_data["summary"][label]["aftertax_cagr"] = round(float(s_row["cagr"]) * 100, 2)
                 h_data["summary"][label]["postliq_cagr"] = round(float(s_row["post_liquidation_cagr"]) * 100, 2)
-                h_data["summary"][label]["ending_aftertax"] = round(float(s_row["post_liquidation_wealth"]), 2)
+                h_data["summary"][label]["ending_aftertax"] = round(float(s_row["final_equity"]), 2)
                 h_data["summary"][label]["tax_drag"] = round(float(s_row["tax_drag"]) * 100, 2)
 
     # Benchmark summary
