@@ -11,6 +11,7 @@ from engine.exporters.csv import (
 from engine.exporters.apps_script import (
     export_google_apps_script,
     generate_google_apps_script,
+    load_apps_script_template,
 )
 from engine.exporters.pipeline import (
     ReportExporter,
@@ -27,6 +28,7 @@ __all__ = [
     "export_trade_log_csv",
     "generate_google_apps_script",
     "export_google_apps_script",
+    "load_apps_script_template",
     "ReportExporter",
     "export_all",
     "build_default_scenario_data",

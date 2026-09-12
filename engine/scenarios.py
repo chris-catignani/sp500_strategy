@@ -15,21 +15,21 @@ from engine.metrics import (
     calculate_cumulative_return,
     calculate_max_drawdown,
 )
-from engine.models import StrategyResult
+from engine.models import StrategyResult, TradeOrder
 from engine.selector import resolve_selector
 
 
-def build_scenario_and_apps_script_data(
+def compute_scenario_grid(
     simulator: Optional[PortfolioSimulator] = None,
     data_loader: Optional[DataLoader] = None,
     strategy_name: str = "market_cap",
     initial_capital: float = 10000.0,
     universes: Optional[List[str]] = None,
-) -> Tuple[Dict[str, Any], Dict[str, Any], List[Dict[str, Any]]]:
-    """Build multi-tier scenario tables and annual sheets for Google Apps Script.
+) -> Dict[str, Any]:
+    """Execute quantitative backtest simulations across universes, tax tiers, and horizons.
 
-    Runs simulations across tax tiers (0.0%, 15.0%, 20.0%, 30.0%, 37.0%) and
-    generates 30-year annual ledgers for Top 3, Top 5, Top 10, plus S&P 500 benchmark.
+    Runs multi-horizon simulations and pre-calculates portfolio results and benchmark
+    series independently of Google Apps Script presentation formatting.
 
     Args:
         simulator: Optional PortfolioSimulator instance (created if None).
@@ -39,7 +39,8 @@ def build_scenario_and_apps_script_data(
         universes: Optional list of constituent universe names (default: ['sp500', 'world']).
 
     Returns:
-        Tuple of (scenario_data, annual_data, trades_data).
+        Dict containing raw quantitative simulation results, benchmark metrics,
+        30-year ledgers, and trade records.
     """
     if data_loader is None:
         data_loader = DataLoader()
@@ -78,13 +79,19 @@ def build_scenario_and_apps_script_data(
                             rebalance_frequency=freq,
                         )
 
-    scenario_rows: List[List[Any]] = []
+    active_results: List[Dict[str, Any]] = []
+    spx_benchmarks: List[Dict[str, Any]] = []
+    spx_q_benchmarks: List[Dict[str, Any]] = []
+    msci_benchmarks: List[Dict[str, Any]] = []
+    msci_q_benchmarks: List[Dict[str, Any]] = []
+
     for rate, rate_str in tax_rates:
         for h_label, s_yr, e_yr in horizons:
+            horizon_years = e_yr - s_yr
+
             # S&P 500 Annual Benchmark
             pr_levels = [data_loader.get_spx_level(y) for y in range(s_yr, e_yr + 1)]
             tr_levels = [data_loader.get_spx_tr_level(y) for y in range(s_yr, e_yr + 1)]
-            horizon_years = e_yr - s_yr
             spx_tr_cagr = calculate_cagr(tr_levels[0], tr_levels[-1], horizon_years)
 
             if rate == 0.0:
@@ -124,6 +131,23 @@ def build_scenario_and_apps_script_data(
                 spx_taxes = bench["total_taxes_paid"]
                 spx_tax_drag = spx_tr_cagr - spx_after_cagr
                 spx_divs = bench["total_dividends_received"]
+
+            spx_benchmarks.append({
+                "rate": rate,
+                "rate_str": rate_str,
+                "h_label": h_label,
+                "s_yr": s_yr,
+                "e_yr": e_yr,
+                "tr_cagr": spx_tr_cagr,
+                "after_cagr": spx_after_cagr,
+                "post_liq_cagr": spx_post_liq_cagr,
+                "cum": spx_cum,
+                "final": spx_final,
+                "divs": spx_divs,
+                "max_dd": spx_max_dd,
+                "taxes": spx_taxes,
+                "tax_drag": spx_tax_drag,
+            })
 
             # S&P 500 Quarterly Benchmark
             spx_q_pr = [data_loader.get_spx_quarterly_level(s_yr, 4)]
@@ -172,6 +196,23 @@ def build_scenario_and_apps_script_data(
                 spx_q_tax_drag = spx_q_tr_cagr - spx_q_after_cagr
                 spx_q_divs = spx_q_bench["total_dividends_received"]
 
+            spx_q_benchmarks.append({
+                "rate": rate,
+                "rate_str": rate_str,
+                "h_label": h_label,
+                "s_yr": s_yr,
+                "e_yr": e_yr,
+                "tr_cagr": spx_q_tr_cagr,
+                "after_cagr": spx_q_after_cagr,
+                "post_liq_cagr": spx_q_post_liq_cagr,
+                "cum": spx_q_cum,
+                "final": spx_q_final,
+                "divs": spx_q_divs,
+                "max_dd": spx_q_max_dd,
+                "taxes": spx_q_taxes,
+                "tax_drag": spx_q_tax_drag,
+            })
+
             # 1. Active Strategy Portfolios for each universe, weighting, and frequency
             for univ in universes:
                 univ_label = "S&P 500" if univ == "sp500" else "All World"
@@ -209,72 +250,25 @@ def build_scenario_and_apps_script_data(
 
                             strat_label = f"Top {n}"
                             key = f"{h_label}_{univ_label}_{strat_label}_{w_label}_{freq_str}_{rate_str}"
-                            scenario_rows.append([
-                                key,
-                                rate,
-                                univ_label,
-                                h_label,
-                                strat_label,
-                                w_label,
-                                freq_str,
-                                round(pre_res.cagr, 6),
-                                round(post_res.cagr, 6),
-                                round(post_res.post_liquidation_cagr, 6),
-                                round(strat_cum, 6),
-                                round(strat_final, 2),
-                                round(post_res.total_dividends_received, 2),
-                                round(post_res.max_drawdown, 6),
-                                round(post_res.total_taxes_paid, 2),
-                                round(tax_drag, 6),
-                                round(alpha, 6),
-                                "Strategy",
-                            ])
-
-            # 2a. S&P 500 Index Benchmark (Annual)
-            spx_key = f"{h_label}_S&P 500_S&P 500_Annual_{rate_str}"
-            scenario_rows.append([
-                spx_key,
-                rate,
-                "S&P 500",
-                h_label,
-                "S&P 500",
-                "Market Cap",
-                "Annual",
-                round(spx_tr_cagr, 6),
-                round(spx_after_cagr, 6),
-                round(spx_post_liq_cagr, 6),
-                round(spx_cum, 6),
-                round(spx_final, 2),
-                round(spx_divs, 2),
-                round(spx_max_dd, 6),
-                round(spx_taxes, 2),
-                round(spx_tax_drag, 6),
-                0.0,
-                "Index",
-            ])
-
-            # 2b. S&P 500 Index Benchmark (Quarterly)
-            spx_q_key = f"{h_label}_S&P 500_S&P 500_Quarterly_{rate_str}"
-            scenario_rows.append([
-                spx_q_key,
-                rate,
-                "S&P 500",
-                h_label,
-                "S&P 500",
-                "Market Cap",
-                "Quarterly",
-                round(spx_q_tr_cagr, 6),
-                round(spx_q_after_cagr, 6),
-                round(spx_q_post_liq_cagr, 6),
-                round(spx_q_cum, 6),
-                round(spx_q_final, 2),
-                round(spx_q_divs, 2),
-                round(spx_q_max_dd, 6),
-                round(spx_q_taxes, 2),
-                round(spx_q_tax_drag, 6),
-                0.0,
-                "Index",
-            ])
+                            active_results.append({
+                                "key": key,
+                                "rate": rate,
+                                "univ_label": univ_label,
+                                "h_label": h_label,
+                                "strat_label": strat_label,
+                                "w_label": w_label,
+                                "freq_str": freq_str,
+                                "pre_cagr": pre_res.cagr,
+                                "post_cagr": post_res.cagr,
+                                "post_liq_cagr": post_res.post_liquidation_cagr,
+                                "strat_cum": strat_cum,
+                                "strat_final": strat_final,
+                                "total_dividends": post_res.total_dividends_received,
+                                "max_drawdown": post_res.max_drawdown,
+                                "total_taxes": post_res.total_taxes_paid,
+                                "tax_drag": tax_drag,
+                                "alpha": alpha,
+                            })
 
             # 3a. MSCI World Index Benchmark (Annual)
             msci_pr_levels = [data_loader.get_msci_world_level(y) for y in range(s_yr, e_yr + 1)]
@@ -320,27 +314,23 @@ def build_scenario_and_apps_script_data(
                 msci_divs = msci_bench["total_dividends_received"]
 
             msci_alpha = round(msci_after_cagr - spx_after_cagr, 6)
-            msci_key = f"{h_label}_All World_MSCI World_Annual_{rate_str}"
-            scenario_rows.append([
-                msci_key,
-                rate,
-                "All World",
-                h_label,
-                "MSCI World",
-                "Market Cap",
-                "Annual",
-                round(msci_tr_cagr, 6),
-                round(msci_after_cagr, 6),
-                round(msci_post_liq_cagr, 6),
-                round(msci_cum, 6),
-                round(msci_final, 2),
-                round(msci_divs, 2),
-                round(msci_max_dd, 6),
-                round(msci_taxes, 2),
-                round(msci_tax_drag, 6),
-                msci_alpha,
-                "Index",
-            ])
+            msci_benchmarks.append({
+                "rate": rate,
+                "rate_str": rate_str,
+                "h_label": h_label,
+                "s_yr": s_yr,
+                "e_yr": e_yr,
+                "tr_cagr": msci_tr_cagr,
+                "after_cagr": msci_after_cagr,
+                "post_liq_cagr": msci_post_liq_cagr,
+                "cum": msci_cum,
+                "final": msci_final,
+                "divs": msci_divs,
+                "max_dd": msci_max_dd,
+                "taxes": msci_taxes,
+                "tax_drag": msci_tax_drag,
+                "alpha": msci_alpha,
+            })
 
             # 3b. MSCI World Index Benchmark (Quarterly)
             msci_q_pr = [data_loader.get_msci_world_quarterly_level(s_yr, 4)]
@@ -390,36 +380,29 @@ def build_scenario_and_apps_script_data(
                 msci_q_divs = msci_q_bench["total_dividends_received"]
 
             msci_q_alpha = round(msci_q_after_cagr - spx_q_after_cagr, 6)
-            msci_q_key = f"{h_label}_All World_MSCI World_Quarterly_{rate_str}"
-            scenario_rows.append([
-                msci_q_key,
-                rate,
-                "All World",
-                h_label,
-                "MSCI World",
-                "Market Cap",
-                "Quarterly",
-                round(msci_q_tr_cagr, 6),
-                round(msci_q_after_cagr, 6),
-                round(msci_q_post_liq_cagr, 6),
-                round(msci_q_cum, 6),
-                round(msci_q_final, 2),
-                round(msci_q_divs, 2),
-                round(msci_q_max_dd, 6),
-                round(msci_q_taxes, 2),
-                round(msci_q_tax_drag, 6),
-                msci_q_alpha,
-                "Index",
-            ])
+            msci_q_benchmarks.append({
+                "rate": rate,
+                "rate_str": rate_str,
+                "h_label": h_label,
+                "s_yr": s_yr,
+                "e_yr": e_yr,
+                "tr_cagr": msci_q_tr_cagr,
+                "after_cagr": msci_q_after_cagr,
+                "post_liq_cagr": msci_q_post_liq_cagr,
+                "cum": msci_q_cum,
+                "final": msci_q_final,
+                "divs": msci_q_divs,
+                "max_dd": msci_q_max_dd,
+                "taxes": msci_q_taxes,
+                "tax_drag": msci_q_tax_drag,
+                "alpha": msci_q_alpha,
+            })
 
     # 30-Year Annual histories & trades at 30% baseline tax rate across universes
-    annual_data: Dict[str, List[List[Any]]] = {}
-    trade_rows: List[Dict[str, Any]] = []
     res_30y_map: Dict[Tuple[str, int, str], StrategyResult] = {}
+    trades_30y_map: Dict[Tuple[str, int], List[TradeOrder]] = {}
 
     for univ in universes:
-        prefix = "" if univ == "sp500" else "World "
-        key_prefix = "" if univ == "sp500" else "world_"
         for n in target_n_values:
             sel = resolve_selector(strategy_name, n=n)
             for freq in ("annual", "quarterly"):
@@ -435,41 +418,230 @@ def build_scenario_and_apps_script_data(
                     rebalance_frequency=freq,
                 )
                 res_30y_map[(univ, n, freq)] = res_30y
-
-                # Annual ledger and trades only recorded once per universe for annual baseline tabs
                 if freq == "annual":
-                    trades_30y = simulator.get_trades()
-                    ledger_rows: List[List[Any]] = []
-                    for entry in res_30y.annual_history:
-                        ledger_rows.append([
-                            entry.year,
-                            round(entry.start_value, 2),
-                            round(entry.gross_return, 6),
-                            round(getattr(entry, "dividend_income", 0.0), 2),
-                            round(entry.ending_value_pretax, 2),
-                            round(entry.realized_capital_gain, 2),
-                            round(entry.net_taxable_gain, 2),
-                            round(getattr(entry, "capital_gains_tax_paid", 0.0), 2),
-                            round(getattr(entry, "dividend_tax_paid", 0.0), 2),
-                            round(entry.tax_paid, 2),
-                            round(entry.loss_carryforward, 2),
-                            round(entry.ending_value_aftertax, 2),
-                            round(entry.cash, 2),
-                            round(entry.spx_return, 6),
-                            round(entry.turnover, 6),
-                        ])
-                    annual_data[f"{key_prefix}top_{n}"] = ledger_rows
+                    trades_30y_map[(univ, n)] = simulator.get_trades()
 
-                    for t in trades_30y:
-                        trade_rows.append({
-                            "year": t.year,
-                            "strategy_name": f"{prefix}Top {n}",
-                            "ticker": t.ticker,
-                            "action": t.action,
-                            "shares": round(t.shares, 4),
-                            "price": round(t.price, 2),
-                            "realized_gain": round(t.realized_gain, 2),
-                        })
+    return {
+        "universes": universes,
+        "horizons": horizons,
+        "tax_rates": tax_rates,
+        "target_n_values": target_n_values,
+        "weighting_schemes": weighting_schemes,
+        "initial_capital": initial_capital,
+        "strategy_name": strategy_name,
+        "pretax_cache": pretax_cache,
+        "active_results": active_results,
+        "spx_benchmarks": spx_benchmarks,
+        "spx_q_benchmarks": spx_q_benchmarks,
+        "msci_benchmarks": msci_benchmarks,
+        "msci_q_benchmarks": msci_q_benchmarks,
+        "res_30y_map": res_30y_map,
+        "trades_30y_map": trades_30y_map,
+        "data_loader": data_loader,
+    }
+
+
+def format_apps_script_payloads(
+    grid: Dict[str, Any],
+) -> Tuple[Dict[str, Any], Dict[str, Any], List[Dict[str, Any]]]:
+    """Format quantitative simulation grid data into Google Apps Script matrices.
+
+    Translates quantitative results into 2D tables, formatted columns, and lookup
+    matrices for Google Sheets.
+
+    Args:
+        grid: Output dictionary from compute_scenario_grid.
+
+    Returns:
+        Tuple of (scenario_data, annual_data, trades_data).
+    """
+    universes = grid["universes"]
+    target_n_values = grid["target_n_values"]
+    initial_capital = grid["initial_capital"]
+    pretax_cache = grid["pretax_cache"]
+    res_30y_map = grid["res_30y_map"]
+    trades_30y_map = grid["trades_30y_map"]
+    data_loader: DataLoader = grid["data_loader"]
+
+    # Build scenario_rows
+    scenario_rows: List[List[Any]] = []
+
+    # Map benchmark rows by (rate, h_label)
+    spx_bench_map = {(b["rate"], b["h_label"]): b for b in grid["spx_benchmarks"]}
+    spx_q_bench_map = {(b["rate"], b["h_label"]): b for b in grid["spx_q_benchmarks"]}
+    msci_bench_map = {(b["rate"], b["h_label"]): b for b in grid["msci_benchmarks"]}
+    msci_q_bench_map = {(b["rate"], b["h_label"]): b for b in grid["msci_q_benchmarks"]}
+
+    # Group active results by (rate, h_label) to maintain identical row order
+    active_by_rate_h: Dict[Tuple[float, str], List[Dict[str, Any]]] = {}
+    for ar in grid["active_results"]:
+        key_pair = (ar["rate"], ar["h_label"])
+        active_by_rate_h.setdefault(key_pair, []).append(ar)
+
+    for rate, rate_str in grid["tax_rates"]:
+        for h_label, _, _ in grid["horizons"]:
+            key_pair = (rate, h_label)
+            # 1. Active strategies for this (rate, horizon)
+            for ar in active_by_rate_h.get(key_pair, []):
+                scenario_rows.append([
+                    ar["key"],
+                    ar["rate"],
+                    ar["univ_label"],
+                    ar["h_label"],
+                    ar["strat_label"],
+                    ar["w_label"],
+                    ar["freq_str"],
+                    round(ar["pre_cagr"], 6),
+                    round(ar["post_cagr"], 6),
+                    round(ar["post_liq_cagr"], 6),
+                    round(ar["strat_cum"], 6),
+                    round(ar["strat_final"], 2),
+                    round(ar["total_dividends"], 2),
+                    round(ar["max_drawdown"], 6),
+                    round(ar["total_taxes"], 2),
+                    round(ar["tax_drag"], 6),
+                    round(ar["alpha"], 6),
+                    "Strategy",
+                ])
+
+            # 2a. S&P 500 Index Benchmark (Annual)
+            spx_b = spx_bench_map[key_pair]
+            spx_key = f"{h_label}_S&P 500_S&P 500_Annual_{rate_str}"
+            scenario_rows.append([
+                spx_key,
+                rate,
+                "S&P 500",
+                h_label,
+                "S&P 500",
+                "Market Cap",
+                "Annual",
+                round(spx_b["tr_cagr"], 6),
+                round(spx_b["after_cagr"], 6),
+                round(spx_b["post_liq_cagr"], 6),
+                round(spx_b["cum"], 6),
+                round(spx_b["final"], 2),
+                round(spx_b["divs"], 2),
+                round(spx_b["max_dd"], 6),
+                round(spx_b["taxes"], 2),
+                round(spx_b["tax_drag"], 6),
+                0.0,
+                "Index",
+            ])
+
+            # 2b. S&P 500 Index Benchmark (Quarterly)
+            spx_qb = spx_q_bench_map[key_pair]
+            spx_q_key = f"{h_label}_S&P 500_S&P 500_Quarterly_{rate_str}"
+            scenario_rows.append([
+                spx_q_key,
+                rate,
+                "S&P 500",
+                h_label,
+                "S&P 500",
+                "Market Cap",
+                "Quarterly",
+                round(spx_qb["tr_cagr"], 6),
+                round(spx_qb["after_cagr"], 6),
+                round(spx_qb["post_liq_cagr"], 6),
+                round(spx_qb["cum"], 6),
+                round(spx_qb["final"], 2),
+                round(spx_qb["divs"], 2),
+                round(spx_qb["max_dd"], 6),
+                round(spx_qb["taxes"], 2),
+                round(spx_qb["tax_drag"], 6),
+                0.0,
+                "Index",
+            ])
+
+            # 3a. MSCI World Index Benchmark (Annual)
+            msci_b = msci_bench_map[key_pair]
+            msci_key = f"{h_label}_All World_MSCI World_Annual_{rate_str}"
+            scenario_rows.append([
+                msci_key,
+                rate,
+                "All World",
+                h_label,
+                "MSCI World",
+                "Market Cap",
+                "Annual",
+                round(msci_b["tr_cagr"], 6),
+                round(msci_b["after_cagr"], 6),
+                round(msci_b["post_liq_cagr"], 6),
+                round(msci_b["cum"], 6),
+                round(msci_b["final"], 2),
+                round(msci_b["divs"], 2),
+                round(msci_b["max_dd"], 6),
+                round(msci_b["taxes"], 2),
+                round(msci_b["tax_drag"], 6),
+                msci_b["alpha"],
+                "Index",
+            ])
+
+            # 3b. MSCI World Index Benchmark (Quarterly)
+            msci_qb = msci_q_bench_map[key_pair]
+            msci_q_key = f"{h_label}_All World_MSCI World_Quarterly_{rate_str}"
+            scenario_rows.append([
+                msci_q_key,
+                rate,
+                "All World",
+                h_label,
+                "MSCI World",
+                "Market Cap",
+                "Quarterly",
+                round(msci_qb["tr_cagr"], 6),
+                round(msci_qb["after_cagr"], 6),
+                round(msci_qb["post_liq_cagr"], 6),
+                round(msci_qb["cum"], 6),
+                round(msci_qb["final"], 2),
+                round(msci_qb["divs"], 2),
+                round(msci_qb["max_dd"], 6),
+                round(msci_qb["taxes"], 2),
+                round(msci_qb["tax_drag"], 6),
+                msci_qb["alpha"],
+                "Index",
+            ])
+
+    # 30-Year Annual histories & trades at 30% baseline tax rate
+    annual_data: Dict[str, List[List[Any]]] = {}
+    trade_rows: List[Dict[str, Any]] = []
+
+    for univ in universes:
+        prefix = "" if univ == "sp500" else "World "
+        key_prefix = "" if univ == "sp500" else "world_"
+        for n in target_n_values:
+            res_30y = res_30y_map[(univ, n, "annual")]
+            trades_30y = trades_30y_map.get((univ, n), [])
+
+            ledger_rows: List[List[Any]] = []
+            for entry in res_30y.annual_history:
+                ledger_rows.append([
+                    entry.year,
+                    round(entry.start_value, 2),
+                    round(entry.gross_return, 6),
+                    round(getattr(entry, "dividend_income", 0.0), 2),
+                    round(entry.ending_value_pretax, 2),
+                    round(entry.realized_capital_gain, 2),
+                    round(entry.net_taxable_gain, 2),
+                    round(getattr(entry, "capital_gains_tax_paid", 0.0), 2),
+                    round(getattr(entry, "dividend_tax_paid", 0.0), 2),
+                    round(entry.tax_paid, 2),
+                    round(entry.loss_carryforward, 2),
+                    round(entry.ending_value_aftertax, 2),
+                    round(entry.cash, 2),
+                    round(entry.spx_return, 6),
+                    round(entry.turnover, 6),
+                ])
+            annual_data[f"{key_prefix}top_{n}"] = ledger_rows
+
+            for t in trades_30y:
+                trade_rows.append({
+                    "year": t.year,
+                    "strategy_name": f"{prefix}Top {n}",
+                    "ticker": t.ticker,
+                    "action": t.action,
+                    "shares": round(t.shares, 4),
+                    "price": round(t.price, 2),
+                    "realized_gain": round(t.realized_gain, 2),
+                })
 
     # S&P 500 30-Year Benchmark Series
     spx_rows: List[List[Any]] = []
@@ -511,7 +683,6 @@ def build_scenario_and_apps_script_data(
             t5_p = pretax_cache.get((u, 5, "market_cap", f_key, 1994, 2024))
             t10_p = pretax_cache.get((u, 10, "market_cap", f_key, 1994, 2024))
 
-            # Benchmark annual return series for regime attribution
             bench_annual_rets: Dict[int, float] = {}
             if u == "sp500":
                 if f_key == "annual":
@@ -561,7 +732,6 @@ def build_scenario_and_apps_script_data(
                         round(win_rate, 4),
                     ])
 
-                    # Preserve legacy era_rows for S&P 500 Annual
                     if u == "sp500" and f_key == "annual":
                         era_rows.append([
                             label,
@@ -708,7 +878,6 @@ def build_scenario_and_apps_script_data(
                     round(db, 6),
                 ])
 
-            # Preserve legacy 31-row trajectory_data / drawdown_data for baseline S&P 500 Annual
             if (u == "sp500" or u == universes[0]) and f_key == "annual" and not trajectory_rows:
                 for y, v3, v5, v10, vb in zip(years_30y, t3_t, t5_t, t10_t, bench_t):
                     trajectory_rows.append([y, round(v3, 2), round(v5, 2), round(v10, 2), round(vb, 2)])
@@ -725,6 +894,27 @@ def build_scenario_and_apps_script_data(
     scenario_data = {"scenario_rows": scenario_rows}
 
     return scenario_data, annual_data, trade_rows
+
+
+def build_scenario_and_apps_script_data(
+    simulator: Optional[PortfolioSimulator] = None,
+    data_loader: Optional[DataLoader] = None,
+    strategy_name: str = "market_cap",
+    initial_capital: float = 10000.0,
+    universes: Optional[List[str]] = None,
+) -> Tuple[Dict[str, Any], Dict[str, Any], List[Dict[str, Any]]]:
+    """Build multi-tier scenario tables and annual sheets for Google Apps Script.
+
+    High-level facade orchestrating compute_scenario_grid and format_apps_script_payloads.
+    """
+    grid = compute_scenario_grid(
+        simulator=simulator,
+        data_loader=data_loader,
+        strategy_name=strategy_name,
+        initial_capital=initial_capital,
+        universes=universes,
+    )
+    return format_apps_script_payloads(grid)
 
 
 def build_default_scenario_data() -> Dict[str, Any]:

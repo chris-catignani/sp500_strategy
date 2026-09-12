@@ -4,6 +4,8 @@ import unittest
 from engine.scenarios import (
     build_default_scenario_data,
     build_scenario_and_apps_script_data,
+    compute_scenario_grid,
+    format_apps_script_payloads,
 )
 
 
@@ -120,6 +122,33 @@ class TestScenarios(unittest.TestCase):
         for k in required_keys:
             self.assertIn(k, defaults)
             self.assertGreater(len(defaults[k]), 0)
+
+    def test_compute_scenario_grid_isolated(self):
+        """Verify compute_scenario_grid generates raw simulation outputs independently."""
+        grid = compute_scenario_grid(universes=["sp500"], initial_capital=20000.0)
+        self.assertIsInstance(grid, dict)
+        self.assertEqual(grid["initial_capital"], 20000.0)
+        self.assertIn("pretax_cache", grid)
+        self.assertIn("active_results", grid)
+        self.assertIn("spx_benchmarks", grid)
+        self.assertIn("spx_q_benchmarks", grid)
+        self.assertIn("res_30y_map", grid)
+        self.assertIn("trades_30y_map", grid)
+        self.assertGreater(len(grid["active_results"]), 0)
+
+        # Ensure active_results entries have unrounded raw numbers and correct keys
+        sample = grid["active_results"][0]
+        self.assertIn("pre_cagr", sample)
+        self.assertIn("post_cagr", sample)
+        self.assertIn("alpha", sample)
+        self.assertIsInstance(sample["pre_cagr"], float)
+
+        # Test format_apps_script_payloads consumes grid output
+        scenario_data, annual_data, trades_data = format_apps_script_payloads(grid)
+        self.assertIn("scenario_rows", scenario_data)
+        self.assertIn("spx", annual_data)
+        self.assertIn("top_10", annual_data)
+        self.assertGreater(len(trades_data), 0)
 
 
 if __name__ == "__main__":

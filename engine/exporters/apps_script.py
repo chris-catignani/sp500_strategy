@@ -11,9 +11,66 @@ from typing import Any, Dict, List, Optional, Union
 from engine.exporters.csv import _ensure_dir_exists
 from engine.scenarios import build_default_scenario_data
 
-TEMPLATE_PATH = (
-    Path(__file__).resolve().parent.parent / "templates" / "google_apps_script.template.js"
+GAS_TEMPLATE_DIR = (
+    Path(__file__).resolve().parent.parent / "templates" / "gas"
 )
+
+EXPECTED_PLACEHOLDERS = (
+    "/*__BASE_INITIAL_CAPITAL__*/10000",
+    "/*__SCENARIO_DATA__*/[]",
+    "/*__TOP3_ANNUAL_DATA__*/[]",
+    "/*__TOP5_ANNUAL_DATA__*/[]",
+    "/*__TOP10_ANNUAL_DATA__*/[]",
+    "/*__WORLD_TOP3_ANNUAL_DATA__*/[]",
+    "/*__WORLD_TOP5_ANNUAL_DATA__*/[]",
+    "/*__WORLD_TOP10_ANNUAL_DATA__*/[]",
+    "/*__SPX_DATA__*/[]",
+    "/*__TRADE_DATA__*/[]",
+    "/*__ERA_DATA__*/[]",
+    "/*__TRAJECTORY_DATA__*/[]",
+    "/*__DRAWDOWN_DATA__*/[]",
+    "/*__ERA_MATRIX__*/[]",
+    "/*__TRAJECTORY_MATRIX__*/[]",
+    "/*__DRAWDOWN_MATRIX__*/[]",
+)
+
+
+def load_apps_script_template() -> str:
+    """Load and concatenate modular Google Apps Script template partials.
+
+    Reads all .js files in engine/templates/gas in alphabetical order,
+    normalizes whitespace, joins with double newlines to prevent ASI and
+    single-line comment swallowing issues, and asserts all 16 required
+    placeholders are present.
+
+    Returns:
+        The concatenated template string.
+
+    Raises:
+        FileNotFoundError: If the template directory or partials are missing.
+        ValueError: If any required placeholder is missing.
+    """
+    if not GAS_TEMPLATE_DIR.is_dir():
+        raise FileNotFoundError(
+            f"Google Apps Script template directory not found: {GAS_TEMPLATE_DIR}"
+        )
+
+    js_files = sorted(GAS_TEMPLATE_DIR.glob("*.js"))
+    if not js_files:
+        raise FileNotFoundError(
+            f"No .js template partials found in {GAS_TEMPLATE_DIR}"
+        )
+
+    parts = [fpath.read_text(encoding="utf-8").strip() for fpath in js_files]
+    template = "\n\n".join(parts) + "\n"
+
+    for ph in EXPECTED_PLACEHOLDERS:
+        if ph not in template:
+            raise ValueError(
+                f"Missing required template placeholder in Apps Script templates: {ph}"
+            )
+
+    return template
 
 
 def generate_google_apps_script(
@@ -155,8 +212,7 @@ def generate_google_apps_script(
 
     base_cap_str = str(int(initial_capital)) if float(initial_capital).is_integer() else str(initial_capital)
 
-    with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
-        template = f.read()
+    template = load_apps_script_template()
 
     replacements = {
         "/*__BASE_INITIAL_CAPITAL__*/10000": base_cap_str,

@@ -11,8 +11,9 @@ from engine.exporters import (
     export_summary_metrics_csv,
     export_annual_breakdown_csv,
     export_trade_log_csv,
-    generate_google_apps_script,
     export_google_apps_script,
+    generate_google_apps_script,
+    load_apps_script_template,
     ReportExporter,
     export_all,
 )
@@ -299,6 +300,43 @@ class TestExporters(unittest.TestCase):
         nested_path = os.path.join(self.test_dir, "nested", "level2", "test.csv")
         export_summary_metrics_csv([self.res_pretax], nested_path)
         self.assertTrue(os.path.exists(nested_path))
+
+    def test_load_apps_script_template(self):
+        """Test that load_apps_script_template concatenates partials and validates placeholders."""
+        from unittest.mock import patch
+        from pathlib import Path
+
+        # 1. Successful load from gas directory
+        template = load_apps_script_template()
+        self.assertIsInstance(template, str)
+        self.assertGreater(len(template), 10000)
+        self.assertIn("function onOpen()", template)
+        self.assertIn("function buildAllSheets()", template)
+        self.assertIn("function buildExecutiveSummarySheet", template)
+        self.assertIn("function buildPerformanceAndTradeoffsSheet", template)
+
+        # Verify all expected placeholders are present
+        from engine.exporters.apps_script import EXPECTED_PLACEHOLDERS
+        for ph in EXPECTED_PLACEHOLDERS:
+            self.assertIn(ph, template)
+
+        # 2. Test FileNotFoundError if directory does not exist
+        with patch("engine.exporters.apps_script.GAS_TEMPLATE_DIR", Path("/non/existent/dir")):
+            with self.assertRaises(FileNotFoundError):
+                load_apps_script_template()
+
+        # 3. Test ValueError if placeholder is missing
+        with tempfile.TemporaryDirectory() as empty_gas_dir:
+            with patch("engine.exporters.apps_script.GAS_TEMPLATE_DIR", Path(empty_gas_dir)):
+                # Empty dir raises FileNotFoundError
+                with self.assertRaises(FileNotFoundError):
+                    load_apps_script_template()
+
+                # Dir with partial missing placeholder raises ValueError
+                p = Path(empty_gas_dir) / "00_test.js"
+                p.write_text("console.log('hello');", encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    load_apps_script_template()
 
     def test_generate_google_apps_script(self):
         """Test Google Apps Script generator creates valid JS with required sheets and styling."""

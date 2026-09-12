@@ -24,7 +24,7 @@ Quantitative backtesting engine and interactive Google Sheets dashboard for S&P 
 - `engine/metrics.py`: Standard math functions (`calculate_cagr`, `calculate_cumulative_return`, `calculate_max_drawdown`, `calculate_turnover`, `calculate_tax_drag`, `calculate_alpha`, `calculate_terminal_metrics`, `calculate_benchmark_annual_series`).
 - `engine/scenarios.py`: Multi-tier scenario matrix builder (`build_scenario_and_apps_script_data`, `build_default_scenario_data`) across tax tiers, frequencies (Annual & Quarterly), and horizons.
 - `engine/terminal_view.py`: Terminal presentation utilities (`format_terminal_table`) for ASCII comparison tables.
-- `engine/templates/`: Standalone Google Apps Script dashboard template (`google_apps_script.template.js`) with 14-column layout, Control 6 frequency dropdown, and spill-safe row 80 glossary.
+- `engine/templates/`: Modular Google Apps Script dashboard templates (`gas/00_` to `05_`) with 14-column layout, Control 6 frequency dropdown, and spill-safe row 80 glossary.
 - `engine/exporters/`: Modular report writers:
   - `csv.py`: CSV report writers (19-column summary metrics, 19-column annual breakdown, 8-column trade log).
   - `apps_script.py`: Google Apps Script generator injecting simulation data into the external JS template.

@@ -190,6 +190,13 @@ function buildAllSheets() {
   ss.toast('All sheets successfully created and styled!', 'Build Complete', 4);
 }
 
+// ============================================================================
+// COORDINATE CONTRACT WITH 03_performance_tradeoffs.js:
+// Cols 1-18 (A-R):   Scenario Matrix
+// Cols 20-25 (T-Y):  Trajectory Matrix (FILTER referenced in Tab 2, A43)
+// Cols 27-32 (AA-AF): Drawdown Matrix  (FILTER referenced in Tab 2, G43)
+// Cols 34-42 (AH-AP): Era Matrix       (FILTER referenced in Tab 2, A6)
+// ============================================================================
 // ==========================================
 // Tab 1: Scenario Data (Lookup Engine)
 // ==========================================
@@ -715,6 +722,12 @@ function buildExecutiveSummarySheet(ss) {
   sheet.setFrozenRows(3);
 }
 
+// ============================================================================
+// COORDINATE CONTRACT WITH 01_scenario_data.js:
+// References 'Scenario Data'! Era Matrix:       (Key: AH, Data: AI-AP)
+// References 'Scenario Data'! Trajectory Matrix:(Key: T,  Data: U-Y)
+// References 'Scenario Data'! Drawdown Matrix:  (Key: AA, Data: AB-AF)
+// ============================================================================
 // ==========================================
 // Tab 2: Performance & Tradeoffs (Charts & Regimes)
 // ==========================================
@@ -1204,7 +1217,6 @@ function buildTradesSheet(ss) {
   }
   sheet.setFrozenRows(1);
 }
-
 
 // ==========================================
 // Utility & Custom Spreadsheet Functions

@@ -40,7 +40,7 @@ graph TD
 | [`engine/metrics.py`](../engine/metrics.py) | Pure mathematical calculation of CAGR, Cumulative Return, Max Drawdown, Turnover, Tax Drag, Alpha, and terminal liquidation metrics. |
 | [`engine/scenarios.py`](../engine/scenarios.py) | Multi-tier scenario matrix orchestrator (`build_scenario_and_apps_script_data`) across horizons, tax rates, and universes. |
 | [`engine/terminal_view.py`](../engine/terminal_view.py) | ASCII terminal presentation formatting (`format_terminal_table`). |
-| [`engine/templates/`](../engine/templates/) | Standalone Google Apps Script dashboard template (`google_apps_script.template.js`). |
+| [`engine/templates/`](../engine/templates/) | Modular Google Apps Script dashboard templates (`gas/00_` to `05_`). |
 | [`engine/exporters/`](../engine/exporters/) | Modular export package (`csv.py`, `apps_script.py`, `pipeline.py`). Formats CSV audit files and generates Google Apps Script dashboards. |
 
 ---
