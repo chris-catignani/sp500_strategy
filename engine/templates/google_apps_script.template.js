@@ -232,7 +232,7 @@ function buildExecutiveSummarySheet(ss) {
 
   // 1. Banner Header (A1:N1, 14 columns)
   sheet.getRange('A1:N1').merge()
-       .setValue('S&P 500 & ALL-WORLD TOP N STRATEGY - EXECUTIVE DASHBOARD')
+       .setValue('S&P 500 & ALL-WORLD TOP N STRATEGY — EXECUTIVE DASHBOARD')
        .setBackground('#1B365D')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -241,14 +241,104 @@ function buildExecutiveSummarySheet(ss) {
        .setVerticalAlignment('middle')
        .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
 
-  // 2. Interactive Parameter Dropdowns in Row 2
-  // Control 1: Tax Rate (Cols A-B)
-  sheet.getRange('A2').setValue('Tax Rate:')
+  // 2. Interactive Parameter Dropdowns in Row 2 (7 Controls across 14 columns)
+  // Control 1: Universe (Cols A-B)
+  sheet.getRange('A2').setValue('Universe:')
        .setFontWeight('bold')
        .setHorizontalAlignment('right')
        .setVerticalAlignment('middle');
   var b2 = sheet.getRange('B2');
-  b2.setValue(0.30)
+  b2.setValue('S&P 500')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var univRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['S&P 500', 'All World'], true)
+    .setAllowInvalid(false)
+    .build();
+  b2.setDataValidation(univRule);
+
+  // Control 2: Strategy (Cols C-D)
+  sheet.getRange('C2').setValue('Strategy:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var d2 = sheet.getRange('D2');
+  d2.setValue('Top 5')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var stratRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Top 3', 'Top 5', 'Top 10'], true)
+    .setAllowInvalid(false)
+    .build();
+  d2.setDataValidation(stratRule);
+
+  // Control 3: Horizon (Cols E-F)
+  sheet.getRange('E2').setValue('Horizon:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var f2 = sheet.getRange('F2');
+  f2.setValue('30y')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var horizRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['10y', '20y', '30y'], true)
+    .setAllowInvalid(false)
+    .build();
+  f2.setDataValidation(horizRule);
+
+  // Control 4: Rebalance Frequency (Cols G-H)
+  sheet.getRange('G2').setValue('Rebalance:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var h2 = sheet.getRange('H2');
+  h2.setValue('Annual')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var freqRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Annual', 'Quarterly'], true)
+    .setAllowInvalid(false)
+    .build();
+  h2.setDataValidation(freqRule);
+
+  // Control 5: Benchmark (Cols I-J)
+  sheet.getRange('I2').setValue('Benchmark:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var j2 = sheet.getRange('J2');
+  j2.setValue('S&P 500')
+    .setFontWeight('bold')
+    .setFontSize(11)
+    .setBackground('#FEFCBF')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle');
+  var benchRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['S&P 500', 'MSCI World'], true)
+    .setAllowInvalid(false)
+    .build();
+  j2.setDataValidation(benchRule);
+
+  // Control 6: Tax Rate (Cols K-L)
+  sheet.getRange('K2').setValue('Tax Rate:')
+       .setFontWeight('bold')
+       .setHorizontalAlignment('right')
+       .setVerticalAlignment('middle');
+  var l2 = sheet.getRange('L2');
+  l2.setValue(0.30)
     .setNumberFormat('0.0%')
     .setFontWeight('bold')
     .setFontSize(11)
@@ -259,97 +349,7 @@ function buildExecutiveSummarySheet(ss) {
     .requireValueInList(['0.0%', '15.0%', '20.0%', '30.0%', '37.0%'], true)
     .setAllowInvalid(false)
     .build();
-  b2.setDataValidation(taxRule);
-
-  // Control 2: Universe (Cols C-D)
-  sheet.getRange('C2').setValue('Universe:')
-       .setFontWeight('bold')
-       .setHorizontalAlignment('right')
-       .setVerticalAlignment('middle');
-  var d2 = sheet.getRange('D2');
-  d2.setValue('All')
-    .setFontWeight('bold')
-    .setFontSize(11)
-    .setBackground('#FEFCBF')
-    .setHorizontalAlignment('center')
-    .setVerticalAlignment('middle');
-  var univRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['All', 'S&P 500 Only', 'All World Only'], true)
-    .setAllowInvalid(false)
-    .build();
-  d2.setDataValidation(univRule);
-
-  // Control 3: Strategy (Cols E-F)
-  sheet.getRange('E2').setValue('Strategy:')
-       .setFontWeight('bold')
-       .setHorizontalAlignment('right')
-       .setVerticalAlignment('middle');
-  var f2 = sheet.getRange('F2');
-  f2.setValue('All')
-    .setFontWeight('bold')
-    .setFontSize(11)
-    .setBackground('#FEFCBF')
-    .setHorizontalAlignment('center')
-    .setVerticalAlignment('middle');
-  var stratRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['All', 'Top 3', 'Top 5', 'Top 10'], true)
-    .setAllowInvalid(false)
-    .build();
-  f2.setDataValidation(stratRule);
-
-  // Control 4: Horizon (Cols G-H)
-  sheet.getRange('G2').setValue('Horizon:')
-       .setFontWeight('bold')
-       .setHorizontalAlignment('right')
-       .setVerticalAlignment('middle');
-  var h2 = sheet.getRange('H2');
-  h2.setValue('All')
-    .setFontWeight('bold')
-    .setFontSize(11)
-    .setBackground('#FEFCBF')
-    .setHorizontalAlignment('center')
-    .setVerticalAlignment('middle');
-  var horizRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['All', '10y', '20y', '30y'], true)
-    .setAllowInvalid(false)
-    .build();
-  h2.setDataValidation(horizRule);
-
-  // Control 5: Compare Index (Cols I-J)
-  sheet.getRange('I2').setValue('Compare Index:')
-       .setFontWeight('bold')
-       .setHorizontalAlignment('right')
-       .setVerticalAlignment('middle');
-  var j2 = sheet.getRange('J2');
-  j2.setValue('Both')
-    .setFontWeight('bold')
-    .setFontSize(11)
-    .setBackground('#FEFCBF')
-    .setHorizontalAlignment('center')
-    .setVerticalAlignment('middle');
-  var indexRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['None', 'S&P 500', 'MSCI World', 'Both'], true)
-    .setAllowInvalid(false)
-    .build();
-  j2.setDataValidation(indexRule);
-
-  // Control 6: Rebalance Frequency (Cols K-L)
-  sheet.getRange('K2').setValue('Rebalance:')
-       .setFontWeight('bold')
-       .setHorizontalAlignment('right')
-       .setVerticalAlignment('middle');
-  var l2 = sheet.getRange('L2');
-  l2.setValue('All')
-    .setFontWeight('bold')
-    .setFontSize(11)
-    .setBackground('#FEFCBF')
-    .setHorizontalAlignment('center')
-    .setVerticalAlignment('middle');
-  var freqRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['All', 'Annual Only', 'Quarterly Only'], true)
-    .setAllowInvalid(false)
-    .build();
-  l2.setDataValidation(freqRule);
+  l2.setDataValidation(taxRule);
 
   // Control 7: Seed Capital (Cols M-N)
   sheet.getRange('M2').setValue('Seed Capital:')
@@ -371,42 +371,46 @@ function buildExecutiveSummarySheet(ss) {
     .build();
   n2.setDataValidation(seedRule);
 
-  // 3. KPI Summary Scorecards (Rows 4-6)
-  // Decoupled formulas query 'Scenario Data' directly using INDEX/MATCH for robust filter resilience
-  // Card 1: Top 5 Final Wealth (30y) (Cols A-B)
-  sheet.getRange('A4:B4').merge().setValue('Top 5 Final Wealth (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('A5:B5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & IF($L$2="Quarterly Only","Quarterly","Annual") & "_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('A6:B6').merge().setFormula('="After all taxes (" & TEXT($N$2, "$#,##0") & " start)"').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('A4:B6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
+  // Helper expressions for Scenario Data lookups with string-resilient tax rate formatting
+  var taxExpr = 'IF(ISNUMBER($L$2), TEXT($L$2, "0.0%"), $L$2)';
+  var stratKeyExpr = '$F$2 & "_" & $B$2 & "_" & $D$2 & "_" & $H$2 & "_" & ' + taxExpr;
+  var benchKeyExpr = '$F$2 & "_" & IF($J$2="MSCI World", "All World_MSCI World", "S&P 500_S&P 500") & "_" & $H$2 & "_" & ' + taxExpr;
 
-  // Card 2: Benchmark Wealth (30y) (Cols C-E)
-  sheet.getRange('C4:E4').merge().setFormula('=IF($D$2="All World Only", "MSCI World Wealth (30y)", "S&P 500 Wealth (30y)")').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('C5:E5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH("30y_" & IF($D$2="All World Only","All World_MSCI World","S&P 500_S&P 500") & "_" & IF($L$2="Quarterly Only","Quarterly","Annual") & "_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('C6:E6').merge().setValue('Passive buy & hold').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('C4:E6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  // 3. Dynamic KPI Summary Scorecards (Rows 4-6)
+  // Card 1: Selected Strategy Final Wealth (Cols A-C)
+  sheet.getRange('A4:C4').merge().setFormula('=$D$2 & " Final Wealth (" & $F$2 & ")"').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A5:C5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A6:C6').merge().setFormula('="After all taxes (" & TEXT($N$2, "$#,##0") & " start)"').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A4:C6').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 3: Top 5 Annual Return (30y) (Cols F-G)
-  sheet.getRange('F4:G4').merge().setValue('Top 5 Annual Return (30y)').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('F5:G5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & IF($L$2="Quarterly Only","Quarterly","Annual") & "_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('F6:G6').merge().setValue('Net post-liquidation CAGR').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('F4:G6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 2: Selected Benchmark Wealth (Cols D-F)
+  sheet.getRange('D4:F4').merge().setFormula('=$J$2 & " Wealth (" & $F$2 & ")"').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('D5:F5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#4A5568').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('D6:F6').merge().setValue('Passive buy & hold').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('D4:F6').setBackground('#EDF2F7').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 4: 30-Year Excess Return (Cols H-J)
-  sheet.getRange('H4:J4').merge().setValue('30-Year Excess Return').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('H5:J5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$P:$P, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & IF($L$2="Quarterly Only","Quarterly","Annual") & "_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('H6:J6').merge().setValue('Annual Alpha vs S&P 500').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('H4:J6').setBackground('#F0FFF4').setBorder(true, true, true, true, false, false, '#C6F6D5', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 3: Selected Strategy Post-Liquidation CAGR (Cols G-H)
+  sheet.getRange('G4:H4').merge().setFormula('="Post-Liq CAGR (" & $D$2 & ")"').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G5:H5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#1B365D').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G6:H6').merge().setValue('Net after-tax annual rate').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('G4:H6').setBackground('#EBF8FF').setBorder(true, true, true, true, false, false, '#BEE3F8', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Card 5: 30-Year Tax Drag (Cols K-N)
-  sheet.getRange('K4:N4').merge().setValue('30-Year Tax Drag').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('K5:N5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$O:$O, MATCH("30y_" & IF($D$2="All World Only","All World","S&P 500") & "_Top 5_" & IF($L$2="Quarterly Only","Quarterly","Annual") & "_" & TEXT($B$2, "0.0%"), \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#9B2C2C').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('K6:N6').merge().setValue('Annual return lost to taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('K4:N6').setBackground('#FFF5F5').setBorder(true, true, true, true, false, false, '#FED7D7', SpreadsheetApp.BorderStyle.SOLID);
+  // Card 4: Annual Alpha vs Selected Benchmark (Cols I-K)
+  sheet.getRange('I4:K4').merge().setFormula('="Annual Alpha vs " & $J$2').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('I5:K5').merge().setFormula('=(IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0) - IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0))').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('I6:K6').merge().setValue('Excess annual compound return').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('I4:K6').setBackground('#F0FFF4').setBorder(true, true, true, true, false, false, '#C6F6D5', SpreadsheetApp.BorderStyle.SOLID);
 
-  // 4. Multi-Horizon Strategy Comparison Table
-  // Row 8: Title
+  // Card 5: Selected Strategy Annual Tax Drag (Cols L-N)
+  sheet.getRange('L4:N4').merge().setFormula('="Annual Tax Drag (" & $D$2 & ")"').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('L5:N5').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$O:$O, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#9B2C2C').setNumberFormat('0.00%').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('L6:N6').merge().setValue('Annual return lost to taxes').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('L4:N6').setBackground('#FFF5F5').setBorder(true, true, true, true, false, false, '#FED7D7', SpreadsheetApp.BorderStyle.SOLID);
+
+  // 4. Head-to-Head Scenario Spotlight Table (Rows 8-12)
+  // Row 8: Title Banner
   sheet.getRange('A8:N8').merge()
-       .setValue('MULTI-HORIZON PERFORMANCE & TAX COMPARISON (10Y, 20Y, 30Y)')
+       .setValue('HEAD-TO-HEAD PERFORMANCE & TAX SPOTLIGHT')
        .setBackground('#1B365D')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -414,11 +418,11 @@ function buildExecutiveSummarySheet(ss) {
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
 
-  // Row 9: Table Header (14 columns matching 'Scenario Data'!$C:$P)
+  // Row 9: Table Header (14 columns)
   var tableHeaders = [
-    'Universe', 'Horizon', 'Strategy', 'Frequency', 'Annual Return (Pre-Tax)', 'Annual Return (After-Tax)', 'Annual Return (Post-Liq)',
+    'Role / Selection', 'Universe', 'Horizon', 'Frequency', 'Annual Return (Pre-Tax)', 'Annual Return (After-Tax)', 'Annual Return (Post-Liq)',
     'Total Return (Cumulative)', 'Ending Wealth', 'Total Dividends Received',
-    'Max Drawdown (Worst Drop)', 'Total Taxes Paid', 'Annual Tax Drag', 'Excess vs S&P 500 (Alpha)'
+    'Max Drawdown (Worst Drop)', 'Total Taxes Paid', 'Annual Tax Drag', 'Excess vs Benchmark (Alpha)'
   ];
   sheet.getRange(9, 1, 1, tableHeaders.length).setValues([tableHeaders])
        .setBackground('#2D3748')
@@ -430,71 +434,60 @@ function buildExecutiveSummarySheet(ss) {
        .setWrap(true);
   sheet.getRange('I9').setFormula('="Ending Wealth (" & TEXT($N$2, "$#,##0") & " Start)"');
 
-  // Row 10: Dynamic Filter Formula spilling down Rows 10:77 (guarded by non-empty $A$2:$A to prevent spill on 0.0% tax rate)
-  var filterFormula = '=IFNA(FILTER(\'Scenario Data\'!$C$2:$P, (\'Scenario Data\'!$A$2:$A <> "") * (ROUND(\'Scenario Data\'!$B$2:$B, 4) = ROUND($B$2, 4)) * (($H$2 = "All") + (\'Scenario Data\'!$D$2:$D = $H$2)) * (($L$2 = "All") + (\'Scenario Data\'!$F$2:$F = SUBSTITUTE($L$2, " Only", ""))) * (((\'Scenario Data\'!$Q$2:$Q = "Strategy") * (($D$2 = "All") + (\'Scenario Data\'!$C$2:$C = SUBSTITUTE($D$2, " Only", ""))) * (($F$2 = "All") + (\'Scenario Data\'!$E$2:$E = $F$2))) + ((\'Scenario Data\'!$Q$2:$Q = "Index") * ((($J$2 = "Both") * 1) + ((\'Scenario Data\'!$E$2:$E = $J$2) * 1))))), "No matching records found")';
-  sheet.getRange('A10').setFormula(filterFormula);
+  // Row 10: Selected Strategy Row (INDEX/MATCH from Scenario Data Cols G-P mapped to E-N)
+  sheet.getRange('A10').setFormula('="★ Strategy: " & $D$2').setFontWeight('bold').setHorizontalAlignment('left').setVerticalAlignment('middle');
+  sheet.getRange('B10').setFormula('=$B$2').setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C10').setFormula('=$F$2').setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('D10').setFormula('=$H$2').setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('E10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$G:$G, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('F10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$H:$H, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('G10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('H10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$J:$J, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('I10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('J10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$L:$L, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('K10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$M:$M, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('L10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$N:$N, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('M10').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$O:$O, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('N10').setFormula('=(G10 - G11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('A10:N10').setBackground('#F0FFF4');
 
-  // Pre-formatting comparison table range (Rows 10 to 77, unmerged for spill protection)
-  sheet.getRange(10, 1, 68, 1).setHorizontalAlignment('center').setFontWeight('bold').setVerticalAlignment('middle');
-  sheet.getRange(10, 2, 68, 1).setHorizontalAlignment('center').setFontWeight('bold').setVerticalAlignment('middle');
-  sheet.getRange(10, 3, 68, 1).setFontWeight('bold').setVerticalAlignment('middle');
-  sheet.getRange(10, 4, 68, 1).setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange(10, 5, 68, 3).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 8, 68, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 9, 68, 2).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 11, 68, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 12, 68, 1).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 13, 68, 1).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(10, 14, 68, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  // Row 11: Benchmark Row
+  sheet.getRange('A11').setFormula('="Benchmark: " & $J$2 & " Total Return"').setFontStyle('italic').setHorizontalAlignment('left').setVerticalAlignment('middle');
+  sheet.getRange('B11').setFormula('=IF($J$2="MSCI World", "All World", "S&P 500")').setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('C11').setFormula('=$F$2').setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('D11').setValue('—').setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('E11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$G:$G, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('F11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$H:$H, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('G11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('H11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$J:$J, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('I11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('J11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$L:$L, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('K11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$M:$M, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('L11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$N:$N, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('M11').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$O:$O, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('N11').setValue('—').setFontStyle('italic').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('A11:N11').setBackground('#EDF2F7').setFontColor('#4A5568');
 
-  // Alternating background colors and benchmark tint via conditional formatting rules
-  var cfRange = sheet.getRange('A10:N77');
-  var ruleIndex = SpreadsheetApp.newConditionalFormatRule()
-    .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", OR($C10="S&P 500", $C10="MSCI World"))')
-    .setBackground('#EDF2F7')
-    .setFontColor('#2D3748')
-    .setItalic(true)
-    .setRanges([cfRange])
-    .build();
-  var ruleEven = SpreadsheetApp.newConditionalFormatRule()
-    .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", MOD(ROW(), 2)=0)')
-    .setBackground('#F7FAFC')
-    .setRanges([cfRange])
-    .build();
-  var ruleOdd = SpreadsheetApp.newConditionalFormatRule()
-    .whenFormulaSatisfied('=AND($A10<>"", $A10<>"No matching records found", MOD(ROW(), 2)=1)')
-    .setBackground('#FFFFFF')
-    .setRanges([cfRange])
-    .build();
-  sheet.setConditionalFormatRules([ruleIndex, ruleEven, ruleOdd]);
+  // Row 12: Net Advantage / Delta Row
+  sheet.getRange('A12').setFormula('="Net Advantage (Strategy vs " & $J$2 & ")"').setFontWeight('bold').setHorizontalAlignment('left').setVerticalAlignment('middle');
+  sheet.getRange('B12:D12').setValue('—').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('E12').setFormula('=(E10 - E11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('F12').setFormula('=(F10 - F11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('G12').setFormula('=(G10 - G11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('H12').setFormula('=(H10 - H11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('I12').setFormula('=(I10 - I11)').setNumberFormat('[Color10]+$#,##0.00;[Red]-$#,##0.00;$0.00').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('J12').setFormula('=(J10 - J11)').setNumberFormat('[Color10]+$#,##0.00;[Red]-$#,##0.00;$0.00').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('K12').setFormula('=(K10 - K11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('L12').setFormula('=(L10 - L11)').setNumberFormat('+$#,##0.00;-$#,##0.00;$0.00').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('M12').setFormula('=(M10 - M11)').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('N12').setFormula('=(G10 - G11)').setNumberFormat('[Color10]+0.00%;[Red]-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('A12:N12').setBackground('#FEFCBF');
 
-  // Borders
-  sheet.getRange(9, 1, 69, tableHeaders.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  // Borders for table (Rows 9-12)
+  sheet.getRange(9, 1, 4, tableHeaders.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Explicit, proportional column widths (14 columns)
-  var colWidths = [85, 70, 95, 80, 100, 100, 100, 100, 110, 105, 100, 95, 95, 95];
-  for (var c = 0; c < colWidths.length; c++) {
-    sheet.setColumnWidth(c + 1, colWidths[c]);
-  }
-
-  // Explicit row heights for polished vertical rhythm
-  sheet.setRowHeight(1, 40);
-  sheet.setRowHeight(2, 32);
-  sheet.setRowHeight(3, 10);
-  sheet.setRowHeight(4, 22);
-  sheet.setRowHeight(5, 32);
-  sheet.setRowHeight(6, 20);
-  sheet.setRowHeight(7, 14);
-  sheet.setRowHeight(8, 30);
-  sheet.setRowHeight(9, 36);
-  for (var dr = 10; dr <= 77; dr++) {
-    sheet.setRowHeight(dr, 24);
-  }
-
-  // 5. Key Metrics Glossary & Explanations (Rows 80-86, leaving Rows 10:77 completely unmerged)
-  sheet.setRowHeight(78, 14);
-  sheet.setRowHeight(79, 10);
-  sheet.getRange('A80:N80').merge()
+  // 5. Key Metrics Glossary & Explanations (Rows 14-18, directly below table)
+  sheet.getRange('A14:N14').merge()
        .setValue('KEY METRIC DEFINITIONS & GLOSSARY')
        .setBackground('#EDF2F7')
        .setFontColor('#2D3748')
@@ -502,71 +495,120 @@ function buildExecutiveSummarySheet(ss) {
        .setFontSize(10)
        .setHorizontalAlignment('left')
        .setVerticalAlignment('middle');
-  sheet.setRowHeight(80, 24);
 
-  var explanations = [
-    ['Annual Return (CAGR):', 'Compound Annual Growth Rate — the smoothed annual percentage your money grew every year compounded steadily.'],
-    ['Total Return (Cumulative):', 'The total unannualized percentage gain over the entire period (e.g. +795.6% means $10k turned into $89.5k).'],
-    ['Post-Liquidation Return:', 'True net annual return assuming all remaining stock holdings are sold at the end and all final taxes paid.'],
-    ['Annual Tax Drag:', 'Annual percentage of return lost to taxes. Calculated as Pre-Tax Annual Return minus Post-Liquidation Annual Return.'],
-    ['Excess vs S&P 500 (Alpha):', 'Additional annual return earned above the S&P 500 benchmark (+5.81% means beating the market by 5.81%/yr).'],
-    ['Max Drawdown:', 'Worst percentage drop from peak to trough during market downturns before a new high was reached.']
+  var explanationsGrid = [
+    [
+      ['Annual Return (CAGR):', 'Smoothed annual percentage portfolio grew compounded steadily.'],
+      ['Annual Alpha:', 'Additional annual compound return earned above benchmark index.']
+    ],
+    [
+      ['Total Return (Cumulative):', 'Unannualized percentage wealth gain over the entire holding horizon.'],
+      ['Annual Tax Drag:', 'Annual return lost to taxes (Pre-Tax CAGR minus Post-Liq CAGR).']
+    ],
+    [
+      ['Post-Liquidation Return:', 'True net annual return assuming full final portfolio sale and tax settlement.'],
+      ['Max Drawdown:', 'Worst peak-to-trough percentage decline before a new high was reached.']
+    ],
+    [
+      ['Ending Wealth:', 'Final liquidated portfolio equity value scaled to active Seed Capital.'],
+      ['Dividends & Cash Pooling:', 'Split-adjusted discrete cash collections reinvested at rebalance dates.']
+    ]
   ];
 
-  for (var e = 0; e < explanations.length; e++) {
-    var r = 81 + e;
-    sheet.getRange('A' + r + ':B' + r).merge()
-         .setValue(explanations[e][0])
+  for (var eg = 0; eg < explanationsGrid.length; eg++) {
+    var gr = 15 + eg;
+    var rowItem = explanationsGrid[eg];
+    // Left definition (Cols A-B label, Cols C-G definition)
+    sheet.getRange('A' + gr + ':B' + gr).merge()
+         .setValue(rowItem[0][0])
          .setFontWeight('bold')
          .setFontSize(9)
          .setFontColor('#4A5568')
          .setHorizontalAlignment('right')
          .setVerticalAlignment('middle');
-    sheet.getRange('C' + r + ':N' + r).merge()
-         .setValue(explanations[e][1])
+    sheet.getRange('C' + gr + ':G' + gr).merge()
+         .setValue(rowItem[0][1])
          .setFontSize(9)
          .setFontColor('#718096')
          .setHorizontalAlignment('left')
          .setVerticalAlignment('middle');
-    sheet.setRowHeight(r, 20);
+    // Right definition (Cols H-I label, Cols J-N definition)
+    sheet.getRange('H' + gr + ':I' + gr).merge()
+         .setValue(rowItem[1][0])
+         .setFontWeight('bold')
+         .setFontSize(9)
+         .setFontColor('#4A5568')
+         .setHorizontalAlignment('right')
+         .setVerticalAlignment('middle');
+    sheet.getRange('J' + gr + ':N' + gr).merge()
+         .setValue(rowItem[1][1])
+         .setFontSize(9)
+         .setFontColor('#718096')
+         .setHorizontalAlignment('left')
+         .setVerticalAlignment('middle');
+    sheet.setRowHeight(gr, 22);
   }
+  sheet.getRange(14, 1, 5, 14).setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // 6. Methodology Note Callout Card (Rows 89-95)
-  sheet.setRowHeight(87, 14);
-  sheet.setRowHeight(88, 10);
-  sheet.getRange('A89:N89').merge()
-       .setValue('METHODOLOGY NOTE — DIVIDEND TIMING & MULTI-UNIVERSE SELECTION')
+  // 6. Methodology Note Callout Card (Rows 20-25)
+  sheet.getRange('A20:N20').merge()
+       .setValue('METHODOLOGY NOTE — REBALANCING, TAXES & DIVIDENDS')
        .setBackground('#2D3748')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
        .setFontSize(10)
        .setHorizontalAlignment('left')
        .setVerticalAlignment('middle');
-  sheet.setRowHeight(89, 24);
 
-  var methodNote = '• Rebalancing Frequency: Supports Annual (year-end factsheet weights) and Quarterly (Q1-Q3 dynamic price drift, Q4 factsheet re-anchored) rebalancing.\n' +
-                   '• Discrete Dividends: Historical dividends are collected discrete-quarterly or discrete-annually and credited prior to rebalancing.\n' +
-                   '• Tax Settlement: Dividend and realized capital gains taxes are settled at the selected marginal tax rate, with capital loss carryforwards applied.\n' +
-                   '• Self-Financing Rebalancing: Net dividend income is reinvested into target holdings alongside rebalancing trade proceeds without margin borrowing (cash >= 0).\n' +
-                   '• Post-Liquidation Terminal Wealth: Terminal equity reflects a full simulated liquidation of all portfolio holdings with final capital gains taxes paid.\n' +
-                   '• Benchmark Alignment: S&P 500 total return benchmark reflects split- and dividend-adjusted performance over identical holding periods.\n' +
-                   '• Multi-Universe Scope: S&P 500 represents domestic mega-caps; All World includes global market cap leaders accessible via US markets (ADRs / direct listings).';
+  var methodBullets = [
+    '• Rebalancing Frequency: Supports Annual (year-end factsheet weights) and Quarterly (Q1-Q3 dynamic price drift, Q4 factsheet re-anchored) rebalancing.',
+    '• Discrete Dividends: Historical dividends are collected discrete-quarterly or discrete-annually and credited prior to rebalancing.',
+    '• Tax Settlement: Dividend and realized capital gains taxes are settled at the selected marginal tax rate, with capital loss carryforwards applied.',
+    '• Self-Financing Rebalancing: Net dividend income is reinvested into target holdings alongside rebalancing trade proceeds without margin borrowing (cash >= 0).',
+    '• Benchmark Alignment & Universes: S&P 500 represents domestic mega-caps; All World includes global market cap leaders accessible via US markets.'
+  ];
 
-  sheet.getRange('A90:N95').merge()
-       .setValue(methodNote)
-       .setFontSize(9)
-       .setFontColor('#4A5568')
-       .setHorizontalAlignment('left')
-       .setVerticalAlignment('middle')
-       .setWrap(true);
-
-  sheet.getRange('A89:N95').setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
-  sheet.getRange('A90:N95').setBackground('#F7FAFC');
-  for (var mr = 90; mr <= 95; mr++) {
-    sheet.setRowHeight(mr, 18);
+  for (var mb = 0; mb < methodBullets.length; mb++) {
+    var mrRow = 21 + mb;
+    sheet.getRange('A' + mrRow + ':N' + mrRow).merge()
+         .setValue(methodBullets[mb])
+         .setFontSize(9)
+         .setFontColor('#4A5568')
+         .setHorizontalAlignment('left')
+         .setVerticalAlignment('middle')
+         .setWrap(true);
+    sheet.setRowHeight(mrRow, 20);
   }
 
-  sheet.setFrozenRows(9);
+  sheet.getRange(20, 1, 6, 14).setBorder(true, true, true, true, false, false, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+  sheet.getRange('A21:N25').setBackground('#F7FAFC');
+
+  // Explicit, proportional column widths (14 columns)
+  var colWidths = [120, 80, 65, 75, 95, 95, 95, 95, 115, 105, 95, 95, 90, 110];
+  for (var c = 0; c < colWidths.length; c++) {
+    sheet.setColumnWidth(c + 1, colWidths[c]);
+  }
+
+  // Explicit row heights for single-screen view without vertical scrolling
+  sheet.setRowHeight(1, 40);
+  sheet.setRowHeight(2, 32);
+  sheet.setRowHeight(3, 8);
+  sheet.setRowHeight(4, 22);
+  sheet.setRowHeight(5, 32);
+  sheet.setRowHeight(6, 20);
+  sheet.setRowHeight(7, 10);
+  sheet.setRowHeight(8, 30);
+  sheet.setRowHeight(9, 36);
+  sheet.setRowHeight(10, 24);
+  sheet.setRowHeight(11, 24);
+  sheet.setRowHeight(12, 24);
+  sheet.setRowHeight(13, 10);
+  sheet.setRowHeight(14, 24);
+  sheet.setRowHeight(19, 10);
+  sheet.setRowHeight(20, 24);
+
+  // Freeze top 2 rows (Banner & Controls) for clean navigation
+  sheet.setFrozenRows(2);
 }
 
 // ==========================================
@@ -947,12 +989,15 @@ function recalculateSheet() {
     SpreadsheetApp.getUi().alert('Executive Summary sheet not found.');
     return;
   }
-  var taxRateVal = sheet.getRange('B2').getValue();
+  var taxRateVal = sheet.getRange('L2').getValue();
   var taxRateStr = (typeof taxRateVal === 'number') ? (taxRateVal * 100).toFixed(1) + '%' : String(taxRateVal);
+  var univVal = sheet.getRange('B2').getValue();
+  var stratVal = sheet.getRange('D2').getValue();
+  var horizVal = sheet.getRange('F2').getValue();
   var seedVal = sheet.getRange('N2').getValue();
   var seedStr = (typeof seedVal === 'number') ? '$' + seedVal.toLocaleString() : String(seedVal);
   SpreadsheetApp.flush();
-  ss.toast('Dashboard updated for Tax Rate: ' + taxRateStr + ', Seed Capital: ' + seedStr, 'Recalculation Complete', 3);
+  ss.toast('Spotlight: ' + univVal + ' ' + stratVal + ' (' + horizVal + '), Tax: ' + taxRateStr + ', Seed: ' + seedStr, 'Recalculation Complete', 4);
 }
 
 /**

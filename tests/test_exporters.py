@@ -374,7 +374,8 @@ class TestExporters(unittest.TestCase):
         self.assertIn("BASE_INITIAL_CAPITAL = 10000;", code)
         self.assertIn("SCALE_EXPR", code)
         # Fully dynamic KPI formulas querying Scenario Data using user selections
-        self.assertIn("MATCH($F$2 & \"_\" & $B$2 & \"_\" & $D$2 & \"_\" & $H$2", code)
+        self.assertIn("stratKeyExpr = '$F$2 & \"_\" & $B$2 & \"_\" & $D$2 & \"_\" & $H$2", code)
+        self.assertIn("benchKeyExpr = '$F$2 & \"_\" & IF($J$2=\"MSCI World\"", code)
         # Head-to-Head Spotlight & Net Advantage Delta Row
         self.assertIn("Net Advantage (Strategy vs", code)
         self.assertIn("=(G10 - G11)", code)
