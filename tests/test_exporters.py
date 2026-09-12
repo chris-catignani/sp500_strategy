@@ -343,6 +343,7 @@ class TestExporters(unittest.TestCase):
     def test_google_apps_script_interactive_dashboard(self):
         code = generate_google_apps_script()
         # Executive Summary checks (14-column layout A1:N1)
+        self.assertIn("clearDataValidations", code)
         self.assertIn("Total Dividends Received", code)
         self.assertIn("'A1:N1'", code)
         self.assertIn("HEAD-TO-HEAD PERFORMANCE & TAX SPOTLIGHT", code)

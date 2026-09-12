@@ -242,23 +242,26 @@ function buildExecutiveSummarySheet(ss) {
        .setWrapStrategy(SpreadsheetApp.WrapStrategy.OVERFLOW);
 
   // 2. Interactive Parameter Dropdowns in Row 2 (7 Controls across 14 columns)
+  // Clear any existing data validation rules from previous builds
+  sheet.getRange('A2:N2').clearDataValidations();
+
   // Control 1: Universe (Cols A-B)
   sheet.getRange('A2').setValue('Universe:')
        .setFontWeight('bold')
        .setHorizontalAlignment('right')
        .setVerticalAlignment('middle');
   var b2 = sheet.getRange('B2');
+  var univRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['S&P 500', 'All World'], true)
+    .setAllowInvalid(false)
+    .build();
+  b2.setDataValidation(univRule);
   b2.setValue('S&P 500')
     .setFontWeight('bold')
     .setFontSize(11)
     .setBackground('#FEFCBF')
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
-  var univRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['S&P 500', 'All World'], true)
-    .setAllowInvalid(false)
-    .build();
-  b2.setDataValidation(univRule);
 
   // Control 2: Strategy (Cols C-D)
   sheet.getRange('C2').setValue('Strategy:')
@@ -266,17 +269,17 @@ function buildExecutiveSummarySheet(ss) {
        .setHorizontalAlignment('right')
        .setVerticalAlignment('middle');
   var d2 = sheet.getRange('D2');
+  var stratRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Top 3', 'Top 5', 'Top 10'], true)
+    .setAllowInvalid(false)
+    .build();
+  d2.setDataValidation(stratRule);
   d2.setValue('Top 5')
     .setFontWeight('bold')
     .setFontSize(11)
     .setBackground('#FEFCBF')
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
-  var stratRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['Top 3', 'Top 5', 'Top 10'], true)
-    .setAllowInvalid(false)
-    .build();
-  d2.setDataValidation(stratRule);
 
   // Control 3: Horizon (Cols E-F)
   sheet.getRange('E2').setValue('Horizon:')
@@ -284,17 +287,17 @@ function buildExecutiveSummarySheet(ss) {
        .setHorizontalAlignment('right')
        .setVerticalAlignment('middle');
   var f2 = sheet.getRange('F2');
+  var horizRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['10y', '20y', '30y'], true)
+    .setAllowInvalid(false)
+    .build();
+  f2.setDataValidation(horizRule);
   f2.setValue('30y')
     .setFontWeight('bold')
     .setFontSize(11)
     .setBackground('#FEFCBF')
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
-  var horizRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['10y', '20y', '30y'], true)
-    .setAllowInvalid(false)
-    .build();
-  f2.setDataValidation(horizRule);
 
   // Control 4: Rebalance Frequency (Cols G-H)
   sheet.getRange('G2').setValue('Rebalance:')
@@ -302,17 +305,17 @@ function buildExecutiveSummarySheet(ss) {
        .setHorizontalAlignment('right')
        .setVerticalAlignment('middle');
   var h2 = sheet.getRange('H2');
+  var freqRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Annual', 'Quarterly'], true)
+    .setAllowInvalid(false)
+    .build();
+  h2.setDataValidation(freqRule);
   h2.setValue('Annual')
     .setFontWeight('bold')
     .setFontSize(11)
     .setBackground('#FEFCBF')
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
-  var freqRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['Annual', 'Quarterly'], true)
-    .setAllowInvalid(false)
-    .build();
-  h2.setDataValidation(freqRule);
 
   // Control 5: Benchmark (Cols I-J)
   sheet.getRange('I2').setValue('Benchmark:')
@@ -320,17 +323,17 @@ function buildExecutiveSummarySheet(ss) {
        .setHorizontalAlignment('right')
        .setVerticalAlignment('middle');
   var j2 = sheet.getRange('J2');
+  var benchRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['S&P 500', 'MSCI World'], true)
+    .setAllowInvalid(false)
+    .build();
+  j2.setDataValidation(benchRule);
   j2.setValue('S&P 500')
     .setFontWeight('bold')
     .setFontSize(11)
     .setBackground('#FEFCBF')
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
-  var benchRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['S&P 500', 'MSCI World'], true)
-    .setAllowInvalid(false)
-    .build();
-  j2.setDataValidation(benchRule);
 
   // Control 6: Tax Rate (Cols K-L)
   sheet.getRange('K2').setValue('Tax Rate:')
@@ -338,6 +341,11 @@ function buildExecutiveSummarySheet(ss) {
        .setHorizontalAlignment('right')
        .setVerticalAlignment('middle');
   var l2 = sheet.getRange('L2');
+  var taxRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['0.0%', '15.0%', '20.0%', '30.0%', '37.0%'], true)
+    .setAllowInvalid(false)
+    .build();
+  l2.setDataValidation(taxRule);
   l2.setValue(0.30)
     .setNumberFormat('0.0%')
     .setFontWeight('bold')
@@ -345,11 +353,6 @@ function buildExecutiveSummarySheet(ss) {
     .setBackground('#FEFCBF')
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
-  var taxRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['0.0%', '15.0%', '20.0%', '30.0%', '37.0%'], true)
-    .setAllowInvalid(false)
-    .build();
-  l2.setDataValidation(taxRule);
 
   // Control 7: Seed Capital (Cols M-N)
   sheet.getRange('M2').setValue('Seed Capital:')
@@ -357,6 +360,12 @@ function buildExecutiveSummarySheet(ss) {
        .setHorizontalAlignment('right')
        .setVerticalAlignment('middle');
   var n2 = sheet.getRange('N2');
+  var seedRule = SpreadsheetApp.newDataValidation()
+    .requireNumberGreaterThan(0)
+    .setAllowInvalid(false)
+    .setHelpText('Please enter a positive seed investment amount.')
+    .build();
+  n2.setDataValidation(seedRule);
   n2.setValue(BASE_INITIAL_CAPITAL)
     .setNumberFormat('$#,##0')
     .setFontWeight('bold')
@@ -364,12 +373,6 @@ function buildExecutiveSummarySheet(ss) {
     .setBackground('#FEFCBF')
     .setHorizontalAlignment('center')
     .setVerticalAlignment('middle');
-  var seedRule = SpreadsheetApp.newDataValidation()
-    .requireNumberGreaterThan(0)
-    .setAllowInvalid(false)
-    .setHelpText('Please enter a positive seed investment amount.')
-    .build();
-  n2.setDataValidation(seedRule);
 
   // Helper expressions for Scenario Data lookups with string-resilient tax rate formatting
   var taxExpr = 'IF(ISNUMBER($L$2), TEXT($L$2, "0.0%"), $L$2)';
@@ -1022,6 +1025,7 @@ function getOrCreateSheet(ss, name) {
   var sheet = ss.getSheetByName(name);
   if (sheet) {
     sheet.clear();
+    sheet.getRange(1, 1, sheet.getMaxRows(), sheet.getMaxColumns()).clearDataValidations();
     var charts = sheet.getCharts();
     for (var i = 0; i < charts.length; i++) {
       sheet.removeChart(charts[i]);
