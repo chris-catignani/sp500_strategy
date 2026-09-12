@@ -54,6 +54,18 @@ var TRAJECTORY_DATA = /*__TRAJECTORY_DATA__*/[];
 var DRAWDOWN_HEADERS = ["Year", "Top 3 Drawdown", "Top 5 Drawdown", "Top 10 Drawdown", "S&P 500 Drawdown"];
 var DRAWDOWN_DATA = /*__DRAWDOWN_DATA__*/[];
 
+var ERA_MATRIX_HEADERS = [
+  "LookupKey", "Market Regime Era", "Historical Context / Regime", "Top 3 CAGR",
+  "Top 5 CAGR", "Top 10 CAGR", "Benchmark CAGR", "Top 10 Alpha", "Top 10 Win Rate"
+];
+var ERA_MATRIX = /*__ERA_MATRIX__*/[];
+
+var TRAJECTORY_MATRIX_HEADERS = ["LookupKey", "Year", "Top 3 ($)", "Top 5 ($)", "Top 10 ($)", "Benchmark ($)"];
+var TRAJECTORY_MATRIX = /*__TRAJECTORY_MATRIX__*/[];
+
+var DRAWDOWN_MATRIX_HEADERS = ["LookupKey", "Year", "Top 3 Drawdown", "Top 5 Drawdown", "Top 10 Drawdown", "Benchmark Drawdown"];
+var DRAWDOWN_MATRIX = /*__DRAWDOWN_MATRIX__*/[];
+
 // ==========================================
 // Google Sheets UI & Menu Triggers
 // ==========================================
@@ -220,6 +232,53 @@ function buildScenarioDataSheet(ss) {
   }
 
   sheet.autoResizeColumns(1, SCENARIO_HEADERS.length);
+
+  // Trajectory Matrix (Cols S to X, Col 19 to 24)
+  if (typeof TRAJECTORY_MATRIX !== 'undefined' && TRAJECTORY_MATRIX.length > 0) {
+    var decoratedTraj = [];
+    for (var ti = 0; ti < TRAJECTORY_MATRIX.length; ti++) {
+      var trow = TRAJECTORY_MATRIX[ti].slice();
+      // Cols 2, 3, 4, 5 are dollar series: Top 3, Top 5, Top 10, Benchmark
+      trow[2] = '=' + trow[2] + ' * ' + SCALE_EXPR;
+      trow[3] = '=' + trow[3] + ' * ' + SCALE_EXPR;
+      trow[4] = '=' + trow[4] + ' * ' + SCALE_EXPR;
+      trow[5] = '=' + trow[5] + ' * ' + SCALE_EXPR;
+      decoratedTraj.push(trow);
+    }
+    var trajAllRows = [TRAJECTORY_MATRIX_HEADERS].concat(decoratedTraj);
+    sheet.getRange(1, 19, trajAllRows.length, TRAJECTORY_MATRIX_HEADERS.length).setValues(trajAllRows);
+    sheet.getRange(1, 19, 1, TRAJECTORY_MATRIX_HEADERS.length)
+         .setBackground('#2C5282').setFontColor('#FFFFFF').setFontWeight('bold').setHorizontalAlignment('center');
+    sheet.getRange(2, 19, TRAJECTORY_MATRIX.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 20, TRAJECTORY_MATRIX.length, 1).setNumberFormat('####').setHorizontalAlignment('center');
+    sheet.getRange(2, 21, TRAJECTORY_MATRIX.length, 4).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+  }
+
+  // Drawdown Matrix (Cols Z to AE, Col 26 to 31)
+  if (typeof DRAWDOWN_MATRIX !== 'undefined' && DRAWDOWN_MATRIX.length > 0) {
+    var ddAllRows = [DRAWDOWN_MATRIX_HEADERS].concat(DRAWDOWN_MATRIX);
+    sheet.getRange(1, 26, ddAllRows.length, DRAWDOWN_MATRIX_HEADERS.length).setValues(ddAllRows);
+    sheet.getRange(1, 26, 1, DRAWDOWN_MATRIX_HEADERS.length)
+         .setBackground('#2C5282').setFontColor('#FFFFFF').setFontWeight('bold').setHorizontalAlignment('center');
+    sheet.getRange(2, 26, DRAWDOWN_MATRIX.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 27, DRAWDOWN_MATRIX.length, 1).setNumberFormat('####').setHorizontalAlignment('center');
+    sheet.getRange(2, 28, DRAWDOWN_MATRIX.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
+  }
+
+  // Era Matrix (Cols AG to AO, Col 33 to 41)
+  if (typeof ERA_MATRIX !== 'undefined' && ERA_MATRIX.length > 0) {
+    var eraAllRows = [ERA_MATRIX_HEADERS].concat(ERA_MATRIX);
+    sheet.getRange(1, 33, eraAllRows.length, ERA_MATRIX_HEADERS.length).setValues(eraAllRows);
+    sheet.getRange(1, 33, 1, ERA_MATRIX_HEADERS.length)
+         .setBackground('#2C5282').setFontColor('#FFFFFF').setFontWeight('bold').setHorizontalAlignment('center');
+    sheet.getRange(2, 33, ERA_MATRIX.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 34, ERA_MATRIX.length, 1).setHorizontalAlignment('center');
+    sheet.getRange(2, 35, ERA_MATRIX.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 36, ERA_MATRIX.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 40, ERA_MATRIX.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 41, ERA_MATRIX.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('right');
+  }
+
   sheet.setFrozenRows(1);
 }
 
@@ -620,10 +679,17 @@ function buildExecutiveSummarySheet(ss) {
 function buildPerformanceAndTradeoffsSheet(ss) {
   var sheet = getOrCreateSheet(ss, 'Performance & Tradeoffs');
   sheet.setHiddenGridlines(false);
+  sheet.clearContents();
 
-  // 1. Banner Header
-  sheet.getRange('A1:L1').merge()
-       .setValue('S&P 500 TOP N STRATEGY - HISTORICAL CHARTS & TRADEOFF ANALYSIS')
+  // Explicit, proportional column widths across 14 columns (Cols A to N)
+  var colWidths = [120, 95, 95, 85, 95, 95, 85, 90, 90, 95, 95, 105, 105, 130];
+  for (var c = 0; c < colWidths.length; c++) {
+    sheet.setColumnWidth(c + 1, colWidths[c]);
+  }
+
+  // 1. Banner Header (Row 1)
+  sheet.getRange('A1:N1').merge()
+       .setValue('S&P 500 & ALL-WORLD TOP N STRATEGY - HISTORICAL CHARTS & TRADEOFF ANALYSIS')
        .setBackground('#1B365D')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -632,18 +698,19 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setVerticalAlignment('middle');
   sheet.setRowHeight(1, 40);
 
-  // 2. Subtitle Description
-  sheet.getRange('A2:L2').merge()
-       .setFormula('="Visualizing 30-year compounded wealth trajectories (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & " initial basis), peak-to-trough drawdowns, and regime attribution (1994–2024)."')
+  // 2. Subtitle Description (Row 2)
+  sheet.getRange('A2:N2').merge()
+       .setFormula('="Visualizing 30-year compounded wealth trajectories (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & " initial basis), peak-to-trough drawdowns, and regime attribution for " & \'Executive Summary\'!$B$2 & " (" & \'Executive Summary\'!$H$2 & " rebalancing, 1994–2024)."')
        .setFontStyle('italic')
        .setFontColor('#4A5568')
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
   sheet.setRowHeight(2, 24);
+  sheet.setRowHeight(3, 10);
 
-  // 3. Section Title: Market Regime Attribution
+  // 3. Section 1: Historical Market Regime Attribution (5 Eras) (Rows 4 to 10)
   sheet.getRange('A4:H4').merge()
-       .setValue('HISTORICAL MARKET REGIME ATTRIBUTION (4 ERAS)')
+       .setValue('HISTORICAL MARKET REGIME ATTRIBUTION (5 ERAS)')
        .setBackground('#2C5282')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -652,8 +719,16 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setVerticalAlignment('middle');
   sheet.setRowHeight(4, 28);
 
-  // 4. Market Regime Table Headers
-  sheet.getRange(5, 1, 1, ERA_HEADERS.length).setValues([ERA_HEADERS])
+  // Headers (Row 5)
+  sheet.getRange('A5').setValue('Market Regime Era');
+  sheet.getRange('B5').setValue('Historical Context / Regime');
+  sheet.getRange('C5').setValue('Top 3 CAGR');
+  sheet.getRange('D5').setValue('Top 5 CAGR');
+  sheet.getRange('E5').setValue('Top 10 CAGR');
+  sheet.getRange('F5').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ") CAGR"');
+  sheet.getRange('G5').setFormula('="Top 10 Alpha vs " & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "SPX")');
+  sheet.getRange('H5').setValue('Top 10 Win Rate');
+  sheet.getRange('A5:H5')
        .setBackground('#2B6CB0')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -661,34 +736,140 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setVerticalAlignment('middle');
   sheet.setRowHeight(5, 26);
 
-  // 5. Market Regime Data Rows
-  sheet.getRange(6, 1, ERA_DATA.length, ERA_HEADERS.length).setValues(ERA_DATA);
-  for (var er = 0; er < ERA_DATA.length; er++) {
-    var rowNum = 6 + er;
-    var bg = (er === ERA_DATA.length - 1) ? '#EDF2F7' : ((er % 2 === 0) ? '#FFFFFF' : '#F7FAFC');
-    sheet.getRange(rowNum, 1, 1, ERA_HEADERS.length).setBackground(bg);
-    sheet.setRowHeight(rowNum, 22);
+  // Spilled Data via FILTER formula in A6 (Rows 6 to 10)
+  sheet.getRange('A6').setFormula(
+    '=IFERROR(FILTER(\'Scenario Data\'!$AH$2:$AO$21, \'Scenario Data\'!$AG$2:$AG$21 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$H$2)), "")'
+  );
+
+  for (var er = 0; er < 5; er++) {
+    var rNum = 6 + er;
+    var bg = (er === 4) ? '#EDF2F7' : ((er % 2 === 0) ? '#FFFFFF' : '#F7FAFC');
+    sheet.getRange(rNum, 1, 1, 8).setBackground(bg);
+    sheet.setRowHeight(rNum, 22);
   }
 
-  // Regime Table Formatting
-  sheet.getRange(6, 1, ERA_DATA.length, 1).setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange(6, 2, ERA_DATA.length, 1).setVerticalAlignment('middle');
-  sheet.getRange(6, 3, ERA_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(6, 7, ERA_DATA.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(6, 8, ERA_DATA.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(5, 1, ERA_DATA.length + 1, ERA_HEADERS.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
-  sheet.getRange(6 + ERA_DATA.length - 1, 1, 1, ERA_HEADERS.length).setFontWeight('bold');
+  sheet.getRange('A6:A10').setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('B6:B10').setVerticalAlignment('middle');
+  sheet.getRange('C6:F10').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('G6:G10').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('H6:H10').setNumberFormat('0.0%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('A10:H10').setFontWeight('bold');
+  sheet.getRange('A5:H10').setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Spacer
-  sheet.setRowHeight(11, 12);
+  sheet.setRowHeight(11, 14);
 
-  for (var cr = 12; cr <= 29; cr++) {
+  // 4. Section 2: Rebalancing Frequency Tradeoff Analysis Table (Rows 12 to 17)
+  sheet.getRange('A12:N12').merge()
+       .setFormula('="REBALANCING FREQUENCY TRADEOFF ANALYSIS — ANNUAL VS. QUARTERLY (" & \'Executive Summary\'!$B$2 & ", " & \'Executive Summary\'!$F$2 & ", " & TEXT(\'Executive Summary\'!$L$2, "0.0%") & " TAX RATE)"')
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(11)
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(12, 28);
+
+  var tradeoffHeaders = [
+    'Strategy',
+    'Annual Pre-Tax CAGR', 'Quarterly Pre-Tax CAGR', 'Pre-Tax Delta',
+    'Annual Post-Liq CAGR', 'Quarterly Post-Liq CAGR', 'Net Post-Liq Delta',
+    'Annual Max Drawdown', 'Quarterly Max Drawdown',
+    'Annual Taxes Paid', 'Quarterly Taxes Paid',
+    'Annual Ending Wealth', 'Quarterly Ending Wealth',
+    'Frequency Advantage'
+  ];
+  sheet.getRange(13, 1, 1, tradeoffHeaders.length).setValues([tradeoffHeaders])
+       .setBackground('#2D3748')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(9)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle')
+       .setWrap(true);
+  sheet.getRange('L13').setFormula('="Annual Wealth (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & ")"');
+  sheet.getRange('M13').setFormula('="Quarterly Wealth (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & ")"');
+  sheet.setRowHeight(13, 36);
+
+  var taxExpr = 'IF(ISNUMBER(\'Executive Summary\'!$L$2), TEXT(\'Executive Summary\'!$L$2, "0.0%"), \'Executive Summary\'!$L$2)';
+  var stratRows = [
+    ['Top 3 Strategy', 'Top 3'],
+    ['Top 5 Strategy', 'Top 5'],
+    ['Top 10 Strategy', 'Top 10'],
+    ['Benchmark', 'Benchmark']
+  ];
+
+  for (var si = 0; si < stratRows.length; si++) {
+    var trRow = 14 + si;
+    var sDisplay = stratRows[si][0];
+    var sCode = stratRows[si][1];
+
+    var annKey, qtrKey;
+    if (sCode === 'Benchmark') {
+      sheet.getRange('A' + trRow).setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ")"');
+      annKey = '\'Executive Summary\'!$F$2 & "_" & IF(\'Executive Summary\'!$B$2="All World", "All World_MSCI World_Annual_", "S&P 500_S&P 500_Annual_") & ' + taxExpr;
+      qtrKey = '\'Executive Summary\'!$F$2 & "_" & IF(\'Executive Summary\'!$B$2="All World", "All World_MSCI World_Quarterly_", "S&P 500_S&P 500_Quarterly_") & ' + taxExpr;
+    } else {
+      sheet.getRange('A' + trRow).setValue(sDisplay);
+      annKey = '\'Executive Summary\'!$F$2 & "_" & \'Executive Summary\'!$B$2 & "_' + sCode + '_Annual_" & ' + taxExpr;
+      qtrKey = '\'Executive Summary\'!$F$2 & "_" & \'Executive Summary\'!$B$2 & "_' + sCode + '_Quarterly_" & ' + taxExpr;
+    }
+
+    // Col B: Annual Pre-Tax CAGR (Col G in Scenario Data)
+    sheet.getRange('B' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$G:$G, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col C: Quarterly Pre-Tax CAGR
+    sheet.getRange('C' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$G:$G, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col D: Pre-Tax Delta
+    sheet.getRange('D' + trRow).setFormula('=C' + trRow + ' - B' + trRow);
+    // Col E: Annual Post-Liq CAGR (Col I in Scenario Data)
+    sheet.getRange('E' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col F: Quarterly Post-Liq CAGR
+    sheet.getRange('F' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col G: Net Post-Liq Delta
+    sheet.getRange('G' + trRow).setFormula('=F' + trRow + ' - E' + trRow);
+    // Col H: Annual Max Drawdown (Col M in Scenario Data)
+    sheet.getRange('H' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$M:$M, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col I: Quarterly Max Drawdown
+    sheet.getRange('I' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$M:$M, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col J: Annual Total Taxes (Col N in Scenario Data)
+    sheet.getRange('J' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$N:$N, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col K: Quarterly Total Taxes
+    sheet.getRange('K' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$N:$N, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col L: Annual Ending Wealth (Col K in Scenario Data)
+    sheet.getRange('L' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col M: Quarterly Ending Wealth
+    sheet.getRange('M' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col N: Frequency Advantage Verdict
+    sheet.getRange('N' + trRow).setFormula('=IF(G' + trRow + ' > 0.0005, "Quarterly Outperformance", IF(G' + trRow + ' < -0.0005, "Annual Tax-Efficiency", "Neutral / Parity"))');
+
+    sheet.setRowHeight(trRow, 24);
+  }
+
+  sheet.getRange('A14:A17').setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange('B14:C17').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('D14:D17').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('E14:F17').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('G14:G17').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('H14:I17').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('J14:K17').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('L14:M17').setNumberFormat('$#,##0.00').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('N14:N17').setFontStyle('italic').setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+
+  sheet.getRange('A14:N14').setBackground('#FFFFFF');
+  sheet.getRange('A15:N15').setBackground('#F7FAFC');
+  sheet.getRange('A16:N16').setBackground('#FFFFFF');
+  sheet.getRange('A17:N17').setBackground('#EDF2F7');
+  sheet.getRange('A13:N17').setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+
+  for (var sr = 18; sr <= 20; sr++) {
+    sheet.setRowHeight(sr, 12);
+  }
+  for (var cr = 21; cr <= 39; cr++) {
     sheet.setRowHeight(cr, 20);
   }
-  sheet.setRowHeight(30, 14);
+  sheet.setRowHeight(40, 14);
 
-  // 6. Section Titles for Time Series Data
-  sheet.getRange('A31:E31').merge()
+  // 5. Section 3: Section Titles & Table Headers for Time Series Data (Rows 41 & 42)
+  sheet.getRange('A41:E41').merge()
        .setFormula('="30-YEAR WEALTH ACCUMULATION DATA (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & " BASIS)"')
        .setBackground('#2C5282')
        .setFontColor('#FFFFFF')
@@ -697,7 +878,7 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
 
-  sheet.getRange('G31:K31').merge()
+  sheet.getRange('G41:K41').merge()
        .setValue('HISTORICAL DRAWDOWN FROM PEAK DATA')
        .setBackground('#2C5282')
        .setFontColor('#FFFFFF')
@@ -705,66 +886,67 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setFontSize(10)
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
-  sheet.setRowHeight(31, 26);
+  sheet.setRowHeight(41, 26);
 
-  // Table Headers (Row 32)
-  sheet.getRange(32, 1, 1, TRAJECTORY_HEADERS.length).setValues([TRAJECTORY_HEADERS])
+  // Table Headers (Row 42)
+  sheet.getRange('A42').setValue('Year');
+  sheet.getRange('B42').setValue('Top 3 ($)');
+  sheet.getRange('C42').setValue('Top 5 ($)');
+  sheet.getRange('D42').setValue('Top 10 ($)');
+  sheet.getRange('E42').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ")"');
+  sheet.getRange('A42:E42')
        .setBackground('#4A5568')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
 
-  sheet.getRange(32, 7, 1, DRAWDOWN_HEADERS.length).setValues([DRAWDOWN_HEADERS])
+  sheet.getRange('G42').setValue('Year');
+  sheet.getRange('H42').setValue('Top 3 Drawdown');
+  sheet.getRange('I42').setValue('Top 5 Drawdown');
+  sheet.getRange('J42').setValue('Top 10 Drawdown');
+  sheet.getRange('K42').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ") Drawdown"');
+  sheet.getRange('G42:K42')
        .setBackground('#4A5568')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
-  sheet.setRowHeight(32, 24);
+  sheet.setRowHeight(42, 24);
 
-  // Trajectory & Drawdown Data (Rows 33 to 63, length 31)
-  var trajRows = [];
-  for (var tr = 0; tr < TRAJECTORY_DATA.length; tr++) {
-    var trow = [TRAJECTORY_DATA[tr][0]];
-    for (var tc = 1; tc <= 4; tc++) {
-      trow.push('=' + TRAJECTORY_DATA[tr][tc] + ' * ' + SCALE_EXPR);
-    }
-    trajRows.push(trow);
-  }
-  sheet.getRange(33, 1, trajRows.length, TRAJECTORY_HEADERS.length).setValues(trajRows);
-  sheet.getRange(33, 7, DRAWDOWN_DATA.length, DRAWDOWN_HEADERS.length).setValues(DRAWDOWN_DATA);
+  // 6. Section 4: Time Series Data Rows (Rows 43 to 73, 31 years)
+  // Dynamic spilled FILTER formulas
+  sheet.getRange('A43').setFormula(
+    '=FILTER(\'Scenario Data\'!$T$2:$X$125, \'Scenario Data\'!$S$2:$S$125 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$H$2))'
+  );
+  sheet.getRange('G43').setFormula(
+    '=FILTER(\'Scenario Data\'!$AA$2:$AE$125, \'Scenario Data\'!$Z$2:$Z$125 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$H$2))'
+  );
 
-  // Formatting Trajectory Table
-  sheet.getRange(33, 1, TRAJECTORY_DATA.length, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange(33, 2, TRAJECTORY_DATA.length, 4).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+  // Formatting Trajectory Table (Rows 43 to 73)
+  sheet.getRange(43, 1, 31, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(43, 2, 31, 4).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(42, 1, 32, 5).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Formatting Drawdown Table
-  sheet.getRange(33, 7, DRAWDOWN_DATA.length, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange(33, 8, DRAWDOWN_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+  // Formatting Drawdown Table (Rows 43 to 73)
+  sheet.getRange(43, 7, 31, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(43, 8, 31, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(42, 7, 32, 5).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
 
-  for (var tr = 0; tr < TRAJECTORY_DATA.length; tr++) {
-    var rowN = 33 + tr;
+  for (var tr = 0; tr < 31; tr++) {
+    var rowN = 43 + tr;
     var bgRow = (tr % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
-    sheet.getRange(rowN, 1, 1, TRAJECTORY_HEADERS.length).setBackground(bgRow);
-    sheet.getRange(rowN, 7, 1, DRAWDOWN_HEADERS.length).setBackground(bgRow);
+    sheet.getRange(rowN, 1, 1, 5).setBackground(bgRow);
+    sheet.getRange(rowN, 7, 1, 5).setBackground(bgRow);
     sheet.setRowHeight(rowN, 20);
-  }
-
-  // Set explicit column widths
-  var pColWidths = [75, 110, 110, 110, 115, 30, 75, 105, 105, 105, 105, 30];
-  for (var pw = 0; pw < pColWidths.length; pw++) {
-    sheet.setColumnWidth(pw + 1, pColWidths[pw]);
   }
 
   // Flush all cell values and formats to spreadsheet before creating charts
   SpreadsheetApp.flush();
 
-  // 7. Embedded Native Charts (Rows 12 to 29)
+  // 7. Embedded Native Charts (Rows 21 to 39)
   // Chart 1: Growth of Seed Capital Line Chart (Logarithmic Scale)
-  var growthRange = sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length);
+  var growthRange = sheet.getRange(42, 1, 32, 5);
   var growthChart = sheet.newChart()
     .asLineChart()
     .addRange(growthRange)
@@ -783,14 +965,14 @@ function buildPerformanceAndTradeoffsSheet(ss) {
     .setOption('vAxis.scaleType', 'log')
     .setOption('vAxis.title', 'Portfolio Value ($) - Log Scale')
     .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
-    .setOption('width', 580)
-    .setOption('height', 360)
-    .setPosition(12, 1, 0, 0)
+    .setOption('width', 590)
+    .setOption('height', 370)
+    .setPosition(21, 1, 0, 0)
     .build();
   sheet.insertChart(growthChart);
 
   // Chart 2: Historical Drawdowns from Peak Line Chart
-  var ddRange = sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length);
+  var ddRange = sheet.getRange(42, 7, 32, 5);
   var ddChart = sheet.newChart()
     .asLineChart()
     .addRange(ddRange)
@@ -802,9 +984,9 @@ function buildPerformanceAndTradeoffsSheet(ss) {
     .setOption('hAxis', {title: 'Year', format: '####', gridlines: {count: 8}})
     .setOption('vAxis', {title: 'Drawdown (%)', format: '0.0%'})
     .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
-    .setOption('width', 580)
-    .setOption('height', 360)
-    .setPosition(12, 7, 0, 0)
+    .setOption('width', 590)
+    .setOption('height', 370)
+    .setPosition(21, 7, 0, 0)
     .build();
   sheet.insertChart(ddChart);
 }

@@ -54,6 +54,18 @@ var TRAJECTORY_DATA = [[1994, 10000.0, 10000.0, 10000.0, 10000.0], [1995, 14207.
 var DRAWDOWN_HEADERS = ["Year", "Top 3 Drawdown", "Top 5 Drawdown", "Top 10 Drawdown", "S&P 500 Drawdown"];
 var DRAWDOWN_DATA = [[1994, 0.0, 0.0, 0.0, 0.0], [1995, 0.0, 0.0, 0.0, 0.0], [1996, 0.0, 0.0, 0.0, 0.0], [1997, 0.0, 0.0, 0.0, 0.0], [1998, 0.0, 0.0, 0.0, 0.0], [1999, 0.0, 0.0, 0.0, 0.0], [2000, -0.349185, -0.353815, -0.196353, -0.094146], [2001, -0.42913, -0.41137, -0.225386, -0.204959], [2002, -0.568288, -0.54351, -0.413632, -0.383685], [2003, -0.490473, -0.47278, -0.293077, -0.211159], [2004, -0.405113, -0.436574, -0.273562, -0.129786], [2005, -0.389421, -0.43349, -0.272977, -0.092031], [2006, -0.25882, -0.323987, -0.14278, 0.0], [2007, -0.145195, -0.293155, -0.146921, 0.0], [2008, -0.441346, -0.509411, -0.403935, -0.374441], [2009, -0.482858, -0.530062, -0.346752, -0.21454], [2010, -0.404212, -0.476209, -0.293146, -0.101597], [2011, -0.320237, -0.410218, -0.227462, -0.088325], [2012, -0.222293, -0.343635, -0.124831, 0.0], [2013, -0.032429, -0.155715, 0.0, 0.0], [2014, 0.0, -0.018015, 0.0, 0.0], [2015, 0.0, -0.048029, 0.0, 0.0], [2016, 0.0, 0.0, 0.0, 0.0], [2017, 0.0, 0.0, 0.0, 0.0], [2018, 0.0, 0.0, -0.01346, -0.049401], [2019, 0.0, 0.0, 0.0, 0.0], [2020, 0.0, 0.0, 0.0, 0.0], [2021, 0.0, 0.0, 0.0, 0.0], [2022, -0.303341, -0.367328, -0.335179, -0.185105], [2023, 0.0, -0.053458, -0.015673, 0.0], [2024, 0.0, 0.0, 0.0, 0.0]];
 
+var ERA_MATRIX_HEADERS = [
+  "LookupKey", "Market Regime Era", "Historical Context / Regime", "Top 3 CAGR",
+  "Top 5 CAGR", "Top 10 CAGR", "Benchmark CAGR", "Top 10 Alpha", "Top 10 Win Rate"
+];
+var ERA_MATRIX = [["S&P 500_Annual", "1995-1999", "Late '90s Dot-Com Boom", 0.412137, 0.455114, 0.406044, 0.285552, 0.120492, 1.0], ["S&P 500_Annual", "2000-2009", "The 'Lost Decade' (Tech Bust & GFC)", -0.057417, -0.061407, -0.03111, -0.009493, -0.021617, 0.3], ["S&P 500_Annual", "2010-2019", "ZIRP & Tech Expansion", 0.20593, 0.17909, 0.164333, 0.135599, 0.028734, 0.7], ["S&P 500_Annual", "2020-2024", "Mega-Cap Tech & AI Concentration", 0.289192, 0.255905, 0.224478, 0.145254, 0.079224, 0.8], ["S&P 500_Annual", "1995-2024", "Full 30-Year Horizon", 0.153222, 0.143713, 0.139661, 0.109242, 0.030419, 0.6333], ["S&P 500_Quarterly", "1995-1999", "Late '90s Dot-Com Boom", 0.450285, 0.447142, 0.411803, 0.285552, 0.126251, 1.0], ["S&P 500_Quarterly", "2000-2009", "The 'Lost Decade' (Tech Bust & GFC)", -0.068024, -0.066326, -0.028596, -0.009493, -0.019103, 0.4], ["S&P 500_Quarterly", "2010-2019", "ZIRP & Tech Expansion", 0.188403, 0.184026, 0.171571, 0.135599, 0.035972, 0.7], ["S&P 500_Quarterly", "2020-2024", "Mega-Cap Tech & AI Concentration", 0.292887, 0.285303, 0.282577, 0.145254, 0.137322, 0.8], ["S&P 500_Quarterly", "1995-2024", "Full 30-Year Horizon", 0.148926, 0.14667, 0.152654, 0.109242, 0.043413, 0.6667], ["All World_Annual", "1995-1999", "Late '90s Dot-Com Boom", 0.445972, 0.416483, 0.370157, 0.20293, 0.167227, 1.0], ["All World_Annual", "2000-2009", "The 'Lost Decade' (Tech Bust & GFC)", -0.056981, -0.072728, -0.02387, 0.002065, -0.025934, 0.3], ["All World_Annual", "2010-2019", "ZIRP & Tech Expansion", 0.206195, 0.174915, 0.1683, 0.100909, 0.067391, 0.8], ["All World_Annual", "2020-2024", "Mega-Cap Tech & AI Concentration", 0.290971, 0.255899, 0.196934, 0.117018, 0.079915, 0.8], ["All World_Annual", "1995-2024", "Full 30-Year Horizon", 0.158311, 0.132658, 0.13456, 0.085423, 0.049137, 0.6667], ["All World_Quarterly", "1995-1999", "Late '90s Dot-Com Boom", 0.461016, 0.404679, 0.375953, 0.20293, 0.173023, 1.0], ["All World_Quarterly", "2000-2009", "The 'Lost Decade' (Tech Bust & GFC)", -0.068304, -0.074788, -0.028087, 0.002065, -0.030151, 0.3], ["All World_Quarterly", "2010-2019", "ZIRP & Tech Expansion", 0.185016, 0.182414, 0.170643, 0.100909, 0.069734, 0.8], ["All World_Quarterly", "2020-2024", "Mega-Cap Tech & AI Concentration", 0.335083, 0.290594, 0.263651, 0.117018, 0.146633, 0.8], ["All World_Quarterly", "1995-2024", "Full 30-Year Horizon", 0.155296, 0.137797, 0.144781, 0.085423, 0.059358, 0.6667]];
+
+var TRAJECTORY_MATRIX_HEADERS = ["LookupKey", "Year", "Top 3 ($)", "Top 5 ($)", "Top 10 ($)", "Benchmark ($)"];
+var TRAJECTORY_MATRIX = [["S&P 500_Annual", 1994, 10000.0, 10000.0, 10000.0, 10000.0], ["S&P 500_Annual", 1995, 14207.67, 14749.73, 14155.88, 13653.65], ["S&P 500_Annual", 1996, 16537.56, 18283.36, 18967.31, 16678.18], ["S&P 500_Annual", 1997, 21343.03, 23515.02, 25201.21, 22124.67], ["S&P 500_Annual", 1998, 31793.43, 33129.2, 34810.08, 28320.88], ["S&P 500_Annual", 1999, 47678.8, 55889.48, 47450.49, 34151.21], ["S&P 500_Annual", 2000, 31030.06, 36114.93, 38133.43, 30936.0], ["S&P 500_Annual", 2001, 27218.39, 32898.25, 36755.79, 27151.59], ["S&P 500_Annual", 2002, 20583.51, 25512.97, 27823.46, 21047.91], ["S&P 500_Annual", 2003, 24293.62, 29466.07, 33543.82, 26939.87], ["S&P 500_Annual", 2004, 28363.49, 31489.58, 34469.86, 29718.85], ["S&P 500_Annual", 2005, 29111.66, 31661.95, 34497.6, 31008.22], ["S&P 500_Annual", 2006, 35338.58, 37782.0, 40675.49, 35703.47], ["S&P 500_Annual", 2007, 40756.07, 39505.2, 40479.01, 37454.55], ["S&P 500_Annual", 2008, 26635.96, 27418.74, 28283.57, 23430.04], ["S&P 500_Annual", 2009, 24656.73, 26264.58, 30996.94, 29419.05], ["S&P 500_Annual", 2010, 28406.46, 29274.41, 33540.58, 33649.27], ["S&P 500_Annual", 2011, 32410.28, 32962.59, 36657.29, 34146.37], ["S&P 500_Annual", 2012, 37080.12, 36683.87, 41527.19, 39344.81], ["S&P 500_Annual", 2013, 46132.61, 47186.63, 53242.12, 51759.0], ["S&P 500_Annual", 2014, 50375.01, 54882.65, 60478.61, 58487.18], ["S&P 500_Annual", 2015, 50718.05, 53205.18, 62350.6, 58926.21], ["S&P 500_Annual", 2016, 56061.57, 59890.06, 70618.43, 65545.06], ["S&P 500_Annual", 2017, 81853.49, 81760.87, 90224.76, 79380.39], ["S&P 500_Annual", 2018, 91873.8, 84067.32, 89010.33, 75458.88], ["S&P 500_Annual", 2019, 142825.57, 119967.26, 125888.4, 98627.69], ["S&P 500_Annual", 2020, 236123.31, 185850.5, 172591.29, 116140.86], ["S&P 500_Annual", 2021, 288421.82, 247325.25, 222845.08, 148847.96], ["S&P 500_Annual", 2022, 200931.66, 156475.65, 148152.06, 121295.51], ["S&P 500_Annual", 2023, 309678.58, 234103.76, 219352.52, 152432.68], ["S&P 500_Annual", 2024, 465584.5, 352958.01, 320010.6, 189788.57], ["S&P 500_Quarterly", 1994, 10000.0, 10000.0, 10000.0, 10000.0], ["S&P 500_Quarterly", 1995, 14252.72, 14204.39, 14221.41, 13652.96], ["S&P 500_Quarterly", 1996, 17757.01, 17429.99, 19096.63, 16676.69], ["S&P 500_Quarterly", 1997, 22903.16, 23054.81, 25414.45, 22122.14], ["S&P 500_Quarterly", 1998, 32769.12, 31376.68, 36045.77, 28317.14], ["S&P 500_Quarterly", 1999, 55395.55, 52956.03, 47002.2, 34146.27], ["S&P 500_Quarterly", 2000, 31853.32, 34789.85, 37585.57, 30931.21], ["S&P 500_Quarterly", 2001, 30049.55, 30706.52, 36289.02, 27147.02], ["S&P 500_Quarterly", 2002, 21682.49, 23200.83, 28025.44, 21043.92], ["S&P 500_Quarterly", 2003, 24434.98, 26895.28, 34166.03, 26934.08], ["S&P 500_Quarterly", 2004, 28556.64, 28750.18, 34648.55, 29711.78], ["S&P 500_Quarterly", 2005, 29308.41, 28904.98, 34592.99, 31000.02], ["S&P 500_Quarterly", 2006, 34488.69, 34551.14, 40802.51, 35693.02], ["S&P 500_Quarterly", 2007, 39817.19, 36141.45, 41958.92, 37442.54], ["S&P 500_Quarterly", 2008, 25928.79, 24152.77, 28573.1, 23421.49], ["S&P 500_Quarterly", 2009, 23942.53, 23880.96, 31591.22, 29406.98], ["S&P 500_Quarterly", 2010, 27621.73, 26116.94, 34187.8, 33634.41], ["S&P 500_Quarterly", 2011, 30619.31, 29937.9, 37485.4, 34130.13], ["S&P 500_Quarterly", 2012, 34998.71, 32293.71, 42447.79, 39324.51], ["S&P 500_Quarterly", 2013, 40429.51, 41603.13, 54644.83, 51730.46], ["S&P 500_Quarterly", 2014, 44657.5, 48677.68, 61616.84, 58453.01], ["S&P 500_Quarterly", 2015, 45213.19, 50254.9, 65894.85, 58889.75], ["S&P 500_Quarterly", 2016, 49280.58, 56589.53, 74675.63, 65502.04], ["S&P 500_Quarterly", 2017, 68074.4, 77735.04, 96648.51, 79325.8], ["S&P 500_Quarterly", 2018, 76373.03, 79693.51, 96152.17, 75404.72], ["S&P 500_Quarterly", 2019, 118896.79, 115112.19, 135902.71, 98553.79], ["S&P 500_Quarterly", 2020, 196690.07, 181399.18, 211776.03, 116050.82], ["S&P 500_Quarterly", 2021, 245028.16, 240854.33, 279895.23, 148730.22], ["S&P 500_Quarterly", 2022, 170596.6, 149708.13, 190388.34, 121197.0], ["S&P 500_Quarterly", 2023, 261868.02, 239698.68, 286177.09, 152305.67], ["S&P 500_Quarterly", 2024, 393369.7, 361091.15, 414791.09, 189627.59], ["All World_Annual", 1994, 10000.0, 10000.0, 10000.0, 10000.0], ["All World_Annual", 1995, 13720.17, 14077.07, 13930.67, 12019.63], ["All World_Annual", 1996, 18555.46, 17594.06, 18043.37, 13716.19], ["All World_Annual", 1997, 24002.86, 23215.41, 23038.93, 15788.06], ["All World_Annual", 1998, 35241.17, 29068.72, 30058.95, 19508.5], ["All World_Annual", 1999, 52878.18, 49023.74, 41865.42, 24401.59], ["All World_Annual", 2000, 34406.8, 32379.5, 33446.83, 21258.91], ["All World_Annual", 2001, 30189.35, 29491.48, 30899.96, 17668.06], ["All World_Annual", 2002, 22860.25, 22891.68, 24814.55, 14081.26], ["All World_Annual", 2003, 26977.99, 26448.77, 28891.37, 18640.24], ["All World_Annual", 2004, 31482.98, 28249.06, 31421.64, 21325.71], ["All World_Annual", 2005, 32301.92, 28370.12, 32324.78, 23315.64], ["All World_Annual", 2006, 39208.73, 33580.41, 38077.86, 27916.04], ["All World_Annual", 2007, 45243.98, 33299.48, 38906.34, 30379.63], ["All World_Annual", 2008, 29547.0, 21653.23, 26356.79, 17914.3], ["All World_Annual", 2009, 27410.68, 20797.09, 29615.59, 23207.54], ["All World_Annual", 2010, 31694.94, 24280.22, 33176.73, 25878.77], ["All World_Annual", 2011, 36106.91, 25676.67, 36308.89, 24360.17], ["All World_Annual", 2012, 41250.03, 28260.57, 39646.9, 28143.8], ["All World_Annual", 2013, 51348.3, 36398.5, 48767.7, 35570.65], ["All World_Annual", 2014, 56037.53, 42538.83, 54440.16, 37252.77], ["All World_Annual", 2015, 56397.13, 41829.3, 56216.9, 36863.1], ["All World_Annual", 2016, 62310.56, 47244.11, 62253.35, 39554.44], ["All World_Annual", 2017, 90970.23, 64548.45, 85097.89, 48328.42], ["All World_Annual", 2018, 102192.46, 65928.89, 84496.76, 44040.73], ["All World_Annual", 2019, 158764.58, 93987.73, 121458.07, 56124.14], ["All World_Annual", 2020, 262139.06, 145384.5, 171603.93, 64973.82], ["All World_Annual", 2021, 320143.69, 193134.92, 215099.85, 79064.68], ["All World_Annual", 2022, 222772.62, 121709.36, 134757.23, 64636.2], ["All World_Annual", 2023, 343447.48, 182105.85, 186804.51, 79906.46], ["All World_Annual", 2024, 518822.8, 275621.39, 276219.59, 94715.52], ["All World_Quarterly", 1994, 10000.0, 10000.0, 10000.0, 10000.0], ["All World_Quarterly", 1995, 13513.18, 14115.77, 13962.69, 12019.12], ["All World_Quarterly", 1996, 18287.21, 17597.64, 18101.02, 13715.07], ["All World_Quarterly", 1997, 23642.23, 22903.66, 22626.84, 15785.65], ["All World_Quarterly", 1998, 33795.9, 29973.02, 30359.69, 19504.81], ["All World_Quarterly", 1999, 57131.66, 45241.91, 42203.96, 24396.81], ["All World_Quarterly", 2000, 32815.46, 30700.5, 33618.22, 21254.71], ["All World_Quarterly", 2001, 30970.56, 27104.81, 29904.04, 17664.19], ["All World_Quarterly", 2002, 22369.44, 20444.03, 24272.27, 14077.97], ["All World_Quarterly", 2003, 26425.59, 23342.91, 28272.53, 18634.94], ["All World_Quarterly", 2004, 30866.58, 24940.23, 30711.16, 21318.63], ["All World_Quarterly", 2005, 31667.82, 24902.03, 31549.32, 23306.75], ["All World_Quarterly", 2006, 36427.49, 29527.3, 37091.27, 27903.95], ["All World_Quarterly", 2007, 42077.14, 31263.88, 38037.55, 30364.33], ["All World_Quarterly", 2008, 25208.87, 19306.36, 24997.47, 17903.11], ["All World_Quarterly", 2009, 24567.36, 19458.67, 28791.37, 23191.17], ["All World_Quarterly", 2010, 28444.48, 22113.3, 32304.88, 25859.22], ["All World_Quarterly", 2011, 31893.4, 23533.26, 34826.09, 24339.73], ["All World_Quarterly", 2012, 36405.08, 25636.8, 37964.44, 28118.3], ["All World_Quarterly", 2013, 41042.13, 33070.36, 47259.43, 35536.55], ["All World_Quarterly", 2014, 44126.07, 38674.04, 52741.96, 37215.28], ["All World_Quarterly", 2015, 44697.6, 40356.23, 56307.59, 36824.26], ["All World_Quarterly", 2016, 49032.86, 45606.94, 62444.38, 39510.59], ["All World_Quarterly", 2017, 67974.42, 63488.55, 85393.61, 48272.6], ["All World_Quarterly", 2018, 76344.19, 64714.3, 84609.73, 43987.77], ["All World_Quarterly", 2019, 118804.73, 93617.22, 120189.42, 56053.84], ["All World_Quarterly", 2020, 205011.09, 147667.76, 195622.03, 64890.16], ["All World_Quarterly", 2021, 270412.07, 195589.33, 249780.35, 78960.83], ["All World_Quarterly", 2022, 188050.27, 123191.51, 163364.17, 64549.02], ["All World_Quarterly", 2023, 288933.78, 196821.9, 234843.07, 79795.79], ["All World_Quarterly", 2024, 436123.24, 297564.77, 339651.67, 94581.8]];
+
+var DRAWDOWN_MATRIX_HEADERS = ["LookupKey", "Year", "Top 3 Drawdown", "Top 5 Drawdown", "Top 10 Drawdown", "Benchmark Drawdown"];
+var DRAWDOWN_MATRIX = [["S&P 500_Annual", 1994, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 1995, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 1996, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 1997, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 1998, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 1999, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 2000, -0.349185, -0.353815, -0.196353, -0.094146], ["S&P 500_Annual", 2001, -0.42913, -0.41137, -0.225386, -0.204959], ["S&P 500_Annual", 2002, -0.568288, -0.54351, -0.413632, -0.383685], ["S&P 500_Annual", 2003, -0.490473, -0.47278, -0.293077, -0.211159], ["S&P 500_Annual", 2004, -0.405113, -0.436574, -0.273562, -0.129786], ["S&P 500_Annual", 2005, -0.389421, -0.43349, -0.272977, -0.092031], ["S&P 500_Annual", 2006, -0.25882, -0.323987, -0.14278, 0.0], ["S&P 500_Annual", 2007, -0.145195, -0.293155, -0.146921, 0.0], ["S&P 500_Annual", 2008, -0.441346, -0.509411, -0.403935, -0.374441], ["S&P 500_Annual", 2009, -0.482858, -0.530062, -0.346752, -0.21454], ["S&P 500_Annual", 2010, -0.404212, -0.476209, -0.293146, -0.101597], ["S&P 500_Annual", 2011, -0.320237, -0.410218, -0.227462, -0.088325], ["S&P 500_Annual", 2012, -0.222293, -0.343635, -0.124831, 0.0], ["S&P 500_Annual", 2013, -0.032429, -0.155715, 0.0, 0.0], ["S&P 500_Annual", 2014, 0.0, -0.018015, 0.0, 0.0], ["S&P 500_Annual", 2015, 0.0, -0.048029, 0.0, 0.0], ["S&P 500_Annual", 2016, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 2017, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 2018, 0.0, 0.0, -0.01346, -0.049401], ["S&P 500_Annual", 2019, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 2020, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 2021, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Annual", 2022, -0.303341, -0.367328, -0.335179, -0.185105], ["S&P 500_Annual", 2023, 0.0, -0.053458, -0.015673, 0.0], ["S&P 500_Annual", 2024, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 1994, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 1995, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 1996, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 1997, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 1998, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 1999, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 2000, -0.424984, -0.343043, -0.200344, -0.094156], ["S&P 500_Quarterly", 2001, -0.457546, -0.420151, -0.227929, -0.204978], ["S&P 500_Quarterly", 2002, -0.608588, -0.561885, -0.403742, -0.383712], ["S&P 500_Quarterly", 2003, -0.5589, -0.492121, -0.273097, -0.211215], ["S&P 500_Quarterly", 2004, -0.484496, -0.457093, -0.262831, -0.129868], ["S&P 500_Quarterly", 2005, -0.470925, -0.45417, -0.264013, -0.09214], ["S&P 500_Quarterly", 2006, -0.37741, -0.347551, -0.131902, 0.0], ["S&P 500_Quarterly", 2007, -0.28122, -0.31752, -0.107299, 0.0], ["S&P 500_Quarterly", 2008, -0.531934, -0.543909, -0.39209, -0.374468], ["S&P 500_Quarterly", 2009, -0.56779, -0.549042, -0.327878, -0.21461], ["S&P 500_Quarterly", 2010, -0.501373, -0.506818, -0.272634, -0.101706], ["S&P 500_Quarterly", 2011, -0.44726, -0.434665, -0.202476, -0.088466], ["S&P 500_Quarterly", 2012, -0.368204, -0.390179, -0.096898, 0.0], ["S&P 500_Quarterly", 2013, -0.270167, -0.214384, 0.0, 0.0], ["S&P 500_Quarterly", 2014, -0.193843, -0.080791, 0.0, 0.0], ["S&P 500_Quarterly", 2015, -0.183812, -0.051007, 0.0, 0.0], ["S&P 500_Quarterly", 2016, -0.110387, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 2017, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 2018, 0.0, 0.0, -0.005136, -0.04943], ["S&P 500_Quarterly", 2019, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 2020, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 2021, 0.0, 0.0, 0.0, 0.0], ["S&P 500_Quarterly", 2022, -0.303767, -0.378429, -0.319787, -0.185122], ["S&P 500_Quarterly", 2023, 0.0, -0.004798, 0.0, 0.0], ["S&P 500_Quarterly", 2024, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 1994, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 1995, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 1996, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 1997, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 1998, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 1999, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 2000, -0.349319, -0.339514, -0.201087, -0.12879], ["All World_Annual", 2001, -0.429077, -0.398424, -0.261922, -0.275946], ["All World_Annual", 2002, -0.567681, -0.533049, -0.407278, -0.422937], ["All World_Annual", 2003, -0.489809, -0.460491, -0.309899, -0.236105], ["All World_Annual", 2004, -0.404613, -0.423768, -0.249461, -0.126052], ["All World_Annual", 2005, -0.389126, -0.421298, -0.227888, -0.044503], ["All World_Annual", 2006, -0.258508, -0.315017, -0.09047, 0.0], ["All World_Annual", 2007, -0.144373, -0.320748, -0.070681, 0.0], ["All World_Annual", 2008, -0.441225, -0.558311, -0.37044, -0.410319], ["All World_Annual", 2009, -0.481626, -0.575775, -0.2926, -0.236082], ["All World_Annual", 2010, -0.400604, -0.504725, -0.207539, -0.148154], ["All World_Annual", 2011, -0.317168, -0.47624, -0.132724, -0.198141], ["All World_Annual", 2012, -0.219904, -0.423533, -0.052992, -0.073596], ["All World_Annual", 2013, -0.028932, -0.257533, 0.0, 0.0], ["All World_Annual", 2014, 0.0, -0.132281, 0.0, 0.0], ["All World_Annual", 2015, 0.0, -0.146754, 0.0, -0.01046], ["All World_Annual", 2016, 0.0, -0.036301, 0.0, 0.0], ["All World_Annual", 2017, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 2018, 0.0, 0.0, -0.007064, -0.08872], ["All World_Annual", 2019, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 2020, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 2021, 0.0, 0.0, 0.0, 0.0], ["All World_Annual", 2022, -0.304148, -0.369822, -0.373513, -0.18249], ["All World_Annual", 2023, 0.0, -0.057106, -0.131545, 0.0], ["All World_Annual", 2024, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 1994, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 1995, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 1996, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 1997, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 1998, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 1999, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 2000, -0.425617, -0.321415, -0.203434, -0.128791], ["All World_Quarterly", 2001, -0.457909, -0.400891, -0.29144, -0.275963], ["All World_Quarterly", 2002, -0.608458, -0.548117, -0.424882, -0.422959], ["All World_Quarterly", 2003, -0.537462, -0.484042, -0.330098, -0.236173], ["All World_Quarterly", 2004, -0.459729, -0.448736, -0.272315, -0.126171], ["All World_Quarterly", 2005, -0.445705, -0.449581, -0.252456, -0.044681], ["All World_Quarterly", 2006, -0.362394, -0.347346, -0.121142, 0.0], ["All World_Quarterly", 2007, -0.263506, -0.308962, -0.098721, 0.0], ["All World_Quarterly", 2008, -0.558758, -0.573264, -0.407699, -0.41039], ["All World_Quarterly", 2009, -0.569987, -0.569897, -0.317804, -0.236236], ["All World_Quarterly", 2010, -0.502124, -0.511221, -0.234553, -0.148368], ["All World_Quarterly", 2011, -0.441756, -0.479835, -0.174815, -0.19841], ["All World_Quarterly", 2012, -0.362786, -0.433339, -0.100453, -0.073969], ["All World_Quarterly", 2013, -0.281622, -0.269033, 0.0, 0.0], ["All World_Quarterly", 2014, -0.227642, -0.145172, 0.0, 0.0], ["All World_Quarterly", 2015, -0.217639, -0.10799, 0.0, -0.010507], ["All World_Quarterly", 2016, -0.141757, 0.0, 0.0, 0.0], ["All World_Quarterly", 2017, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 2018, 0.0, 0.0, -0.00918, -0.088763], ["All World_Quarterly", 2019, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 2020, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 2021, 0.0, 0.0, 0.0, 0.0], ["All World_Quarterly", 2022, -0.304579, -0.370152, -0.345969, -0.182518], ["All World_Quarterly", 2023, 0.0, 0.0, -0.059802, 0.0], ["All World_Quarterly", 2024, 0.0, 0.0, 0.0, 0.0]];
+
 // ==========================================
 // Google Sheets UI & Menu Triggers
 // ==========================================
@@ -220,6 +232,53 @@ function buildScenarioDataSheet(ss) {
   }
 
   sheet.autoResizeColumns(1, SCENARIO_HEADERS.length);
+
+  // Trajectory Matrix (Cols S to X, Col 19 to 24)
+  if (typeof TRAJECTORY_MATRIX !== 'undefined' && TRAJECTORY_MATRIX.length > 0) {
+    var decoratedTraj = [];
+    for (var ti = 0; ti < TRAJECTORY_MATRIX.length; ti++) {
+      var trow = TRAJECTORY_MATRIX[ti].slice();
+      // Cols 2, 3, 4, 5 are dollar series: Top 3, Top 5, Top 10, Benchmark
+      trow[2] = '=' + trow[2] + ' * ' + SCALE_EXPR;
+      trow[3] = '=' + trow[3] + ' * ' + SCALE_EXPR;
+      trow[4] = '=' + trow[4] + ' * ' + SCALE_EXPR;
+      trow[5] = '=' + trow[5] + ' * ' + SCALE_EXPR;
+      decoratedTraj.push(trow);
+    }
+    var trajAllRows = [TRAJECTORY_MATRIX_HEADERS].concat(decoratedTraj);
+    sheet.getRange(1, 19, trajAllRows.length, TRAJECTORY_MATRIX_HEADERS.length).setValues(trajAllRows);
+    sheet.getRange(1, 19, 1, TRAJECTORY_MATRIX_HEADERS.length)
+         .setBackground('#2C5282').setFontColor('#FFFFFF').setFontWeight('bold').setHorizontalAlignment('center');
+    sheet.getRange(2, 19, TRAJECTORY_MATRIX.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 20, TRAJECTORY_MATRIX.length, 1).setNumberFormat('####').setHorizontalAlignment('center');
+    sheet.getRange(2, 21, TRAJECTORY_MATRIX.length, 4).setNumberFormat('$#,##0.00').setHorizontalAlignment('right');
+  }
+
+  // Drawdown Matrix (Cols Z to AE, Col 26 to 31)
+  if (typeof DRAWDOWN_MATRIX !== 'undefined' && DRAWDOWN_MATRIX.length > 0) {
+    var ddAllRows = [DRAWDOWN_MATRIX_HEADERS].concat(DRAWDOWN_MATRIX);
+    sheet.getRange(1, 26, ddAllRows.length, DRAWDOWN_MATRIX_HEADERS.length).setValues(ddAllRows);
+    sheet.getRange(1, 26, 1, DRAWDOWN_MATRIX_HEADERS.length)
+         .setBackground('#2C5282').setFontColor('#FFFFFF').setFontWeight('bold').setHorizontalAlignment('center');
+    sheet.getRange(2, 26, DRAWDOWN_MATRIX.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 27, DRAWDOWN_MATRIX.length, 1).setNumberFormat('####').setHorizontalAlignment('center');
+    sheet.getRange(2, 28, DRAWDOWN_MATRIX.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
+  }
+
+  // Era Matrix (Cols AG to AO, Col 33 to 41)
+  if (typeof ERA_MATRIX !== 'undefined' && ERA_MATRIX.length > 0) {
+    var eraAllRows = [ERA_MATRIX_HEADERS].concat(ERA_MATRIX);
+    sheet.getRange(1, 33, eraAllRows.length, ERA_MATRIX_HEADERS.length).setValues(eraAllRows);
+    sheet.getRange(1, 33, 1, ERA_MATRIX_HEADERS.length)
+         .setBackground('#2C5282').setFontColor('#FFFFFF').setFontWeight('bold').setHorizontalAlignment('center');
+    sheet.getRange(2, 33, ERA_MATRIX.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 34, ERA_MATRIX.length, 1).setHorizontalAlignment('center');
+    sheet.getRange(2, 35, ERA_MATRIX.length, 1).setHorizontalAlignment('left');
+    sheet.getRange(2, 36, ERA_MATRIX.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 40, ERA_MATRIX.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setHorizontalAlignment('right');
+    sheet.getRange(2, 41, ERA_MATRIX.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('right');
+  }
+
   sheet.setFrozenRows(1);
 }
 
@@ -620,10 +679,17 @@ function buildExecutiveSummarySheet(ss) {
 function buildPerformanceAndTradeoffsSheet(ss) {
   var sheet = getOrCreateSheet(ss, 'Performance & Tradeoffs');
   sheet.setHiddenGridlines(false);
+  sheet.clearContents();
 
-  // 1. Banner Header
-  sheet.getRange('A1:L1').merge()
-       .setValue('S&P 500 TOP N STRATEGY - HISTORICAL CHARTS & TRADEOFF ANALYSIS')
+  // Explicit, proportional column widths across 14 columns (Cols A to N)
+  var colWidths = [120, 95, 95, 85, 95, 95, 85, 90, 90, 95, 95, 105, 105, 130];
+  for (var c = 0; c < colWidths.length; c++) {
+    sheet.setColumnWidth(c + 1, colWidths[c]);
+  }
+
+  // 1. Banner Header (Row 1)
+  sheet.getRange('A1:N1').merge()
+       .setValue('S&P 500 & ALL-WORLD TOP N STRATEGY - HISTORICAL CHARTS & TRADEOFF ANALYSIS')
        .setBackground('#1B365D')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -632,18 +698,19 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setVerticalAlignment('middle');
   sheet.setRowHeight(1, 40);
 
-  // 2. Subtitle Description
-  sheet.getRange('A2:L2').merge()
-       .setFormula('="Visualizing 30-year compounded wealth trajectories (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & " initial basis), peak-to-trough drawdowns, and regime attribution (1994–2024)."')
+  // 2. Subtitle Description (Row 2)
+  sheet.getRange('A2:N2').merge()
+       .setFormula('="Visualizing 30-year compounded wealth trajectories (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & " initial basis), peak-to-trough drawdowns, and regime attribution for " & \'Executive Summary\'!$B$2 & " (" & \'Executive Summary\'!$H$2 & " rebalancing, 1994–2024)."')
        .setFontStyle('italic')
        .setFontColor('#4A5568')
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
   sheet.setRowHeight(2, 24);
+  sheet.setRowHeight(3, 10);
 
-  // 3. Section Title: Market Regime Attribution
+  // 3. Section 1: Historical Market Regime Attribution (5 Eras) (Rows 4 to 10)
   sheet.getRange('A4:H4').merge()
-       .setValue('HISTORICAL MARKET REGIME ATTRIBUTION (4 ERAS)')
+       .setValue('HISTORICAL MARKET REGIME ATTRIBUTION (5 ERAS)')
        .setBackground('#2C5282')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -652,8 +719,16 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setVerticalAlignment('middle');
   sheet.setRowHeight(4, 28);
 
-  // 4. Market Regime Table Headers
-  sheet.getRange(5, 1, 1, ERA_HEADERS.length).setValues([ERA_HEADERS])
+  // Headers (Row 5)
+  sheet.getRange('A5').setValue('Market Regime Era');
+  sheet.getRange('B5').setValue('Historical Context / Regime');
+  sheet.getRange('C5').setValue('Top 3 CAGR');
+  sheet.getRange('D5').setValue('Top 5 CAGR');
+  sheet.getRange('E5').setValue('Top 10 CAGR');
+  sheet.getRange('F5').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ") CAGR"');
+  sheet.getRange('G5').setFormula('="Top 10 Alpha vs " & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "SPX")');
+  sheet.getRange('H5').setValue('Top 10 Win Rate');
+  sheet.getRange('A5:H5')
        .setBackground('#2B6CB0')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
@@ -661,34 +736,140 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setVerticalAlignment('middle');
   sheet.setRowHeight(5, 26);
 
-  // 5. Market Regime Data Rows
-  sheet.getRange(6, 1, ERA_DATA.length, ERA_HEADERS.length).setValues(ERA_DATA);
-  for (var er = 0; er < ERA_DATA.length; er++) {
-    var rowNum = 6 + er;
-    var bg = (er === ERA_DATA.length - 1) ? '#EDF2F7' : ((er % 2 === 0) ? '#FFFFFF' : '#F7FAFC');
-    sheet.getRange(rowNum, 1, 1, ERA_HEADERS.length).setBackground(bg);
-    sheet.setRowHeight(rowNum, 22);
+  // Spilled Data via FILTER formula in A6 (Rows 6 to 10)
+  sheet.getRange('A6').setFormula(
+    '=IFERROR(FILTER(\'Scenario Data\'!$AH$2:$AO$21, \'Scenario Data\'!$AG$2:$AG$21 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$H$2)), "")'
+  );
+
+  for (var er = 0; er < 5; er++) {
+    var rNum = 6 + er;
+    var bg = (er === 4) ? '#EDF2F7' : ((er % 2 === 0) ? '#FFFFFF' : '#F7FAFC');
+    sheet.getRange(rNum, 1, 1, 8).setBackground(bg);
+    sheet.setRowHeight(rNum, 22);
   }
 
-  // Regime Table Formatting
-  sheet.getRange(6, 1, ERA_DATA.length, 1).setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange(6, 2, ERA_DATA.length, 1).setVerticalAlignment('middle');
-  sheet.getRange(6, 3, ERA_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(6, 7, ERA_DATA.length, 1).setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(6, 8, ERA_DATA.length, 1).setNumberFormat('0.0%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(5, 1, ERA_DATA.length + 1, ERA_HEADERS.length).setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
-  sheet.getRange(6 + ERA_DATA.length - 1, 1, 1, ERA_HEADERS.length).setFontWeight('bold');
+  sheet.getRange('A6:A10').setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('B6:B10').setVerticalAlignment('middle');
+  sheet.getRange('C6:F10').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('G6:G10').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('H6:H10').setNumberFormat('0.0%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('A10:H10').setFontWeight('bold');
+  sheet.getRange('A5:H10').setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Spacer
-  sheet.setRowHeight(11, 12);
+  sheet.setRowHeight(11, 14);
 
-  for (var cr = 12; cr <= 29; cr++) {
+  // 4. Section 2: Rebalancing Frequency Tradeoff Analysis Table (Rows 12 to 17)
+  sheet.getRange('A12:N12').merge()
+       .setFormula('="REBALANCING FREQUENCY TRADEOFF ANALYSIS — ANNUAL VS. QUARTERLY (" & \'Executive Summary\'!$B$2 & ", " & \'Executive Summary\'!$F$2 & ", " & TEXT(\'Executive Summary\'!$L$2, "0.0%") & " TAX RATE)"')
+       .setBackground('#2C5282')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(11)
+       .setHorizontalAlignment('left')
+       .setVerticalAlignment('middle');
+  sheet.setRowHeight(12, 28);
+
+  var tradeoffHeaders = [
+    'Strategy',
+    'Annual Pre-Tax CAGR', 'Quarterly Pre-Tax CAGR', 'Pre-Tax Delta',
+    'Annual Post-Liq CAGR', 'Quarterly Post-Liq CAGR', 'Net Post-Liq Delta',
+    'Annual Max Drawdown', 'Quarterly Max Drawdown',
+    'Annual Taxes Paid', 'Quarterly Taxes Paid',
+    'Annual Ending Wealth', 'Quarterly Ending Wealth',
+    'Frequency Advantage'
+  ];
+  sheet.getRange(13, 1, 1, tradeoffHeaders.length).setValues([tradeoffHeaders])
+       .setBackground('#2D3748')
+       .setFontColor('#FFFFFF')
+       .setFontWeight('bold')
+       .setFontSize(9)
+       .setHorizontalAlignment('center')
+       .setVerticalAlignment('middle')
+       .setWrap(true);
+  sheet.getRange('L13').setFormula('="Annual Wealth (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & ")"');
+  sheet.getRange('M13').setFormula('="Quarterly Wealth (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & ")"');
+  sheet.setRowHeight(13, 36);
+
+  var taxExpr = 'IF(ISNUMBER(\'Executive Summary\'!$L$2), TEXT(\'Executive Summary\'!$L$2, "0.0%"), \'Executive Summary\'!$L$2)';
+  var stratRows = [
+    ['Top 3 Strategy', 'Top 3'],
+    ['Top 5 Strategy', 'Top 5'],
+    ['Top 10 Strategy', 'Top 10'],
+    ['Benchmark', 'Benchmark']
+  ];
+
+  for (var si = 0; si < stratRows.length; si++) {
+    var trRow = 14 + si;
+    var sDisplay = stratRows[si][0];
+    var sCode = stratRows[si][1];
+
+    var annKey, qtrKey;
+    if (sCode === 'Benchmark') {
+      sheet.getRange('A' + trRow).setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ")"');
+      annKey = '\'Executive Summary\'!$F$2 & "_" & IF(\'Executive Summary\'!$B$2="All World", "All World_MSCI World_Annual_", "S&P 500_S&P 500_Annual_") & ' + taxExpr;
+      qtrKey = '\'Executive Summary\'!$F$2 & "_" & IF(\'Executive Summary\'!$B$2="All World", "All World_MSCI World_Quarterly_", "S&P 500_S&P 500_Quarterly_") & ' + taxExpr;
+    } else {
+      sheet.getRange('A' + trRow).setValue(sDisplay);
+      annKey = '\'Executive Summary\'!$F$2 & "_" & \'Executive Summary\'!$B$2 & "_' + sCode + '_Annual_" & ' + taxExpr;
+      qtrKey = '\'Executive Summary\'!$F$2 & "_" & \'Executive Summary\'!$B$2 & "_' + sCode + '_Quarterly_" & ' + taxExpr;
+    }
+
+    // Col B: Annual Pre-Tax CAGR (Col G in Scenario Data)
+    sheet.getRange('B' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$G:$G, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col C: Quarterly Pre-Tax CAGR
+    sheet.getRange('C' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$G:$G, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col D: Pre-Tax Delta
+    sheet.getRange('D' + trRow).setFormula('=C' + trRow + ' - B' + trRow);
+    // Col E: Annual Post-Liq CAGR (Col I in Scenario Data)
+    sheet.getRange('E' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col F: Quarterly Post-Liq CAGR
+    sheet.getRange('F' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$I:$I, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col G: Net Post-Liq Delta
+    sheet.getRange('G' + trRow).setFormula('=F' + trRow + ' - E' + trRow);
+    // Col H: Annual Max Drawdown (Col M in Scenario Data)
+    sheet.getRange('H' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$M:$M, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col I: Quarterly Max Drawdown
+    sheet.getRange('I' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$M:$M, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col J: Annual Total Taxes (Col N in Scenario Data)
+    sheet.getRange('J' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$N:$N, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col K: Quarterly Total Taxes
+    sheet.getRange('K' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$N:$N, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col L: Annual Ending Wealth (Col K in Scenario Data)
+    sheet.getRange('L' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH(' + annKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col M: Quarterly Ending Wealth
+    sheet.getRange('M' + trRow).setFormula('=IFERROR(INDEX(\'Scenario Data\'!$K:$K, MATCH(' + qtrKey + ', \'Scenario Data\'!$A:$A, 0)), 0)');
+    // Col N: Frequency Advantage Verdict
+    sheet.getRange('N' + trRow).setFormula('=IF(G' + trRow + ' > 0.0005, "Quarterly Outperformance", IF(G' + trRow + ' < -0.0005, "Annual Tax-Efficiency", "Neutral / Parity"))');
+
+    sheet.setRowHeight(trRow, 24);
+  }
+
+  sheet.getRange('A14:A17').setFontWeight('bold').setVerticalAlignment('middle');
+  sheet.getRange('B14:C17').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('D14:D17').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('E14:F17').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('G14:G17').setNumberFormat('+0.00%;-0.00%;0.00%').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('H14:I17').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('J14:K17').setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('L14:M17').setNumberFormat('$#,##0.00').setFontWeight('bold').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange('N14:N17').setFontStyle('italic').setFontWeight('bold').setHorizontalAlignment('center').setVerticalAlignment('middle');
+
+  sheet.getRange('A14:N14').setBackground('#FFFFFF');
+  sheet.getRange('A15:N15').setBackground('#F7FAFC');
+  sheet.getRange('A16:N16').setBackground('#FFFFFF');
+  sheet.getRange('A17:N17').setBackground('#EDF2F7');
+  sheet.getRange('A13:N17').setBorder(true, true, true, true, true, true, '#CBD5E0', SpreadsheetApp.BorderStyle.SOLID);
+
+  for (var sr = 18; sr <= 20; sr++) {
+    sheet.setRowHeight(sr, 12);
+  }
+  for (var cr = 21; cr <= 39; cr++) {
     sheet.setRowHeight(cr, 20);
   }
-  sheet.setRowHeight(30, 14);
+  sheet.setRowHeight(40, 14);
 
-  // 6. Section Titles for Time Series Data
-  sheet.getRange('A31:E31').merge()
+  // 5. Section 3: Section Titles & Table Headers for Time Series Data (Rows 41 & 42)
+  sheet.getRange('A41:E41').merge()
        .setFormula('="30-YEAR WEALTH ACCUMULATION DATA (" & TEXT(\'Executive Summary\'!$N$2, "$#,##0") & " BASIS)"')
        .setBackground('#2C5282')
        .setFontColor('#FFFFFF')
@@ -697,7 +878,7 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
 
-  sheet.getRange('G31:K31').merge()
+  sheet.getRange('G41:K41').merge()
        .setValue('HISTORICAL DRAWDOWN FROM PEAK DATA')
        .setBackground('#2C5282')
        .setFontColor('#FFFFFF')
@@ -705,66 +886,67 @@ function buildPerformanceAndTradeoffsSheet(ss) {
        .setFontSize(10)
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
-  sheet.setRowHeight(31, 26);
+  sheet.setRowHeight(41, 26);
 
-  // Table Headers (Row 32)
-  sheet.getRange(32, 1, 1, TRAJECTORY_HEADERS.length).setValues([TRAJECTORY_HEADERS])
+  // Table Headers (Row 42)
+  sheet.getRange('A42').setValue('Year');
+  sheet.getRange('B42').setValue('Top 3 ($)');
+  sheet.getRange('C42').setValue('Top 5 ($)');
+  sheet.getRange('D42').setValue('Top 10 ($)');
+  sheet.getRange('E42').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ")"');
+  sheet.getRange('A42:E42')
        .setBackground('#4A5568')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
 
-  sheet.getRange(32, 7, 1, DRAWDOWN_HEADERS.length).setValues([DRAWDOWN_HEADERS])
+  sheet.getRange('G42').setValue('Year');
+  sheet.getRange('H42').setValue('Top 3 Drawdown');
+  sheet.getRange('I42').setValue('Top 5 Drawdown');
+  sheet.getRange('J42').setValue('Top 10 Drawdown');
+  sheet.getRange('K42').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ") Drawdown"');
+  sheet.getRange('G42:K42')
        .setBackground('#4A5568')
        .setFontColor('#FFFFFF')
        .setFontWeight('bold')
        .setHorizontalAlignment('center')
        .setVerticalAlignment('middle');
-  sheet.setRowHeight(32, 24);
+  sheet.setRowHeight(42, 24);
 
-  // Trajectory & Drawdown Data (Rows 33 to 63, length 31)
-  var trajRows = [];
-  for (var tr = 0; tr < TRAJECTORY_DATA.length; tr++) {
-    var trow = [TRAJECTORY_DATA[tr][0]];
-    for (var tc = 1; tc <= 4; tc++) {
-      trow.push('=' + TRAJECTORY_DATA[tr][tc] + ' * ' + SCALE_EXPR);
-    }
-    trajRows.push(trow);
-  }
-  sheet.getRange(33, 1, trajRows.length, TRAJECTORY_HEADERS.length).setValues(trajRows);
-  sheet.getRange(33, 7, DRAWDOWN_DATA.length, DRAWDOWN_HEADERS.length).setValues(DRAWDOWN_DATA);
+  // 6. Section 4: Time Series Data Rows (Rows 43 to 73, 31 years)
+  // Dynamic spilled FILTER formulas
+  sheet.getRange('A43').setFormula(
+    '=FILTER(\'Scenario Data\'!$T$2:$X$125, \'Scenario Data\'!$S$2:$S$125 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$H$2))'
+  );
+  sheet.getRange('G43').setFormula(
+    '=FILTER(\'Scenario Data\'!$AA$2:$AE$125, \'Scenario Data\'!$Z$2:$Z$125 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$H$2))'
+  );
 
-  // Formatting Trajectory Table
-  sheet.getRange(33, 1, TRAJECTORY_DATA.length, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange(33, 2, TRAJECTORY_DATA.length, 4).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+  // Formatting Trajectory Table (Rows 43 to 73)
+  sheet.getRange(43, 1, 31, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(43, 2, 31, 4).setNumberFormat('$#,##0.00').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(42, 1, 32, 5).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
 
-  // Formatting Drawdown Table
-  sheet.getRange(33, 7, DRAWDOWN_DATA.length, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange(33, 8, DRAWDOWN_DATA.length, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
-  sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
+  // Formatting Drawdown Table (Rows 43 to 73)
+  sheet.getRange(43, 7, 31, 1).setNumberFormat('####').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange(43, 8, 31, 4).setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
+  sheet.getRange(42, 7, 32, 5).setBorder(true, true, true, true, true, true, '#E2E8F0', SpreadsheetApp.BorderStyle.SOLID);
 
-  for (var tr = 0; tr < TRAJECTORY_DATA.length; tr++) {
-    var rowN = 33 + tr;
+  for (var tr = 0; tr < 31; tr++) {
+    var rowN = 43 + tr;
     var bgRow = (tr % 2 === 0) ? '#FFFFFF' : '#F7FAFC';
-    sheet.getRange(rowN, 1, 1, TRAJECTORY_HEADERS.length).setBackground(bgRow);
-    sheet.getRange(rowN, 7, 1, DRAWDOWN_HEADERS.length).setBackground(bgRow);
+    sheet.getRange(rowN, 1, 1, 5).setBackground(bgRow);
+    sheet.getRange(rowN, 7, 1, 5).setBackground(bgRow);
     sheet.setRowHeight(rowN, 20);
-  }
-
-  // Set explicit column widths
-  var pColWidths = [75, 110, 110, 110, 115, 30, 75, 105, 105, 105, 105, 30];
-  for (var pw = 0; pw < pColWidths.length; pw++) {
-    sheet.setColumnWidth(pw + 1, pColWidths[pw]);
   }
 
   // Flush all cell values and formats to spreadsheet before creating charts
   SpreadsheetApp.flush();
 
-  // 7. Embedded Native Charts (Rows 12 to 29)
+  // 7. Embedded Native Charts (Rows 21 to 39)
   // Chart 1: Growth of Seed Capital Line Chart (Logarithmic Scale)
-  var growthRange = sheet.getRange(32, 1, TRAJECTORY_DATA.length + 1, TRAJECTORY_HEADERS.length);
+  var growthRange = sheet.getRange(42, 1, 32, 5);
   var growthChart = sheet.newChart()
     .asLineChart()
     .addRange(growthRange)
@@ -783,14 +965,14 @@ function buildPerformanceAndTradeoffsSheet(ss) {
     .setOption('vAxis.scaleType', 'log')
     .setOption('vAxis.title', 'Portfolio Value ($) - Log Scale')
     .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
-    .setOption('width', 580)
-    .setOption('height', 360)
-    .setPosition(12, 1, 0, 0)
+    .setOption('width', 590)
+    .setOption('height', 370)
+    .setPosition(21, 1, 0, 0)
     .build();
   sheet.insertChart(growthChart);
 
   // Chart 2: Historical Drawdowns from Peak Line Chart
-  var ddRange = sheet.getRange(32, 7, DRAWDOWN_DATA.length + 1, DRAWDOWN_HEADERS.length);
+  var ddRange = sheet.getRange(42, 7, 32, 5);
   var ddChart = sheet.newChart()
     .asLineChart()
     .addRange(ddRange)
@@ -802,9 +984,9 @@ function buildPerformanceAndTradeoffsSheet(ss) {
     .setOption('hAxis', {title: 'Year', format: '####', gridlines: {count: 8}})
     .setOption('vAxis', {title: 'Drawdown (%)', format: '0.0%'})
     .setOption('colors', ['#805AD5', '#2B6CB0', '#285E61', '#A0AEC0'])
-    .setOption('width', 580)
-    .setOption('height', 360)
-    .setPosition(12, 7, 0, 0)
+    .setOption('width', 590)
+    .setOption('height', 370)
+    .setPosition(21, 7, 0, 0)
     .build();
   sheet.insertChart(ddChart);
 }

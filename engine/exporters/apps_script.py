@@ -61,6 +61,9 @@ def generate_google_apps_script(
             era_data = defaults["era_data"]
             trajectory_data = defaults["trajectory_data"]
             drawdown_data = defaults["drawdown_data"]
+            era_matrix = defaults.get("era_matrix", [])
+            trajectory_matrix = defaults.get("trajectory_matrix", [])
+            drawdown_matrix = defaults.get("drawdown_matrix", [])
         else:
             top3_annual = annual_data.get("top_3") or annual_data.get("top3_annual", defaults["top3_annual"])
             top5_annual = annual_data.get("top_5") or annual_data.get("top5_annual", defaults["top5_annual"])
@@ -72,6 +75,9 @@ def generate_google_apps_script(
             era_data = annual_data.get("era_data", defaults["era_data"])
             trajectory_data = annual_data.get("trajectory_data", defaults["trajectory_data"])
             drawdown_data = annual_data.get("drawdown_data", defaults["drawdown_data"])
+            era_matrix = annual_data.get("era_matrix", defaults.get("era_matrix", []))
+            trajectory_matrix = annual_data.get("trajectory_matrix", defaults.get("trajectory_matrix", []))
+            drawdown_matrix = annual_data.get("drawdown_matrix", defaults.get("drawdown_matrix", []))
 
         source_trades = defaults["trades_data"] if trades_data is None else trades_data
     else:
@@ -86,8 +92,11 @@ def generate_google_apps_script(
         era_data = annual_data.get("era_data")
         trajectory_data = annual_data.get("trajectory_data")
         drawdown_data = annual_data.get("drawdown_data")
+        era_matrix = annual_data.get("era_matrix")
+        trajectory_matrix = annual_data.get("trajectory_matrix")
+        drawdown_matrix = annual_data.get("drawdown_matrix")
 
-        if era_data is None or trajectory_data is None or drawdown_data is None:
+        if era_data is None or trajectory_data is None or drawdown_data is None or era_matrix is None or trajectory_matrix is None or drawdown_matrix is None:
             defaults = build_default_scenario_data()
             if era_data is None:
                 era_data = defaults["era_data"]
@@ -95,6 +104,12 @@ def generate_google_apps_script(
                 trajectory_data = defaults["trajectory_data"]
             if drawdown_data is None:
                 drawdown_data = defaults["drawdown_data"]
+            if era_matrix is None:
+                era_matrix = defaults.get("era_matrix", [])
+            if trajectory_matrix is None:
+                trajectory_matrix = defaults.get("trajectory_matrix", [])
+            if drawdown_matrix is None:
+                drawdown_matrix = defaults.get("drawdown_matrix", [])
             if not world_top3_annual:
                 world_top3_annual = defaults.get("world_top3_annual", [])
             if not world_top5_annual:
@@ -157,6 +172,9 @@ def generate_google_apps_script(
         "/*__ERA_DATA__*/[]": json.dumps(era_data),
         "/*__TRAJECTORY_DATA__*/[]": json.dumps(trajectory_data),
         "/*__DRAWDOWN_DATA__*/[]": json.dumps(drawdown_data),
+        "/*__ERA_MATRIX__*/[]": json.dumps(era_matrix),
+        "/*__TRAJECTORY_MATRIX__*/[]": json.dumps(trajectory_matrix),
+        "/*__DRAWDOWN_MATRIX__*/[]": json.dumps(drawdown_matrix),
     }
 
     for placeholder, val in replacements.items():

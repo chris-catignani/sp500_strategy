@@ -44,10 +44,28 @@ class TestScenarios(unittest.TestCase):
             "era_data",
             "trajectory_data",
             "drawdown_data",
+            "era_matrix",
+            "trajectory_matrix",
+            "drawdown_matrix",
         ]
         for key in expected_keys:
             self.assertIn(key, annual_data)
             self.assertGreater(len(annual_data[key]), 0)
+
+        # Matrix dimensions (4 combos: SP500 & World x Annual & Quarterly)
+        # 31 years * 4 combos = 124 rows
+        self.assertEqual(len(annual_data["trajectory_matrix"]), 124)
+        for row in annual_data["trajectory_matrix"]:
+            self.assertEqual(len(row), 6)  # LookupKey, Year, Top3, Top5, Top10, Bench
+
+        self.assertEqual(len(annual_data["drawdown_matrix"]), 124)
+        for row in annual_data["drawdown_matrix"]:
+            self.assertEqual(len(row), 6)  # LookupKey, Year, Top3_DD, Top5_DD, Top10_DD, Bench_DD
+
+        # 5 eras * 4 combos = 20 rows
+        self.assertEqual(len(annual_data["era_matrix"]), 20)
+        for row in annual_data["era_matrix"]:
+            self.assertEqual(len(row), 9)  # LookupKey, Era, Context, Top3, Top5, Top10, Bench, Alpha, WinRate
 
         # Trades data checks
         self.assertIsInstance(trades_data, list)
@@ -65,6 +83,11 @@ class TestScenarios(unittest.TestCase):
         # Trajectories should have full 31 years (1994..2024)
         self.assertEqual(len(annual_data["trajectory_data"]), 31)
         self.assertEqual(len(annual_data["drawdown_data"]), 31)
+        # Single universe with 2 frequencies = 31 * 2 = 62 rows
+        self.assertEqual(len(annual_data["trajectory_matrix"]), 62)
+        self.assertEqual(len(annual_data["drawdown_matrix"]), 62)
+        # 5 eras * 2 frequencies = 10 rows
+        self.assertEqual(len(annual_data["era_matrix"]), 10)
 
     def test_build_default_scenario_data_helper(self):
         """Verify backward-compatible build_default_scenario_data dictionary contract."""
@@ -83,6 +106,9 @@ class TestScenarios(unittest.TestCase):
             "era_data",
             "trajectory_data",
             "drawdown_data",
+            "era_matrix",
+            "trajectory_matrix",
+            "drawdown_matrix",
         ]
         for k in required_keys:
             self.assertIn(k, defaults)

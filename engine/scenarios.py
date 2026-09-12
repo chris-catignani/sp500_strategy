@@ -407,57 +407,61 @@ def build_scenario_and_apps_script_data(
     # 30-Year Annual histories & trades at 30% baseline tax rate across universes
     annual_data: Dict[str, List[List[Any]]] = {}
     trade_rows: List[Dict[str, Any]] = []
-    res_30y_map: Dict[Tuple[str, int], StrategyResult] = {}
+    res_30y_map: Dict[Tuple[str, int, str], StrategyResult] = {}
 
     for univ in universes:
         prefix = "" if univ == "sp500" else "World "
         key_prefix = "" if univ == "sp500" else "world_"
         for n in target_n_values:
             sel = resolve_selector(strategy_name, n=n)
-            res_30y = simulator.run_simulation(
-                1994,
-                2024,
-                n=n,
-                selector=sel,
-                is_after_tax=True,
-                tax_rate=0.30,
-                initial_capital=initial_capital,
-                universe=univ,
-            )
-            res_30y_map[(univ, n)] = res_30y
-            trades_30y = simulator.get_trades()
+            for freq in ("annual", "quarterly"):
+                res_30y = simulator.run_simulation(
+                    1994,
+                    2024,
+                    n=n,
+                    selector=sel,
+                    is_after_tax=True,
+                    tax_rate=0.30,
+                    initial_capital=initial_capital,
+                    universe=univ,
+                    rebalance_frequency=freq,
+                )
+                res_30y_map[(univ, n, freq)] = res_30y
 
-            ledger_rows: List[List[Any]] = []
-            for entry in res_30y.annual_history:
-                ledger_rows.append([
-                    entry.year,
-                    round(entry.start_value, 2),
-                    round(entry.gross_return, 6),
-                    round(getattr(entry, "dividend_income", 0.0), 2),
-                    round(entry.ending_value_pretax, 2),
-                    round(entry.realized_capital_gain, 2),
-                    round(entry.net_taxable_gain, 2),
-                    round(getattr(entry, "capital_gains_tax_paid", 0.0), 2),
-                    round(getattr(entry, "dividend_tax_paid", 0.0), 2),
-                    round(entry.tax_paid, 2),
-                    round(entry.loss_carryforward, 2),
-                    round(entry.ending_value_aftertax, 2),
-                    round(entry.cash, 2),
-                    round(entry.spx_return, 6),
-                    round(entry.turnover, 6),
-                ])
-            annual_data[f"{key_prefix}top_{n}"] = ledger_rows
+                # Annual ledger and trades only recorded once per universe for annual baseline tabs
+                if freq == "annual":
+                    trades_30y = simulator.get_trades()
+                    ledger_rows: List[List[Any]] = []
+                    for entry in res_30y.annual_history:
+                        ledger_rows.append([
+                            entry.year,
+                            round(entry.start_value, 2),
+                            round(entry.gross_return, 6),
+                            round(getattr(entry, "dividend_income", 0.0), 2),
+                            round(entry.ending_value_pretax, 2),
+                            round(entry.realized_capital_gain, 2),
+                            round(entry.net_taxable_gain, 2),
+                            round(getattr(entry, "capital_gains_tax_paid", 0.0), 2),
+                            round(getattr(entry, "dividend_tax_paid", 0.0), 2),
+                            round(entry.tax_paid, 2),
+                            round(entry.loss_carryforward, 2),
+                            round(entry.ending_value_aftertax, 2),
+                            round(entry.cash, 2),
+                            round(entry.spx_return, 6),
+                            round(entry.turnover, 6),
+                        ])
+                    annual_data[f"{key_prefix}top_{n}"] = ledger_rows
 
-            for t in trades_30y:
-                trade_rows.append({
-                    "year": t.year,
-                    "strategy_name": f"{prefix}Top {n}",
-                    "ticker": t.ticker,
-                    "action": t.action,
-                    "shares": round(t.shares, 4),
-                    "price": round(t.price, 2),
-                    "realized_gain": round(t.realized_gain, 2),
-                })
+                    for t in trades_30y:
+                        trade_rows.append({
+                            "year": t.year,
+                            "strategy_name": f"{prefix}Top {n}",
+                            "ticker": t.ticker,
+                            "action": t.action,
+                            "shares": round(t.shares, 4),
+                            "price": round(t.price, 2),
+                            "realized_gain": round(t.realized_gain, 2),
+                        })
 
     # S&P 500 30-Year Benchmark Series
     spx_rows: List[List[Any]] = []
@@ -472,7 +476,7 @@ def build_scenario_and_apps_script_data(
             comp_growth = initial_capital * (lvl / base_level)
             spx_rows.append([y, round(lvl, 2), round(ann_ret, 6), round(comp_growth, 2)])
 
-    # Historical Market Regime Breakdown (4 Eras + Full 30-Year)
+    # Historical Market Regime Breakdown (5 Eras across Universe x Frequency)
     eras = [
         ("1995-1999", 1995, 1999, "Late '90s Dot-Com Boom"),
         ("2000-2009", 2000, 2009, "The 'Lost Decade' (Tech Bust & GFC)"),
@@ -480,70 +484,90 @@ def build_scenario_and_apps_script_data(
         ("2020-2024", 2020, 2024, "Mega-Cap Tech & AI Concentration"),
         ("1995-2024", 1995, 2024, "Full 30-Year Horizon"),
     ]
-    baseline_univ = "sp500" if "sp500" in universes else (universes[0] if universes else "sp500")
-    t3_pre = pretax_cache.get((baseline_univ, 3, "annual", 1994, 2024))
-    t5_pre = pretax_cache.get((baseline_univ, 5, "annual", 1994, 2024))
-    t10_pre = pretax_cache.get((baseline_univ, 10, "annual", 1994, 2024))
 
+    def _cagr(rets: List[float]) -> float:
+        p = 1.0
+        for r in rets:
+            p *= (1.0 + r)
+        return (p ** (1.0 / len(rets)) - 1.0) if rets else 0.0
+
+    era_matrix: List[List[Any]] = []
     era_rows: List[List[Any]] = []
-    if t3_pre and t5_pre and t10_pre:
-        for label, sy, ey, desc in eras:
-            ny = ey - sy + 1
-            t3_sub = [e.gross_return for e in t3_pre.annual_history if sy <= e.year <= ey]
-            t5_sub = [e.gross_return for e in t5_pre.annual_history if sy <= e.year <= ey]
-            t10_sub = [e.gross_return for e in t10_pre.annual_history if sy <= e.year <= ey]
-            spx_sub = [e.spx_return for e in t10_pre.annual_history if sy <= e.year <= ey]
 
-            def _cagr(rets: List[float]) -> float:
-                p = 1.0
-                for r in rets:
-                    p *= (1.0 + r)
-                return (p ** (1.0 / len(rets)) - 1.0) if rets else 0.0
+    for u in universes:
+        u_label = "S&P 500" if u == "sp500" else "All World"
+        for f_key in ("annual", "quarterly"):
+            f_label = "Annual" if f_key == "annual" else "Quarterly"
+            lookup_key = f"{u_label}_{f_label}"
+            t3_p = pretax_cache.get((u, 3, f_key, 1994, 2024))
+            t5_p = pretax_cache.get((u, 5, f_key, 1994, 2024))
+            t10_p = pretax_cache.get((u, 10, f_key, 1994, 2024))
 
-            c3, c5, c10, cspx = _cagr(t3_sub), _cagr(t5_sub), _cagr(t10_sub), _cagr(spx_sub)
-            wins10 = sum(1 for a, b in zip(t10_sub, spx_sub) if a > b)
-            win_rate = wins10 / ny if ny > 0 else 0.0
-            alpha10 = c10 - cspx
-            era_rows.append([
-                label,
-                desc,
-                round(c3, 6),
-                round(c5, 6),
-                round(c10, 6),
-                round(cspx, 6),
-                round(alpha10, 6),
-                round(win_rate, 4),
-            ])
+            # Benchmark annual return series for regime attribution
+            bench_annual_rets: Dict[int, float] = {}
+            if u == "sp500":
+                if f_key == "annual":
+                    for y in range(1995, 2025):
+                        tr_now = data_loader.get_spx_tr_level(y)
+                        tr_prev = data_loader.get_spx_tr_level(y - 1)
+                        bench_annual_rets[y] = (tr_now - tr_prev) / tr_prev
+                else:
+                    for y in range(1995, 2025):
+                        tr_now = data_loader.get_spx_tr_quarterly_level(y, 4)
+                        tr_prev = data_loader.get_spx_tr_quarterly_level(y - 1, 4)
+                        bench_annual_rets[y] = (tr_now - tr_prev) / tr_prev
+            else:
+                if f_key == "annual":
+                    for y in range(1995, 2025):
+                        tr_now = data_loader.get_msci_world_tr_level(y)
+                        tr_prev = data_loader.get_msci_world_tr_level(y - 1)
+                        bench_annual_rets[y] = (tr_now - tr_prev) / tr_prev
+                else:
+                    for y in range(1995, 2025):
+                        tr_now = data_loader.get_msci_world_tr_quarterly_level(y, 4)
+                        tr_prev = data_loader.get_msci_world_tr_quarterly_level(y - 1, 4)
+                        bench_annual_rets[y] = (tr_now - tr_prev) / tr_prev
+
+            if t3_p and t5_p and t10_p:
+                for label, sy, ey, desc in eras:
+                    ny = ey - sy + 1
+                    t3_sub = [e.gross_return for e in t3_p.annual_history if sy <= e.year <= ey]
+                    t5_sub = [e.gross_return for e in t5_p.annual_history if sy <= e.year <= ey]
+                    t10_sub = [e.gross_return for e in t10_p.annual_history if sy <= e.year <= ey]
+                    bench_sub = [bench_annual_rets.get(y, 0.0) for y in range(sy, ey + 1)]
+
+                    c3, c5, c10, cbench = _cagr(t3_sub), _cagr(t5_sub), _cagr(t10_sub), _cagr(bench_sub)
+                    wins10 = sum(1 for a, b in zip(t10_sub, bench_sub) if a > b)
+                    win_rate = wins10 / ny if ny > 0 else 0.0
+                    alpha10 = c10 - cbench
+
+                    era_matrix.append([
+                        lookup_key,
+                        label,
+                        desc,
+                        round(c3, 6),
+                        round(c5, 6),
+                        round(c10, 6),
+                        round(cbench, 6),
+                        round(alpha10, 6),
+                        round(win_rate, 4),
+                    ])
+
+                    # Preserve legacy era_rows for S&P 500 Annual
+                    if u == "sp500" and f_key == "annual":
+                        era_rows.append([
+                            label,
+                            desc,
+                            round(c3, 6),
+                            round(c5, 6),
+                            round(c10, 6),
+                            round(cbench, 6),
+                            round(alpha10, 6),
+                            round(win_rate, 4),
+                        ])
 
     # 30-Year Wealth Accumulation & Drawdown Trajectories (After-Tax 30% Baseline)
-    pr_30y = [data_loader.get_spx_level(y) for y in range(1994, 2025)]
-    tr_30y = [data_loader.get_spx_tr_level(y) for y in range(1994, 2025)]
-    spx_bench_30y = calculate_benchmark_annual_series(
-        pr_levels=pr_30y,
-        tr_levels=tr_30y,
-        tax_rate=0.30,
-        initial_capital=initial_capital,
-        is_after_tax=True,
-    )
-    spx_val = initial_capital
-    spx_traj = [initial_capital]
-    for r_spx in spx_bench_30y["annual_returns"]:
-        spx_val *= (1.0 + r_spx)
-        spx_traj.append(spx_val)
-
-    t3_res = res_30y_map.get((baseline_univ, 3))
-    t5_res = res_30y_map.get((baseline_univ, 5))
-    t10_res = res_30y_map.get((baseline_univ, 10))
-
-    t3_traj = [initial_capital] + ([e.ending_value_aftertax for e in t3_res.annual_history] if t3_res else [])
-    t5_traj = [initial_capital] + ([e.ending_value_aftertax for e in t5_res.annual_history] if t5_res else [])
-    t10_traj = [initial_capital] + ([e.ending_value_aftertax for e in t10_res.annual_history] if t10_res else [])
-
     years_30y = list(range(1994, 2025))
-    trajectory_rows = [
-        [y, round(v3, 2), round(v5, 2), round(v10, 2), round(vspx, 2)]
-        for y, v3, v5, v10, vspx in zip(years_30y, t3_traj, t5_traj, t10_traj, spx_traj)
-    ]
 
     def _calc_dd(vals: List[float]) -> List[float]:
         if not vals:
@@ -556,20 +580,140 @@ def build_scenario_and_apps_script_data(
             dds.append((v - peak) / peak if peak > 0 else 0.0)
         return dds
 
-    dd3 = _calc_dd(t3_traj)
-    dd5 = _calc_dd(t5_traj)
-    dd10 = _calc_dd(t10_traj)
-    ddspx = _calc_dd(spx_traj)
+    # Benchmark Trajectories (30y)
+    pr_30y_spx = [data_loader.get_spx_level(y) for y in range(1994, 2025)]
+    tr_30y_spx = [data_loader.get_spx_tr_level(y) for y in range(1994, 2025)]
+    spx_bench_ann = calculate_benchmark_annual_series(
+        pr_levels=pr_30y_spx,
+        tr_levels=tr_30y_spx,
+        tax_rate=0.30,
+        initial_capital=initial_capital,
+        is_after_tax=True,
+    )
+    spx_val_ann = initial_capital
+    spx_traj_ann = [initial_capital]
+    for r in spx_bench_ann["annual_returns"]:
+        spx_val_ann *= (1.0 + r)
+        spx_traj_ann.append(spx_val_ann)
 
-    drawdown_rows = [
-        [y, round(d3, 6), round(d5, 6), round(d10, 6), round(dspx, 6)]
-        for y, d3, d5, d10, dspx in zip(years_30y, dd3, dd5, dd10, ddspx)
-    ]
+    spx_q_pr_30y = [data_loader.get_spx_quarterly_level(1994, 4)]
+    spx_q_tr_30y = [data_loader.get_spx_tr_quarterly_level(1994, 4)]
+    for y in range(1995, 2025):
+        for q in (1, 2, 3, 4):
+            spx_q_pr_30y.append(data_loader.get_spx_quarterly_level(y, q))
+            spx_q_tr_30y.append(data_loader.get_spx_tr_quarterly_level(y, q))
+    spx_bench_q = calculate_benchmark_annual_series(
+        pr_levels=spx_q_pr_30y,
+        tr_levels=spx_q_tr_30y,
+        tax_rate=0.30,
+        initial_capital=initial_capital,
+        is_after_tax=True,
+    )
+    spx_q_val = initial_capital
+    spx_traj_q = [initial_capital]
+    for idx, r_step in enumerate(spx_bench_q["annual_returns"], start=1):
+        spx_q_val *= (1.0 + r_step)
+        if idx % 4 == 0:
+            spx_traj_q.append(spx_q_val)
+
+    msci_pr_30y = [data_loader.get_msci_world_level(y) for y in range(1994, 2025)]
+    msci_tr_30y = [data_loader.get_msci_world_tr_level(y) for y in range(1994, 2025)]
+    msci_bench_ann = calculate_benchmark_annual_series(
+        pr_levels=msci_pr_30y,
+        tr_levels=msci_tr_30y,
+        tax_rate=0.30,
+        initial_capital=initial_capital,
+        is_after_tax=True,
+    )
+    msci_val_ann = initial_capital
+    msci_traj_ann = [initial_capital]
+    for r in msci_bench_ann["annual_returns"]:
+        msci_val_ann *= (1.0 + r)
+        msci_traj_ann.append(msci_val_ann)
+
+    msci_q_pr_30y = [data_loader.get_msci_world_quarterly_level(1994, 4)]
+    msci_q_tr_30y = [data_loader.get_msci_world_tr_quarterly_level(1994, 4)]
+    for y in range(1995, 2025):
+        for q in (1, 2, 3, 4):
+            msci_q_pr_30y.append(data_loader.get_msci_world_quarterly_level(y, q))
+            msci_q_tr_30y.append(data_loader.get_msci_world_tr_quarterly_level(y, q))
+    msci_bench_q = calculate_benchmark_annual_series(
+        pr_levels=msci_q_pr_30y,
+        tr_levels=msci_q_tr_30y,
+        tax_rate=0.30,
+        initial_capital=initial_capital,
+        is_after_tax=True,
+    )
+    msci_q_val = initial_capital
+    msci_traj_q = [initial_capital]
+    for idx, r_step in enumerate(msci_bench_q["annual_returns"], start=1):
+        msci_q_val *= (1.0 + r_step)
+        if idx % 4 == 0:
+            msci_traj_q.append(msci_q_val)
+
+    trajectory_matrix: List[List[Any]] = []
+    drawdown_matrix: List[List[Any]] = []
+    trajectory_rows: List[List[Any]] = []
+    drawdown_rows: List[List[Any]] = []
+
+    for u in universes:
+        u_label = "S&P 500" if u == "sp500" else "All World"
+        for f_key in ("annual", "quarterly"):
+            f_label = "Annual" if f_key == "annual" else "Quarterly"
+            lookup_key = f"{u_label}_{f_label}"
+
+            t3_r = res_30y_map.get((u, 3, f_key))
+            t5_r = res_30y_map.get((u, 5, f_key))
+            t10_r = res_30y_map.get((u, 10, f_key))
+
+            t3_t = [initial_capital] + ([e.ending_value_aftertax for e in t3_r.annual_history] if t3_r else [])
+            t5_t = [initial_capital] + ([e.ending_value_aftertax for e in t5_r.annual_history] if t5_r else [])
+            t10_t = [initial_capital] + ([e.ending_value_aftertax for e in t10_r.annual_history] if t10_r else [])
+
+            if u == "sp500":
+                bench_t = spx_traj_ann if f_key == "annual" else spx_traj_q
+            else:
+                bench_t = msci_traj_ann if f_key == "annual" else msci_traj_q
+
+            dd3_m = _calc_dd(t3_t)
+            dd5_m = _calc_dd(t5_t)
+            dd10_m = _calc_dd(t10_t)
+            ddbench_m = _calc_dd(bench_t)
+
+            for y, v3, v5, v10, vb in zip(years_30y, t3_t, t5_t, t10_t, bench_t):
+                trajectory_matrix.append([
+                    lookup_key,
+                    y,
+                    round(v3, 2),
+                    round(v5, 2),
+                    round(v10, 2),
+                    round(vb, 2),
+                ])
+
+            for y, d3, d5, d10, db in zip(years_30y, dd3_m, dd5_m, dd10_m, ddbench_m):
+                drawdown_matrix.append([
+                    lookup_key,
+                    y,
+                    round(d3, 6),
+                    round(d5, 6),
+                    round(d10, 6),
+                    round(db, 6),
+                ])
+
+            # Preserve legacy 31-row trajectory_data / drawdown_data for baseline S&P 500 Annual
+            if (u == "sp500" or u == universes[0]) and f_key == "annual" and not trajectory_rows:
+                for y, v3, v5, v10, vb in zip(years_30y, t3_t, t5_t, t10_t, bench_t):
+                    trajectory_rows.append([y, round(v3, 2), round(v5, 2), round(v10, 2), round(vb, 2)])
+                for y, d3, d5, d10, db in zip(years_30y, dd3_m, dd5_m, dd10_m, ddbench_m):
+                    drawdown_rows.append([y, round(d3, 6), round(d5, 6), round(d10, 6), round(db, 6)])
 
     annual_data["spx"] = spx_rows
     annual_data["era_data"] = era_rows
     annual_data["trajectory_data"] = trajectory_rows
     annual_data["drawdown_data"] = drawdown_rows
+    annual_data["era_matrix"] = era_matrix
+    annual_data["trajectory_matrix"] = trajectory_matrix
+    annual_data["drawdown_matrix"] = drawdown_matrix
     scenario_data = {"scenario_rows": scenario_rows}
 
     return scenario_data, annual_data, trade_rows
@@ -594,4 +738,7 @@ def build_default_scenario_data() -> Dict[str, Any]:
         "era_data": annual_data["era_data"],
         "trajectory_data": annual_data["trajectory_data"],
         "drawdown_data": annual_data["drawdown_data"],
+        "era_matrix": annual_data.get("era_matrix", []),
+        "trajectory_matrix": annual_data.get("trajectory_matrix", []),
+        "drawdown_matrix": annual_data.get("drawdown_matrix", []),
     }

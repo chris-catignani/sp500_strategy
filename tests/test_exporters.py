@@ -410,6 +410,26 @@ class TestExporters(unittest.TestCase):
         self.assertIn("DRAWDOWN_HEADERS", code)
         self.assertIn("DRAWDOWN_DATA", code)
 
+        # Check multi-universe & multi-frequency matrix datasets
+        self.assertIn("ERA_MATRIX", code)
+        self.assertIn("ERA_MATRIX_HEADERS", code)
+        self.assertIn("TRAJECTORY_MATRIX", code)
+        self.assertIn("TRAJECTORY_MATRIX_HEADERS", code)
+        self.assertIn("DRAWDOWN_MATRIX", code)
+        self.assertIn("DRAWDOWN_MATRIX_HEADERS", code)
+
+        # Check dynamic filter formulas on Performance & Tradeoffs tab
+        self.assertIn("FILTER(\\'Scenario Data\\'!$AH$2:$AO$21", code)
+        self.assertIn("FILTER(\\'Scenario Data\\'!$T$2:$X$125", code)
+        self.assertIn("FILTER(\\'Scenario Data\\'!$AA$2:$AE$125", code)
+
+        # Check Rebalancing Frequency Tradeoff Table
+        self.assertIn("REBALANCING FREQUENCY TRADEOFF ANALYSIS", code)
+        self.assertIn("Annual Pre-Tax CAGR", code)
+        self.assertIn("Quarterly Pre-Tax CAGR", code)
+        self.assertIn("Frequency Advantage", code)
+        self.assertIn("Quarterly Outperformance", code)
+
         # Check Google Sheets ChartBuilder integration
         self.assertIn("asLineChart()", code)
         self.assertIn("insertChart", code)
@@ -417,6 +437,8 @@ class TestExporters(unittest.TestCase):
         self.assertIn("scaleType: 'log'", code)
         self.assertIn("Historical Drawdown from Peak (1994–2024)", code)
         self.assertIn("removeChart", code)
+        self.assertIn("sheet.getRange(42, 1, 32, 5)", code)
+        self.assertIn("sheet.getRange(42, 7, 32, 5)", code)
 
     def test_google_apps_script_custom_initial_capital(self):
         """Verify custom initial capital is injected into BASE_INITIAL_CAPITAL."""
