@@ -63,6 +63,7 @@ class ReportExporter:
         scenario_data: Optional[Dict[str, Any]] = None,
         annual_data: Optional[Dict[str, Any]] = None,
         trades_data: Optional[List[Union[Dict[str, Any], Any]]] = None,
+        initial_capital: Optional[float] = None,
     ) -> str:
         """Export standalone Google Apps Script file."""
         filepath = os.path.join(self.scripts_dir, filename)
@@ -71,6 +72,7 @@ class ReportExporter:
             scenario_data=scenario_data,
             annual_data=annual_data,
             trades_data=trades_data,
+            initial_capital=initial_capital,
         )
 
     def export_all(
@@ -81,6 +83,7 @@ class ReportExporter:
         scenario_data: Optional[Dict[str, Any]] = None,
         annual_data: Optional[Dict[str, Any]] = None,
         trades_data: Optional[List[Union[Dict[str, Any], Any]]] = None,
+        initial_capital: Optional[float] = None,
     ) -> Dict[str, str]:
         """Export summary metrics, annual breakdown, trade log, and Apps Script.
 
@@ -91,6 +94,7 @@ class ReportExporter:
             scenario_data: Optional scenario dataset for Google Apps Script.
             annual_data: Optional annual dataset for Google Apps Script.
             trades_data: Optional trades dataset for Google Apps Script.
+            initial_capital: Optional starting seed capital basis.
 
         Returns:
             Dictionary mapping artifact names to their created file paths.
@@ -104,6 +108,7 @@ class ReportExporter:
             scenario_data=scenario_data,
             annual_data=annual_data,
             trades_data=trades_data,
+            initial_capital=initial_capital,
         )
         return files
 
@@ -117,6 +122,7 @@ def export_all(
     scenario_data: Optional[Dict[str, Any]] = None,
     annual_data: Optional[Dict[str, Any]] = None,
     trades_data: Optional[List[Union[Dict[str, Any], Any]]] = None,
+    initial_capital: Optional[float] = None,
 ) -> Dict[str, str]:
     """Convenience helper function to export all report artifacts into target directories.
 
@@ -129,6 +135,7 @@ def export_all(
         scenario_data: Optional scenario dataset for Google Apps Script.
         annual_data: Optional annual dataset for Google Apps Script.
         trades_data: Optional trades dataset for Google Apps Script.
+        initial_capital: Optional starting seed capital basis.
 
     Returns:
         Dictionary mapping artifact names to their created file paths.
@@ -141,4 +148,5 @@ def export_all(
         scenario_data=scenario_data,
         annual_data=annual_data,
         trades_data=trades_data,
+        initial_capital=initial_capital,
     )

@@ -89,7 +89,7 @@ def export_summary_metrics_csv(
             tax_drag = 0.0
 
         # Alpha vs S&P 500 Benchmark
-        if r.strategy_name == "S&P 500":
+        if r.strategy_name == "S&P 500" or r.strategy_name.startswith("S&P 500 ("):
             alpha_vs_spx = 0.0
         else:
             spx_cagr: Optional[float] = None

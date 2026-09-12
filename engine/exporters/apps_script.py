@@ -20,11 +20,12 @@ def generate_google_apps_script(
     scenario_data: Optional[Dict[str, Any]] = None,
     annual_data: Optional[Dict[str, Any]] = None,
     trades_data: Optional[List[Union[Dict[str, Any], Any]]] = None,
+    initial_capital: Optional[float] = None,
 ) -> str:
     """Generate a complete, self-contained Google Apps Script (.js).
 
     The script creates and formats:
-    - Executive Summary (Interactive Dashboard with tax rate selector in B2)
+    - Executive Summary (Interactive Dashboard with tax rate and seed capital selectors)
     - Top 3 Strategy (30-year annual breakdown)
     - Top 5 Strategy (30-year annual breakdown)
     - Top 10 Strategy (30-year annual breakdown)
@@ -36,6 +37,7 @@ def generate_google_apps_script(
         scenario_data: Optional custom scenario dataset.
         annual_data: Optional custom annual ledger dataset.
         trades_data: Optional custom trades dataset.
+        initial_capital: Optional starting seed capital basis.
 
     Returns:
         A JavaScript string ready to be installed in Google Sheets Script Editor.
@@ -128,10 +130,21 @@ def generate_google_apps_script(
                 round(float(getattr(t, "realized_gain", 0.0)), 2),
             ])
 
+    if initial_capital is None:
+        if spx_data and len(spx_data) > 0 and len(spx_data[0]) > 3 and isinstance(spx_data[0][3], (int, float)):
+            initial_capital = float(spx_data[0][3])
+        elif trajectory_data and len(trajectory_data) > 0 and len(trajectory_data[0]) > 1 and isinstance(trajectory_data[0][1], (int, float)):
+            initial_capital = float(trajectory_data[0][1])
+        else:
+            initial_capital = 10000.0
+
+    base_cap_str = str(int(initial_capital)) if float(initial_capital).is_integer() else str(initial_capital)
+
     with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
         template = f.read()
 
     replacements = {
+        "/*__BASE_INITIAL_CAPITAL__*/10000": base_cap_str,
         "/*__SCENARIO_DATA__*/[]": json.dumps(scenario_rows),
         "/*__TOP3_ANNUAL_DATA__*/[]": json.dumps(top3_annual),
         "/*__TOP5_ANNUAL_DATA__*/[]": json.dumps(top5_annual),
@@ -157,6 +170,7 @@ def export_google_apps_script(
     scenario_data: Optional[Dict[str, Any]] = None,
     annual_data: Optional[Dict[str, Any]] = None,
     trades_data: Optional[List[Union[Dict[str, Any], Any]]] = None,
+    initial_capital: Optional[float] = None,
 ) -> str:
     """Write the complete Google Apps Script file to disk.
 
@@ -165,6 +179,7 @@ def export_google_apps_script(
         scenario_data: Optional custom scenario dataset.
         annual_data: Optional custom annual ledger dataset.
         trades_data: Optional custom trades dataset.
+        initial_capital: Optional starting seed capital basis.
 
     Returns:
         The target filepath written to.
@@ -174,6 +189,7 @@ def export_google_apps_script(
         scenario_data=scenario_data,
         annual_data=annual_data,
         trades_data=trades_data,
+        initial_capital=initial_capital,
     )
     with open(filepath, mode="w", encoding="utf-8") as f:
         f.write(js_code)

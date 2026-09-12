@@ -355,11 +355,15 @@ class TestExporters(unittest.TestCase):
         self.assertIn('"Strategy"', code)
         self.assertIn('"Frequency"', code)
         self.assertIn('"RowType"', code)
-        # Compare Index and Frequency dropdowns and controls
+        # Compare Index, Frequency, and Seed Capital dropdowns and controls
         self.assertIn("'Compare Index:'", code)
         self.assertIn("['None', 'S&P 500', 'MSCI World', 'Both']", code)
         self.assertIn("'Rebalance:'", code)
         self.assertIn("['All', 'Annual Only', 'Quarterly Only']", code)
+        self.assertIn("'Seed Capital:'", code)
+        self.assertIn("requireNumberGreaterThan(0)", code)
+        self.assertIn("BASE_INITIAL_CAPITAL = 10000;", code)
+        self.assertIn("SCALE_EXPR", code)
         # Decoupled KPI formulas querying Scenario Data
         self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$K:$K, MATCH(\"30y_\"", code)
         self.assertIn("=IFERROR(INDEX(\\'Scenario Data\\'!$I:$I, MATCH(\"30y_\"", code)
@@ -398,10 +402,15 @@ class TestExporters(unittest.TestCase):
         # Check Google Sheets ChartBuilder integration
         self.assertIn("asLineChart()", code)
         self.assertIn("insertChart", code)
-        self.assertIn("Growth of $10,000 Initial Investment (Log Scale, 1994–2024)", code)
+        self.assertIn("Growth of Seed Capital (Log Scale, 1994–2024)", code)
         self.assertIn("scaleType: 'log'", code)
         self.assertIn("Historical Drawdown from Peak (1994–2024)", code)
         self.assertIn("removeChart", code)
+
+    def test_google_apps_script_custom_initial_capital(self):
+        """Verify custom initial capital is injected into BASE_INITIAL_CAPITAL."""
+        code = generate_google_apps_script(initial_capital=50000.0)
+        self.assertIn("var BASE_INITIAL_CAPITAL = 50000;", code)
 
     def test_report_exporter_coordinator(self):
         """Test ReportExporter class and export_all convenience function."""

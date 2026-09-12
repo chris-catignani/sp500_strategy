@@ -162,6 +162,55 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         self.assertGreater(res_ann.cagr, 0.10)
         self.assertGreater(res_qtr.cagr, 0.10)
 
+    def test_quarterly_index_dividend_reinvestment(self) -> None:
+        """Verify quarterly index dividend reinvestment produces exact compounding metrics."""
+        from engine.metrics import calculate_benchmark_annual_series, calculate_cagr
+
+        # S&P 500 10-Year (2014-2024)
+        spx_q_pr = [self.loader.get_spx_quarterly_level(2014, 4)]
+        spx_q_tr = [self.loader.get_spx_tr_quarterly_level(2014, 4)]
+        for y in range(2015, 2025):
+            for q in (1, 2, 3, 4):
+                spx_q_pr.append(self.loader.get_spx_quarterly_level(y, q))
+                spx_q_tr.append(self.loader.get_spx_tr_quarterly_level(y, q))
+
+        self.assertEqual(len(spx_q_pr), 41)
+        self.assertEqual(len(spx_q_tr), 41)
+
+        spx_post = calculate_benchmark_annual_series(
+            pr_levels=spx_q_pr,
+            tr_levels=spx_q_tr,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            is_after_tax=True,
+        )
+
+        cagr = calculate_cagr(10000.0, spx_post["post_liquidation_wealth"], 10)
+        self.assertAlmostEqual(cagr, 0.1017, places=3)
+        self.assertAlmostEqual(spx_post["post_liquidation_wealth"], 26352.07, places=1)
+        self.assertAlmostEqual(spx_post["total_taxes_paid"], 919.06, places=1)
+        self.assertAlmostEqual(spx_post["total_dividends_received"], 3063.55, places=1)
+
+        # MSCI World 10-Year (2014-2024)
+        msci_q_pr = [self.loader.get_msci_world_quarterly_level(2014, 4)]
+        msci_q_tr = [self.loader.get_msci_world_tr_quarterly_level(2014, 4)]
+        for y in range(2015, 2025):
+            for q in (1, 2, 3, 4):
+                msci_q_pr.append(self.loader.get_msci_world_quarterly_level(y, q))
+                msci_q_tr.append(self.loader.get_msci_world_tr_quarterly_level(y, q))
+
+        self.assertEqual(len(msci_q_pr), 41)
+        msci_post = calculate_benchmark_annual_series(
+            pr_levels=msci_q_pr,
+            tr_levels=msci_q_tr,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            is_after_tax=True,
+        )
+        m_cagr = calculate_cagr(10000.0, msci_post["post_liquidation_wealth"], 10)
+        self.assertAlmostEqual(m_cagr, 0.0796, places=3)
+        self.assertAlmostEqual(msci_post["post_liquidation_wealth"], 21510.43, places=1)
+
 
 if __name__ == "__main__":
     unittest.main()

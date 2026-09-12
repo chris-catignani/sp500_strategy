@@ -22,11 +22,15 @@ class TestScenarios(unittest.TestCase):
             self.assertEqual(len(row), 17)
             self.assertIn(row[16], ("Strategy", "Index"))
 
-        # Verify benchmark rows exist without duplicates (5 tax rates x 3 horizons = 15 rows each)
+        # Verify benchmark rows exist without duplicates (5 tax rates x 3 horizons x 2 frequencies = 30 rows each)
         spx_bench_rows = [r for r in scenario_rows if r[4] == "S&P 500" and r[16] == "Index"]
         msci_bench_rows = [r for r in scenario_rows if r[4] == "MSCI World" and r[16] == "Index"]
-        self.assertEqual(len(spx_bench_rows), 15)
-        self.assertEqual(len(msci_bench_rows), 15)
+        self.assertEqual(len(spx_bench_rows), 30)
+        self.assertEqual(len(msci_bench_rows), 30)
+        self.assertEqual(sum(1 for r in spx_bench_rows if r[5] == "Annual"), 15)
+        self.assertEqual(sum(1 for r in spx_bench_rows if r[5] == "Quarterly"), 15)
+        self.assertEqual(sum(1 for r in msci_bench_rows if r[5] == "Annual"), 15)
+        self.assertEqual(sum(1 for r in msci_bench_rows if r[5] == "Quarterly"), 15)
 
         # Annual data checks
         expected_keys = [
