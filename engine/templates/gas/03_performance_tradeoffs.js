@@ -136,9 +136,9 @@ function buildPerformanceAndTradeoffsSheet(ss) {
 
     var annKey, qtrKey;
     if (sCode === 'Benchmark') {
-      sheet.getRange('A' + trRow).setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ")"');
-      annKey = '\'Executive Summary\'!$H$2 & "_" & IF(\'Executive Summary\'!$B$2="All World", "All World_MSCI World_Annual_", "S&P 500_S&P 500_Annual_") & ' + taxExpr;
-      qtrKey = '\'Executive Summary\'!$H$2 & "_" & IF(\'Executive Summary\'!$B$2="All World", "All World_MSCI World_Quarterly_", "S&P 500_S&P 500_Quarterly_") & ' + taxExpr;
+      sheet.getRange('A' + trRow).setFormula('="Benchmark (" & \'Executive Summary\'!$D$3 & ")"');
+      annKey = '\'Executive Summary\'!$H$2 & "_" & IF(\'Executive Summary\'!$D$3="MSCI World", "All World_MSCI World_Annual_", IF(\'Executive Summary\'!$D$3="FBGRX", "FBGRX_FBGRX_Annual_", "S&P 500_S&P 500_Annual_")) & ' + taxExpr;
+      qtrKey = '\'Executive Summary\'!$H$2 & "_" & IF(\'Executive Summary\'!$D$3="MSCI World", "All World_MSCI World_Quarterly_", IF(\'Executive Summary\'!$D$3="FBGRX", "FBGRX_FBGRX_Quarterly_", "S&P 500_S&P 500_Quarterly_")) & ' + taxExpr;
     } else {
       sheet.getRange('A' + trRow).setValue(sDisplay);
       annKey = '\'Executive Summary\'!$H$2 & "_" & \'Executive Summary\'!$B$2 & "_' + sCode + '_" & \'Executive Summary\'!$F$2 & "_Annual_" & ' + taxExpr;
@@ -224,7 +224,7 @@ function buildPerformanceAndTradeoffsSheet(ss) {
   sheet.getRange('B42').setValue('Top 3 ($)');
   sheet.getRange('C42').setValue('Top 5 ($)');
   sheet.getRange('D42').setValue('Top 10 ($)');
-  sheet.getRange('E42').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ")"');
+  sheet.getRange('E42').setFormula('="Benchmark (" & \'Executive Summary\'!$D$3 & ")"');
   sheet.getRange('A42:E42')
        .setBackground('#4A5568')
        .setFontColor('#FFFFFF')
@@ -236,7 +236,7 @@ function buildPerformanceAndTradeoffsSheet(ss) {
   sheet.getRange('H42').setValue('Top 3 Drawdown');
   sheet.getRange('I42').setValue('Top 5 Drawdown');
   sheet.getRange('J42').setValue('Top 10 Drawdown');
-  sheet.getRange('K42').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ") Drawdown"');
+  sheet.getRange('K42').setFormula('="Benchmark (" & \'Executive Summary\'!$D$3 & ") Drawdown"');
   sheet.getRange('G42:K42')
        .setBackground('#4A5568')
        .setFontColor('#FFFFFF')
@@ -248,10 +248,10 @@ function buildPerformanceAndTradeoffsSheet(ss) {
   // 6. Section 4: Time Series Data Rows (Rows 43 to 73, 31 years)
   // Dynamic spilled FILTER formulas
   sheet.getRange('A43').setFormula(
-    '=FILTER(\'Scenario Data\'!$U$2:$Y$125, \'Scenario Data\'!$T$2:$T$125 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$B$3))'
+    '=FILTER(\'Scenario Data\'!$U$2:$Y, \'Scenario Data\'!$T$2:$T = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$D$3 & "_" & \'Executive Summary\'!$B$3))'
   );
   sheet.getRange('G43').setFormula(
-    '=FILTER(\'Scenario Data\'!$AB$2:$AF$125, \'Scenario Data\'!$AA$2:$AA$125 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$B$3))'
+    '=FILTER(\'Scenario Data\'!$AB$2:$AF, \'Scenario Data\'!$AA$2:$AA = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$D$3 & "_" & \'Executive Summary\'!$B$3))'
   );
 
   // Formatting Trajectory Table (Rows 43 to 73)

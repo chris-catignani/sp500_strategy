@@ -38,3 +38,4 @@ Thumbs.db
 # Scratch and temporary directories
 scratch/
 tmp/
+outputs/*.html

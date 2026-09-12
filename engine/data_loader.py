@@ -242,19 +242,103 @@ class DataLoader:
             raise ValueError(f"Price for '{ticker}' in {year} must be positive, got {price}")
         return price
 
+    BENCHMARK_KEY_MAP = {
+        "sp500": ("^GSPC", "^SP500TR"),
+        "s&p 500": ("^GSPC", "^SP500TR"),
+        "^gspc": ("^GSPC", "^SP500TR"),
+        "^sp500tr": ("^GSPC", "^SP500TR"),
+        "sp500tr": ("^GSPC", "^SP500TR"),
+        "msci_world": ("^MSCIWORLD_PR", "^MSCIWORLD_TR"),
+        "msci world": ("^MSCIWORLD_PR", "^MSCIWORLD_TR"),
+        "^msciworld_pr": ("^MSCIWORLD_PR", "^MSCIWORLD_TR"),
+        "^msciworld_tr": ("^MSCIWORLD_PR", "^MSCIWORLD_TR"),
+        "msciworld_tr": ("^MSCIWORLD_PR", "^MSCIWORLD_TR"),
+        "fbgrx": ("FBGRX", "FBGRX_TR"),
+        "fbgrx_tr": ("FBGRX", "FBGRX_TR"),
+    }
+
+    def get_benchmark_level(self, benchmark: str, year: int) -> float:
+        """Retrieve benchmark Price Return / NAV level for a given year."""
+        bmk_lower = benchmark.lower()
+        if bmk_lower in self.BENCHMARK_KEY_MAP:
+            ticker = self.BENCHMARK_KEY_MAP[bmk_lower][0]
+        elif benchmark.upper().endswith(("_TR", "TR")):
+            b_up = benchmark.upper()
+            ticker = b_up[:-3] if b_up.endswith("_TR") else b_up[:-2]
+        else:
+            ticker = benchmark.upper()
+        return self.get_price(ticker, year)
+
+    def get_benchmark_tr_level(self, benchmark: str, year: int) -> float:
+        """Retrieve benchmark Total Return level for a given year."""
+        bmk_lower = benchmark.lower()
+        if bmk_lower in self.BENCHMARK_KEY_MAP:
+            ticker = self.BENCHMARK_KEY_MAP[bmk_lower][1]
+        elif benchmark.upper().endswith(("_TR", "TR")):
+            ticker = benchmark.upper()
+        else:
+            ticker = f"{benchmark.upper()}_TR"
+        return self.get_price(ticker, year)
+
+    def get_benchmark_quarterly_level(self, benchmark: str, year: int, quarter: int) -> float:
+        """Retrieve benchmark Price Return / NAV level at end of (year, quarter)."""
+        bmk_lower = benchmark.lower()
+        if bmk_lower in self.BENCHMARK_KEY_MAP:
+            ticker = self.BENCHMARK_KEY_MAP[bmk_lower][0]
+        elif benchmark.upper().endswith(("_TR", "TR")):
+            b_up = benchmark.upper()
+            ticker = b_up[:-3] if b_up.endswith("_TR") else b_up[:-2]
+        else:
+            ticker = benchmark.upper()
+        return self.get_quarterly_price(ticker, year, quarter)
+
+    def get_benchmark_quarterly_tr_level(self, benchmark: str, year: int, quarter: int) -> float:
+        """Retrieve benchmark Total Return level at end of (year, quarter)."""
+        bmk_lower = benchmark.lower()
+        if bmk_lower in self.BENCHMARK_KEY_MAP:
+            ticker = self.BENCHMARK_KEY_MAP[bmk_lower][1]
+        elif benchmark.upper().endswith(("_TR", "TR")):
+            ticker = benchmark.upper()
+        else:
+            ticker = f"{benchmark.upper()}_TR"
+        return self.get_quarterly_price(ticker, year, quarter)
+
+    def get_benchmark_dividend_yield(self, benchmark: str, year: int) -> float:
+        """Calculate the benchmark dividend / distribution yield for a given year."""
+        tr_curr = self.get_benchmark_tr_level(benchmark, year)
+        tr_prev = self.get_benchmark_tr_level(benchmark, year - 1)
+        r_tr = (tr_curr - tr_prev) / tr_prev if tr_prev > 0.0 else 0.0
+        pr_curr = self.get_benchmark_level(benchmark, year)
+        pr_prev = self.get_benchmark_level(benchmark, year - 1)
+        r_pr = (pr_curr - pr_prev) / pr_prev if pr_prev > 0.0 else 0.0
+        return max(0.0, r_tr - r_pr)
+
+    get_quarterly_benchmark_level = get_benchmark_quarterly_level
+    get_quarterly_benchmark_tr_level = get_benchmark_quarterly_tr_level
+
+    def get_fbgrx_level(self, year: int) -> float:
+        """Retrieve FBGRX NAV close for a given year."""
+        return self.get_benchmark_level("fbgrx", year)
+
+    def get_fbgrx_tr_level(self, year: int) -> float:
+        """Retrieve FBGRX Total Return level for a given year."""
+        return self.get_benchmark_tr_level("fbgrx", year)
+
+    def get_fbgrx_quarterly_level(self, year: int, quarter: int) -> float:
+        """Retrieve FBGRX NAV close at end of (year, quarter)."""
+        return self.get_benchmark_quarterly_level("fbgrx", year, quarter)
+
+    def get_fbgrx_tr_quarterly_level(self, year: int, quarter: int) -> float:
+        """Retrieve FBGRX Total Return level at end of (year, quarter)."""
+        return self.get_benchmark_quarterly_tr_level("fbgrx", year, quarter)
+
+    def get_fbgrx_dividend_yield(self, year: int) -> float:
+        """Calculate FBGRX distribution yield for a given year."""
+        return self.get_benchmark_dividend_yield("fbgrx", year)
+
     def get_spx_level(self, year: int) -> float:
-        """Retrieve S&P 500 (^GSPC) benchmark index level for a given year.
-
-        Args:
-            year: Calendar year (1994..2024).
-
-        Returns:
-            Benchmark index level as float.
-
-        Raises:
-            KeyError: If year is not available for benchmark index.
-        """
-        return self.get_price("^GSPC", year)
+        """Retrieve S&P 500 (^GSPC) benchmark index level for a given year."""
+        return self.get_benchmark_level("sp500", year)
 
     def get_dividend(self, ticker: str, year: int) -> float:
         """Retrieve split-adjusted cash dividend per share for a ticker and year.
@@ -270,79 +354,24 @@ class DataLoader:
         return float(ticker_divs.get(str(year), 0.0))
 
     def get_spx_tr_level(self, year: int) -> float:
-        """Retrieve S&P 500 Total Return (^SP500TR) index level for a given year.
-
-        Args:
-            year: Calendar year.
-
-        Returns:
-            Total Return index level as float.
-        """
-        return self.get_price("^SP500TR", year)
+        """Retrieve S&P 500 Total Return (^SP500TR) index level for a given year."""
+        return self.get_benchmark_tr_level("sp500", year)
 
     def get_spx_dividend_yield(self, year: int) -> float:
-        """Calculate the benchmark S&P 500 dividend yield for a given year.
-
-        Yield is calculated as max(0.0, r_tr - r_pr) where:
-            r_tr = (SPX_TR_t - SPX_TR_{t-1}) / SPX_TR_{t-1}
-            r_pr = (SPX_PR_t - SPX_PR_{t-1}) / SPX_PR_{t-1}
-
-        Args:
-            year: Calendar year (>= 1994).
-
-        Returns:
-            Benchmark dividend yield as float.
-        """
-        tr_curr = self.get_spx_tr_level(year)
-        tr_prev = self.get_spx_tr_level(year - 1)
-        r_tr = (tr_curr - tr_prev) / tr_prev if tr_prev > 0.0 else 0.0
-        pr_curr = self.get_spx_level(year)
-        pr_prev = self.get_spx_level(year - 1)
-        r_pr = (pr_curr - pr_prev) / pr_prev if pr_prev > 0.0 else 0.0
-        return max(0.0, r_tr - r_pr)
+        """Calculate the benchmark S&P 500 dividend yield for a given year."""
+        return self.get_benchmark_dividend_yield("sp500", year)
 
     def get_msci_world_level(self, year: int) -> float:
-        """Retrieve MSCI World Price Return (^MSCIWORLD_PR) index level for a given year.
-
-        Args:
-            year: Calendar year.
-
-        Returns:
-            Price Return index level as float.
-        """
-        return self.get_price("^MSCIWORLD_PR", year)
+        """Retrieve MSCI World Price Return (^MSCIWORLD_PR) index level for a given year."""
+        return self.get_benchmark_level("msci_world", year)
 
     def get_msci_world_tr_level(self, year: int) -> float:
-        """Retrieve MSCI World Total Return (^MSCIWORLD_TR) index level for a given year.
-
-        Args:
-            year: Calendar year.
-
-        Returns:
-            Total Return index level as float.
-        """
-        return self.get_price("^MSCIWORLD_TR", year)
+        """Retrieve MSCI World Total Return (^MSCIWORLD_TR) index level for a given year."""
+        return self.get_benchmark_tr_level("msci_world", year)
 
     def get_msci_world_dividend_yield(self, year: int) -> float:
-        """Calculate the benchmark MSCI World dividend yield for a given year.
-
-        Yield is calculated as max(0.0, r_tr - r_pr) where:
-            r_tr = (MSCI_TR_t - MSCI_TR_{t-1}) / MSCI_TR_{t-1}
-            r_pr = (MSCI_PR_t - MSCI_PR_{t-1}) / MSCI_PR_{t-1}
-
-        Args:
-            year: Calendar year (>= 1994).
-
-        Returns:
-            Benchmark dividend yield as float.
-        """
-        tr_curr = self.get_msci_world_tr_level(year)
-        tr_prev = self.get_msci_world_tr_level(year - 1)
-        r_tr = (tr_curr - tr_prev) / tr_prev if tr_prev > 0.0 else 0.0
-        pr_curr = self.get_msci_world_level(year)
-        pr_prev = self.get_msci_world_level(year - 1)
-        r_pr = (pr_curr - pr_prev) / pr_prev if pr_prev > 0.0 else 0.0
-        return max(0.0, r_tr - r_pr)
+        """Calculate the benchmark MSCI World dividend yield for a given year."""
+        return self.get_benchmark_dividend_yield("msci_world", year)
 
     def get_quarterly_price(self, ticker: str, year: int, quarter: int) -> float:
         """Retrieve split-adjusted close for a ticker at the end of (year, quarter).
@@ -431,16 +460,16 @@ class DataLoader:
 
     def get_spx_quarterly_level(self, year: int, quarter: int) -> float:
         """Retrieve S&P 500 Price Return (^GSPC) level at end of (year, quarter)."""
-        return self.get_quarterly_price("^GSPC", year, quarter)
+        return self.get_benchmark_quarterly_level("sp500", year, quarter)
 
     def get_spx_tr_quarterly_level(self, year: int, quarter: int) -> float:
         """Retrieve S&P 500 Total Return (^SP500TR) level at end of (year, quarter)."""
-        return self.get_quarterly_price("^SP500TR", year, quarter)
+        return self.get_benchmark_quarterly_tr_level("sp500", year, quarter)
 
     def get_msci_world_quarterly_level(self, year: int, quarter: int) -> float:
         """Retrieve MSCI World Price Return (^MSCIWORLD_PR) level at end of (year, quarter)."""
-        return self.get_quarterly_price("^MSCIWORLD_PR", year, quarter)
+        return self.get_benchmark_quarterly_level("msci_world", year, quarter)
 
     def get_msci_world_tr_quarterly_level(self, year: int, quarter: int) -> float:
         """Retrieve MSCI World Total Return (^MSCIWORLD_TR) level at end of (year, quarter)."""
-        return self.get_quarterly_price("^MSCIWORLD_TR", year, quarter)
+        return self.get_benchmark_quarterly_tr_level("msci_world", year, quarter)

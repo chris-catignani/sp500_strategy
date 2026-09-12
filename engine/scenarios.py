@@ -84,6 +84,8 @@ def compute_scenario_grid(
     spx_q_benchmarks: List[Dict[str, Any]] = []
     msci_benchmarks: List[Dict[str, Any]] = []
     msci_q_benchmarks: List[Dict[str, Any]] = []
+    fbgrx_benchmarks: List[Dict[str, Any]] = []
+    fbgrx_q_benchmarks: List[Dict[str, Any]] = []
 
     for rate, rate_str in tax_rates:
         for h_label, s_yr, e_yr in horizons:
@@ -398,6 +400,134 @@ def compute_scenario_grid(
                 "alpha": msci_q_alpha,
             })
 
+            # 3c. FBGRX Mutual Fund Benchmark (Annual)
+            fbgrx_pr_levels = [data_loader.get_fbgrx_level(y) for y in range(s_yr, e_yr + 1)]
+            fbgrx_tr_levels = [data_loader.get_fbgrx_tr_level(y) for y in range(s_yr, e_yr + 1)]
+            fbgrx_tr_cagr = calculate_cagr(fbgrx_tr_levels[0], fbgrx_tr_levels[-1], horizon_years)
+
+            if rate == 0.0:
+                fbgrx_bench = calculate_benchmark_annual_series(
+                    pr_levels=fbgrx_pr_levels,
+                    tr_levels=fbgrx_tr_levels,
+                    tax_rate=0.0,
+                    initial_capital=initial_capital,
+                    is_after_tax=False,
+                )
+                fbgrx_after_cagr = fbgrx_tr_cagr
+                fbgrx_post_liq_cagr = fbgrx_tr_cagr
+                fbgrx_cum = calculate_cumulative_return(initial_capital, fbgrx_bench["final_equity"])
+                fbgrx_final = fbgrx_bench["final_equity"]
+                fbgrx_max_dd = calculate_max_drawdown(fbgrx_tr_levels)
+                fbgrx_taxes = 0.0
+                fbgrx_tax_drag = 0.0
+                fbgrx_divs = fbgrx_bench["total_dividends_received"]
+            else:
+                fbgrx_bench = calculate_benchmark_annual_series(
+                    pr_levels=fbgrx_pr_levels,
+                    tr_levels=fbgrx_tr_levels,
+                    tax_rate=rate,
+                    initial_capital=initial_capital,
+                    is_after_tax=True,
+                )
+                fbgrx_val_series = [initial_capital]
+                f_curr_v = initial_capital
+                for r_ann in fbgrx_bench["annual_returns"]:
+                    f_curr_v *= (1.0 + r_ann)
+                    fbgrx_val_series.append(f_curr_v)
+                fbgrx_max_dd = calculate_max_drawdown(fbgrx_val_series)
+                fbgrx_after_cagr = calculate_cagr(initial_capital, fbgrx_bench["pre_liquidation_wealth"], horizon_years)
+                fbgrx_post_liq_cagr = calculate_cagr(initial_capital, fbgrx_bench["post_liquidation_wealth"], horizon_years)
+                fbgrx_cum = calculate_cumulative_return(initial_capital, fbgrx_bench["final_equity"])
+                fbgrx_final = fbgrx_bench["final_equity"]
+                fbgrx_taxes = fbgrx_bench["total_taxes_paid"]
+                fbgrx_tax_drag = fbgrx_tr_cagr - fbgrx_after_cagr
+                fbgrx_divs = fbgrx_bench["total_dividends_received"]
+
+            fbgrx_alpha = round(fbgrx_after_cagr - spx_after_cagr, 6)
+            fbgrx_benchmarks.append({
+                "rate": rate,
+                "rate_str": rate_str,
+                "h_label": h_label,
+                "s_yr": s_yr,
+                "e_yr": e_yr,
+                "tr_cagr": fbgrx_tr_cagr,
+                "after_cagr": fbgrx_after_cagr,
+                "post_liq_cagr": fbgrx_post_liq_cagr,
+                "cum": fbgrx_cum,
+                "final": fbgrx_final,
+                "divs": fbgrx_divs,
+                "max_dd": fbgrx_max_dd,
+                "taxes": fbgrx_taxes,
+                "tax_drag": fbgrx_tax_drag,
+                "alpha": fbgrx_alpha,
+            })
+
+            # 3d. FBGRX Mutual Fund Benchmark (Quarterly)
+            fbgrx_q_pr = [data_loader.get_fbgrx_quarterly_level(s_yr, 4)]
+            fbgrx_q_tr = [data_loader.get_fbgrx_tr_quarterly_level(s_yr, 4)]
+            for y in range(s_yr + 1, e_yr + 1):
+                for q in (1, 2, 3, 4):
+                    fbgrx_q_pr.append(data_loader.get_fbgrx_quarterly_level(y, q))
+                    fbgrx_q_tr.append(data_loader.get_fbgrx_tr_quarterly_level(y, q))
+            fbgrx_q_tr_cagr = calculate_cagr(fbgrx_q_tr[0], fbgrx_q_tr[-1], horizon_years)
+
+            if rate == 0.0:
+                fbgrx_q_bench = calculate_benchmark_annual_series(
+                    pr_levels=fbgrx_q_pr,
+                    tr_levels=fbgrx_q_tr,
+                    tax_rate=0.0,
+                    initial_capital=initial_capital,
+                    is_after_tax=False,
+                )
+                fbgrx_q_after_cagr = fbgrx_q_tr_cagr
+                fbgrx_q_post_liq_cagr = fbgrx_q_tr_cagr
+                fbgrx_q_cum = calculate_cumulative_return(initial_capital, fbgrx_q_bench["final_equity"])
+                fbgrx_q_final = fbgrx_q_bench["final_equity"]
+                fbgrx_q_max_dd = calculate_max_drawdown(fbgrx_q_tr)
+                fbgrx_q_taxes = 0.0
+                fbgrx_q_tax_drag = 0.0
+                fbgrx_q_divs = fbgrx_q_bench["total_dividends_received"]
+            else:
+                fbgrx_q_bench = calculate_benchmark_annual_series(
+                    pr_levels=fbgrx_q_pr,
+                    tr_levels=fbgrx_q_tr,
+                    tax_rate=rate,
+                    initial_capital=initial_capital,
+                    is_after_tax=True,
+                )
+                fbgrx_q_val_series = [initial_capital]
+                fq_curr_v = initial_capital
+                for r_step in fbgrx_q_bench["annual_returns"]:
+                    fq_curr_v *= (1.0 + r_step)
+                    fbgrx_q_val_series.append(fq_curr_v)
+                fbgrx_q_max_dd = calculate_max_drawdown(fbgrx_q_val_series)
+                fbgrx_q_after_cagr = calculate_cagr(initial_capital, fbgrx_q_bench["pre_liquidation_wealth"], horizon_years)
+                fbgrx_q_post_liq_cagr = calculate_cagr(initial_capital, fbgrx_q_bench["post_liquidation_wealth"], horizon_years)
+                fbgrx_q_cum = calculate_cumulative_return(initial_capital, fbgrx_q_bench["final_equity"])
+                fbgrx_q_final = fbgrx_q_bench["final_equity"]
+                fbgrx_q_taxes = fbgrx_q_bench["total_taxes_paid"]
+                fbgrx_q_tax_drag = fbgrx_q_tr_cagr - fbgrx_q_after_cagr
+                fbgrx_q_divs = fbgrx_q_bench["total_dividends_received"]
+
+            fbgrx_q_alpha = round(fbgrx_q_after_cagr - spx_q_after_cagr, 6)
+            fbgrx_q_benchmarks.append({
+                "rate": rate,
+                "rate_str": rate_str,
+                "h_label": h_label,
+                "s_yr": s_yr,
+                "e_yr": e_yr,
+                "tr_cagr": fbgrx_q_tr_cagr,
+                "after_cagr": fbgrx_q_after_cagr,
+                "post_liq_cagr": fbgrx_q_post_liq_cagr,
+                "cum": fbgrx_q_cum,
+                "final": fbgrx_q_final,
+                "divs": fbgrx_q_divs,
+                "max_dd": fbgrx_q_max_dd,
+                "taxes": fbgrx_q_taxes,
+                "tax_drag": fbgrx_q_tax_drag,
+                "alpha": fbgrx_q_alpha,
+            })
+
     # 30-Year Annual histories & trades at 30% baseline tax rate across universes
     res_30y_map: Dict[Tuple[str, int, str], StrategyResult] = {}
     trades_30y_map: Dict[Tuple[str, int], List[TradeOrder]] = {}
@@ -435,6 +565,8 @@ def compute_scenario_grid(
         "spx_q_benchmarks": spx_q_benchmarks,
         "msci_benchmarks": msci_benchmarks,
         "msci_q_benchmarks": msci_q_benchmarks,
+        "fbgrx_benchmarks": fbgrx_benchmarks,
+        "fbgrx_q_benchmarks": fbgrx_q_benchmarks,
         "res_30y_map": res_30y_map,
         "trades_30y_map": trades_30y_map,
         "data_loader": data_loader,
@@ -471,6 +603,8 @@ def format_apps_script_payloads(
     spx_q_bench_map = {(b["rate"], b["h_label"]): b for b in grid["spx_q_benchmarks"]}
     msci_bench_map = {(b["rate"], b["h_label"]): b for b in grid["msci_benchmarks"]}
     msci_q_bench_map = {(b["rate"], b["h_label"]): b for b in grid["msci_q_benchmarks"]}
+    fbgrx_bench_map = {(b["rate"], b["h_label"]): b for b in grid["fbgrx_benchmarks"]}
+    fbgrx_q_bench_map = {(b["rate"], b["h_label"]): b for b in grid["fbgrx_q_benchmarks"]}
 
     # Group active results by (rate, h_label) to maintain identical row order
     active_by_rate_h: Dict[Tuple[float, str], List[Dict[str, Any]]] = {}
@@ -598,6 +732,54 @@ def format_apps_script_payloads(
                 round(msci_qb["tax_drag"], 6),
                 msci_qb["alpha"],
                 "Index",
+            ])
+
+            # 4a. FBGRX Benchmark (Annual)
+            fbgrx_b = fbgrx_bench_map[key_pair]
+            fbgrx_key = f"{h_label}_FBGRX_FBGRX_Annual_{rate_str}"
+            scenario_rows.append([
+                fbgrx_key,
+                rate,
+                "FBGRX",
+                h_label,
+                "FBGRX",
+                "Market Cap",
+                "Annual",
+                round(fbgrx_b["tr_cagr"], 6),
+                round(fbgrx_b["after_cagr"], 6),
+                round(fbgrx_b["post_liq_cagr"], 6),
+                round(fbgrx_b["cum"], 6),
+                round(fbgrx_b["final"], 2),
+                round(fbgrx_b["divs"], 2),
+                round(fbgrx_b["max_dd"], 6),
+                round(fbgrx_b["taxes"], 2),
+                round(fbgrx_b["tax_drag"], 6),
+                fbgrx_b["alpha"],
+                "Mutual Fund",
+            ])
+
+            # 4b. FBGRX Benchmark (Quarterly)
+            fbgrx_qb = fbgrx_q_bench_map[key_pair]
+            fbgrx_q_key = f"{h_label}_FBGRX_FBGRX_Quarterly_{rate_str}"
+            scenario_rows.append([
+                fbgrx_q_key,
+                rate,
+                "FBGRX",
+                h_label,
+                "FBGRX",
+                "Market Cap",
+                "Quarterly",
+                round(fbgrx_qb["tr_cagr"], 6),
+                round(fbgrx_qb["after_cagr"], 6),
+                round(fbgrx_qb["post_liq_cagr"], 6),
+                round(fbgrx_qb["cum"], 6),
+                round(fbgrx_qb["final"], 2),
+                round(fbgrx_qb["divs"], 2),
+                round(fbgrx_qb["max_dd"], 6),
+                round(fbgrx_qb["taxes"], 2),
+                round(fbgrx_qb["tax_drag"], 6),
+                fbgrx_qb["alpha"],
+                "Mutual Fund",
             ])
 
     # 30-Year Annual histories & trades at 30% baseline tax rate
@@ -829,6 +1011,47 @@ def format_apps_script_payloads(
         if idx % 4 == 0:
             msci_traj_q.append(msci_q_val)
 
+    fbgrx_pr_30y = [data_loader.get_fbgrx_level(y) for y in range(1994, 2025)]
+    fbgrx_tr_30y = [data_loader.get_fbgrx_tr_level(y) for y in range(1994, 2025)]
+    fbgrx_bench_ann = calculate_benchmark_annual_series(
+        pr_levels=fbgrx_pr_30y,
+        tr_levels=fbgrx_tr_30y,
+        tax_rate=0.30,
+        initial_capital=initial_capital,
+        is_after_tax=True,
+    )
+    fbgrx_val_ann = initial_capital
+    fbgrx_traj_ann = [initial_capital]
+    for r in fbgrx_bench_ann["annual_returns"]:
+        fbgrx_val_ann *= (1.0 + r)
+        fbgrx_traj_ann.append(fbgrx_val_ann)
+
+    fbgrx_q_pr_30y = [data_loader.get_fbgrx_quarterly_level(1994, 4)]
+    fbgrx_q_tr_30y = [data_loader.get_fbgrx_tr_quarterly_level(1994, 4)]
+    for y in range(1995, 2025):
+        for q in (1, 2, 3, 4):
+            fbgrx_q_pr_30y.append(data_loader.get_fbgrx_quarterly_level(y, q))
+            fbgrx_q_tr_30y.append(data_loader.get_fbgrx_tr_quarterly_level(y, q))
+    fbgrx_bench_q = calculate_benchmark_annual_series(
+        pr_levels=fbgrx_q_pr_30y,
+        tr_levels=fbgrx_q_tr_30y,
+        tax_rate=0.30,
+        initial_capital=initial_capital,
+        is_after_tax=True,
+    )
+    fbgrx_q_val = initial_capital
+    fbgrx_traj_q = [initial_capital]
+    for idx, r_step in enumerate(fbgrx_bench_q["annual_returns"], start=1):
+        fbgrx_q_val *= (1.0 + r_step)
+        if idx % 4 == 0:
+            fbgrx_traj_q.append(fbgrx_q_val)
+
+    benchmarks = [
+        ("S&P 500", spx_traj_ann, spx_traj_q),
+        ("MSCI World", msci_traj_ann, msci_traj_q),
+        ("FBGRX", fbgrx_traj_ann, fbgrx_traj_q),
+    ]
+
     trajectory_matrix: List[List[Any]] = []
     drawdown_matrix: List[List[Any]] = []
     trajectory_rows: List[List[Any]] = []
@@ -836,53 +1059,51 @@ def format_apps_script_payloads(
 
     for u in universes:
         u_label = "S&P 500" if u == "sp500" else "All World"
-        for f_key in ("annual", "quarterly"):
-            f_label = "Annual" if f_key == "annual" else "Quarterly"
-            lookup_key = f"{u_label}_{f_label}"
+        for b_label, b_ann, b_q in benchmarks:
+            for f_key in ("annual", "quarterly"):
+                f_label = "Annual" if f_key == "annual" else "Quarterly"
+                lookup_key = f"{u_label}_{b_label}_{f_label}"
 
-            t3_r = res_30y_map.get((u, 3, f_key))
-            t5_r = res_30y_map.get((u, 5, f_key))
-            t10_r = res_30y_map.get((u, 10, f_key))
+                t3_r = res_30y_map.get((u, 3, f_key))
+                t5_r = res_30y_map.get((u, 5, f_key))
+                t10_r = res_30y_map.get((u, 10, f_key))
 
-            t3_t = [initial_capital] + ([e.ending_value_aftertax for e in t3_r.annual_history] if t3_r else [])
-            t5_t = [initial_capital] + ([e.ending_value_aftertax for e in t5_r.annual_history] if t5_r else [])
-            t10_t = [initial_capital] + ([e.ending_value_aftertax for e in t10_r.annual_history] if t10_r else [])
+                t3_t = [initial_capital] + ([e.ending_value_aftertax for e in t3_r.annual_history] if t3_r else [])
+                t5_t = [initial_capital] + ([e.ending_value_aftertax for e in t5_r.annual_history] if t5_r else [])
+                t10_t = [initial_capital] + ([e.ending_value_aftertax for e in t10_r.annual_history] if t10_r else [])
 
-            if u == "sp500":
-                bench_t = spx_traj_ann if f_key == "annual" else spx_traj_q
-            else:
-                bench_t = msci_traj_ann if f_key == "annual" else msci_traj_q
+                bench_t = b_ann if f_key == "annual" else b_q
 
-            dd3_m = _calc_dd(t3_t)
-            dd5_m = _calc_dd(t5_t)
-            dd10_m = _calc_dd(t10_t)
-            ddbench_m = _calc_dd(bench_t)
+                dd3_m = _calc_dd(t3_t)
+                dd5_m = _calc_dd(t5_t)
+                dd10_m = _calc_dd(t10_t)
+                ddbench_m = _calc_dd(bench_t)
 
-            for y, v3, v5, v10, vb in zip(years_30y, t3_t, t5_t, t10_t, bench_t):
-                trajectory_matrix.append([
-                    lookup_key,
-                    y,
-                    round(v3, 2),
-                    round(v5, 2),
-                    round(v10, 2),
-                    round(vb, 2),
-                ])
-
-            for y, d3, d5, d10, db in zip(years_30y, dd3_m, dd5_m, dd10_m, ddbench_m):
-                drawdown_matrix.append([
-                    lookup_key,
-                    y,
-                    round(d3, 6),
-                    round(d5, 6),
-                    round(d10, 6),
-                    round(db, 6),
-                ])
-
-            if (u == "sp500" or u == universes[0]) and f_key == "annual" and not trajectory_rows:
                 for y, v3, v5, v10, vb in zip(years_30y, t3_t, t5_t, t10_t, bench_t):
-                    trajectory_rows.append([y, round(v3, 2), round(v5, 2), round(v10, 2), round(vb, 2)])
+                    trajectory_matrix.append([
+                        lookup_key,
+                        y,
+                        round(v3, 2),
+                        round(v5, 2),
+                        round(v10, 2),
+                        round(vb, 2),
+                    ])
+
                 for y, d3, d5, d10, db in zip(years_30y, dd3_m, dd5_m, dd10_m, ddbench_m):
-                    drawdown_rows.append([y, round(d3, 6), round(d5, 6), round(d10, 6), round(db, 6)])
+                    drawdown_matrix.append([
+                        lookup_key,
+                        y,
+                        round(d3, 6),
+                        round(d5, 6),
+                        round(d10, 6),
+                        round(db, 6),
+                    ])
+
+                if (u == "sp500" or u == universes[0]) and b_label == "S&P 500" and f_key == "annual" and not trajectory_rows:
+                    for y, v3, v5, v10, vb in zip(years_30y, t3_t, t5_t, t10_t, bench_t):
+                        trajectory_rows.append([y, round(v3, 2), round(v5, 2), round(v10, 2), round(vb, 2)])
+                    for y, d3, d5, d10, db in zip(years_30y, dd3_m, dd5_m, dd10_m, ddbench_m):
+                        drawdown_rows.append([y, round(d3, 6), round(d5, 6), round(d10, 6), round(db, 6)])
 
     annual_data["spx"] = spx_rows
     annual_data["era_data"] = era_rows

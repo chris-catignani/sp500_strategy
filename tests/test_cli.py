@@ -352,6 +352,46 @@ class TestCLI(unittest.TestCase):
             trade_content = f.read()
             self.assertIn("Top_3_MarketCap_EW", trade_content)
 
+    def test_benchmark_arguments(self):
+        """Test parsing of the --benchmark CLI option."""
+        import run_backtest
+
+        parser = run_backtest.build_parser()
+        args_default = parser.parse_args([])
+        self.assertEqual(args_default.benchmark, "all")
+
+        for bmk_choice in ("all", "sp500", "msci_world", "fbgrx"):
+            args = parser.parse_args(["--benchmark", bmk_choice])
+            self.assertEqual(args.benchmark, bmk_choice)
+
+    def test_run_backtest_benchmark_fbgrx_integration(self):
+        """Test programmatic execution with FBGRX benchmark filtering."""
+        import run_backtest
+
+        parser = run_backtest.build_parser()
+        args = parser.parse_args(
+            [
+                "--strategy", "market_cap",
+                "--benchmark", "fbgrx",
+                "--tax-rate", "0.30",
+                "--initial-capital", "10000.0",
+                "--output-dir", self.output_dir,
+                "--scripts-dir", self.scripts_dir,
+                "--horizons", "10y",
+                "--n", "3",
+                "--quiet",
+            ]
+        )
+
+        exit_code = run_backtest.run_backtest(args)
+        self.assertEqual(exit_code, 0)
+
+        summary_path = os.path.join(self.output_dir, "summary_metrics.csv")
+        self.assertTrue(os.path.exists(summary_path))
+        with open(summary_path, "r", encoding="utf-8") as f:
+            summary_content = f.read()
+            self.assertIn("FBGRX", summary_content)
+
 
 if __name__ == "__main__":
     unittest.main()

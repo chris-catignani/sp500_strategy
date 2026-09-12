@@ -240,10 +240,15 @@ def load_raw_chart(file_path: Path) -> dict:
     return data["chart"]["result"][0]
 
 
-def extract_year_end_closes(chart_data: dict) -> Dict[str, float]:
+def extract_year_end_closes(chart_data: dict, source_field: str = "close") -> Dict[str, float]:
     """Extract split-adjusted year-end closes (December of each year)."""
     timestamps = chart_data.get("timestamp", [])
-    closes = chart_data.get("indicators", {}).get("quote", [{}])[0].get("close", [])
+    if source_field == "adjclose":
+        adj_list = chart_data.get("indicators", {}).get("adjclose")
+        closes = adj_list[0].get("adjclose", []) if (adj_list and adj_list[0] is not None) else []
+    else:
+        quote_list = chart_data.get("indicators", {}).get("quote")
+        closes = quote_list[0].get("close", []) if (quote_list and quote_list[0] is not None) else []
 
     year_closes = {}
     for ts, c in zip(timestamps, closes):
@@ -279,10 +284,15 @@ def extract_annual_dividends(chart_data: dict) -> Dict[str, float]:
     return result
 
 
-def extract_quarterly_closes(chart_data: dict) -> Dict[str, float]:
+def extract_quarterly_closes(chart_data: dict, source_field: str = "close") -> Dict[str, float]:
     """Extract split-adjusted quarter-end closes (Mar, Jun, Sep, Dec)."""
     timestamps = chart_data.get("timestamp", [])
-    closes = chart_data.get("indicators", {}).get("quote", [{}])[0].get("close", [])
+    if source_field == "adjclose":
+        adj_list = chart_data.get("indicators", {}).get("adjclose")
+        closes = adj_list[0].get("adjclose", []) if (adj_list and adj_list[0] is not None) else []
+    else:
+        quote_list = chart_data.get("indicators", {}).get("quote")
+        closes = quote_list[0].get("close", []) if (quote_list and quote_list[0] is not None) else []
 
     quarter_closes = {}
     for ts, c in zip(timestamps, closes):
@@ -428,6 +438,14 @@ def main():
         all_prices_data["URTH"] = extract_year_end_closes(urth_chart)
         all_quarterly_prices_data["URTH"] = extract_quarterly_closes(urth_chart)
 
+    fbgrx_raw = RAW_DIR / "benchmarks" / "FBGRX.json"
+    if fbgrx_raw.exists():
+        fbgrx_chart = load_raw_chart(fbgrx_raw)
+        all_prices_data["FBGRX"] = extract_year_end_closes(fbgrx_chart, source_field="close")
+        all_prices_data["FBGRX_TR"] = extract_year_end_closes(fbgrx_chart, source_field="adjclose")
+        all_quarterly_prices_data["FBGRX"] = extract_quarterly_closes(fbgrx_chart, source_field="close")
+        all_quarterly_prices_data["FBGRX_TR"] = extract_quarterly_closes(fbgrx_chart, source_field="adjclose")
+
     all_prices_data["^MSCIWORLD_PR"] = dict(MSCIWORLD_PR_LEVELS)
     all_prices_data["^MSCIWORLD_TR"] = dict(MSCIWORLD_TR_LEVELS)
 
@@ -540,9 +558,10 @@ def main():
     )
 
     # 6. Build S&P 500 subsets for exact backward compatibility
+    BENCHMARK_PRICE_KEYS = ["^GSPC", "^SP500TR", "^MSCIWORLD_PR", "^MSCIWORLD_TR", "FBGRX", "FBGRX_TR"]
     sp500_prices = {
         k: all_prices_data[k]
-        for k in ["^GSPC", "^SP500TR"] + sorted(SP500_NAMES.keys())
+        for k in BENCHMARK_PRICE_KEYS + sorted(SP500_NAMES.keys())
         if k in all_prices_data
     }
     sp500_dividends = {
@@ -552,7 +571,7 @@ def main():
     }
     sp500_quarterly_prices = {
         k: all_quarterly_prices_data[k]
-        for k in ["^GSPC", "^SP500TR"] + sorted(SP500_NAMES.keys())
+        for k in BENCHMARK_PRICE_KEYS + sorted(SP500_NAMES.keys())
         if k in all_quarterly_prices_data
     }
     sp500_quarterly_dividends = {

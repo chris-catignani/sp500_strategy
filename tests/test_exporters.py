@@ -410,7 +410,7 @@ class TestExporters(unittest.TestCase):
         self.assertIn("'Rebalance:'", code)
         self.assertIn("['Annual', 'Quarterly']", code)
         self.assertIn("'Benchmark:'", code)
-        self.assertIn("['S&P 500', 'MSCI World']", code)
+        self.assertIn("['S&P 500', 'MSCI World', 'FBGRX']", code)
         self.assertIn("'Tax Rate:'", code)
         self.assertIn("['0.0%', '15.0%', '20.0%', '30.0%', '37.0%']", code)
         self.assertIn("'Seed Capital:'", code)
@@ -463,8 +463,8 @@ class TestExporters(unittest.TestCase):
 
         # Check dynamic filter formulas on Performance & Tradeoffs tab
         self.assertIn("FILTER(\\'Scenario Data\\'!$AI$2:$AP$21", code)
-        self.assertIn("FILTER(\\'Scenario Data\\'!$U$2:$Y$125", code)
-        self.assertIn("FILTER(\\'Scenario Data\\'!$AB$2:$AF$125", code)
+        self.assertIn("FILTER(\\'Scenario Data\\'!$U$2:$Y", code)
+        self.assertIn("FILTER(\\'Scenario Data\\'!$AB$2:$AF", code)
 
         # Check Rebalancing Frequency Tradeoff Table
         self.assertIn("REBALANCING FREQUENCY TRADEOFF ANALYSIS", code)
