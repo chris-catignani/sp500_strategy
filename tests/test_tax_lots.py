@@ -209,6 +209,47 @@ class TestFIFOTaxLotManager(unittest.TestCase):
         self.assertEqual(len(depleted), 0)
         self.assertAlmostEqual(self.manager.get_position_shares("A"), 10.0)
 
+    def test_adjust_basis_ratio_multi_lot(self):
+        """Adjust basis ratio across multiple lots preserving shares and acquisition dates."""
+        manager = FIFOTaxLotManager()
+        manager.add_lot("MO", 100.0, 50.0, 2005)
+        manager.add_lot("MO", 50.0, 60.0, 2006)
+
+        # 2007 Kraft spinoff: ratio 0.6910
+        manager.adjust_basis_ratio("MO", 0.6910)
+
+        lots = manager.get_lots("MO")
+        self.assertEqual(len(lots), 2)
+        self.assertAlmostEqual(lots[0].purchase_price, 34.55, places=2)
+        self.assertAlmostEqual(lots[1].purchase_price, 41.46, places=2)
+        self.assertEqual(lots[0].shares, 100.0)
+        self.assertEqual(lots[1].shares, 50.0)
+        self.assertEqual(lots[0].year, 2005)
+
+    def test_adjust_basis_ratio_preserves_attributes_and_edge_cases(self):
+        """Preserves quarter, cost_basis_per_share property, handles missing ticker, copy isolation."""
+        manager = FIFOTaxLotManager()
+        lot = manager.add_lot("MO", 100.0, 50.0, 2005, quarter=1)
+        self.assertEqual(lot.cost_basis_per_share, 50.0)
+        self.assertEqual(lot.quarter, 1)
+
+        # Spinoff ratio adjustment
+        manager.adjust_basis_ratio("MO", 0.6910)
+        self.assertEqual(lot.cost_basis_per_share, 34.55)
+        self.assertEqual(lot.quarter, 1)
+        self.assertEqual(lot.shares, 100.0)
+
+        # Missing ticker adjustment should be a safe no-op
+        manager.adjust_basis_ratio("UNKNOWN", 0.5)
+
+        # get_lots on non-existent ticker returns empty list
+        self.assertEqual(manager.get_lots("UNKNOWN"), [])
+
+        # get_lots returns a copy of the list
+        lots_copy = manager.get_lots("MO")
+        lots_copy.clear()
+        self.assertEqual(len(manager.get_lots("MO")), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -35,9 +35,19 @@ class TaxLot:
     purchase_quarter: Optional[int] = None
 
     @property
+    def year(self) -> int:
+        """Alias for purchase_year."""
+        return self.purchase_year
+
+    @property
     def quarter(self) -> Optional[int]:
         """Alias for purchase_quarter."""
         return self.purchase_quarter
+
+    @property
+    def cost_basis_per_share(self) -> float:
+        """Cost basis per share (purchase_price)."""
+        return self.purchase_price
 
     def cost_basis(self) -> float:
         """Calculate the total dollar cost basis for this lot."""
@@ -75,6 +85,7 @@ class AnnualLedgerEntry:
     dividend_income: float = 0.0
     dividend_tax_paid: float = 0.0
     capital_gains_tax_paid: float = 0.0
+    spinoff_proceeds: float = 0.0
     universe: str = "sp500"
     quarter: Optional[int] = None
 
