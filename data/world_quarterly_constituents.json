@@ -20,7 +20,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.0224,
-      "trailing_1y_return": 0.085,
+      "trailing_1y_return": 0.0061,
       "year": 1994,
       "quarter": 1
     },
@@ -115,18 +115,18 @@
       "quarter": 2
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0242,
-      "trailing_1y_return": 0.1752,
-      "year": 1994,
-      "quarter": 2
-    },
-    {
       "ticker": "GE",
       "name": "General Electric Company",
       "market_cap_weight": 0.0233,
       "trailing_1y_return": 0.003,
+      "year": 1994,
+      "quarter": 2
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0227,
+      "trailing_1y_return": -0.0126,
       "year": 1994,
       "quarter": 2
     },
@@ -215,8 +215,8 @@
     {
       "ticker": "T",
       "name": "AT&T Inc.",
-      "market_cap_weight": 0.0227,
-      "trailing_1y_return": 0.0358,
+      "market_cap_weight": 0.0225,
+      "trailing_1y_return": -0.021,
       "year": 1994,
       "quarter": 3
     },
@@ -314,7 +314,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.022,
-      "trailing_1y_return": 0.023,
+      "trailing_1y_return": -0.027,
       "year": 1994,
       "quarter": 4
     },
@@ -419,8 +419,8 @@
     {
       "ticker": "T",
       "name": "AT&T Inc.",
-      "market_cap_weight": 0.021,
-      "trailing_1y_return": 0.0918,
+      "market_cap_weight": 0.0206,
+      "trailing_1y_return": 0.0208,
       "year": 1995,
       "quarter": 1
     },
@@ -507,14 +507,6 @@
       "quarter": 2
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0219,
-      "trailing_1y_return": 0.1435,
-      "year": 1995,
-      "quarter": 2
-    },
-    {
       "ticker": "XOM",
       "name": "Exxon Mobil Corporation",
       "market_cap_weight": 0.0206,
@@ -527,6 +519,14 @@
       "name": "The Coca-Cola Company",
       "market_cap_weight": 0.0198,
       "trailing_1y_return": 0.5893,
+      "year": 1995,
+      "quarter": 2
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0196,
+      "trailing_1y_return": 0.0446,
       "year": 1995,
       "quarter": 2
     },
@@ -599,8 +599,8 @@
     {
       "ticker": "T",
       "name": "AT&T Inc.",
-      "market_cap_weight": 0.0235,
-      "trailing_1y_return": 0.3444,
+      "market_cap_weight": 0.0218,
+      "trailing_1y_return": 0.206,
       "year": 1995,
       "quarter": 3
     },
@@ -714,7 +714,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.021,
-      "trailing_1y_return": 0.4712,
+      "trailing_1y_return": 0.3148,
       "year": 1995,
       "quarter": 4
     },
@@ -819,8 +819,8 @@
     {
       "ticker": "T",
       "name": "AT&T Inc.",
-      "market_cap_weight": 0.0184,
-      "trailing_1y_return": 0.3048,
+      "market_cap_weight": 0.019,
+      "trailing_1y_return": 0.2258,
       "year": 1996,
       "quarter": 1
     },
@@ -915,6 +915,14 @@
       "quarter": 2
     },
     {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0185,
+      "trailing_1y_return": 0.1947,
+      "year": 1996,
+      "quarter": 2
+    },
+    {
       "ticker": "TM",
       "name": "Toyota Motor Corporation",
       "market_cap_weight": 0.0185,
@@ -927,14 +935,6 @@
       "name": "Altria Group Inc.",
       "market_cap_weight": 0.0169,
       "trailing_1y_return": 0.4523,
-      "year": 1996,
-      "quarter": 2
-    },
-    {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0166,
-      "trailing_1y_return": 0.0802,
       "year": 1996,
       "quarter": 2
     },
@@ -1039,8 +1039,8 @@
     {
       "ticker": "T",
       "name": "AT&T Inc.",
-      "market_cap_weight": 0.0158,
-      "trailing_1y_return": -0.0846,
+      "market_cap_weight": 0.0164,
+      "trailing_1y_return": -0.0894,
       "year": 1996,
       "quarter": 3
     },
@@ -1114,7 +1114,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.02,
-      "trailing_1y_return": -0.0545,
+      "trailing_1y_return": -0.3078,
       "year": 1996,
       "quarter": 4
     },
@@ -1209,14 +1209,6 @@
       "quarter": 1
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0198,
-      "trailing_1y_return": 0.0525,
-      "year": 1997,
-      "quarter": 1
-    },
-    {
       "ticker": "MSFT",
       "name": "Microsoft Corporation",
       "market_cap_weight": 0.0195,
@@ -1229,6 +1221,14 @@
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0176,
       "trailing_1y_return": 0.3786,
+      "year": 1997,
+      "quarter": 1
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0171,
+      "trailing_1y_return": -0.3607,
       "year": 1997,
       "quarter": 1
     },
@@ -1315,14 +1315,6 @@
       "quarter": 2
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.02,
-      "trailing_1y_return": 0.3032,
-      "year": 1997,
-      "quarter": 2
-    },
-    {
       "ticker": "MRK",
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0183,
@@ -1343,6 +1335,14 @@
       "name": "Toyota Motor Corporation",
       "market_cap_weight": 0.0138,
       "trailing_1y_return": 0.187,
+      "year": 1997,
+      "quarter": 2
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0137,
+      "trailing_1y_return": -0.4061,
       "year": 1997,
       "quarter": 2
     },
@@ -1413,18 +1413,18 @@
       "quarter": 3
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0185,
-      "trailing_1y_return": 0.3252,
-      "year": 1997,
-      "quarter": 3
-    },
-    {
       "ticker": "MRK",
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0167,
       "trailing_1y_return": 0.4439,
+      "year": 1997,
+      "quarter": 3
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0159,
+      "trailing_1y_return": -0.1935,
       "year": 1997,
       "quarter": 3
     },

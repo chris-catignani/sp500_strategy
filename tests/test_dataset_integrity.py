@@ -116,6 +116,73 @@ class TestDatasetIntegrity(unittest.TestCase):
                 self.assertIn(str_yr, prices[ticker])
                 self.assertGreater(prices[ticker][str_yr], 0.0)
 
+    def test_spinoffs_raw_catalog_valid(self):
+        spinoffs_file = self.data_dir / "raw" / "corporate_actions" / "spinoffs.json"
+        self.assertTrue(spinoffs_file.exists(), "raw spinoffs.json missing")
+        with open(spinoffs_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for ticker in ["MO", "T", "GE"]:
+            self.assertIn(ticker, data)
+            for event in data[ticker]:
+                self.assertIn("ex_date", event)
+                self.assertIn("year", event)
+                self.assertIn("quarter", event)
+                self.assertGreater(event["distribution_per_share"], 0.0)
+                self.assertGreater(event["basis_retention_ratio"], 0.0)
+                self.assertLess(event["basis_retention_ratio"], 1.0)
+
+    def test_att_corp_historical_raw_exists(self):
+        t_hist_file = self.data_dir / "raw" / "tickers" / "T_CORP_HISTORICAL.json"
+        self.assertTrue(t_hist_file.exists(), "T_CORP_HISTORICAL.json missing")
+        with open(t_hist_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        chart = data["chart"]["result"][0]
+        self.assertEqual(chart["meta"]["symbol"], "T_CORP")
+
+    def test_spinoff_distributions_compiled(self):
+        compiled_file = self.data_dir / "spinoff_distributions.json"
+        self.assertTrue(compiled_file.exists(), "spinoff_distributions.json missing")
+        with open(compiled_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        self.assertIn("MO", data)
+        self.assertIn("GE", data)
+        self.assertIn("T", data)
+
+    def test_att_decoupled_series_1994_1997(self):
+        with open(self.dividends_path, "r", encoding="utf-8") as f:
+            divs = json.load(f)
+        with open(self.prices_path, "r", encoding="utf-8") as f:
+            prices = json.load(f)
+        # Verify AT&T Corp decoupled values (not SBC Communications)
+        self.assertEqual(prices["T"]["1994"], 50.25)
+        self.assertEqual(prices["T"]["1995"], 64.75)
+        self.assertEqual(prices["T"]["1996"], 43.50)
+        self.assertEqual(prices["T"]["1997"], 61.25)
+        for yr in ["1994", "1995", "1996", "1997"]:
+            self.assertAlmostEqual(divs["T"][yr], 1.32, places=2)
+
+    def test_att_quarterly_decoupled_series_1993_1994(self):
+        q_prices_path = self.data_dir / "sp500_quarterly_prices.json"
+        q_constituents_path = self.data_dir / "sp500_quarterly_constituents.json"
+        with open(q_prices_path, "r", encoding="utf-8") as f:
+            q_prices = json.load(f)
+        with open(q_constituents_path, "r", encoding="utf-8") as f:
+            q_constituents = json.load(f)
+
+        # Assert 1993-Q1 price is decoupled (>= 50.0, not SBC unadjusted ~14.75)
+        self.assertIn("1993-Q1", q_prices["T"])
+        self.assertGreaterEqual(q_prices["T"]["1993-Q1"], 50.0)
+        self.assertEqual(q_prices["T"]["1993-Q1"], 52.50)
+        self.assertEqual(q_prices["T"]["1993-Q2"], 54.00)
+        self.assertEqual(q_prices["T"]["1993-Q3"], 56.25)
+
+        # Assert 1994-Q1 trailing 1y return is realistic (between -0.20 and +0.20, not +250%)
+        t_entry = next((c for c in q_constituents["1994-Q1"] if c["ticker"] == "T"), None)
+        self.assertIsNotNone(t_entry, "T not found in 1994-Q1 constituents")
+        ret_1y = t_entry["trailing_1y_return"]
+        self.assertGreaterEqual(ret_1y, -0.20, f"Trailing 1y return {ret_1y} too negative")
+        self.assertLessEqual(ret_1y, 0.20, f"Trailing 1y return {ret_1y} spiked unexpectedly")
+
 
 if __name__ == "__main__":
     unittest.main()

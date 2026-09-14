@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 from engine.models import ConstituentSnapshot
 
@@ -18,6 +18,7 @@ class DataLoader:
         quarterly_constituents_path: Optional[Union[str, Path]] = None,
         quarterly_prices_path: Optional[Union[str, Path]] = None,
         quarterly_dividends_path: Optional[Union[str, Path]] = None,
+        spinoffs_path: Optional[Union[str, Path]] = None,
     ) -> None:
         """Initialize DataLoader with dataset paths.
 
@@ -31,6 +32,8 @@ class DataLoader:
             quarterly_constituents_path: Optional path to quarterly constituents dataset.
             quarterly_prices_path: Optional path to quarterly prices dataset.
             quarterly_dividends_path: Optional path to quarterly dividends dataset.
+            spinoffs_path: Optional path to spinoff distributions dataset.
+                Defaults to data/spinoff_distributions.json relative to project root.
         """
         project_root = Path(__file__).resolve().parent.parent
 
@@ -63,6 +66,11 @@ class DataLoader:
             quarterly_dividends_path = project_root / "data" / "sp500_quarterly_dividends.json"
         else:
             quarterly_dividends_path = Path(quarterly_dividends_path)
+
+        if spinoffs_path is None:
+            spinoffs_path = project_root / "data" / "spinoff_distributions.json"
+        else:
+            spinoffs_path = Path(spinoffs_path)
 
         if not constituents_path.exists():
             raise FileNotFoundError(
@@ -157,6 +165,12 @@ class DataLoader:
                         self._raw_quarterly_dividends[sym] = q_data
                     else:
                         self._raw_quarterly_dividends[sym].update(q_data)
+
+        # Spinoff distributions dataset
+        self.spinoffs: Dict[str, List[dict]] = {}
+        if spinoffs_path.exists():
+            with open(spinoffs_path, "r", encoding="utf-8") as f:
+                self.spinoffs = json.load(f)
 
         # Parse available years
         self._available_years: List[int] = sorted(
@@ -406,6 +420,55 @@ class DataLoader:
         if ticker in self._raw_quarterly_dividends and key in self._raw_quarterly_dividends[ticker]:
             return float(self._raw_quarterly_dividends[ticker][key])
         return 0.0
+
+    def get_spinoff_distribution(self, ticker: str, year: int) -> Tuple[float, float]:
+        """Return (total_cash_per_share, combined_basis_retention_ratio) for annual period.
+
+        Args:
+            ticker: Equity symbol (e.g., 'MO').
+            year: Four-digit calendar year.
+
+        Returns:
+            Tuple of (distribution_per_share, basis_retention_ratio).
+            Returns (0.0, 1.0) if no spinoff events occurred.
+        """
+        events = [
+            e for e in self.spinoffs.get(ticker, [])
+            if int(e["year"]) == int(year)
+        ]
+        if not events:
+            return (0.0, 1.0)
+        total_dist = sum(float(e["distribution_per_share"]) for e in events)
+        total_ratio = 1.0
+        for e in events:
+            total_ratio *= float(e["basis_retention_ratio"])
+        return (total_dist, total_ratio)
+
+    def get_quarterly_spinoff_distribution(
+        self, ticker: str, year: int, quarter: int
+    ) -> Tuple[float, float]:
+        """Return (total_cash_per_share, combined_basis_retention_ratio) for quarter.
+
+        Args:
+            ticker: Equity symbol (e.g., 'MO').
+            year: Four-digit calendar year.
+            quarter: Calendar quarter (1..4).
+
+        Returns:
+            Tuple of (distribution_per_share, basis_retention_ratio).
+            Returns (0.0, 1.0) if no spinoff events occurred in the quarter.
+        """
+        events = [
+            e for e in self.spinoffs.get(ticker, [])
+            if int(e["year"]) == int(year) and int(e["quarter"]) == int(quarter)
+        ]
+        if not events:
+            return (0.0, 1.0)
+        total_dist = sum(float(e["distribution_per_share"]) for e in events)
+        total_ratio = 1.0
+        for e in events:
+            total_ratio *= float(e["basis_retention_ratio"])
+        return (total_dist, total_ratio)
 
     def load_quarterly_universe(
         self, year: int, quarter: int, universe: str = "sp500"

@@ -79,6 +79,20 @@ class FIFOTaxLotManager:
                 positions[ticker] = total
         return positions
 
+    def get_lots(self, ticker: str) -> List[TaxLot]:
+        """Return a copy of active lots for a given ticker."""
+        return list(self.lots.get(ticker, []))
+
+    def adjust_basis_ratio(self, ticker: str, ratio: float) -> None:
+        """Adjust cost basis per share (purchase_price) of all open lots following a corporate spinoff."""
+        if not (0.0 < ratio <= 1.0):
+            raise ValueError(f"Invalid basis retention ratio: {ratio}. Must be in (0.0, 1.0].")
+        if ratio == 1.0:
+            return
+        if ticker in self.lots:
+            for lot in self.lots[ticker]:
+                lot.purchase_price = round(lot.purchase_price * ratio, 4)
+
     def sell_shares(
         self,
         ticker: str,

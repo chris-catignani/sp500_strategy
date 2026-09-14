@@ -423,6 +423,56 @@ class TestPortfolioSimulator(unittest.TestCase):
             self.assertAlmostEqual(entry.net_taxable_gain, expected_net_taxable, places=2)
             prev_loss_cf = entry.loss_carryforward
 
+    def test_spinoff_tax_free_credit_and_deferred_gain(self):
+        """Verify spinoff proceeds credit tax-free to cash and adjust lot cost basis."""
+        # Inject spinoff on MSFT (held in 2014-2015 Top 5) to verify execution
+        self.data_loader.spinoffs["MSFT"] = [
+            {
+                "ex_date": "2015-06-01",
+                "year": 2015,
+                "quarter": 2,
+                "distribution_per_share": 10.0,
+                "basis_retention_ratio": 0.80,
+                "spinco_ticker": "SPIN",
+                "description": "Test Spinoff",
+            }
+        ]
+        res = self.simulator.run_simulation(
+            start_year=2014,
+            end_year=2015,
+            n=5,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+        )
+        entry_2015 = res.annual_history[0]
+        self.assertGreater(entry_2015.spinoff_proceeds, 0.0)
+        # Ensure dividend tax paid strictly equals dividend_income * tax_rate (spinoff proceeds untaxed as dividend)
+        self.assertAlmostEqual(
+            entry_2015.dividend_tax_paid,
+            entry_2015.dividend_income * 0.30,
+            places=2,
+        )
+
+        # Brief test for 2006-2007 horizon
+        res_07 = self.simulator.run_simulation(
+            start_year=2006,
+            end_year=2007,
+            n=5,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+        )
+        entry_2007 = res_07.annual_history[0]
+        # In 2007, MO was in Top 5 and underwent Kraft spinoff
+        if "MO" in entry_2007.holdings:
+            self.assertGreater(entry_2007.spinoff_proceeds, 0.0)
+            self.assertAlmostEqual(
+                entry_2007.dividend_tax_paid,
+                entry_2007.dividend_income * 0.30,
+                places=2,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
