@@ -20,7 +20,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.0224,
-      "trailing_1y_return": 2.581,
+      "trailing_1y_return": 0.0061,
       "year": 1994,
       "quarter": 1
     },
@@ -126,7 +126,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.0227,
-      "trailing_1y_return": 2.6446,
+      "trailing_1y_return": -0.0126,
       "year": 1994,
       "quarter": 2
     },
@@ -216,7 +216,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.0225,
-      "trailing_1y_return": 2.391,
+      "trailing_1y_return": -0.021,
       "year": 1994,
       "quarter": 3
     },

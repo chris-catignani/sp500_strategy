@@ -161,6 +161,28 @@ class TestDatasetIntegrity(unittest.TestCase):
         for yr in ["1994", "1995", "1996", "1997"]:
             self.assertAlmostEqual(divs["T"][yr], 1.32, places=2)
 
+    def test_att_quarterly_decoupled_series_1993_1994(self):
+        q_prices_path = self.data_dir / "sp500_quarterly_prices.json"
+        q_constituents_path = self.data_dir / "sp500_quarterly_constituents.json"
+        with open(q_prices_path, "r", encoding="utf-8") as f:
+            q_prices = json.load(f)
+        with open(q_constituents_path, "r", encoding="utf-8") as f:
+            q_constituents = json.load(f)
+
+        # Assert 1993-Q1 price is decoupled (>= 50.0, not SBC unadjusted ~14.75)
+        self.assertIn("1993-Q1", q_prices["T"])
+        self.assertGreaterEqual(q_prices["T"]["1993-Q1"], 50.0)
+        self.assertEqual(q_prices["T"]["1993-Q1"], 52.50)
+        self.assertEqual(q_prices["T"]["1993-Q2"], 54.00)
+        self.assertEqual(q_prices["T"]["1993-Q3"], 56.25)
+
+        # Assert 1994-Q1 trailing 1y return is realistic (between -0.20 and +0.20, not +250%)
+        t_entry = next((c for c in q_constituents["1994-Q1"] if c["ticker"] == "T"), None)
+        self.assertIsNotNone(t_entry, "T not found in 1994-Q1 constituents")
+        ret_1y = t_entry["trailing_1y_return"]
+        self.assertGreaterEqual(ret_1y, -0.20, f"Trailing 1y return {ret_1y} too negative")
+        self.assertLessEqual(ret_1y, 0.20, f"Trailing 1y return {ret_1y} spiked unexpectedly")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -8,14 +8,14 @@
           "exchangeName": "NYQ",
           "fullExchangeName": "NYSE",
           "instrumentType": "EQUITY",
-          "firstTradeDate": 757296000,
+          "firstTradeDate": 733536000,
           "regularMarketTime": 915062400,
           "hasPrePostMarketData": true,
           "gmtoffset": -18000,
           "timezone": "EST",
           "exchangeTimezoneName": "America/New_York",
           "regularMarketPrice": 75.0,
-          "chartPreviousClose": 53.0,
+          "chartPreviousClose": 52.5,
           "priceHint": 2,
           "longName": "AT&T Corp. (Historical Ma Bell Pre-SBC)",
           "shortName": "AT&T Corp.",
@@ -36,6 +36,9 @@
           ]
         },
         "timestamp": [
+          733536000,
+          741398400,
+          749347200,
           757296000,
           765072000,
           772934400,
@@ -162,6 +165,9 @@
           "quote": [
             {
               "low": [
+                52.5,
+                54.0,
+                56.25,
                 53.0,
                 51.5,
                 52.0,
@@ -185,6 +191,9 @@
                 75.0
               ],
               "close": [
+                52.5,
+                54.0,
+                56.25,
                 53.0,
                 51.5,
                 52.0,
@@ -208,6 +217,9 @@
                 75.0
               ],
               "high": [
+                52.5,
+                54.0,
+                56.25,
                 53.0,
                 51.5,
                 52.0,
@@ -231,6 +243,9 @@
                 75.0
               ],
               "open": [
+                52.5,
+                54.0,
+                56.25,
                 53.0,
                 51.5,
                 52.0,
@@ -274,6 +289,9 @@
                 10000000,
                 10000000,
                 10000000,
+                10000000,
+                10000000,
+                10000000,
                 10000000
               ]
             }
@@ -281,6 +299,9 @@
           "adjclose": [
             {
               "adjclose": [
+                52.5,
+                54.0,
+                56.25,
                 53.0,
                 51.5,
                 52.0,

@@ -406,6 +406,12 @@ def main():
                 t_corp_q_prices = extract_quarterly_closes(t_corp_chart)
                 t_corp_q_divs = extract_quarterly_dividends(t_corp_chart)
 
+                # Strip pre-1999 SBC data so pre-1999 strictly originates from T_CORP_HISTORICAL
+                ticker_prices = {k: v for k, v in ticker_prices.items() if int(k) > 1998}
+                ticker_divs = {k: v for k, v in ticker_divs.items() if int(k) > 1998}
+                ticker_q_prices = {k: v for k, v in ticker_q_prices.items() if int(k.split("-")[0]) > 1998}
+                ticker_q_divs = {k: v for k, v in ticker_q_divs.items() if int(k.split("-")[0]) > 1998}
+
                 for yr_str, price in t_corp_prices.items():
                     if int(yr_str) <= 1998:
                         ticker_prices[yr_str] = price
@@ -423,6 +429,12 @@ def main():
                     q_yr = int(q_key.split("-")[0])
                     if q_yr <= 1998:
                         ticker_q_divs[q_key] = q_div
+
+                # Keep chronological key ordering
+                ticker_prices = dict(sorted(ticker_prices.items(), key=lambda x: int(x[0])))
+                ticker_divs = dict(sorted(ticker_divs.items(), key=lambda x: int(x[0])))
+                ticker_q_prices = dict(sorted(ticker_q_prices.items()))
+                ticker_q_divs = dict(sorted(ticker_q_divs.items()))
 
         all_prices_data[ticker] = ticker_prices
         all_dividends_data[ticker] = ticker_divs
