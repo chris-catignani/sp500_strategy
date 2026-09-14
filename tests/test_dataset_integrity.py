@@ -139,6 +139,28 @@ class TestDatasetIntegrity(unittest.TestCase):
         chart = data["chart"]["result"][0]
         self.assertEqual(chart["meta"]["symbol"], "T_CORP")
 
+    def test_spinoff_distributions_compiled(self):
+        compiled_file = self.data_dir / "spinoff_distributions.json"
+        self.assertTrue(compiled_file.exists(), "spinoff_distributions.json missing")
+        with open(compiled_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        self.assertIn("MO", data)
+        self.assertIn("GE", data)
+        self.assertIn("T", data)
+
+    def test_att_decoupled_series_1994_1997(self):
+        with open(self.dividends_path, "r", encoding="utf-8") as f:
+            divs = json.load(f)
+        with open(self.prices_path, "r", encoding="utf-8") as f:
+            prices = json.load(f)
+        # Verify AT&T Corp decoupled values (not SBC Communications)
+        self.assertEqual(prices["T"]["1994"], 50.25)
+        self.assertEqual(prices["T"]["1995"], 64.75)
+        self.assertEqual(prices["T"]["1996"], 43.50)
+        self.assertEqual(prices["T"]["1997"], 61.25)
+        for yr in ["1994", "1995", "1996", "1997"]:
+            self.assertAlmostEqual(divs["T"][yr], 1.32, places=2)
+
 
 if __name__ == "__main__":
     unittest.main()
