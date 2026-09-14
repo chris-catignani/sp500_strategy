@@ -39,7 +39,8 @@ To guarantee data integrity and eliminate dependency on volatile external web co
 data/raw/
 ├── benchmarks/
 │   ├── GSPC.json          # S&P 500 Price Return Index (^GSPC) raw response
-│   └── SP500TR.json       # S&P 500 Total Return Index (^SP500TR) raw response
+│   ├── SP500TR.json       # S&P 500 Total Return Index (^SP500TR) raw response
+│   └── MSCIWORLD.json     # MSCI World raw historical quarterly chart response
 ├── tickers/
 │   ├── AAPL.json          # Apple Inc. raw response (timestamps, quotes, splits, dividends)
 │   ├── BRK.B.json         # Berkshire Hathaway Class B (queried as BRK-B)
@@ -77,15 +78,43 @@ All share prices and dividend-per-share values are normalized to share counts as
     $$\text{DPS}_t = \sum_{i: \text{Year}(T_{\text{ex}, i}) = t} \text{Amount}_i$$
 - Cash dividends are pooled into available portfolio cash prior to rebalancing, preserving the self-financing cash invariant ($C \ge 0$).
 
-### 4.3 Quarterly Pricing & Point-in-Time Constituent Composition
-- **Quarterly Prices (`data/sp500_quarterly_prices.json` & `world_quarterly_prices.json`)**: Extracted from March, June, September, and December month-end candles. Q4 prices align with year-end closes.
-- **Dynamic Weight Drift (Q1–Q3)**: Weights and rankings update dynamically based on price performance relative to the index:
-  $$W_{i, q} = W_{i, 0} \times \frac{P_{i, q} / P_{i, 0}}{P_{\text{index}, q} / P_{\text{index}, 0}}$$
-- **Q4 Factsheet Re-Anchoring**: At each Q4 (December 31), constituent rosters and weights re-anchor to official index factsheets, eliminating multi-year cumulative drift error.
-- **Pluggable Dataset Architecture**: [`DataLoader.load_quarterly_universe()`](../engine/data_loader.py) checks for registered quarterly universe files in `data/`, enabling external point-in-time constituent datasets to be dropped in without engine modifications.
+### 4.3 Quarterly Pricing, Point-in-Time Constituent Composition & Drift Methodology
 
-### 4.4 Benchmark Total Return & Synthetic Yield
+- **Quarterly Prices (`data/sp500_quarterly_prices.json` & `world_quarterly_prices.json`)**: Extracted from March, June, September, and December month-end candles. Q4 prices precisely match official year-end closes.
+
+#### 4.3.1 Public Sourcing Constraints & Institutional Data Landscape
+Free financial APIs (such as Yahoo Finance) reliably provide point-in-time adjusted prices, volumes, splits, and dividend distributions, but do **not** supply 30-year historical quarterly index constituent rosters, historical float-adjusted shares outstanding, or official intra-year index constituent weights (1994–2024).
+
+Audited historical daily or quarterly index constituent compositions dating back to 1994 are proprietary intellectual property of index providers (S&P Dow Jones Indices, MSCI) and require costly institutional academic or commercial subscriptions (such as CRSP, Compustat, or direct S&P Capital IQ feeds).
+
+#### 4.3.2 ETF Proxy Limitations (VOO & SPY SEC Filings)
+To reconstruct historical quarterly constituent holdings without proprietary database licenses, passive ETF proxy strategies were evaluated:
+- **Vanguard S&P 500 ETF (VOO)**: Launched in September 2010, VOO covers less than half of the 31-year (1994–2024) backtest horizon, rendering it incapable of providing holdings for the 1994–2009 period (which encompasses both the 2000–2002 Dot-Com crash and the 2007–2009 Global Financial Crisis).
+- **SPDR S&P 500 ETF Trust (SPY)**: While SPY launched in January 1993, public historical portfolio snapshots are dispersed across more than 120 quarterly regulatory filings (Form N-Q, Form N-PORT, and annual Form N-CSR) on SEC EDGAR. Parsing heterogeneous text, HTML, and XML filings spanning three decades introduces substantial fragility, non-standardized asset reporting schemas, and heavy external parsing dependencies—directly conflicting with this project's core invariant of a lightweight, zero-external-dependency architecture.
+
+#### 4.3.3 Exact Mathematical Drift Mechanics
+Between index reconstitution dates, a capitalization-weighted index does not transact or rebalance constituent shares; instead, passive constituent holdings naturally float and drift with price movements. The proportion of stock $i$ in index $M$ at quarter $q$ relative to base date $0$ (the preceding year-end factsheet anchor) satisfies the exact mathematical identity of passive index holding:
+
+$$W_{i, q} = \frac{\text{Shares}_i \times P_{i, q}}{\sum_j \text{Shares}_j \times P_{j, q}} = \frac{\text{Shares}_i \times P_{i, 0} \times (P_{i, q} / P_{i, 0})}{\sum_j \text{Shares}_j \times P_{j, 0} \times (P_{j, q} / P_{j, 0})} = W_{i, 0} \times \frac{P_{i, q} / P_{i, 0}}{P_{\text{index}, q} / P_{\text{index}, 0}}$$
+
+Where:
+- $W_{i, 0}$ is constituent $i$'s official weight in the index at the prior year-end ($t-1$ Q4) factsheet anchor.
+- $P_{i, q} / P_{i, 0}$ is the cumulative price return of stock $i$ from the year-end anchor through quarter $q$.
+- $P_{\text{index}, q} / P_{\text{index}, 0}$ is the benchmark price index return over the same intra-year period.
+
+In the absence of intermediate corporate share issuances or secondary offerings, index weights naturally follow this price-return ratio. This identity accurately models passive capitalization drift between official annual factsheet releases.
+
+#### 4.3.4 Zero-Lookahead Candidate Policy & Official Inclusion Date Enforcement
+To eliminate lookahead bias and maintain strict point-in-time realism:
+1. **Prior-Year Factsheet Candidate Basis**: For quarters Q1, Q2, and Q3 of calendar year $t$, candidate rosters derive strictly from the verified year-end ($t-1$ Q4) index factsheet. No constituents from year $t$'s future Q4 factsheet are injected into prior quarters, ensuring that quarterly candidate evaluation at Q1–Q3 uses only information observable at that historical point in time.
+2. **Official Inclusion Date Enforcement (`EFFECTIVE_INCLUSION_DATES`)**: Even when a company achieves mega-cap valuation status intra-year, it cannot enter the index prior to the index committee's official effective inclusion date. An explicit calendar lookup (`EFFECTIVE_INCLUSION_DATES`) enforces this quarter-end eligibility. For example:
+   - **Tesla Inc. (`TSLA`)**: Officially added to the S&P 500 on **December 21, 2020**. TSLA is strictly excluded from candidate consideration in 2020-Q1, 2020-Q2, and 2020-Q3, preventing premature selection during early 2020.
+3. **Q4 Factsheet Re-Anchoring**: At each Q4 (December 31), candidate rosters and constituent index weights re-anchor to the official S&P Dow Jones Indices year-end factsheet. This introduces any newly admitted constituents (such as TSLA in 2020-Q4) and resets drifted weights to audited benchmark reality, eliminating multi-year cumulative drift error.
+4. **Pluggable Dataset Architecture**: [`DataLoader.load_quarterly_universe()`](../engine/data_loader.py) checks for registered quarterly universe files in `data/`, enabling external point-in-time constituent datasets to be dropped in without engine modifications.
+
+### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
+- **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).
 - For after-tax benchmark comparisons, the dividend yield $y_t$ is determined dynamically from the relationship between Total Return and Price Return:
   $$r_{\text{tr}, t} = \frac{\text{TR}_t - \text{TR}_{t-1}}{\text{TR}_{t-1}}, \quad r_{\text{pr}, t} = \frac{\text{PR}_t - \text{PR}_{t-1}}{\text{PR}_{t-1}}$$
   $$y_t = \max(0, r_{\text{tr}, t} - r_{\text{pr}, t})$$
@@ -116,7 +145,7 @@ All share prices and dividend-per-share values are normalized to share counts as
 
 In `data/sp500_constituents.json`, the top 12 constituents for each calendar year (1994–2024) are recorded in descending market cap rank order:
 - **Index Weight Semantics**: Each constituent's `market_cap_weight` represents its actual point-in-time weight **in the entire S&P 500 index** (typically 1.0% to 7.5% per constituent, summing to ~20%–35% across the top 12).
-- **Subset Normalization**: During backtest execution, [`engine/selector.py`](file:///Users/chriscatignani/Developer/sp500_strategy/engine/selector.py) dynamically normalizes any selected top $N \in \{3, 5, 10\}$ subset to sum strictly to 1.0:
+- **Subset Normalization**: During backtest execution, [`engine/selector.py`](../engine/selector.py) dynamically normalizes any selected top $N \in \{3, 5, 10\}$ subset to sum strictly to 1.0:
   $$w_i = \frac{W_i}{\sum_{j=1}^N W_j}$$
 - **Trailing 1-Year Return**: Sourced dynamically from split-adjusted closing prices:
   $$r_{t} = \frac{P_t - P_{t-1}}{P_{t-1}}$$

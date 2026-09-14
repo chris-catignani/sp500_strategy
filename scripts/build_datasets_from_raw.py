@@ -69,6 +69,16 @@ NON_US_NAMES = {
 
 NAMES = {**SP500_NAMES, **NON_US_NAMES}
 
+EFFECTIVE_INCLUSION_DATES = {
+    "TSLA": "2020-12-21",
+}
+QUARTER_END_DATES = {
+    1: "03-31",
+    2: "06-30",
+    3: "09-30",
+    4: "12-31",
+}
+
 # Historical S&P 500 Top 12 Constituents by Market Cap Rank Order (1994-2024)
 YEAR_CONSTITUENTS = {
     1994: ["GE", "T", "XOM", "KO", "MRK", "PG", "MO", "WMT", "IBM", "MSFT", "INTC", "PFE"],
@@ -354,13 +364,9 @@ def build_quarterly_constituents(
         prev_year = year - 1
         base_tickers = year_constituents.get(prev_year, year_constituents[year])
         base_weights = historical_weights.get(prev_year, historical_weights[year])
-        candidate_tickers = list(dict.fromkeys(base_tickers + year_constituents[year]))
+        candidate_tickers = list(base_tickers)
 
         base_w_map = {t: w for t, w in zip(base_tickers, base_weights)}
-        min_w = min(base_weights) * 0.8
-        for t in candidate_tickers:
-            if t not in base_w_map:
-                base_w_map[t] = min_w
 
         bmk_prices = quarterly_prices.get(benchmark_key, {})
         p_bmk_base = bmk_prices.get(f"{year - 1}-Q4", bmk_prices.get(f"{year}-Q1", 1.0))
@@ -373,6 +379,10 @@ def build_quarterly_constituents(
 
             scored_candidates = []
             for t in candidate_tickers:
+                q_end_date = f"{year}-{QUARTER_END_DATES[q]}"
+                if t in EFFECTIVE_INCLUSION_DATES and q_end_date < EFFECTIVE_INCLUSION_DATES[t]:
+                    continue
+
                 t_prices = quarterly_prices.get(t, {})
                 p_base = t_prices.get(f"{year - 1}-Q4")
                 p_curr = t_prices.get(q_key)
@@ -380,9 +390,9 @@ def build_quarterly_constituents(
 
                 if p_curr is not None and p_base is not None and p_base > 0:
                     stock_mult = p_curr / p_base
-                    drifted_w = base_w_map.get(t, min_w) * (stock_mult / bmk_mult if bmk_mult > 0 else 1.0)
+                    drifted_w = base_w_map[t] * (stock_mult / bmk_mult if bmk_mult > 0 else 1.0)
                 else:
-                    drifted_w = base_w_map.get(t, min_w)
+                    drifted_w = base_w_map[t]
 
                 t_divs = quarterly_dividends.get(t, {}) if quarterly_dividends else {}
                 div_1y = sum(t_divs.get(qk, 0.0) for qk in q_trailing_keys)
@@ -468,25 +478,39 @@ def main():
     all_prices_data["^MSCIWORLD_PR"] = dict(MSCIWORLD_PR_LEVELS)
     all_prices_data["^MSCIWORLD_TR"] = dict(MSCIWORLD_TR_LEVELS)
 
-    # Quarterly MSCI World levels (anchored at Q4, quarterly interpolation for Q1..Q3)
-    q_msci_pr = {}
-    q_msci_tr = {}
+    # Quarterly MSCI World levels (calibrated from observed quarterly closes in data/raw/benchmarks/MSCIWORLD.json)
+    msci_raw = load_raw_chart(RAW_DIR / "benchmarks" / "MSCIWORLD.json")
+    qc_msci = extract_quarterly_closes(msci_raw)
+
+    q_msci_pr = {"1993-Q4": MSCIWORLD_PR_LEVELS["1993"]}
+    q_msci_tr = {"1993-Q4": MSCIWORLD_TR_LEVELS["1993"]}
+
     for yr in range(1994, 2025):
         p_pr_base = MSCIWORLD_PR_LEVELS[str(yr - 1)]
         p_pr_target = MSCIWORLD_PR_LEVELS[str(yr)]
         p_tr_base = MSCIWORLD_TR_LEVELS[str(yr - 1)]
         p_tr_target = MSCIWORLD_TR_LEVELS[str(yr)]
 
+        raw_base = qc_msci[f"{yr-1}-Q4"]
+        raw_target = qc_msci[f"{yr}-Q4"]
+        raw_tot_ret = (raw_target - raw_base) / raw_base if raw_base > 0 else 0.0
+        target_pr_ret = (p_pr_target - p_pr_base) / p_pr_base if p_pr_base > 0 else 0.0
+        ann_div_yield = max(0.0, (p_tr_target / p_tr_base) - (p_pr_target / p_pr_base))
+
         for q in (1, 2, 3):
-            frac = q / 4.0
-            q_msci_pr[f"{yr}-Q{q}"] = round(p_pr_base + (p_pr_target - p_pr_base) * frac, 2)
-            q_msci_tr[f"{yr}-Q{q}"] = round(p_tr_base + (p_tr_target - p_tr_base) * frac, 2)
+            raw_c = qc_msci[f"{yr}-Q{q}"]
+            frac_ret = (raw_c - raw_base) / raw_base if raw_base > 0 else 0.0
+            scaled_ret = (
+                frac_ret * (target_pr_ret / raw_tot_ret)
+                if abs(raw_tot_ret) > 1e-6
+                else target_pr_ret * (q / 4.0)
+            )
+            q_msci_pr[f"{yr}-Q{q}"] = round(p_pr_base * (1.0 + scaled_ret), 2)
+            q_msci_tr[f"{yr}-Q{q}"] = round(p_tr_base * (1.0 + scaled_ret + ann_div_yield * (q / 4.0)), 2)
 
         q_msci_pr[f"{yr}-Q4"] = p_pr_target
         q_msci_tr[f"{yr}-Q4"] = p_tr_target
 
-    q_msci_pr["1993-Q4"] = MSCIWORLD_PR_LEVELS["1993"]
-    q_msci_tr["1993-Q4"] = MSCIWORLD_TR_LEVELS["1993"]
     all_quarterly_prices_data["^MSCIWORLD_PR"] = q_msci_pr
     all_quarterly_prices_data["^MSCIWORLD_TR"] = q_msci_tr
 

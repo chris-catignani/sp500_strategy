@@ -54,6 +54,44 @@ class TestQuarterlyDataLoading(unittest.TestCase):
                 self.assertEqual(s.quarter, q)
                 self.assertGreater(s.market_cap_weight, 0.0)
 
+    def test_tesla_inclusion_date_enforced(self) -> None:
+        """Verify TSLA is not in quarterly candidates prior to its Dec 21, 2020 addition."""
+        for universe in ("sp500", "world"):
+            for q in (1, 2, 3):
+                univ = self.loader.load_quarterly_universe(2020, q, universe=universe)
+                tickers = [s.ticker for s in univ]
+                self.assertNotIn("TSLA", tickers, f"TSLA found prematurely in {universe} 2020-Q{q}")
+            # TSLA should be present at 2020-Q4 factsheet re-anchoring
+            univ_q4 = self.loader.load_quarterly_universe(2020, 4, universe=universe)
+            self.assertIn("TSLA", [s.ticker for s in univ_q4])
+
+    def test_quarterly_candidate_zero_lookahead_invariant(self) -> None:
+        """Verify Q1-Q3 candidate rosters across all years derive strictly from prior-year membership."""
+        for universe in ("sp500", "world"):
+            for year in range(1995, 2025):
+                prior_univ = self.loader.load_universe(year - 1, universe=universe)
+                prior_tickers = {s.ticker for s in prior_univ}
+                for q in (1, 2, 3):
+                    q_univ = self.loader.load_quarterly_universe(year, q, universe=universe)
+                    for s in q_univ:
+                        self.assertIn(
+                            s.ticker,
+                            prior_tickers,
+                            f"Lookahead leak: {s.ticker} in {universe} {year}-Q{q} was not in {year-1} factsheet",
+                        )
+
+    def test_msci_world_quarterly_levels_observed(self) -> None:
+        """Verify MSCI World quarterly levels reflect observed market movements rather than linear interpolation."""
+        # In Q1 2020 (COVID shock), MSCI World Price Return and Total Return dropped significantly
+        pr_2019_q4 = self.loader.get_msci_world_quarterly_level(2019, 4)
+        pr_2020_q1 = self.loader.get_msci_world_quarterly_level(2020, 1)
+        tr_2019_q4 = self.loader.get_msci_world_tr_quarterly_level(2019, 4)
+        tr_2020_q1 = self.loader.get_msci_world_tr_quarterly_level(2020, 1)
+
+        self.assertLess(pr_2020_q1, pr_2019_q4, "Q1 2020 PR did not reflect market crash")
+        self.assertLess(tr_2020_q1, tr_2019_q4, "Q1 2020 TR did not reflect market crash")
+
+
 
 class TestQuarterlyTaxLotsAndTrades(unittest.TestCase):
     """Test tax lot manager with quarter metadata."""
@@ -244,8 +282,8 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             is_after_tax=True,
         )
         m_cagr = calculate_cagr(10000.0, msci_post["post_liquidation_wealth"], 10)
-        self.assertAlmostEqual(m_cagr, 0.0796, places=3)
-        self.assertAlmostEqual(msci_post["post_liquidation_wealth"], 21510.43, places=1)
+        self.assertAlmostEqual(m_cagr, 0.0795, places=3)
+        self.assertAlmostEqual(msci_post["post_liquidation_wealth"], 21497.28, places=1)
 
 
 if __name__ == "__main__":
