@@ -257,6 +257,46 @@ class TestDataLoader(unittest.TestCase):
         unknown_div = self.loader.get_dividend("NONEXISTENT", 2024)
         self.assertEqual(unknown_div, 0.0)
 
+    def test_spinoff_distribution_queries(self):
+        dist, basis_ratio = self.loader.get_spinoff_distribution("MO", 2007)
+        self.assertAlmostEqual(dist, 21.90, places=2)
+        self.assertAlmostEqual(basis_ratio, 0.6910, places=4)
+
+        q_dist, q_ratio = self.loader.get_quarterly_spinoff_distribution("MO", 2007, 1)
+        self.assertAlmostEqual(q_dist, 21.90, places=2)
+        self.assertAlmostEqual(q_ratio, 0.6910, places=4)
+
+        # Non-spinoff period
+        no_dist, no_ratio = self.loader.get_spinoff_distribution("AAPL", 2020)
+        self.assertEqual(no_dist, 0.0)
+        self.assertEqual(no_ratio, 1.0)
+
+        # Non-spinoff quarter
+        no_q_dist, no_q_ratio = self.loader.get_quarterly_spinoff_distribution("MO", 2007, 2)
+        self.assertEqual(no_q_dist, 0.0)
+        self.assertEqual(no_q_ratio, 1.0)
+
+        # Missing spinoffs file gracefully returns empty dict / no spinoffs
+        loader_no_spinoffs = DataLoader(spinoffs_path="nonexistent_spinoffs.json")
+        missing_dist, missing_ratio = loader_no_spinoffs.get_spinoff_distribution("MO", 2007)
+        self.assertEqual(missing_dist, 0.0)
+        self.assertEqual(missing_ratio, 1.0)
+
+        # Multi-event aggregation test
+        loader_no_spinoffs.spinoffs = {
+            "TEST": [
+                {"year": 2020, "quarter": 1, "distribution_per_share": 10.0, "basis_retention_ratio": 0.8},
+                {"year": 2020, "quarter": 1, "distribution_per_share": 5.0, "basis_retention_ratio": 0.5},
+            ]
+        }
+        multi_dist, multi_ratio = loader_no_spinoffs.get_spinoff_distribution("TEST", 2020)
+        self.assertAlmostEqual(multi_dist, 15.0)
+        self.assertAlmostEqual(multi_ratio, 0.4)
+        multi_q_dist, multi_q_ratio = loader_no_spinoffs.get_quarterly_spinoff_distribution("TEST", 2020, 1)
+        self.assertAlmostEqual(multi_q_dist, 15.0)
+        self.assertAlmostEqual(multi_q_ratio, 0.4)
+
+
     def test_spx_tr_and_dividend_yield(self):
         tr_2024 = self.loader.get_spx_tr_level(2024)
         self.assertGreater(tr_2024, 0.0)
