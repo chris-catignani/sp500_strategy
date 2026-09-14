@@ -40,14 +40,21 @@ data/raw/
 ├── benchmarks/
 │   ├── GSPC.json          # S&P 500 Price Return Index (^GSPC) raw response
 │   ├── SP500TR.json       # S&P 500 Total Return Index (^SP500TR) raw response
-│   └── MSCIWORLD.json     # MSCI World raw historical quarterly chart response
+│   ├── MSCIWORLD.json     # MSCI World raw historical quarterly chart response
+│   ├── URTH.json          # iShares MSCI World ETF (URTH) raw response
+│   └── FBGRX.json         # Fidelity Blue Chip Growth Fund (FBGRX) raw response
+├── corporate_actions/
+│   └── spinoffs.json      # Raw corporate spinoff catalog (IRS Form 8937 / Section 355)
 ├── tickers/
 │   ├── AAPL.json          # Apple Inc. raw response (timestamps, quotes, splits, dividends)
 │   ├── BRK.B.json         # Berkshire Hathaway Class B (queried as BRK-B)
+│   ├── T.json             # Post-1998 SBC / AT&T Inc. raw response
+│   ├── T_CORP_HISTORICAL.json # Decoupled original AT&T Corp ("Ma Bell") historical series (1993–1998)
 │   ├── UNH.json           # UnitedHealth Group Inc. raw response
 │   └── ... (33 files)
 └── constituents/
-    └── historical_index_weights.json  # Point-in-time constituent rankings and S&P 500 weights
+    ├── historical_index_weights.json       # Authoritative S&P 500 point-in-time constituent factsheet weights
+    └── world_historical_index_weights.json # Authoritative All-World point-in-time constituent factsheet weights
 ```
 
 Each raw file contains the unadulterated JSON response directly from the API endpoint:
@@ -55,6 +62,15 @@ Each raw file contains the unadulterated JSON response directly from the API end
 - `indicators.quote[0].close`: Month-end closing price, normalized for splits as of the query date.
 - `events.splits`: Dictionary of every stock split event, with timestamp `date`, `numerator`, `denominator`, and `splitRatio`.
 - `events.dividends`: Dictionary of every cash dividend distribution, with ex-dividend `date` and split-adjusted `amount`.
+
+### 3.1 Factsheet Provenance Architecture & Elimination of Circular Code Generation
+
+Previously, constituent rosters and historical factsheet weights were embedded as hardcoded Python dictionaries within `scripts/build_datasets_from_raw.py`, which then serialized them to `data/raw/constituents/historical_index_weights.json`. This introduced circular code generation where a raw data artifact was being created by code rather than serving as the upstream authoritative input.
+
+This architecture was strictly inverted to establish an unassailable data provenance chain:
+1. **Authoritative Raw Source of Truth**: `data/raw/constituents/historical_index_weights.json` and `data/raw/constituents/world_historical_index_weights.json` are now the immutable upstream source files. They record point-in-time constituent rosters and S&P Dow Jones Indices / Compustat factsheet weights directly compiled from primary archives.
+2. **One-Way Ingestion Pipeline**: `scripts/build_datasets_from_raw.py` reads directly from these raw JSON files into memory at runtime to drive dataset compilation (`data/sp500_constituents.json`, `data/sp500_quarterly_constituents.json`, etc.).
+3. **Auditability & Zero Circularity**: By eliminating hardcoded constituent arrays in code, the data compilation script functions purely as a deterministic transformer. Any update to historical constituent weights must be made in the raw factsheet catalog, where it is subjected to integrity checks (`tests/test_dataset_integrity.py`).
 
 ---
 
@@ -123,6 +139,53 @@ To eliminate lookahead bias and maintain strict point-in-time realism:
   $$r_{\text{pr}, 1994} = \frac{459.27 - 466.45}{466.45} = -1.5393\%$$
   $$y_{1994} = 1.3216\% - (-1.5393\%) = 2.8609\% \approx 2.86\%$$
 
+### 4.5 Security Decoupling: AT&T Corp ("Ma Bell") vs. SBC Communications (1993–1998)
+
+#### 4.5.1 The Telecommunications Merger & Retrospective Ticker Collision
+In modern market datasets, historical equity series are frequently retroactively reassigned following corporate mergers and acquisitions. A prominent instance occurs with ticker **`T`**:
+- In November 2005, **SBC Communications Inc.** (formerly Southwestern Bell Corporation, one of the seven Regional Bell Operating Companies created by the 1984 DOJ breakup of AT&T) acquired its former parent corporation, **AT&T Corp** ("Ma Bell"), for \$16 billion.
+- Following the merger, SBC Communications rebranded the consolidated enterprise as **AT&T Inc.** and adopted the legacy single-letter ticker symbol **`T`** on the New York Stock Exchange.
+- Modern automated APIs (including Yahoo Finance `/v8/finance/chart/T`) link the pre-2005 ticker history of `T` to the financial statements, stock splits, and dividend distributions of the surviving legal entity (**SBC Communications**), rather than the original AT&T Corp.
+
+#### 4.5.2 Point-in-Time Impact on S&P 500 Constituent Selection
+From 1994 through 1998, the authentic mega-cap constituent ranking in the S&P 500 Top 10 was the original **AT&T Corp** ("Ma Bell"), not SBC Communications:
+- Relying on SBC Communications' historical series artificially distorts constituent price returns, capitalization weights, and dividend cash flows for the telecom holding.
+- To resolve this collision, the repository decouples the two corporate entities.
+
+#### 4.5.3 Verified Decoupled Series (`T_CORP_HISTORICAL.json`)
+The authentic historical market record for original AT&T Corp is isolated in `data/raw/tickers/T_CORP_HISTORICAL.json`:
+- **Cash Dividends**: Verified split-adjusted distributions of **\$0.33 per quarter (\$1.32 per year)** across 1994–1998, reflecting Ma Bell's consistent quarterly \$0.33 payout.
+- **Prices & Baseline Closes**: Verified historical month-end closes from 1993 through 1998, including 1993-Q1..Q3 baseline closes (\$26.83, \$26.00, and \$26.75) to prevent artificial capitalization drift spikes in early 1994.
+- **Automated Splicing**: In `scripts/build_datasets_from_raw.py`, pre-1999 SBC data for `T` is purged, and the verified `T_CORP_HISTORICAL` record is spliced into the constituent series for 1993–1998. Data from 1999 onward transitions smoothly into the consolidated modern AT&T series.
+
+---
+
+### 4.6 Statutory Corporate Spinoff Modeling (IRS Section 355 & Form 8937)
+
+#### 4.6.1 Statutory Background & IRC Section 355
+Under Internal Revenue Code (IRC) Section 355 and Treasury Regulations, a corporate division or spinoff meeting statutory requirements is treated as a **tax-free reorganization**:
+- Shareholders receiving shares of a spun-off entity do not recognize taxable dividend income or immediate capital gain.
+- Pursuant to IRC Section 358 and IRS Form 8937 (*Report of Organizational Actions Affecting Basis of Securities*), the aggregate tax basis in the pre-distribution parent shares is allocated between the parent shares and the spun-off shares in proportion to their relative fair market values immediately following the distribution:
+  $$P_{\text{basis, new}} = \text{round}(P_{\text{basis, old}} \times R_{\text{retention}}, 4)$$
+  where $R_{\text{retention}} \in (0, 1)$ is the basis retention ratio reported on the issuer's Form 8937.
+
+#### 4.6.2 Engine Simulation Mechanics & Invariant Preservation
+In a disciplined Top N strategy, the portfolio cannot hold non-qualifying arbitrary spin-co equity positions without violating constituent universe constraints. The backtesting engine (`engine/backtest.py` and `engine/tax_lots.py`) implements an exact statutory cash-realization and basis-adjustment model:
+1. **Tax-Free Cash Credit**: In the quarter or year of the corporate action, the cash distribution per share is multiplied by existing shares held and credited directly to the portfolio's available cash pool (`self.cash += shares_held * dist_per_share`). This preserves the self-financing cash invariant ($C \ge 0$).
+2. **Zero Dividend Tax Withholding**: Because qualifying Section 355 spinoffs are corporate reorganizations rather than ordinary dividend distributions, **zero dividend tax is withheld** at rebalancing ($0.00 dividend tax drag).
+3. **Tax Lot Cost Basis Reduction**: All open FIFO tax lots of the parent company are updated via [`FIFOTaxLotManager.adjust_basis_ratio(ticker, ratio)`](../engine/tax_lots.py), reducing each lot's `purchase_price` by the Form 8937 basis retention ratio. This preserves embedded unrealized capital gains, ensuring correct capital gains tax settlement when the parent shares are subsequently trimmed or liquidated.
+
+#### 4.6.3 Raw Corporate Spinoff Catalog (`data/raw/corporate_actions/spinoffs.json`)
+The immutable catalog in `data/raw/corporate_actions/spinoffs.json` (compiled to `data/spinoff_distributions.json`) records the following verified historical corporate spinoffs:
+
+| Ticker | Ex-Date | Spin-Co Ticker | Spin-Co Description | Dist / Share | Basis Retention ($R_{\text{retention}}$) | Statutory Filing |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **MO** | 2007-03-30 | `KFT` | Kraft Foods Inc. | \$21.90 | 0.6910 (69.10%) | IRS Form 8937 / Section 355 |
+| **MO** | 2008-03-28 | `PM` | Philip Morris International Inc. | \$50.60 | 0.3040 (30.40%) | IRS Form 8937 / Section 355 |
+| **T** | 2022-04-08 | `WBD` | Warner Bros. Discovery Inc. | \$5.81 | 0.7623 (76.23%) | IRS Form 8937 / Section 355 |
+| **GE** | 2023-01-04 | `GEHC` | GE HealthCare Technologies Inc. | \$18.67 | 0.8165 (81.65%) | IRS Form 8937 / Section 355 |
+| **GE** | 2024-04-02 | `GEV` | GE Vernova Inc. | \$35.38 | 0.6686 (66.86%) | IRS Form 8937 / Section 355 |
+
 ---
 
 ## 5. Major Corporate Actions & Adjustments Log
@@ -134,10 +197,12 @@ To eliminate lookahead bias and maintain strict point-in-time realism:
 | **NVDA** | 2000, 2001, 2006, 2007, 2021, 2024 | 2:1 (x3), 3:2, 4:1, 10:1 splits | Cumulative 480:1 split factor. 1999 split-adjusted close is \$0.10. |
 | **C** | 2011-05-09 | 1-for-10 Reverse Split | Pre-2011 nominal prices scaled up by 10x. 2006 split-adjusted close is \$496.80. |
 | **AIG** | 2009-07-01 | 1-for-20 Reverse Split | Pre-2009 nominal prices scaled up by 20x. 2007 split-adjusted close is \$1,166.00; crashed to \$31.40 in 2008 (-97.31%). |
-| **GE** | 2021-08-02 | 1-for-8 Reverse Split | Pre-2021 nominal prices scaled up by 8x. Also spun off GEHC (2023) and GEV (2024). |
+| **GE** | 2021-08-02 | 1-for-8 Reverse Split | Pre-2021 nominal prices scaled up by 8x. |
+| **GE** | 2023, 2024 | Spinoff of GEHC & GEV | Modeled via Section 355 tax-free cash credit (\$18.67 and \$35.38) and Form 8937 basis retention ratios (0.8165 and 0.6686). |
 | **WMT** | 2024-02-26 | 3-for-1 Split | 2023 split-adjusted close is \$52.55; 2024 close is \$88.93 (+69.23% return). |
-| **T** | 2022-04-08 | Spinoff of WarnerMedia | Spinoff accounted for via standard market price series. |
-| **MO** | 2007, 2008 | Spinoff of Kraft & Philip Morris Int. | Spinoff distributions reflected in price index returns. |
+| **T** | 1993–1998 | Decoupling of AT&T Corp ("Ma Bell") | Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \$0.33/quarter (\$1.32/year) dividends. |
+| **T** | 2022-04-08 | Spinoff of WarnerMedia (`WBD`) | Modeled via Section 355 tax-free cash credit (\$5.81/sh) and Form 8937 basis retention ratio (0.7623). |
+| **MO** | 2007, 2008 | Spinoff of Kraft (`KFT`) & Philip Morris (`PM`) | Modeled via Section 355 tax-free cash credits (\$21.90 and \$50.60) and Form 8937 basis retention ratios (0.6910 and 0.3040). |
 
 ---
 
