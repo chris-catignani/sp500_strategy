@@ -11,7 +11,7 @@ import os
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from engine.models import StrategyResult, TradeOrder
-from engine.metrics import calculate_cagr, calculate_alpha, calculate_tax_drag
+from engine.metrics import calculate_cagr, calculate_alpha
 
 
 def _ensure_dir_exists(filepath: str) -> None:
@@ -33,13 +33,6 @@ def export_summary_metrics_csv(
         initial_capital, final_equity, cumulative_return, cagr, max_drawdown,
         total_taxes_paid, total_dividends_received, pre_liquidation_wealth,
         post_liquidation_wealth, post_liquidation_cagr, tax_drag, alpha_vs_spx
-
-    Key Definitions:
-        - final_equity: Ending portfolio equity before terminal liquidation tax (identical to pre_liquidation_wealth).
-        - pre_liquidation_wealth: Valuation of holdings + cash at terminal year before liquidating remaining tax lots.
-        - post_liquidation_wealth: Net cash realized after full terminal liquidation of all holdings and terminal tax.
-        - post_liquidation_cagr: Annualized return based on post_liquidation_wealth factoring terminal liquidation tax.
-        - tax_drag: Performance drag between pre-tax CAGR and after-tax CAGR (via calculate_tax_drag).
 
     Args:
         results: List of StrategyResult objects.
@@ -89,7 +82,7 @@ def export_summary_metrics_csv(
         # Tax drag (Pre-tax CAGR minus After-tax CAGR)
         if r.is_after_tax:
             if key in pretax_cagr_map:
-                tax_drag = calculate_tax_drag(pretax_cagr_map[key], r.cagr)
+                tax_drag = pretax_cagr_map[key] - r.cagr
             else:
                 tax_drag = 0.0
         else:

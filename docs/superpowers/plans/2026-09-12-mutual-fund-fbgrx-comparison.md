@@ -220,8 +220,8 @@ sheet.getRange('G43').setFormula(
 );
 ```
 
-- [ ] **Step 3: Rebuild Apps Script bundle**
-Run `python3 run_backtest.py` to regenerate `scripts/google_apps_script.js`.
+- [ ] **Step 3: Rebuild dashboard HTML & Apps Script bundle**
+Run `python3 scripts/build_dashboard_html.py` to regenerate `scripts/google_apps_script.js`.
 Verify syntax and absence of syntax errors.
 
 ---

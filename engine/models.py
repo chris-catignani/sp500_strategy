@@ -81,15 +81,7 @@ class AnnualLedgerEntry:
 
 @dataclass
 class StrategyResult:
-    """Comprehensive multi-year performance and risk statistics for a strategy run.
-
-    Wealth & Return Semantics:
-        final_equity: Terminal portfolio valuation before terminal liquidation tax (identical to pre_liquidation_wealth).
-        cagr: Compound annual growth rate based on pre_liquidation_wealth.
-        pre_liquidation_wealth: Valuation of holdings + cash at terminal year before liquidating remaining tax lots.
-        post_liquidation_wealth: Net cash realized after full terminal liquidation of all holdings and terminal tax.
-        post_liquidation_cagr: Annualized return based on post_liquidation_wealth factoring terminal liquidation tax.
-    """
+    """Comprehensive multi-year performance and risk statistics for a strategy run."""
     strategy_name: str
     n: int
     start_year: int

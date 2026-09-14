@@ -188,8 +188,8 @@ class TestDataLoader(unittest.TestCase):
                     f"Price for {c.ticker} in {year} must be positive, got {price}",
                 )
 
-    def test_total_return_consistency(self):
-        """Verify trailing_1y_return in year t equals (P_t - P_{t-1} + Div_t) / P_{t-1} when price at t-1 exists."""
+    def test_price_return_consistency(self):
+        """Verify trailing_1y_return in year t equals (P_t - P_{t-1}) / P_{t-1} when price at t-1 exists."""
         for year in range(1995, 2025):
             universe = self.loader.load_universe(year)
             for c in universe:
@@ -198,37 +198,13 @@ class TestDataLoader(unittest.TestCase):
                 except (KeyError, ValueError):
                     continue
                 p_curr = self.loader.get_price(c.ticker, year)
-                div = self.loader.get_dividend(c.ticker, year)
-                expected_return = (p_curr - p_prev + div) / p_prev
+                expected_return = (p_curr - p_prev) / p_prev
                 self.assertAlmostEqual(
                     c.trailing_1y_return,
                     expected_return,
                     places=3,
                     msg=f"Return inconsistency for {c.ticker} in {year}: snapshot={c.trailing_1y_return}, calculated={expected_return}",
                 )
-
-    def test_quarterly_total_return_consistency(self):
-        """Verify quarterly trailing_1y_return equals trailing 4-quarter total return."""
-        for year in range(1995, 2025):
-            for q in (1, 2, 3, 4):
-                universe = self.loader.load_quarterly_universe(year, q)
-                for c in universe:
-                    try:
-                        p_prev = self.loader.get_quarterly_price(c.ticker, year - 1, q)
-                    except (KeyError, ValueError):
-                        continue
-                    p_curr = self.loader.get_quarterly_price(c.ticker, year, q)
-                    divs = 0.0
-                    for offset in range(4):
-                        tot_q = year * 4 + (q - 1) - offset
-                        divs += self.loader.get_quarterly_dividend(c.ticker, tot_q // 4, (tot_q % 4) + 1)
-                    expected_return = (p_curr - p_prev + divs) / p_prev
-                    self.assertAlmostEqual(
-                        c.trailing_1y_return,
-                        expected_return,
-                        places=3,
-                        msg=f"Quarterly return inconsistency for {c.ticker} in {year}-Q{q}: snapshot={c.trailing_1y_return}, calculated={expected_return}",
-                    )
 
     def test_error_handling_invalid_inputs(self):
         """Verify appropriate errors are raised for invalid years or unknown tickers."""

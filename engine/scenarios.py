@@ -14,7 +14,6 @@ from engine.metrics import (
     calculate_cagr,
     calculate_cumulative_return,
     calculate_max_drawdown,
-    calculate_tax_drag,
 )
 from engine.models import StrategyResult, TradeOrder
 from engine.selector import resolve_selector
@@ -132,7 +131,7 @@ def compute_scenario_grid(
                 spx_cum = calculate_cumulative_return(initial_capital, bench["final_equity"])
                 spx_final = bench["final_equity"]
                 spx_taxes = bench["total_taxes_paid"]
-                spx_tax_drag = calculate_tax_drag(spx_tr_cagr, spx_after_cagr)
+                spx_tax_drag = spx_tr_cagr - spx_after_cagr
                 spx_divs = bench["total_dividends_received"]
 
             spx_benchmarks.append({
@@ -196,7 +195,7 @@ def compute_scenario_grid(
                 spx_q_cum = calculate_cumulative_return(initial_capital, spx_q_bench["final_equity"])
                 spx_q_final = spx_q_bench["final_equity"]
                 spx_q_taxes = spx_q_bench["total_taxes_paid"]
-                spx_q_tax_drag = calculate_tax_drag(spx_q_tr_cagr, spx_q_after_cagr)
+                spx_q_tax_drag = spx_q_tr_cagr - spx_q_after_cagr
                 spx_q_divs = spx_q_bench["total_dividends_received"]
 
             spx_q_benchmarks.append({
@@ -246,7 +245,7 @@ def compute_scenario_grid(
                                     universe=univ,
                                     rebalance_frequency=freq_key,
                                 )
-                                tax_drag = calculate_tax_drag(pre_res.cagr, post_res.cagr)
+                                tax_drag = pre_res.cagr - post_res.cagr
                                 alpha = post_res.cagr - ref_spx_after
                                 strat_cum = post_res.cumulative_return
                                 strat_final = post_res.final_equity
@@ -313,7 +312,7 @@ def compute_scenario_grid(
                 msci_cum = calculate_cumulative_return(initial_capital, msci_bench["final_equity"])
                 msci_final = msci_bench["final_equity"]
                 msci_taxes = msci_bench["total_taxes_paid"]
-                msci_tax_drag = calculate_tax_drag(msci_tr_cagr, msci_after_cagr)
+                msci_tax_drag = msci_tr_cagr - msci_after_cagr
                 msci_divs = msci_bench["total_dividends_received"]
 
             msci_alpha = round(msci_after_cagr - spx_after_cagr, 6)
@@ -379,7 +378,7 @@ def compute_scenario_grid(
                 msci_q_cum = calculate_cumulative_return(initial_capital, msci_q_bench["final_equity"])
                 msci_q_final = msci_q_bench["final_equity"]
                 msci_q_taxes = msci_q_bench["total_taxes_paid"]
-                msci_q_tax_drag = calculate_tax_drag(msci_q_tr_cagr, msci_q_after_cagr)
+                msci_q_tax_drag = msci_q_tr_cagr - msci_q_after_cagr
                 msci_q_divs = msci_q_bench["total_dividends_received"]
 
             msci_q_alpha = round(msci_q_after_cagr - spx_q_after_cagr, 6)
@@ -441,7 +440,7 @@ def compute_scenario_grid(
                 fbgrx_cum = calculate_cumulative_return(initial_capital, fbgrx_bench["final_equity"])
                 fbgrx_final = fbgrx_bench["final_equity"]
                 fbgrx_taxes = fbgrx_bench["total_taxes_paid"]
-                fbgrx_tax_drag = calculate_tax_drag(fbgrx_tr_cagr, fbgrx_after_cagr)
+                fbgrx_tax_drag = fbgrx_tr_cagr - fbgrx_after_cagr
                 fbgrx_divs = fbgrx_bench["total_dividends_received"]
 
             fbgrx_alpha = round(fbgrx_after_cagr - spx_after_cagr, 6)
@@ -507,7 +506,7 @@ def compute_scenario_grid(
                 fbgrx_q_cum = calculate_cumulative_return(initial_capital, fbgrx_q_bench["final_equity"])
                 fbgrx_q_final = fbgrx_q_bench["final_equity"]
                 fbgrx_q_taxes = fbgrx_q_bench["total_taxes_paid"]
-                fbgrx_q_tax_drag = calculate_tax_drag(fbgrx_q_tr_cagr, fbgrx_q_after_cagr)
+                fbgrx_q_tax_drag = fbgrx_q_tr_cagr - fbgrx_q_after_cagr
                 fbgrx_q_divs = fbgrx_q_bench["total_dividends_received"]
 
             fbgrx_q_alpha = round(fbgrx_q_after_cagr - spx_q_after_cagr, 6)

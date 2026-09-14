@@ -117,22 +117,17 @@ class MarketCapSelector(BaseSelector):
 
 
 class PerformanceSelector(BaseSelector):
-    """Selector that picks top N constituents sorted descending by trailing 1-year total return.
-
-    Evaluates candidate constituents from the eligible mega-cap universe (e.g. top 10-12
-    index market-cap leaders) and selects the top N performers ranked by trailing 1-year total
-    return (split-adjusted capital appreciation plus cash dividends).
-    """
+    """Selector that picks top N constituents sorted descending by trailing 1-year return."""
 
     def select(
         self,
         universe: Sequence[ConstituentSnapshot],
         n: Optional[int] = None,
     ) -> List[HoldingTarget]:
-        """Select top N constituents from the candidate mega-cap universe by trailing 1-year total return.
+        """Select top N constituents by trailing 1-year return.
 
         Args:
-            universe: Point-in-time constituent snapshots representing the eligible mega-cap universe.
+            universe: Point-in-time constituent snapshots.
             n: Optional override for constituent count. Defaults to self.n.
 
         Returns:

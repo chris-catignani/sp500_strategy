@@ -39,5 +39,3 @@ Thumbs.db
 scratch/
 tmp/
 outputs/*.html
-outputs/*snapshot*/
-outputs/baseline_*.txt

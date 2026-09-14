@@ -643,8 +643,7 @@ class PortfolioSimulator:
         cagr = calculate_cagr(initial_capital, pre_liquidation_wealth, total_years)
         total_taxes_paid = sum(e.tax_paid for e in annual_history)
 
-        # Maximum Drawdown (evaluated at discrete rebalance observation dates,
-        # e.g., annual year-end or quarterly quarter-end valuations, not continuous daily extremes)
+        # Maximum Drawdown
         history_for_dd = (
             quarterly_history
             if rebalance_frequency == "quarterly" and quarterly_history

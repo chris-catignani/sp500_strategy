@@ -318,22 +318,11 @@ def extract_quarterly_dividends(chart_data: dict) -> Dict[str, float]:
         quarter_totals[key] = quarter_totals.get(key, 0.0) + float(div["amount"])
 
     result = {}
-    for yr in range(1993, 2025):
+    for yr in range(1994, 2025):
         for q in (1, 2, 3, 4):
             key = f"{yr}-Q{q}"
             result[key] = round(quarter_totals.get(key, 0.0), 4)
     return result
-
-
-def _get_trailing_4q_keys(year: int, quarter: int) -> List[str]:
-    """Return keys for the 4 quarters ending at (year, quarter)."""
-    keys = []
-    for offset in range(4):
-        total_q = year * 4 + (quarter - 1) - offset
-        y = total_q // 4
-        q = (total_q % 4) + 1
-        keys.append(f"{y}-Q{q}")
-    return keys
 
 
 def build_quarterly_constituents(
@@ -342,12 +331,11 @@ def build_quarterly_constituents(
     quarterly_prices: Dict[str, Dict[str, float]],
     benchmark_key: str,
     name_map: Dict[str, str],
-    quarterly_dividends: Optional[Dict[str, Dict[str, float]]] = None,
 ) -> Dict[str, List[dict]]:
     """Build quarterly point-in-time constituent lists.
 
     Q4 re-anchors to official year-end factsheet.
-    Q1..Q3 dynamically drift market-cap weights and compute rolling 4-quarter total returns.
+    Q1..Q3 dynamically drift market-cap weights and compute rolling 4-quarter returns.
     """
     result = {}
     for year in range(1994, 2025):
@@ -369,7 +357,6 @@ def build_quarterly_constituents(
             q_key = f"{year}-Q{q}"
             p_bmk_q = bmk_prices.get(q_key, p_bmk_base)
             bmk_mult = (p_bmk_q / p_bmk_base) if p_bmk_base > 0 else 1.0
-            q_trailing_keys = _get_trailing_4q_keys(year, q)
 
             scored_candidates = []
             for t in candidate_tickers:
@@ -384,11 +371,8 @@ def build_quarterly_constituents(
                 else:
                     drifted_w = base_w_map.get(t, min_w)
 
-                t_divs = quarterly_dividends.get(t, {}) if quarterly_dividends else {}
-                div_1y = sum(t_divs.get(qk, 0.0) for qk in q_trailing_keys)
-
                 if p_curr is not None and p_1y_prior is not None and p_1y_prior > 0:
-                    ret_1y = round((p_curr - p_1y_prior + div_1y) / p_1y_prior, 4)
+                    ret_1y = round((p_curr - p_1y_prior) / p_1y_prior, 4)
                 else:
                     ret_1y = 0.0
 
@@ -408,16 +392,13 @@ def build_quarterly_constituents(
         q4_key = f"{year}-Q4"
         q4_tickers = year_constituents[year]
         q4_weights = historical_weights[year]
-        q4_trailing_keys = _get_trailing_4q_keys(year, 4)
         q4_list = []
         for rank, t in enumerate(q4_tickers):
             t_prices = quarterly_prices.get(t, {})
             p_curr = t_prices.get(q4_key)
             p_1y_prior = t_prices.get(f"{year - 1}-Q4")
-            t_divs = quarterly_dividends.get(t, {}) if quarterly_dividends else {}
-            div_1y = sum(t_divs.get(qk, 0.0) for qk in q4_trailing_keys)
             ret_1y = (
-                round((p_curr - p_1y_prior + div_1y) / p_1y_prior, 4)
+                round((p_curr - p_1y_prior) / p_1y_prior, 4)
                 if (p_curr is not None and p_1y_prior is not None and p_1y_prior > 0)
                 else 0.0
             )
@@ -525,8 +506,7 @@ def main():
             name = SP500_NAMES[ticker]
             p_curr = all_prices_data[ticker][str_year]
             p_prev = all_prices_data[ticker][str(year - 1)]
-            div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
-            ret_1y = round((p_curr - p_prev + div) / p_prev, 4) if p_prev > 0 else 0.0
+            ret_1y = round((p_curr - p_prev) / p_prev, 4)
 
             c_list.append({
                 "ticker": ticker,
@@ -550,8 +530,7 @@ def main():
             name = NAMES[ticker]
             p_curr = all_prices_data[ticker][str_year]
             p_prev = all_prices_data[ticker][str(year - 1)]
-            div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
-            ret_1y = round((p_curr - p_prev + div) / p_prev, 4) if p_prev > 0 else 0.0
+            ret_1y = round((p_curr - p_prev) / p_prev, 4)
 
             c_list.append({
                 "ticker": ticker,
@@ -569,7 +548,6 @@ def main():
         all_quarterly_prices_data,
         "^GSPC",
         SP500_NAMES,
-        all_quarterly_dividends_data,
     )
     world_quarterly_constituents = build_quarterly_constituents(
         WORLD_YEAR_CONSTITUENTS,
@@ -577,7 +555,6 @@ def main():
         all_quarterly_prices_data,
         "^GSPC",
         NAMES,
-        all_quarterly_dividends_data,
     )
 
     # 6. Build S&P 500 subsets for exact backward compatibility

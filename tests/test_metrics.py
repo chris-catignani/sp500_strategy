@@ -349,29 +349,6 @@ class TestMetrics(unittest.TestCase):
         self.assertEqual(res_zero_tax["final_equity"], res_pretax["final_equity"])
         self.assertEqual(res_zero_tax["total_taxes_paid"], 0.0)
 
-    def test_fbgrx_quarterly_pretax_cagr_discrepancy_zero(self):
-        """Verify mutual fund NAV data noise (r_TR < r_PR) produces 0 discrepancy with direct TR CAGR."""
-        from engine.data_loader import DataLoader
-        loader = DataLoader()
-        s_yr, e_yr = 1994, 2024
-        pr_levels = [loader.get_fbgrx_quarterly_level(s_yr, 4)]
-        tr_levels = [loader.get_fbgrx_tr_quarterly_level(s_yr, 4)]
-        for y in range(s_yr + 1, e_yr + 1):
-            for q in (1, 2, 3, 4):
-                pr_levels.append(loader.get_fbgrx_quarterly_level(y, q))
-                tr_levels.append(loader.get_fbgrx_tr_quarterly_level(y, q))
-
-        direct_cagr = calculate_cagr(tr_levels[0], tr_levels[-1], 30)
-        bench_pre = calculate_benchmark_annual_series(
-            pr_levels=pr_levels,
-            tr_levels=tr_levels,
-            tax_rate=0.0,
-            initial_capital=10000.0,
-            is_after_tax=False,
-        )
-        series_cagr = calculate_cagr(10000.0, bench_pre["final_equity"], 30)
-        self.assertAlmostEqual(direct_cagr, series_cagr, places=7)
-
 
 if __name__ == "__main__":
     unittest.main()
