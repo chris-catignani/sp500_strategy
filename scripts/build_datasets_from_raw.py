@@ -399,8 +399,9 @@ def main():
 
         if ticker == "T":
             t_corp_file = RAW_DIR / "tickers" / "T_CORP_HISTORICAL.json"
-            if t_corp_file.exists():
-                t_corp_chart = load_raw_chart(t_corp_file)
+            if not t_corp_file.exists():
+                raise FileNotFoundError(f"Missing required historical decoupled series: {t_corp_file}")
+            t_corp_chart = load_raw_chart(t_corp_file)
                 t_corp_prices = extract_year_end_closes(t_corp_chart)
                 t_corp_divs = extract_annual_dividends(t_corp_chart)
                 t_corp_q_prices = extract_quarterly_closes(t_corp_chart)
