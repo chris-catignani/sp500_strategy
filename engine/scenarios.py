@@ -87,6 +87,8 @@ def compute_scenario_grid(
     msci_q_benchmarks: List[Dict[str, Any]] = []
     fbgrx_benchmarks: List[Dict[str, Any]] = []
     fbgrx_q_benchmarks: List[Dict[str, Any]] = []
+    nasdaq_benchmarks: List[Dict[str, Any]] = []
+    nasdaq_q_benchmarks: List[Dict[str, Any]] = []
 
     for rate, rate_str in tax_rates:
         for h_label, s_yr, e_yr in horizons:
@@ -529,6 +531,134 @@ def compute_scenario_grid(
                 "alpha": fbgrx_q_alpha,
             })
 
+            # 3e. Nasdaq 100 Index Benchmark (Annual)
+            nasdaq_pr_levels = [data_loader.get_nasdaq_level(y) for y in range(s_yr, e_yr + 1)]
+            nasdaq_tr_levels = [data_loader.get_nasdaq_tr_level(y) for y in range(s_yr, e_yr + 1)]
+            nasdaq_tr_cagr = calculate_cagr(nasdaq_tr_levels[0], nasdaq_tr_levels[-1], horizon_years)
+
+            if rate == 0.0:
+                nasdaq_bench = calculate_benchmark_annual_series(
+                    pr_levels=nasdaq_pr_levels,
+                    tr_levels=nasdaq_tr_levels,
+                    tax_rate=0.0,
+                    initial_capital=initial_capital,
+                    is_after_tax=False,
+                )
+                nasdaq_after_cagr = nasdaq_tr_cagr
+                nasdaq_post_liq_cagr = nasdaq_tr_cagr
+                nasdaq_cum = calculate_cumulative_return(initial_capital, nasdaq_bench["final_equity"])
+                nasdaq_final = nasdaq_bench["final_equity"]
+                nasdaq_max_dd = calculate_max_drawdown(nasdaq_tr_levels)
+                nasdaq_taxes = 0.0
+                nasdaq_tax_drag = 0.0
+                nasdaq_divs = nasdaq_bench["total_dividends_received"]
+            else:
+                nasdaq_bench = calculate_benchmark_annual_series(
+                    pr_levels=nasdaq_pr_levels,
+                    tr_levels=nasdaq_tr_levels,
+                    tax_rate=rate,
+                    initial_capital=initial_capital,
+                    is_after_tax=True,
+                )
+                nasdaq_val_series = [initial_capital]
+                n_curr_v = initial_capital
+                for r_ann in nasdaq_bench["annual_returns"]:
+                    n_curr_v *= (1.0 + r_ann)
+                    nasdaq_val_series.append(n_curr_v)
+                nasdaq_max_dd = calculate_max_drawdown(nasdaq_val_series)
+                nasdaq_after_cagr = calculate_cagr(initial_capital, nasdaq_bench["pre_liquidation_wealth"], horizon_years)
+                nasdaq_post_liq_cagr = calculate_cagr(initial_capital, nasdaq_bench["post_liquidation_wealth"], horizon_years)
+                nasdaq_cum = calculate_cumulative_return(initial_capital, nasdaq_bench["final_equity"])
+                nasdaq_final = nasdaq_bench["final_equity"]
+                nasdaq_taxes = nasdaq_bench["total_taxes_paid"]
+                nasdaq_tax_drag = calculate_tax_drag(nasdaq_tr_cagr, nasdaq_after_cagr)
+                nasdaq_divs = nasdaq_bench["total_dividends_received"]
+
+            nasdaq_alpha = round(nasdaq_after_cagr - spx_after_cagr, 6)
+            nasdaq_benchmarks.append({
+                "rate": rate,
+                "rate_str": rate_str,
+                "h_label": h_label,
+                "s_yr": s_yr,
+                "e_yr": e_yr,
+                "tr_cagr": nasdaq_tr_cagr,
+                "after_cagr": nasdaq_after_cagr,
+                "post_liq_cagr": nasdaq_post_liq_cagr,
+                "cum": nasdaq_cum,
+                "final": nasdaq_final,
+                "divs": nasdaq_divs,
+                "max_dd": nasdaq_max_dd,
+                "taxes": nasdaq_taxes,
+                "tax_drag": nasdaq_tax_drag,
+                "alpha": nasdaq_alpha,
+            })
+
+            # 3f. Nasdaq 100 Index Benchmark (Quarterly)
+            nasdaq_q_pr = [data_loader.get_nasdaq_quarterly_level(s_yr, 4)]
+            nasdaq_q_tr = [data_loader.get_nasdaq_tr_quarterly_level(s_yr, 4)]
+            for y in range(s_yr + 1, e_yr + 1):
+                for q in (1, 2, 3, 4):
+                    nasdaq_q_pr.append(data_loader.get_nasdaq_quarterly_level(y, q))
+                    nasdaq_q_tr.append(data_loader.get_nasdaq_tr_quarterly_level(y, q))
+            nasdaq_q_tr_cagr = calculate_cagr(nasdaq_q_tr[0], nasdaq_q_tr[-1], horizon_years)
+
+            if rate == 0.0:
+                nasdaq_q_bench = calculate_benchmark_annual_series(
+                    pr_levels=nasdaq_q_pr,
+                    tr_levels=nasdaq_q_tr,
+                    tax_rate=0.0,
+                    initial_capital=initial_capital,
+                    is_after_tax=False,
+                )
+                nasdaq_q_after_cagr = nasdaq_q_tr_cagr
+                nasdaq_q_post_liq_cagr = nasdaq_q_tr_cagr
+                nasdaq_q_cum = calculate_cumulative_return(initial_capital, nasdaq_q_bench["final_equity"])
+                nasdaq_q_final = nasdaq_q_bench["final_equity"]
+                nasdaq_q_max_dd = calculate_max_drawdown(nasdaq_q_tr)
+                nasdaq_q_taxes = 0.0
+                nasdaq_q_tax_drag = 0.0
+                nasdaq_q_divs = nasdaq_q_bench["total_dividends_received"]
+            else:
+                nasdaq_q_bench = calculate_benchmark_annual_series(
+                    pr_levels=nasdaq_q_pr,
+                    tr_levels=nasdaq_q_tr,
+                    tax_rate=rate,
+                    initial_capital=initial_capital,
+                    is_after_tax=True,
+                )
+                nasdaq_q_val_series = [initial_capital]
+                nq_curr_v = initial_capital
+                for r_step in nasdaq_q_bench["annual_returns"]:
+                    nq_curr_v *= (1.0 + r_step)
+                    nasdaq_q_val_series.append(nq_curr_v)
+                nasdaq_q_max_dd = calculate_max_drawdown(nasdaq_q_val_series)
+                nasdaq_q_after_cagr = calculate_cagr(initial_capital, nasdaq_q_bench["pre_liquidation_wealth"], horizon_years)
+                nasdaq_q_post_liq_cagr = calculate_cagr(initial_capital, nasdaq_q_bench["post_liquidation_wealth"], horizon_years)
+                nasdaq_q_cum = calculate_cumulative_return(initial_capital, nasdaq_q_bench["final_equity"])
+                nasdaq_q_final = nasdaq_q_bench["final_equity"]
+                nasdaq_q_taxes = nasdaq_q_bench["total_taxes_paid"]
+                nasdaq_q_tax_drag = calculate_tax_drag(nasdaq_q_tr_cagr, nasdaq_q_after_cagr)
+                nasdaq_q_divs = nasdaq_q_bench["total_dividends_received"]
+
+            nasdaq_q_alpha = round(nasdaq_q_after_cagr - spx_q_after_cagr, 6)
+            nasdaq_q_benchmarks.append({
+                "rate": rate,
+                "rate_str": rate_str,
+                "h_label": h_label,
+                "s_yr": s_yr,
+                "e_yr": e_yr,
+                "tr_cagr": nasdaq_q_tr_cagr,
+                "after_cagr": nasdaq_q_after_cagr,
+                "post_liq_cagr": nasdaq_q_post_liq_cagr,
+                "cum": nasdaq_q_cum,
+                "final": nasdaq_q_final,
+                "divs": nasdaq_q_divs,
+                "max_dd": nasdaq_q_max_dd,
+                "taxes": nasdaq_q_taxes,
+                "tax_drag": nasdaq_q_tax_drag,
+                "alpha": nasdaq_q_alpha,
+            })
+
     # 30-Year Annual histories & trades at 30% baseline tax rate across universes
     res_30y_map: Dict[Tuple[str, int, str], StrategyResult] = {}
     trades_30y_map: Dict[Tuple[str, int], List[TradeOrder]] = {}
@@ -568,6 +698,8 @@ def compute_scenario_grid(
         "msci_q_benchmarks": msci_q_benchmarks,
         "fbgrx_benchmarks": fbgrx_benchmarks,
         "fbgrx_q_benchmarks": fbgrx_q_benchmarks,
+        "nasdaq_benchmarks": nasdaq_benchmarks,
+        "nasdaq_q_benchmarks": nasdaq_q_benchmarks,
         "res_30y_map": res_30y_map,
         "trades_30y_map": trades_30y_map,
         "data_loader": data_loader,
@@ -606,6 +738,8 @@ def format_apps_script_payloads(
     msci_q_bench_map = {(b["rate"], b["h_label"]): b for b in grid["msci_q_benchmarks"]}
     fbgrx_bench_map = {(b["rate"], b["h_label"]): b for b in grid["fbgrx_benchmarks"]}
     fbgrx_q_bench_map = {(b["rate"], b["h_label"]): b for b in grid["fbgrx_q_benchmarks"]}
+    nasdaq_bench_map = {(b["rate"], b["h_label"]): b for b in grid["nasdaq_benchmarks"]}
+    nasdaq_q_bench_map = {(b["rate"], b["h_label"]): b for b in grid["nasdaq_q_benchmarks"]}
 
     # Group active results by (rate, h_label) to maintain identical row order
     active_by_rate_h: Dict[Tuple[float, str], List[Dict[str, Any]]] = {}
@@ -781,6 +915,54 @@ def format_apps_script_payloads(
                 round(fbgrx_qb["tax_drag"], 6),
                 fbgrx_qb["alpha"],
                 "Mutual Fund",
+            ])
+
+            # 5a. Nasdaq 100 Index Benchmark (Annual)
+            nasdaq_b = nasdaq_bench_map[key_pair]
+            nasdaq_key = f"{h_label}_Nasdaq 100_Nasdaq 100_Annual_{rate_str}"
+            scenario_rows.append([
+                nasdaq_key,
+                rate,
+                "Nasdaq 100",
+                h_label,
+                "Nasdaq 100",
+                "Market Cap",
+                "Annual",
+                round(nasdaq_b["tr_cagr"], 6),
+                round(nasdaq_b["after_cagr"], 6),
+                round(nasdaq_b["post_liq_cagr"], 6),
+                round(nasdaq_b["cum"], 6),
+                round(nasdaq_b["final"], 2),
+                round(nasdaq_b["divs"], 2),
+                round(nasdaq_b["max_dd"], 6),
+                round(nasdaq_b["taxes"], 2),
+                round(nasdaq_b["tax_drag"], 6),
+                nasdaq_b["alpha"],
+                "Index",
+            ])
+
+            # 5b. Nasdaq 100 Index Benchmark (Quarterly)
+            nasdaq_qb = nasdaq_q_bench_map[key_pair]
+            nasdaq_q_key = f"{h_label}_Nasdaq 100_Nasdaq 100_Quarterly_{rate_str}"
+            scenario_rows.append([
+                nasdaq_q_key,
+                rate,
+                "Nasdaq 100",
+                h_label,
+                "Nasdaq 100",
+                "Market Cap",
+                "Quarterly",
+                round(nasdaq_qb["tr_cagr"], 6),
+                round(nasdaq_qb["after_cagr"], 6),
+                round(nasdaq_qb["post_liq_cagr"], 6),
+                round(nasdaq_qb["cum"], 6),
+                round(nasdaq_qb["final"], 2),
+                round(nasdaq_qb["divs"], 2),
+                round(nasdaq_qb["max_dd"], 6),
+                round(nasdaq_qb["taxes"], 2),
+                round(nasdaq_qb["tax_drag"], 6),
+                nasdaq_qb["alpha"],
+                "Index",
             ])
 
     # 30-Year Annual histories & trades at 30% baseline tax rate
@@ -1047,10 +1229,46 @@ def format_apps_script_payloads(
         if idx % 4 == 0:
             fbgrx_traj_q.append(fbgrx_q_val)
 
+    nasdaq_pr_30y = [data_loader.get_nasdaq_level(y) for y in range(1994, 2025)]
+    nasdaq_tr_30y = [data_loader.get_nasdaq_tr_level(y) for y in range(1994, 2025)]
+    nasdaq_bench_ann = calculate_benchmark_annual_series(
+        pr_levels=nasdaq_pr_30y,
+        tr_levels=nasdaq_tr_30y,
+        tax_rate=0.30,
+        initial_capital=initial_capital,
+        is_after_tax=True,
+    )
+    nasdaq_val_ann = initial_capital
+    nasdaq_traj_ann = [initial_capital]
+    for r in nasdaq_bench_ann["annual_returns"]:
+        nasdaq_val_ann *= (1.0 + r)
+        nasdaq_traj_ann.append(nasdaq_val_ann)
+
+    nasdaq_q_pr_30y = [data_loader.get_nasdaq_quarterly_level(1994, 4)]
+    nasdaq_q_tr_30y = [data_loader.get_nasdaq_tr_quarterly_level(1994, 4)]
+    for y in range(1995, 2025):
+        for q in (1, 2, 3, 4):
+            nasdaq_q_pr_30y.append(data_loader.get_nasdaq_quarterly_level(y, q))
+            nasdaq_q_tr_30y.append(data_loader.get_nasdaq_tr_quarterly_level(y, q))
+    nasdaq_bench_q = calculate_benchmark_annual_series(
+        pr_levels=nasdaq_q_pr_30y,
+        tr_levels=nasdaq_q_tr_30y,
+        tax_rate=0.30,
+        initial_capital=initial_capital,
+        is_after_tax=True,
+    )
+    nasdaq_q_val = initial_capital
+    nasdaq_traj_q = [initial_capital]
+    for idx, r_step in enumerate(nasdaq_bench_q["annual_returns"], start=1):
+        nasdaq_q_val *= (1.0 + r_step)
+        if idx % 4 == 0:
+            nasdaq_traj_q.append(nasdaq_q_val)
+
     benchmarks = [
         ("S&P 500", spx_traj_ann, spx_traj_q),
         ("MSCI World", msci_traj_ann, msci_traj_q),
         ("FBGRX", fbgrx_traj_ann, fbgrx_traj_q),
+        ("Nasdaq 100", nasdaq_traj_ann, nasdaq_traj_q),
     ]
 
     trajectory_matrix: List[List[Any]] = []

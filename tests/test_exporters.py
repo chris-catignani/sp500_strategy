@@ -410,7 +410,7 @@ class TestExporters(unittest.TestCase):
         self.assertIn("'Rebalance:'", code)
         self.assertIn("['Annual', 'Quarterly']", code)
         self.assertIn("'Benchmark:'", code)
-        self.assertIn("['S&P 500', 'MSCI World', 'FBGRX']", code)
+        self.assertIn("['S&P 500', 'MSCI World', 'FBGRX', 'Nasdaq 100']", code)
         self.assertIn("'Tax Rate:'", code)
         self.assertIn("['0.0%', '15.0%', '20.0%', '30.0%', '37.0%']", code)
         self.assertIn("'Seed Capital:'", code)
@@ -420,6 +420,7 @@ class TestExporters(unittest.TestCase):
         # Fully dynamic KPI formulas querying Scenario Data using user selections
         self.assertIn("stratKeyExpr = '$H$2 & \"_\" & $B$2 & \"_\" & $D$2 & \"_\" & $F$2 & \"_\" & $B$3", code)
         self.assertIn("benchKeyExpr = '$H$2 & \"_\" & IF($D$3=\"MSCI World\"", code)
+        self.assertIn('IF($D$3="Nasdaq 100", "Nasdaq 100_Nasdaq 100",', code)
         # Head-to-Head Spotlight & Net Advantage Delta Row
         self.assertIn("Net Advantage (Strategy vs", code)
         self.assertIn("=(G11 - G12)", code)

@@ -137,8 +137,8 @@ function buildPerformanceAndTradeoffsSheet(ss) {
     var annKey, qtrKey;
     if (sCode === 'Benchmark') {
       sheet.getRange('A' + trRow).setFormula('="Benchmark (" & \'Executive Summary\'!$D$3 & ")"');
-      annKey = '\'Executive Summary\'!$H$2 & "_" & IF(\'Executive Summary\'!$D$3="MSCI World", "All World_MSCI World_Annual_", IF(\'Executive Summary\'!$D$3="FBGRX", "FBGRX_FBGRX_Annual_", "S&P 500_S&P 500_Annual_")) & ' + taxExpr;
-      qtrKey = '\'Executive Summary\'!$H$2 & "_" & IF(\'Executive Summary\'!$D$3="MSCI World", "All World_MSCI World_Quarterly_", IF(\'Executive Summary\'!$D$3="FBGRX", "FBGRX_FBGRX_Quarterly_", "S&P 500_S&P 500_Quarterly_")) & ' + taxExpr;
+      annKey = '\'Executive Summary\'!$H$2 & "_" & IF(\'Executive Summary\'!$D$3="MSCI World", "All World_MSCI World_Annual_", IF(\'Executive Summary\'!$D$3="FBGRX", "FBGRX_FBGRX_Annual_", IF(\'Executive Summary\'!$D$3="Nasdaq 100", "Nasdaq 100_Nasdaq 100_Annual_", "S&P 500_S&P 500_Annual_"))) & ' + taxExpr;
+      qtrKey = '\'Executive Summary\'!$H$2 & "_" & IF(\'Executive Summary\'!$D$3="MSCI World", "All World_MSCI World_Quarterly_", IF(\'Executive Summary\'!$D$3="FBGRX", "FBGRX_FBGRX_Quarterly_", IF(\'Executive Summary\'!$D$3="Nasdaq 100", "Nasdaq 100_Nasdaq 100_Quarterly_", "S&P 500_S&P 500_Quarterly_"))) & ' + taxExpr;
     } else {
       sheet.getRange('A' + trRow).setValue(sDisplay);
       annKey = '\'Executive Summary\'!$H$2 & "_" & \'Executive Summary\'!$B$2 & "_' + sCode + '_" & \'Executive Summary\'!$F$2 & "_Annual_" & ' + taxExpr;

@@ -183,6 +183,26 @@ def extract_quarterly_closes(chart_data: dict, source_field: str = "close") -> D
     return quarter_closes
 
 
+def extract_quarterly_closes_raw(chart_data: dict, source_field: str = "close") -> Dict[str, float]:
+    """Extract unrounded quarter-end closes keeping raw float precision."""
+    timestamps = chart_data.get("timestamp", [])
+    if source_field == "adjclose":
+        adj_list = chart_data.get("indicators", {}).get("adjclose")
+        closes = adj_list[0].get("adjclose", []) if (adj_list and adj_list[0] is not None) else []
+    else:
+        quote_list = chart_data.get("indicators", {}).get("quote")
+        closes = quote_list[0].get("close", []) if (quote_list and quote_list[0] is not None) else []
+
+    quarter_closes = {}
+    for ts, c in zip(timestamps, closes):
+        if c is not None:
+            dt = datetime.datetime.utcfromtimestamp(ts)
+            if dt.month in (3, 6, 9, 12):
+                q = (dt.month - 1) // 3 + 1
+                quarter_closes[f"{dt.year}-Q{q}"] = float(c)
+    return quarter_closes
+
+
 def extract_quarterly_dividends(chart_data: dict) -> Dict[str, float]:
     """Extract quarterly split-adjusted cash dividends per share."""
     events = chart_data.get("events", {})
@@ -385,6 +405,77 @@ def main():
     all_quarterly_prices_data["^MSCIWORLD_PR"] = q_msci_pr
     all_quarterly_prices_data["^MSCIWORLD_TR"] = q_msci_tr
 
+    # Nasdaq 100 (^NDX Price Return & ^NDXT Total Return Composite)
+    ndx_raw = RAW_DIR / "benchmarks" / "NDX.json"
+    qqq_raw = RAW_DIR / "benchmarks" / "QQQ.json"
+
+    if ndx_raw.exists() and qqq_raw.exists():
+        ndx_chart = load_raw_chart(ndx_raw)
+        qqq_chart = load_raw_chart(qqq_raw)
+
+        # 1. Price return series (^NDX)
+        all_prices_data["^NDX"] = extract_year_end_closes(ndx_chart, source_field="close")
+        all_quarterly_prices_data["^NDX"] = extract_quarterly_closes(ndx_chart, source_field="close")
+
+        # 2. Total return composite series (^NDXT) synthesized from ^NDX and QQQ
+        ndx_q_raw = extract_quarterly_closes_raw(ndx_chart, source_field="close")
+        qqq_q_raw = extract_quarterly_closes_raw(qqq_chart, source_field="close")
+        qqq_q_divs = extract_quarterly_dividends(qqq_chart)
+
+        composite_q_tr: Dict[str, float] = {}
+        base_tr = 398.28
+        composite_q_tr["1993-Q4"] = base_tr
+
+        # Backward chain for 1993-Q3, 1993-Q2, 1993-Q1
+        curr_tr = base_tr
+        for t_key, prev_key in [("1993-Q4", "1993-Q3"), ("1993-Q3", "1993-Q2"), ("1993-Q2", "1993-Q1")]:
+            ndx_t = ndx_q_raw[t_key]
+            ndx_prev = ndx_q_raw[prev_key]
+            r_pr = (ndx_t - ndx_prev) / ndx_prev
+            y_t = 0.0025 / 4.0
+            r_tr = r_pr + y_t
+            prev_tr = curr_tr / (1.0 + r_tr)
+            composite_q_tr[prev_key] = prev_tr
+            curr_tr = prev_tr
+
+        # Forward chain from 1994-Q1 to 2024-Q4
+        curr_tr = base_tr
+        prev_key = "1993-Q4"
+        for yr in range(1994, 2025):
+            for q in (1, 2, 3, 4):
+                t_key = f"{yr}-Q{q}"
+                ndx_t = ndx_q_raw[t_key]
+                ndx_prev = ndx_q_raw[prev_key]
+                r_pr = (ndx_t - ndx_prev) / ndx_prev
+
+                if t_key >= "1999-Q2":
+                    div_qqq = qqq_q_divs.get(t_key, 0.0)
+                    p_qqq_prev = qqq_q_raw[prev_key]
+                    y_t = div_qqq / p_qqq_prev if p_qqq_prev > 0.0 else 0.0
+                elif t_key == "1999-Q1":
+                    y_t = 0.0
+                else:
+                    # 1993-Q1 to 1998-Q4: 0.25% annualized nominal yield
+                    y_t = 0.0025 / 4.0
+
+                r_tr = r_pr + y_t
+                curr_tr = curr_tr * (1.0 + r_tr)
+                composite_q_tr[t_key] = curr_tr
+                prev_key = t_key
+
+        all_quarterly_prices_data["^NDXT"] = {
+            k: round(v, 2)
+            for k, v in sorted(composite_q_tr.items())
+        }
+
+        all_prices_data["^NDXT"] = {
+            str(yr): all_quarterly_prices_data["^NDXT"][f"{yr}-Q4"]
+            for yr in range(1993, 2025)
+        }
+
+        print(f"Processed ^NDX: {len(all_prices_data['^NDX'])} years, {len(all_quarterly_prices_data['^NDX'])} quarters")
+        print(f"Processed ^NDXT: {len(all_prices_data['^NDXT'])} years, {len(all_quarterly_prices_data['^NDXT'])} quarters")
+
     print(f"Processed ^GSPC: {len(all_prices_data['^GSPC'])} years, {len(all_quarterly_prices_data['^GSPC'])} quarters")
     print(f"Processed ^SP500TR: {len(all_prices_data['^SP500TR'])} years, {len(all_quarterly_prices_data['^SP500TR'])} quarters")
 
@@ -539,7 +630,9 @@ def main():
     )
 
     # 6. Build S&P 500 subsets for exact backward compatibility
-    BENCHMARK_PRICE_KEYS = ["^GSPC", "^SP500TR", "^MSCIWORLD_PR", "^MSCIWORLD_TR", "FBGRX", "FBGRX_TR"]
+    BENCHMARK_PRICE_KEYS = [
+        "^GSPC", "^SP500TR", "^MSCIWORLD_PR", "^MSCIWORLD_TR", "FBGRX", "FBGRX_TR", "^NDX", "^NDXT"
+    ]
     sp500_prices = {
         k: all_prices_data[k]
         for k in BENCHMARK_PRICE_KEYS + sorted(SP500_NAMES.keys())

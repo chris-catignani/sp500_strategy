@@ -129,7 +129,7 @@ function buildExecutiveSummarySheet(ss) {
        .setVerticalAlignment('middle');
   var d3 = sheet.getRange('D3');
   var benchRule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(['S&P 500', 'MSCI World', 'FBGRX'], true)
+    .requireValueInList(['S&P 500', 'MSCI World', 'FBGRX', 'Nasdaq 100'], true)
     .setAllowInvalid(false)
     .build();
   d3.setDataValidation(benchRule);
@@ -192,7 +192,7 @@ function buildExecutiveSummarySheet(ss) {
   // Helper expressions for Scenario Data lookups with string-resilient tax rate formatting
   var taxExpr = 'IF(ISNUMBER($F$3), TEXT($F$3, "0.0%"), $F$3)';
   var stratKeyExpr = '$H$2 & "_" & $B$2 & "_" & $D$2 & "_" & $F$2 & "_" & $B$3 & "_" & ' + taxExpr;
-  var benchKeyExpr = '$H$2 & "_" & IF($D$3="MSCI World", "All World_MSCI World", IF($D$3="FBGRX", "FBGRX_FBGRX", "S&P 500_S&P 500")) & "_" & $B$3 & "_" & ' + taxExpr;
+  var benchKeyExpr = '$H$2 & "_" & IF($D$3="MSCI World", "All World_MSCI World", IF($D$3="FBGRX", "FBGRX_FBGRX", IF($D$3="Nasdaq 100", "Nasdaq 100_Nasdaq 100", "S&P 500_S&P 500"))) & "_" & $B$3 & "_" & ' + taxExpr;
 
   // 3. Dynamic KPI Summary Scorecards (Rows 5-7)
   // Card 1: Selected Strategy Final Wealth (Cols A-C)
@@ -271,7 +271,7 @@ function buildExecutiveSummarySheet(ss) {
 
   // Row 12: Benchmark Row
   sheet.getRange('A12').setFormula('="Benchmark: " & $D$3 & " Total Return"').setFontStyle('italic').setHorizontalAlignment('left').setVerticalAlignment('middle');
-  sheet.getRange('B12').setFormula('=IF($D$3="MSCI World", "All World", IF($D$3="FBGRX", "US Large Growth", "S&P 500"))').setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('B12').setFormula('=IF($D$3="MSCI World", "All World", IF($D$3="FBGRX", "US Large Growth", IF($D$3="Nasdaq 100", "US Large Tech", "S&P 500")))').setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('C12').setFormula('=$H$2').setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('D12').setValue('—').setFontStyle('italic').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('E12').setFormula('=IFERROR(INDEX(\'Scenario Data\'!$H:$H, MATCH(' + benchKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setNumberFormat('0.00%').setHorizontalAlignment('right').setVerticalAlignment('middle');
