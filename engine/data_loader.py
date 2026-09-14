@@ -269,6 +269,14 @@ class DataLoader:
         "msciworld_tr": ("^MSCIWORLD_PR", "^MSCIWORLD_TR"),
         "fbgrx": ("FBGRX", "FBGRX_TR"),
         "fbgrx_tr": ("FBGRX", "FBGRX_TR"),
+        "nasdaq_100": ("^NDX", "^NDXT"),
+        "nasdaq 100": ("^NDX", "^NDXT"),
+        "nasdaq100": ("^NDX", "^NDXT"),
+        "qqq": ("^NDX", "^NDXT"),
+        "^ndx": ("^NDX", "^NDXT"),
+        "ndx": ("^NDX", "^NDXT"),
+        "^ndxt": ("^NDX", "^NDXT"),
+        "ndxt": ("^NDX", "^NDXT"),
     }
 
     def get_benchmark_level(self, benchmark: str, year: int) -> float:
@@ -386,6 +394,28 @@ class DataLoader:
     def get_msci_world_dividend_yield(self, year: int) -> float:
         """Calculate the benchmark MSCI World dividend yield for a given year."""
         return self.get_benchmark_dividend_yield("msci_world", year)
+
+    def get_nasdaq_level(self, year: int) -> float:
+        """Retrieve Nasdaq 100 (^NDX) benchmark index level for a given year."""
+        return self.get_benchmark_level("nasdaq_100", year)
+
+    def get_nasdaq_tr_level(self, year: int) -> float:
+        """Retrieve Nasdaq 100 Total Return (^NDXT) index level for a given year."""
+        return self.get_benchmark_tr_level("nasdaq_100", year)
+
+    def get_nasdaq_quarterly_level(self, year: int, quarter: int) -> float:
+        """Retrieve Nasdaq 100 (^NDX) level at end of (year, quarter)."""
+        return self.get_benchmark_quarterly_level("nasdaq_100", year, quarter)
+
+    def get_nasdaq_tr_quarterly_level(self, year: int, quarter: int) -> float:
+        """Retrieve Nasdaq 100 Total Return (^NDXT) level at end of (year, quarter)."""
+        return self.get_benchmark_quarterly_tr_level("nasdaq_100", year, quarter)
+
+    get_nasdaq_quarterly_tr_level = get_nasdaq_tr_quarterly_level
+
+    def get_nasdaq_dividend_yield(self, year: int) -> float:
+        """Calculate the benchmark Nasdaq 100 dividend yield for a given year."""
+        return self.get_benchmark_dividend_yield("nasdaq_100", year)
 
     def get_quarterly_price(self, ticker: str, year: int, quarter: int) -> float:
         """Retrieve split-adjusted close for a ticker at the end of (year, quarter).
