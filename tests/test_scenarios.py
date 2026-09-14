@@ -29,15 +29,22 @@ class TestScenarios(unittest.TestCase):
         spx_bench_rows = [r for r in scenario_rows if r[4] == "S&P 500" and r[17] == "Index"]
         msci_bench_rows = [r for r in scenario_rows if r[4] == "MSCI World" and r[17] == "Index"]
         fbgrx_bench_rows = [r for r in scenario_rows if r[4] == "FBGRX" and r[17] == "Mutual Fund"]
+        nasdaq_bench_rows = [r for r in scenario_rows if r[4] == "Nasdaq 100" and r[17] == "Index"]
         self.assertEqual(len(spx_bench_rows), 30)
         self.assertEqual(len(msci_bench_rows), 30)
         self.assertEqual(len(fbgrx_bench_rows), 30)
+        self.assertEqual(len(nasdaq_bench_rows), 30)
         self.assertEqual(sum(1 for r in spx_bench_rows if r[6] == "Annual"), 15)
         self.assertEqual(sum(1 for r in spx_bench_rows if r[6] == "Quarterly"), 15)
         self.assertEqual(sum(1 for r in msci_bench_rows if r[6] == "Annual"), 15)
         self.assertEqual(sum(1 for r in msci_bench_rows if r[6] == "Quarterly"), 15)
         self.assertEqual(sum(1 for r in fbgrx_bench_rows if r[6] == "Annual"), 15)
         self.assertEqual(sum(1 for r in fbgrx_bench_rows if r[6] == "Quarterly"), 15)
+        self.assertEqual(sum(1 for r in nasdaq_bench_rows if r[6] == "Annual"), 15)
+        self.assertEqual(sum(1 for r in nasdaq_bench_rows if r[6] == "Quarterly"), 15)
+
+        # Total scenario rows: 360 active strategy + 120 benchmark = 480
+        self.assertEqual(len(scenario_rows), 480)
 
         # Verify active strategy rows exist for both Market Cap and Equal Weight (180 each = 360 total)
         strat_mc_rows = [r for r in scenario_rows if r[17] == "Strategy" and r[5] == "Market Cap"]
@@ -65,13 +72,13 @@ class TestScenarios(unittest.TestCase):
             self.assertIn(key, annual_data)
             self.assertGreater(len(annual_data[key]), 0)
 
-        # Matrix dimensions (12 combos: 2 Universes x 3 Benchmarks x 2 Frequencies)
-        # 31 years * 12 combos = 372 rows
-        self.assertEqual(len(annual_data["trajectory_matrix"]), 372)
+        # Matrix dimensions (16 combos: 2 Universes x 4 Benchmarks x 2 Frequencies)
+        # 31 years * 16 combos = 496 rows
+        self.assertEqual(len(annual_data["trajectory_matrix"]), 496)
         for row in annual_data["trajectory_matrix"]:
             self.assertEqual(len(row), 6)  # LookupKey, Year, Top3, Top5, Top10, Bench
 
-        self.assertEqual(len(annual_data["drawdown_matrix"]), 372)
+        self.assertEqual(len(annual_data["drawdown_matrix"]), 496)
         for row in annual_data["drawdown_matrix"]:
             self.assertEqual(len(row), 6)  # LookupKey, Year, Top3_DD, Top5_DD, Top10_DD, Bench_DD
 
@@ -96,9 +103,9 @@ class TestScenarios(unittest.TestCase):
         # Trajectories should have full 31 years (1994..2024)
         self.assertEqual(len(annual_data["trajectory_data"]), 31)
         self.assertEqual(len(annual_data["drawdown_data"]), 31)
-        # Single universe with 3 benchmarks x 2 frequencies = 31 * 6 = 186 rows
-        self.assertEqual(len(annual_data["trajectory_matrix"]), 186)
-        self.assertEqual(len(annual_data["drawdown_matrix"]), 186)
+        # Single universe with 4 benchmarks x 2 frequencies = 31 * 8 = 248 rows
+        self.assertEqual(len(annual_data["trajectory_matrix"]), 248)
+        self.assertEqual(len(annual_data["drawdown_matrix"]), 248)
         # 5 eras * 2 frequencies = 10 rows
         self.assertEqual(len(annual_data["era_matrix"]), 10)
 
@@ -136,6 +143,8 @@ class TestScenarios(unittest.TestCase):
         self.assertIn("active_results", grid)
         self.assertIn("spx_benchmarks", grid)
         self.assertIn("spx_q_benchmarks", grid)
+        self.assertIn("nasdaq_benchmarks", grid)
+        self.assertIn("nasdaq_q_benchmarks", grid)
         self.assertIn("res_30y_map", grid)
         self.assertIn("trades_30y_map", grid)
         self.assertGreater(len(grid["active_results"]), 0)
