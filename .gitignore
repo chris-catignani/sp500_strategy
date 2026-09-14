@@ -1,5 +1,6 @@
 # Superpowers and local agent work
 .superpowers/
+docs/superpowers/
 
 # Python bytecode and caches
 __pycache__/
@@ -39,3 +40,5 @@ Thumbs.db
 scratch/
 tmp/
 outputs/*.html
+outputs/*snapshot*/
+outputs/baseline_*.txt

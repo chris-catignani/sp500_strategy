@@ -62,6 +62,11 @@ def calculate_max_drawdown(series: Sequence[float]) -> float:
     Formula:
         max_dd = min_t ((V_t - peak_t) / peak_t)
 
+    Note:
+        Drawdown is evaluated across the discrete periodic observation dates supplied
+        in `series` (e.g. annual or quarterly rebalance dates), rather than continuous
+        intra-period daily peak/trough valuations.
+
     Args:
         series: Sequence of portfolio valuations ordered chronologically.
 
@@ -104,15 +109,20 @@ def calculate_turnover(entries: Sequence[AnnualLedgerEntry]) -> float:
 def calculate_tax_drag(cagr_pretax: float, cagr_aftertax: float) -> float:
     """Calculate the tax drag between pre-tax and after-tax annualized returns.
 
-    Formula:
-        cagr_pretax - cagr_aftertax
+    Standard definition:
+        tax_drag = cagr_pretax - cagr_aftertax
+
+    Measures the annualized performance reduction resulting from ongoing annual taxes
+    (annual dividend taxes and realized capital gains taxes during rebalancing).
+    For the terminal liquidation drag incurred upon fully unwinding remaining holdings
+    at horizon end, see `terminal_tax_drag` in `calculate_terminal_metrics()`.
 
     Args:
-        cagr_pretax: Compound annual growth rate before taxes.
-        cagr_aftertax: Compound annual growth rate after taxes.
+        cagr_pretax: Compound annual growth rate before taxes (pre-liquidation).
+        cagr_aftertax: Compound annual growth rate after taxes (pre-liquidation).
 
     Returns:
-        Tax drag as a float.
+        Annualized tax drag as a float.
     """
     return cagr_pretax - cagr_aftertax
 
@@ -245,7 +255,10 @@ def calculate_benchmark_annual_series(
         r_tr = (tr_curr - tr_prev) / tr_prev if tr_prev > 0.0 else 0.0
         yield_t = max(0.0, r_tr - r_pr)
 
-        r_annual = r_pr + yield_t * (1.0 - eff_tax_rate)
+        if eff_tax_rate == 0.0:
+            r_annual = r_tr
+        else:
+            r_annual = r_tr - yield_t * eff_tax_rate
         annual_returns.append(r_annual)
 
         gross_div = current_wealth * yield_t

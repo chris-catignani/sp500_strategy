@@ -12,6 +12,7 @@ def format_terminal_table(
     initial_capital: float = 10000.0,
     strategy_name: str = "market_cap",
     weight_by: str = "market_cap",
+    show_footnotes: bool = True,
 ) -> str:
     """Format strategy performance metrics into an ASCII comparison table.
 
@@ -21,6 +22,7 @@ def format_terminal_table(
         initial_capital: Starting capital.
         strategy_name: Selector name.
         weight_by: Weighting mode ('market_cap' or 'equal').
+        show_footnotes: Whether to append explanatory table footnotes.
 
     Returns:
         Formatted ASCII table string.
@@ -125,4 +127,7 @@ def format_terminal_table(
         lines.append(line_str)
 
     lines.append("=" * total_width)
+    if show_footnotes:
+        lines.append("  * Note: Max Drawdown is measured at discrete rebalance observation dates (annual/quarterly).")
+        lines.append("  * Note: Pre-Tax and After-Tax CAGRs reflect pre-liquidation wealth; Post-Liq CAGR reflects terminal liquidation.")
     return "\n".join(lines)
