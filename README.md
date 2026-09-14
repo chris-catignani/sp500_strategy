@@ -32,15 +32,16 @@ Here is how the system works together:
 - [How This Project Works: Python + Apps Script](#how-this-project-works-python-simulation--google-apps-script)
 - [Executive Summary & Strategy Logic](#executive-summary--strategy-logic)
 - [Two-Phase Rebalancing & Tax Model](#two-phase-rebalancing--tax-model)
-- [Methodology Note: Dividend Timing Convention](#methodology-note-dividend-timing-convention)
-- [Key Empirical Results (1994–2024)](#key-empirical-results-19942024)
+- [Methodology Note: Dividend Timing & Rebalancing Frequencies](#methodology-note-dividend-timing--rebalancing-frequencies)
 - [Financial Metrics & Acronym Guide](#financial-metrics--acronym-guide)
 - [Getting Started](#getting-started)
 - [CLI Runner Usage](#cli-runner-usage)
 - [Extensibility: Adding Custom Selectors](#extensibility-adding-custom-selectors)
 - [Google Sheets Integration Guide](#google-sheets-integration-guide)
 - [Running Unit Tests](#running-unit-tests)
+- [Historical Data Sources & Provenance](#historical-data-sources--provenance)
 - [License](#license)
+
 
 ---
 
@@ -89,50 +90,25 @@ For full mathematical derivations, sequence diagrams, and tax-loss carryforward 
 > 2. Cash dividends are pooled into available cash prior to rebalancing, preserving the zero-external-dependency, self-financing invariant ($C \ge 0$) without margin debt.
 > 3. Dividend income is taxed in the exact period earned at marginal rate $\tau$, decoupled from capital gains under IRS rules.
 
----
-
-## Key Empirical Results (1994–2024)
-
-*Baseline: \$10,000 Initial Capital | 30% Capital Gains & Dividend Tax Rate*
-
-| Horizon | Strategy | Pre-Tax CAGR (Annual) | After-Tax CAGR (Annual) | Post-Liq CAGR (Annual) | Total Return (Cumulative) | Max Drawdown (Worst Drop) | Tax Drag (Annual) | Alpha vs SPX (Annual) |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **10-Year** (2014–2024) | **Top 3** | **28.02%** | **25.54%** | **22.92%** | **+687.61%** | -31.04% | 5.10% | **+13.37%** |
-| | Top 5 | 23.50% | 21.47% | 18.96% | +467.42% | -36.76% | 4.55% | +9.40% |
-| | Top 10 | 21.53% | 19.39% | 17.13% | +385.96% | -33.55% | 4.40% | +7.58% |
-| | S&P 500 Index | 12.24% | 11.89% | 9.55% | +149.02% | -18.68% | 2.69% | *Benchmark* |
-| **20-Year** (2004–2024) | **Top 3** | **17.30%** | **15.49%** | **14.24%** | **+1,334.18%** | -39.56% | 3.06% | **+6.52%** |
-| | Top 5 | 15.41% | 13.69% | 12.47% | +949.41% | -36.76% | 2.93% | +4.75% |
-| | Top 10 | 14.50% | 12.69% | 11.59% | +796.31% | -33.55% | 2.91% | +3.87% |
-| | S&P 500 Index | 9.53% | 9.14% | 7.72% | +342.65% | -37.04% | 1.81% | *Benchmark* |
-| **30-Year** (1994–2024) | **Top 3** | **15.18%** | **13.20%** | **12.38%** | **+3,220.82%** | -56.50% | 2.79% | **+3.75%** |
-| | Top 5 | 14.95% | 12.85% | 12.04% | +2,932.26% | -54.82% | 2.91% | +3.41% |
-| | Top 10 | 14.74% | 12.58% | 11.85% | +2,778.09% | -40.32% | 2.89% | +3.21% |
-| | S&P 500 Index | 10.11% | 9.74% | 8.64% | +1,100.36% | -38.64% | 1.47% | *Benchmark* |
-
-*Note: Total Return (Cumulative) reflects true post-liquidation net wealth for both strategy and benchmark under the baseline 30% tax rate.*
-
----
-
 ## Financial Metrics & Acronym Guide
 
 Every metric reported in the CLI, CSV files, and Google Sheets dashboard is defined below, including whether it represents an **annualized rate** or a **total cumulative return**:
 
-| Metric | Frequency | Plain-English Definition | Example |
+| Metric | Frequency | Plain-English Definition | Interpretation & Context |
 | :--- | :---: | :--- | :--- |
-| **CAGR** *(Compound Annual Growth Rate)* | **Annual** | The smoothed annual return your money grew each year, assuming steady compound interest. It answers: *"What constant annual return would turn my starting capital into my ending wealth?"* | A 10-year CAGR of 25.54% means your portfolio grew at an effective pace of 25.54% per year. |
-| **Pre-Tax CAGR** | **Annual** | Annual compounded growth before deducting any taxes on rebalancing gains and dividends. | 28.02% / year (Top 3, 10y) |
-| **After-Tax CAGR** | **Annual** | Annual compounded growth of your live portfolio after paying annual taxes on dividends and net realized capital gains. | 25.54% / year (Top 3, 10y) |
-| **Post-Liquidation CAGR** | **Annual** | True net "walk-away" annual return assuming you sell 100% of remaining holdings at the end of the horizon and pay all final taxes on unrealized gains. | 22.92% / year (Top 3, 10y) |
-| **Cumulative Return** | **Total** | The complete percentage gain over the entire 10, 20, or 30 year horizon. | **+872.37%** over 10 years means $\$10,000$ turned into $\$97,237$ total. |
-| **Alpha vs S&P 500** | **Annual** | The excess annual return earned above the dynamic after-tax S&P 500 Total Return benchmark. | An alpha of **+13.37%** means beating the benchmark by 13.37% each year. |
-| **Tax Drag** | **Annual** | The annual percentage of return lost to taxes each year. Calculated as $\text{Pre-Tax CAGR} - \text{Post-Liquidation CAGR}$. | A tax drag of 5.10% means taxes reduced annual compounding from 28.02% to 22.92%. |
-| **Max Drawdown** | **Total** | The worst peak-to-trough decline during market crashes before recovering to new highs. | -36.76% drop during the 2022 bear market. |
-| **Total Dividends Received** | **Total** | Cumulative gross dollar dividends credited to the portfolio from constituent holdings. | $\$1,245.50$ in dividends received over the horizon. |
-| **Dividend Tax Paid** | **Annual** | Annual tax paid on gross dividend distributions ($\text{Div} \times \tau$). Per IRS rules, dividends cannot be offset by capital loss carryforwards. | Taxed annually at rate $\tau$. |
-| **Capital Gains Tax Paid** | **Annual** | Annual tax paid on net realized capital gains after FIFO lot depletion and loss carryforward offsets. | Taxed annually at rate $\tau$. |
-| **SPX / `^GSPC`** | *Index* | The standard ticker symbol for the S&P 500 Price Return Index. | Historical price levels |
-| **`^SP500TR`** | *Index* | The standard ticker symbol for the S&P 500 Total Return Index (reinvested gross dividends). | Total return benchmark |
+| **CAGR** *(Compound Annual Growth Rate)* | **Annual** | The smoothed annual return your money grew each year, assuming steady compound interest. It answers: *"What constant annual return would turn my starting capital into my ending wealth?"* | Geometric mean growth rate per annum over the investment horizon. |
+| **Pre-Tax CAGR** | **Annual** | Annual compounded growth before deducting any taxes on rebalancing gains and dividends. | Compound annual return before deducting any annual taxes. |
+| **After-Tax CAGR** | **Annual** | Annual compounded growth of your live portfolio after paying annual taxes on dividends and net realized capital gains. | Compound annual return net of annual dividend and capital gains taxes. |
+| **Post-Liquidation CAGR** | **Annual** | True net "walk-away" annual return assuming you sell 100% of remaining holdings at the end of the horizon and pay all final taxes on unrealized gains. | Walk-away annual return after paying all terminal liquidation taxes. |
+| **Cumulative Return** | **Total** | The complete percentage gain over the entire 10, 20, or 30 year horizon. | Overall percentage growth from starting capital to ending equity. |
+| **Alpha vs S&P 500** | **Annual** | The excess annual return earned above the dynamic after-tax S&P 500 Total Return benchmark. | Annualized excess return relative to the after-tax benchmark. |
+| **Tax Drag** | **Annual** | The annual percentage of return lost to taxes each year. Calculated as $\text{Pre-Tax CAGR} - \text{Post-Liquidation CAGR}$. | Annual compounding performance reduced by taxation. |
+| **Max Drawdown** | **Total** | The worst peak-to-trough decline during market crashes before recovering to new highs. | Measured across discrete periodic observation dates. |
+| **Total Dividends Received** | **Total** | Cumulative gross dollar dividends credited to the portfolio from constituent holdings. | Total cash distributions pooled prior to rebalancing. |
+| **Dividend Tax Paid** | **Annual** | Annual tax paid on gross dividend distributions ($\text{Div} \times \tau$). Per IRS rules, dividends cannot be offset by capital loss carryforwards. | Taxed periodically at marginal rate $\tau$. |
+| **Capital Gains Tax Paid** | **Annual** | Annual tax paid on net realized capital gains after FIFO lot depletion and loss carryforward offsets. | Taxed periodically at capital gains rate $\tau$. |
+| **SPX / `^GSPC`** | *Index* | The standard ticker symbol for the S&P 500 Price Return Index. | Historical benchmark price level |
+| **`^SP500TR`** | *Index* | The standard ticker symbol for the S&P 500 Total Return Index (reinvested gross dividends). | Total return benchmark series |
 
 ---
 
@@ -323,7 +299,7 @@ python3 -m unittest tests/test_rebalancing.py
 python3 -m unittest tests/test_exporters.py
 ```
 
-All 126 tests execute in ~1.4 seconds with 100% test pass rate.
+All unit tests pass with zero external dependencies.
 
 ---
 
