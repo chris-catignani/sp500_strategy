@@ -83,15 +83,51 @@ class FIFOTaxLotManager:
         """Return a copy of active lots for a given ticker."""
         return list(self.lots.get(ticker, []))
 
-    def adjust_basis_ratio(self, ticker: str, ratio: float) -> None:
-        """Adjust cost basis per share (purchase_price) of all open lots following a corporate spinoff."""
+    def adjust_basis_ratio(
+        self, ticker: str, ratio: float, gross_proceeds: Optional[float] = None
+    ) -> float:
+        """Adjust cost basis per share (purchase_price) of all open lots following a corporate spinoff,
+        and optionally realize capital gain/loss on the liquidated child shares.
+
+        Under IRC Section 358, the cost basis of the parent shares is apportioned between
+        the parent and the spun-off child shares based on relative fair market value:
+            Parent Basis = Prior Basis * ratio
+            Child Basis = Prior Basis * (1.0 - ratio)
+
+        When the child shares are immediately liquidated for gross_proceeds (IRC Section 1001):
+            Realized Gain = gross_proceeds - Child Basis
+
+        Args:
+            ticker: Stock ticker symbol of the parent company.
+            ratio: Basis retention ratio for the parent stock in (0.0, 1.0].
+            gross_proceeds: Total cash proceeds received from selling the spun-off child shares.
+                            If provided, computes and records the realized capital gain/loss.
+
+        Returns:
+            Realized capital gain/loss on the liquidated child shares (0.0 if gross_proceeds is None).
+        """
         if not (0.0 < ratio <= 1.0):
             raise ValueError(f"Invalid basis retention ratio: {ratio}. Must be in (0.0, 1.0].")
         if ratio == 1.0:
-            return
+            if gross_proceeds is not None and gross_proceeds > 0.0:
+                self.current_annual_realized_gain += gross_proceeds
+                return gross_proceeds
+            return 0.0
+
+        child_basis = 0.0
         if ticker in self.lots:
             for lot in self.lots[ticker]:
-                lot.purchase_price = round(lot.purchase_price * ratio, 4)
+                old_price = lot.purchase_price
+                new_price = round(old_price * ratio, 4)
+                child_basis += lot.shares * (old_price - new_price)
+                lot.purchase_price = new_price
+
+        if gross_proceeds is not None:
+            child_realized_gain = gross_proceeds - child_basis
+            self.current_annual_realized_gain += child_realized_gain
+            return child_realized_gain
+
+        return 0.0
 
     def sell_shares(
         self,

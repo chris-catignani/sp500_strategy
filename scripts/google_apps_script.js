@@ -490,7 +490,7 @@ function buildExecutiveSummarySheet(ss) {
   // Card 1: Selected Strategy Final Wealth (Cols A-C)
   sheet.getRange('A5:C5').merge().setFormula('=$D$2 & " (" & $F$2 & ") Final Wealth (" & $H$2 & ")"').setFontWeight('bold').setFontSize(10).setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('A6:C6').merge().setFormula('=IFERROR(INDEX(\'Scenario Data\'!$L:$L, MATCH(' + stratKeyExpr + ', \'Scenario Data\'!$A:$A, 0)), 0)').setFontWeight('bold').setFontSize(14).setFontColor('#22543D').setNumberFormat('$#,##0.00').setHorizontalAlignment('center').setVerticalAlignment('middle');
-  sheet.getRange('A7:C7').merge().setFormula('="After all taxes (" & TEXT($H$3, "$#,##0") & " start)"').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
+  sheet.getRange('A7:C7').merge().setFormula('="Pre-liquidation after-tax (" & TEXT($H$3, "$#,##0") & " start)"').setFontSize(9).setFontColor('#718096').setHorizontalAlignment('center').setVerticalAlignment('middle');
   sheet.getRange('A5:C7').setBackground('#E6FFFA').setBorder(true, true, true, true, false, false, '#B2F5EA', SpreadsheetApp.BorderStyle.SOLID);
 
   // Card 2: Selected Benchmark Wealth (Cols D-F)

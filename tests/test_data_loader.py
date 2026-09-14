@@ -189,7 +189,7 @@ class TestDataLoader(unittest.TestCase):
                 )
 
     def test_total_return_consistency(self):
-        """Verify trailing_1y_return in year t equals (P_t - P_{t-1} + Div_t) / P_{t-1} when price at t-1 exists."""
+        """Verify trailing_1y_return in year t equals (P_t - P_{t-1} + Div_t + Spinoff_t) / P_{t-1} when price at t-1 exists."""
         for year in range(1995, 2025):
             universe = self.loader.load_universe(year)
             for c in universe:
@@ -199,7 +199,8 @@ class TestDataLoader(unittest.TestCase):
                     continue
                 p_curr = self.loader.get_price(c.ticker, year)
                 div = self.loader.get_dividend(c.ticker, year)
-                expected_return = (p_curr - p_prev + div) / p_prev
+                spinoff_dist, _ = self.loader.get_spinoff_distribution(c.ticker, year)
+                expected_return = (p_curr - p_prev + div + spinoff_dist) / p_prev
                 self.assertAlmostEqual(
                     c.trailing_1y_return,
                     expected_return,
@@ -208,7 +209,7 @@ class TestDataLoader(unittest.TestCase):
                 )
 
     def test_quarterly_total_return_consistency(self):
-        """Verify quarterly trailing_1y_return equals trailing 4-quarter total return."""
+        """Verify quarterly trailing_1y_return equals trailing 4-quarter total return including dividends and spinoffs."""
         for year in range(1995, 2025):
             for q in (1, 2, 3, 4):
                 universe = self.loader.load_quarterly_universe(year, q)
@@ -219,10 +220,15 @@ class TestDataLoader(unittest.TestCase):
                         continue
                     p_curr = self.loader.get_quarterly_price(c.ticker, year, q)
                     divs = 0.0
+                    spinoff_dists = 0.0
                     for offset in range(4):
                         tot_q = year * 4 + (q - 1) - offset
-                        divs += self.loader.get_quarterly_dividend(c.ticker, tot_q // 4, (tot_q % 4) + 1)
-                    expected_return = (p_curr - p_prev + divs) / p_prev
+                        q_y = tot_q // 4
+                        q_num = (tot_q % 4) + 1
+                        divs += self.loader.get_quarterly_dividend(c.ticker, q_y, q_num)
+                        sp_dist, _ = self.loader.get_quarterly_spinoff_distribution(c.ticker, q_y, q_num)
+                        spinoff_dists += sp_dist
+                    expected_return = (p_curr - p_prev + divs + spinoff_dists) / p_prev
                     self.assertAlmostEqual(
                         c.trailing_1y_return,
                         expected_return,

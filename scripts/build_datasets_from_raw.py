@@ -221,6 +221,7 @@ def build_quarterly_constituents(
     benchmark_key: str,
     name_map: Dict[str, str],
     quarterly_dividends: Optional[Dict[str, Dict[str, float]]] = None,
+    quarterly_spinoffs: Optional[Dict[str, Dict[str, float]]] = None,
 ) -> Dict[str, List[dict]]:
     """Build quarterly point-in-time constituent lists.
 
@@ -263,7 +264,8 @@ def build_quarterly_constituents(
                     drifted_w = base_w_map[t]
 
                 t_divs = quarterly_dividends.get(t, {}) if quarterly_dividends else {}
-                div_1y = sum(t_divs.get(qk, 0.0) for qk in q_trailing_keys)
+                t_spinoffs = quarterly_spinoffs.get(t, {}) if quarterly_spinoffs else {}
+                div_1y = sum(t_divs.get(qk, 0.0) for qk in q_trailing_keys) + sum(t_spinoffs.get(qk, 0.0) for qk in q_trailing_keys)
 
                 if p_curr is not None and p_1y_prior is not None and p_1y_prior > 0:
                     ret_1y = round((p_curr - p_1y_prior + div_1y) / p_1y_prior, 4)
@@ -293,7 +295,8 @@ def build_quarterly_constituents(
             p_curr = t_prices.get(q4_key)
             p_1y_prior = t_prices.get(f"{year - 1}-Q4")
             t_divs = quarterly_dividends.get(t, {}) if quarterly_dividends else {}
-            div_1y = sum(t_divs.get(qk, 0.0) for qk in q4_trailing_keys)
+            t_spinoffs = quarterly_spinoffs.get(t, {}) if quarterly_spinoffs else {}
+            div_1y = sum(t_divs.get(qk, 0.0) for qk in q4_trailing_keys) + sum(t_spinoffs.get(qk, 0.0) for qk in q4_trailing_keys)
             ret_1y = (
                 round((p_curr - p_1y_prior + div_1y) / p_1y_prior, 4)
                 if (p_curr is not None and p_1y_prior is not None and p_1y_prior > 0)
@@ -402,40 +405,40 @@ def main():
             if not t_corp_file.exists():
                 raise FileNotFoundError(f"Missing required historical decoupled series: {t_corp_file}")
             t_corp_chart = load_raw_chart(t_corp_file)
-                t_corp_prices = extract_year_end_closes(t_corp_chart)
-                t_corp_divs = extract_annual_dividends(t_corp_chart)
-                t_corp_q_prices = extract_quarterly_closes(t_corp_chart)
-                t_corp_q_divs = extract_quarterly_dividends(t_corp_chart)
+            t_corp_prices = extract_year_end_closes(t_corp_chart)
+            t_corp_divs = extract_annual_dividends(t_corp_chart)
+            t_corp_q_prices = extract_quarterly_closes(t_corp_chart)
+            t_corp_q_divs = extract_quarterly_dividends(t_corp_chart)
 
-                # Strip pre-1999 SBC data so pre-1999 strictly originates from T_CORP_HISTORICAL
-                ticker_prices = {k: v for k, v in ticker_prices.items() if int(k) > 1998}
-                ticker_divs = {k: v for k, v in ticker_divs.items() if int(k) > 1998}
-                ticker_q_prices = {k: v for k, v in ticker_q_prices.items() if int(k.split("-")[0]) > 1998}
-                ticker_q_divs = {k: v for k, v in ticker_q_divs.items() if int(k.split("-")[0]) > 1998}
+            # Strip pre-1999 SBC data so pre-1999 strictly originates from T_CORP_HISTORICAL
+            ticker_prices = {k: v for k, v in ticker_prices.items() if int(k) > 1998}
+            ticker_divs = {k: v for k, v in ticker_divs.items() if int(k) > 1998}
+            ticker_q_prices = {k: v for k, v in ticker_q_prices.items() if int(k.split("-")[0]) > 1998}
+            ticker_q_divs = {k: v for k, v in ticker_q_divs.items() if int(k.split("-")[0]) > 1998}
 
-                for yr_str, price in t_corp_prices.items():
-                    if int(yr_str) <= 1998:
-                        ticker_prices[yr_str] = price
+            for yr_str, price in t_corp_prices.items():
+                if int(yr_str) <= 1998:
+                    ticker_prices[yr_str] = price
 
-                for yr_str, div in t_corp_divs.items():
-                    if int(yr_str) <= 1998:
-                        ticker_divs[yr_str] = div
+            for yr_str, div in t_corp_divs.items():
+                if int(yr_str) <= 1998:
+                    ticker_divs[yr_str] = div
 
-                for q_key, q_price in t_corp_q_prices.items():
-                    q_yr = int(q_key.split("-")[0])
-                    if q_yr <= 1998:
-                        ticker_q_prices[q_key] = q_price
+            for q_key, q_price in t_corp_q_prices.items():
+                q_yr = int(q_key.split("-")[0])
+                if q_yr <= 1998:
+                    ticker_q_prices[q_key] = q_price
 
-                for q_key, q_div in t_corp_q_divs.items():
-                    q_yr = int(q_key.split("-")[0])
-                    if q_yr <= 1998:
-                        ticker_q_divs[q_key] = q_div
+            for q_key, q_div in t_corp_q_divs.items():
+                q_yr = int(q_key.split("-")[0])
+                if q_yr <= 1998:
+                    ticker_q_divs[q_key] = q_div
 
-                # Keep chronological key ordering
-                ticker_prices = dict(sorted(ticker_prices.items(), key=lambda x: int(x[0])))
-                ticker_divs = dict(sorted(ticker_divs.items(), key=lambda x: int(x[0])))
-                ticker_q_prices = dict(sorted(ticker_q_prices.items()))
-                ticker_q_divs = dict(sorted(ticker_q_divs.items()))
+            # Keep chronological key ordering
+            ticker_prices = dict(sorted(ticker_prices.items(), key=lambda x: int(x[0])))
+            ticker_divs = dict(sorted(ticker_divs.items(), key=lambda x: int(x[0])))
+            ticker_q_prices = dict(sorted(ticker_q_prices.items()))
+            ticker_q_divs = dict(sorted(ticker_q_divs.items()))
 
         all_prices_data[ticker] = ticker_prices
         all_dividends_data[ticker] = ticker_divs
@@ -443,6 +446,25 @@ def main():
         all_quarterly_dividends_data[ticker] = ticker_q_divs
 
     print(f"Processed prices and dividends for {len(NAMES)} tickers ({len(SP500_NAMES)} SP500, {len(NON_US_NAMES)} Non-US).")
+
+    # Load raw spinoff distributions for total return calculations
+    all_quarterly_spinoffs: Dict[str, Dict[str, float]] = {}
+    all_annual_spinoffs: Dict[str, Dict[int, float]] = {}
+    spinoffs_raw = RAW_DIR / "corporate_actions" / "spinoffs.json"
+    spinoffs_data = {}
+    if spinoffs_raw.exists():
+        with open(spinoffs_raw, "r", encoding="utf-8") as f:
+            spinoffs_data = json.load(f)
+        for t, events in spinoffs_data.items():
+            all_quarterly_spinoffs[t] = {}
+            all_annual_spinoffs[t] = {}
+            for ev in events:
+                y = int(ev["year"])
+                q = int(ev["quarter"])
+                d = float(ev["distribution_per_share"])
+                q_key = f"{y}-Q{q}"
+                all_quarterly_spinoffs[t][q_key] = all_quarterly_spinoffs[t].get(q_key, 0.0) + d
+                all_annual_spinoffs[t][y] = all_annual_spinoffs[t].get(y, 0.0) + d
 
     # 3. Build S&P 500 constituents
     sp500_constituents: Dict[str, List[dict]] = {}
@@ -458,7 +480,8 @@ def main():
             p_curr = all_prices_data[ticker][str_year]
             p_prev = all_prices_data[ticker][str(year - 1)]
             div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
-            ret_1y = round((p_curr - p_prev + div) / p_prev, 4) if p_prev > 0 else 0.0
+            spinoff_dist = all_annual_spinoffs.get(ticker, {}).get(year, 0.0)
+            ret_1y = round((p_curr - p_prev + div + spinoff_dist) / p_prev, 4) if p_prev > 0 else 0.0
 
             c_list.append({
                 "ticker": ticker,
@@ -483,7 +506,8 @@ def main():
             p_curr = all_prices_data[ticker][str_year]
             p_prev = all_prices_data[ticker][str(year - 1)]
             div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
-            ret_1y = round((p_curr - p_prev + div) / p_prev, 4) if p_prev > 0 else 0.0
+            spinoff_dist = all_annual_spinoffs.get(ticker, {}).get(year, 0.0)
+            ret_1y = round((p_curr - p_prev + div + spinoff_dist) / p_prev, 4) if p_prev > 0 else 0.0
 
             c_list.append({
                 "ticker": ticker,
@@ -502,6 +526,7 @@ def main():
         "^GSPC",
         SP500_NAMES,
         all_quarterly_dividends_data,
+        all_quarterly_spinoffs,
     )
     world_quarterly_constituents = build_quarterly_constituents(
         WORLD_YEAR_CONSTITUENTS,
@@ -510,6 +535,7 @@ def main():
         "^GSPC",
         NAMES,
         all_quarterly_dividends_data,
+        all_quarterly_spinoffs,
     )
 
     # 6. Build S&P 500 subsets for exact backward compatibility
