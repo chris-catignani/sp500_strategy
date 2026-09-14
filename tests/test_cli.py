@@ -366,7 +366,16 @@ class TestCLI(unittest.TestCase):
         args_default = parser.parse_args([])
         self.assertEqual(args_default.benchmark, "all")
 
-        for bmk_choice in ("all", "sp500", "msci_world", "fbgrx"):
+        for bmk_choice in (
+            "all",
+            "sp500",
+            "msci_world",
+            "fbgrx",
+            "nasdaq_100",
+            "nasdaq 100",
+            "nasdaq100",
+            "qqq",
+        ):
             args = parser.parse_args(["--benchmark", bmk_choice])
             self.assertEqual(args.benchmark, bmk_choice)
 
@@ -397,6 +406,82 @@ class TestCLI(unittest.TestCase):
         with open(summary_path, "r", encoding="utf-8") as f:
             summary_content = f.read()
             self.assertIn("FBGRX", summary_content)
+
+    def test_run_backtest_benchmark_nasdaq_integration(self):
+        """Test programmatic execution with Nasdaq 100 benchmark filtering."""
+        import run_backtest
+
+        parser = run_backtest.build_parser()
+        args = parser.parse_args(
+            [
+                "--strategy", "market_cap",
+                "--benchmark", "nasdaq_100",
+                "--tax-rate", "0.30",
+                "--initial-capital", "10000.0",
+                "--output-dir", self.output_dir,
+                "--scripts-dir", self.scripts_dir,
+                "--horizons", "10y",
+                "--n", "3",
+                "--quiet",
+            ]
+        )
+
+        exit_code = run_backtest.run_backtest(args)
+        self.assertEqual(exit_code, 0)
+
+        summary_path = os.path.join(self.output_dir, "summary_metrics.csv")
+        self.assertTrue(os.path.exists(summary_path))
+        with open(summary_path, "r", encoding="utf-8") as f:
+            summary_content = f.read()
+            self.assertIn("Nasdaq 100", summary_content)
+
+    def test_run_backtest_benchmark_nasdaq_100_subprocess(self):
+        """Test running CLI via subprocess with --benchmark nasdaq_100."""
+        cmd = [
+            sys.executable,
+            "run_backtest.py",
+            "--benchmark", "nasdaq_100",
+            "--horizons", "10y",
+            "--n", "3",
+            "--universes", "sp500",
+            "--output-dir", self.output_dir,
+            "--scripts-dir", self.scripts_dir,
+        ]
+        res = subprocess.run(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        self.assertEqual(res.returncode, 0)
+        self.assertTrue(len(res.stdout) > 0)
+        self.assertIn("Nasdaq 100", res.stdout)
+        self.assertNotIn("FBGRX", res.stdout)
+        self.assertNotIn("MSCI World", res.stdout)
+
+    def test_run_backtest_benchmark_qqq_subprocess(self):
+        """Test running CLI via subprocess with --benchmark qqq."""
+        cmd = [
+            sys.executable,
+            "run_backtest.py",
+            "--benchmark", "qqq",
+            "--horizons", "10y",
+            "--n", "3",
+            "--universes", "sp500",
+            "--output-dir", self.output_dir,
+            "--scripts-dir", self.scripts_dir,
+        ]
+        res = subprocess.run(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        self.assertEqual(res.returncode, 0)
+        self.assertTrue(len(res.stdout) > 0)
+        self.assertIn("Nasdaq 100", res.stdout)
+        self.assertNotIn("FBGRX", res.stdout)
+        self.assertNotIn("MSCI World", res.stdout)
 
 
 if __name__ == "__main__":
