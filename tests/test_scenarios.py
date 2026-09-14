@@ -82,10 +82,17 @@ class TestScenarios(unittest.TestCase):
         for row in annual_data["drawdown_matrix"]:
             self.assertEqual(len(row), 6)  # LookupKey, Year, Top3_DD, Top5_DD, Top10_DD, Bench_DD
 
-        # 5 eras * 4 combos = 20 rows
-        self.assertEqual(len(annual_data["era_matrix"]), 20)
+        # 5 eras * 16 combos (2 Universes x 4 Benchmarks x 2 Frequencies) = 80 rows
+        self.assertEqual(len(annual_data["era_matrix"]), 80)
         for row in annual_data["era_matrix"]:
             self.assertEqual(len(row), 9)  # LookupKey, Era, Context, Top3, Top5, Top10, Bench, Alpha, WinRate
+
+        era_keys = {row[0] for row in annual_data["era_matrix"]}
+        for b in ["S&P 500", "MSCI World", "FBGRX", "Nasdaq 100"]:
+            self.assertIn(f"S&P 500_{b}_Annual", era_keys)
+            self.assertIn(f"S&P 500_{b}_Quarterly", era_keys)
+            self.assertIn(f"All World_{b}_Annual", era_keys)
+            self.assertIn(f"All World_{b}_Quarterly", era_keys)
 
         # Trades data checks
         self.assertIsInstance(trades_data, list)
@@ -106,8 +113,9 @@ class TestScenarios(unittest.TestCase):
         # Single universe with 4 benchmarks x 2 frequencies = 31 * 8 = 248 rows
         self.assertEqual(len(annual_data["trajectory_matrix"]), 248)
         self.assertEqual(len(annual_data["drawdown_matrix"]), 248)
-        # 5 eras * 2 frequencies = 10 rows
-        self.assertEqual(len(annual_data["era_matrix"]), 10)
+        # 5 eras * 8 combos (1 Universe x 4 Benchmarks x 2 Frequencies) = 40 rows
+        self.assertEqual(len(annual_data["era_matrix"]), 40)
+        self.assertEqual(len(annual_data["era_data"]), 5)
 
     def test_build_default_scenario_data_helper(self):
         """Verify backward-compatible build_default_scenario_data dictionary contract."""

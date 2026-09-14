@@ -1038,67 +1038,45 @@ def format_apps_script_payloads(
 
     era_matrix: List[List[Any]] = []
     era_rows: List[List[Any]] = []
+    era_benchmarks = ["S&P 500", "MSCI World", "FBGRX", "Nasdaq 100"]
 
     for u in universes:
         u_label = "S&P 500" if u == "sp500" else "All World"
-        for f_key in ("annual", "quarterly"):
-            f_label = "Annual" if f_key == "annual" else "Quarterly"
-            lookup_key = f"{u_label}_{f_label}"
-            t3_p = pretax_cache.get((u, 3, "market_cap", f_key, 1994, 2024))
-            t5_p = pretax_cache.get((u, 5, "market_cap", f_key, 1994, 2024))
-            t10_p = pretax_cache.get((u, 10, "market_cap", f_key, 1994, 2024))
+        for bmk_label in era_benchmarks:
+            for f_key in ("annual", "quarterly"):
+                f_label = "Annual" if f_key == "annual" else "Quarterly"
+                lookup_key = f"{u_label}_{bmk_label}_{f_label}"
+                t3_p = pretax_cache.get((u, 3, "market_cap", f_key, 1994, 2024))
+                t5_p = pretax_cache.get((u, 5, "market_cap", f_key, 1994, 2024))
+                t10_p = pretax_cache.get((u, 10, "market_cap", f_key, 1994, 2024))
 
-            bench_annual_rets: Dict[int, float] = {}
-            if u == "sp500":
+                bench_annual_rets: Dict[int, float] = {}
                 if f_key == "annual":
                     for y in range(1995, 2025):
-                        tr_now = data_loader.get_spx_tr_level(y)
-                        tr_prev = data_loader.get_spx_tr_level(y - 1)
+                        tr_now = data_loader.get_benchmark_tr_level(bmk_label, y)
+                        tr_prev = data_loader.get_benchmark_tr_level(bmk_label, y - 1)
                         bench_annual_rets[y] = (tr_now - tr_prev) / tr_prev
                 else:
                     for y in range(1995, 2025):
-                        tr_now = data_loader.get_spx_tr_quarterly_level(y, 4)
-                        tr_prev = data_loader.get_spx_tr_quarterly_level(y - 1, 4)
-                        bench_annual_rets[y] = (tr_now - tr_prev) / tr_prev
-            else:
-                if f_key == "annual":
-                    for y in range(1995, 2025):
-                        tr_now = data_loader.get_msci_world_tr_level(y)
-                        tr_prev = data_loader.get_msci_world_tr_level(y - 1)
-                        bench_annual_rets[y] = (tr_now - tr_prev) / tr_prev
-                else:
-                    for y in range(1995, 2025):
-                        tr_now = data_loader.get_msci_world_tr_quarterly_level(y, 4)
-                        tr_prev = data_loader.get_msci_world_tr_quarterly_level(y - 1, 4)
+                        tr_now = data_loader.get_benchmark_quarterly_tr_level(bmk_label, y, 4)
+                        tr_prev = data_loader.get_benchmark_quarterly_tr_level(bmk_label, y - 1, 4)
                         bench_annual_rets[y] = (tr_now - tr_prev) / tr_prev
 
-            if t3_p and t5_p and t10_p:
-                for label, sy, ey, desc in eras:
-                    ny = ey - sy + 1
-                    t3_sub = [e.gross_return for e in t3_p.annual_history if sy <= e.year <= ey]
-                    t5_sub = [e.gross_return for e in t5_p.annual_history if sy <= e.year <= ey]
-                    t10_sub = [e.gross_return for e in t10_p.annual_history if sy <= e.year <= ey]
-                    bench_sub = [bench_annual_rets.get(y, 0.0) for y in range(sy, ey + 1)]
+                if t3_p and t5_p and t10_p:
+                    for label, sy, ey, desc in eras:
+                        ny = ey - sy + 1
+                        t3_sub = [e.gross_return for e in t3_p.annual_history if sy <= e.year <= ey]
+                        t5_sub = [e.gross_return for e in t5_p.annual_history if sy <= e.year <= ey]
+                        t10_sub = [e.gross_return for e in t10_p.annual_history if sy <= e.year <= ey]
+                        bench_sub = [bench_annual_rets.get(y, 0.0) for y in range(sy, ey + 1)]
 
-                    c3, c5, c10, cbench = _cagr(t3_sub), _cagr(t5_sub), _cagr(t10_sub), _cagr(bench_sub)
-                    wins10 = sum(1 for a, b in zip(t10_sub, bench_sub) if a > b)
-                    win_rate = wins10 / ny if ny > 0 else 0.0
-                    alpha10 = c10 - cbench
+                        c3, c5, c10, cbench = _cagr(t3_sub), _cagr(t5_sub), _cagr(t10_sub), _cagr(bench_sub)
+                        wins10 = sum(1 for a, b in zip(t10_sub, bench_sub) if a > b)
+                        win_rate = wins10 / ny if ny > 0 else 0.0
+                        alpha10 = c10 - cbench
 
-                    era_matrix.append([
-                        lookup_key,
-                        label,
-                        desc,
-                        round(c3, 6),
-                        round(c5, 6),
-                        round(c10, 6),
-                        round(cbench, 6),
-                        round(alpha10, 6),
-                        round(win_rate, 4),
-                    ])
-
-                    if u == "sp500" and f_key == "annual":
-                        era_rows.append([
+                        era_matrix.append([
+                            lookup_key,
                             label,
                             desc,
                             round(c3, 6),
@@ -1108,6 +1086,18 @@ def format_apps_script_payloads(
                             round(alpha10, 6),
                             round(win_rate, 4),
                         ])
+
+                        if (u == "sp500" or u == universes[0]) and bmk_label == "S&P 500" and f_key == "annual" and len(era_rows) < 5:
+                            era_rows.append([
+                                label,
+                                desc,
+                                round(c3, 6),
+                                round(c5, 6),
+                                round(c10, 6),
+                                round(cbench, 6),
+                                round(alpha10, 6),
+                                round(win_rate, 4),
+                            ])
 
     # 30-Year Wealth Accumulation & Drawdown Trajectories (After-Tax 30% Baseline)
     years_30y = list(range(1994, 2025))

@@ -56,8 +56,8 @@ function buildPerformanceAndTradeoffsSheet(ss) {
   sheet.getRange('C5').setValue('Top 3 CAGR');
   sheet.getRange('D5').setValue('Top 5 CAGR');
   sheet.getRange('E5').setValue('Top 10 CAGR');
-  sheet.getRange('F5').setFormula('="Benchmark (" & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "S&P 500") & ") CAGR"');
-  sheet.getRange('G5').setFormula('="Top 10 Alpha vs " & IF(\'Executive Summary\'!$B$2="All World", "MSCI World", "SPX")');
+  sheet.getRange('F5').setFormula('="Benchmark (" & \'Executive Summary\'!$D$3 & ") CAGR"');
+  sheet.getRange('G5').setFormula('="Top 10 Alpha vs " & \'Executive Summary\'!$D$3');
   sheet.getRange('H5').setValue('Top 10 Win Rate');
   sheet.getRange('A5:H5')
        .setBackground('#2B6CB0')
@@ -69,7 +69,7 @@ function buildPerformanceAndTradeoffsSheet(ss) {
 
   // Spilled Data via FILTER formula in A6 (Rows 6 to 10)
   sheet.getRange('A6').setFormula(
-    '=IFERROR(FILTER(\'Scenario Data\'!$AI$2:$AP$21, \'Scenario Data\'!$AH$2:$AH$21 = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$B$3)), "")'
+    '=IFERROR(FILTER(\'Scenario Data\'!$AI$2:$AP, \'Scenario Data\'!$AH$2:$AH = (\'Executive Summary\'!$B$2 & "_" & \'Executive Summary\'!$D$3 & "_" & \'Executive Summary\'!$B$3)), "")'
   );
 
   for (var er = 0; er < 5; er++) {
