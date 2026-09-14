@@ -4,7 +4,7 @@
 
 **Goal:** Integrate the **Nasdaq 100** index into the quantitative backtest engine, CLI runner, and Google Apps Script dashboard as a full first-class benchmark (GitHub Issue #19).
 
-**Architecture:** A continuous 31-year (1993–2024) dual-series dataset is constructed from `^NDX` (Price Return) and composite `^NDXT` (Total Return, seamlessly backward-chained from 2006 `^NDXT`, 1999–2005 QQQ distributions, and 1993–1998 nominal yield). The engine models pre-tax and after-tax CAGR, dividend tax drag, basis tracking, and terminal liquidation tax across 10y, 20y, and 30y horizons for both annual and quarterly rebalancing frequencies.
+**Architecture:** A continuous 31-year (1993–2024) dual-series dataset is constructed from `^NDX` (Price Return) and composite `^NDXT` (Total Return, seamlessly backward-chained from 2006 `^NDXT`, 1999–2006-Q1 QQQ distributions, and 1993–1998 nominal yield). The engine models pre-tax and after-tax CAGR, dividend tax drag, basis tracking, and terminal liquidation tax across 10y, 20y, and 30y horizons for both annual and quarterly rebalancing frequencies.
 
 **Tech Stack:** Python 3 standard library only (`json`, `math`, `argparse`, `dataclasses`, `unittest`, `urllib`). External dependencies prohibited.
 
@@ -56,11 +56,15 @@ Verify `data/raw/benchmarks/NDX.json`, `NDXT.json`, and `QQQ.json` exist and hav
 
 1. Add `"^NDX"` and `"^NDXT"` to `BENCHMARK_PRICE_KEYS`.
 2. Extract year-end and quarterly closes for `^NDX`.
-3. Build quarterly composite `^NDXT` backwards from 2006-Q1 official `^NDXT` level:
+3. Build quarterly composite `^NDXT` backwards from 2006-Q1 official `^NDXT` level keeping raw float precision:
    $$TR_{t-1} = \frac{TR_t}{1 + r_{\text{tr}, t}}$$
-   with $r_{\text{tr}, t} = r_{\text{pr}, t} + y_t$, where $y_t = \frac{\text{Div}_t}{P_{t-1}}$ for QQQ (1999–2005) and $y_t = \frac{0.0025}{4} = 0.000625$ for 1993–1998.
+   with $r_{\text{tr}, t} = r_{\text{pr}, t} + y_t$, where $r_{\text{pr}, t} = \frac{NDX_t - NDX_{t-1}}{NDX_{t-1}}$:
+   - For 1999-Q2 to 2006-Q1: $y_t = \frac{\text{Div}_{\text{QQQ}, t}}{P_{\text{QQQ}, t-1}}$ using unadjusted QQQ cash dividends and quarter-end closes.
+   - For 1999-Q1: $y_t = 0.0$ (QQQ launched March 10, 1999).
+   - For 1993-Q1 to 1998-Q4: $y_t = \frac{0.0025}{4} = 0.000625$ (0.25% annualized nominal yield).
 4. Extract annual `^NDXT` closes from Q4: $TR_{\text{year}} = TR_{\text{year-Q4}}$.
-5. Add `^NDX` and `^NDXT` to `all_prices_data` and `all_quarterly_prices_data`.
+5. Round final dictionary values to 2 decimals (e.g. `round(val, 2)`) when assigning to export maps.
+6. Add `^NDX` and `^NDXT` to `all_prices_data` and `all_quarterly_prices_data`.
 
 - [ ] **Step 4: Run dataset build script and verify outputs**
 
@@ -69,7 +73,7 @@ Verify `data/sp500_prices.json` and `data/sp500_quarterly_prices.json` contain `
 
 - [ ] **Step 5: Document provenance in `data/README.md`**
 
-Add a dedicated "Nasdaq 100 (^NDX / ^NDXT)" section to `data/README.md` documenting the 2006–2024 official `^NDXT`, 1999–2005 QQQ distribution bridge, and 1993–1998 nominal yield bridge.
+Add a dedicated "Nasdaq 100 (^NDX / ^NDXT)" section to `data/README.md` documenting the 2006–2024 official `^NDXT`, 1999-Q2 to 2006-Q1 QQQ distribution bridge, and 1993–1998 nominal yield bridge.
 
 - [ ] **Step 6: Commit Task 1 changes**
 
@@ -101,7 +105,7 @@ git commit -m "feat(data): add Nasdaq 100 (^NDX/^NDXT) dual-series datasets (#19
 ```python
 import unittest
 from engine.data_loader import DataLoader
-from engine.metrics import calculate_benchmark_annual_series, calculate_cagr
+from engine.metrics import calculate_benchmark_annual_series, calculate_cagr, calculate_tax_drag
 
 class TestNasdaqDataLoader(unittest.TestCase):
     def setUp(self):
@@ -118,21 +122,60 @@ class TestNasdaqDataLoader(unittest.TestCase):
         self.assertGreater(tr_2024, tr_1993)
 
     def test_nasdaq_key_map_aliases(self):
-        for alias in ["nasdaq_100", "nasdaq 100", "nasdaq100", "qqq", "^ndx", "ndx"]:
+        aliases = ["nasdaq_100", "nasdaq 100", "nasdaq100", "qqq", "^ndx", "ndx", "^ndxt", "ndxt"]
+        for alias in aliases:
             self.assertEqual(self.loader.get_benchmark_level(alias, 2024), self.loader.get_nasdaq_level(2024))
             self.assertEqual(self.loader.get_benchmark_tr_level(alias, 2024), self.loader.get_nasdaq_tr_level(2024))
 
     def test_nasdaq_quarterly_levels(self):
         pr_q4_1993 = self.loader.get_nasdaq_quarterly_level(1993, 4)
         tr_q4_1993 = self.loader.get_nasdaq_tr_quarterly_level(1993, 4)
+        alias_tr_q4 = self.loader.get_nasdaq_quarterly_tr_level(1993, 4)
+        self.assertEqual(tr_q4_1993, alias_tr_q4)
         self.assertGreater(pr_q4_1993, 0.0)
         self.assertGreater(tr_q4_1993, 0.0)
         self.assertAlmostEqual(pr_q4_1993, self.loader.get_nasdaq_level(1993), places=2)
+        self.assertAlmostEqual(tr_q4_1993, self.loader.get_nasdaq_tr_level(1993), places=2)
 
     def test_nasdaq_dividend_yield_non_negative(self):
         for yr in range(1994, 2025):
             yld = self.loader.get_nasdaq_dividend_yield(yr)
             self.assertGreaterEqual(yld, 0.0)
+
+
+class TestNasdaqPerformanceCalculations(unittest.TestCase):
+    def setUp(self):
+        self.loader = DataLoader()
+
+    def test_nasdaq_30y_series_modeling(self):
+        years = list(range(1993, 2025))
+        pr_series = [self.loader.get_nasdaq_level(y) for y in years]
+        tr_series = [self.loader.get_nasdaq_tr_level(y) for y in years]
+
+        res_pre = calculate_benchmark_annual_series(
+            pr_levels=pr_series,
+            tr_levels=tr_series,
+            tax_rate=0.0,
+            initial_capital=10000.0,
+            is_after_tax=False,
+        )
+        self.assertEqual(res_pre["total_taxes_paid"], 0.0)
+        self.assertEqual(res_pre["cost_basis"], res_pre["final_equity"])
+        cagr_pre = calculate_cagr(10000.0, res_pre["final_equity"], 31)
+        self.assertGreater(cagr_pre, 0.05)
+
+        res_post = calculate_benchmark_annual_series(
+            pr_levels=pr_series,
+            tr_levels=tr_series,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            is_after_tax=True,
+        )
+        self.assertGreater(res_post["total_taxes_paid"], 0.0)
+        self.assertLess(res_post["final_equity"], res_pre["final_equity"])
+        cagr_post = calculate_cagr(10000.0, res_post["pre_liquidation_wealth"], 31)
+        drag = calculate_tax_drag(cagr_pre, cagr_post)
+        self.assertGreaterEqual(drag, 0.0)
 ```
 
 - [ ] **Step 2: Run test to verify failure**
@@ -142,7 +185,7 @@ Expected: FAIL with `AttributeError: 'DataLoader' object has no attribute 'get_n
 
 - [ ] **Step 3: Implement methods in `engine/data_loader.py`**
 
-1. Update `BENCHMARK_KEY_MAP` with Nasdaq 100 entries.
+1. Update `BENCHMARK_KEY_MAP` with all 8 Nasdaq 100 aliases.
 2. Add `get_nasdaq_level`, `get_nasdaq_tr_level`, `get_nasdaq_quarterly_level`, `get_nasdaq_tr_quarterly_level`, `get_nasdaq_quarterly_tr_level`, and `get_nasdaq_dividend_yield`.
 
 - [ ] **Step 4: Run test to verify it passes**
@@ -170,16 +213,15 @@ git commit -m "feat(engine): add DataLoader support for Nasdaq 100 benchmark (#1
 - Produces:
   - `nasdaq_benchmarks` and `nasdaq_q_benchmarks` in `compute_scenario_grid`.
   - Matrix rows: `{h_label}_Nasdaq 100_Nasdaq 100_{Annual/Quarterly}_{rate_str}`.
-  - `("Nasdaq 100", nasdaq_traj_ann, nasdaq_traj_q)` in `build_default_scenario_data` `benchmarks`.
+  - `("Nasdaq 100", nasdaq_traj_ann, nasdaq_traj_q)` in `benchmarks` inside `format_apps_script_payloads`.
 
 - [ ] **Step 1: Update `tests/test_scenarios.py` with new dimension expectations**
 
-Update row count assertions in `tests/test_scenarios.py`:
-- Total scenario rows: 450 $\to$ 480
-- Trajectory matrix rows: 372 $\to$ 496 (2 universes $\times$ 4 benchmarks $\times$ 2 frequencies $\times$ 31 years)
-- Single universe trajectory matrix rows: 186 $\to$ 248
-- Drawdown matrix rows: 372 $\to$ 496 (and 186 $\to$ 248)
-- Assert presence of `nasdaq_benchmarks` and `nasdaq_q_benchmarks` in grid.
+Update assertions in `tests/test_scenarios.py`:
+- Line 28: assert `len(active_results) == 180` (60 per universe * 3) or verify active results unchanged.
+- Line 34: assert `len(scenario_rows) == 480` (was 450).
+- Lines 70, 74, 100, 101: assert `len(trajectory_matrix) == 496` for 2 universes (was 372) and `248` for 1 universe (was 186); same for `drawdown_matrix`.
+- Assert presence of `"nasdaq_benchmarks"` and `"nasdaq_q_benchmarks"` in grid.
 
 - [ ] **Step 2: Run test to verify failure**
 
@@ -194,10 +236,10 @@ Expected: FAIL due to row count mismatches.
    - Calculate alpha relative to `spx_after_cagr` / `spx_q_after_cagr`.
    - Add to return dictionary.
 2. In `format_apps_script_payloads`:
-   - Format scenario rows for Annual and Quarterly Nasdaq 100.
-3. In `build_default_scenario_data`:
-   - Compute 30-year `nasdaq_traj_ann` and `nasdaq_traj_q`.
-   - Append `("Nasdaq 100", nasdaq_traj_ann, nasdaq_traj_q)` to `benchmarks`.
+   - Format scenario rows for Annual and Quarterly Nasdaq 100 under keys:
+     - `{h_label}_Nasdaq 100_Nasdaq 100_Annual_{rate_str}`
+     - `{h_label}_Nasdaq 100_Nasdaq 100_Quarterly_{rate_str}`
+   - At line 1050 inside `format_apps_script_payloads`, compute 30-year `nasdaq_traj_ann` and `nasdaq_traj_q`, and append `("Nasdaq 100", nasdaq_traj_ann, nasdaq_traj_q)` to `benchmarks`.
 
 - [ ] **Step 4: Run tests to verify they pass**
 
@@ -225,7 +267,7 @@ git commit -m "feat(scenarios): add Nasdaq 100 to scenario grid and trajectory m
 
 - [ ] **Step 1: Write test in `tests/test_cli.py` for Nasdaq benchmark options**
 
-Add test cases for running CLI with `--benchmark nasdaq_100` and `--benchmark qqq`.
+Add test cases for running CLI with `--benchmark nasdaq_100` and `--benchmark qqq`, verifying exit code 0 and non-empty stdout.
 
 - [ ] **Step 2: Run test to verify failure**
 
@@ -236,7 +278,7 @@ Expected: FAIL on invalid `--benchmark` choice.
 
 1. Update `build_argument_parser`:
    Add `"nasdaq_100"`, `"nasdaq 100"`, `"nasdaq100"`, `"qqq"` to `--benchmark` choices.
-2. Normalize `bmk_filter` so all aliases map to `"nasdaq_100"`.
+2. Normalize `bmk_filter = getattr(args, "benchmark", "all").lower().replace(" ", "_")` (mapping `"qqq"` and `"nasdaq100"` to `"nasdaq_100"`).
 3. Pre-calculate Nasdaq 100 Annual & Quarterly series across all horizons.
 4. Update `bench_configs` unpacking to 5-tuple: `(freq_tag, s_bm, m_bm, f_bm, n_bm)`.
 5. Add `Nasdaq 100` rows to terminal table if `include_nasdaq`.
@@ -267,9 +309,13 @@ git commit -m "feat(cli): add Nasdaq 100 benchmark option and table output (#19)
 - Consumes: Scenario matrix keys from `engine/scenarios.py`.
 - Produces: Valid Google Apps Script templates supporting `"Nasdaq 100"` in Control 6 dropdown and dynamic formulas.
 
-- [ ] **Step 1: Write test in `tests/test_exporters.py` for Nasdaq Apps Script output**
+- [ ] **Step 1: Update existing assertion and add Nasdaq 100 test in `tests/test_exporters.py`**
 
-Add test asserting that generated Apps Script JavaScript contains `'Nasdaq 100'` in data validation rules and key lookup formulas.
+1. In `tests/test_exporters.py` line 413, update:
+   ```python
+   self.assertIn("['S&P 500', 'MSCI World', 'FBGRX', 'Nasdaq 100']", code)
+   ```
+2. Add assertion verifying `IF($D$3="Nasdaq 100", "Nasdaq 100_Nasdaq 100", ...)` is present in generated code.
 
 - [ ] **Step 2: Run test to verify failure**
 
@@ -303,6 +349,7 @@ git commit -m "feat(gas): integrate Nasdaq 100 into Google Sheets templates (#19
 
 **Files:**
 - All modified files across the repo.
+- Generated: `scripts/google_apps_script.js`, `outputs/summary_metrics.csv`, `outputs/annual_breakdown.csv`, `outputs/trade_log.csv`.
 
 - [ ] **Step 1: Run full test suite**
 
@@ -316,13 +363,14 @@ Expected: All tests pass with 0 failures and 0 errors.
 3. `python3 run_backtest.py --compare-frequencies --benchmark all`
 Verify terminal ASCII table renders cleanly with `"Nasdaq 100"` rows.
 
-- [ ] **Step 3: Verify output CSV files**
+- [ ] **Step 3: Verify output CSV files and generated Apps Script bundle**
 
-Verify `outputs/summary_metrics.csv` contains `Nasdaq 100` entries for all horizons and frequencies.
+Verify `outputs/summary_metrics.csv` contains `Nasdaq 100` records for all horizons and frequencies.
+Verify `scripts/google_apps_script.js` contains the updated scenario rows (480 rows) and trajectory matrices.
 
 - [ ] **Step 4: Commit all final outputs and artifacts**
 
 ```bash
-git add outputs/
+git add outputs/ scripts/google_apps_script.js
 git commit -m "chore: regenerate export outputs with Nasdaq 100 benchmark (#19)"
 ```
