@@ -285,6 +285,40 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         self.assertAlmostEqual(m_cagr, 0.0795, places=3)
         self.assertAlmostEqual(msci_post["post_liquidation_wealth"], 21497.28, places=1)
 
+    def test_quarterly_spinoff_distribution_and_basis_adjustment(self) -> None:
+        """Verify quarterly spinoff proceeds credit to cash and adjust basis in quarterly simulation."""
+        self.loader.spinoffs["MSFT"] = [
+            {
+                "ex_date": "2015-03-15",
+                "year": 2015,
+                "quarter": 1,
+                "distribution_per_share": 5.0,
+                "basis_retention_ratio": 0.85,
+                "spinco_ticker": "SPINQ",
+                "description": "Quarterly Test Spinoff",
+            }
+        ]
+        sim = PortfolioSimulator(data_loader=self.loader)
+        res = sim.run_simulation(
+            start_year=2014,
+            end_year=2015,
+            n=5,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+            rebalance_frequency="quarterly",
+        )
+        q1_entry = res.quarterly_history[0]  # 2015 Q1
+        ann_entry = res.annual_history[0]    # 2015 synthesized annual
+        self.assertGreater(q1_entry.spinoff_proceeds, 0.0)
+        self.assertGreater(ann_entry.spinoff_proceeds, 0.0)
+        self.assertAlmostEqual(q1_entry.spinoff_proceeds, ann_entry.spinoff_proceeds, places=2)
+        self.assertAlmostEqual(
+            q1_entry.dividend_tax_paid,
+            q1_entry.dividend_income * 0.30,
+            places=2,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

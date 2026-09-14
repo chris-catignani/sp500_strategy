@@ -145,6 +145,7 @@ class PortfolioSimulator:
                 year_tax_paid = 0.0
                 year_cap_tax = 0.0
                 year_turnover_sum = 0.0
+                year_spinoff_proceeds = 0.0
 
                 for q in (1, 2, 3, 4):
                     q_start_value = start_value
@@ -155,6 +156,19 @@ class PortfolioSimulator:
                         for ticker, shares in positions.items()
                     )
                     self.cash += q_dividends
+
+                    q_spinoff_proceeds = 0.0
+                    for ticker in list(self.tax_manager.get_all_positions().keys()):
+                        dist_per_share, basis_ratio = self.data_loader.get_quarterly_spinoff_distribution(
+                            ticker, current_year, q
+                        )
+                        if dist_per_share > 0.0 or (0.0 < basis_ratio < 1.0):
+                            shares_held = self.tax_manager.get_position_shares(ticker)
+                            spinoff_cash = shares_held * dist_per_share
+                            self.cash += spinoff_cash
+                            q_spinoff_proceeds += spinoff_cash
+                            self.tax_manager.adjust_basis_ratio(ticker, basis_ratio)
+                    year_spinoff_proceeds += q_spinoff_proceeds
 
                     holdings_value_pretax = sum(
                         shares * self.data_loader.get_quarterly_price(ticker, current_year, q)
@@ -357,6 +371,7 @@ class PortfolioSimulator:
                         dividend_income=q_dividends,
                         dividend_tax_paid=tax_div,
                         capital_gains_tax_paid=capital_gains_tax_paid,
+                        spinoff_proceeds=q_spinoff_proceeds,
                         universe=universe,
                     )
                     quarterly_history.append(q_entry)
@@ -401,6 +416,7 @@ class PortfolioSimulator:
                     dividend_income=year_dividends,
                     dividend_tax_paid=year_div_tax,
                     capital_gains_tax_paid=year_cap_tax,
+                    spinoff_proceeds=year_spinoff_proceeds,
                     universe=universe,
                 )
                 annual_history.append(ann_entry)
@@ -414,6 +430,18 @@ class PortfolioSimulator:
                     for ticker, shares in positions.items()
                 )
                 self.cash += annual_dividends
+
+                year_spinoff_proceeds = 0.0
+                for ticker in list(self.tax_manager.get_all_positions().keys()):
+                    dist_per_share, basis_ratio = self.data_loader.get_spinoff_distribution(
+                        ticker, current_year
+                    )
+                    if dist_per_share > 0.0 or (0.0 < basis_ratio < 1.0):
+                        shares_held = self.tax_manager.get_position_shares(ticker)
+                        spinoff_cash = shares_held * dist_per_share
+                        self.cash += spinoff_cash
+                        year_spinoff_proceeds += spinoff_cash
+                        self.tax_manager.adjust_basis_ratio(ticker, basis_ratio)
 
                 # Step 2: Pre-Tax Valuation
                 holdings_value_pretax = sum(
@@ -623,6 +651,7 @@ class PortfolioSimulator:
                     dividend_income=annual_dividends,
                     dividend_tax_paid=dividend_tax_paid,
                     capital_gains_tax_paid=capital_gains_tax_paid,
+                    spinoff_proceeds=year_spinoff_proceeds,
                     universe=universe,
                 )
                 annual_history.append(entry)
