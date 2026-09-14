@@ -82,8 +82,8 @@ class TestScenarios(unittest.TestCase):
         for row in annual_data["drawdown_matrix"]:
             self.assertEqual(len(row), 6)  # LookupKey, Year, Top3_DD, Top5_DD, Top10_DD, Bench_DD
 
-        # 5 eras * 4 combos = 20 rows
-        self.assertEqual(len(annual_data["era_matrix"]), 20)
+        # 5 eras * 16 combos (2 Universes x 4 Benchmarks x 2 Frequencies) = 80 rows
+        self.assertEqual(len(annual_data["era_matrix"]), 80)
         for row in annual_data["era_matrix"]:
             self.assertEqual(len(row), 9)  # LookupKey, Era, Context, Top3, Top5, Top10, Bench, Alpha, WinRate
 
@@ -106,8 +106,8 @@ class TestScenarios(unittest.TestCase):
         # Single universe with 4 benchmarks x 2 frequencies = 31 * 8 = 248 rows
         self.assertEqual(len(annual_data["trajectory_matrix"]), 248)
         self.assertEqual(len(annual_data["drawdown_matrix"]), 248)
-        # 5 eras * 2 frequencies = 10 rows
-        self.assertEqual(len(annual_data["era_matrix"]), 10)
+        # 5 eras * 8 combos (1 Universe x 4 Benchmarks x 2 Frequencies) = 40 rows
+        self.assertEqual(len(annual_data["era_matrix"]), 40)
 
     def test_build_default_scenario_data_helper(self):
         """Verify backward-compatible build_default_scenario_data dictionary contract."""
