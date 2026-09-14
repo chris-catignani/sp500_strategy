@@ -20,6 +20,7 @@ from engine.metrics import (
     calculate_cagr,
     calculate_cumulative_return,
     calculate_max_drawdown,
+    calculate_tax_drag,
 )
 from engine.models import StrategyResult
 from engine.selector import BaseSelector, MarketCapSelector, PerformanceSelector
@@ -287,7 +288,7 @@ def run_backtest(args: argparse.Namespace) -> int:
         spx_post_cum = calculate_cumulative_return(args.initial_capital, bench_post["final_equity"])
         spx_post_taxes = bench_post["total_taxes_paid"]
         spx_post_divs = bench_post["total_dividends_received"]
-        spx_tax_drag = spx_tr_cagr - spx_after_cagr
+        spx_tax_drag = calculate_tax_drag(spx_tr_cagr, spx_after_cagr)
 
         benchmark_metrics_by_horizon[h_label] = {
             "tr_cagr": spx_tr_cagr,
@@ -342,7 +343,7 @@ def run_backtest(args: argparse.Namespace) -> int:
         spx_q_post_cum = calculate_cumulative_return(args.initial_capital, spx_q_bench_post["final_equity"])
         spx_q_post_taxes = spx_q_bench_post["total_taxes_paid"]
         spx_q_post_divs = spx_q_bench_post["total_dividends_received"]
-        spx_q_tax_drag = spx_q_tr_cagr - spx_q_after_cagr
+        spx_q_tax_drag = calculate_tax_drag(spx_q_tr_cagr, spx_q_after_cagr)
 
         quarterly_benchmark_metrics_by_horizon[h_label] = {
             "tr_cagr": spx_q_tr_cagr,
@@ -393,7 +394,7 @@ def run_backtest(args: argparse.Namespace) -> int:
         msci_post_cum = calculate_cumulative_return(args.initial_capital, msci_bench_post["final_equity"])
         msci_post_taxes = msci_bench_post["total_taxes_paid"]
         msci_post_divs = msci_bench_post["total_dividends_received"]
-        msci_tax_drag = msci_tr_cagr - msci_after_cagr
+        msci_tax_drag = calculate_tax_drag(msci_tr_cagr, msci_after_cagr)
         msci_alpha = msci_after_cagr - spx_after_cagr
 
         msci_metrics_by_horizon[h_label] = {
@@ -450,7 +451,7 @@ def run_backtest(args: argparse.Namespace) -> int:
         msci_q_post_cum = calculate_cumulative_return(args.initial_capital, msci_q_bench_post["final_equity"])
         msci_q_post_taxes = msci_q_bench_post["total_taxes_paid"]
         msci_q_post_divs = msci_q_bench_post["total_dividends_received"]
-        msci_q_tax_drag = msci_q_tr_cagr - msci_q_after_cagr
+        msci_q_tax_drag = calculate_tax_drag(msci_q_tr_cagr, msci_q_after_cagr)
         msci_q_alpha = msci_q_after_cagr - spx_q_after_cagr
 
         quarterly_msci_metrics_by_horizon[h_label] = {
@@ -503,7 +504,7 @@ def run_backtest(args: argparse.Namespace) -> int:
         fbgrx_post_cum = calculate_cumulative_return(args.initial_capital, fbgrx_bench_post["final_equity"])
         fbgrx_post_taxes = fbgrx_bench_post["total_taxes_paid"]
         fbgrx_post_divs = fbgrx_bench_post["total_dividends_received"]
-        fbgrx_tax_drag = fbgrx_tr_cagr - fbgrx_after_cagr
+        fbgrx_tax_drag = calculate_tax_drag(fbgrx_tr_cagr, fbgrx_after_cagr)
         fbgrx_alpha = fbgrx_after_cagr - spx_after_cagr
 
         fbgrx_metrics_by_horizon[h_label] = {
@@ -560,7 +561,7 @@ def run_backtest(args: argparse.Namespace) -> int:
         fbgrx_q_post_cum = calculate_cumulative_return(args.initial_capital, fbgrx_q_bench_post["final_equity"])
         fbgrx_q_post_taxes = fbgrx_q_bench_post["total_taxes_paid"]
         fbgrx_q_post_divs = fbgrx_q_bench_post["total_dividends_received"]
-        fbgrx_q_tax_drag = fbgrx_q_tr_cagr - fbgrx_q_after_cagr
+        fbgrx_q_tax_drag = calculate_tax_drag(fbgrx_q_tr_cagr, fbgrx_q_after_cagr)
         fbgrx_q_alpha = fbgrx_q_after_cagr - spx_q_after_cagr
 
         quarterly_fbgrx_metrics_by_horizon[h_label] = {
@@ -670,7 +671,7 @@ def run_backtest(args: argparse.Namespace) -> int:
                         if freq == "quarterly"
                         else bm["after_cagr"]
                     )
-                    tax_drag = res_pre.cagr - res_post.cagr
+                    tax_drag = calculate_tax_drag(res_pre.cagr, res_post.cagr)
                     alpha = calculate_alpha(res_post.cagr, ref_spx_after)
 
                     table_rows.append({

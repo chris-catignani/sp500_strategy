@@ -10,11 +10,12 @@ Quantitative backtesting engine and interactive Google Sheets dashboard for S&P 
 - **Rebalancing Frequencies**: Supports both Annual and Quarterly rebalancing. Q1–Q3 dynamically drift constituent weights by price performance relative to the index; Q4 re-anchors to official year-end factsheet weights.
 - **Benchmark**: S&P 500 Total Return (`^SP500TR`) for pre-tax comparisons, and dynamic after-tax total return modeling (`^GSPC` price return + `^SP500TR` synthetic dividend yield with dividend taxation and terminal liquidation tax) for after-tax comparisons.
 - **Pricing & Dividends**: All prices (`data/sp500_prices.json`, `data/sp500_quarterly_prices.json`) and dividends per share (`data/sp500_dividends.json`, `data/sp500_quarterly_dividends.json`) are split-adjusted to 2024-12-31.
+- **Risk & Drawdown Measurement**: Max Drawdown is measured across discrete periodic observation dates (annual year-end or quarterly quarter-end valuations), reflecting endpoint rebalance valuations rather than continuous daily extremes.
 
 ## Architecture
-- `engine/models.py`: Domain dataclasses (`ConstituentSnapshot`, `HoldingTarget`, `TaxLot`, `TradeOrder`, `AnnualLedgerEntry` with `quarter` metadata and decoupled tax fields, `StrategyResult` with cumulative dividend metrics and `quarterly_history`).
+- `engine/models.py`: Domain dataclasses (`ConstituentSnapshot`, `HoldingTarget`, `TaxLot`, `TradeOrder`, `AnnualLedgerEntry` with `quarter` metadata and decoupled tax fields, `StrategyResult` with cumulative dividend metrics, wealth definitions, and `quarterly_history`).
 - `engine/tax_lots.py`: `FIFOTaxLotManager` (FIFO queues, lot splitting, capital gains tax settlement, loss carryforwards, unrealized gains, quarter metadata).
-- `engine/selector.py`: `BaseSelector`, `MarketCapSelector`, `PerformanceSelector`. Target weight formula: $w_i = W_i / \sum_{j=1}^N W_j$.
+- `engine/selector.py`: `BaseSelector`, `MarketCapSelector`, `PerformanceSelector` (ranks top N mega-caps by trailing 1-year total return including dividends). Target weight formula: $w_i = W_i / \sum_{j=1}^N W_j$.
 - `engine/data_loader.py` & `data/`: 31-year point-in-time constituent datasets, split-adjusted prices, and split-adjusted dividend history (1994–2024) for both annual and quarterly frequencies across S&P 500 and All World. Methods: `get_dividend`, `get_quarterly_dividend`, `get_quarterly_price`, `load_quarterly_universe`, `get_spx_tr_level`, `get_spx_dividend_yield`.
 - `engine/backtest.py`: `PortfolioSimulator` implementing dividend cash pooling and two-phase annual/quarterly rebalancing:
   - Step 1: Pre-rebalance cash dividend collection & cash pooling (`self.cash += period_dividends`).
