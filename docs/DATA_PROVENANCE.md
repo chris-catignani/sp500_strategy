@@ -155,7 +155,7 @@ From 1994 through 1998, the authentic mega-cap constituent ranking in the S&P 50
 #### 4.5.3 Verified Decoupled Series (`T_CORP_HISTORICAL.json`)
 The authentic historical market record for original AT&T Corp is isolated in `data/raw/tickers/T_CORP_HISTORICAL.json`:
 - **Cash Dividends**: Verified split-adjusted distributions of **\$0.33 per quarter (\$1.32 per year)** across 1994–1998, reflecting Ma Bell's consistent quarterly \$0.33 payout.
-- **Prices & Baseline Closes**: Verified historical month-end closes from 1993 through 1998, including 1993-Q1..Q3 baseline closes (\$26.83, \$26.00, and \$26.75) to prevent artificial capitalization drift spikes in early 1994.
+- **Prices & Baseline Closes**: Verified historical month-end closes from 1993 through 1998, including 1993-Q1..Q3 baseline closes (\$52.50, \$54.00, and \$56.25) to prevent artificial capitalization drift spikes in early 1994.
 - **Automated Splicing**: In `scripts/build_datasets_from_raw.py`, pre-1999 SBC data for `T` is purged, and the verified `T_CORP_HISTORICAL` record is spliced into the constituent series for 1993–1998. Data from 1999 onward transitions smoothly into the consolidated modern AT&T series.
 
 ---
