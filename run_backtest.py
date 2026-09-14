@@ -217,6 +217,7 @@ def build_parser() -> argparse.ArgumentParser:
             "nasdaq 100",
             "nasdaq100",
             "qqq",
+            "ndx",
         ],
         default="all",
         help="Benchmark comparison display ('all', 'sp500', 'msci_world', 'fbgrx', 'nasdaq_100').",
@@ -840,7 +841,7 @@ def run_backtest(args: argparse.Namespace) -> int:
             rebal_freq = freq_tag.lower() if freq_tag else getattr(args, "frequency", "annual")
 
             bmk_filter = getattr(args, "benchmark", "all").lower().replace(" ", "_")
-            if bmk_filter in ("qqq", "nasdaq100"):
+            if bmk_filter in ("qqq", "nasdaq100", "ndx"):
                 bmk_filter = "nasdaq_100"
             include_spx = bmk_filter in ("all", "sp500")
             include_msci = bmk_filter in ("all", "msci_world")

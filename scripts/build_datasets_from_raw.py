@@ -407,62 +407,65 @@ def main():
 
     # Nasdaq 100 (^NDX Price Return & ^NDXT Total Return Composite)
     ndx_raw = RAW_DIR / "benchmarks" / "NDX.json"
-    ndxt_raw = RAW_DIR / "benchmarks" / "NDXT.json"
     qqq_raw = RAW_DIR / "benchmarks" / "QQQ.json"
 
-    if ndx_raw.exists() and ndxt_raw.exists() and qqq_raw.exists():
+    if ndx_raw.exists() and qqq_raw.exists():
         ndx_chart = load_raw_chart(ndx_raw)
-        ndxt_chart = load_raw_chart(ndxt_raw)
         qqq_chart = load_raw_chart(qqq_raw)
 
         # 1. Price return series (^NDX)
         all_prices_data["^NDX"] = extract_year_end_closes(ndx_chart, source_field="close")
         all_quarterly_prices_data["^NDX"] = extract_quarterly_closes(ndx_chart, source_field="close")
 
-        # 2. Total return composite series (^NDXT)
-        ndxt_official_q = extract_quarterly_closes(ndxt_chart, source_field="close")
+        # 2. Total return composite series (^NDXT) synthesized from ^NDX and QQQ
         ndx_q_raw = extract_quarterly_closes_raw(ndx_chart, source_field="close")
         qqq_q_raw = extract_quarterly_closes_raw(qqq_chart, source_field="close")
         qqq_q_divs = extract_quarterly_dividends(qqq_chart)
 
-        all_q_keys = [f"{y}-Q{q}" for y in range(1993, 2025) for q in (1, 2, 3, 4)]
-        q_idx_map = {k: i for i, k in enumerate(all_q_keys)}
-
         composite_q_tr: Dict[str, float] = {}
-        for k, v in ndxt_official_q.items():
-            composite_q_tr[k] = float(v)
+        base_tr = 398.28
+        composite_q_tr["1993-Q4"] = base_tr
 
-        curr_tr = composite_q_tr["2006-Q1"]
-        curr_idx = q_idx_map["2006-Q1"]
-
-        while curr_idx > 0:
-            t_key = all_q_keys[curr_idx]
-            prev_key = all_q_keys[curr_idx - 1]
-
+        # Backward chain for 1993-Q3, 1993-Q2, 1993-Q1
+        curr_tr = base_tr
+        for t_key, prev_key in [("1993-Q4", "1993-Q3"), ("1993-Q3", "1993-Q2"), ("1993-Q2", "1993-Q1")]:
             ndx_t = ndx_q_raw[t_key]
             ndx_prev = ndx_q_raw[prev_key]
             r_pr = (ndx_t - ndx_prev) / ndx_prev
-
-            if t_key >= "1999-Q2" and t_key <= "2006-Q1":
-                div_qqq = qqq_q_divs.get(t_key, 0.0)
-                p_qqq_prev = qqq_q_raw[prev_key]
-                y_t = div_qqq / p_qqq_prev
-            elif t_key == "1999-Q1":
-                y_t = 0.0
-            else:
-                # 1993-Q1 to 1998-Q4: 0.25% annualized nominal yield
-                y_t = 0.0025 / 4.0
-
+            y_t = 0.0025 / 4.0
             r_tr = r_pr + y_t
             prev_tr = curr_tr / (1.0 + r_tr)
             composite_q_tr[prev_key] = prev_tr
             curr_tr = prev_tr
-            curr_idx -= 1
+
+        # Forward chain from 1994-Q1 to 2024-Q4
+        curr_tr = base_tr
+        prev_key = "1993-Q4"
+        for yr in range(1994, 2025):
+            for q in (1, 2, 3, 4):
+                t_key = f"{yr}-Q{q}"
+                ndx_t = ndx_q_raw[t_key]
+                ndx_prev = ndx_q_raw[prev_key]
+                r_pr = (ndx_t - ndx_prev) / ndx_prev
+
+                if t_key >= "1999-Q2":
+                    div_qqq = qqq_q_divs.get(t_key, 0.0)
+                    p_qqq_prev = qqq_q_raw[prev_key]
+                    y_t = div_qqq / p_qqq_prev if p_qqq_prev > 0.0 else 0.0
+                elif t_key == "1999-Q1":
+                    y_t = 0.0
+                else:
+                    # 1993-Q1 to 1998-Q4: 0.25% annualized nominal yield
+                    y_t = 0.0025 / 4.0
+
+                r_tr = r_pr + y_t
+                curr_tr = curr_tr * (1.0 + r_tr)
+                composite_q_tr[t_key] = curr_tr
+                prev_key = t_key
 
         all_quarterly_prices_data["^NDXT"] = {
-            k: round(composite_q_tr[k], 2)
-            for k in all_q_keys
-            if k in composite_q_tr
+            k: round(v, 2)
+            for k, v in sorted(composite_q_tr.items())
         }
 
         all_prices_data["^NDXT"] = {

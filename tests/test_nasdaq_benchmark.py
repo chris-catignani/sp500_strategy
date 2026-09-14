@@ -37,6 +37,33 @@ class TestNasdaqDataLoader(unittest.TestCase):
         for yr in range(1994, 2025):
             yld = self.loader.get_nasdaq_dividend_yield(yr)
             self.assertGreaterEqual(yld, 0.0)
+            self.assertLessEqual(yld, 0.035)
+
+    def test_nasdaq_cagr_horizons(self):
+        end_year = 2024
+        for horizon in [10, 20, 30]:
+            start_year = end_year - horizon
+            pr_start = self.loader.get_nasdaq_level(start_year)
+            pr_end = self.loader.get_nasdaq_level(end_year)
+            tr_start = self.loader.get_nasdaq_tr_level(start_year)
+            tr_end = self.loader.get_nasdaq_tr_level(end_year)
+
+            nasdaq_pr_cagr = calculate_cagr(pr_start, pr_end, horizon)
+            nasdaq_tr_cagr = calculate_cagr(tr_start, tr_end, horizon)
+
+            self.assertGreater(
+                nasdaq_tr_cagr,
+                nasdaq_pr_cagr,
+                f"Expected TR CAGR > PR CAGR for {horizon}y horizon, got TR={nasdaq_tr_cagr} <= PR={nasdaq_pr_cagr}",
+            )
+
+    def test_cli_ndx_choice(self):
+        import run_backtest
+
+        parser = run_backtest.build_parser()
+        args = parser.parse_args(["--benchmark", "ndx"])
+        self.assertEqual(args.benchmark, "ndx")
+
 
 
 class TestNasdaqPerformanceCalculations(unittest.TestCase):
