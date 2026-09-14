@@ -250,6 +250,42 @@ class TestFIFOTaxLotManager(unittest.TestCase):
         lots_copy.clear()
         self.assertEqual(len(manager.get_lots("MO")), 1)
 
+    def test_adjust_basis_ratio_with_capital_gains_realization(self):
+        """Verify child share monetization calculates child basis, realizes gain, and taxes at 30%."""
+        manager = FIFOTaxLotManager()
+        manager.add_lot("PARENT", 1.0, 100.0, 2020)
+
+        # Spinoff: ratio 0.80, gross proceeds = $40.0
+        # Parent basis: 100 * 0.80 = $80.0
+        # Child basis: 100 * (1 - 0.80) = $20.0
+        # Realized gain on child sale: $40 - $20 = $20.0
+        child_gain = manager.adjust_basis_ratio("PARENT", 0.80, gross_proceeds=40.0)
+        self.assertAlmostEqual(child_gain, 20.0)
+        self.assertAlmostEqual(manager.current_annual_realized_gain, 20.0)
+
+        # Lots updated
+        lots = manager.get_lots("PARENT")
+        self.assertEqual(len(lots), 1)
+        self.assertAlmostEqual(lots[0].purchase_price, 80.0)
+
+        # Tax settlement at 30%
+        tax_paid, net_taxable, loss_cf = manager.settle_annual_taxes(0.30, 2020)
+        self.assertAlmostEqual(net_taxable, 20.0)
+        self.assertAlmostEqual(tax_paid, 6.0)
+        self.assertAlmostEqual(loss_cf, 0.0)
+
+        # Terminal liquidation of parent at $160
+        # Gain on parent = 160 - 80 = $80; tax = $80 * 0.30 = $24
+        # Total wealth: ($40 proceeds - $6 tax) + ($160 parent - $24 tax) = $34 + $136 = $170.0
+        # (Prior buggy engine gave $176 because $20 child gain was never taxed)
+        parent_gain, _ = manager.sell_shares("PARENT", 1.0, 160.0, 2021)
+        self.assertAlmostEqual(parent_gain, 80.0)
+        term_tax, _, _ = manager.settle_annual_taxes(0.30, 2021)
+        self.assertAlmostEqual(term_tax, 24.0)
+        total_tax = tax_paid + term_tax
+        self.assertAlmostEqual(total_tax, 30.0)
+
 
 if __name__ == "__main__":
     unittest.main()
+

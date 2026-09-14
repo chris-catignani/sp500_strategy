@@ -157,6 +157,7 @@ class PortfolioSimulator:
                     )
                     self.cash += q_dividends
 
+                    q_realized_gain = 0.0
                     q_spinoff_proceeds = 0.0
                     for ticker in list(self.tax_manager.get_all_positions().keys()):
                         dist_per_share, basis_ratio = self.data_loader.get_quarterly_spinoff_distribution(
@@ -167,7 +168,10 @@ class PortfolioSimulator:
                             spinoff_cash = shares_held * dist_per_share
                             self.cash += spinoff_cash
                             q_spinoff_proceeds += spinoff_cash
-                            self.tax_manager.adjust_basis_ratio(ticker, basis_ratio)
+                            child_gain = self.tax_manager.adjust_basis_ratio(
+                                ticker, basis_ratio, gross_proceeds=spinoff_cash
+                            )
+                            q_realized_gain += child_gain
                     year_spinoff_proceeds += q_spinoff_proceeds
 
                     holdings_value_pretax = sum(
@@ -196,7 +200,6 @@ class PortfolioSimulator:
                     }
 
                     gross_sell_proceeds = 0.0
-                    q_realized_gain = 0.0
 
                     for ticker, held_shares in list(positions.items()):
                         price = self.data_loader.get_quarterly_price(ticker, current_year, q)
@@ -298,6 +301,7 @@ class PortfolioSimulator:
                         last_loss_cf = self.tax_manager.loss_carryforward
                         net_investable_equity = total_pretax_value
                         final_target_shares = prov_target_shares
+                        self.tax_manager.current_annual_realized_gain = 0.0
 
                     gross_buy_expenditure = 0.0
                     current_positions_before_buys = self.tax_manager.get_all_positions()
@@ -431,6 +435,7 @@ class PortfolioSimulator:
                 )
                 self.cash += annual_dividends
 
+                annual_realized_gain = 0.0
                 year_spinoff_proceeds = 0.0
                 for ticker in list(self.tax_manager.get_all_positions().keys()):
                     dist_per_share, basis_ratio = self.data_loader.get_spinoff_distribution(
@@ -441,7 +446,10 @@ class PortfolioSimulator:
                         spinoff_cash = shares_held * dist_per_share
                         self.cash += spinoff_cash
                         year_spinoff_proceeds += spinoff_cash
-                        self.tax_manager.adjust_basis_ratio(ticker, basis_ratio)
+                        child_gain = self.tax_manager.adjust_basis_ratio(
+                            ticker, basis_ratio, gross_proceeds=spinoff_cash
+                        )
+                        annual_realized_gain += child_gain
 
                 # Step 2: Pre-Tax Valuation
                 holdings_value_pretax = sum(
@@ -473,7 +481,6 @@ class PortfolioSimulator:
 
                 # Step 4: Phase 1 (Sells: Full Exits & Overweight Trims)
                 gross_sell_proceeds = 0.0
-                annual_realized_gain = 0.0
 
                 for ticker, held_shares in list(positions.items()):
                     price = self.data_loader.get_price(ticker, current_year)
@@ -580,6 +587,7 @@ class PortfolioSimulator:
                     loss_carryforward = self.tax_manager.loss_carryforward
                     net_investable_equity = total_pretax_value
                     final_target_shares = prov_target_shares
+                    self.tax_manager.current_annual_realized_gain = 0.0
 
                 # Step 6: Buys with Cash Clamping
                 gross_buy_expenditure = 0.0

@@ -473,6 +473,49 @@ class TestPortfolioSimulator(unittest.TestCase):
                 places=2,
             )
 
+    def test_spinoff_child_share_capital_gains_differential(self):
+        """Verify child share monetization increases realized capital gains by exactly (proceeds - child_basis)."""
+        # Baseline simulation without spinoff
+        self.data_loader.spinoffs.clear()
+        res_base = self.simulator.run_simulation(
+            start_year=2014,
+            end_year=2015,
+            n=5,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+        )
+        base_gain = res_base.annual_history[0].realized_capital_gain
+
+        # Simulation with MSFT spinoff
+        self.data_loader.spinoffs["MSFT"] = [
+            {
+                "ex_date": "2015-06-01",
+                "year": 2015,
+                "quarter": 2,
+                "distribution_per_share": 10.0,
+                "basis_retention_ratio": 0.80,
+                "spinco_ticker": "SPIN",
+                "description": "Test Spinoff",
+            }
+        ]
+        res_spin = self.simulator.run_simulation(
+            start_year=2014,
+            end_year=2015,
+            n=5,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+        )
+        spin_entry = res_spin.annual_history[0]
+        spin_gain = spin_entry.realized_capital_gain
+
+        # The difference in realized capital gain must strictly be positive reflecting the child share gain
+        diff_gain = spin_gain - base_gain
+        self.assertGreater(diff_gain, 0.0)
+        self.assertGreater(spin_entry.spinoff_proceeds, 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()
+

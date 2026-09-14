@@ -183,6 +183,16 @@ class TestDatasetIntegrity(unittest.TestCase):
         self.assertGreaterEqual(ret_1y, -0.20, f"Trailing 1y return {ret_1y} too negative")
         self.assertLessEqual(ret_1y, 0.20, f"Trailing 1y return {ret_1y} spiked unexpectedly")
 
+    def test_build_datasets_script_syntax_and_import(self):
+        """Verify scripts/build_datasets_from_raw.py compiles without IndentationError or SyntaxError."""
+        build_script = Path(__file__).resolve().parent.parent / "scripts" / "build_datasets_from_raw.py"
+        self.assertTrue(build_script.exists())
+        with open(build_script, "r", encoding="utf-8") as f:
+            code = f.read()
+        compiled = compile(code, str(build_script), "exec")
+        self.assertIsNotNone(compiled)
+
 
 if __name__ == "__main__":
     unittest.main()
+

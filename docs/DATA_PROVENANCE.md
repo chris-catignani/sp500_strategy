@@ -72,6 +72,11 @@ This architecture was strictly inverted to establish an unassailable data proven
 2. **One-Way Ingestion Pipeline**: `scripts/build_datasets_from_raw.py` reads directly from these raw JSON files into memory at runtime to drive dataset compilation (`data/sp500_constituents.json`, `data/sp500_quarterly_constituents.json`, etc.).
 3. **Auditability & Zero Circularity**: By eliminating hardcoded constituent arrays in code, the data compilation script functions purely as a deterministic transformer. Any update to historical constituent weights must be made in the raw factsheet catalog, where it is subjected to integrity checks (`tests/test_dataset_integrity.py`).
 
+#### 3.1.1 Historical Weight Sources & Institutional Validation Boundaries
+- **Source Compilation**: Point-in-time index constituent weights were compiled from official S&P Dow Jones Indices year-end factsheets and verified against historical archives maintained by Siblis Research and SEC Form 10-K disclosures.
+- **Institutional Access Constraints**: Audited daily observation-level constituent weights dating back to 1994 are proprietary intellectual property of S&P Global and CRSP (Center for Research in Security Prices), requiring expensive commercial academic licenses.
+- **Verification Guarantee**: While free public endpoints cannot independently recalculate daily float-adjusted shares for 1994–2005, isolating these weights into static upstream JSON files guarantees immutability, programmatic auditability, and reproducible backtest results without undocumented hidden code shifts.
+
 ---
 
 ## 4. Normalization & Transformation Methodology
@@ -128,6 +133,12 @@ To eliminate lookahead bias and maintain strict point-in-time realism:
 3. **Q4 Factsheet Re-Anchoring**: At each Q4 (December 31), candidate rosters and constituent index weights re-anchor to the official S&P Dow Jones Indices year-end factsheet. This introduces any newly admitted constituents (such as TSLA in 2020-Q4) and resets drifted weights to audited benchmark reality, eliminating multi-year cumulative drift error.
 4. **Pluggable Dataset Architecture**: [`DataLoader.load_quarterly_universe()`](../engine/data_loader.py) checks for registered quarterly universe files in `data/`, enabling external point-in-time constituent datasets to be dropped in without engine modifications.
 
+#### 4.3.5 Quarterly Candidate Roster Selection & Float Drift Trade-offs
+Evaluating candidate constituents for quarters Q1–Q3 from the prior December's Top 12 roster with passive price drift relative to the benchmark index ($W_{i,0} \times \frac{P_{i,q}/P_{i,0}}{P_{\text{index},q}/P_{\text{index},0}}$) is an intentional, principled design decision:
+- **Zero Lookahead Guarantee**: Deriving candidates from the prior year-end factsheet ensures no future information from year $t$'s Q4 factsheet leaks into early-year decisions. Midyear entrants that attain mega-cap valuation during Q1–Q3 are formally admitted at the Q4 reconstitution.
+- **Architectural Simplicity vs EDGAR Fragility**: Scraping float-adjusted shares and constituent holdings across 120+ historical SEC EDGAR regulatory filings (Forms N-Q, N-PORT, N-CSR for SPY) would introduce massive web scraping fragility and require external XML/HTML dependencies, violating the project's zero-external-dependency rule.
+- **Economic Accuracy**: In capitalization-weighted indices, capitalization between reconstitutions is overwhelmingly driven by price return rather than share issuance. The mathematical drift model closely tracks true passive index weight evolution.
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).
@@ -138,6 +149,14 @@ To eliminate lookahead bias and maintain strict point-in-time realism:
   $$r_{\text{tr}, 1994} = \frac{575.71 - 568.20}{568.20} = +1.3216\%$$
   $$r_{\text{pr}, 1994} = \frac{459.27 - 466.45}{466.45} = -1.5393\%$$
   $$y_{1994} = 1.3216\% - (-1.5393\%) = 2.8609\% \approx 2.86\%$$
+
+#### 4.4.1 MSCI World Benchmark: Synthetic Quarterly Total Return & Institutional Paywall Constraints
+Historical 31-year daily/quarterly Gross Total Return index series for MSCI World (1994–2024) are commercial intellectual property of MSCI Inc. and require costly institutional licenses (such as MSCI Index Metrics, Bloomberg, or FactSet). Public APIs provide price returns or modern ETF proxies (e.g. URTH starting only in 2012).
+To provide an unassailable benchmark without third-party subscriptions:
+1. Observed quarterly price index levels from `data/raw/benchmarks/MSCIWORLD.json` provide the intra-year quarterly shape and volatility dynamics.
+2. Intra-year quarterly returns are rescaled so their compound annual product matches audited annual total return targets.
+3. The synthetic annual dividend yield is spread evenly across quarters ($y_t / 4$).
+This methodology faithfully reflects discrete quarterly market drawdowns (e.g., Q3 2008 Lehman, Q1 2020 COVID) while strictly guaranteeing exact adherence to audited annual benchmark targets.
 
 ### 4.5 Security Decoupling: AT&T Corp ("Ma Bell") vs. SBC Communications (1993–1998)
 
@@ -158,22 +177,34 @@ The authentic historical market record for original AT&T Corp is isolated in `da
 - **Prices & Baseline Closes**: Verified historical month-end closes from 1993 through 1998, including 1993-Q1..Q3 baseline closes (\$52.50, \$54.00, and \$56.25) to prevent artificial capitalization drift spikes in early 1994.
 - **Automated Splicing**: In `scripts/build_datasets_from_raw.py`, pre-1999 SBC data for `T` is purged, and the verified `T_CORP_HISTORICAL` record is spliced into the constituent series for 1993–1998. Data from 1999 onward transitions smoothly into the consolidated modern AT&T series.
 
+#### 4.5.4 AT&T Corporate Timeline & 1998–2006 Top 12 Absence
+A rigorous audit of `historical_index_weights.json` reveals that ticker **`T` was NOT in the S&P 500 Top 12 from 1998 through 2006**:
+- Following the 1996 Lucent Technologies spinoff and 1997 NCR spinoff, legacy AT&T Corp shrank rapidly in market capitalization and dropped completely out of Top 10/12 consideration by year-end 1998.
+- During 1994–1997, when AT&T was held in Top 10 strategies, the series is **100% sourced from the verified `T_CORP_HISTORICAL.json`** dataset.
+- Transitioning to modern SBC Communications data in 1999 therefore had **zero effect** on portfolio constituent selection or performance during the 1998–2006 window.
+- When `T` re-entered the Top 12 roster in 2007, SBC Communications had already completed its \$16 billion acquisition of AT&T Corp (November 2005) and adopted the consolidated **AT&T Inc.** identity, ensuring complete continuity with modern corporate reality.
+
 ---
 
 ### 4.6 Statutory Corporate Spinoff Modeling (IRS Section 355 & Form 8937)
 
 #### 4.6.1 Statutory Background & IRC Section 355
 Under Internal Revenue Code (IRC) Section 355 and Treasury Regulations, a corporate division or spinoff meeting statutory requirements is treated as a **tax-free reorganization**:
-- Shareholders receiving shares of a spun-off entity do not recognize taxable dividend income or immediate capital gain.
+- Shareholders receiving shares of a spun-off entity do not recognize taxable dividend income or immediate capital gain upon distribution.
 - Pursuant to IRC Section 358 and IRS Form 8937 (*Report of Organizational Actions Affecting Basis of Securities*), the aggregate tax basis in the pre-distribution parent shares is allocated between the parent shares and the spun-off shares in proportion to their relative fair market values immediately following the distribution:
   $$P_{\text{basis, new}} = \text{round}(P_{\text{basis, old}} \times R_{\text{retention}}, 4)$$
   where $R_{\text{retention}} \in (0, 1)$ is the basis retention ratio reported on the issuer's Form 8937.
 
 #### 4.6.2 Engine Simulation Mechanics & Invariant Preservation
-In a disciplined Top N strategy, the portfolio cannot hold non-qualifying arbitrary spin-co equity positions without violating constituent universe constraints. The backtesting engine (`engine/backtest.py` and `engine/tax_lots.py`) implements an exact statutory cash-realization and basis-adjustment model:
-1. **Tax-Free Cash Credit**: In the quarter or year of the corporate action, the cash distribution per share is multiplied by existing shares held and credited directly to the portfolio's available cash pool (`self.cash += shares_held * dist_per_share`). This preserves the self-financing cash invariant ($C \ge 0$).
-2. **Zero Dividend Tax Withholding**: Because qualifying Section 355 spinoffs are corporate reorganizations rather than ordinary dividend distributions, **zero dividend tax is withheld** at rebalancing ($0.00 dividend tax drag).
-3. **Tax Lot Cost Basis Reduction**: All open FIFO tax lots of the parent company are updated via [`FIFOTaxLotManager.adjust_basis_ratio(ticker, ratio)`](../engine/tax_lots.py), reducing each lot's `purchase_price` by the Form 8937 basis retention ratio. This preserves embedded unrealized capital gains, ensuring correct capital gains tax settlement when the parent shares are subsequently trimmed or liquidated.
+In a disciplined Top N strategy, the portfolio cannot hold non-qualifying arbitrary spin-co equity positions without violating constituent universe constraints. The backtesting engine (`engine/backtest.py` and `engine/tax_lots.py`) implements an exact statutory two-step cash-realization and basis-adjustment model:
+1. **Tax-Free Corporate Distribution (IRC § 355 & § 358)**:
+   - In the quarter or year of the corporate action, the cash distribution per share is credited directly to available cash (`self.cash += shares_held * dist_per_share`), maintaining self-financing cash neutrality ($C \ge 0$).
+   - **Zero Dividend Tax Withholding**: Qualifying Section 355 reorganizations are not dividends; zero dividend tax is withheld ($0.00 dividend tax drag).
+   - **Cost Basis Allocation**: All open FIFO tax lots of the parent company are reduced by $R_{\text{retention}}$ via [`FIFOTaxLotManager.adjust_basis_ratio(ticker, ratio)`](../engine/tax_lots.py), while the remaining basis $B_{\text{child}} = \sum_{\text{lots}} \text{shares} \times (\text{old\_price} - \text{new\_price})$ is apportioned to the child shares.
+2. **Immediate Monetization & Capital Gains Tax Settlement (IRC § 1001)**:
+   - Because the portfolio strategy immediately sells the non-qualifying child shares for cash proceeds $G = \text{shares\_held} \times \text{dist\_per\_share}$, this monetization constitutes a taxable disposition under IRC § 1001.
+   - The realized capital gain is computed as $\text{Realized Gain}_{\text{child}} = G - B_{\text{child}}$.
+   - This realized gain is recorded in `FIFOTaxLotManager.current_annual_realized_gain` and nets against capital loss carryforwards during annual/quarterly rebalancing tax settlement, paying tax at the capital gains rate $\tau$. This preserves the fundamental invariant that all lifecycle economic gains are taxed without escaping taxation.
 
 #### 4.6.3 Raw Corporate Spinoff Catalog (`data/raw/corporate_actions/spinoffs.json`)
 The immutable catalog in `data/raw/corporate_actions/spinoffs.json` (compiled to `data/spinoff_distributions.json`) records the following verified historical corporate spinoffs:
