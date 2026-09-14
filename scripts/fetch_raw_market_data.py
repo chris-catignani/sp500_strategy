@@ -24,7 +24,7 @@ NON_US_TICKERS = [
     "NVS", "BP", "BHP", "RIO", "SONY", "TTE", "SNY",
 ]
 
-BENCHMARKS = ["^GSPC", "^SP500TR", "URTH", "FBGRX"]
+BENCHMARKS = ["^GSPC", "^SP500TR", "URTH", "FBGRX", "^NDX", "^NDXT", "QQQ"]
 
 # Symbol translations for Yahoo Finance API
 SYMBOL_MAP = {
@@ -37,6 +37,9 @@ BENCHMARK_FILE_MAP = {
     "^SP500TR": "SP500TR.json",
     "URTH": "URTH.json",
     "FBGRX": "FBGRX.json",
+    "^NDX": "NDX.json",
+    "^NDXT": "NDXT.json",
+    "QQQ": "QQQ.json",
 }
 
 # 1993-01-01 to 2024-12-31 UTC
