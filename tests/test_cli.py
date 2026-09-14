@@ -148,6 +148,12 @@ class TestCLI(unittest.TestCase):
         self.assertIn("15.20%", table_str)
         self.assertIn("Horizon", table_str)
         self.assertIn("Alpha", table_str)
+        self.assertIn("Max Drawdown is measured at discrete rebalance observation dates", table_str)
+        self.assertIn("Pre-Tax and After-Tax CAGRs reflect pre-liquidation wealth", table_str)
+
+        # Verify show_footnotes=False suppresses footnotes
+        table_no_fn = run_backtest.format_terminal_table(rows, show_footnotes=False)
+        self.assertNotIn("Note: Max Drawdown", table_no_fn)
 
     def test_run_backtest_integration(self):
         """Test programmatic execution of run_backtest on a single horizon and N."""
