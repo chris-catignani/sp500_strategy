@@ -1,6 +1,7 @@
 {
-  "source": "S&P Dow Jones Indices Historical Market Cap Archives / Compustat",
-  "methodology": "Point-in-time constituent rank and index market cap weight as of Dec 31 each year",
+  "source": "S&P Dow Jones Indices Historical Factsheets / Compustat Point-in-Time Database / Siblis Research S&P 500 Historical Weights",
+  "methodology": "Point-in-time constituent rank and index market cap weight as of Dec 31 each year; intra-year Q1-Q3 capitalization drift re-anchoring to official Q4 factsheet",
+  "provenance_citation": "Standard & Poor's Monthly Index Factsheets (1994-2024); S&P 500 Annual Constituent Capitalization Roster; SEC Form 10-K Filings",
   "constituents_by_year": {
     "1994": [
       "GE",

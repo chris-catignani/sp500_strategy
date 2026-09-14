@@ -116,6 +116,29 @@ class TestDatasetIntegrity(unittest.TestCase):
                 self.assertIn(str_yr, prices[ticker])
                 self.assertGreater(prices[ticker][str_yr], 0.0)
 
+    def test_spinoffs_raw_catalog_valid(self):
+        spinoffs_file = self.data_dir / "raw" / "corporate_actions" / "spinoffs.json"
+        self.assertTrue(spinoffs_file.exists(), "raw spinoffs.json missing")
+        with open(spinoffs_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for ticker in ["MO", "T", "GE"]:
+            self.assertIn(ticker, data)
+            for event in data[ticker]:
+                self.assertIn("ex_date", event)
+                self.assertIn("year", event)
+                self.assertIn("quarter", event)
+                self.assertGreater(event["distribution_per_share"], 0.0)
+                self.assertGreater(event["basis_retention_ratio"], 0.0)
+                self.assertLess(event["basis_retention_ratio"], 1.0)
+
+    def test_att_corp_historical_raw_exists(self):
+        t_hist_file = self.data_dir / "raw" / "tickers" / "T_CORP_HISTORICAL.json"
+        self.assertTrue(t_hist_file.exists(), "T_CORP_HISTORICAL.json missing")
+        with open(t_hist_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        chart = data["chart"]["result"][0]
+        self.assertEqual(chart["meta"]["symbol"], "T_CORP")
+
 
 if __name__ == "__main__":
     unittest.main()

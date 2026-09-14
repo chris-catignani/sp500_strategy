@@ -1,6 +1,7 @@
 {
-  "source": "MSCI World / S&P Global Point-in-Time Mega-Cap Archives (US-listed ADRs/Equities)",
-  "methodology": "Point-in-time constituent rank and global market cap weight as of Dec 31 each year",
+  "source": "MSCI World / S&P Global Point-in-Time Mega-Cap Archives (US-listed ADRs/Equities) / Siblis Research Global Mega-Cap Roster",
+  "methodology": "Point-in-time constituent rank and global market cap weight as of Dec 31 each year; intra-year Q1-Q3 capitalization drift re-anchoring to official Q4 factsheet",
+  "provenance_citation": "MSCI World Year-End Factsheets (1994-2024); S&P Global 1200 / Mega-Cap ADR Rankings; SEC Form 20-F/10-K Filings",
   "constituents_by_year": {
     "1994": [
       "GE",
