@@ -1087,7 +1087,7 @@ def format_apps_script_payloads(
                             round(win_rate, 4),
                         ])
 
-                        if u == "sp500" and bmk_label == "S&P 500" and f_key == "annual":
+                        if (u == "sp500" or u == universes[0]) and bmk_label == "S&P 500" and f_key == "annual" and len(era_rows) < 5:
                             era_rows.append([
                                 label,
                                 desc,

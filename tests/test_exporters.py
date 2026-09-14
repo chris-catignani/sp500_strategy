@@ -465,6 +465,8 @@ class TestExporters(unittest.TestCase):
         # Check dynamic filter formulas on Performance & Tradeoffs tab
         self.assertIn("FILTER(\\'Scenario Data\\'!$AI$2:$AP", code)
         self.assertIn("\\'Scenario Data\\'!$AH$2:$AH = (\\'Executive Summary\\'!$B$2 & \"_\" & \\'Executive Summary\\'!$D$3 & \"_\" & \\'Executive Summary\\'!$B$3)", code)
+        self.assertIn("sheet.getRange('F5').setFormula('=\"Benchmark (\" & \\'Executive Summary\\'!$D$3 & \") CAGR\"');", code)
+        self.assertIn("sheet.getRange('G5').setFormula('=\"Top 10 Alpha vs \" & \\'Executive Summary\\'!$D$3');", code)
         self.assertIn("FILTER(\\'Scenario Data\\'!$U$2:$Y", code)
         self.assertIn("FILTER(\\'Scenario Data\\'!$AB$2:$AF", code)
 

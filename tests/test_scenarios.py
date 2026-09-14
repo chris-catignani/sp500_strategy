@@ -87,6 +87,13 @@ class TestScenarios(unittest.TestCase):
         for row in annual_data["era_matrix"]:
             self.assertEqual(len(row), 9)  # LookupKey, Era, Context, Top3, Top5, Top10, Bench, Alpha, WinRate
 
+        era_keys = {row[0] for row in annual_data["era_matrix"]}
+        for b in ["S&P 500", "MSCI World", "FBGRX", "Nasdaq 100"]:
+            self.assertIn(f"S&P 500_{b}_Annual", era_keys)
+            self.assertIn(f"S&P 500_{b}_Quarterly", era_keys)
+            self.assertIn(f"All World_{b}_Annual", era_keys)
+            self.assertIn(f"All World_{b}_Quarterly", era_keys)
+
         # Trades data checks
         self.assertIsInstance(trades_data, list)
         self.assertGreater(len(trades_data), 0)
@@ -108,6 +115,7 @@ class TestScenarios(unittest.TestCase):
         self.assertEqual(len(annual_data["drawdown_matrix"]), 248)
         # 5 eras * 8 combos (1 Universe x 4 Benchmarks x 2 Frequencies) = 40 rows
         self.assertEqual(len(annual_data["era_matrix"]), 40)
+        self.assertEqual(len(annual_data["era_data"]), 5)
 
     def test_build_default_scenario_data_helper(self):
         """Verify backward-compatible build_default_scenario_data dictionary contract."""
