@@ -20,12 +20,13 @@ See `docs/ARCHITECTURE.md` for full component diagrams and schema details.
 - `engine/selector.py`: `BaseSelector`, `MarketCapSelector`, `PerformanceSelector` ($w_i = W_i / \sum_{j=1}^N W_j$).
 - `engine/data_loader.py`: Point-in-time constituent datasets, split-adjusted prices, and split-adjusted dividend history (1994–2024).
 - `engine/backtest.py`: `PortfolioSimulator` implementing dividend cash pooling and two-phase rebalancing (pre-tax valuation, exits/trims, decoupled dual tax, secondary trims, cash-clamped buys).
+- `engine/benchmarks.py`: Benchmark compounding and metrics calculation across SPX, MSCI World, FBGRX, and Nasdaq 100 (`BenchmarkSuite`, `compute_all_benchmarks`).
 - `engine/metrics.py`: Math functions (`calculate_cagr`, `calculate_cumulative_return`, `calculate_max_drawdown`, `calculate_turnover`, `calculate_tax_drag`, `calculate_alpha`, `calculate_terminal_metrics`, `calculate_benchmark_annual_series`).
 - `engine/scenarios.py`: Multi-tier scenario matrix builder across tax tiers, frequencies, and horizons.
-- `engine/terminal_view.py`: Terminal presentation utilities (`format_terminal_table`).
+- `engine/terminal_view.py`: Terminal presentation utilities (`format_terminal_table`, `build_strategy_row`, `build_benchmark_row`).
 - `engine/templates/`: Modular Google Apps Script dashboard templates (`gas/00_` to `05_`).
 - `engine/exporters/`: CSV report writers, Google Apps Script generator, and pipeline orchestrator.
-- `run_backtest.py`: Primary CLI runner (`--frequency`, `--compare-frequencies`, `--no-export`, `--benchmark`).
+- `run_backtest.py`: Decomposed primary CLI runner and pipeline orchestrator (`--frequency`, `--compare-frequencies`, `--no-export`, `--benchmark`).
 
 ## Common Commands
 - Run backtest (fast, no file exports): `python3 run_backtest.py --no-export`

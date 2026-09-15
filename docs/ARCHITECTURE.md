@@ -10,16 +10,22 @@ The system is decoupled into seven distinct layers, strictly adhering to single-
 
 ```mermaid
 graph TD
-    CLI[run_backtest.py<br>CLI Entrypoint] --> SIM[PortfolioSimulator<br>engine/backtest.py]
+    CLI[run_backtest.py<br>CLI Orchestrator] --> SIM[PortfolioSimulator<br>engine/backtest.py]
+    CLI --> BM[Benchmark Engine<br>engine/benchmarks.py]
+    CLI --> TV[Terminal View<br>engine/terminal_view.py]
     
     SIM --> DL[DataLoader<br>engine/data_loader.py]
     SIM --> SEL[BaseSelector<br>engine/selector.py]
     SIM --> TAX[FIFOTaxLotManager<br>engine/tax_lots.py]
     SIM --> MOD[Domain Models<br>engine/models.py]
     
+    BM --> DL
+    BM --> MET[Metrics Engine<br>engine/metrics.py]
+    BM --> MOD
+    
     DL --> DATA[(JSON Datasets<br>data/)]
     
-    SIM --> MET[Metrics Engine<br>engine/metrics.py]
+    SIM --> MET
     SIM --> SCN[Scenarios Engine<br>engine/scenarios.py]
     SCN --> EXP[Report Exporters<br>engine/exporters/]
     SCN --> GAS_TMPL[Apps Script Template<br>engine/templates/]
@@ -32,14 +38,16 @@ graph TD
 
 | Layer / File | Responsibility |
 | :--- | :--- |
+| [`run_backtest.py`](../run_backtest.py) | Decomposed CLI orchestrator parsing arguments, coordinating benchmark computation, driving simulation matrix, and delegating output to terminal presentation and export pipelines. |
 | [`engine/models.py`](../engine/models.py) | Pure immutable/mutable typed dataclasses (`ConstituentSnapshot`, `HoldingTarget`, `TaxLot`, `TradeOrder`, `AnnualLedgerEntry`, `StrategyResult`). |
 | [`engine/data_loader.py`](../engine/data_loader.py) | Loads point-in-time constituent snapshots, split-adjusted close prices (1994–2024), and official `^GSPC` benchmark levels from JSON data stores. |
+| [`engine/benchmarks.py`](../engine/benchmarks.py) | Pre-calculates market benchmarks (S&P 500, MSCI World, FBGRX, Nasdaq 100) across annual and quarterly horizons, and builds synthetic `StrategyResult` instances for export pipelines. |
 | [`engine/tax_lots.py`](../engine/tax_lots.py) | Maintains FIFO tax-lot queues per ticker, executes partial lot depletion, accumulates realized gains, and nets gains against prior loss carryforwards. |
 | [`engine/selector.py`](../engine/selector.py) | Ranks constituents and calculates target weights normalized to 100% ($w_i = W_i / \sum W_j$). Selector resolution (`resolve_selector`). |
 | [`engine/backtest.py`](../engine/backtest.py) | Two-phase rebalance simulation engine enforcing cash neutrality, self-financing, and zero margin debt ($cash \ge 0.0$). |
 | [`engine/metrics.py`](../engine/metrics.py) | Pure mathematical calculation of CAGR, Cumulative Return, Max Drawdown, Turnover, Tax Drag, Alpha, and terminal liquidation metrics. |
 | [`engine/scenarios.py`](../engine/scenarios.py) | Multi-tier scenario matrix orchestrator (`build_scenario_and_apps_script_data`) across horizons, tax rates, and universes. |
-| [`engine/terminal_view.py`](../engine/terminal_view.py) | ASCII terminal presentation formatting (`format_terminal_table`). |
+| [`engine/terminal_view.py`](../engine/terminal_view.py) | ASCII terminal presentation formatting (`format_terminal_table`) and row transformation utilities (`build_strategy_row`, `build_benchmark_row`). |
 | [`engine/templates/`](../engine/templates/) | Modular Google Apps Script dashboard templates (`gas/00_` to `05_`). |
 | [`engine/exporters/`](../engine/exporters/) | Modular export package (`csv.py`, `apps_script.py`, `pipeline.py`). Formats CSV audit files and generates Google Apps Script dashboards. |
 
