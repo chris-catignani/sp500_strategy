@@ -515,6 +515,40 @@ class TestPortfolioSimulator(unittest.TestCase):
         self.assertGreater(diff_gain, 0.0)
         self.assertGreater(spin_entry.spinoff_proceeds, 0.0)
 
+    def test_secondary_trim_at_loss_reduces_tax_and_refunds_cash(self):
+        """Verify secondary rebalance trims at a loss refund earlier tax within the rebalance."""
+        sim = PortfolioSimulator(self.data_loader)
+        # Setup portfolio manually with two positions in 2020:
+        # Stock A: huge gain (bought at 10, current price 50)
+        # Stock B: huge loss (bought at 100, current price 50)
+        sim.tax_manager.start_tax_year(2020)
+        sim.tax_manager.add_lot("WIN", shares=100.0, price=10.0, year=2019)
+        sim.tax_manager.add_lot("LOSE", shares=100.0, price=100.0, year=2019)
+        sim.cash = 1000.0
+
+        # Now simulate rebalance iteration:
+        # Iteration 0: WIN is trimmed by 50 shares @ 50 -> gain = 50 * (50 - 10) = 2000
+        gain_win, _ = sim.tax_manager.sell_shares("WIN", 50.0, 50.0, 2020)
+        self.assertAlmostEqual(gain_win, 2000.0)
+        tax_step_0, net_0, cf_0 = sim.tax_manager.settle_annual_taxes(0.30, 2020)
+        self.assertAlmostEqual(tax_step_0, 600.0)
+        self.assertAlmostEqual(net_0, 2000.0)
+        self.assertAlmostEqual(cf_0, 0.0)
+        total_tax_paid = tax_step_0
+
+        # Iteration 1: Secondary trim on LOSE sells 20 shares @ 50 -> loss = 20 * (50 - 100) = -1000
+        gain_lose, _ = sim.tax_manager.sell_shares("LOSE", 20.0, 50.0, 2020)
+        self.assertAlmostEqual(gain_lose, -1000.0)
+        tax_step_1, net_1, cf_1 = sim.tax_manager.settle_annual_taxes(0.30, 2020)
+        # Net annual taxable gain is now 1000; total tax liability is 300; tax_step is 300 - 600 = -300
+        self.assertAlmostEqual(tax_step_1, -300.0)
+        self.assertAlmostEqual(net_1, 1000.0)
+        self.assertAlmostEqual(cf_1, 0.0)
+
+        total_tax_paid += tax_step_1
+        self.assertAlmostEqual(total_tax_paid, 300.0)
+        self.assertAlmostEqual(sim.tax_manager.capital_loss_carryforward, 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()

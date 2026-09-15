@@ -68,7 +68,13 @@ class TradeOrder:
 
 @dataclass
 class AnnualLedgerEntry:
-    """Annual or quarterly performance, cash flow, and tax ledger entry."""
+    """Annual or quarterly performance, cash flow, and tax ledger entry.
+
+    Note on net_taxable_gain:
+        Represents the signed net taxable capital position (G - C_open) for the period,
+        where negative values signify unabsorbed capital losses for that period rather
+        than negative taxable income.
+    """
     year: int
     start_value: float
     gross_return: float
