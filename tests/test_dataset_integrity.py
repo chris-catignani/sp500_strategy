@@ -4,6 +4,19 @@ from pathlib import Path
 
 
 class TestDatasetIntegrity(unittest.TestCase):
+    def test_att_distribution_endpoints_conserve_quoted_wealth(self):
+        """Parent plus credited child must equal the sourced package quote."""
+        from engine.data_loader import DataLoader
+        loader = DataLoader()
+        # Source observations: 130 T shares valued at $6,792.50 on Sept 30
+        # and $5,638.75 on Dec 31 in contemporaneous portfolio statements.
+        for quarter, quoted_wealth in ((3, 6792.50), (4, 5638.75)):
+            parent = loader.get_quarterly_price("T", 1996, quarter)
+            child, _ = loader.get_quarterly_spinoff_distribution("T", 1996, quarter)
+            self.assertLessEqual(abs(parent + child - quoted_wealth / 130), 0.00501)
+        self.assertEqual(loader.get_price("T", 1996),
+                         loader.get_quarterly_price("T", 1996, 4))
+
     def setUp(self):
         self.data_dir = Path(__file__).resolve().parent.parent / "data"
         self.dividends_path = self.data_dir / "sp500_dividends.json"
@@ -169,7 +182,7 @@ class TestDatasetIntegrity(unittest.TestCase):
         # Verify AT&T Corp decoupled values (not SBC Communications)
         self.assertEqual(prices["T"]["1994"], 50.25)
         self.assertEqual(prices["T"]["1995"], 64.75)
-        self.assertEqual(prices["T"]["1996"], 43.50)
+        self.assertEqual(prices["T"]["1996"], 41.27)
         self.assertEqual(prices["T"]["1997"], 61.25)
         for yr in ["1994", "1995", "1996", "1997"]:
             self.assertAlmostEqual(divs["T"][yr], 1.32, places=2)
@@ -208,4 +221,3 @@ class TestDatasetIntegrity(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

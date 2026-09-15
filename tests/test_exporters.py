@@ -526,6 +526,8 @@ class TestExporters(unittest.TestCase):
                 errNeg: RECALCULATE_STRATEGY(-0.05),
                 errHigh: RECALCULATE_STRATEGY(0.50),
                 errScenario: RECALCULATE_STRATEGY(0.30, 'Top 99'),
+                errUniverse: RECALCULATE_STRATEGY(0.30, 'Top 5', '30y', 'Market Cap', 'nonsense'),
+                errWeighting: RECALCULATE_STRATEGY(0.30, 'Top 5', '30y', 'nonsense', 'S&P 500'),
                 errMetric: RECALCULATE_STRATEGY(0.30, 'Top 5', '30y', 'Market Cap', 'S&P 500', 'Annual', 'SharpeRatio')
             };
             console.log(JSON.stringify(results));
@@ -535,14 +537,14 @@ class TestExporters(unittest.TestCase):
             data = json.loads(proc.stdout)
 
             # Compare standard tiers against exact backtest results
-            self.assertAlmostEqual(data["cagr0"], 0.142807, places=5)
-            self.assertAlmostEqual(data["cagr15"], 0.130057, places=5)
-            self.assertAlmostEqual(data["cagr20"], 0.125485, places=5)
-            self.assertAlmostEqual(data["cagr30"], 0.115767, places=5)
-            self.assertAlmostEqual(data["cagr37"], 0.108434, places=5)
+            self.assertAlmostEqual(data["cagr0"], 0.142980, places=5)
+            self.assertAlmostEqual(data["cagr15"], 0.130214, places=5)
+            self.assertAlmostEqual(data["cagr20"], 0.125637, places=5)
+            self.assertAlmostEqual(data["cagr30"], 0.115907, places=5)
+            self.assertAlmostEqual(data["cagr37"], 0.108565, places=5)
 
             # Piecewise interpolation: 25% is halfway between 20% and 30%
-            expected_25 = 0.125485 + 0.5 * (0.115767 - 0.125485)
+            expected_25 = 0.125637 + 0.5 * (0.115907 - 0.125637)
             self.assertAlmostEqual(data["cagr25Interp"], expected_25, places=5)
 
             # Custom dimension lookup
@@ -561,6 +563,8 @@ class TestExporters(unittest.TestCase):
             self.assertEqual(data["errNeg"], "Tax rate out of simulated bounds (0.0% - 37.0%)")
             self.assertEqual(data["errHigh"], "Tax rate out of simulated bounds (0.0% - 37.0%)")
             self.assertEqual(data["errScenario"], "Scenario not found")
+            self.assertEqual(data["errUniverse"], "Scenario not found")
+            self.assertEqual(data["errWeighting"], "Scenario not found")
             self.assertEqual(data["errMetric"], "Invalid metric: SharpeRatio")
 
 

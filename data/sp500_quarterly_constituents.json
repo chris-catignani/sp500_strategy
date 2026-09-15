@@ -1021,14 +1021,6 @@
       "quarter": 3
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0195,
-      "trailing_1y_return": 0.1447,
-      "year": 1996,
-      "quarter": 3
-    },
-    {
       "ticker": "MRK",
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0192,
@@ -1057,6 +1049,14 @@
       "name": "Walmart Inc.",
       "market_cap_weight": 0.0149,
       "trailing_1y_return": 0.0763,
+      "year": 1996,
+      "quarter": 3
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0129,
+      "trailing_1y_return": -0.1564,
       "year": 1996,
       "quarter": 3
     },
@@ -1106,7 +1106,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.023,
-      "trailing_1y_return": -0.0457,
+      "trailing_1y_return": -0.0802,
       "year": 1996,
       "quarter": 4
     },
@@ -1201,18 +1201,18 @@
       "quarter": 1
     },
     {
-      "ticker": "MRK",
-      "name": "Merck & Co. Inc.",
+      "ticker": "T",
+      "name": "AT&T Inc.",
       "market_cap_weight": 0.0207,
-      "trailing_1y_return": 0.3786,
+      "trailing_1y_return": -0.0847,
       "year": 1997,
       "quarter": 1
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0197,
-      "trailing_1y_return": -0.0847,
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.0207,
+      "trailing_1y_return": 0.3786,
       "year": 1997,
       "quarter": 1
     },
@@ -1325,7 +1325,7 @@
     {
       "ticker": "T",
       "name": "AT&T Inc.",
-      "market_cap_weight": 0.0157,
+      "market_cap_weight": 0.0166,
       "trailing_1y_return": -0.1324,
       "year": 1997,
       "quarter": 2
@@ -1415,8 +1415,8 @@
     {
       "ticker": "T",
       "name": "AT&T Inc.",
-      "market_cap_weight": 0.0183,
-      "trailing_1y_return": -0.1563,
+      "market_cap_weight": 0.0193,
+      "trailing_1y_return": 0.2753,
       "year": 1997,
       "quarter": 3
     },
@@ -1562,7 +1562,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.012,
-      "trailing_1y_return": 0.4384,
+      "trailing_1y_return": 0.5161,
       "year": 1997,
       "quarter": 4
     }

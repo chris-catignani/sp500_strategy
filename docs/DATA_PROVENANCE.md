@@ -57,7 +57,11 @@ data/raw/
     └── world_historical_index_weights.json # Authoritative All-World point-in-time constituent factsheet weights
 ```
 
-Each raw file contains the unadulterated JSON response directly from the API endpoint:
+Downloaded chart files contain API responses with the following fields. The constituent
+catalogs, corporate-action catalog, legacy `T_CORP_HISTORICAL.json` reconstruction,
+and `att_1996_endpoint_valuations.json` are separately compiled inputs, not untouched
+API responses. The endpoint manifest records the observations and sources used for
+the 1996 reconciliation below.
 - `timestamp`: Unix epoch seconds for each monthly observation.
 - `indicators.quote[0].close`: Month-end closing price, normalized for splits as of the query date.
 - `events.splits`: Dictionary of every stock split event, with timestamp `date`, `numerator`, `denominator`, and `splitRatio`.
@@ -180,7 +184,7 @@ The authentic historical market record for original AT&T Corp is isolated in `da
 #### 4.5.4 AT&T Corporate Timeline & 1998–2006 Top 12 Absence
 A rigorous audit of `historical_index_weights.json` reveals that ticker **`T` was NOT in the S&P 500 Top 12 from 1998 through 2006**:
 - Following the 1996 Lucent Technologies spinoff and 1996 NCR spinoff, legacy AT&T Corp shrank rapidly in market capitalization and dropped completely out of Top 10/12 consideration by year-end 1998.
-- During 1994–1997, when AT&T was held in Top 10 strategies, the series is **100% sourced from the verified `T_CORP_HISTORICAL.json`** dataset.
+- During 1994–1997, the legacy series comes from `T_CORP_HISTORICAL.json`, with the explicit 1996 endpoint reconciliation below. Other legacy observations remain subject to the source-validation work in issue #25.
 - Transitioning to modern SBC Communications data in 1999 therefore had **zero effect** on portfolio constituent selection or performance during the 1998–2006 window.
 - When `T` re-entered the Top 12 roster in 2007, SBC Communications had already completed its \$16 billion acquisition of AT&T Corp (November 2005) and adopted the consolidated **AT&T Inc.** identity, ensuring complete continuity with modern corporate reality.
 
@@ -227,13 +231,13 @@ Following the engine's immediate-liquidation convention for non-qualifying Spin-
    - **Statutory Basis Allocation**: AT&T retained **72.01%** (`0.7201`), allocating **27.99%** to Lucent (IRS Section 358; [AT&T Official Shareholder Cost Basis Guide](https://investors.att.com/stockholder-services/cost-basis-guide/worksheet/att-corp)).
    - **Market Liquidation Price**: **\$45.875** ($45\frac{7}{8}$), the official NYSE closing price on September 30, 1996.
    - **Proceeds per Share**: $0.324084 \times \$45.875 = \$14.86735 \approx \mathbf{\$14.87}$.
-   - *Cross-Check*: Relative value $\frac{\$14.87}{\$38.25 + \$14.87} = 27.99\%$, matching the official 0.2799 allocation factor.
+   - **Basis versus valuation**: The issuer basis allocation is retained independently. The former $38.25 parent-price cross-check was unsupported and is removed; a tax allocation ratio is not evidence of an endpoint execution price.
 2. **AT&T / NCR Corporation (`NCR`, 1996-12-31)**:
    - **Distribution Ratio**: 0.0625 shares of NCR common stock per AT&T share (1 share of NCR for each 16 AT&T shares).
    - **Statutory Basis Allocation**: AT&T retained **95.23%** (`0.9523`), allocating **4.77%** to NCR (IRS Section 358; AT&T Shareholder Cost Basis Guide).
-   - **Market Liquidation Price**: **\$33.625** ($33\frac{5}{8}$), initial trading valuation on distribution (first public trading day January 2, 1997).
+   - **Market Liquidation Price**: **\$33.625** ($33\frac{5}{8}$), when-issued valuation on December 31, 1996; regular trading began January 2, 1997.
    - **Proceeds per Share**: $0.0625 \times \$33.625 = \$2.10156 \approx \mathbf{\$2.10}$.
-   - *Cross-Check*: Relative value $\frac{\$2.10}{\$41.40 + \$2.10} \approx 4.8\%$, aligning with the statutory 4.77% allocation factor.
+   - **Basis versus valuation**: Retain the issuer basis factor independently of the market valuation.
 3. **Altria / Kraft Foods (`KFT`, 2007-03-30)**:
    - **Distribution Ratio**: 0.692024 shares of Kraft Foods Inc. per Altria share.
    - **Statutory Basis Allocation**: Altria retained **69.10%** (`0.6910`), allocating **30.90%** to Kraft (IRS Form 8937).
@@ -260,6 +264,35 @@ Following the engine's immediate-liquidation convention for non-qualifying Spin-
    - **Market Liquidation Price**: **\$141.50**, closing price on April 2, 2024.
    - **Proceeds per Share**: $0.25 \times \$141.50 = \$35.375 \approx \mathbf{\$35.38}$.
 
+#### 1996 endpoint reconciliation (derived valuations)
+
+The legacy archive's $56.50 Q3 and $43.50 Q4 entries are superseded by
+`data/raw/corporate_actions/att_1996_endpoint_valuations.json` during dataset compilation.
+Contemporaneous first-person portfolio statements value 130 AT&T shares at
+[$6,792.50 on September 30](https://www.fool.com/archive/foolport/1996/09/30/fool-portfolio-report-monday-september-30-1996.aspx)
+and [$5,638.75 on December 31](https://www.fool.com/archive/foolport/1996/12/31/fool-portfolio-report-tuesday-december-31-1996.aspx),
+implying package quotes of $52.25 and $43.375. The September statement has no separate
+Lucent position; the [October 1 statement](https://www.fool.com/archive/foolport/1996/10/01/fool-portfolio-report-tuesday-october-1-1996.aspx)
+recognizes it separately. These observations are not post-distribution parent closes.
+
+The engine recognizes each child at the distribution-date endpoint. To conserve
+wealth under this convention, the builder deducts **only that endpoint's** separately
+credited child proceeds from the package quote: Q3 = $52.25 - $14.87 = $37.38;
+Q4 = $43.375 - $2.10, rounded to $41.27. Lucent must not be deducted again in Q4.
+Annual 1996 uses the same Q4 valuation. These are **derived parent-only valuations**,
+not observed exchange execution prices. This is an explicit approximation for
+quarter-end trading immediately after a distribution, not a daily execution model.
+The underlying source archive is preserved, and rebuilds apply the reconciliation once.
+Legacy prices, dividends and distributions use contemporary legacy AT&T share units;
+they are not mapped onto modern SBC/AT&T share counts.
+
+[The transfer-agent historical guide](https://www.shareowneronline.com/FileHttphandler.ashx?filename=Historical&guid=131b40cd-f071-476d-8f86-1e6cd2b1edb5)
+supports Lucent's $45.875 close. NCR's $33.625 when-issued quote is reported in
+[contemporaneous coverage](https://www.latimes.com/archives/la-xpm-1997-01-01-fi-14389-story.html).
+Basis allocation remains independently sourced from the issuer guide; it is not used
+to reverse-engineer an alleged market close. Remaining legacy source validation is
+tracked separately in issue #25.
+
 #### 4.6.5 Absence of 1996 Spinoff Ticker Series on Modern Commercial APIs
 Modern market data providers (e.g., Yahoo Finance) do not host clean, unadjusted historical equity ticker series for 1996 Lucent (`LU`) or 1996 NCR (`NCR`):
 - Lucent merged with Alcatel in 2006 to form Alcatel-Lucent, which was acquired by Nokia (`NOK`) in 2016, extinguishing the standalone ticker history.
@@ -268,9 +301,9 @@ Consequently, source data for these legacy transactions cannot be retrieved via 
 
 #### 4.6.6 Rebalancing Entitlement Dynamics: Annual vs. Quarterly
 Because quarterly rebalancing dynamically drifts constituent market-cap weights at quarter-ends, corporate action entitlement depends on whether the security was held at the distribution date:
-- In 1996-Q3, `T` drifted to market cap rank #6.
+- In 1996-Q3, `T` drifted to market cap rank #10.
 - **Top 5 Annual**: Holds `T` across the entire 1996 calendar year $\implies$ receives Lucent (\$14.87) in Q3 and NCR (\$2.10) in Q4 (total \$16.97).
-- **Top 5 Quarterly**: Holds `T` entering Q3 $\implies$ receives Lucent (\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #6 $\implies$ receives **\$0.00 from NCR in Q4**.
+- **Top 5 Quarterly**: Holds `T` entering Q3 $\implies$ receives Lucent (\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #10 $\implies$ receives **\$0.00 from NCR in Q4**.
 - **Top 10 Quarterly**: Holds `T` through all four quarters $\implies$ receives both Lucent and NCR.
 - **Top 3 Quarterly**: Exits `T` at 1996-Q1 $\implies$ receives neither distribution.
 

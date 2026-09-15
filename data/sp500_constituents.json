@@ -197,7 +197,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.023,
-      "trailing_1y_return": -0.0457,
+      "trailing_1y_return": -0.0802,
       "year": 1996
     },
     {
@@ -339,7 +339,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.012,
-      "trailing_1y_return": 0.4384,
+      "trailing_1y_return": 0.5161,
       "year": 1997
     }
   ],

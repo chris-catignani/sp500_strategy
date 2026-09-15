@@ -7,10 +7,11 @@ For full details on sources, formulas, corporate actions, and rebuild instructio
 
 ## Directory Structure
 
-- `raw/`: **Immutable Raw API Data**
+- `raw/`: **Source archives and reconstruction inputs**
   - `benchmarks/`: Raw JSON chart responses for `^GSPC`, `^SP500TR`, `^MSCIWORLD_PR`, `^MSCIWORLD_TR`, `FBGRX`, `URTH`, `^NDX`, `^NDXT`, and `QQQ`.
   - `tickers/`: Raw JSON chart responses for all equity constituents with exact distribution timestamps and amounts for corporate actions.
   - `constituents/`: Point-in-time constituent rankings and historical index weights.
+  - `corporate_actions/att_1996_endpoint_valuations.json`: Cited AT&T package quotes used to derive parent-only September/December 1996 valuations after subtracting separately credited child proceeds. The builder applies these corrections once; the legacy ticker archive is preserved.
 - **Annual Datasets**:
   - `sp500_prices.json` / `world_prices.json`: Split-adjusted year-end closing prices (1993–2024).
   - `sp500_dividends.json` / `world_dividends.json`: Split-adjusted annual cash dividends per share (1994–2024).

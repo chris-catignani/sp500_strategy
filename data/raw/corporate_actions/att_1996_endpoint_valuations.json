@@ -1,0 +1,24 @@
+{
+  "methodology": "Derived post-distribution parent values, not observed ex-distribution closes. Subtract the separately credited child proceeds from the contemporaneous cum-distribution parent quote to conserve endpoint wealth. Uses legacy AT&T share units, not modern SBC share units.",
+  "retrieved_on": "2026-09-15",
+  "observations": [
+    {
+      "date": "1996-09-30",
+      "year": 1996,
+      "quarter": 3,
+      "cum_distribution_close": 52.25,
+      "spinco_ticker": "LU",
+      "source_url": "https://www.fool.com/archive/foolport/1996/09/30/fool-portfolio-report-monday-september-30-1996.aspx",
+      "evidence": "Publisher's own portfolio: 130 AT&T shares valued at 6792.50, before separate Lucent recognition in the October 1 report."
+    },
+    {
+      "date": "1996-12-31",
+      "year": 1996,
+      "quarter": 4,
+      "cum_distribution_close": 43.375,
+      "spinco_ticker": "NCR",
+      "source_url": "https://www.fool.com/archive/foolport/1996/12/31/fool-portfolio-report-tuesday-december-31-1996.aspx",
+      "evidence": "Publisher's own portfolio: 130 AT&T shares valued at 5638.75; quote includes the NCR entitlement."
+    }
+  ]
+}

@@ -376,7 +376,7 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         self.assertGreater(q_top10_96[2].spinoff_proceeds, 0.0)  # Q3 (Lucent)
         self.assertGreater(q_top10_96[3].spinoff_proceeds, 0.0)  # Q4 (NCR)
 
-        # Top 5 holds T through Q3, but drifts to rank #6 and exits at Q3 rebalance -> collects $0 in Q4
+        # Top 5 holds T through Q3, but drifts to rank #10 and exits at Q3 rebalance -> collects $0 in Q4
         res_top5 = self.simulator.run_simulation(
             start_year=1995,
             end_year=1996,
