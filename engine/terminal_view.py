@@ -3,7 +3,88 @@
 Formats summary metrics and multi-horizon comparisons into clean ASCII tables.
 """
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
+
+from engine.benchmarks import BenchmarkMetrics
+from engine.metrics import calculate_tax_drag
+from engine.models import StrategyResult
+
+
+def build_strategy_row(
+    res_pre: StrategyResult,
+    res_post: StrategyResult,
+    horizon_label: str,
+    spx_after_cagr: float,
+    strategy_label: Optional[str] = None,
+    universe_label: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Construct a table row dictionary representing a strategy run.
+
+    Args:
+        res_pre: Pre-tax strategy result.
+        res_post: After-tax strategy result.
+        horizon_label: Horizon period identifier (e.g., '10y', '20y', '30y').
+        spx_after_cagr: Benchmark S&P 500 after-tax CAGR for alpha comparison.
+        strategy_label: Optional display label overriding `res_post.strategy_name`.
+        universe_label: Optional universe name (e.g., 'S&P 500', 'Nasdaq 100').
+
+    Returns:
+        Dictionary mapping column names to metric values for the terminal table.
+    """
+    row: Dict[str, Any] = {}
+    if universe_label is not None:
+        row["universe"] = universe_label
+    row["horizon"] = horizon_label
+    row["strategy"] = strategy_label if strategy_label is not None else res_post.strategy_name
+    row["pre_cagr"] = res_pre.cagr
+    row["post_cagr"] = res_post.cagr
+    row["post_liq_cagr"] = res_post.post_liquidation_cagr
+    row["cum_return"] = res_post.cumulative_return
+    row["max_dd"] = res_post.max_drawdown
+    row["tax_drag"] = calculate_tax_drag(res_pre.cagr, res_post.cagr)
+    row["alpha"] = res_post.cagr - spx_after_cagr
+    return row
+
+
+def build_benchmark_row(
+    name: str,
+    metrics: BenchmarkMetrics,
+    horizon_label: str,
+    spx_after_cagr: float,
+    universe_label: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Construct a table row dictionary representing an index or fund benchmark.
+
+    Args:
+        name: Benchmark display name (e.g., 'S&P 500', 'Nasdaq 100', 'MSCI World').
+        metrics: Computed benchmark performance and risk metrics.
+        horizon_label: Horizon period identifier (e.g., '10y', '20y', '30y').
+        spx_after_cagr: Benchmark S&P 500 after-tax CAGR for alpha comparison.
+        universe_label: Optional universe name (e.g., 'S&P 500', 'Nasdaq 100').
+
+    Returns:
+        Dictionary mapping column names to metric values for the terminal table.
+    """
+    row: Dict[str, Any] = {}
+    if universe_label is not None:
+        row["universe"] = universe_label
+    row["horizon"] = horizon_label
+    row["strategy"] = name
+    row["pre_cagr"] = metrics.tr_cagr
+    row["post_cagr"] = metrics.after_cagr
+    row["post_liq_cagr"] = metrics.post_liq_cagr
+    row["cum_return"] = metrics.cum_return
+    row["max_dd"] = metrics.max_dd
+    row["tax_drag"] = metrics.tax_drag
+    row["alpha"] = (
+        0.0
+        if "S&P 500" in name and not any(other in name for other in ["World", "FBGRX", "Nasdaq"])
+        else (metrics.after_cagr - spx_after_cagr)
+    )
+    return row
+
+
+
 
 
 def format_terminal_table(
