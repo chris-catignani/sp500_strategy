@@ -525,6 +525,26 @@ def main():
                 if q_yr <= 1998:
                     ticker_q_divs[q_key] = q_div
 
+            # The model credits children at distribution-date endpoints. The
+            # contemporary parent quotes still include those entitlements, so
+            # reconstruct a parent-only value rather than count them twice.
+            with open(RAW_DIR / "corporate_actions" / "att_1996_endpoint_valuations.json", encoding="utf-8") as f:
+                endpoint_valuations = json.load(f)["observations"]
+            with open(RAW_DIR / "corporate_actions" / "spinoffs.json", encoding="utf-8") as f:
+                att_events = json.load(f)["T"]
+            for observation in endpoint_valuations:
+                event, = [e for e in att_events
+                          if e["ex_date"] == observation["date"]
+                          and e["spinco_ticker"] == observation["spinco_ticker"]]
+                parent_value = round(observation["cum_distribution_close"]
+                                     - event["distribution_per_share"], 2)
+                if parent_value <= 0:
+                    raise ValueError("AT&T post-distribution value must be positive")
+                year, quarter = observation["year"], observation["quarter"]
+                ticker_q_prices[f"{year}-Q{quarter}"] = parent_value
+                if quarter == 4:
+                    ticker_prices[str(year)] = parent_value
+
             # Keep chronological key ordering
             ticker_prices = dict(sorted(ticker_prices.items(), key=lambda x: int(x[0])))
             ticker_divs = dict(sorted(ticker_divs.items(), key=lambda x: int(x[0])))

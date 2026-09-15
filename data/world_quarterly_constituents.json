@@ -1037,14 +1037,6 @@
       "quarter": 3
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0164,
-      "trailing_1y_return": 0.1447,
-      "year": 1996,
-      "quarter": 3
-    },
-    {
       "ticker": "PG",
       "name": "Procter & Gamble Co.",
       "market_cap_weight": 0.0147,
@@ -1073,6 +1065,14 @@
       "name": "Walmart Inc.",
       "market_cap_weight": 0.0117,
       "trailing_1y_return": 0.0763,
+      "year": 1996,
+      "quarter": 3
+    },
+    {
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0109,
+      "trailing_1y_return": -0.1564,
       "year": 1996,
       "quarter": 3
     }
@@ -1114,7 +1114,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.02,
-      "trailing_1y_return": -0.0457,
+      "trailing_1y_return": -0.0802,
       "year": 1996,
       "quarter": 4
     },
@@ -1217,18 +1217,18 @@
       "quarter": 1
     },
     {
-      "ticker": "MRK",
-      "name": "Merck & Co. Inc.",
-      "market_cap_weight": 0.0176,
-      "trailing_1y_return": 0.3786,
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.018,
+      "trailing_1y_return": -0.0847,
       "year": 1997,
       "quarter": 1
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0171,
-      "trailing_1y_return": -0.0847,
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.0176,
+      "trailing_1y_return": 0.3786,
       "year": 1997,
       "quarter": 1
     },
@@ -1331,18 +1331,18 @@
       "quarter": 2
     },
     {
-      "ticker": "TM",
-      "name": "Toyota Motor Corporation",
-      "market_cap_weight": 0.0138,
-      "trailing_1y_return": 0.187,
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0144,
+      "trailing_1y_return": -0.1324,
       "year": 1997,
       "quarter": 2
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0137,
-      "trailing_1y_return": -0.1324,
+      "ticker": "TM",
+      "name": "Toyota Motor Corporation",
+      "market_cap_weight": 0.0138,
+      "trailing_1y_return": 0.187,
       "year": 1997,
       "quarter": 2
     },
@@ -1413,18 +1413,18 @@
       "quarter": 3
     },
     {
-      "ticker": "MRK",
-      "name": "Merck & Co. Inc.",
-      "market_cap_weight": 0.0167,
-      "trailing_1y_return": 0.4439,
+      "ticker": "T",
+      "name": "AT&T Inc.",
+      "market_cap_weight": 0.0168,
+      "trailing_1y_return": 0.2753,
       "year": 1997,
       "quarter": 3
     },
     {
-      "ticker": "T",
-      "name": "AT&T Inc.",
-      "market_cap_weight": 0.0159,
-      "trailing_1y_return": -0.1563,
+      "ticker": "MRK",
+      "name": "Merck & Co. Inc.",
+      "market_cap_weight": 0.0167,
+      "trailing_1y_return": 0.4439,
       "year": 1997,
       "quarter": 3
     },

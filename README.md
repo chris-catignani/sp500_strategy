@@ -279,6 +279,9 @@ Access the live target Google Sheet here:
 
 - **Cell B2 on Executive Summary**: Features an interactive dropdown list allowing you to switch tax brackets on the fly (`0.0%`, `15.0%`, `20.0%`, `30.0%`, `37.0%`).
 - A custom spreadsheet function `=RECALCULATE_STRATEGY(taxRate, [strategy], [horizon], [weighting], [universe], [frequency], [metric])` is also available for ad-hoc financial modeling directly in sheet formulas. It queries the generated `Scenario Data` matrix to return exact empirical metrics for standard simulated tax tiers (`0.0%`, `15.0%`, `20.0%`, `30.0%`, `37.0%`), and computes piecewise linear interpolation between bounding tiers for non-standard intermediate rates (e.g., `24.5%`). Defaults: Top 5, 30y, Market Cap, S&P 500, Annual, PostLiqCAGR.
+- Top N lookups require a matching universe and weighting. Invalid combinations return `Scenario not found`; only named benchmarks may ignore these dimensions when selecting their benchmark rows.
+- Legacy AT&T's September and December 1996 endpoints use derived parent-only valuations so separately credited Lucent/NCR proceeds are not counted twice. These values are model approximations, with source observations and the calculation documented in [Data Provenance](docs/DATA_PROVENANCE.md#1996-endpoint-reconciliation-derived-valuations).
+- After changing datasets or templates, regenerate exports with `python3 run_backtest.py --compare-frequencies`. Updating the local `scripts/google_apps_script.js` does not update the live Google Sheet; install the regenerated script using the setup steps above.
 
 ---
 

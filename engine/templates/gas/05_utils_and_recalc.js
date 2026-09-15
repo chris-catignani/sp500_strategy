@@ -184,7 +184,8 @@ function RECALCULATE_STRATEGY(taxRate, optStrategy, optHorizon, optWeighting, op
     }
   }
 
-  if (matchedRows.length === 0) {
+  var isBenchmark = ['S&P 500', 'MSCI World', 'FBGRX', 'Nasdaq 100'].indexOf(strat) !== -1;
+  if (matchedRows.length === 0 && isBenchmark) {
     // Check if benchmark row match without strict weighting or universe constraint
     for (var b = 0; b < SCENARIO_DATA.length; b++) {
       var brow = SCENARIO_DATA[b];
