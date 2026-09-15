@@ -272,6 +272,23 @@ class TestDataLoader(unittest.TestCase):
         self.assertAlmostEqual(q_dist, 21.90, places=2)
         self.assertAlmostEqual(q_ratio, 0.6910, places=4)
 
+        # AT&T 1996 multi-event spinoff queries
+        t_dist_annual, t_ratio_annual = self.loader.get_spinoff_distribution("T", 1996)
+        self.assertAlmostEqual(t_dist_annual, 16.97, places=2)
+        self.assertAlmostEqual(t_ratio_annual, 0.7201 * 0.9523, places=6)
+
+        t_q3_dist, t_q3_ratio = self.loader.get_quarterly_spinoff_distribution("T", 1996, 3)
+        self.assertAlmostEqual(t_q3_dist, 14.87, places=2)
+        self.assertAlmostEqual(t_q3_ratio, 0.7201, places=4)
+
+        t_q4_dist, t_q4_ratio = self.loader.get_quarterly_spinoff_distribution("T", 1996, 4)
+        self.assertAlmostEqual(t_q4_dist, 2.10, places=2)
+        self.assertAlmostEqual(t_q4_ratio, 0.9523, places=4)
+
+        t_q1_dist, t_q1_ratio = self.loader.get_quarterly_spinoff_distribution("T", 1996, 1)
+        self.assertEqual(t_q1_dist, 0.0)
+        self.assertEqual(t_q1_ratio, 1.0)
+
         # Non-spinoff period
         no_dist, no_ratio = self.loader.get_spinoff_distribution("AAPL", 2020)
         self.assertEqual(no_dist, 0.0)

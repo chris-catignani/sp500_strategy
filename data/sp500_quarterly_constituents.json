@@ -1024,7 +1024,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.0195,
-      "trailing_1y_return": -0.0894,
+      "trailing_1y_return": 0.1447,
       "year": 1996,
       "quarter": 3
     },
@@ -1106,7 +1106,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.023,
-      "trailing_1y_return": -0.3078,
+      "trailing_1y_return": -0.0457,
       "year": 1996,
       "quarter": 4
     },
@@ -1212,7 +1212,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.0197,
-      "trailing_1y_return": -0.3607,
+      "trailing_1y_return": -0.0847,
       "year": 1997,
       "quarter": 1
     },
@@ -1326,7 +1326,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.0157,
-      "trailing_1y_return": -0.4061,
+      "trailing_1y_return": -0.1324,
       "year": 1997,
       "quarter": 2
     },
@@ -1416,7 +1416,7 @@
       "ticker": "T",
       "name": "AT&T Inc.",
       "market_cap_weight": 0.0183,
-      "trailing_1y_return": -0.1935,
+      "trailing_1y_return": -0.1563,
       "year": 1997,
       "quarter": 3
     },

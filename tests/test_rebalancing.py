@@ -473,6 +473,31 @@ class TestPortfolioSimulator(unittest.TestCase):
                 places=2,
             )
 
+    def test_att_1996_spinoff_execution(self):
+        """Verify 1996 AT&T Lucent and NCR spinoff execution in simulation."""
+        res_96 = self.simulator.run_simulation(
+            start_year=1995,
+            end_year=1996,
+            n=5,
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+        )
+        entry_96 = res_96.annual_history[0]
+        self.assertIn("T", entry_96.holdings)
+        self.assertGreater(entry_96.spinoff_proceeds, 0.0)
+        # Spinoff proceeds untaxed as dividends
+        self.assertAlmostEqual(
+            entry_96.dividend_tax_paid,
+            entry_96.dividend_income * 0.30,
+            places=2,
+        )
+        # Verify proceeds match pre-rebalance shares held entering 1996 * (14.87 + 2.10)
+        # In 1995 Top 5, T had target weight 0.025 / 0.12 = 0.208333... and close 64.75
+        initial_t_shares = (100000.0 * (0.025 / 0.12)) / 64.75
+        expected_proceeds = initial_t_shares * 16.97
+        self.assertAlmostEqual(entry_96.spinoff_proceeds, expected_proceeds, places=2)
+
     def test_spinoff_child_share_capital_gains_differential(self):
         """Verify child share monetization increases realized capital gains by exactly (proceeds - child_basis)."""
         # Baseline simulation without spinoff
