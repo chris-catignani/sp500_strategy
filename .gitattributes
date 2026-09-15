@@ -1,0 +1,7 @@
+# Treat large generated simulation outputs and compiled bundles as non-diffable
+outputs/** -diff linguist-generated=true
+scripts/google_apps_script.js -diff linguist-generated=true
+
+# Treat raw historical market archives as non-diffable
+data/raw/** -diff linguist-generated=true
+data/*.json -diff linguist-generated=true

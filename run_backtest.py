@@ -229,6 +229,12 @@ def build_parser() -> argparse.ArgumentParser:
         default=False,
         help="Suppress terminal ASCII summary table output.",
     )
+    parser.add_argument(
+        "--no-export",
+        action="store_true",
+        default=False,
+        help="Suppress exporting CSV reports and Google Apps Script to disk.",
+    )
     return parser
 
 
@@ -1100,26 +1106,27 @@ def run_backtest(args: argparse.Namespace) -> int:
             )
             all_results.append(nasdaq_res_post)
 
-    # Prepare Google Apps Script data across tax tiers
-    scenario_data, annual_data, trades_data = build_scenario_and_apps_script_data(
-        simulator=simulator,
-        data_loader=data_loader,
-        strategy_name=args.strategy,
-        initial_capital=args.initial_capital,
-        universes=universes,
-    )
+    # Export all report artifacts (unless suppressed)
+    exported_files = {}
+    if not getattr(args, "no_export", False):
+        scenario_data, annual_data, trades_data = build_scenario_and_apps_script_data(
+            simulator=simulator,
+            data_loader=data_loader,
+            strategy_name=args.strategy,
+            initial_capital=args.initial_capital,
+            universes=universes,
+        )
 
-    # Export all report artifacts
-    exporter = ReportExporter(output_dir=args.output_dir, scripts_dir=args.scripts_dir)
-    exported_files = exporter.export_all(
-        results=all_results,
-        trade_records=trade_records,
-        spx_benchmarks=spx_benchmarks,
-        scenario_data=scenario_data,
-        annual_data=annual_data,
-        trades_data=trades_data,
-        initial_capital=args.initial_capital,
-    )
+        exporter = ReportExporter(output_dir=args.output_dir, scripts_dir=args.scripts_dir)
+        exported_files = exporter.export_all(
+            results=all_results,
+            trade_records=trade_records,
+            spx_benchmarks=spx_benchmarks,
+            scenario_data=scenario_data,
+            annual_data=annual_data,
+            trades_data=trades_data,
+            initial_capital=args.initial_capital,
+        )
 
     # Display ASCII terminal comparison table
     if not args.quiet:
@@ -1133,11 +1140,12 @@ def run_backtest(args: argparse.Namespace) -> int:
                 weight_by=getattr(args, "weight_by", "market_cap"),
             )
         )
-        print()
-        print("Generated Output Artifacts:")
-        for name, path in exported_files.items():
-            print(f"  - {name}: {path}")
-        print()
+        if exported_files:
+            print()
+            print("Generated Output Artifacts:")
+            for name, path in exported_files.items():
+                print(f"  - {name}: {path}")
+            print()
 
     return 0
 

@@ -1,0 +1,4 @@
+# Ignore bulky raw market archives and generated CSVs during global code searches
+data/raw/
+outputs/
+scripts/google_apps_script.js
