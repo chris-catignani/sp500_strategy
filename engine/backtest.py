@@ -146,6 +146,8 @@ class PortfolioSimulator:
                 year_cap_tax = 0.0
                 year_turnover_sum = 0.0
                 year_spinoff_proceeds = 0.0
+                self.tax_manager.start_tax_year(current_year)
+                year_cum_taxable_gain = 0.0
 
                 for q in (1, 2, 3, 4):
                     q_start_value = start_value
@@ -169,7 +171,7 @@ class PortfolioSimulator:
                             self.cash += spinoff_cash
                             q_spinoff_proceeds += spinoff_cash
                             child_gain = self.tax_manager.adjust_basis_ratio(
-                                ticker, basis_ratio, gross_proceeds=spinoff_cash
+                                ticker, basis_ratio, gross_proceeds=spinoff_cash, current_year=current_year
                             )
                             q_realized_gain += child_gain
                     year_spinoff_proceeds += q_spinoff_proceeds
@@ -292,7 +294,8 @@ class PortfolioSimulator:
                             if additional_trims == 0:
                                 break
                         capital_gains_tax_paid = total_tax_paid - tax_div
-                        q_net_taxable_gain = q_realized_gain - q_initial_loss_cf
+                        q_net_taxable_gain = net_taxable - year_cum_taxable_gain
+                        year_cum_taxable_gain = net_taxable
                     else:
                         total_tax_paid = 0.0
                         tax_div = 0.0
@@ -427,6 +430,8 @@ class PortfolioSimulator:
         else:
             # Annual Rebalancing Loop for subsequent years
             for current_year in range(start_year + 1, end_year + 1):
+                self.tax_manager.start_tax_year(current_year)
+
                 # Step 1: Pre-Rebalance Dividend Receipt & Cash Pooling
                 positions = self.tax_manager.get_all_positions()
                 annual_dividends = sum(
@@ -447,7 +452,7 @@ class PortfolioSimulator:
                         self.cash += spinoff_cash
                         year_spinoff_proceeds += spinoff_cash
                         child_gain = self.tax_manager.adjust_basis_ratio(
-                            ticker, basis_ratio, gross_proceeds=spinoff_cash
+                            ticker, basis_ratio, gross_proceeds=spinoff_cash, current_year=current_year
                         )
                         annual_realized_gain += child_gain
 

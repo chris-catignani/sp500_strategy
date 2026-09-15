@@ -285,6 +285,111 @@ class TestFIFOTaxLotManager(unittest.TestCase):
         total_tax = tax_paid + term_tax
         self.assertAlmostEqual(total_tax, 30.0)
 
+    def test_gain_then_loss_intra_year_netting(self):
+        """Gain followed by loss in same year reconciles earlier tax payment with refund and zero carryforward."""
+        # Q1/Q2: Realize +$100 gain
+        self.manager.add_lot("WIN", shares=10.0, price=10.0, year=2020, quarter=1)
+        self.manager.sell_shares("WIN", shares_to_sell=10.0, current_price=20.0, current_year=2020, current_quarter=2)
+        tax_delta_1, net_1, cf_1 = self.manager.settle_annual_taxes(tax_rate=0.30, current_year=2020)
+        self.assertAlmostEqual(tax_delta_1, 30.0)
+        self.assertAlmostEqual(net_1, 100.0)
+        self.assertAlmostEqual(cf_1, 0.0)
+
+        # Q3: Realize -$100 loss in same calendar year
+        self.manager.add_lot("LOSE", shares=10.0, price=20.0, year=2020, quarter=3)
+        self.manager.sell_shares("LOSE", shares_to_sell=10.0, current_price=10.0, current_year=2020, current_quarter=3)
+        tax_delta_2, net_2, cf_2 = self.manager.settle_annual_taxes(tax_rate=0.30, current_year=2020)
+        # Should refund -$30.0, net annual gain becomes 0.0, loss carryforward becomes 0.0
+        self.assertAlmostEqual(tax_delta_2, -30.0)
+        self.assertAlmostEqual(net_2, 0.0)
+        self.assertAlmostEqual(cf_2, 0.0)
+        self.assertAlmostEqual(self.manager.capital_loss_carryforward, 0.0)
+
+        total_annual_tax = tax_delta_1 + tax_delta_2
+        self.assertAlmostEqual(total_annual_tax, 0.0)
+
+    def test_gain_then_partial_loss_intra_year_netting(self):
+        """Gain followed by partial loss in same year refunds corresponding portion of tax."""
+        # Gain of $100
+        self.manager.add_lot("WIN", shares=10.0, price=10.0, year=2020)
+        self.manager.sell_shares("WIN", shares_to_sell=10.0, current_price=20.0, current_year=2020)
+        tax_delta_1, _, _ = self.manager.settle_annual_taxes(tax_rate=0.30, current_year=2020)
+        self.assertAlmostEqual(tax_delta_1, 30.0)
+
+        # Loss of $40 in same year
+        self.manager.add_lot("LOSE", shares=10.0, price=20.0, year=2020)
+        self.manager.sell_shares("LOSE", shares_to_sell=10.0, current_price=16.0, current_year=2020)
+        tax_delta_2, net_2, cf_2 = self.manager.settle_annual_taxes(tax_rate=0.30, current_year=2020)
+        # Net annual taxable gain is 60.0; cumulative tax liability is 18.0; delta is 18.0 - 30.0 = -12.0
+        self.assertAlmostEqual(tax_delta_2, -12.0)
+        self.assertAlmostEqual(net_2, 60.0)
+        self.assertAlmostEqual(cf_2, 0.0)
+        self.assertAlmostEqual(tax_delta_1 + tax_delta_2, 18.0)
+
+    def test_loss_then_gain_symmetry(self):
+        """Verify identical annual tax ($0) and carryforward ($0) whether loss or gain occurs first."""
+        # Sequence A: Gain +100 then Loss -100
+        mgr_a = FIFOTaxLotManager()
+        mgr_a.add_lot("A1", 10.0, 10.0, 2020)
+        mgr_a.sell_shares("A1", 10.0, 20.0, 2020)
+        t_a1, _, _ = mgr_a.settle_annual_taxes(0.30, 2020)
+        mgr_a.add_lot("A2", 10.0, 20.0, 2020)
+        mgr_a.sell_shares("A2", 10.0, 10.0, 2020)
+        t_a2, net_a, cf_a = mgr_a.settle_annual_taxes(0.30, 2020)
+
+        # Sequence B: Loss -100 then Gain +100
+        mgr_b = FIFOTaxLotManager()
+        mgr_b.add_lot("B1", 10.0, 20.0, 2020)
+        mgr_b.sell_shares("B1", 10.0, 10.0, 2020)
+        t_b1, _, _ = mgr_b.settle_annual_taxes(0.30, 2020)
+        mgr_b.add_lot("B2", 10.0, 10.0, 2020)
+        mgr_b.sell_shares("B2", 10.0, 20.0, 2020)
+        t_b2, net_b, cf_b = mgr_b.settle_annual_taxes(0.30, 2020)
+
+        # Both sequences must arrive at identical calendar-year totals
+        self.assertAlmostEqual(t_a1 + t_a2, t_b1 + t_b2)
+        self.assertAlmostEqual(t_a1 + t_a2, 0.0)
+        self.assertAlmostEqual(net_a, net_b)
+        self.assertAlmostEqual(cf_a, cf_b)
+        self.assertAlmostEqual(cf_a, 0.0)
+
+    def test_spinoff_gain_nets_with_subsequent_loss_intra_year(self):
+        """Spinoff child monetization gain in Q1 followed by sale loss in Q2 nets to zero."""
+        manager = FIFOTaxLotManager()
+        manager.add_lot("PARENT", 1.0, 100.0, 2020)
+        # Spinoff realization: $40 proceeds - $20 child basis = $20 child gain
+        manager.adjust_basis_ratio("PARENT", 0.80, gross_proceeds=40.0, current_year=2020)
+        t1, net1, cf1 = manager.settle_annual_taxes(0.30, 2020)
+        self.assertAlmostEqual(t1, 6.0)
+        self.assertAlmostEqual(net1, 20.0)
+
+        # Subsequent trade loss of -$20 in same year
+        manager.add_lot("LOSE", 10.0, 20.0, 2020)
+        manager.sell_shares("LOSE", 10.0, 18.0, 2020)
+        t2, net2, cf2 = manager.settle_annual_taxes(0.30, 2020)
+        self.assertAlmostEqual(t2, -6.0)
+        self.assertAlmostEqual(net2, 0.0)
+        self.assertAlmostEqual(cf2, 0.0)
+        self.assertAlmostEqual(t1 + t2, 0.0)
+
+    def test_year_rollover_prevents_loss_carryback(self):
+        """Loss in year 2 does not carry back to refund taxes paid in year 1."""
+        # Year 1 (2020): Gain +$100 pays $30 tax
+        self.manager.add_lot("Y1", 10.0, 10.0, 2020)
+        self.manager.sell_shares("Y1", 10.0, 20.0, 2020)
+        t1, net1, cf1 = self.manager.settle_annual_taxes(0.30, 2020)
+        self.assertAlmostEqual(t1, 30.0)
+        self.assertAlmostEqual(cf1, 0.0)
+
+        # Year 2 (2021): Loss -$100 pays $0 tax and creates $100 carryforward
+        self.manager.add_lot("Y2", 10.0, 20.0, 2021)
+        self.manager.sell_shares("Y2", 10.0, 10.0, 2021)
+        t2, net2, cf2 = self.manager.settle_annual_taxes(0.30, 2021)
+        self.assertAlmostEqual(t2, 0.0)  # Must NOT be -30.0! (No carryback)
+        self.assertAlmostEqual(net2, -100.0)
+        self.assertAlmostEqual(cf2, 100.0)
+        self.assertAlmostEqual(self.manager.capital_loss_carryforward, 100.0)
+
 
 if __name__ == "__main__":
     unittest.main()

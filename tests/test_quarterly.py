@@ -319,6 +319,44 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             places=2,
         )
 
+    def test_year_2000_quarterly_capital_gains_tax_reconciliation(self) -> None:
+        """Verify year 2000 quarterly simulation reconciles capital gains tax without overpayment or phantom carryforwards."""
+        res = self.simulator.run_simulation(
+            start_year=1994,
+            end_year=2024,
+            n=3,
+            selector=MarketCapSelector(3),
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=10000.0,
+            universe="sp500",
+            rebalance_frequency="quarterly",
+        )
+        entry_2000 = next(e for e in res.annual_history if e.year == 2000)
+        q_entries_2000 = [q for q in res.quarterly_history if q.year == 2000]
+
+        # In 2000, entering loss carryforward from 1999 is 0.0
+        # Total capital gains tax for 2000 should equal 30% of net taxable gain
+        self.assertAlmostEqual(entry_2000.net_taxable_gain, entry_2000.realized_capital_gain, places=2)
+        expected_tax = entry_2000.net_taxable_gain * 0.30
+        self.assertAlmostEqual(entry_2000.capital_gains_tax_paid, expected_tax, places=2)
+        self.assertAlmostEqual(entry_2000.loss_carryforward, 0.0, places=2)
+
+        # Verify quarterly sum matches annual totals
+        self.assertAlmostEqual(
+            sum(q.capital_gains_tax_paid for q in q_entries_2000),
+            entry_2000.capital_gains_tax_paid,
+            places=2,
+        )
+        self.assertAlmostEqual(
+            sum(q.net_taxable_gain for q in q_entries_2000),
+            entry_2000.net_taxable_gain,
+            places=2,
+        )
+        # Cash invariant
+        for q in q_entries_2000:
+            self.assertGreaterEqual(q.cash, 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()

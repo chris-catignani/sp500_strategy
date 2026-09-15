@@ -16,11 +16,39 @@ class FIFOTaxLotManager:
     def __init__(self) -> None:
         # Queues of TaxLot per ticker: Dict[str, List[TaxLot]]
         self.lots: Dict[str, List[TaxLot]] = defaultdict(list)
-        # Accumulated capital loss carryforward
+        # Accumulated capital loss carryforward (closing carryforward of last settled period)
         self.capital_loss_carryforward: float = 0.0
         # Current annual realized capital gains accumulator
         self.current_annual_realized_gain: float = 0.0
+        # Active calendar tax year
+        self.current_tax_year: Optional[int] = None
+        # Opening capital loss carryforward at start of active calendar year
+        self.opening_loss_carryforward: float = 0.0
+        # Cumulative capital gains tax paid within active calendar year
+        self.annual_capital_gains_tax_paid: float = 0.0
         self._lot_counter: int = 0
+
+    def start_tax_year(self, year: int) -> None:
+        """Explicitly starts a new calendar tax year, rolling over loss carryforwards.
+
+        Under US individual tax rules, capital loss carryforwards from prior years offset
+        current year capital gains, but current year losses never carry back to prior years.
+        Within a calendar year, intra-year gains and losses net symmetrically.
+
+        Args:
+            year: Calendar year being started.
+        """
+        if self.current_tax_year != year:
+            if self.current_tax_year is not None:
+                self.current_annual_realized_gain = 0.0
+            self.current_tax_year = year
+            self.opening_loss_carryforward = self.capital_loss_carryforward
+            self.annual_capital_gains_tax_paid = 0.0
+
+    def _check_calendar_year_rollover(self, current_year: int) -> None:
+        """Ensures the tax lot manager is synced to current_year."""
+        if self.current_tax_year != current_year:
+            self.start_tax_year(current_year)
 
     @property
     def loss_carryforward(self) -> float:
@@ -84,7 +112,11 @@ class FIFOTaxLotManager:
         return list(self.lots.get(ticker, []))
 
     def adjust_basis_ratio(
-        self, ticker: str, ratio: float, gross_proceeds: Optional[float] = None
+        self,
+        ticker: str,
+        ratio: float,
+        gross_proceeds: Optional[float] = None,
+        current_year: Optional[int] = None,
     ) -> float:
         """Adjust cost basis per share (purchase_price) of all open lots following a corporate spinoff,
         and optionally realize capital gain/loss on the liquidated child shares.
@@ -102,10 +134,14 @@ class FIFOTaxLotManager:
             ratio: Basis retention ratio for the parent stock in (0.0, 1.0].
             gross_proceeds: Total cash proceeds received from selling the spun-off child shares.
                             If provided, computes and records the realized capital gain/loss.
+            current_year: Optional calendar year of the spinoff corporate action.
 
         Returns:
             Realized capital gain/loss on the liquidated child shares (0.0 if gross_proceeds is None).
         """
+        if current_year is not None:
+            self._check_calendar_year_rollover(current_year)
+
         if not (0.0 < ratio <= 1.0):
             raise ValueError(f"Invalid basis retention ratio: {ratio}. Must be in (0.0, 1.0].")
         if ratio == 1.0:
@@ -155,6 +191,8 @@ class FIFOTaxLotManager:
             ValueError: If shares_to_sell > available shares (allowing for floating point epsilon 1e-7)
                         or shares_to_sell < 0.
         """
+        self._check_calendar_year_rollover(current_year)
+
         if shares_to_sell < -EPSILON:
             raise ValueError(f"Cannot sell negative shares: {shares_to_sell}")
 
@@ -213,40 +251,50 @@ class FIFOTaxLotManager:
     def settle_annual_taxes(
         self, tax_rate: float, current_year: int
     ) -> Tuple[float, float, float]:
-        """Nets annual realized gain/loss against accumulated loss carryforward:
+        """Nets cumulative annual realized gain/loss against opening loss carryforward:
 
-        net_taxable_gain = current_annual_realized_gain - capital_loss_carryforward
+        net_taxable_gain = current_annual_realized_gain - opening_loss_carryforward
         If net_taxable_gain > 0:
-            tax_paid = net_taxable_gain * tax_rate
+            cum_tax_liability = net_taxable_gain * tax_rate
             new_loss_carryforward = 0.0
         Else:
-            tax_paid = 0.0
+            cum_tax_liability = 0.0
             new_loss_carryforward = abs(net_taxable_gain)
 
-        Resets current annual realized gains accumulator to 0.0.
-        Updates internal capital_loss_carryforward to new_loss_carryforward.
+        tax_delta = cum_tax_liability - annual_capital_gains_tax_paid
+
+        If tax_delta > 0, additional capital gains tax is paid.
+        If tax_delta < 0, earlier intra-year estimated tax overpayment is refunded/credited.
+        Capital loss refunds can never exceed annual_capital_gains_tax_paid (cum_tax_liability >= 0),
+        ensuring capital losses never offset or refund dividend taxes.
 
         Args:
             tax_rate: Tax rate on net capital gains (e.g. 0.30).
             current_year: Calendar year being settled.
 
         Returns:
-            Tuple of (tax_paid, net_taxable_gain, new_loss_carryforward).
+            Tuple of (tax_delta, net_taxable_gain, new_loss_carryforward).
         """
-        net_taxable_gain = self.current_annual_realized_gain - self.capital_loss_carryforward
+        self._check_calendar_year_rollover(current_year)
+
+        net_taxable_gain = self.current_annual_realized_gain - self.opening_loss_carryforward
         if net_taxable_gain > 0:
-            tax_paid = net_taxable_gain * tax_rate
+            cum_tax_liability = net_taxable_gain * tax_rate
             new_loss_carryforward = 0.0
         else:
-            tax_paid = 0.0
+            cum_tax_liability = 0.0
             new_loss_carryforward = abs(net_taxable_gain)
 
         if new_loss_carryforward < 1e-9:
             new_loss_carryforward = 0.0
 
-        self.current_annual_realized_gain = 0.0
+        tax_delta = cum_tax_liability - self.annual_capital_gains_tax_paid
+        if abs(tax_delta) < 1e-9:
+            tax_delta = 0.0
+
+        self.annual_capital_gains_tax_paid = cum_tax_liability
         self.capital_loss_carryforward = new_loss_carryforward
-        return tax_paid, net_taxable_gain, new_loss_carryforward
+        return tax_delta, net_taxable_gain, new_loss_carryforward
 
     def calculate_taxes_and_net(
         self, tax_rate: float, current_year: int
