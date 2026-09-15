@@ -170,4 +170,4 @@ The generated [`scripts/google_apps_script.js`](../scripts/google_apps_script.js
    - Glossary and Methodology cards are positioned at **Row 80+**.
 4. **Decoupled KPI Scorecards (Rows 4–6)**:
    - Scorecards query `Scenario Data` via `{horizon}_{universe}_{strategy}_{freq}_{tax_rate}` composite keys and automatically reflect frequency and tax rate changes.
-5. **On-Demand Custom Recalculation**: A custom Google Apps Script function `RECALCULATE_STRATEGY(customRate)` is included for non-standard tax rates (e.g. $24.5\%$).
+5. **On-Demand Custom Recalculation**: A custom Google Apps Script function `RECALCULATE_STRATEGY(taxRate, [strategy], [horizon], [weighting], [universe], [frequency], [metric])` is provided for ad-hoc formula queries. It looks up exact empirical backtest results from `SCENARIO_DATA` for standard tax tiers ($0.0\%, 15.0\%, 20.0\%, 30.0\%, 37.0\%$) and performs piecewise linear interpolation between bounding tiers for non-standard intermediate rates (e.g. $24.5\%$).

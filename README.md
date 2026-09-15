@@ -278,8 +278,7 @@ Access the live target Google Sheet here:
 ### Interactive Dashboard Controls
 
 - **Cell B2 on Executive Summary**: Features an interactive dropdown list allowing you to switch tax brackets on the fly (`0.0%`, `15.0%`, `20.0%`, `30.0%`, `37.0%`).
-- Selecting a new tax rate instantly recalculates after-tax CAGRs, ending portfolio equity, tax drag, and alpha across all horizons (10y, 20y, 30y) using dynamic lookup formulas.
-- A custom spreadsheet function `=RECALCULATE_STRATEGY(taxRate)` is also available for ad-hoc financial modeling directly in sheet formulas.
+- A custom spreadsheet function `=RECALCULATE_STRATEGY(taxRate, [strategy], [horizon], [weighting], [universe], [frequency], [metric])` is also available for ad-hoc financial modeling directly in sheet formulas. It queries the generated `Scenario Data` matrix to return exact empirical metrics for standard simulated tax tiers (`0.0%`, `15.0%`, `20.0%`, `30.0%`, `37.0%`), and computes piecewise linear interpolation between bounding tiers for non-standard intermediate rates (e.g., `24.5%`). Defaults: Top 5, 30y, Market Cap, S&P 500, Annual, PostLiqCAGR.
 
 ---
 

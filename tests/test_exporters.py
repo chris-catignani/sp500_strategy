@@ -1,6 +1,7 @@
 """Unit tests for reporting and exporters suite (CSVs & Google Apps Script)."""
 
 import csv
+import json
 import os
 import shutil
 import subprocess
@@ -491,6 +492,77 @@ class TestExporters(unittest.TestCase):
         """Verify custom initial capital is injected into BASE_INITIAL_CAPITAL."""
         code = generate_google_apps_script(initial_capital=50000.0)
         self.assertIn("var BASE_INITIAL_CAPITAL = 50000;", code)
+
+    def test_recalculate_strategy_function(self):
+        """Verify RECALCULATE_STRATEGY uses dynamic SCENARIO_DATA without stale hardcoded constants."""
+        code = generate_google_apps_script()
+
+        # Verify stale constants from Issue #27 are absent
+        self.assertNotIn("0.1495", code)
+        self.assertNotIn("0.0970", code)
+
+        # Verify signature and documentation
+        self.assertIn("function RECALCULATE_STRATEGY(taxRate, optStrategy, optHorizon, optWeighting, optUniverse, optFrequency, optMetric)", code)
+        self.assertIn("@customfunction", code)
+
+        # Dynamic runtime verification with Node.js if available
+        if shutil.which("node"):
+            test_js = code + """
+            var results = {
+                cagr0: RECALCULATE_STRATEGY(0.0),
+                cagr15: RECALCULATE_STRATEGY(0.15),
+                cagr20: RECALCULATE_STRATEGY('20%'),
+                cagr30: RECALCULATE_STRATEGY(0.30),
+                cagr37: RECALCULATE_STRATEGY('37.0%'),
+                cagr25Interp: RECALCULATE_STRATEGY(0.25),
+                customDim: RECALCULATE_STRATEGY(0.30, 'Top 3', '10y', 'Equal Weight', 'S&P 500', 'Annual', 'PreTaxCAGR'),
+                spxBench: RECALCULATE_STRATEGY(0.30, 'Benchmark'),
+                spxByName: RECALCULATE_STRATEGY(0.30, 'sp500'),
+                worldBench: RECALCULATE_STRATEGY(0.30, 'Benchmark', '30y', 'Market Cap', 'All World'),
+                fbgrxBench: RECALCULATE_STRATEGY(0.30, 'fbgrx'),
+                nasdaqBench: RECALCULATE_STRATEGY(0.30, 'nasdaq100'),
+                errMissing: RECALCULATE_STRATEGY(),
+                errInvalid: RECALCULATE_STRATEGY('invalid_rate'),
+                errNeg: RECALCULATE_STRATEGY(-0.05),
+                errHigh: RECALCULATE_STRATEGY(0.50),
+                errScenario: RECALCULATE_STRATEGY(0.30, 'Top 99'),
+                errMetric: RECALCULATE_STRATEGY(0.30, 'Top 5', '30y', 'Market Cap', 'S&P 500', 'Annual', 'SharpeRatio')
+            };
+            console.log(JSON.stringify(results));
+            """
+            proc = subprocess.run(["node", "-e", test_js], capture_output=True, text=True)
+            self.assertEqual(proc.returncode, 0, f"Node execution error: {proc.stderr}")
+            data = json.loads(proc.stdout)
+
+            # Compare standard tiers against exact backtest results
+            self.assertAlmostEqual(data["cagr0"], 0.142807, places=5)
+            self.assertAlmostEqual(data["cagr15"], 0.130057, places=5)
+            self.assertAlmostEqual(data["cagr20"], 0.125485, places=5)
+            self.assertAlmostEqual(data["cagr30"], 0.115767, places=5)
+            self.assertAlmostEqual(data["cagr37"], 0.108434, places=5)
+
+            # Piecewise interpolation: 25% is halfway between 20% and 30%
+            expected_25 = 0.125485 + 0.5 * (0.115767 - 0.125485)
+            self.assertAlmostEqual(data["cagr25Interp"], expected_25, places=5)
+
+            # Custom dimension lookup
+            self.assertAlmostEqual(data["customDim"], 0.286515, places=5)
+
+            # Benchmark lookups
+            self.assertAlmostEqual(data["spxBench"], 0.092550, places=5)
+            self.assertAlmostEqual(data["spxByName"], 0.092550, places=5)
+            self.assertAlmostEqual(data["worldBench"], 0.069184, places=5)
+            self.assertAlmostEqual(data["fbgrxBench"], 0.097368, places=5)
+            self.assertAlmostEqual(data["nasdaqBench"], 0.132623, places=5)
+
+            # Error handling
+            self.assertEqual(data["errMissing"], "Tax rate required")
+            self.assertEqual(data["errInvalid"], "Invalid tax rate")
+            self.assertEqual(data["errNeg"], "Tax rate out of simulated bounds (0.0% - 37.0%)")
+            self.assertEqual(data["errHigh"], "Tax rate out of simulated bounds (0.0% - 37.0%)")
+            self.assertEqual(data["errScenario"], "Scenario not found")
+            self.assertEqual(data["errMetric"], "Invalid metric: SharpeRatio")
+
 
     def test_report_exporter_coordinator(self):
         """Test ReportExporter class and export_all convenience function."""
