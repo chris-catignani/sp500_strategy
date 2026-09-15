@@ -128,3 +128,5 @@ class StrategyResult:
     total_dividend_taxes_paid: float = 0.0
     universe: str = "sp500"
     rebalance_frequency: str = "annual"
+    tax_drag: float = 0.0
+    alpha: float = 0.0
