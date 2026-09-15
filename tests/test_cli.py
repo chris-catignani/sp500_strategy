@@ -34,6 +34,7 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(args.output_dir, "outputs")
         self.assertEqual(args.scripts_dir, "scripts")
         self.assertFalse(args.quiet)
+        self.assertFalse(args.no_export)
 
         horizons = run_backtest.resolve_horizons(args.horizons)
         self.assertEqual(
@@ -198,6 +199,37 @@ class TestCLI(unittest.TestCase):
             self.assertIn("buildAllSheets", js_content)
             self.assertIn("SCENARIO_DATA", js_content)
 
+    def test_run_backtest_no_export(self):
+        """Test that --no-export suppresses writing CSV and JS artifacts."""
+        import run_backtest
+
+        parser = run_backtest.build_parser()
+        args = parser.parse_args(
+            [
+                "--strategy", "market_cap",
+                "--tax-rate", "0.30",
+                "--initial-capital", "10000.0",
+                "--output-dir", self.output_dir,
+                "--scripts-dir", self.scripts_dir,
+                "--horizons", "10y",
+                "--n", "5",
+                "--no-export",
+                "--quiet",
+            ]
+        )
+        exit_code = run_backtest.run_backtest(args)
+        self.assertEqual(exit_code, 0)
+
+        # Verify output files do NOT exist
+        summary_path = os.path.join(self.output_dir, "summary_metrics.csv")
+        annual_path = os.path.join(self.output_dir, "annual_breakdown.csv")
+        trades_path = os.path.join(self.output_dir, "trade_log.csv")
+        script_path = os.path.join(self.scripts_dir, "google_apps_script.js")
+        self.assertFalse(os.path.exists(summary_path), "summary_metrics.csv should not be created with --no-export")
+        self.assertFalse(os.path.exists(annual_path), "annual_breakdown.csv should not be created with --no-export")
+        self.assertFalse(os.path.exists(trades_path), "trade_log.csv should not be created with --no-export")
+        self.assertFalse(os.path.exists(script_path), "google_apps_script.js should not be created with --no-export")
+
     def test_cli_subprocess_help(self):
         """Test running the CLI via subprocess with --help."""
         cmd = [sys.executable, "run_backtest.py", "--help"]
@@ -212,6 +244,7 @@ class TestCLI(unittest.TestCase):
         self.assertIn("--tax-rate", res.stdout)
         self.assertIn("--initial-capital", res.stdout)
         self.assertIn("--universes", res.stdout)
+        self.assertIn("--no-export", res.stdout)
 
     def test_resolve_universes(self):
         """Test universe normalization and validation."""
