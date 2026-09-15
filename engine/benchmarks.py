@@ -150,8 +150,6 @@ def _make_benchmark_result_pair(
         rebalance_frequency=rebal_freq,
         universe=universe,
     )
-    res_pre.tax_drag = 0.0
-    res_pre.alpha = (bm.tr_cagr - spx_bm.tr_cagr) if bm is not spx_bm else 0.0
 
     res_post = StrategyResult(
         strategy_name=label,
@@ -174,8 +172,6 @@ def _make_benchmark_result_pair(
         rebalance_frequency=rebal_freq,
         universe=universe,
     )
-    res_post.tax_drag = bm.tax_drag
-    res_post.alpha = bm.alpha if bm is not spx_bm else 0.0
 
     return res_pre, res_post
 
