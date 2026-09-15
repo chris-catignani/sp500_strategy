@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
 from engine.data_loader import DataLoader
+from engine.models import StrategyResult
 from engine.metrics import (
     calculate_benchmark_annual_series,
     calculate_cagr,
@@ -46,6 +47,137 @@ class BenchmarkSuite:
     fbgrx_quarterly: Dict[str, BenchmarkMetrics]
     nasdaq_annual: Dict[str, BenchmarkMetrics]
     nasdaq_quarterly: Dict[str, BenchmarkMetrics]
+
+    def build_synthetic_results(
+        self,
+        horizons: List[Tuple[str, int, int]],
+        tax_rate: float,
+        initial_capital: float,
+        frequency: str = "annual",
+        compare_frequencies: bool = False,
+    ) -> List[StrategyResult]:
+        """Construct synthetic StrategyResult instances for all benchmark indices."""
+        results: List[StrategyResult] = []
+
+        for h_label, s_yr, e_yr in horizons:
+            bm = self.spx_annual[h_label]
+            q_bm = self.spx_quarterly[h_label]
+            msci = self.msci_annual[h_label]
+            q_msci = self.msci_quarterly[h_label]
+            fbgrx_bm = self.fbgrx_annual[h_label]
+            q_fbgrx_bm = self.fbgrx_quarterly[h_label]
+            nasdaq_bm = self.nasdaq_annual[h_label]
+            q_nasdaq_bm = self.nasdaq_quarterly[h_label]
+
+            if compare_frequencies:
+                bench_configs = [
+                    ("Annual", bm, msci, fbgrx_bm, nasdaq_bm),
+                    ("Quarterly", q_bm, q_msci, q_fbgrx_bm, q_nasdaq_bm),
+                ]
+            elif frequency == "quarterly":
+                bench_configs = [
+                    ("", q_bm, q_msci, q_fbgrx_bm, q_nasdaq_bm),
+                ]
+            else:
+                bench_configs = [
+                    ("", bm, msci, fbgrx_bm, nasdaq_bm),
+                ]
+
+            for freq_tag, s_bm, m_bm, f_bm, n_bm in bench_configs:
+                spx_label = f"S&P 500 ({freq_tag})" if freq_tag else "S&P 500"
+                msci_label = f"MSCI World ({freq_tag})" if freq_tag else "MSCI World"
+                fbgrx_label = f"FBGRX ({freq_tag})" if freq_tag else "FBGRX"
+                nasdaq_label = f"Nasdaq 100 ({freq_tag})" if freq_tag else "Nasdaq 100"
+                rebal_freq = freq_tag.lower() if freq_tag else frequency
+
+                # 1. S&P 500
+                spx_pre, spx_post = _make_benchmark_result_pair(
+                    spx_label, "sp500", s_bm, s_yr, e_yr, tax_rate, initial_capital, rebal_freq, s_bm
+                )
+                results.extend([spx_pre, spx_post])
+
+                # 2. MSCI World
+                msci_pre, msci_post = _make_benchmark_result_pair(
+                    msci_label, "world", m_bm, s_yr, e_yr, tax_rate, initial_capital, rebal_freq, s_bm
+                )
+                results.extend([msci_pre, msci_post])
+
+                # 3. FBGRX
+                fbgrx_pre, fbgrx_post = _make_benchmark_result_pair(
+                    fbgrx_label, "mutual_fund", f_bm, s_yr, e_yr, tax_rate, initial_capital, rebal_freq, s_bm
+                )
+                results.extend([fbgrx_pre, fbgrx_post])
+
+                # 4. Nasdaq 100
+                ndx_pre, ndx_post = _make_benchmark_result_pair(
+                    nasdaq_label, "nasdaq_100", n_bm, s_yr, e_yr, tax_rate, initial_capital, rebal_freq, s_bm
+                )
+                results.extend([ndx_pre, ndx_post])
+
+        return results
+
+
+def _make_benchmark_result_pair(
+    label: str,
+    universe: str,
+    bm: BenchmarkMetrics,
+    s_yr: int,
+    e_yr: int,
+    tax_rate: float,
+    initial_capital: float,
+    rebal_freq: str,
+    spx_bm: BenchmarkMetrics,
+) -> Tuple[StrategyResult, StrategyResult]:
+    """Helper to construct pre-tax and after-tax StrategyResult pair for a benchmark."""
+    res_pre = StrategyResult(
+        strategy_name=label,
+        n=0,
+        start_year=s_yr,
+        end_year=e_yr,
+        is_after_tax=False,
+        tax_rate=0.0,
+        initial_capital=initial_capital,
+        final_equity=bm.bench_pre["final_equity"],
+        cagr=bm.tr_cagr,
+        cumulative_return=bm.tr_cum,
+        max_drawdown=bm.tr_max_dd,
+        total_taxes_paid=0.0,
+        pre_liquidation_wealth=bm.bench_pre["pre_liquidation_wealth"],
+        post_liquidation_wealth=bm.bench_pre["post_liquidation_wealth"],
+        post_liquidation_cagr=bm.tr_cagr,
+        total_dividends_received=bm.bench_pre["total_dividends_received"],
+        annual_history=[],
+        rebalance_frequency=rebal_freq,
+        universe=universe,
+    )
+    res_pre.tax_drag = 0.0
+    res_pre.alpha = (bm.tr_cagr - spx_bm.tr_cagr) if bm is not spx_bm else 0.0
+
+    res_post = StrategyResult(
+        strategy_name=label,
+        n=0,
+        start_year=s_yr,
+        end_year=e_yr,
+        is_after_tax=True,
+        tax_rate=tax_rate,
+        initial_capital=initial_capital,
+        final_equity=bm.final_equity,
+        cagr=bm.after_cagr,
+        cumulative_return=bm.cum_return,
+        max_drawdown=bm.max_dd,
+        total_taxes_paid=bm.total_taxes,
+        pre_liquidation_wealth=bm.bench_post["pre_liquidation_wealth"],
+        post_liquidation_wealth=bm.bench_post["post_liquidation_wealth"],
+        post_liquidation_cagr=bm.post_liq_cagr,
+        total_dividends_received=bm.total_dividends,
+        annual_history=[],
+        rebalance_frequency=rebal_freq,
+        universe=universe,
+    )
+    res_post.tax_drag = bm.tax_drag
+    res_post.alpha = bm.alpha if bm is not spx_bm else 0.0
+
+    return res_pre, res_post
 
 
 def _calculate_series_metrics(
