@@ -179,7 +179,7 @@ The authentic historical market record for original AT&T Corp is isolated in `da
 
 #### 4.5.4 AT&T Corporate Timeline & 1998–2006 Top 12 Absence
 A rigorous audit of `historical_index_weights.json` reveals that ticker **`T` was NOT in the S&P 500 Top 12 from 1998 through 2006**:
-- Following the 1996 Lucent Technologies spinoff and 1997 NCR spinoff, legacy AT&T Corp shrank rapidly in market capitalization and dropped completely out of Top 10/12 consideration by year-end 1998.
+- Following the 1996 Lucent Technologies spinoff and 1996 NCR spinoff, legacy AT&T Corp shrank rapidly in market capitalization and dropped completely out of Top 10/12 consideration by year-end 1998.
 - During 1994–1997, when AT&T was held in Top 10 strategies, the series is **100% sourced from the verified `T_CORP_HISTORICAL.json`** dataset.
 - Transitioning to modern SBC Communications data in 1999 therefore had **zero effect** on portfolio constituent selection or performance during the 1998–2006 window.
 - When `T` re-entered the Top 12 roster in 2007, SBC Communications had already completed its \$16 billion acquisition of AT&T Corp (November 2005) and adopted the consolidated **AT&T Inc.** identity, ensuring complete continuity with modern corporate reality.
@@ -211,11 +211,68 @@ The immutable catalog in `data/raw/corporate_actions/spinoffs.json` (compiled to
 
 | Ticker | Ex-Date | Spin-Co Ticker | Spin-Co Description | Dist / Share | Basis Retention ($R_{\text{retention}}$) | Statutory Filing |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **T** | 1996-09-30 | `LU` | Lucent Technologies Inc. | \$14.87 | 0.7201 (72.01%) | IRS Form 8937 / Section 355 |
+| **T** | 1996-12-31 | `NCR` | NCR Corporation | \$2.10 | 0.9523 (95.23%) | IRS Form 8937 / Section 355 |
 | **MO** | 2007-03-30 | `KFT` | Kraft Foods Inc. | \$21.90 | 0.6910 (69.10%) | IRS Form 8937 / Section 355 |
 | **MO** | 2008-03-28 | `PM` | Philip Morris International Inc. | \$50.60 | 0.3040 (30.40%) | IRS Form 8937 / Section 355 |
 | **T** | 2022-04-08 | `WBD` | Warner Bros. Discovery Inc. | \$5.81 | 0.7623 (76.23%) | IRS Form 8937 / Section 355 |
 | **GE** | 2023-01-04 | `GEHC` | GE HealthCare Technologies Inc. | \$18.67 | 0.8165 (81.65%) | IRS Form 8937 / Section 355 |
 | **GE** | 2024-04-02 | `GEV` | GE Vernova Inc. | \$35.38 | 0.6686 (66.86%) | IRS Form 8937 / Section 355 |
+
+#### 4.6.4 Valuation Provenance & Child-Share Liquidation Pricing
+Following the engine's immediate-liquidation convention for non-qualifying Spin-Co equity, cash distributions per share represent the product of the **share distribution ratio** and the **child-share market price** on the distribution date:
+
+1. **AT&T / Lucent Technologies (`LU`, 1996-09-30)**:
+   - **Distribution Ratio**: 0.324084 shares of Lucent common stock per AT&T share.
+   - **Statutory Basis Allocation**: AT&T retained **72.01%** (`0.7201`), allocating **27.99%** to Lucent (IRS Section 358; [AT&T Official Shareholder Cost Basis Guide](https://investors.att.com/stockholder-services/cost-basis-guide/worksheet/att-corp)).
+   - **Market Liquidation Price**: **\$45.875** ($45\frac{7}{8}$), the official NYSE closing price on September 30, 1996.
+   - **Proceeds per Share**: $0.324084 \times \$45.875 = \$14.86735 \approx \mathbf{\$14.87}$.
+   - *Cross-Check*: Relative value $\frac{\$14.87}{\$38.25 + \$14.87} = 27.99\%$, matching the official 0.2799 allocation factor.
+2. **AT&T / NCR Corporation (`NCR`, 1996-12-31)**:
+   - **Distribution Ratio**: 0.0625 shares of NCR common stock per AT&T share (1 share of NCR for each 16 AT&T shares).
+   - **Statutory Basis Allocation**: AT&T retained **95.23%** (`0.9523`), allocating **4.77%** to NCR (IRS Section 358; AT&T Shareholder Cost Basis Guide).
+   - **Market Liquidation Price**: **\$33.625** ($33\frac{5}{8}$), initial trading valuation on distribution (first public trading day January 2, 1997).
+   - **Proceeds per Share**: $0.0625 \times \$33.625 = \$2.10156 \approx \mathbf{\$2.10}$.
+   - *Cross-Check*: Relative value $\frac{\$2.10}{\$41.40 + \$2.10} \approx 4.8\%$, aligning with the statutory 4.77% allocation factor.
+3. **Altria / Kraft Foods (`KFT`, 2007-03-30)**:
+   - **Distribution Ratio**: 0.692024 shares of Kraft Foods Inc. per Altria share.
+   - **Statutory Basis Allocation**: Altria retained **69.10%** (`0.6910`), allocating **30.90%** to Kraft (IRS Form 8937).
+   - **Market Liquidation Price**: **\$31.65**, closing price on March 30, 2007.
+   - **Proceeds per Share**: $0.692024 \times \$31.65 = \$21.902 \approx \mathbf{\$21.90}$.
+4. **Altria / Philip Morris International (`PM`, 2008-03-28)**:
+   - **Distribution Ratio**: 1.0 share of PMI common stock per Altria share.
+   - **Statutory Basis Allocation**: Altria retained **30.40%** (`0.3040`), allocating **69.60%** to PMI (IRS Form 8937).
+   - **Market Liquidation Price**: **\$50.60**, closing price on March 28, 2008.
+   - **Proceeds per Share**: $1.0 \times \$50.60 = \mathbf{\$50.60}$.
+5. **AT&T / WarnerMedia (`WBD`, 2022-04-08)**:
+   - **Distribution Ratio**: 0.241917 shares of Warner Bros. Discovery per AT&T share.
+   - **Statutory Basis Allocation**: AT&T retained **76.23%** (`0.7623`), allocating **23.77%** to WBD (IRS Form 8937).
+   - **Market Liquidation Price**: **\$24.01**, closing price on April 8, 2022.
+   - **Proceeds per Share**: $0.241917 \times \$24.01 = \$5.808 \approx \mathbf{\$5.81}$.
+6. **General Electric / GE HealthCare (`GEHC`, 2023-01-04)**:
+   - **Distribution Ratio**: 1 share of GEHC per 3 GE shares (0.333333 shares/GE share).
+   - **Statutory Basis Allocation**: GE retained **81.65%** (`0.8165`), allocating **18.35%** to GEHC (IRS Form 8937).
+   - **Market Liquidation Price**: **\$56.00**, closing price on January 4, 2023.
+   - **Proceeds per Share**: $\frac{1}{3} \times \$56.00 = \$18.666 \approx \mathbf{\$18.67}$.
+7. **General Electric / GE Vernova (`GEV`, 2024-04-02)**:
+   - **Distribution Ratio**: 1 share of GEV per 4 GE shares (0.25 shares/GE share).
+   - **Statutory Basis Allocation**: GE retained **66.86%** (`0.6686`), allocating **33.14%** to GEV (IRS Form 8937).
+   - **Market Liquidation Price**: **\$141.50**, closing price on April 2, 2024.
+   - **Proceeds per Share**: $0.25 \times \$141.50 = \$35.375 \approx \mathbf{\$35.38}$.
+
+#### 4.6.5 Absence of 1996 Spinoff Ticker Series on Modern Commercial APIs
+Modern market data providers (e.g., Yahoo Finance) do not host clean, unadjusted historical equity ticker series for 1996 Lucent (`LU`) or 1996 NCR (`NCR`):
+- Lucent merged with Alcatel in 2006 to form Alcatel-Lucent, which was acquired by Nokia (`NOK`) in 2016, extinguishing the standalone ticker history.
+- NCR Corporation executed multiple spin-mergers and split in 2023 into NCR Voyix (`VYX`) and NCR Atleos (`NATL`).
+Consequently, source data for these legacy transactions cannot be retrieved via raw ticker downloads and must be reconciled using verifiable issuer cost-basis worksheets, SEC filings, and contemporaneous NYSE transaction records.
+
+#### 4.6.6 Rebalancing Entitlement Dynamics: Annual vs. Quarterly
+Because quarterly rebalancing dynamically drifts constituent market-cap weights at quarter-ends, corporate action entitlement depends on whether the security was held at the distribution date:
+- In 1996-Q3, `T` drifted to market cap rank #6.
+- **Top 5 Annual**: Holds `T` across the entire 1996 calendar year $\implies$ receives Lucent (\$14.87) in Q3 and NCR (\$2.10) in Q4 (total \$16.97).
+- **Top 5 Quarterly**: Holds `T` entering Q3 $\implies$ receives Lucent (\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #6 $\implies$ receives **\$0.00 from NCR in Q4**.
+- **Top 10 Quarterly**: Holds `T` through all four quarters $\implies$ receives both Lucent and NCR.
+- **Top 3 Quarterly**: Exits `T` at 1996-Q1 $\implies$ receives neither distribution.
 
 ---
 
@@ -232,6 +289,8 @@ The immutable catalog in `data/raw/corporate_actions/spinoffs.json` (compiled to
 | **GE** | 2023, 2024 | Spinoff of GEHC & GEV | Modeled via Section 355 tax-free cash credit (\$18.67 and \$35.38) and Form 8937 basis retention ratios (0.8165 and 0.6686). |
 | **WMT** | 2024-02-26 | 3-for-1 Split | 2023 split-adjusted close is \$52.55; 2024 close is \$88.93 (+69.23% return). |
 | **T** | 1993–1998 | Decoupling of AT&T Corp ("Ma Bell") | Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \$0.33/quarter (\$1.32/year) dividends. |
+| **T** | 1996-09-30 | Spinoff of Lucent Technologies (`LU`) | Modeled via Section 355 tax-free cash credit (\$14.87/sh; 0.324084 shares at \$45.875) and Form 8937 basis retention ratio (0.7201). |
+| **T** | 1996-12-31 | Spinoff of NCR Corporation (`NCR`) | Modeled via Section 355 tax-free cash credit (\$2.10/sh; 0.0625 shares at \$33.625) and Form 8937 basis retention ratio (0.9523). |
 | **T** | 2022-04-08 | Spinoff of WarnerMedia (`WBD`) | Modeled via Section 355 tax-free cash credit (\$5.81/sh) and Form 8937 basis retention ratio (0.7623). |
 | **MO** | 2007, 2008 | Spinoff of Kraft (`KFT`) & Philip Morris (`PM`) | Modeled via Section 355 tax-free cash credits (\$21.90 and \$50.60) and Form 8937 basis retention ratios (0.6910 and 0.3040). |
 

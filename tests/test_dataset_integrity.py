@@ -147,6 +147,19 @@ class TestDatasetIntegrity(unittest.TestCase):
         self.assertIn("MO", data)
         self.assertIn("GE", data)
         self.assertIn("T", data)
+        # Verify 1996 Lucent and NCR spinoffs present in compiled data
+        t_spinoffs = {ev["spinco_ticker"]: ev for ev in data["T"]}
+        self.assertIn("LU", t_spinoffs)
+        self.assertIn("NCR", t_spinoffs)
+        self.assertIn("WBD", t_spinoffs)
+        self.assertEqual(t_spinoffs["LU"]["year"], 1996)
+        self.assertEqual(t_spinoffs["LU"]["quarter"], 3)
+        self.assertEqual(t_spinoffs["LU"]["distribution_per_share"], 14.87)
+        self.assertEqual(t_spinoffs["LU"]["basis_retention_ratio"], 0.7201)
+        self.assertEqual(t_spinoffs["NCR"]["year"], 1996)
+        self.assertEqual(t_spinoffs["NCR"]["quarter"], 4)
+        self.assertEqual(t_spinoffs["NCR"]["distribution_per_share"], 2.10)
+        self.assertEqual(t_spinoffs["NCR"]["basis_retention_ratio"], 0.9523)
 
     def test_att_decoupled_series_1994_1997(self):
         with open(self.dividends_path, "r", encoding="utf-8") as f:

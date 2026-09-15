@@ -357,6 +357,57 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         for q in q_entries_2000:
             self.assertGreaterEqual(q.cash, 0.0)
 
+    def test_quarterly_1996_spinoff_entitlement_and_asymmetry(self):
+        """Verify discrete 1996-Q3 (LU) and 1996-Q4 (NCR) quarterly spinoff execution and Top 5 vs Top 10 drift asymmetry."""
+        # Top 10 holds T throughout all 1996 quarters
+        res_top10 = self.simulator.run_simulation(
+            start_year=1995,
+            end_year=1996,
+            n=10,
+            rebalance_frequency="quarterly",
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+        )
+        q_top10_96 = [q for q in res_top10.quarterly_history if q.year == 1996]
+        self.assertEqual(len(q_top10_96), 4)
+        self.assertEqual(q_top10_96[0].spinoff_proceeds, 0.0)  # Q1
+        self.assertEqual(q_top10_96[1].spinoff_proceeds, 0.0)  # Q2
+        self.assertGreater(q_top10_96[2].spinoff_proceeds, 0.0)  # Q3 (Lucent)
+        self.assertGreater(q_top10_96[3].spinoff_proceeds, 0.0)  # Q4 (NCR)
+
+        # Top 5 holds T through Q3, but drifts to rank #6 and exits at Q3 rebalance -> collects $0 in Q4
+        res_top5 = self.simulator.run_simulation(
+            start_year=1995,
+            end_year=1996,
+            n=5,
+            rebalance_frequency="quarterly",
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+        )
+        q_top5_96 = [q for q in res_top5.quarterly_history if q.year == 1996]
+        self.assertEqual(len(q_top5_96), 4)
+        self.assertEqual(q_top5_96[0].spinoff_proceeds, 0.0)  # Q1
+        self.assertEqual(q_top5_96[1].spinoff_proceeds, 0.0)  # Q2
+        self.assertGreater(q_top5_96[2].spinoff_proceeds, 0.0)  # Q3 (Lucent)
+        self.assertEqual(q_top5_96[3].spinoff_proceeds, 0.0)  # Q4 ($0 from NCR since T was exited)
+
+        # Top 3 drops T at 1996-Q1 -> collects neither Lucent nor NCR
+        res_top3 = self.simulator.run_simulation(
+            start_year=1995,
+            end_year=1996,
+            n=3,
+            rebalance_frequency="quarterly",
+            is_after_tax=True,
+            tax_rate=0.30,
+            initial_capital=100000.0,
+        )
+        q_top3_96 = [q for q in res_top3.quarterly_history if q.year == 1996]
+        self.assertEqual(len(q_top3_96), 4)
+        for q in q_top3_96:
+            self.assertEqual(q.spinoff_proceeds, 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()
