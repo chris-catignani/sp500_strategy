@@ -3,6 +3,7 @@
 import csv
 import json
 from pathlib import Path
+import re
 import sys
 import unittest
 import warnings
@@ -591,10 +592,9 @@ class TestIssuerSeparation(unittest.TestCase):
 
     def test_n30d_all_filings_tickers_map_one_issuer_each(self):
         """Across all 1995-2009 filings, no ticker may absorb multiple distinct source company names."""
-        import re
         from scripts.extract_ground_truth_from_sec import (
-            parse_n30d_filing, FILINGS_DIR, _n30d_ticker, _N30D_ROW,
-            _N30D_SCHEDULE_HEADER, _N30D_SCHEDULE_TOTAL, _N30D_NAME_FRAGMENT,
+            parse_n30d_filing, FILINGS_DIR, _n30d_ticker,
+            _resolve_n30d_schedule_bounds, _extract_n30d_positions,
         )
 
         manifest_path = FILINGS_DIR / "sec_annual_filings_manifest.json"
@@ -605,31 +605,8 @@ class TestIssuerSeparation(unittest.TestCase):
             meta = manifest[str(year)]
             filing_path = ROOT / meta["file_path"]
             lines = filing_path.read_text(encoding="utf-8", errors="replace").splitlines()
-            headers = [i for i, l in enumerate(lines) if _N30D_SCHEDULE_HEADER.search(l)]
-            totals = [i for i, l in enumerate(lines) if _N30D_SCHEDULE_TOTAL.search(l)]
-            self.assertTrue(headers and totals, f"{year}: missing schedule header or total")
-
-            name_buffer = []
-            positions = []
-            for line in lines[headers[0] + 1 : totals[0]]:
-                m = _N30D_ROW.match(line)
-                if m:
-                    name_buffer.append(m.group("name"))
-                    name = " ".join(name_buffer)
-                    name = re.sub(r"\s+", " ", name).strip()
-                    shares = float(m.group("shares").replace(",", ""))
-                    val = float(m.group("value").replace(",", ""))
-                    if name and shares > 0 and val > 0:
-                        positions.append({"name": name, "shares": shares, "val": val})
-                    name_buffer = []
-                    continue
-                frag = line.strip()
-                if len(frag) <= 60 and _N30D_NAME_FRAGMENT.match(frag) and not any(c.isdigit() for c in frag):
-                    name_buffer.append(frag)
-                    if len(name_buffer) > 3:
-                        name_buffer = name_buffer[-3:]
-                else:
-                    name_buffer = []
+            start, end = _resolve_n30d_schedule_bounds(lines, filing_path.name)
+            positions = _extract_n30d_positions(lines, start, end)
 
             ticker_to_names = {}
             for pos in positions:

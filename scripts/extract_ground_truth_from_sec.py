@@ -9,7 +9,7 @@ Zero external dependencies - Python 3 standard library only.
 import json
 from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import warnings
 import xml.etree.ElementTree as ET
 
@@ -311,53 +311,44 @@ def _n30d_ticker(name: str) -> str:
     return cleaned
 
 
-def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
-    """Parse a Form N-30D / N-CSR Schedule of Investments into ranked holdings.
+def _resolve_n30d_schedule_bounds(lines: List[str], label: str) -> Tuple[int, int]:
+    """Find the schedule header line index and the first closing total line index occurring after it.
 
-    The schedule is fixed-width text where each position reads
-    ``Company Name ......  shares  market_value``. Long names wrap across up to three
-    indented continuation lines, so the name is accumulated until the numeric row is
-    reached. Positions in the same issuer (multiple share classes) are consolidated.
-
-    Args:
-        txt_path: Path to the archived filing text.
-
-    Returns:
-        Dict with 'total_val_usd', 'stated_total_usd', and 'holdings' (ranked descending by market value).
+    Raises ScheduleParseError if either anchor is missing or if no total anchor follows the header.
+    Shared between parse_n30d_filing and the issuer-separation test suite so both resolve bounds identically.
     """
-    lines = txt_path.read_text(encoding="utf-8", errors="replace").splitlines()
-
     headers = [i for i, line in enumerate(lines) if _N30D_SCHEDULE_HEADER.search(line)]
     totals = [i for i, line in enumerate(lines) if _N30D_SCHEDULE_TOTAL.search(line)]
 
     if not headers:
         raise ScheduleParseError(
-            f"{txt_path.name}: missing schedule header anchor (_N30D_SCHEDULE_HEADER)"
+            f"{label}: missing schedule header anchor (_N30D_SCHEDULE_HEADER)"
         )
     if not totals:
         raise ScheduleParseError(
-            f"{txt_path.name}: missing schedule total anchor (_N30D_SCHEDULE_TOTAL)"
+            f"{label}: missing schedule total anchor (_N30D_SCHEDULE_TOTAL)"
         )
 
     start = headers[0]
     totals_after_start = [i for i in totals if i > start]
     if not totals_after_start:
         raise ScheduleParseError(
-            f"{txt_path.name}: missing schedule total anchor after header line {start}"
+            f"{label}: missing schedule total anchor after header line {start}"
         )
     end = totals_after_start[0]
+    return start, end
 
-    # Stated total is within 3 lines of the closing anchor. Parenthetical cost
-    # figures must be stripped so they are not mistaken for the market-value total.
-    blob = " ".join(lines[end : end + 3])
-    cleaned_blob = re.sub(r"\(Cost[^)]*\)", " ", blob, flags=re.IGNORECASE | re.DOTALL)
-    matches = _N30D_TOTAL_VALUE.findall(cleaned_blob)
-    if not matches:
-        raise ScheduleParseError(
-            f"{txt_path.name}: unable to find stated total value in lines {end}..{end + 3}"
-        )
-    stated_total = float(matches[-1].replace(",", ""))
 
+def _extract_n30d_positions(
+    lines: List[str], start: int, end: int
+) -> List[Dict[str, Any]]:
+    """Extract position rows from lines within schedule bounds.
+
+    This is the single definition of how a fixed-width Schedule of Investments row
+    and its wrapped name fragments are read from Form N-30D filings. It is shared
+    between parse_n30d_filing and the issuer-separation test suite so the two cannot
+    drift apart.
+    """
     positions: List[Dict[str, Any]] = []
     name_buffer: List[str] = []
     for raw in lines[start + 1 : end]:
@@ -389,6 +380,39 @@ def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
                 name_buffer = name_buffer[-3:]
         else:
             name_buffer = []
+
+    return positions
+
+
+def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
+    """Parse a Form N-30D / N-CSR Schedule of Investments into ranked holdings.
+
+    The schedule is fixed-width text where each position reads
+    ``Company Name ......  shares  market_value``. Long names wrap across up to three
+    indented continuation lines, so the name is accumulated until the numeric row is
+    reached. Positions in the same issuer (multiple share classes) are consolidated.
+
+    Args:
+        txt_path: Path to the archived filing text.
+
+    Returns:
+        Dict with 'total_val_usd', 'stated_total_usd', and 'holdings' (ranked descending by market value).
+    """
+    lines = txt_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    start, end = _resolve_n30d_schedule_bounds(lines, txt_path.name)
+
+    # Stated total is within 3 lines of the closing anchor. Parenthetical cost
+    # figures must be stripped so they are not mistaken for the market-value total.
+    blob = " ".join(lines[end : end + 3])
+    cleaned_blob = re.sub(r"\(Cost[^)]*\)", " ", blob, flags=re.IGNORECASE | re.DOTALL)
+    matches = _N30D_TOTAL_VALUE.findall(cleaned_blob)
+    if not matches:
+        raise ScheduleParseError(
+            f"{txt_path.name}: unable to find stated total value in lines {end}..{end + 3}"
+        )
+    stated_total = float(matches[-1].replace(",", ""))
+
+    positions = _extract_n30d_positions(lines, start, end)
 
     parsed_sum = sum(pos["val"] for pos in positions)
     diff = abs(parsed_sum - stated_total)
