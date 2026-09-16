@@ -96,7 +96,7 @@ TICKER_TO_ISSUER: Dict[str, str] = {
 
 ### 3.2 Pure Consolidation Function (`consolidate_holdings`)
 
-Implement `consolidate_holdings` as a pure, standalone function:
+Implement `consolidate_holdings` as a pure, standalone function with dynamic index resolution and defensive field handling:
 
 ```python
 def consolidate_holdings(
@@ -109,20 +109,32 @@ def consolidate_holdings(
     
     Sums valuations across classes for registered issuers, mapping to the primary
     ticker, CUSIP, and canonical name. All other holdings pass through unchanged.
+    
+    Contract & Post-Conditions:
+      - Operates on raw holdings with valuation amounts ('val') prior to sorting and ranking.
+      - Callers (e.g. parse_xml_filing) are responsible for sorting descending by 'val'
+        and recalculating ranks and portfolio weights.
     """
     if issuers is None:
         issuers = CONSOLIDATED_ISSUERS
-    if cusip_map is None:
-        cusip_map = CUSIP_TO_ISSUER
-    if ticker_map is None:
-        ticker_map = TICKER_TO_ISSUER
+        cusip_map = cusip_map or CUSIP_TO_ISSUER
+        ticker_map = ticker_map or TICKER_TO_ISSUER
+    else:
+        if cusip_map is None:
+            cusip_map = {
+                c: k for k, s in issuers.items() for c in s.get("member_cusips", set())
+            }
+        if ticker_map is None:
+            ticker_map = {
+                t: k for k, s in issuers.items() for t in s.get("member_tickers", set())
+            }
 
     aggregated: Dict[str, Dict[str, Any]] = {}
     passthrough: List[Dict[str, Any]] = []
 
     for h in raw_holdings:
-        cusip = h.get("cusip", "")
-        ticker = h.get("ticker", "")
+        cusip = (h.get("cusip") or "").strip()
+        ticker = (h.get("ticker") or "").strip()
         
         # Identify issuer by CUSIP, fallback to ticker
         issuer_key = cusip_map.get(cusip) or ticker_map.get(ticker)
@@ -140,8 +152,7 @@ def consolidate_holdings(
         else:
             passthrough.append(dict(h))
 
-    result = passthrough + list(aggregated.values())
-    return result
+    return passthrough + list(aggregated.values())
 ```
 
 In `parse_xml_filing(xml_path)`:
@@ -153,7 +164,11 @@ Then sort descending by `val` and assign ranks and weights as before.
 1. **`scripts/build_datasets_from_raw.py`**:
    - Update `SP500_NAMES["GOOGL"] = "Alphabet Inc. (Class A & C)"`
    - Re-run dataset builder: `python3 scripts/build_datasets_from_raw.py`
-   - Updates `data/sp500_constituents.json` and `data/sp500_quarterly_constituents.json` to uniformly reflect `Alphabet Inc. (Class A & C)`.
+   - Confirms that all four generated constituent datasets uniformly reflect `"Alphabet Inc. (Class A & C)"`:
+     - `data/sp500_constituents.json`
+     - `data/sp500_quarterly_constituents.json`
+     - `data/world_constituents.json`
+     - `data/world_quarterly_constituents.json`
 2. **`scripts/extract_ground_truth_from_sec.py`**:
    - Update ground-truth documentation strings and canonical names to `Alphabet Inc. (Class A & C)`.
 3. **`scripts/generate_historical_weights.py`**:
@@ -162,17 +177,19 @@ Then sort descending by `val` and assign ranks and weights as before.
 ### 3.4 As-Filed vs. Consolidated Sensitivity Analysis
 
 Create an ephemeral measurement script `scripts/measure_dual_class_sensitivity.py`:
-1. Build an alternative "as-filed" weights dataset where NPORT-P filings (2020–2024) do not consolidate `GOOGL` and `GOOG`.
-2. Map execution for `GOOG` to `GOOGL` prices/dividends if it enters a book.
+1. Build an alternative "as-filed" weights dataset where NPORT-P filings (2020–2024) do not consolidate `GOOGL` and `GOOG`:
+   - For Annual rebalancing: use as-filed year-end weights for 2020–2024.
+   - For Quarterly rebalancing: anchor quarterly snapshots to as-filed Q4 weights and apply standard price-performance drift mechanics.
+2. Map execution for `GOOG` to `GOOGL` prices/dividends if it enters a portfolio book.
 3. Run simulations across all primary dimensions:
    - Frequencies: Annual, Quarterly
    - Selectors: MarketCap, Performance
    - Portfolios: Top 3, Top 5, Top 10
    - Horizons: 10y (2014–2024), 20y (2004–2024), 30y (1994–2024)
    - Tax Tiers: Pre-Tax (0%), After-Tax (30%)
-4. Generate markdown table of CAGR deltas: `Consolidated CAGR - As-Filed CAGR`.
+4. Generate markdown table publishing `Consolidated CAGR`, `As-Filed CAGR`, and `Delta (pp)` across the 10y, 20y, and 30y horizons for all cells.
 5. Append the formatted table and analysis to `docs/DATA_PROVENANCE.md` under section 4.3.
-6. Delete `scripts/measure_dual_class_sensitivity.py` per acceptance criteria ("alternative path removed afterwards").
+6. Delete `scripts/measure_dual_class_sensitivity.py` per acceptance criteria ("alternative path removed afterwards"). All sensitivity runs operate strictly in-memory or via temporary data structures without mutating persistent files in `data/`.
 
 ### 3.5 Documentation Updates
 
