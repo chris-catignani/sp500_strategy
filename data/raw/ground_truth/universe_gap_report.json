@@ -1,6 +1,6 @@
 {
   "description": "Top constituents from historical SPY Form N-30D annual filings that have no market data files in data/raw/tickers/, enumerating the historical survivorship gap.",
-  "source": "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (September 30 snapshots)",
+  "source": "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (December 31 snapshots for 1995-1996, September 30 snapshots for 1997-2009)",
   "depth": 30,
   "missing_tickers": {
     "LU": {
@@ -17,8 +17,8 @@
       "name": "Royal Dutch Petroleum Co. (a)",
       "best_rank": 7,
       "periods": [
-        "1995-Q3",
-        "1996-Q3",
+        "1995-Q4",
+        "1996-Q4",
         "1997-Q3",
         "1998-Q3",
         "1999-Q3",
@@ -37,7 +37,7 @@
       "name": "SBC Communications, Inc",
       "best_rank": 10,
       "periods": [
-        "1995-Q3",
+        "1995-Q4",
         "1997-Q3",
         "1998-Q3",
         "1999-Q3",
@@ -71,8 +71,8 @@
       "name": "Mobil Corp",
       "best_rank": 14,
       "periods": [
-        "1995-Q3",
-        "1996-Q3",
+        "1995-Q4",
+        "1996-Q4",
         "1997-Q3",
         "1999-Q3"
       ]
@@ -88,8 +88,8 @@
       "name": "Du Pont (E.I.) de Nemours & Co., Inc",
       "best_rank": 15,
       "periods": [
-        "1995-Q3",
-        "1996-Q3",
+        "1995-Q4",
+        "1996-Q4",
         "1997-Q3",
         "1998-Q3"
       ]
@@ -117,8 +117,8 @@
       "name": "BellSouth Corp",
       "best_rank": 18,
       "periods": [
-        "1995-Q3",
-        "1996-Q3",
+        "1995-Q4",
+        "1996-Q4",
         "1998-Q3",
         "1999-Q3",
         "2001-Q3",
@@ -141,8 +141,8 @@
       "name": "GTE Corp",
       "best_rank": 20,
       "periods": [
-        "1995-Q3",
-        "1996-Q3"
+        "1995-Q4",
+        "1996-Q4"
       ]
     },
     "VIA": {
@@ -175,8 +175,8 @@
       "name": "General Motors Corp",
       "best_rank": 22,
       "periods": [
-        "1995-Q3",
-        "1996-Q3"
+        "1995-Q4",
+        "1996-Q4"
       ]
     },
     "SLB": {
@@ -208,7 +208,7 @@
       "name": "Abbott Lab",
       "best_rank": 24,
       "periods": [
-        "1995-Q3",
+        "1995-Q4",
         "1998-Q3",
         "2001-Q3",
         "2002-Q3",
@@ -221,8 +221,8 @@
       "name": "Amoco Corp",
       "best_rank": 24,
       "periods": [
-        "1995-Q3",
-        "1996-Q3"
+        "1995-Q4",
+        "1996-Q4"
       ]
     },
     "CPQ": {
@@ -236,7 +236,7 @@
       "name": "Gillette Co",
       "best_rank": 24,
       "periods": [
-        "1996-Q3"
+        "1996-Q4"
       ]
     },
     "TYC": {
@@ -283,7 +283,7 @@
       "name": "Motorola, Inc",
       "best_rank": 28,
       "periods": [
-        "1995-Q3"
+        "1995-Q4"
       ]
     },
     "MS": {
@@ -304,7 +304,7 @@
       "name": "Ameritech Corp",
       "best_rank": 30,
       "periods": [
-        "1995-Q3"
+        "1995-Q4"
       ]
     },
     "AXP": {

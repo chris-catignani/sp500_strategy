@@ -218,12 +218,16 @@ NAME_FALLBACKS = [
 
 
 # Historical Form N-30D annual reports with an extracted Schedule of Investments.
-# SPY's fiscal year ends September 30, so each validates that year's Q3 only.
+# SPY's fiscal year ended December 31 through 1996, so the 1995 and 1996 annual reports
+# represent Q4 (12-31) snapshots. Beginning in 1997, SPY changed its fiscal year end to
+# September 30, so 1997-2009 annual reports represent Q3 (09-30) snapshots.
 N30D_HISTORICAL_FILINGS = [
-    ("1995-Q3", "SPY_1995_N-30D_0000912057-96-003840.txt",
-     "0000912057-96-003840", "Form N-30D", "1995-09-30", "1996-03-04"),
-    ("1996-Q3", "SPY_1996_N-30D_0000912057-97-006798.txt",
-     "0000912057-97-006798", "Form N-30D", "1996-09-30", "1997-02-26"),
+    # SPY's fiscal year ended December 31 until changing to September 30 in 1997;
+    # 1995 and 1996 annual reports are December 31 (Q4) snapshots, not September 30.
+    ("1995-Q4", "SPY_1995_N-30D_0000912057-96-003840.txt",
+     "0000912057-96-003840", "Form N-30D", "1995-12-31", "1996-03-04"),
+    ("1996-Q4", "SPY_1996_N-30D_0000912057-97-006798.txt",
+     "0000912057-97-006798", "Form N-30D", "1996-12-31", "1997-02-26"),
     ("1997-Q3", "SPY_1997_N-30D_0000950135-97-004820.txt",
      "0000950135-97-004820", "Form N-30D", "1997-09-30", "1997-12-01"),
     ("1998-Q3", "SPY_1998_N-30D_0000950135-98-006321.txt",
@@ -252,14 +256,26 @@ N30D_HISTORICAL_FILINGS = [
      "0000950123-09-066888", "Form N-30D", "2009-09-30", "2009-11-30"),
 ]
 
-# Quarters adjacent to the extracted annual reports that have no point-in-time filing.
+_QUARTER_DATES = (
+    ("Q1", "03-31"),
+    ("Q2", "06-30"),
+    ("Q3", "09-30"),
+    ("Q4", "12-31"),
+)
+
+_verified_historical_periods = {entry[0] for entry in N30D_HISTORICAL_FILINGS}
+_historical_years = sorted({int(entry[0].split("-")[0]) for entry in N30D_HISTORICAL_FILINGS})
+
+# Historical quarters adjacent to the extracted annual reports that have no point-in-time filing.
+# Derived from N30D_HISTORICAL_FILINGS rather than hardcoding so coverage cannot drift.
 UNVERIFIED_HISTORICAL_PERIODS = [
     (
         f"{year}-{q}",
         f"No point-in-time regulatory filing available for {year}-{dt}; unverified.",
     )
-    for year in range(1995, 2010)
-    for q, dt in (("Q1", "03-31"), ("Q2", "06-30"))
+    for year in _historical_years
+    for q, dt in _QUARTER_DATES
+    if f"{year}-{q}" not in _verified_historical_periods
 ]
 
 
@@ -325,6 +341,33 @@ def assert_top_holdings_resolved(holdings, filing_label, depth=30):
         names = ", ".join(repr(u) for u in unresolved)
         raise ScheduleParseError(
             f"{filing_label}: unmapped top-{depth} holding(s): {names}"
+        )
+
+
+_SEC_PERIOD = re.compile(r"^CONFORMED PERIOD OF REPORT:\s*(\d{4})(\d{2})(\d{2})", re.M)
+
+
+def assert_filing_period_matches(txt_path: Any, expected_report_date: str) -> None:
+    """Refuse a filing whose own stated period disagrees with its configured one.
+
+    Parses CONFORMED PERIOD OF REPORT: YYYYMMDD from the SEC header. Reads only
+    the header (content[:4000]) to avoid loading the full document.
+    """
+    path = Path(txt_path)
+    with open(path, "r", encoding="utf-8", errors="replace") as f:
+        header = f.read(4000)
+
+    match = _SEC_PERIOD.search(header)
+    if not match:
+        raise ScheduleParseError(
+            f"{path.name}: missing CONFORMED PERIOD OF REPORT in SEC header"
+        )
+
+    stated_date = f"{match.group(1)}-{match.group(2)}-{match.group(3)}"
+    if stated_date != expected_report_date:
+        raise ScheduleParseError(
+            f"{path.name}: conformed period of report ({stated_date}) "
+            f"does not match expected report date ({expected_report_date})"
         )
 
 
@@ -694,7 +737,7 @@ def build_universe_gap_report(
             "Top constituents from historical SPY Form N-30D annual filings that have no "
             "market data files in data/raw/tickers/, enumerating the historical survivorship gap."
         ),
-        "source": "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (September 30 snapshots)",
+        "source": "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (December 31 snapshots for 1995-1996, September 30 snapshots for 1997-2009)",
         "depth": depth,
         "missing_tickers": sorted_missing,
     }
@@ -716,7 +759,7 @@ def main():
     }
 
     # 1. Historical Periods from audited Form N-30D Schedules of Investments.
-    # SPY's fiscal year ends September 30, so these annual reports validate Q3 only.
+    # SPY's fiscal year ended December 31 through 1996, changing to September 30 in 1997.
     # Holdings are PARSED from the archived filing text, never transcribed by hand.
     for period, note in UNVERIFIED_HISTORICAL_PERIODS:
         ground_truth["periods"][period] = {
@@ -727,7 +770,9 @@ def main():
 
     parsed_historical = []
     for period, filename, acc, form, rep_dt, file_dt in N30D_HISTORICAL_FILINGS:
-        parsed = parse_n30d_filing(FILINGS_DIR / filename)
+        filing_path = FILINGS_DIR / filename
+        assert_filing_period_matches(filing_path, rep_dt)
+        parsed = parse_n30d_filing(filing_path)
         assert_top_holdings_resolved(parsed["holdings"], f"{period} ({filename})")
         parsed_historical.append((period, parsed))
         top10 = parsed["holdings"][:10]
