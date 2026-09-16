@@ -48,7 +48,7 @@ data/raw/
 ├── ground_truth/
 │   ├── quarterly_ground_truth_holdings.json # Audited SEC EDGAR Form N-30D / NPORT-P holdings (1995–2024, 55 verified quarters across 120 labeled periods)
 │   ├── sec_filings/                         # Archive of 56 filings (20 NPORT-P XML, 35 historical annual & semi-annual reports, superseded Select Sector doc)
-│   └── universe_gap_report.json             # Historical survivorship gap report (38 missing constituents at depth 30)
+│   └── universe_gap_report.json             # Historical survivorship gap report (39 missing constituents at depth 30)
 ├── tickers/
 │   ├── AAPL.json          # Apple Inc. raw response (timestamps, quotes, splits, dividends)
 │   ├── BRK.B.json         # Berkshire Hathaway Class B (queried as BRK-B)
@@ -192,13 +192,13 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
   - **Circular-Q4 Caveat**: The five modern Q4 filings (2020-Q4 … 2024-Q4) match 10/10 by construction because the year-end candidate lists are themselves parsed from those exact filings. `scripts/audit_quarterly_expansion.py` reports both figures and `CIRCULAR_Q4_PERIODS` names the excluded quarters. (Note: 1995-Q4 and 1996-Q4 candidate lists derive from estimated factsheet anchors, not from these Form N-30D filings, so they are genuine independent tests and not circular.)
 - **Historical Universe Gap & Survivorship Bias Analysis**:
   - The 26 extracted filings reveal a persistent historical universe gap: constituents appearing in the filings' Top 30 that have no price series in `data/raw/tickers/`.
-  - An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating **38 missing constituents** across the 1995–2019 filings (depth 30). The 2010–2019 filings add only two (`GILD`, `DWDP`) — by that era the project's universe covers nearly all of the index's largest constituents.
+  - An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating **39 missing constituents** across the 1995–2019 filings (depth 30). The 2010–2019 annual filings add only two (`GILD`, `DWDP`) — by that era the project's universe covers nearly all of the index's largest constituents — and the ten semi-annual 03-31 filings archived under #54 add one more (`OXY`, rank #30 at 2011-Q1).
   - Four missing constituents reached the Top 10 in audited filings:
     - `RD` (Royal Dutch Petroleum Co., #7 peak rank, present in Top 10 across 1995, 1996, and 1997; 7 filings total)
     - `LU` (Lucent Technologies Inc., #7 peak rank in 1999-Q3; present in Top 30 across 4 filings: 1997–2000)
     - `EMC` (EMC Corp., #10 peak rank in 2000-Q3)
     - `SBC` (SBC Communications Inc., #10 peak rank in 2001-Q3; present in Top 30 across 10 filings)
-  - **Nuanced Survivorship Framing**: A claim must not outrun its sources. Rather than characterizing all missing constituents as companies that later collapsed, the full 26-filing evidence reveals that survivorship effects operated bidirectionally. While telecom and tech crash casualties like `LU` (fell ~99% from peak) and `EMC` (fell ~96%) create upward survivorship bias when omitted during the 2000–2002 crash, major blue chips like Royal Dutch Petroleum (`RD`) and SBC Communications (`SBC`) were stable mega-cap operating companies that did not collapse. The universe gap represents systematic universe selection truncation across the pre-2010 era, rather than a pure distressed-firm attrition pattern. Issue #37 tracks acquiring historical price and corporate-action data for these 38 missing constituents.
+  - **Nuanced Survivorship Framing**: A claim must not outrun its sources. Rather than characterizing all missing constituents as companies that later collapsed, the full 26-filing evidence reveals that survivorship effects operated bidirectionally. While telecom and tech crash casualties like `LU` (fell ~99% from peak) and `EMC` (fell ~96%) create upward survivorship bias when omitted during the 2000–2002 crash, major blue chips like Royal Dutch Petroleum (`RD`) and SBC Communications (`SBC`) were stable mega-cap operating companies that did not collapse. The universe gap represents systematic universe selection truncation across the pre-2010 era, rather than a pure distressed-firm attrition pattern. Issue #37 tracks closing this gap, decomposed into #55 (deriving price series for the **17** of these constituents that reach a filing's Top 20) and #56 (modelling terminal value for constituents that stop trading mid-horizon).
 
 #### 4.3.7 Empirical Mid-Year Promotion Findings & Selector Sensitivity
 The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/audit_quarterly_expansion.py) detects mid-year promotions, classifies each against the audited filings, and runs the side-by-side strategy comparison.
