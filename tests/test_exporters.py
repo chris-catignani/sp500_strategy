@@ -24,6 +24,10 @@ import engine
 class TestExporters(unittest.TestCase):
     """Test suite for engine/exporters.py reporting and export utilities."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.default_apps_script = generate_google_apps_script()
+
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
 
@@ -341,7 +345,7 @@ class TestExporters(unittest.TestCase):
 
     def test_generate_google_apps_script(self):
         """Test Google Apps Script generator creates valid JS with required sheets and styling."""
-        js_code = generate_google_apps_script()
+        js_code = self.default_apps_script
         self.assertIsInstance(js_code, str)
         self.assertGreater(len(js_code), 500)
 
@@ -382,7 +386,7 @@ class TestExporters(unittest.TestCase):
             self.assertEqual(result.returncode, 0, f"Node syntax check failed: {result.stderr}")
 
     def test_google_apps_script_interactive_dashboard(self):
-        code = generate_google_apps_script()
+        code = self.default_apps_script
         # Executive Summary checks (14-column layout A1:N1)
         self.assertIn("clearDataValidations", code)
         self.assertIn("Total Dividends Received", code)
@@ -436,7 +440,7 @@ class TestExporters(unittest.TestCase):
         self.assertIn("Show All Tabs", code)
 
     def test_google_apps_script_performance_charts_and_regimes(self):
-        code = generate_google_apps_script()
+        code = self.default_apps_script
         # Check tab presence
         self.assertIn("'Performance & Tradeoffs'", code)
         self.assertIn("buildPerformanceAndTradeoffsSheet", code)
@@ -495,7 +499,7 @@ class TestExporters(unittest.TestCase):
 
     def test_recalculate_strategy_function(self):
         """Verify RECALCULATE_STRATEGY uses dynamic SCENARIO_DATA without stale hardcoded constants."""
-        code = generate_google_apps_script()
+        code = self.default_apps_script
 
         # Verify stale constants from Issue #27 are absent
         self.assertNotIn("0.1495", code)
