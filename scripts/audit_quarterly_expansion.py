@@ -19,7 +19,7 @@ from engine.models import ConstituentSnapshot
 
 # Q4 periods whose ground truth is the same filing the year-end candidate list is built
 # from. They match 10/10 by construction and cannot corroborate the drift model.
-CIRCULAR_Q4_PERIODS = frozenset({"2020-Q4", "2021-Q4", "2022-Q4", "2023-Q4"})
+CIRCULAR_Q4_PERIODS = frozenset({"2020-Q4", "2021-Q4", "2022-Q4", "2023-Q4", "2024-Q4"})
 
 
 def audit_midyear_promotions():
@@ -264,7 +264,7 @@ def main():
     xml_results = {k: v for k, v in verified_results.items() if v.get("form") == "NPORT-P"}
     xml_accuracy = sum(r["accuracy_pct"] for r in xml_results.values()) / len(xml_results) if xml_results else 0.0
 
-    # Q4 2020-2023 are not independent checks: the year-end candidate lists are parsed
+    # Q4 2020-2024 are not independent checks: the year-end candidate lists are parsed
     # from those very filings, so they match 10/10 by construction. The out-of-sample
     # figure excludes them and is the one that actually measures the drift model.
     out_of_sample = {k: v for k, v in xml_results.items() if k not in CIRCULAR_Q4_PERIODS}

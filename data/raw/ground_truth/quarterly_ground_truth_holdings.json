@@ -751,15 +751,72 @@
       "fund_total_value_usd": 540780877133.1704
     },
     "2024-Q3": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing archived for 2024-09-30; unverified.",
-      "accession_number": "N/A",
-      "form": "Unverified",
+      "verified": true,
+      "holdings": [
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "GOOGL",
+        "AMZN",
+        "META",
+        "BRK.B",
+        "AVGO",
+        "TSLA",
+        "LLY"
+      ],
+      "weights": [
+        0.0727,
+        0.0657,
+        0.0613,
+        0.0364,
+        0.0357,
+        0.0257,
+        0.0173,
+        0.0165,
+        0.0149,
+        0.0143
+      ],
+      "accession_number": "0001752724-24-264697",
+      "form": "NPORT-P",
       "report_date": "2024-09-30",
-      "filing_date": "N/A",
-      "sec_edgar_url": "N/A",
-      "local_file": "N/A"
+      "filing_date": "2024-11-25",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/000175272424264697/0001752724-24-264697-index.htm",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2024-Q3_0001752724-24-264697.xml",
+      "fund_total_value_usd": 591427786375.25
+    },
+    "2024-Q4": {
+      "verified": true,
+      "holdings": [
+        "AAPL",
+        "NVDA",
+        "MSFT",
+        "AMZN",
+        "GOOGL",
+        "META",
+        "TSLA",
+        "AVGO",
+        "BRK.B",
+        "JPM"
+      ],
+      "weights": [
+        0.076,
+        0.0661,
+        0.0629,
+        0.0412,
+        0.0404,
+        0.0256,
+        0.0226,
+        0.0217,
+        0.0167,
+        0.0136
+      ],
+      "accession_number": "0001752724-25-043826",
+      "form": "NPORT-P",
+      "report_date": "2024-12-31",
+      "filing_date": "2025-02-27",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/000175272425043826/0001752724-25-043826-index.htm",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2024-Q4_0001752724-25-043826.xml",
+      "fund_total_value_usd": 623655440876.9103
     }
   }
 }

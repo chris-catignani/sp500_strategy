@@ -97,7 +97,7 @@ class TestRawConstituents(unittest.TestCase):
 
 
     def test_xml_generated_candidates_and_weights(self):
-        """Verify 2020-2023 candidates and weights strictly reproduce the Form NPORT-P XML filings."""
+        """Verify 2020-2024 candidates and weights strictly reproduce the Form NPORT-P XML filings."""
         import sys
         root = Path(__file__).resolve().parent.parent
         sys.path.insert(0, str(root))
@@ -112,6 +112,7 @@ class TestRawConstituents(unittest.TestCase):
             "2021": "SPY_2021-Q4_0001752724-22-048845.xml",
             "2022": "SPY_2022-Q4_0001752724-23-046862.xml",
             "2023": "SPY_2023-Q4_0001752724-24-043296.xml",
+            "2024": "SPY_2024-Q4_0001752724-25-043826.xml",
         }
 
         for year, xml_file in xml_map.items():
@@ -152,6 +153,10 @@ class TestRawConstituents(unittest.TestCase):
         self.assertIn("MRK", tickers_2023)
         self.assertNotIn("WMT", tickers_2023)
 
+        tickers_2024 = data["constituents_by_year"]["2024"]
+        self.assertIn("NFLX", tickers_2024)
+        self.assertNotIn("ORCL", tickers_2024)
+
     def test_sec_ground_truth_filing_accuracy(self):
         """Verify ground-truth historical and modern holdings against SEC filings."""
         import csv
@@ -182,9 +187,13 @@ class TestRawConstituents(unittest.TestCase):
         self.assertNotIn("WMT", gt_2008_q3["holdings"])
         self.assertNotIn("CSCO", gt_2008_q3["holdings"])
 
-        # 2024-Q3 must be unverified (no regulatory filing archived)
+        # 2024-Q3 and 2024-Q4 are now archived Form NPORT-P filings (Issue #39)
         gt_2024_q3 = gt["periods"]["2024-Q3"]
-        self.assertFalse(gt_2024_q3["verified"])
+        self.assertTrue(gt_2024_q3["verified"])
+        self.assertNotIn("ORCL", gt_2024_q3["holdings"][:10])
+
+        gt_2024_q4 = gt["periods"]["2024-Q4"]
+        self.assertTrue(gt_2024_q4["verified"])
 
         # Provenance table reproducibility check
         csv_path = root / "docs" / "historical_weights_table.csv"
@@ -225,7 +234,7 @@ class TestRawConstituents(unittest.TestCase):
         with open(root / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
             reader = list(csv.DictReader(f))
 
-        xml_years = {"2020", "2021", "2022", "2023"}
+        xml_years = {"2020", "2021", "2022", "2023", "2024"}
         for row in reader:
             if row["year"] in xml_years:
                 self.assertEqual(row["methodology"], "SEC Form NPORT-P Audited Holdings")

@@ -1,4 +1,20 @@
 {
+  "2024-Q4": {
+    "form": "NPORT-P",
+    "report_date": "2024-12-31",
+    "filing_date": "2025-02-27",
+    "accession_number": "0001752724-25-043826",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272425043826/0001752724-25-043826-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2024-Q4_0001752724-25-043826.xml"
+  },
+  "2024-Q3": {
+    "form": "NPORT-P",
+    "report_date": "2024-09-30",
+    "filing_date": "2024-11-25",
+    "accession_number": "0001752724-24-264697",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272424264697/0001752724-24-264697-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2024-Q3_0001752724-24-264697.xml"
+  },
   "2024-Q2": {
     "form": "NPORT-P",
     "report_date": "2024-06-30",

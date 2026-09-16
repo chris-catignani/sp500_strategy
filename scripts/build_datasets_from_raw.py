@@ -64,6 +64,7 @@ SP500_NAMES = {
     "ABBV": "AbbVie Inc.",
     "ADBE": "Adobe Inc.",
     "CMCSA": "Comcast Corporation",
+    "NFLX": "Netflix, Inc.",
 }
 
 NON_US_NAMES = {
@@ -100,6 +101,7 @@ EFFECTIVE_INCLUSION_DATES = {
     "ABBV": "2013-01-02",
     "ADBE": "1997-05-05",
     "CMCSA": "2002-11-18",
+    "NFLX": "2010-12-17",
 }
 QUARTER_END_DATES = {
     1: "03-31",

@@ -1,8 +1,8 @@
 """Generate historical S&P 500 Top 20 constituent weights and reproducible provenance table.
 
 Ranks #1-#12 derive from official S&P Dow Jones Indices factsheet weights.
-Years 2020-2023 derive directly from primary SPY Form NPORT-P XML regulatory filings.
-Ranks #13-#20 for 1994-2019 and 2024 derive from point-in-time capitalization ratios
+Years 2020-2024 derive directly from primary SPY Form NPORT-P XML regulatory filings.
+Ranks #13-#20 for 1994-2019 derive from point-in-time capitalization ratios
 anchored to verified rank-12 factsheet weights with reproducible underlying market capitalizations.
 
 Exports:
@@ -84,6 +84,7 @@ COMPANY_NAMES = {
     "ABBV": "AbbVie Inc.",
     "ADBE": "Adobe Inc.",
     "CMCSA": "Comcast Corporation",
+    "NFLX": "Netflix, Inc.",
 }
 
 # Form NPORT-P XML filings manifest for year-ends
@@ -92,9 +93,10 @@ XML_YEAR_ENDS = {
     "2021": ("SPY_2021-Q4_0001752724-22-048845.xml", "0001752724-22-048845"),
     "2022": ("SPY_2022-Q4_0001752724-23-046862.xml", "0001752724-23-046862"),
     "2023": ("SPY_2023-Q4_0001752724-24-043296.xml", "0001752724-24-043296"),
+    "2024": ("SPY_2024-Q4_0001752724-25-043826.xml", "0001752724-25-043826"),
 }
 
-# 1. Programmatically parse XML filings and update 2020-2023 directly
+# 1. Programmatically parse XML filings and update 2020-2024 directly
 xml_data_by_year = {}
 for year_str, (filename, accession) in XML_YEAR_ENDS.items():
     xml_path = FILINGS_DIR / filename
@@ -137,7 +139,7 @@ def build_provenance_csv():
         w12 = weights[11]
 
         if year in xml_data_by_year:
-            # Modern XML filings (2020-2023)
+            # Modern XML filings (2020-2024)
             parsed = xml_data_by_year[year]["parsed"]
             accession = xml_data_by_year[year]["accession"]
             fund_total_usd = parsed["total_val_usd"]
@@ -215,7 +217,7 @@ def main():
 
     with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
         json.dump(current_data, f, indent=2)
-    print(f"Updated {OUTPUT_JSON} with all XML-derived year-ends (2020-2023).")
+    print(f"Updated {OUTPUT_JSON} with all XML-derived year-ends (2020-2024).")
 
     build_provenance_csv()
 

@@ -58,6 +58,7 @@ CUSIP_TO_TICKER = {
     "70450Y103": "PYPL",   # PayPal Holdings Inc
     "00724F101": "ADBE",   # Adobe Inc
     "20030N101": "CMCSA",  # Comcast Corp
+    "64110L106": "NFLX",   # Netflix Inc
 }
 
 # Historical company names appearing in Form N-30D Schedules of Investments (1995-2019).
@@ -427,19 +428,6 @@ def main():
             "local_file": meta["file_path"],
             "fund_total_value_usd": parsed["total_val_usd"],
         }
-
-    # 3. 2024-Q3 (Unverified - no archived SEC filing)
-    ground_truth["periods"]["2024-Q3"] = {
-        "verified": False,
-        "holdings": [],
-        "note": "No point-in-time regulatory filing archived for 2024-09-30; unverified.",
-        "accession_number": "N/A",
-        "form": "Unverified",
-        "report_date": "2024-09-30",
-        "filing_date": "N/A",
-        "sec_edgar_url": "N/A",
-        "local_file": "N/A",
-    }
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(ground_truth, f, indent=2)

@@ -19,6 +19,7 @@ TICKERS = [
     "GE", "PFE", "CSCO", "INTC", "KO", "MRK", "MO", "T", "HPQ",
     "AMGN", "BMY", "COST", "DIS", "FNMA", "MA", "MCD", "ORCL",
     "PEP", "PM", "PYPL", "QCOM", "UPS", "VZ", "ABBV", "ADBE", "CMCSA",
+    "NFLX",
 ]
 
 NON_US_TICKERS = [

@@ -4263,141 +4263,141 @@
     {
       "ticker": "AAPL",
       "name": "Apple Inc.",
-      "market_cap_weight": 0.071,
+      "market_cap_weight": 0.076,
       "trailing_1y_return": 0.3058,
       "year": 2024
     },
     {
       "ticker": "NVDA",
       "name": "NVIDIA Corporation",
-      "market_cap_weight": 0.068,
+      "market_cap_weight": 0.0661,
       "trailing_1y_return": 1.7125,
       "year": 2024
     },
     {
       "ticker": "MSFT",
       "name": "Microsoft Corporation",
-      "market_cap_weight": 0.065,
+      "market_cap_weight": 0.0629,
       "trailing_1y_return": 0.1291,
       "year": 2024
     },
     {
       "ticker": "AMZN",
       "name": "Amazon.com Inc.",
-      "market_cap_weight": 0.038,
+      "market_cap_weight": 0.0412,
       "trailing_1y_return": 0.4439,
-      "year": 2024
-    },
-    {
-      "ticker": "META",
-      "name": "Meta Platforms Inc.",
-      "market_cap_weight": 0.027,
-      "trailing_1y_return": 0.6598,
       "year": 2024
     },
     {
       "ticker": "GOOGL",
       "name": "Alphabet Inc. (Class A)",
-      "market_cap_weight": 0.023,
+      "market_cap_weight": 0.0404,
       "trailing_1y_return": 0.3594,
       "year": 2024
     },
     {
-      "ticker": "BRK.B",
-      "name": "Berkshire Hathaway Inc. (Class B)",
-      "market_cap_weight": 0.018,
-      "trailing_1y_return": 0.2709,
+      "ticker": "META",
+      "name": "Meta Platforms Inc.",
+      "market_cap_weight": 0.0256,
+      "trailing_1y_return": 0.6598,
       "year": 2024
     },
     {
       "ticker": "TSLA",
       "name": "Tesla Inc.",
-      "market_cap_weight": 0.017,
+      "market_cap_weight": 0.0226,
       "trailing_1y_return": 0.6252,
       "year": 2024
     },
     {
       "ticker": "AVGO",
       "name": "Broadcom Inc.",
-      "market_cap_weight": 0.016,
+      "market_cap_weight": 0.0217,
       "trailing_1y_return": 1.0965,
+      "year": 2024
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Inc. (Class B)",
+      "market_cap_weight": 0.0167,
+      "trailing_1y_return": 0.2709,
       "year": 2024
     },
     {
       "ticker": "JPM",
       "name": "JPMorgan Chase & Co.",
-      "market_cap_weight": 0.014,
+      "market_cap_weight": 0.0136,
       "trailing_1y_return": 0.4363,
       "year": 2024
     },
     {
       "ticker": "LLY",
       "name": "Eli Lilly and Company",
-      "market_cap_weight": 0.013,
+      "market_cap_weight": 0.0122,
       "trailing_1y_return": 0.3333,
-      "year": 2024
-    },
-    {
-      "ticker": "UNH",
-      "name": "UnitedHealth Group Inc.",
-      "market_cap_weight": 0.012,
-      "trailing_1y_return": -0.0236,
-      "year": 2024
-    },
-    {
-      "ticker": "WMT",
-      "name": "Walmart Inc.",
-      "market_cap_weight": 0.0111,
-      "trailing_1y_return": 0.7351,
       "year": 2024
     },
     {
       "ticker": "V",
       "name": "Visa Inc.",
-      "market_cap_weight": 0.0086,
+      "market_cap_weight": 0.011,
       "trailing_1y_return": 0.2222,
-      "year": 2024
-    },
-    {
-      "ticker": "MA",
-      "name": "Mastercard Incorporated",
-      "market_cap_weight": 0.0084,
-      "trailing_1y_return": 0.2408,
       "year": 2024
     },
     {
       "ticker": "XOM",
       "name": "Exxon Mobil Corporation",
-      "market_cap_weight": 0.0083,
+      "market_cap_weight": 0.0095,
       "trailing_1y_return": 0.1143,
       "year": 2024
     },
     {
-      "ticker": "ORCL",
-      "name": "Oracle Corporation",
-      "market_cap_weight": 0.0083,
-      "trailing_1y_return": 0.5958,
+      "ticker": "UNH",
+      "name": "UnitedHealth Group Inc.",
+      "market_cap_weight": 0.0093,
+      "trailing_1y_return": -0.0236,
+      "year": 2024
+    },
+    {
+      "ticker": "MA",
+      "name": "Mastercard Incorporated",
+      "market_cap_weight": 0.0087,
+      "trailing_1y_return": 0.2408,
       "year": 2024
     },
     {
       "ticker": "COST",
       "name": "Costco Wholesale Corporation",
-      "market_cap_weight": 0.0073,
+      "market_cap_weight": 0.0082,
       "trailing_1y_return": 0.3949,
       "year": 2024
     },
     {
       "ticker": "PG",
       "name": "Procter & Gamble Co.",
-      "market_cap_weight": 0.007,
+      "market_cap_weight": 0.0079,
       "trailing_1y_return": 0.1711,
+      "year": 2024
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart Inc.",
+      "market_cap_weight": 0.0079,
+      "trailing_1y_return": 0.7351,
       "year": 2024
     },
     {
       "ticker": "HD",
       "name": "The Home Depot Inc.",
-      "market_cap_weight": 0.0069,
+      "market_cap_weight": 0.0078,
       "trailing_1y_return": 0.1484,
+      "year": 2024
+    },
+    {
+      "ticker": "NFLX",
+      "name": "Netflix, Inc.",
+      "market_cap_weight": 0.0076,
+      "trailing_1y_return": 0.8306,
       "year": 2024
     }
   ]
