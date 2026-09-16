@@ -187,7 +187,7 @@ The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/
     - `MarketCapSelector`: Top 3 and Top 5 are **unchanged** (0.00% delta at every horizon and tax tier) — a name ranked #13–#20 cannot reach a Top 5 book. Top 10 improves: 10y pre-tax 21.82% → 22.06% (+0.24%), 20y 13.57% → 14.16% (+0.59%), 30y 12.96% → 13.01% (+0.05%). **This is the expansion's real benefit.**
     - `PerformanceSelector`: the expansion is **negative in 8 of the 9 strategy/horizon cells**, averaging **-2.2%** pre-tax and reaching **-5.89%** (Top 10, 10y). Only Top 3 at 10y improves (+2.92%). A wider candidate pool gives a momentum selector more recent winners to choose among, and the largest recent gainer out of 20 large caps mean-reverts more often than the largest out of 12. An earlier revision of this document quoted the single positive cell as representative; the full table is printed by the audit script and should be read in full.
   - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results independently of any pool-size effect. `Top_3_MarketCap` fell from 26.88% to 24.49% (10y), 16.39% to 15.29% (20y) and 15.16% to 14.43% (30y). The cause is year-end 2023: the prior data ranked NVIDIA #3 at 3.4%, while the filing shows NVIDIA at 3.06% behind Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run.
-- **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.06%, Alphabet A 2.07%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN.
+- **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.06%, Alphabet A 2.07%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN. The consolidation applies to the 2020-2024 filing-derived weights; Alphabet's 2014-2019 share-class basis is undetermined and flagged unverified. See section 4.3.8 for coverage and the open gap.
 
 #### 4.3.8 Dual-Class Issuer Consolidation & Execution Convention
 
@@ -195,18 +195,56 @@ In capitalization-weighted benchmark construction, indices often track separate 
 
 To prevent artificial portfolio distortion—where an issuer's enterprise weight is arbitrarily fragmented across multiple slots or double-counted in concentrated books—the simulation engine standardizes on **company/issuer-level consolidation**:
 
-1. **Capitalization Consolidation**:
-   All publicly traded share classes of an issuer are aggregated into a single enterprise weight ($W_{\text{issuer}} = \sum_k W_{\text{class}_k}$) via `CONSOLIDATED_ISSUERS` and `consolidate_holdings()`.
-   - In the audited 2023-12-31 SPY Form NPORT-P filing, Alphabet is reported as Class A (CUSIP `02079K305`, 2.065%) and Class C (CUSIP `02079K107`, 1.753%).
-   - Combined, Alphabet's aggregate 3.818% (~3.82%) weight ranks **#3** behind Apple (7.03%) and Microsoft (6.98%), establishing the 2024 Top 3 book as `['AAPL', 'MSFT', 'GOOGL']`.
-   - Unconsolidated, Alphabet fragments into rank #5 (`GOOGL`) and rank #7 (`GOOG`), so an uncombined selection would hold Amazon (#3, 3.45%) instead.
-   - In Top 10 portfolios, unconsolidated treatment creates portfolio degeneracy by allocating two distinct slots to the same corporate enterprise, displacing the authentic 10th distinct company.
+**1. Capitalization Consolidation**
 
-2. **Execution Convention Rationale**:
-   The simulation engine aggregates both share classes into a single constituent with canonical company label **`Alphabet Inc. (Class A & C)`** and executes entirely through **Alphabet Inc. Class A (`GOOGL`)**:
-   - **Primary Voting Rights & Historical Continuity**: Class A shares carry standard 1-vote-per-share governance and maintain an unbroken price and corporate action record dating to Google's August 2004 initial public offering. Class C shares (`GOOG`) were created in April 2014 via a stock dividend as non-voting equity.
-   - **Institutional Liquidity**: Class A represents the standard primary equity line for benchmark replication and institutional order routing.
-   - **Negligible Tracking Error (<1%)**: Because both share classes possess equal claims on enterprise earnings and cash flows, the market price spread between Class A and Class C trades in an extremely narrow band (historically within ~1% of parity, with an annualized tracking error under 0.10%). Routing execution through Class A avoids unnecessary transaction complexity, dual-lot tax tracking, and bid-ask friction with zero economic benefit.
+All publicly traded share classes of a registered issuer are aggregated into a single enterprise weight ($W_{\text{issuer}} = \sum_k W_{\text{class}_k}$) via `CONSOLIDATED_ISSUERS` and `consolidate_holdings()` in [`scripts/extract_ground_truth_from_sec.py`](../scripts/extract_ground_truth_from_sec.py).
+
+- In the audited 2023-12-31 SPY Form NPORT-P filing, Alphabet is reported as Class A (CUSIP `02079K305`, 2.065%) and Class C (CUSIP `02079K107`, 1.753%).
+- Combined, Alphabet's aggregate 3.818% (~3.82%) weight ranks **#3** behind Apple (7.03%) and Microsoft (6.98%), establishing the 2024 Top 3 book as `['AAPL', 'MSFT', 'GOOGL']`.
+- Unconsolidated, Alphabet fragments into rank #5 (`GOOGL`) and rank #7 (`GOOG`), so an uncombined selection would hold Amazon (#3, 3.45%) instead.
+- In Top 10 portfolios, unconsolidated treatment creates portfolio degeneracy by allocating two distinct slots to the same corporate enterprise, displacing the authentic 10th distinct company.
+
+Consolidation is keyed on CUSIP, with ticker as a fallback. Because the registry is explicit, an issuer filed under two tickers but absent from `CONSOLIDATED_ISSUERS` would otherwise be ranked twice in silence; `_warn_unregistered_multi_class()` detects that case by looking for one issuer `name` resolving to several tickers, and raises a warning rather than passing it through. All 20 archived NPORT-P filings are clean under this check: Alphabet is the only multi-class issuer they report.
+
+**2. Coverage, and the 2014–2019 Gap**
+
+Consolidation can only be applied where the underlying source reports each share class separately. That condition holds for the 2020–2024 year-end weights, which are derived from SPY Form NPORT-P filings. It does not hold uniformly before that, and the series is **not** consistent across its full span:
+
+| Years | Source | Share-class basis |
+|---|---|---|
+| 1994–2013 | Year-end factsheet anchors | Single class. Alphabet Class C was created 2014-04-03 by stock dividend; before that date Alphabet had one listed class, so there is nothing to consolidate. |
+| 2014–2019 | Year-end factsheet anchors | **Undetermined.** No December-dated primary source for these years is archived in this repository. |
+| 2020–2024 | SPY Form NPORT-P (December) | Consolidated, verified — `consolidate_holdings()` sums both CUSIPs. |
+
+The 2014–2019 rows are the open problem. SPY's archived annual reports (fiscal year end September 30) do carry both Alphabet classes, and they show the two classes at comparable size:
+
+| Schedule date | Class A | Class C | C/A |
+|---|---|---|---|
+| 2014-09-30 | $1,714,698,526 | $1,682,324,270 | 0.981 |
+| 2015-09-30 | $1,822,232,272 | $1,773,130,574 | 0.973 |
+| 2016-09-30 | $2,497,461,820 | $2,406,998,965 | 0.964 |
+| 2017-09-30 | $3,264,369,036 | $3,260,913,576 | 0.999 |
+| 2018-09-30 | $4,098,642,554 | $4,174,606,489 | 1.019 |
+| 2019-09-30 | $4,061,358,997 | $4,090,422,764 | 1.007 |
+
+*(Source: `data/raw/ground_truth/sec_filings/SPY_{2014_Q4,2015,2016,2017,2018,2019}_N-30D_*.txt`, Schedule of Investments. Note that `SPY_2014_Q4_N-30D_0001193125-14-428689.txt` carries `CONFORMED PERIOD OF REPORT: 20130930` in its SEC header, but every Schedule of Investments page in the document body is dated September 30, 2014; the header value is a filing-agent error and the body date governs.)*
+
+A consolidated Alphabet weight should therefore sit close to twice its Class A weight. The committed 2014–2019 figures match neither multiple consistently — 2019 reads 2.70%, against roughly 1.65% for Class A alone and 3.30% consolidated — so their composition cannot be inferred from the numbers themselves, and the September ratios above cannot be projected onto a December anchor without a December source to check them against.
+
+Rather than assert a consolidation that is not evidenced, these rows are published as unverified: in [`historical_weights_table.csv`](historical_weights_table.csv) their `methodology` reads `Official Factsheet Anchor (Share-Class Composition Unverified)` and their `source_citation` records that the weight may understate the consolidated issuer weight. Closing the gap requires acquiring a December-dated primary source for 2014–2019 and is tracked in issue #45.
+
+The practical consequence is that Alphabet may be under-ranked in those years. If the committed weights are Class A only, a consolidated Alphabet would enter Top 3 and Top 5 books it is currently excluded from, and reported returns for the affected horizons would change. This is a known limitation of the published 1994–2019 results, not a settled result.
+
+**3. Execution Convention**
+
+The simulation engine aggregates all registered share classes into a single constituent with the canonical issuer label **`Alphabet Inc.`** and executes entirely through **Alphabet Inc. Class A (`GOOGL`)**. The label names the issuer and deliberately makes no claim about which classes a given year's weight covers, because—as the table above shows—that varies by year and belongs in per-row provenance, not in a global constant.
+
+- **Primary Voting Rights & Historical Continuity**: Class A shares carry standard 1-vote-per-share governance and maintain an unbroken price and corporate action record dating to Google's August 2004 initial public offering. Class C shares (`GOOG`) were created in April 2014 via a stock dividend as non-voting equity.
+- **Institutional Liquidity**: Class A represents the standard primary equity line for benchmark replication and institutional order routing.
+- **Single-line execution**: Routing through one class avoids dual-lot tax tracking and a second set of corporate actions for what is one economic claim.
+
+**Limitation**: only `GOOGL` prices are archived (`data/raw/tickers/GOOGL.json`); no `GOOG` price series is held in this repository. Any realized price spread between Class A and Class C is therefore outside the model, and its effect on returns is neither measured nor bounded here. No claim is made that the spread is negligible — that would require a Class C price series this repository does not have.
+
 
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).

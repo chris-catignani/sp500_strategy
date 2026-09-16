@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 from typing import Any, Dict, List, Optional
+import warnings
 import xml.etree.ElementTree as ET
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -88,6 +89,10 @@ N30D_NAME_PATTERNS = [
     (r"^AT\s*&\s*T", "T"),
     (r"^SBC\s+Communications", "SBC"),
     (r"^Bank\s+of\s+America", "BAC"),
+    # Coca-Cola Enterprises was the separately listed bottler, an S&P 500 constituent in
+    # its own right until 2010. It must be matched before the parent, or the broader
+    # pattern swallows it and inflates KO.
+    (r"^Coca[-\s]?Cola\s+Enterprises", "CCE"),
     (r"^Coca[-\s]?Cola", "KO"),
     # Philip Morris International was spun off from Altria in March 2008; both trade as
     # separate S&P 500 constituents thereafter and must not be consolidated. The pre-2003
@@ -294,7 +299,7 @@ def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
 CONSOLIDATED_ISSUERS: Dict[str, Dict[str, Any]] = {
     "GOOGL": {
         "primary_ticker": "GOOGL",
-        "canonical_name": "Alphabet Inc. (Class A & C)",
+        "canonical_name": "Alphabet Inc.",
         "primary_cusip": "02079K305",
         "member_cusips": {"02079K305", "02079K107"},
         "member_tickers": {"GOOGL", "GOOG"},
@@ -310,6 +315,48 @@ TICKER_TO_ISSUER: Dict[str, str] = {
     for issuer_key, spec in CONSOLIDATED_ISSUERS.items()
     for ticker in spec.get("member_tickers", set())
 }
+
+
+def _warn_unregistered_multi_class(
+    raw_holdings: List[Dict[str, Any]],
+    cusip_map: Dict[str, str],
+    ticker_map: Dict[str, str],
+) -> List[str]:
+    """Flag issuers that appear under several tickers but are not registered for consolidation.
+
+    A filing reports each share class as its own position, and the classes share an
+    issuer ``name`` - SPY lists both Alphabet lines as "Alphabet Inc". Any other name
+    that resolves to more than one ticker is a multi-class issuer this module would
+    silently count twice, so it is surfaced rather than passed through in silence.
+
+    Returns the issuer names warned about, so callers and tests can assert on them.
+    """
+    by_name: Dict[str, Dict[str, Optional[str]]] = {}
+    for h in raw_holdings:
+        name = (h.get("name") or "").strip()
+        ticker = (h.get("ticker") or "").strip()
+        if not (name and ticker):
+            continue
+        cusip = (h.get("cusip") or "").strip()
+        # Resolve exactly as consolidate_holdings does, CUSIP first, so a class registered
+        # by CUSIP under an unexpected ticker is not reported as a gap.
+        by_name.setdefault(name, {})[ticker] = cusip_map.get(cusip) or ticker_map.get(ticker)
+
+    unregistered = []
+    for name, resolved in sorted(by_name.items()):
+        tickers = sorted(resolved)
+        if len(tickers) < 2:
+            continue
+        if all(resolved.values()):
+            continue  # already consolidated by an entry in CONSOLIDATED_ISSUERS
+        unregistered.append(name)
+        warnings.warn(
+            f"{name!r} is reported under multiple tickers ({', '.join(tickers)}) "
+            "but is not registered in CONSOLIDATED_ISSUERS; its share classes will be "
+            "ranked as separate constituents. Add the issuer to consolidate it.",
+            stacklevel=2,
+        )
+    return unregistered
 
 
 def consolidate_holdings(
@@ -336,6 +383,8 @@ def consolidate_holdings(
             ticker_map = {
                 t: k for k, s in issuers.items() for t in s.get("member_tickers", set())
             }
+
+    _warn_unregistered_multi_class(raw_holdings, cusip_map, ticker_map)
 
     aggregated: Dict[str, Dict[str, Any]] = {}
     passthrough: List[Dict[str, Any]] = []

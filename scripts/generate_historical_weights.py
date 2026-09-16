@@ -38,7 +38,7 @@ COMPANY_NAMES = {
     "MSFT": "Microsoft Corporation",
     "NVDA": "NVIDIA Corporation",
     "AMZN": "Amazon.com Inc.",
-    "GOOGL": "Alphabet Inc. (Class A & C)",
+    "GOOGL": "Alphabet Inc.",
     "META": "Meta Platforms Inc.",
     "TSLA": "Tesla Inc.",
     "AVGO": "Broadcom Inc.",
@@ -130,6 +130,28 @@ for yr in constituents_by_year:
             assert weights[i-1] >= weights[i], f"Year {yr} weights not descending at idx {i}: {weights[i-1]} < {weights[i]}"
 
 
+# Share-class composition of the Alphabet index weight, by year.
+#
+# Alphabet Class C (GOOG) was created on 2014-04-03 by stock dividend. Before that
+# Alphabet had one listed class, so 1994-2013 weights need no consolidation and are
+# recorded as single-class.
+#
+# 2020-2024 weights are derived from SPY Form NPORT-P filings through
+# consolidate_holdings(), which sums CUSIPs 02079K305 and 02079K107 - verified
+# consolidated against a December-dated primary source.
+#
+# 2014-2019 weights are hand-entered year-end factsheet anchors, and no December-dated
+# primary source for those years is archived in this repository. The archived SPY annual
+# reports (fiscal year end September 30) put Class C at 96-102% of Class A, so a
+# consolidated weight should be close to twice the Class A weight - but the committed
+# figures match neither multiple consistently (2019 reads 2.70%, against roughly 1.65%
+# for Class A alone and 3.30% consolidated). Their composition is therefore UNDETERMINED
+# and is published as such rather than asserted either way. See docs/DATA_PROVENANCE.md
+# section 4.3.8 and issue #45.
+ALPHABET_SINGLE_CLASS_THROUGH = 2013
+ALPHABET_UNDETERMINED_YEARS = frozenset(str(y) for y in range(2014, 2020))
+
+
 def build_provenance_csv():
     """Write comprehensive CSV table of constituent source values, calculations, and valuations."""
     rows = []
@@ -172,6 +194,15 @@ def build_provenance_csv():
                     underlying_val = ""
                     anchor_val = ""
                     source_cit = f"S&P Dow Jones Indices Year-End Factsheet {year}"
+                    if ticker == "GOOGL" and year in ALPHABET_UNDETERMINED_YEARS:
+                        # The weight is sourced; which Alphabet share classes it covers is not.
+                        methodology = "Official Factsheet Anchor (Share-Class Composition Unverified)"
+                        source_cit = (
+                            f"S&P Dow Jones Indices Year-End Factsheet {year}; UNVERIFIED - "
+                            "Alphabet Class A/C composition of this weight is undetermined "
+                            "and it may understate the consolidated issuer weight; see "
+                            "docs/DATA_PROVENANCE.md 4.3.8"
+                        )
                 else:
                     # These weights are ESTIMATES, not derived quantities. No primary
                     # source in this repository reports a market capitalization for

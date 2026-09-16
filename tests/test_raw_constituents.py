@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 import unittest
+import warnings
 
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
@@ -141,7 +142,6 @@ class TestRawConstituents(unittest.TestCase):
         self.assertIn("NFLX", tickers_2024)
         self.assertNotIn("ORCL", tickers_2024)
 
-    test_xml_filing_exact_derivation = test_xml_generated_candidates_and_weights
 
     def test_sec_ground_truth_filing_accuracy(self):
         """Verify ground-truth historical and modern holdings against SEC filings."""
@@ -209,7 +209,10 @@ class TestRawConstituents(unittest.TestCase):
                 self.assertEqual(row["anchor_value_usd"], "")
                 self.assertTrue(row["source_citation"].startswith("UNVERIFIED"))
             else:
-                self.assertEqual(row["methodology"], "Official Factsheet Anchor")
+                self.assertTrue(
+                    row["methodology"].startswith("Official Factsheet Anchor"),
+                    f"{row['year']} rank {row['rank']}: {row['methodology']}",
+                )
 
     def test_provenance_table_marks_unsourced_ranks_unverified(self):
         """Ranks #13-#20 outside the NPORT-P years have no primary source and must say so."""
@@ -221,7 +224,12 @@ class TestRawConstituents(unittest.TestCase):
             if row["year"] in xml_years:
                 self.assertEqual(row["methodology"], "SEC Form NPORT-P Audited Holdings")
             elif int(row["rank"]) <= 12:
-                self.assertEqual(row["methodology"], "Official Factsheet Anchor")
+                # The suffixed variant qualifies a sourced weight whose share-class
+                # composition is undetermined; the anchor itself is still sourced.
+                self.assertTrue(
+                    row["methodology"].startswith("Official Factsheet Anchor"),
+                    f"{row['year']} rank {row['rank']}: {row['methodology']}",
+                )
             else:
                 self.assertEqual(
                     row["methodology"],
@@ -230,12 +238,12 @@ class TestRawConstituents(unittest.TestCase):
                 )
 
     def test_company_label_consistency(self):
-        """Verify GOOGL company label is harmonized across scripts, mappings, and datasets."""
+        """The Alphabet label names the issuer and claims nothing about share classes."""
         from scripts.generate_historical_weights import COMPANY_NAMES
         from scripts.build_datasets_from_raw import SP500_NAMES
         from scripts.extract_ground_truth_from_sec import CONSOLIDATED_ISSUERS
 
-        canonical = "Alphabet Inc. (Class A & C)"
+        canonical = "Alphabet Inc."
         self.assertEqual(COMPANY_NAMES["GOOGL"], canonical)
         self.assertEqual(SP500_NAMES["GOOGL"], canonical)
         self.assertEqual(CONSOLIDATED_ISSUERS["GOOGL"]["canonical_name"], canonical)
@@ -254,6 +262,7 @@ class TestRawConstituents(unittest.TestCase):
                 for v in content.values():
                     if isinstance(v, list):
                         items.extend(v)
+            self.assertTrue(items, f"{ds} yielded no constituent rows to check")
             googl_found = False
             for item in items:
                 if item.get("ticker") == "GOOGL":
@@ -263,7 +272,49 @@ class TestRawConstituents(unittest.TestCase):
                         canonical,
                         f"Failed in {ds} for period {item.get('year')}-{item.get('quarter')}",
                     )
+                self.assertNotEqual(
+                    item.get("ticker"), "GOOG",
+                    f"{ds} carries a separate Class C line; the issuer must hold one slot",
+                )
             self.assertTrue(googl_found, f"GOOGL not found in {ds}")
+
+    def test_alphabet_share_class_composition_is_declared_per_year(self):
+        """Which Alphabet classes a weight covers varies by year and must be stated, not assumed."""
+        from scripts.generate_historical_weights import (
+            ALPHABET_SINGLE_CLASS_THROUGH,
+            ALPHABET_UNDETERMINED_YEARS,
+        )
+
+        with open(ROOT / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
+            googl_rows = {r["year"]: r for r in csv.DictReader(f) if r["ticker"] == "GOOGL"}
+
+        self.assertTrue(googl_rows, "no GOOGL rows in the provenance table")
+
+        for year, row in googl_rows.items():
+            if year in ALPHABET_UNDETERMINED_YEARS:
+                # Class C existed but no December-dated primary source is archived, so the
+                # table must say the composition is unverified rather than imply either.
+                self.assertIn("Share-Class Composition Unverified", row["methodology"], year)
+                self.assertIn("UNVERIFIED", row["source_citation"], year)
+            elif int(year) > ALPHABET_SINGLE_CLASS_THROUGH:
+                # 2020 onward is consolidated by consolidate_holdings() from a filing.
+                self.assertIn("NPORT-P", row["source_citation"], year)
+                self.assertNotIn("Unverified", row["methodology"], year)
+            else:
+                # Before 2014-04-03 Alphabet had one listed class; nothing to consolidate.
+                self.assertNotIn("Share-Class", row["methodology"], year)
+
+    def test_provenance_table_never_claims_unsourced_consolidation(self):
+        """No GOOGL row may cite a bare factsheet for a weight of undetermined composition."""
+        from scripts.generate_historical_weights import ALPHABET_UNDETERMINED_YEARS
+
+        with open(ROOT / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row["ticker"] == "GOOGL" and row["year"] in ALPHABET_UNDETERMINED_YEARS:
+                    self.assertNotEqual(
+                        row["methodology"], "Official Factsheet Anchor",
+                        f"{row['year']} presents an unverified consolidation as a sourced weight",
+                    )
 
 
 class TestN30DScheduleParser(unittest.TestCase):
@@ -360,7 +411,7 @@ class TestConsolidateHoldings(unittest.TestCase):
         self.assertIn("GOOGL", by_ticker)
         self.assertEqual(by_ticker["GOOGL"]["val"], 750.0)
         self.assertEqual(by_ticker["GOOGL"]["cusip"], "02079K305")
-        self.assertEqual(by_ticker["GOOGL"]["name"], "Alphabet Inc. (Class A & C)")
+        self.assertEqual(by_ticker["GOOGL"]["name"], "Alphabet Inc.")
 
     def test_consolidate_holdings_synthetic_dual_class(self):
         from scripts.extract_ground_truth_from_sec import consolidate_holdings
@@ -408,7 +459,103 @@ class TestConsolidateHoldings(unittest.TestCase):
         self.assertIn("GOOGL", by_ticker)
         self.assertEqual(by_ticker["GOOGL"]["val"], 500.0)
         self.assertEqual(by_ticker["GOOGL"]["cusip"], "02079K305")
-        self.assertEqual(by_ticker["GOOGL"]["name"], "Alphabet Inc. (Class A & C)")
+        self.assertEqual(by_ticker["GOOGL"]["name"], "Alphabet Inc.")
+
+
+class TestIssuerSeparation(unittest.TestCase):
+    """Distinct issuers must not be merged, and multi-class issuers must not be missed."""
+
+    def test_coca_cola_enterprises_is_not_merged_into_ko(self):
+        """The bottler was its own S&P 500 constituent and must rank separately."""
+        from scripts.extract_ground_truth_from_sec import (
+            parse_n30d_filing, FILINGS_DIR, N30D_HISTORICAL_FILINGS,
+        )
+
+        for period, filename, *_ in N30D_HISTORICAL_FILINGS:
+            parsed = parse_n30d_filing(FILINGS_DIR / filename)
+            by_ticker = {h["ticker"]: h for h in parsed["holdings"]}
+            self.assertIn("KO", by_ticker, period)
+            self.assertIn("CCE", by_ticker, period)
+            self.assertIn("Coca-Cola Co", by_ticker["KO"]["name"].replace(" Co.", " Co"), period)
+            self.assertIn("Enterprises", by_ticker["CCE"]["name"], period)
+            self.assertGreater(by_ticker["KO"]["val"], by_ticker["CCE"]["val"], period)
+
+    def test_n30d_tickers_map_one_issuer_each(self):
+        """No name pattern may absorb two differently named issuers into one ticker."""
+        from scripts.extract_ground_truth_from_sec import (
+            parse_n30d_filing, FILINGS_DIR, N30D_HISTORICAL_FILINGS, _n30d_ticker,
+        )
+
+        for period, filename, *_ in N30D_HISTORICAL_FILINGS:
+            parsed = parse_n30d_filing(FILINGS_DIR / filename)
+            for holding in parsed["holdings"]:
+                self.assertEqual(
+                    _n30d_ticker(holding["name"]), holding["ticker"],
+                    f"{period}: {holding['name']!r} was consolidated under a foreign ticker",
+                )
+
+    def test_registered_issuer_consolidates_without_warning(self):
+        from scripts.extract_ground_truth_from_sec import consolidate_holdings
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            result = consolidate_holdings([
+                {"name": "Alphabet Inc", "ticker": "GOOGL", "cusip": "02079K305", "val": 400.0},
+                {"name": "Alphabet Inc", "ticker": "GOOG", "cusip": "02079K107", "val": 350.0},
+            ])
+        self.assertEqual(caught, [])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["val"], 750.0)
+
+    def test_unregistered_multi_class_issuer_warns(self):
+        """An issuer filed under two tickers but absent from the registry must not pass silently."""
+        from scripts.extract_ground_truth_from_sec import consolidate_holdings
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            result = consolidate_holdings([
+                {"name": "Fox Corp", "ticker": "FOXA", "cusip": "35137L105", "val": 10.0},
+                {"name": "Fox Corp", "ticker": "FOX", "cusip": "35137L204", "val": 5.0},
+                {"name": "Apple Inc", "ticker": "AAPL", "cusip": "037833100", "val": 99.0},
+            ])
+        self.assertEqual(len(caught), 1)
+        self.assertIn("Fox Corp", str(caught[0].message))
+        self.assertIn("CONSOLIDATED_ISSUERS", str(caught[0].message))
+        # The warning reports the gap; it does not silently invent a consolidation.
+        self.assertEqual(len(result), 3)
+
+    def test_archived_filings_contain_no_unregistered_multi_class_issuer(self):
+        """Every multi-class issuer in the archived NPORT-P filings must be registered."""
+        import json
+        import xml.etree.ElementTree as ET
+        from scripts.extract_ground_truth_from_sec import (
+            FILINGS_DIR, TICKER_TO_ISSUER, map_ticker, strip_ns,
+            _warn_unregistered_multi_class, CUSIP_TO_ISSUER,
+        )
+
+        with open(FILINGS_DIR / "sec_filings_manifest.json", "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+
+        for period, meta in sorted(manifest.items()):
+            root = ET.parse(ROOT / meta["file_path"]).getroot()
+            holdings = []
+            for elem in root.iter():
+                if strip_ns(elem.tag) != "invstOrSec":
+                    continue
+                fields = {strip_ns(c.tag): (c.text or "").strip() for c in elem}
+                holdings.append({
+                    "name": fields.get("name", ""),
+                    "ticker": map_ticker(
+                        fields.get("name", ""), fields.get("cusip", ""), fields.get("ticker", "")
+                    ),
+                    "cusip": fields.get("cusip", ""),
+                })
+            with warnings.catch_warnings(record=True):
+                warnings.simplefilter("always")
+                unregistered = _warn_unregistered_multi_class(
+                    holdings, CUSIP_TO_ISSUER, TICKER_TO_ISSUER
+                )
+            self.assertEqual(unregistered, [], f"{period} has unregistered multi-class issuers")
 
 
 if __name__ == "__main__":
