@@ -5,3 +5,4 @@ scripts/google_apps_script.js -diff linguist-generated=true
 # Treat raw historical market archives as non-diffable
 data/raw/** -diff linguist-generated=true
 data/*.json -diff linguist-generated=true
+docs/historical_weights_table.csv -diff linguist-generated=true

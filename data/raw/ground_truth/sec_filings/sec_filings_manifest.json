@@ -1,0 +1,146 @@
+{
+  "2024-Q2": {
+    "form": "NPORT-P",
+    "report_date": "2024-06-30",
+    "filing_date": "2024-08-28",
+    "accession_number": "0001752724-24-196595",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272424196595/0001752724-24-196595-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2024-Q2_0001752724-24-196595.xml"
+  },
+  "2024-Q1": {
+    "form": "NPORT-P",
+    "report_date": "2024-03-31",
+    "filing_date": "2024-05-28",
+    "accession_number": "0001752724-24-122729",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272424122729/0001752724-24-122729-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2024-Q1_0001752724-24-122729.xml"
+  },
+  "2023-Q4": {
+    "form": "NPORT-P",
+    "report_date": "2023-12-31",
+    "filing_date": "2024-02-27",
+    "accession_number": "0001752724-24-043296",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272424043296/0001752724-24-043296-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2023-Q4_0001752724-24-043296.xml"
+  },
+  "2023-Q3": {
+    "form": "NPORT-P",
+    "report_date": "2023-09-30",
+    "filing_date": "2023-11-28",
+    "accession_number": "0001752724-23-267659",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272423267659/0001752724-23-267659-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2023-Q3_0001752724-23-267659.xml"
+  },
+  "2023-Q2": {
+    "form": "NPORT-P",
+    "report_date": "2023-06-30",
+    "filing_date": "2023-08-28",
+    "accession_number": "0001752724-23-196486",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272423196486/0001752724-23-196486-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2023-Q2_0001752724-23-196486.xml"
+  },
+  "2023-Q1": {
+    "form": "NPORT-P",
+    "report_date": "2023-03-31",
+    "filing_date": "2023-05-30",
+    "accession_number": "0001752724-23-123974",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272423123974/0001752724-23-123974-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2023-Q1_0001752724-23-123974.xml"
+  },
+  "2022-Q4": {
+    "form": "NPORT-P",
+    "report_date": "2022-12-31",
+    "filing_date": "2023-02-28",
+    "accession_number": "0001752724-23-046862",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272423046862/0001752724-23-046862-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2022-Q4_0001752724-23-046862.xml"
+  },
+  "2022-Q3": {
+    "form": "NPORT-P",
+    "report_date": "2022-09-30",
+    "filing_date": "2022-11-28",
+    "accession_number": "0001752724-22-271183",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272422271183/0001752724-22-271183-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2022-Q3_0001752724-22-271183.xml"
+  },
+  "2022-Q2": {
+    "form": "NPORT-P",
+    "report_date": "2022-06-30",
+    "filing_date": "2022-08-26",
+    "accession_number": "0001752724-22-196968",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272422196968/0001752724-22-196968-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2022-Q2_0001752724-22-196968.xml"
+  },
+  "2022-Q1": {
+    "form": "NPORT-P",
+    "report_date": "2022-03-31",
+    "filing_date": "2022-05-27",
+    "accession_number": "0001752724-22-127611",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272422127611/0001752724-22-127611-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2022-Q1_0001752724-22-127611.xml"
+  },
+  "2021-Q4": {
+    "form": "NPORT-P",
+    "report_date": "2021-12-31",
+    "filing_date": "2022-02-25",
+    "accession_number": "0001752724-22-048845",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272422048845/0001752724-22-048845-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2021-Q4_0001752724-22-048845.xml"
+  },
+  "2021-Q3": {
+    "form": "NPORT-P",
+    "report_date": "2021-09-30",
+    "filing_date": "2021-11-26",
+    "accession_number": "0001752724-21-258706",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272421258706/0001752724-21-258706-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2021-Q3_0001752724-21-258706.xml"
+  },
+  "2021-Q2": {
+    "form": "NPORT-P",
+    "report_date": "2021-06-30",
+    "filing_date": "2021-08-27",
+    "accession_number": "0001752724-21-189808",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272421189808/0001752724-21-189808-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2021-Q2_0001752724-21-189808.xml"
+  },
+  "2021-Q1": {
+    "form": "NPORT-P",
+    "report_date": "2021-03-31",
+    "filing_date": "2021-05-28",
+    "accession_number": "0001752724-21-119080",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272421119080/0001752724-21-119080-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2021-Q1_0001752724-21-119080.xml"
+  },
+  "2020-Q4": {
+    "form": "NPORT-P",
+    "report_date": "2020-12-31",
+    "filing_date": "2021-02-26",
+    "accession_number": "0001752724-21-043869",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272421043869/0001752724-21-043869-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2020-Q4_0001752724-21-043869.xml"
+  },
+  "2020-Q3": {
+    "form": "NPORT-P",
+    "report_date": "2020-09-30",
+    "filing_date": "2020-11-19",
+    "accession_number": "0001752724-20-236128",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272420236128/0001752724-20-236128-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2020-Q3_0001752724-20-236128.xml"
+  },
+  "2020-Q2": {
+    "form": "NPORT-P",
+    "report_date": "2020-06-30",
+    "filing_date": "2020-08-27",
+    "accession_number": "0001752724-20-177260",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272420177260/0001752724-20-177260-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2020-Q2_0001752724-20-177260.xml"
+  },
+  "2020-Q1": {
+    "form": "NPORT-P",
+    "report_date": "2020-03-31",
+    "filing_date": "2020-06-01",
+    "accession_number": "0001752724-20-111515",
+    "url": "https://www.sec.gov/Archives/edgar/data/884394/000175272420111515/0001752724-20-111515-index.htm",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2020-Q1_0001752724-20-111515.xml"
+  }
+}
