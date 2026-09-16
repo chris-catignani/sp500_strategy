@@ -73,22 +73,37 @@ N30D_NAME_PATTERNS = [
     (r"^Exxon\s+Mobil", "XOM"),
     (r"^Exxon\s+Corp", "XOM"),
     (r"^General\s+Electric", "GE"),
+    (r"^General\s+Motors", "GM"),
     (r"^Microsoft\s+Corp", "MSFT"),
     (r"^Intel\s+Corp", "INTC"),
     (r"^International\s+Business\s+Machines", "IBM"),
     (r"^Cisco\s+Systems", "CSCO"),
     (r"^Merck\s+&\s+Co", "MRK"),
+    # Citicorp was the predecessor to Citigroup before the 1998 merger with
+    # Travelers Group; both represent the same banking franchise and map to C.
+    (r"^Citicorp", "C"),
     (r"^Citigroup", "C"),
     (r"^Pfizer", "PFE"),
     (r"^Oracle\s+Corp", "ORCL"),
     (r"^American\s+International\s+Group", "AIG"),
+    (r"^American\s+Express", "AXP"),
+    # American Home Products was renamed Wyeth in 2002; both represent the same
+    # issuer and map to the successor ticker WYE.
+    (r"^American\s+Home\s+Products", "WYE"),
+    # Wyeth was formerly American Home Products; anchor to prevent matching longer names.
+    (r"^Wyeth\b", "WYE"),
     (r"^Johnson\s+&\s+Johnson", "JNJ"),
     (r"^Procter\s+&\s+Gamble", "PG"),
-    (r"^JPMorgan\s+Chase", "JPM"),
+    (r"^(J\.?\s*P\.?\s*Morgan|JPMorgan)\s+Chase", "JPM"),
     (r"^Chevron(Texaco)?\s+Corp", "CVX"),
     (r"^AT\s*&\s*T", "T"),
     (r"^SBC\s+Communications", "SBC"),
+    (r"^Bell\s+Atlantic", "BEL"),
+    # BankAmerica Corp was the 1998 predecessor to Bank of America before merging
+    # with NationsBank; maps to BAC.
+    (r"^BankAmerica\b", "BAC"),
     (r"^Bank\s+of\s+America", "BAC"),
+    (r"^Boeing", "BA"),
     # Coca-Cola Enterprises was the separately listed bottler, an S&P 500 constituent in
     # its own right until 2010. It must be matched before the parent, or the broader
     # pattern swallows it and inflates KO.
@@ -105,14 +120,19 @@ N30D_NAME_PATTERNS = [
     (r"^Amgen", "AMGN"),
     (r"^PepsiCo", "PEP"),
     (r"^Walt\s+Disney", "DIS"),
-    (r"^Abbott\s+Laboratories", "ABT"),
-    (r"^Eli\s+Lilly", "LLY"),
+    (r"^Disney\s*\(Walt\)", "DIS"),
+    (r"^Abbott\s+Lab", "ABT"),
+    (r"^(Eli\s+Lilly|Lilly\s*\(Eli\))", "LLY"),
     (r"^Schlumberger", "SLB"),
     (r"^ConocoPhillips", "COP"),
     (r"^United\s+Technologies", "UTX"),
+    (r"^United\s+Parcel\s+Service", "UPS"),
     (r"^Nortel\s+Networks", "NT"),
     (r"^Sun\s+Microsystems", "SUNW"),
-    (r"^Dell\s+(Computer|Inc)", "DELL"),
+    (r"^Dell[,\s]", "DELL"),
+    # Tyco Laboratories was renamed Tyco International in 1993, but earlier filings
+    # continued to report the predecessor name; maps to TYC.
+    (r"^Tyco\s+Laboratories", "TYC"),
     (r"^Tyco\s+International", "TYC"),
     (r"^WorldCom", "WCOM"),
     (r"^MCI\s+", "MCIC"),
@@ -121,16 +141,34 @@ N30D_NAME_PATTERNS = [
     (r"^Ameritech", "AIT"),
     (r"^Mobil\s+Corp", "MOB"),
     (r"^Amoco\s+Corp", "AN"),
-    (r"^E\.?I\.?\s+du\s*Pont|^DuPont", "DD"),
+    (r"^Du\s*Pont|^E\.?I\.?\s+du\s*Pont|^DuPont", "DD"),
     (r"^Fannie\s+Mae|^Federal\s+National\s+Mortgage", "FNMA"),
     (r"^Freddie\s+Mac|^Federal\s+Home\s+Loan\s+Mortgage", "FMCC"),
     (r"^Royal\s+Dutch", "RD"),
+    (r"^America\s+Online", "AOL"),
     (r"^AOL\s+Time\s+Warner", "AOL"),
     (r"^Bristol-?Myers\s+Squibb", "BMY"),
     (r"^Apple", "AAPL"),
     (r"^Home\s+Depot", "HD"),
     (r"^Verizon\s+Communications", "VZ"),
     (r"^QUALCOMM", "QCOM"),
+    (r"^Compaq\s+Computer", "CPQ"),
+    (r"^Comcast\s+Corp", "CMCSA"),
+    (r"^Ford\s+Motor", "F"),
+    (r"^GTE\s+Corp", "GTE"),
+    (r"^Gillette\s+Co", "G"),
+    (r"^Goldman\s+Sachs", "GS"),
+    (r"^Google[,\s]", "GOOGL"),
+    (r"^McDonald'?s", "MCD"),
+    # Morgan Stanley merged with Dean Witter Discover in 1997 and traded under MWD
+    # until rebranding and changing ticker to MS in 2002. Must precede Morgan Stanley.
+    (r"^Morgan\s+Stanley[,\s]+Dean\s+Witter", "MWD"),
+    (r"^Morgan\s+Stanley", "MS"),
+    (r"^Motorola", "MOT"),
+    (r"^Schering-?Plough", "SGP"),
+    (r"^Viacom\b", "VIA"),
+    (r"^Wachovia\s+Corp", "WB"),
+    (r"^Warner-?Lambert", "WLA"),
 ]
 
 # Name pattern fallbacks if CUSIP lookup fails
@@ -228,6 +266,28 @@ _N30D_NAME_FRAGMENT = re.compile(r"^[A-Za-z(][A-Za-z0-9&.,'()/\- ]*$")
 
 class ScheduleParseError(ValueError):
     """Raised when a filing's Schedule of Investments cannot be read faithfully."""
+
+
+_TICKER_SHAPE = re.compile(r"^[A-Z][A-Z.]{0,5}$")
+
+
+def assert_top_holdings_resolved(holdings, filing_label, depth=30):
+    """Refuse a filing whose top `depth` holdings include an unmapped company name.
+
+    `_n30d_ticker` returns the cleaned company name when no pattern matches. Emitting
+    that into ranked output would reintroduce the silent gaps this extraction exists to
+    close, so an unresolved name is a hard failure, not a warning.
+    """
+    unresolved = [
+        h.get("ticker", "")
+        for h in holdings[:depth]
+        if not _TICKER_SHAPE.match(h.get("ticker", ""))
+    ]
+    if unresolved:
+        names = ", ".join(repr(u) for u in unresolved)
+        raise ScheduleParseError(
+            f"{filing_label}: unmapped top-{depth} holding(s): {names}"
+        )
 
 
 def _n30d_ticker(name: str) -> str:
@@ -553,6 +613,7 @@ def main():
 
     for period, filename, acc, form, rep_dt, file_dt in N30D_HISTORICAL_FILINGS:
         parsed = parse_n30d_filing(FILINGS_DIR / filename)
+        assert_top_holdings_resolved(parsed["holdings"], f"{period} ({filename})")
         top10 = parsed["holdings"][:10]
         ground_truth["periods"][period] = {
             "verified": True,

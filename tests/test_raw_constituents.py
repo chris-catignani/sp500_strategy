@@ -457,6 +457,31 @@ class TestN30DScheduleParser(unittest.TestCase):
         self.assertIsNotNone(aig, "AIG was not found in parsed 1999 holdings")
         self.assertEqual(aig["val"], 167497004.0)
 
+    def test_all_filings_resolve_top_30_to_tickers(self):
+        """For every entry in N30D_HISTORICAL_FILINGS, assert_top_holdings_resolved does not raise."""
+        from scripts.extract_ground_truth_from_sec import (
+            N30D_HISTORICAL_FILINGS, assert_top_holdings_resolved,
+        )
+
+        for period, filename, *_ in N30D_HISTORICAL_FILINGS:
+            parsed = self.parse(self.dir / filename)
+            assert_top_holdings_resolved(parsed["holdings"], f"{period} ({filename})")
+
+    def test_unmapped_top_holding_is_refused(self):
+        """assert_top_holdings_resolved raises ScheduleParseError for unmapped names."""
+        from scripts.extract_ground_truth_from_sec import (
+            ScheduleParseError, assert_top_holdings_resolved,
+        )
+
+        synthetic_holdings = [
+            {"ticker": "AAPL", "val": 100.0},
+            {"ticker": "Some Unmapped Corp.", "val": 50.0},
+        ]
+        with self.assertRaises(ScheduleParseError) as ctx:
+            assert_top_holdings_resolved(synthetic_holdings, "SPY_TEST_FILING")
+        self.assertIn("SPY_TEST_FILING", str(ctx.exception))
+        self.assertIn("Some Unmapped Corp.", str(ctx.exception))
+
 
 class TestConsolidateHoldings(unittest.TestCase):
     """Unit tests for multi-class equity holdings consolidation at issuer level."""
