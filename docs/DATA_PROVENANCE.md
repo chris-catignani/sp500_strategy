@@ -48,7 +48,7 @@ data/raw/
 ├── ground_truth/
 │   ├── quarterly_ground_truth_holdings.json # Audited SEC EDGAR Form N-30D / NPORT-P holdings (1995–2024, 55 verified quarters across 120 labeled periods)
 │   ├── sec_filings/                         # Archive of 56 filings (20 NPORT-P XML, 35 historical annual & semi-annual reports, superseded Select Sector doc)
-│   └── universe_gap_report.json             # Historical survivorship gap report (38 missing constituents at depth 30)
+│   └── universe_gap_report.json             # Historical survivorship gap report (39 missing constituents at depth 30)
 ├── tickers/
 │   ├── AAPL.json          # Apple Inc. raw response (timestamps, quotes, splits, dividends)
 │   ├── BRK.B.json         # Berkshire Hathaway Class B (queried as BRK-B)
@@ -95,6 +95,41 @@ All share prices and dividend-per-share values are normalized to share counts as
   $$P_{\text{adj}, t} = \frac{P_{\text{unadj}, t}}{\prod_{T_{\text{split}, k} > t} S_k}$$
 - In Yahoo Finance's `/v8/finance/chart` engine, `indicators.quote[0].close` is already normalized to current share terms by this exact formula.
 - Year-end prices in `data/sp500_prices.json` are extracted from the December monthly candle (reflecting the final active trading session of December) and rounded to 2 decimal places (or 4 decimal places for base prices under \$1.00).
+
+#### 4.1.1 The `close` Column Is Split- *and Spinoff-* Adjusted
+The normalization above describes splits only, which is incomplete. Yahoo also back-adjusts
+`indicators.quote[0].close` for **spinoff distributions**, scaling the entire pre-distribution
+history so the ex-date price drop does not register as a loss. Measured against AT&T's
+as-traded year-end closes:
+
+| Year | As-traded | `T.json` `close` | Ratio |
+|---|---:|---:|---:|
+| 2019 | \$39.08 | \$29.52 | **1.324** |
+| 2020 | \$28.76 | \$21.72 | **1.324** |
+| 2021 | \$24.60 | \$18.58 | **1.324** |
+| 2022 | \$18.41 | \$18.41 | **1.000** |
+| 2023 | \$16.78 | \$16.78 | **1.000** |
+| 2024 | \$22.77 | \$22.77 | **1.000** |
+
+The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022. The break is the
+**WarnerMedia / Warner Bros. Discovery spinoff of April 8, 2022** (§4.6.3), applied by Yahoo as
+a uniform 1/1.324 = 0.7553 scaling of all prior closes. `GE.json` carries the same signature
+from its GEHC (2023) and GEV (2024) spinoffs.
+
+**This is not a defect, and it must not be "corrected" out.** An adjusted price series combined
+with a separately credited distribution (§4.6.2) is the correct total-return treatment, exactly
+as for dividends; removing the adjustment while retaining the credit would double-count. Yahoo's
+price factor (0.7553) and the IRS basis retention ratio (0.7623 for `T` → `WBD`) are different
+quantities and are not expected to agree.
+
+Two consequences follow:
+- **Stored prices are not as-traded quotes.** Reconciling any series in `data/raw/tickers/`
+  against a contemporaneous quote from a filing or news source requires applying the cumulative
+  spinoff factor. This is why `T.json` reads \$21.62 for December 1995 where SBC's audited
+  schedules imply \$57.50 (2.660 = 1.324 × 2, the additional March 1998 two-for-one split).
+- **The factor is constant across a security's pre-distribution history, so it cancels in return
+  calculations.** A slice of such a series is usable for returns without correction, provided it
+  is never mixed with as-traded prices.
 
 ### 4.2 Cash Dividend Aggregation (Annual and Quarterly)
 - In Yahoo Finance's raw chart payload, `events.dividends[i].amount` records the exact cash dividend per share, normalized to 2024-12-31 share terms, with Unix epoch `date` indicating the ex-dividend date.
@@ -192,13 +227,13 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
   - **Circular-Q4 Caveat**: The five modern Q4 filings (2020-Q4 … 2024-Q4) match 10/10 by construction because the year-end candidate lists are themselves parsed from those exact filings. `scripts/audit_quarterly_expansion.py` reports both figures and `CIRCULAR_Q4_PERIODS` names the excluded quarters. (Note: 1995-Q4 and 1996-Q4 candidate lists derive from estimated factsheet anchors, not from these Form N-30D filings, so they are genuine independent tests and not circular.)
 - **Historical Universe Gap & Survivorship Bias Analysis**:
   - The 26 extracted filings reveal a persistent historical universe gap: constituents appearing in the filings' Top 30 that have no price series in `data/raw/tickers/`.
-  - An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating **38 missing constituents** across the 1995–2019 filings (depth 30). The 2010–2019 filings add only two (`GILD`, `DWDP`) — by that era the project's universe covers nearly all of the index's largest constituents.
+  - An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating **39 missing constituents** across the 1995–2019 filings (depth 30). The 2010–2019 annual filings add only two (`GILD`, `DWDP`) — by that era the project's universe covers nearly all of the index's largest constituents — and the ten semi-annual 03-31 filings archived under #54 add one more (`OXY`, rank #30 at 2011-Q1).
   - Four missing constituents reached the Top 10 in audited filings:
     - `RD` (Royal Dutch Petroleum Co., #7 peak rank, present in Top 10 across 1995, 1996, and 1997; 7 filings total)
     - `LU` (Lucent Technologies Inc., #7 peak rank in 1999-Q3; present in Top 30 across 4 filings: 1997–2000)
     - `EMC` (EMC Corp., #10 peak rank in 2000-Q3)
     - `SBC` (SBC Communications Inc., #10 peak rank in 2001-Q3; present in Top 30 across 10 filings)
-  - **Nuanced Survivorship Framing**: A claim must not outrun its sources. Rather than characterizing all missing constituents as companies that later collapsed, the full 26-filing evidence reveals that survivorship effects operated bidirectionally. While telecom and tech crash casualties like `LU` (fell ~99% from peak) and `EMC` (fell ~96%) create upward survivorship bias when omitted during the 2000–2002 crash, major blue chips like Royal Dutch Petroleum (`RD`) and SBC Communications (`SBC`) were stable mega-cap operating companies that did not collapse. The universe gap represents systematic universe selection truncation across the pre-2010 era, rather than a pure distressed-firm attrition pattern. Issue #37 tracks acquiring historical price and corporate-action data for these 38 missing constituents.
+  - **Nuanced Survivorship Framing**: A claim must not outrun its sources. Rather than characterizing all missing constituents as companies that later collapsed, the full 26-filing evidence reveals that survivorship effects operated bidirectionally. While telecom and tech crash casualties like `LU` (fell ~99% from peak) and `EMC` (fell ~96%) create upward survivorship bias when omitted during the 2000–2002 crash, major blue chips like Royal Dutch Petroleum (`RD`) and SBC Communications (`SBC`) were stable mega-cap operating companies that did not collapse. The universe gap represents systematic universe selection truncation across the pre-2010 era, rather than a pure distressed-firm attrition pattern. Issue #37 tracks closing this gap, decomposed into #55 (deriving price series for the **17** of these constituents that reach a filing's Top 20) and #56 (modelling terminal value for constituents that stop trading mid-horizon).
 
 #### 4.3.7 Empirical Mid-Year Promotion Findings & Selector Sensitivity
 The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/audit_quarterly_expansion.py) detects mid-year promotions, classifies each against the audited filings, and runs the side-by-side strategy comparison.
@@ -308,6 +343,13 @@ The authentic historical market record for original AT&T Corp is isolated in `da
 - **Cash Dividends**: Verified split-adjusted distributions of **\$0.33 per quarter (\$1.32 per year)** across 1994–1998, reflecting Ma Bell's consistent quarterly \$0.33 payout.
 - **Prices & Baseline Closes**: Verified historical month-end closes from 1993 through 1998, including 1993-Q1..Q3 baseline closes (\$52.50, \$54.00, and \$56.25) to prevent artificial capitalization drift spikes in early 1994.
 - **Automated Splicing**: In `scripts/build_datasets_from_raw.py`, pre-1999 SBC data for `T` is purged, and the verified `T_CORP_HISTORICAL` record is spliced into the constituent series for 1993–1998. Data from 1999 onward transitions smoothly into the consolidated modern AT&T series.
+- **The purged slice is SBC's authentic series and is recoverable.** The pre-1999 data discarded
+  by the splice above is not spurious — `T.json` carries `firstTradeDate` 1983-11-21, the
+  continuing Southwestern Bell / SBC registrant that took the `T` ticker on acquiring AT&T Corp
+  in 2005. It reconciles to SBC's audited fund-schedule prices on a known constant (§4.1.1:
+  1.324 from the 2022 WBD spinoff, × 2 before the March 1998 split). Correct for the AT&T Corp
+  collision, it is the primary source for `SBC` as a distinct historical constituent, which is
+  why `SBC` requires no external data acquisition under #55.
 
 #### 4.5.4 AT&T Corporate Timeline & 1998–2006 Top 12 Absence
 A rigorous audit of `historical_index_weights.json` reveals that ticker **`T` was NOT in the S&P 500 Top 12 from 1998 through 2006**:
