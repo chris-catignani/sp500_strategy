@@ -189,6 +189,110 @@ The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/
   - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results independently of any pool-size effect. `Top_3_MarketCap` fell from 26.88% to 24.49% (10y), 16.39% to 15.29% (20y) and 15.16% to 14.43% (30y). The cause is year-end 2023: the prior data ranked NVIDIA #3 at 3.4%, while the filing shows NVIDIA at 3.06% behind Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run.
 - **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.06%, Alphabet A 2.07%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN.
 
+#### 4.3.8 Dual-Class Share Aggregation Sensitivity & Execution Convention
+
+In capitalization-weighted benchmark construction, indices often track separate share classes of multi-class issuers (e.g., S&P Dow Jones and SPDR S&P 500 ETF Trust separate Alphabet Inc. into Class A `GOOGL` and Class C `GOOG`, or historically Berkshire Hathaway into Class A and Class B). From an equity market microstructure standpoint, each share class carries a distinct CUSIP and trading symbol. However, from an economic enterprise perspective, both share classes represent undivided equity claims on the same corporate issuer, backed by identical underlying cash flows and operating earnings.
+
+To prevent artificial portfolio fragmentation—where an issuer's enterprise weight is arbitrarily split across multiple slots, displacing other mega-cap companies—the simulation engine standardizes on **company/issuer-level consolidation**:
+1. **Capitalization Consolidation**: All publicly traded share classes of an issuer are aggregated into a single enterprise weight ($W_{\text{issuer}} = \sum_k W_{\text{class}_k}$).
+2. **Primary Execution Line**: The consolidated holding is mapped to and executed via the issuer's primary liquid voting share class (`GOOGL` for Alphabet Inc.).
+
+##### Empirical Sensitivity Analysis: Consolidated vs. As-Filed (Unconsolidated)
+To measure the exact empirical impact of company-level consolidation versus the raw as-filed multi-class treatment across 2020–2024 Form NPORT-P filings, the engine evaluates both models across all primary horizons, frequencies, selectors, and tax tiers:
+
+| Selector | Strategy | Frequency | Horizon | Tax Tier | Consolidated CAGR | As-Filed CAGR | Delta (pp) |
+| :--- | :--- | :--- | :---: | :--- | :---: | :---: | :---: |
+| MarketCap | Top 3 | Annual | 10y | Pre-Tax (0%) | 24.49% | 24.56% | +0.07pp |
+| MarketCap | Top 3 | Annual | 10y | After-Tax (30%) | 22.50% | 22.77% | +0.27pp |
+| MarketCap | Top 3 | Annual | 20y | Pre-Tax (0%) | 15.29% | 15.33% | +0.03pp |
+| MarketCap | Top 3 | Annual | 20y | After-Tax (30%) | 13.84% | 13.97% | +0.13pp |
+| MarketCap | Top 3 | Annual | 30y | Pre-Tax (0%) | 14.43% | 14.45% | +0.02pp |
+| MarketCap | Top 3 | Annual | 30y | After-Tax (30%) | 12.64% | 12.72% | +0.09pp |
+| MarketCap | Top 3 | Quarterly | 10y | Pre-Tax (0%) | 24.42% | 24.44% | +0.03pp |
+| MarketCap | Top 3 | Quarterly | 10y | After-Tax (30%) | 22.57% | 22.79% | +0.22pp |
+| MarketCap | Top 3 | Quarterly | 20y | Pre-Tax (0%) | 14.63% | 14.64% | +0.01pp |
+| MarketCap | Top 3 | Quarterly | 20y | After-Tax (30%) | 13.13% | 13.24% | +0.10pp |
+| MarketCap | Top 3 | Quarterly | 30y | Pre-Tax (0%) | 14.26% | 14.27% | +0.01pp |
+| MarketCap | Top 3 | Quarterly | 30y | After-Tax (30%) | 12.33% | 12.40% | +0.07pp |
+| MarketCap | Top 5 | Annual | 10y | Pre-Tax (0%) | 21.97% | 21.73% | -0.24pp |
+| MarketCap | Top 5 | Annual | 10y | After-Tax (30%) | 21.08% | 20.40% | -0.68pp |
+| MarketCap | Top 5 | Annual | 20y | Pre-Tax (0%) | 13.96% | 13.85% | -0.11pp |
+| MarketCap | Top 5 | Annual | 20y | After-Tax (30%) | 12.98% | 12.66% | -0.32pp |
+| MarketCap | Top 5 | Annual | 30y | Pre-Tax (0%) | 14.18% | 14.10% | -0.08pp |
+| MarketCap | Top 5 | Annual | 30y | After-Tax (30%) | 12.54% | 12.33% | -0.21pp |
+| MarketCap | Top 5 | Quarterly | 10y | Pre-Tax (0%) | 23.39% | 22.68% | -0.72pp |
+| MarketCap | Top 5 | Quarterly | 10y | After-Tax (30%) | 22.34% | 21.35% | -0.99pp |
+| MarketCap | Top 5 | Quarterly | 20y | Pre-Tax (0%) | 14.36% | 14.03% | -0.33pp |
+| MarketCap | Top 5 | Quarterly | 20y | After-Tax (30%) | 13.41% | 12.93% | -0.48pp |
+| MarketCap | Top 5 | Quarterly | 30y | Pre-Tax (0%) | 13.82% | 13.60% | -0.22pp |
+| MarketCap | Top 5 | Quarterly | 30y | After-Tax (30%) | 12.26% | 11.94% | -0.32pp |
+| MarketCap | Top 10 | Annual | 10y | Pre-Tax (0%) | 19.99% | 19.06% | -0.93pp |
+| MarketCap | Top 10 | Annual | 10y | After-Tax (30%) | 19.03% | 17.85% | -1.18pp |
+| MarketCap | Top 10 | Annual | 20y | Pre-Tax (0%) | 13.14% | 12.70% | -0.44pp |
+| MarketCap | Top 10 | Annual | 20y | After-Tax (30%) | 12.08% | 11.50% | -0.58pp |
+| MarketCap | Top 10 | Annual | 30y | Pre-Tax (0%) | 13.91% | 13.61% | -0.30pp |
+| MarketCap | Top 10 | Annual | 30y | After-Tax (30%) | 12.29% | 11.90% | -0.39pp |
+| MarketCap | Top 10 | Quarterly | 10y | Pre-Tax (0%) | 20.36% | 20.07% | -0.29pp |
+| MarketCap | Top 10 | Quarterly | 10y | After-Tax (30%) | 19.24% | 18.86% | -0.38pp |
+| MarketCap | Top 10 | Quarterly | 20y | Pre-Tax (0%) | 13.45% | 13.31% | -0.14pp |
+| MarketCap | Top 10 | Quarterly | 20y | After-Tax (30%) | 12.26% | 12.07% | -0.19pp |
+| MarketCap | Top 10 | Quarterly | 30y | Pre-Tax (0%) | 13.90% | 13.81% | -0.09pp |
+| MarketCap | Top 10 | Quarterly | 30y | After-Tax (30%) | 12.16% | 12.03% | -0.13pp |
+| Performance | Top 3 | Annual | 10y | Pre-Tax (0%) | 19.60% | 20.75% | +1.15pp |
+| Performance | Top 3 | Annual | 10y | After-Tax (30%) | 15.39% | 16.63% | +1.23pp |
+| Performance | Top 3 | Annual | 20y | Pre-Tax (0%) | 10.33% | 10.86% | +0.53pp |
+| Performance | Top 3 | Annual | 20y | After-Tax (30%) | 8.08% | 8.66% | +0.58pp |
+| Performance | Top 3 | Annual | 30y | Pre-Tax (0%) | 11.68% | 12.04% | +0.36pp |
+| Performance | Top 3 | Annual | 30y | After-Tax (30%) | 8.93% | 9.32% | +0.39pp |
+| Performance | Top 3 | Quarterly | 10y | Pre-Tax (0%) | 22.48% | 22.48% | +0.00pp |
+| Performance | Top 3 | Quarterly | 10y | After-Tax (30%) | 17.92% | 17.78% | -0.14pp |
+| Performance | Top 3 | Quarterly | 20y | Pre-Tax (0%) | 11.28% | 11.28% | +0.00pp |
+| Performance | Top 3 | Quarterly | 20y | After-Tax (30%) | 8.93% | 8.87% | -0.07pp |
+| Performance | Top 3 | Quarterly | 30y | Pre-Tax (0%) | 11.64% | 11.64% | +0.00pp |
+| Performance | Top 3 | Quarterly | 30y | After-Tax (30%) | 8.94% | 8.90% | -0.04pp |
+| Performance | Top 5 | Annual | 10y | Pre-Tax (0%) | 16.75% | 16.34% | -0.41pp |
+| Performance | Top 5 | Annual | 10y | After-Tax (30%) | 13.14% | 12.76% | -0.37pp |
+| Performance | Top 5 | Annual | 20y | Pre-Tax (0%) | 10.26% | 10.07% | -0.19pp |
+| Performance | Top 5 | Annual | 20y | After-Tax (30%) | 7.92% | 7.74% | -0.18pp |
+| Performance | Top 5 | Annual | 30y | Pre-Tax (0%) | 12.21% | 12.08% | -0.13pp |
+| Performance | Top 5 | Annual | 30y | After-Tax (30%) | 9.22% | 9.10% | -0.12pp |
+| Performance | Top 5 | Quarterly | 10y | Pre-Tax (0%) | 13.77% | 13.92% | +0.16pp |
+| Performance | Top 5 | Quarterly | 10y | After-Tax (30%) | 10.62% | 10.72% | +0.09pp |
+| Performance | Top 5 | Quarterly | 20y | Pre-Tax (0%) | 8.49% | 8.56% | +0.08pp |
+| Performance | Top 5 | Quarterly | 20y | After-Tax (30%) | 6.43% | 6.48% | +0.05pp |
+| Performance | Top 5 | Quarterly | 30y | Pre-Tax (0%) | 10.84% | 10.89% | +0.05pp |
+| Performance | Top 5 | Quarterly | 30y | After-Tax (30%) | 8.14% | 8.17% | +0.03pp |
+| Performance | Top 10 | Annual | 10y | Pre-Tax (0%) | 13.97% | 13.83% | -0.13pp |
+| Performance | Top 10 | Annual | 10y | After-Tax (30%) | 11.15% | 11.23% | +0.08pp |
+| Performance | Top 10 | Annual | 20y | Pre-Tax (0%) | 9.50% | 9.43% | -0.06pp |
+| Performance | Top 10 | Annual | 20y | After-Tax (30%) | 7.38% | 7.42% | +0.04pp |
+| Performance | Top 10 | Annual | 30y | Pre-Tax (0%) | 11.50% | 11.46% | -0.04pp |
+| Performance | Top 10 | Annual | 30y | After-Tax (30%) | 8.86% | 8.88% | +0.03pp |
+| Performance | Top 10 | Quarterly | 10y | Pre-Tax (0%) | 13.25% | 13.11% | -0.14pp |
+| Performance | Top 10 | Quarterly | 10y | After-Tax (30%) | 10.55% | 10.45% | -0.11pp |
+| Performance | Top 10 | Quarterly | 20y | Pre-Tax (0%) | 9.36% | 9.29% | -0.07pp |
+| Performance | Top 10 | Quarterly | 20y | After-Tax (30%) | 7.21% | 7.16% | -0.05pp |
+| Performance | Top 10 | Quarterly | 30y | Pre-Tax (0%) | 11.23% | 11.18% | -0.05pp |
+| Performance | Top 10 | Quarterly | 30y | After-Tax (30%) | 8.53% | 8.49% | -0.03pp |
+
+##### Key Findings & Portfolio Mechanics
+1. **Top 3 MarketCap Dynamics**:
+   - At year-end 2023, the audited SPY Form NPORT-P filing reports the top equity weights as: Apple (`AAPL`, 7.03%), Microsoft (`MSFT`, 6.98%), Amazon (`AMZN`, 3.45%), NVIDIA (`NVDA`, 3.06%), Alphabet Class A (`GOOGL`, 2.06%), Meta Platforms (`META`, 1.96%), and Alphabet Class C (`GOOG`, 1.75%).
+   - Under company-level consolidation, Alphabet's aggregate 3.82% weight ranks **#3**, establishing the 2024 Top 3 portfolio as `['AAPL', 'MSFT', 'GOOGL']`.
+   - As-filed without consolidation, Alphabet fragments into rank #5 (`GOOGL`) and rank #7 (`GOOG`). The Top 3 portfolio instead selects `['AAPL', 'MSFT', 'AMZN']`.
+   - This structural interaction is central to the project's historical data provenance: in prior unverified datasets where NVIDIA was erroneously credited with a 3.40% weight at year-end 2023, Top 3 held NVIDIA through its +171% AI rally in 2024, achieving a 26.88% 10-year pre-tax CAGR. When ground-truth SEC filings were integrated and Alphabet was properly consolidated at #3 (3.82%), NVIDIA was ranked #5 behind AMZN (3.45%), removing NVIDIA from the 2024 Top 3 book and driving the **-2.39pp swing** (26.88% → 24.49% 10y CAGR). Under as-filed selection, holding Amazon (+44.4% in 2024) instead of Alphabet (+36.2% in 2024) yields 24.56% (+0.07pp pre-tax, +0.27pp after-tax).
+
+2. **Top 5 and Top 10 Dynamics Across Selectors and Frequencies**:
+   - In **Top 5 MarketCap**, consolidation improves returns across all horizons and frequencies (as-filed produces negative deltas of -0.08pp to -0.99pp). Splitting Alphabet dilutes its weighting and distorts capitalization concentration among the top 5 holdings.
+   - In **Top 10 MarketCap**, as-filed treatment introduces both `GOOGL` and `GOOG` into the Top 10 simultaneously. Holding two share classes of the same company consumes two of the ten available portfolio slots, displacing the authentic #10 distinct corporate enterprise (such as Berkshire Hathaway, JPMorgan Chase, or Visa). This redundant allocation increases tracking drag and rebalancing turnover, reducing 10y pre-tax CAGR by **-0.93pp** (19.99% → 19.06%) and 10y after-tax CAGR by **-1.18pp** (19.03% → 17.85%).
+   - In **PerformanceSelector**, momentum selection evaluates past 1-year total returns. Splitting Alphabet creates two identical momentum candidates that can both enter momentum books simultaneously, amplifying momentum factor bets in strong tech years (e.g., Annual 10y Top 3 delta of +1.15pp), while quarterly rebalancing washes out this momentum concentration (+0.00pp pre-tax).
+
+##### Execution Convention Rationale
+The simulation engine executes the consolidated Alphabet position entirely through **Alphabet Inc. Class A (`GOOGL`)**:
+- **Primary Voting Rights & Historical Continuity**: Class A shares carry standard 1-vote-per-share governance and maintain an unbroken price and corporate action record dating to Google's August 2004 initial public offering. Class C shares (`GOOG`) were created in April 2014 via a stock dividend as non-voting equity.
+- **Institutional Liquidity**: Class A represents the standard primary equity line for benchmark replication and institutional order routing.
+- **Negligible Tracking Error (<1%)**: Because both share classes possess equal claims on enterprise earnings, cash flows, and dividends, the market price spread between Class A and Class C trades in an extremely narrow band (historically within ~1% of parity, with an annualized tracking error under 0.10%). Splitting live orders into separate Class A and Class C execution tickets would introduce unnecessary transaction complexity, dual-lot tax tracking, and bid-ask friction with zero economic benefit.
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).
