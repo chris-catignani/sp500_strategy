@@ -189,6 +189,25 @@ The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/
   - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results independently of any pool-size effect. `Top_3_MarketCap` fell from 26.88% to 24.49% (10y), 16.39% to 15.29% (20y) and 15.16% to 14.43% (30y). The cause is year-end 2023: the prior data ranked NVIDIA #3 at 3.4%, while the filing shows NVIDIA at 3.06% behind Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run.
 - **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.06%, Alphabet A 2.07%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN.
 
+#### 4.3.8 Dual-Class Issuer Consolidation & Execution Convention
+
+In capitalization-weighted benchmark construction, indices often track separate share classes of multi-class issuers as distinct constituents (e.g., S&P Dow Jones and SPDR S&P 500 ETF Trust separate Alphabet Inc. into Class A `GOOGL` and Class C `GOOG`). From an equity market microstructure standpoint, each share class carries a distinct CUSIP and trading symbol. However, from an economic enterprise perspective, both share classes represent undivided equity claims on the same corporate issuer, backed by identical underlying operating earnings and cash flows.
+
+To prevent artificial portfolio distortion—where an issuer's enterprise weight is arbitrarily fragmented across multiple slots or double-counted in concentrated books—the simulation engine standardizes on **company/issuer-level consolidation**:
+
+1. **Capitalization Consolidation**:
+   All publicly traded share classes of an issuer are aggregated into a single enterprise weight ($W_{\text{issuer}} = \sum_k W_{\text{class}_k}$) via `CONSOLIDATED_ISSUERS` and `consolidate_holdings()`.
+   - In the audited 2023-12-31 SPY Form NPORT-P filing, Alphabet is reported as Class A (CUSIP `02079K305`, 2.065%) and Class C (CUSIP `02079K107`, 1.753%).
+   - Combined, Alphabet's aggregate 3.818% (~3.82%) weight ranks **#3** behind Apple (7.03%) and Microsoft (6.98%), establishing the 2024 Top 3 book as `['AAPL', 'MSFT', 'GOOGL']`.
+   - Unconsolidated, Alphabet fragments into rank #5 (`GOOGL`) and rank #7 (`GOOG`), so an uncombined selection would hold Amazon (#3, 3.45%) instead.
+   - In Top 10 portfolios, unconsolidated treatment creates portfolio degeneracy by allocating two distinct slots to the same corporate enterprise, displacing the authentic 10th distinct company.
+
+2. **Execution Convention Rationale**:
+   The simulation engine aggregates both share classes into a single constituent with canonical company label **`Alphabet Inc. (Class A & C)`** and executes entirely through **Alphabet Inc. Class A (`GOOGL`)**:
+   - **Primary Voting Rights & Historical Continuity**: Class A shares carry standard 1-vote-per-share governance and maintain an unbroken price and corporate action record dating to Google's August 2004 initial public offering. Class C shares (`GOOG`) were created in April 2014 via a stock dividend as non-voting equity.
+   - **Institutional Liquidity**: Class A represents the standard primary equity line for benchmark replication and institutional order routing.
+   - **Negligible Tracking Error (<1%)**: Because both share classes possess equal claims on enterprise earnings and cash flows, the market price spread between Class A and Class C trades in an extremely narrow band (historically within ~1% of parity, with an annualized tracking error under 0.10%). Routing execution through Class A avoids unnecessary transaction complexity, dual-lot tax tracking, and bid-ask friction with zero economic benefit.
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).

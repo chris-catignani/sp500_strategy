@@ -5456,7 +5456,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.016,
       "trailing_1y_return": 0.5017,
       "year": 2007,
@@ -5578,7 +5578,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0113,
       "trailing_1y_return": -0.0392,
       "year": 2008,
@@ -5668,7 +5668,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.014,
       "trailing_1y_return": 0.0069,
       "year": 2008,
@@ -5774,7 +5774,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0117,
       "trailing_1y_return": -0.2944,
       "year": 2008,
@@ -6264,7 +6264,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.014,
       "trailing_1y_return": 1.0156,
       "year": 2009,
@@ -6362,7 +6362,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0122,
       "trailing_1y_return": 0.6292,
       "year": 2010,
@@ -6460,7 +6460,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0109,
       "trailing_1y_return": 0.055,
       "year": 2010,
@@ -6558,7 +6558,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0116,
       "trailing_1y_return": 0.0604,
       "year": 2010,
@@ -7368,7 +7368,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.025,
       "trailing_1y_return": 0.0953,
       "year": 2012,
@@ -7466,7 +7466,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0255,
       "trailing_1y_return": 0.238,
       "year": 2013,
@@ -7556,7 +7556,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0276,
       "trailing_1y_return": 0.5172,
       "year": 2013,
@@ -7654,7 +7654,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0263,
       "trailing_1y_return": 0.161,
       "year": 2013,
@@ -7760,7 +7760,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.025,
       "trailing_1y_return": 0.5847,
       "year": 2013,
@@ -7866,7 +7866,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0245,
       "trailing_1y_return": 0.4036,
       "year": 2014,
@@ -7948,7 +7948,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0246,
       "trailing_1y_return": 0.3268,
       "year": 2014,
@@ -8054,7 +8054,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0246,
       "trailing_1y_return": 0.3422,
       "year": 2014,
@@ -8176,7 +8176,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.02,
       "trailing_1y_return": -0.0542,
       "year": 2014,
@@ -8266,7 +8266,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0208,
       "trailing_1y_return": -0.0054,
       "year": 2015,
@@ -8364,7 +8364,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0203,
       "trailing_1y_return": -0.0763,
       "year": 2015,
@@ -8438,7 +8438,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0258,
       "trailing_1y_return": 0.085,
       "year": 2015,
@@ -8592,7 +8592,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.014,
       "trailing_1y_return": 0.4663,
       "year": 2015,
@@ -8690,7 +8690,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0136,
       "trailing_1y_return": 0.3753,
       "year": 2016,
@@ -8796,7 +8796,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0123,
       "trailing_1y_return": 0.303,
       "year": 2016,
@@ -8886,7 +8886,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0136,
       "trailing_1y_return": 0.2594,
       "year": 2016,
@@ -8984,7 +8984,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.014,
       "trailing_1y_return": 0.0185,
       "year": 2016,
@@ -9090,7 +9090,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0142,
       "trailing_1y_return": 0.1111,
       "year": 2017,
@@ -9180,7 +9180,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0152,
       "trailing_1y_return": 0.3212,
       "year": 2017,
@@ -9278,7 +9278,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0153,
       "trailing_1y_return": 0.2112,
       "year": 2017,
@@ -9344,7 +9344,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.021,
       "trailing_1y_return": 0.3294,
       "year": 2017,
@@ -9434,7 +9434,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0209,
       "trailing_1y_return": 0.2234,
       "year": 2018,
@@ -9540,7 +9540,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0221,
       "trailing_1y_return": 0.2147,
       "year": 2018,
@@ -9630,7 +9630,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0221,
       "trailing_1y_return": 0.2395,
       "year": 2018,
@@ -9728,7 +9728,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.03,
       "trailing_1y_return": -0.008,
       "year": 2018,
@@ -9826,7 +9826,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0299,
       "trailing_1y_return": 0.1346,
       "year": 2019,
@@ -9924,7 +9924,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0265,
       "trailing_1y_return": -0.0411,
       "year": 2019,
@@ -10022,7 +10022,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0295,
       "trailing_1y_return": 0.0118,
       "year": 2019,
@@ -10128,7 +10128,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.026,
       "trailing_1y_return": 0.2817,
       "year": 2019,
@@ -10218,7 +10218,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0282,
       "trailing_1y_return": -0.0126,
       "year": 2020,
@@ -10324,7 +10324,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0287,
       "trailing_1y_return": 0.3096,
       "year": 2020,
@@ -10430,7 +10430,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0273,
       "trailing_1y_return": 0.2001,
       "year": 2020,
@@ -10512,7 +10512,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.03,
       "trailing_1y_return": 0.3085,
       "year": 2020,
@@ -10610,7 +10610,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0334,
       "trailing_1y_return": 0.775,
       "year": 2021,
@@ -10708,7 +10708,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0365,
       "trailing_1y_return": 0.722,
       "year": 2021,
@@ -10798,7 +10798,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0399,
       "trailing_1y_return": 0.8242,
       "year": 2021,
@@ -10896,7 +10896,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.04,
       "trailing_1y_return": 0.653,
       "year": 2021,
@@ -10994,7 +10994,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0404,
       "trailing_1y_return": 0.3485,
       "year": 2022,
@@ -11092,7 +11092,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0379,
       "trailing_1y_return": -0.1075,
       "year": 2022,
@@ -11190,7 +11190,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0351,
       "trailing_1y_return": -0.2845,
       "year": 2022,
@@ -11288,7 +11288,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.033,
       "trailing_1y_return": -0.3909,
       "year": 2022,
@@ -11386,7 +11386,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0362,
       "trailing_1y_return": -0.2541,
       "year": 2023,
@@ -11484,7 +11484,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0386,
       "trailing_1y_return": 0.0986,
       "year": 2023,
@@ -11582,7 +11582,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0438,
       "trailing_1y_return": 0.3681,
       "year": 2023,
@@ -11704,7 +11704,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.02,
       "trailing_1y_return": 0.5832,
       "year": 2023,
@@ -11810,7 +11810,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0196,
       "trailing_1y_return": 0.455,
       "year": 2024,
@@ -11900,7 +11900,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0228,
       "trailing_1y_return": 0.5234,
       "year": 2024,
@@ -12014,7 +12014,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.0197,
       "trailing_1y_return": 0.2704,
       "year": 2024,
@@ -12096,7 +12096,7 @@
     },
     {
       "ticker": "GOOGL",
-      "name": "Alphabet Inc. (Class A)",
+      "name": "Alphabet Inc. (Class A & C)",
       "market_cap_weight": 0.022,
       "trailing_1y_return": 0.3594,
       "year": 2024,
