@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test & Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          check-latest: false
+
+      - name: Validate Python syntax and compilation
+        run: python3 -m compileall engine scripts tests run_backtest.py
+
+      - name: Run unit tests
+        run: python3 -m unittest discover tests
+
+      - name: Run backtest CLI smoke test
+        run: python3 run_backtest.py --compare-frequencies --no-export

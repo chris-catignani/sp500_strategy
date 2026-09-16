@@ -24,6 +24,16 @@ import engine
 class TestExporters(unittest.TestCase):
     """Test suite for engine/exporters.py reporting and export utilities."""
 
+    @classmethod
+    def setUpClass(cls):
+        from engine.scenarios import build_scenario_and_apps_script_data
+        cls.scenario_data, cls.annual_data, cls.trades_data = build_scenario_and_apps_script_data()
+        cls.default_apps_script = generate_google_apps_script(
+            scenario_data=cls.scenario_data,
+            annual_data=cls.annual_data,
+            trades_data=cls.trades_data,
+        )
+
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
 
@@ -341,7 +351,7 @@ class TestExporters(unittest.TestCase):
 
     def test_generate_google_apps_script(self):
         """Test Google Apps Script generator creates valid JS with required sheets and styling."""
-        js_code = generate_google_apps_script()
+        js_code = self.default_apps_script
         self.assertIsInstance(js_code, str)
         self.assertGreater(len(js_code), 500)
 
@@ -373,7 +383,12 @@ class TestExporters(unittest.TestCase):
 
         # Test writing to file
         output_js = os.path.join(self.test_dir, "scripts", "google_apps_script.js")
-        export_google_apps_script(output_js)
+        export_google_apps_script(
+            output_js,
+            scenario_data=self.scenario_data,
+            annual_data=self.annual_data,
+            trades_data=self.trades_data,
+        )
         self.assertTrue(os.path.exists(output_js))
 
         # Check syntax using Node.js if available in PATH
@@ -382,7 +397,7 @@ class TestExporters(unittest.TestCase):
             self.assertEqual(result.returncode, 0, f"Node syntax check failed: {result.stderr}")
 
     def test_google_apps_script_interactive_dashboard(self):
-        code = generate_google_apps_script()
+        code = self.default_apps_script
         # Executive Summary checks (14-column layout A1:N1)
         self.assertIn("clearDataValidations", code)
         self.assertIn("Total Dividends Received", code)
@@ -436,7 +451,7 @@ class TestExporters(unittest.TestCase):
         self.assertIn("Show All Tabs", code)
 
     def test_google_apps_script_performance_charts_and_regimes(self):
-        code = generate_google_apps_script()
+        code = self.default_apps_script
         # Check tab presence
         self.assertIn("'Performance & Tradeoffs'", code)
         self.assertIn("buildPerformanceAndTradeoffsSheet", code)
@@ -495,7 +510,7 @@ class TestExporters(unittest.TestCase):
 
     def test_recalculate_strategy_function(self):
         """Verify RECALCULATE_STRATEGY uses dynamic SCENARIO_DATA without stale hardcoded constants."""
-        code = generate_google_apps_script()
+        code = self.default_apps_script
 
         # Verify stale constants from Issue #27 are absent
         self.assertNotIn("0.1495", code)
@@ -532,7 +547,7 @@ class TestExporters(unittest.TestCase):
             };
             console.log(JSON.stringify(results));
             """
-            proc = subprocess.run(["node", "-e", test_js], capture_output=True, text=True)
+            proc = subprocess.run(["node"], input=test_js, capture_output=True, text=True)
             self.assertEqual(proc.returncode, 0, f"Node execution error: {proc.stderr}")
             data = json.loads(proc.stdout)
 
@@ -585,7 +600,13 @@ class TestExporters(unittest.TestCase):
             "realized_gain": 0.0,
         }
         results = [self.res_pretax, self.res_aftertax]
-        generated_files = exporter.export_all(results=results, trade_records=[trade_record])
+        generated_files = exporter.export_all(
+            results=results,
+            trade_records=[trade_record],
+            scenario_data=self.scenario_data,
+            annual_data=self.annual_data,
+            trades_data=self.trades_data,
+        )
 
         self.assertIn("summary_metrics", generated_files)
         self.assertIn("annual_breakdown", generated_files)
@@ -601,6 +622,9 @@ class TestExporters(unittest.TestCase):
             trade_records=[trade_record],
             output_dir=os.path.join(self.test_dir, "out2"),
             scripts_dir=os.path.join(self.test_dir, "scripts2"),
+            scenario_data=self.scenario_data,
+            annual_data=self.annual_data,
+            trades_data=self.trades_data,
         )
         for name, path in generated_files_2.items():
             self.assertTrue(os.path.exists(path), f"Standalone export_all failed for {name}")
