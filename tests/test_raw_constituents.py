@@ -182,9 +182,13 @@ class TestRawConstituents(unittest.TestCase):
         self.assertNotIn("WMT", gt_2008_q3["holdings"])
         self.assertNotIn("CSCO", gt_2008_q3["holdings"])
 
-        # 2024-Q3 must be unverified (no regulatory filing archived)
+        # 2024-Q3 and 2024-Q4 are now archived Form NPORT-P filings (Issue #39)
         gt_2024_q3 = gt["periods"]["2024-Q3"]
-        self.assertFalse(gt_2024_q3["verified"])
+        self.assertTrue(gt_2024_q3["verified"])
+        self.assertNotIn("ORCL", gt_2024_q3["holdings"][:10])
+
+        gt_2024_q4 = gt["periods"]["2024-Q4"]
+        self.assertTrue(gt_2024_q4["verified"])
 
         # Provenance table reproducibility check
         csv_path = root / "docs" / "historical_weights_table.csv"
