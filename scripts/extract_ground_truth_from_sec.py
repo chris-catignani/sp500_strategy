@@ -96,6 +96,10 @@ N30D_NAME_PATTERNS = [
     (r"^Procter\s+&\s+Gamble", "PG"),
     (r"^(J\.?\s*P\.?\s*Morgan|JPMorgan)\s+Chase", "JPM"),
     (r"^Chevron(Texaco)?\s+Corp", "CVX"),
+    # AT&T Wireless Services (ticker AWE) was spun off from AT&T in 2001 and traded as
+    # an independent S&P 500 constituent until acquired by Cingular in 2004. It must
+    # be matched before AT&T, or the broader parent pattern swallows it and inflates T.
+    (r"^AT\s*&\s*T\s+Wireless", "AWE"),
     (r"^AT\s*&\s*T", "T"),
     (r"^SBC\s+Communications", "SBC"),
     (r"^Bell\s+Atlantic", "BEL"),
@@ -136,6 +140,10 @@ N30D_NAME_PATTERNS = [
     (r"^Tyco\s+International", "TYC"),
     (r"^WorldCom", "WCOM"),
     (r"^MCI\s+", "MCIC"),
+    # Time Warner Cable (ticker TWC) was spun off from Time Warner in 2009 and traded as
+    # a separate S&P 500 constituent. It must be matched before Time Warner, or the
+    # parent pattern swallows it and inflates TWX.
+    (r"^Time\s+Warner\s+Cable", "TWC"),
     (r"^Time\s+Warner", "TWX"),
     (r"^BellSouth", "BLS"),
     (r"^Ameritech", "AIT"),
@@ -148,6 +156,10 @@ N30D_NAME_PATTERNS = [
     (r"^America\s+Online", "AOL"),
     (r"^AOL\s+Time\s+Warner", "AOL"),
     (r"^Bristol-?Myers\s+Squibb", "BMY"),
+    # Applera Corp (Applied Biosystems Group, ticker ABI) was an independent S&P 500
+    # constituent until its 2008 acquisition by Invitrogen. It must be matched before
+    # Apple, or the broader prefix swallows it and inflates AAPL.
+    (r"^Applera\b", "ABI"),
     (r"^Apple", "AAPL"),
     (r"^Home\s+Depot", "HD"),
     (r"^Verizon\s+Communications", "VZ"),
