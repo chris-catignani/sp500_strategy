@@ -234,7 +234,7 @@ class TestRawConstituents(unittest.TestCase):
         with open(root / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
             reader = list(csv.DictReader(f))
 
-        xml_years = {"2020", "2021", "2022", "2023"}
+        xml_years = {"2020", "2021", "2022", "2023", "2024"}
         for row in reader:
             if row["year"] in xml_years:
                 self.assertEqual(row["methodology"], "SEC Form NPORT-P Audited Holdings")

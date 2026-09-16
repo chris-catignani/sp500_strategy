@@ -19,7 +19,7 @@ from engine.models import ConstituentSnapshot
 
 # Q4 periods whose ground truth is the same filing the year-end candidate list is built
 # from. They match 10/10 by construction and cannot corroborate the drift model.
-CIRCULAR_Q4_PERIODS = frozenset({"2020-Q4", "2021-Q4", "2022-Q4", "2023-Q4"})
+CIRCULAR_Q4_PERIODS = frozenset({"2020-Q4", "2021-Q4", "2022-Q4", "2023-Q4", "2024-Q4"})
 
 
 def audit_midyear_promotions():

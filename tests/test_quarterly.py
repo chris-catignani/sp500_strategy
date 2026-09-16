@@ -469,7 +469,7 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             r for k, r in gt.items()
             if r.get("verified") and r.get("form") == "NPORT-P" and k not in CIRCULAR_Q4_PERIODS
         ]
-        self.assertEqual(len(oos), 14)
+        self.assertEqual(len(oos), 15)
         oos_acc = sum(r["accuracy_pct"] for r in oos) / len(oos)
         self.assertLess(oos_acc, 96.7)
         self.assertGreater(oos_acc, 90.0)
