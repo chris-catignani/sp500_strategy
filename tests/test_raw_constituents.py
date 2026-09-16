@@ -371,13 +371,13 @@ class TestN30DScheduleParser(unittest.TestCase):
         self.assertIn("Machines", ibm["name"])
 
     def test_all_fifteen_annual_filings_extracted(self):
-        """N30D_HISTORICAL_FILINGS has 15 entries covering 1995-Q3..2009-Q3 and all files exist."""
+        """N30D_HISTORICAL_FILINGS has 15 entries (1995-Q4, 1996-Q4, 1997-Q3..2009-Q3) and all files exist."""
         from scripts.extract_ground_truth_from_sec import (
             N30D_HISTORICAL_FILINGS, FILINGS_DIR,
         )
 
         self.assertEqual(len(N30D_HISTORICAL_FILINGS), 15)
-        expected_periods = [f"{y}-Q3" for y in range(1995, 2010)]
+        expected_periods = ["1995-Q4", "1996-Q4"] + [f"{y}-Q3" for y in range(1997, 2010)]
         actual_periods = [entry[0] for entry in N30D_HISTORICAL_FILINGS]
         self.assertEqual(actual_periods, expected_periods)
 
@@ -387,6 +387,56 @@ class TestN30DScheduleParser(unittest.TestCase):
                 filing_file.exists(),
                 f"{period} filing file does not exist: {filing_file}",
             )
+
+    def test_all_historical_filings_pass_period_assertion(self):
+        """Every entry in N30D_HISTORICAL_FILINGS passes assert_filing_period_matches against its header."""
+        from scripts.extract_ground_truth_from_sec import (
+            N30D_HISTORICAL_FILINGS, FILINGS_DIR, assert_filing_period_matches,
+        )
+
+        for period, filename, _acc, _form, rep_dt, _file_dt in N30D_HISTORICAL_FILINGS:
+            with self.subTest(period=period, filename=filename):
+                assert_filing_period_matches(FILINGS_DIR / filename, rep_dt)
+
+    def test_filing_period_assertion_raises_on_mismatch(self):
+        """assert_filing_period_matches raises ScheduleParseError when given a deliberately wrong date."""
+        from scripts.extract_ground_truth_from_sec import (
+            FILINGS_DIR, ScheduleParseError, assert_filing_period_matches,
+        )
+
+        # 1995 filing is 1995-12-31; passing 1995-09-30 (the old defect) must raise
+        file_1995 = FILINGS_DIR / "SPY_1995_N-30D_0000912057-96-003840.txt"
+        with self.assertRaises(ScheduleParseError) as ctx:
+            assert_filing_period_matches(file_1995, "1995-09-30")
+        self.assertIn("1995-12-31", str(ctx.exception))
+        self.assertIn("1995-09-30", str(ctx.exception))
+
+        # 1997 filing is 1997-09-30; passing 1997-12-31 must raise
+        file_1997 = FILINGS_DIR / "SPY_1997_N-30D_0000950135-97-004820.txt"
+        with self.assertRaises(ScheduleParseError) as ctx:
+            assert_filing_period_matches(file_1997, "1997-12-31")
+        self.assertIn("1997-09-30", str(ctx.exception))
+        self.assertIn("1997-12-31", str(ctx.exception))
+
+    def test_relabelled_historical_periods_in_ground_truth(self):
+        """1995-Q4 and 1996-Q4 are verified: true in ground-truth JSON; 1995-Q3 and 1996-Q3 are verified: false."""
+        gt_path = ROOT / "data" / "raw" / "ground_truth" / "quarterly_ground_truth_holdings.json"
+        with open(gt_path, "r", encoding="utf-8") as f:
+            gt = json.load(f)
+
+        for q4_period, expected_date in (("1995-Q4", "1995-12-31"), ("1996-Q4", "1996-12-31")):
+            self.assertIn(q4_period, gt["periods"])
+            entry = gt["periods"][q4_period]
+            self.assertTrue(entry["verified"], f"{q4_period} should be verified: true")
+            self.assertEqual(entry["report_date"], expected_date)
+            self.assertEqual(len(entry["holdings"]), 10)
+
+        for q3_period, expected_date in (("1995-Q3", "1995-09-30"), ("1996-Q3", "1996-09-30")):
+            self.assertIn(q3_period, gt["periods"])
+            entry = gt["periods"][q3_period]
+            self.assertFalse(entry["verified"], f"{q3_period} should be verified: false")
+            self.assertEqual(entry["holdings"], [])
+            self.assertIn(expected_date, entry.get("note", ""))
 
     def test_ground_truth_json_matches_parsed_filings(self):
         """The committed ground-truth JSON must reproduce what the parser reads."""
@@ -512,7 +562,7 @@ class TestN30DScheduleParser(unittest.TestCase):
         self.assertEqual(report["depth"], 30)
         self.assertEqual(
             report["source"],
-            "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (September 30 snapshots)",
+            "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (December 31 snapshots for 1995-1996, September 30 snapshots for 1997-2009)",
         )
 
         tickers_dir = ROOT / "data" / "raw" / "tickers"
