@@ -62,12 +62,18 @@ def get_filings_for_quarter(year: int, qtr: int):
     return matches
 
 def is_valid_spy_annual_report(file_path: Path, year: int, content: str) -> bool:
-    """Verify that a candidate filing is SPY's own report rather than another trust.
+    """Validate that a candidate filing is SPY's own annual report.
 
-    EDGAR master indexes list all series sharing CIK 0000884394 together (such as
-    Select Sector SPDR Trust). A candidate must represent SPDR Trust Series 1 /
-    SPDR S&P 500 ETF Trust and, for the fixed-width era (<= 2009), must successfully
-    parse a single fund Schedule of Investments whose sum equals the stated total.
+    Enforces:
+    1. Positive filer identity: COMPANY CONFORMED NAME must match SPY's official
+       filer names ('SPDR TRUST SERIES 1' for 1995-2009, or 'SPDR S&P 500 ETF TRUST'
+       for 2010-2019).
+    2. Document-level exclusion: co-filed trusts sharing CIK 0000884394 (such as
+       Select Sector SPDR Trust) share the conformed filer identity, so candidate
+       descriptions containing 'SELECT SECTOR' are rejected.
+    3. Faithful-parse enforcement: for the fixed-width era (<= 2009), once filer identity
+       and document exclusion pass, the candidate IS SPY's report. Any ScheduleParseError
+       is a real reconciliation failure and must not be swallowed.
     """
     header_lines = content[:5000].splitlines()[:100]
     description = ""
@@ -78,18 +84,28 @@ def is_valid_spy_annual_report(file_path: Path, year: int, content: str) -> bool
         if "COMPANY CONFORMED NAME:" in line:
             company_name = line.split("COMPANY CONFORMED NAME:")[-1].strip().upper()
 
-    # Reject filings that identify another trust under the shared CIK.
-    if "SELECT SECTOR" in description or "SELECT SECTOR" in company_name:
+    # 1. Positive filer identity:
+    # 1995-2009 filings use "SPDR TRUST SERIES 1"; 2010-2019 filings use
+    # "SPDR S&P 500 ETF TRUST". Any other conformed name is not SPY.
+    if company_name not in ("SPDR TRUST SERIES 1", "SPDR S&P 500 ETF TRUST"):
         return False
 
-    # The 2010-2019 HTML filings legitimately raise ScheduleParseError today, but
-    # fixed-width filings (<= 2009) must parse cleanly with verified stated totals.
-    # Multi-fund filings have multiple schedules and totals, failing this check.
+    # 2. Document-level exclusion for co-filed trusts:
+    # Under shared CIK 0000884394, Select Sector SPDR filings also carry
+    # COMPANY CONFORMED NAME "SPDR TRUST SERIES 1", so filer identity alone
+    # cannot exclude them. The document description identifies Select Sector.
+    if "SELECT SECTOR" in description:
+        return False
+
+    # 3. Faithful-parse enforcement for the fixed-width era:
+    # For year <= 2009, candidates passing the above checks are SPY's own reports.
+    # A ScheduleParseError indicates an extraction/reconciliation failure on SPY itself
+    # and must be raised rather than swallowed so it does not silently drop the filing.
     if year <= 2009:
         try:
             parse_n30d_filing(file_path)
-        except ScheduleParseError:
-            return False
+        except ScheduleParseError as err:
+            raise ScheduleParseError(f"{Path(file_path).name}: {err}") from err
 
     return True
 

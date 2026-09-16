@@ -762,5 +762,56 @@ class TestIssuerSeparation(unittest.TestCase):
             self.assertEqual(unregistered, [], f"{period} has unregistered multi-class issuers")
 
 
+class TestIsValidSpyAnnualReport(unittest.TestCase):
+    """Unit tests for is_valid_spy_annual_report validation and regression guards."""
+
+    def test_valid_spy_filing_fixed_width_era(self):
+        """A genuine 1995-2009 SPY filing passes validation and parsing."""
+        from scripts.download_all_historical_sec_filings import is_valid_spy_annual_report
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "SPY_1995_N-30D_0000912057-96-003840.txt"
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        self.assertTrue(is_valid_spy_annual_report(file_path, 1995, content))
+
+    def test_valid_spy_filing_html_era(self):
+        """A 2010-2019 SPY filing passes validation (regression guard for HTML era)."""
+        from scripts.download_all_historical_sec_filings import is_valid_spy_annual_report
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "SPY_2015_N-30D_0001193125-15-390230.txt"
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        self.assertTrue(is_valid_spy_annual_report(file_path, 2015, content))
+
+    def test_select_sector_spdr_filing_rejected(self):
+        """The mis-archived Select Sector document is rejected by description exclusion."""
+        from scripts.download_all_historical_sec_filings import is_valid_spy_annual_report
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "SELECT_SECTOR_SPDR_2004_N-CSR_0000950135-04-005558.txt"
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        self.assertFalse(is_valid_spy_annual_report(file_path, 2004, content))
+
+    def test_foreign_company_conformed_name_rejected(self):
+        """A filing with a foreign COMPANY CONFORMED NAME is rejected."""
+        from scripts.download_all_historical_sec_filings import is_valid_spy_annual_report
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "SPY_1995_N-30D_0000912057-96-003840.txt"
+        content = file_path.read_text(encoding="utf-8", errors="replace").replace(
+            "SPDR TRUST SERIES 1", "FOREIGN TRUST CORP"
+        )
+        self.assertFalse(is_valid_spy_annual_report(file_path, 1995, content))
+
+    def test_schedule_parse_error_re_raised_for_fixed_width_era(self):
+        """A ScheduleParseError on a genuine SPY filing (<= 2009) must not be swallowed."""
+        from unittest.mock import patch
+        from scripts.download_all_historical_sec_filings import is_valid_spy_annual_report
+        from scripts.extract_ground_truth_from_sec import ScheduleParseError
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "SPY_1995_N-30D_0000912057-96-003840.txt"
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        with patch("scripts.download_all_historical_sec_filings.parse_n30d_filing", side_effect=ScheduleParseError("stated total mismatch")):
+            with self.assertRaises(ScheduleParseError) as ctx:
+                is_valid_spy_annual_report(file_path, 1995, content)
+            self.assertIn(file_path.name, str(ctx.exception))
+
+
 if __name__ == "__main__":
     unittest.main()
