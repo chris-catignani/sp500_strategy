@@ -157,6 +157,8 @@ class TestRawConstituents(unittest.TestCase):
         self.assertIn("NFLX", tickers_2024)
         self.assertNotIn("ORCL", tickers_2024)
 
+    test_xml_filing_exact_derivation = test_xml_generated_candidates_and_weights
+
     def test_sec_ground_truth_filing_accuracy(self):
         """Verify ground-truth historical and modern holdings against SEC filings."""
         import csv
@@ -321,6 +323,89 @@ class TestN30DScheduleParser(unittest.TestCase):
                 [h["ticker"] for h in parsed["holdings"][:10]],
                 f"{period} ground truth does not match parsed {filename}",
             )
+
+
+class TestConsolidateHoldings(unittest.TestCase):
+    """Unit tests for multi-class equity holdings consolidation at issuer level."""
+
+    def test_consolidate_holdings_alphabet(self):
+        import sys
+        root = Path(__file__).resolve().parent.parent
+        sys.path.insert(0, str(root))
+        from scripts.extract_ground_truth_from_sec import consolidate_holdings
+
+        raw_holdings = [
+            {"name": "Apple Inc.", "ticker": "AAPL", "cusip": "037833100", "val": 1000.0},
+            {"name": "Alphabet Inc. Cl A", "ticker": "GOOGL", "cusip": "02079K305", "val": 400.0},
+            {"name": "Alphabet Inc. Cl C", "ticker": "GOOG", "cusip": "02079K107", "val": 350.0},
+            {"name": "Microsoft Corp.", "ticker": "MSFT", "cusip": "594918104", "val": 900.0},
+        ]
+        consolidated = consolidate_holdings(raw_holdings)
+        by_ticker = {h["ticker"]: h for h in consolidated}
+
+        self.assertEqual(len(consolidated), 3)
+        self.assertIn("AAPL", by_ticker)
+        self.assertEqual(by_ticker["AAPL"]["val"], 1000.0)
+        self.assertIn("MSFT", by_ticker)
+        self.assertEqual(by_ticker["MSFT"]["val"], 900.0)
+        self.assertIn("GOOGL", by_ticker)
+        self.assertEqual(by_ticker["GOOGL"]["val"], 750.0)
+        self.assertEqual(by_ticker["GOOGL"]["cusip"], "02079K305")
+        self.assertEqual(by_ticker["GOOGL"]["name"], "Alphabet Inc. (Class A & C)")
+
+    def test_consolidate_holdings_synthetic_dual_class(self):
+        import sys
+        root = Path(__file__).resolve().parent.parent
+        sys.path.insert(0, str(root))
+        from scripts.extract_ground_truth_from_sec import consolidate_holdings
+
+        custom_issuers = {
+            "TEST": {
+                "primary_ticker": "TEST.A",
+                "canonical_name": "Test Company Inc. (Class A & B)",
+                "primary_cusip": "111111111",
+                "member_cusips": {"111111111", "222222222"},
+                "member_tickers": {"TEST.A", "TEST.B"},
+            }
+        }
+        raw_holdings = [
+            {"name": "Test Class A", "ticker": "TEST.A", "cusip": "111111111", "val": 50.0},
+            {"name": "Test Class B", "ticker": "TEST.B", "cusip": "222222222", "val": 75.0},
+            {"name": "Other Corp", "ticker": "OTHR", "cusip": "999999999", "val": 200.0},
+        ]
+        consolidated = consolidate_holdings(raw_holdings, issuers=custom_issuers)
+        by_ticker = {h["ticker"]: h for h in consolidated}
+
+        self.assertEqual(len(consolidated), 2)
+        self.assertIn("OTHR", by_ticker)
+        self.assertEqual(by_ticker["OTHR"]["val"], 200.0)
+        self.assertIn("TEST.A", by_ticker)
+        self.assertEqual(by_ticker["TEST.A"]["val"], 125.0)
+        self.assertEqual(by_ticker["TEST.A"]["cusip"], "111111111")
+        self.assertEqual(by_ticker["TEST.A"]["name"], "Test Company Inc. (Class A & B)")
+
+    def test_consolidate_holdings_ticker_fallback(self):
+        import sys
+        root = Path(__file__).resolve().parent.parent
+        sys.path.insert(0, str(root))
+        from scripts.extract_ground_truth_from_sec import consolidate_holdings
+
+        # Holdings without CUSIP but with valid ticker
+        raw_holdings = [
+            {"name": "Google Class A", "ticker": "GOOGL", "cusip": "", "val": 300.0},
+            {"name": "Google Class C", "ticker": "GOOG", "cusip": None, "val": 200.0},
+            {"name": "Amazon", "ticker": "AMZN", "cusip": None, "val": 500.0},
+        ]
+        consolidated = consolidate_holdings(raw_holdings)
+        by_ticker = {h["ticker"]: h for h in consolidated}
+
+        self.assertEqual(len(consolidated), 2)
+        self.assertIn("AMZN", by_ticker)
+        self.assertEqual(by_ticker["AMZN"]["val"], 500.0)
+        self.assertIn("GOOGL", by_ticker)
+        self.assertEqual(by_ticker["GOOGL"]["val"], 500.0)
+        self.assertEqual(by_ticker["GOOGL"]["cusip"], "02079K305")
+        self.assertEqual(by_ticker["GOOGL"]["name"], "Alphabet Inc. (Class A & C)")
 
 
 if __name__ == "__main__":

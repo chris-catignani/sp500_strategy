@@ -9,7 +9,7 @@ Zero external dependencies - Python 3 standard library only.
 import json
 from pathlib import Path
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 import xml.etree.ElementTree as ET
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -291,6 +291,77 @@ def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
     return {"total_val_usd": total_val, "holdings": holdings}
 
 
+CONSOLIDATED_ISSUERS: Dict[str, Dict[str, Any]] = {
+    "GOOGL": {
+        "primary_ticker": "GOOGL",
+        "canonical_name": "Alphabet Inc. (Class A & C)",
+        "primary_cusip": "02079K305",
+        "member_cusips": {"02079K305", "02079K107"},
+        "member_tickers": {"GOOGL", "GOOG"},
+    },
+}
+CUSIP_TO_ISSUER: Dict[str, str] = {
+    cusip: issuer_key
+    for issuer_key, spec in CONSOLIDATED_ISSUERS.items()
+    for cusip in spec["member_cusips"]
+}
+TICKER_TO_ISSUER: Dict[str, str] = {
+    ticker: issuer_key
+    for issuer_key, spec in CONSOLIDATED_ISSUERS.items()
+    for ticker in spec.get("member_tickers", set())
+}
+
+
+def consolidate_holdings(
+    raw_holdings: List[Dict[str, Any]],
+    issuers: Optional[Dict[str, Dict[str, Any]]] = None,
+    cusip_map: Optional[Dict[str, str]] = None,
+    ticker_map: Optional[Dict[str, str]] = None,
+) -> List[Dict[str, Any]]:
+    """Consolidate multi-class equity holdings at the issuer level.
+
+    Sums valuations across classes for registered issuers, mapping to the primary
+    ticker, CUSIP, and canonical name. All other holdings pass through unchanged.
+    """
+    if issuers is None:
+        issuers = CONSOLIDATED_ISSUERS
+        cusip_map = cusip_map or CUSIP_TO_ISSUER
+        ticker_map = ticker_map or TICKER_TO_ISSUER
+    else:
+        if cusip_map is None:
+            cusip_map = {
+                c: k for k, s in issuers.items() for c in s.get("member_cusips", set())
+            }
+        if ticker_map is None:
+            ticker_map = {
+                t: k for k, s in issuers.items() for t in s.get("member_tickers", set())
+            }
+
+    aggregated: Dict[str, Dict[str, Any]] = {}
+    passthrough: List[Dict[str, Any]] = []
+
+    for h in raw_holdings:
+        cusip = (h.get("cusip") or "").strip()
+        ticker = (h.get("ticker") or "").strip()
+
+        issuer_key = cusip_map.get(cusip) or ticker_map.get(ticker)
+
+        if issuer_key and issuer_key in issuers:
+            spec = issuers[issuer_key]
+            if issuer_key not in aggregated:
+                aggregated[issuer_key] = {
+                    "name": spec["canonical_name"],
+                    "ticker": spec["primary_ticker"],
+                    "cusip": spec["primary_cusip"],
+                    "val": 0.0,
+                }
+            aggregated[issuer_key]["val"] += float(h.get("val", 0.0))
+        else:
+            passthrough.append(dict(h))
+
+    return passthrough + list(aggregated.values())
+
+
 def parse_xml_filing(xml_path: Path) -> Dict[str, Any]:
     """Parse Form NPORT-P XML file."""
     tree = ET.parse(xml_path)
@@ -332,18 +403,7 @@ def parse_xml_filing(xml_path: Path) -> Dict[str, Any]:
                 "val": val,
             })
 
-    # Consolidate Alphabet Class A & C
-    alphabet_val = sum(h["val"] for h in raw_holdings if h["ticker"] in ("GOOG", "GOOGL"))
-    other_holdings = [h for h in raw_holdings if h["ticker"] not in ("GOOG", "GOOGL")]
-
-    consolidated = list(other_holdings)
-    if alphabet_val > 0:
-        consolidated.append({
-            "name": "Alphabet Inc. (Class A & C Combined)",
-            "ticker": "GOOGL",
-            "cusip": "02079K305",
-            "val": alphabet_val,
-        })
+    consolidated = consolidate_holdings(raw_holdings)
 
     consolidated.sort(key=lambda x: x["val"], reverse=True)
     total_val = sum(h["val"] for h in consolidated)
