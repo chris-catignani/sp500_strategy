@@ -370,17 +370,33 @@ class TestN30DScheduleParser(unittest.TestCase):
         self.assertIn("International Business", ibm["name"])
         self.assertIn("Machines", ibm["name"])
 
+    def test_all_fifteen_annual_filings_extracted(self):
+        """N30D_HISTORICAL_FILINGS has 15 entries covering 1995-Q3..2009-Q3 and all files exist."""
+        from scripts.extract_ground_truth_from_sec import (
+            N30D_HISTORICAL_FILINGS, FILINGS_DIR,
+        )
+
+        self.assertEqual(len(N30D_HISTORICAL_FILINGS), 15)
+        expected_periods = [f"{y}-Q3" for y in range(1995, 2010)]
+        actual_periods = [entry[0] for entry in N30D_HISTORICAL_FILINGS]
+        self.assertEqual(actual_periods, expected_periods)
+
+        for period, filename, *_ in N30D_HISTORICAL_FILINGS:
+            filing_file = FILINGS_DIR / filename
+            self.assertTrue(
+                filing_file.exists(),
+                f"{period} filing file does not exist: {filing_file}",
+            )
+
     def test_ground_truth_json_matches_parsed_filings(self):
         """The committed ground-truth JSON must reproduce what the parser reads."""
+        from scripts.extract_ground_truth_from_sec import N30D_HISTORICAL_FILINGS
+
         gt_path = ROOT / "data" / "raw" / "ground_truth" / "quarterly_ground_truth_holdings.json"
         with open(gt_path, "r", encoding="utf-8") as f:
             gt = json.load(f)
 
-        for period, filename in (
-            ("1999-Q3", "SPY_1999_Q4_N-30D_0000950135-99-005434.txt"),
-            ("2000-Q3", "SPY_2000_Q4_N-30D_0000950135-00-005227.txt"),
-            ("2008-Q3", "SPY_2008_Q4_N-30D_0000950135-08-007648.txt"),
-        ):
+        for period, filename, *_ in N30D_HISTORICAL_FILINGS:
             parsed = self.parse(self.dir / filename)
             self.assertEqual(
                 gt["periods"][period]["holdings"],
@@ -389,13 +405,12 @@ class TestN30DScheduleParser(unittest.TestCase):
             )
 
     def test_parsed_total_matches_filing_stated_total(self):
-        """For each of the 14 fixed-width filings (1995-2003, 2005-2009), total_val_usd == stated_total_usd."""
+        """For each of the 15 fixed-width filings (1995-2009), total_val_usd == stated_total_usd."""
         manifest_path = self.dir / "sec_annual_filings_manifest.json"
         with open(manifest_path, "r", encoding="utf-8") as f:
             manifest = json.load(f)
 
-        target_years = [y for y in range(1995, 2010) if y != 2004]
-        for year in target_years:
+        for year in range(1995, 2010):
             filing_path = ROOT / manifest[str(year)]["file_path"]
             with self.subTest(year=year, filename=filing_path.name):
                 parsed = self.parse(filing_path)
@@ -483,6 +498,51 @@ class TestN30DScheduleParser(unittest.TestCase):
         self.assertIn("SPY_TEST_FILING", str(ctx.exception))
         self.assertIn("Some Unmapped Corp.", str(ctx.exception))
 
+    def test_universe_gap_report_matches_filings(self):
+        """Every ticker in universe_gap_report.json has no raw json, and every omitted top-30 ticker has one."""
+        from scripts.extract_ground_truth_from_sec import (
+            N30D_HISTORICAL_FILINGS, parse_n30d_filing, FILINGS_DIR,
+        )
+
+        report_path = ROOT / "data" / "raw" / "ground_truth" / "universe_gap_report.json"
+        self.assertTrue(report_path.exists(), "universe_gap_report.json does not exist")
+        with open(report_path, "r", encoding="utf-8") as f:
+            report = json.load(f)
+
+        self.assertEqual(report["depth"], 30)
+        self.assertEqual(
+            report["source"],
+            "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (September 30 snapshots)",
+        )
+
+        tickers_dir = ROOT / "data" / "raw" / "tickers"
+        reported_missing = set(report["missing_tickers"].keys())
+
+        # Every ticker reported as missing must not have a raw ticker file
+        for ticker in reported_missing:
+            self.assertFalse(
+                (tickers_dir / f"{ticker}.json").exists(),
+                f"Gap report claims {ticker} is missing, but data/raw/tickers/{ticker}.json exists",
+            )
+
+        # Collect all tickers appearing in the top 30 across all 15 filings
+        filing_top30_tickers = set()
+        for period, filename, *_ in N30D_HISTORICAL_FILINGS:
+            parsed = parse_n30d_filing(FILINGS_DIR / filename)
+            for h in parsed["holdings"][:30]:
+                filing_top30_tickers.add(h["ticker"])
+
+        # Every ticker in top 30 omitted from gap report must have a raw ticker file
+        omitted = filing_top30_tickers - reported_missing
+        for ticker in omitted:
+            self.assertTrue(
+                (tickers_dir / f"{ticker}.json").exists(),
+                f"Top-30 ticker {ticker} omitted from gap report, but data/raw/tickers/{ticker}.json is missing",
+            )
+
+        # Every ticker in gap report must actually appear in at least one filing's top 30
+        self.assertEqual(reported_missing - filing_top30_tickers, set())
+
 
 class TestConsolidateHoldings(unittest.TestCase):
     """Unit tests for multi-class equity holdings consolidation at issuer level."""
@@ -562,7 +622,7 @@ class TestIssuerSeparation(unittest.TestCase):
     """Distinct issuers must not be merged, and multi-class issuers must not be missed."""
 
     def test_coca_cola_enterprises_is_not_merged_into_ko(self):
-        """The bottler was its own S&P 500 constituent and must rank separately."""
+        """The bottler was its own S&P 500 constituent (1999-2009) and must rank separately."""
         from scripts.extract_ground_truth_from_sec import (
             parse_n30d_filing, FILINGS_DIR, N30D_HISTORICAL_FILINGS,
         )
@@ -571,10 +631,16 @@ class TestIssuerSeparation(unittest.TestCase):
             parsed = parse_n30d_filing(FILINGS_DIR / filename)
             by_ticker = {h["ticker"]: h for h in parsed["holdings"]}
             self.assertIn("KO", by_ticker, period)
-            self.assertIn("CCE", by_ticker, period)
-            self.assertIn("Coca-Cola Co", by_ticker["KO"]["name"].replace(" Co.", " Co"), period)
-            self.assertIn("Enterprises", by_ticker["CCE"]["name"], period)
-            self.assertGreater(by_ticker["KO"]["val"], by_ticker["CCE"]["val"], period)
+            ko_name = by_ticker["KO"]["name"].replace("Coca Cola", "Coca-Cola").replace(" Co.", " Co")
+            self.assertIn("Coca-Cola Co", ko_name, period)
+            self.assertNotIn("Enterprises", by_ticker["KO"]["name"], period)
+            year = int(period.split("-")[0])
+            if year >= 1999:
+                self.assertIn("CCE", by_ticker, period)
+                self.assertIn("Enterprises", by_ticker["CCE"]["name"], period)
+                self.assertGreater(by_ticker["KO"]["val"], by_ticker["CCE"]["val"], period)
+            else:
+                self.assertNotIn("CCE", by_ticker, period)
 
     def test_n30d_tickers_map_one_issuer_each(self):
         """No name pattern may absorb two differently named issuers into one ticker."""

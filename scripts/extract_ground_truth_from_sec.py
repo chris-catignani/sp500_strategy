@@ -16,6 +16,8 @@ import xml.etree.ElementTree as ET
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 FILINGS_DIR = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
 OUTPUT_FILE = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "quarterly_ground_truth_holdings.json"
+UNIVERSE_GAP_REPORT_FILE = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "universe_gap_report.json"
+TICKERS_DIR = PROJECT_ROOT / "data" / "raw" / "tickers"
 
 # CUSIP to standard engine Ticker mapping
 CUSIP_TO_TICKER = {
@@ -218,22 +220,46 @@ NAME_FALLBACKS = [
 # Historical Form N-30D annual reports with an extracted Schedule of Investments.
 # SPY's fiscal year ends September 30, so each validates that year's Q3 only.
 N30D_HISTORICAL_FILINGS = [
+    ("1995-Q3", "SPY_1995_N-30D_0000912057-96-003840.txt",
+     "0000912057-96-003840", "Form N-30D", "1995-09-30", "1996-03-04"),
+    ("1996-Q3", "SPY_1996_N-30D_0000912057-97-006798.txt",
+     "0000912057-97-006798", "Form N-30D", "1996-09-30", "1997-02-26"),
+    ("1997-Q3", "SPY_1997_N-30D_0000950135-97-004820.txt",
+     "0000950135-97-004820", "Form N-30D", "1997-09-30", "1997-12-01"),
+    ("1998-Q3", "SPY_1998_N-30D_0000950135-98-006321.txt",
+     "0000950135-98-006321", "Form N-30D", "1998-09-30", "1998-12-21"),
     ("1999-Q3", "SPY_1999_Q4_N-30D_0000950135-99-005434.txt",
      "0000950135-99-005434", "Form N-30D", "1999-09-30", "1999-11-29"),
     ("2000-Q3", "SPY_2000_Q4_N-30D_0000950135-00-005227.txt",
      "0000950135-00-005227", "Form N-30D", "2000-09-30", "2000-11-21"),
+    ("2001-Q3", "SPY_2001_N-30D_0000950135-01-503664.txt",
+     "0000950135-01-503664", "Form N-30D", "2001-09-30", "2001-11-21"),
+    ("2002-Q3", "SPY_2002_N-30D_0000950135-02-005195.txt",
+     "0000950135-02-005195", "Form N-30D", "2002-09-30", "2002-11-21"),
+    ("2003-Q3", "SPY_2003_N-30D_0000950135-03-005842.txt",
+     "0000950135-03-005842", "Form N-30D", "2003-09-30", "2003-11-26"),
+    ("2004-Q3", "SPY_2004_N-30D_0000950135-05-000037.txt",
+     "0000950135-05-000037", "Form N-30D", "2004-09-30", "2005-01-05"),
+    ("2005-Q3", "SPY_2005_N-30D_0000950135-05-006765.txt",
+     "0000950135-05-006765", "Form N-30D", "2005-09-30", "2005-12-01"),
+    ("2006-Q3", "SPY_2006_N-30D_0000950135-06-007169.txt",
+     "0000950135-06-007169", "Form N-30D", "2006-09-30", "2006-11-29"),
+    ("2007-Q3", "SPY_2007_N-30D_0000950135-07-007280.txt",
+     "0000950135-07-007280", "Form N-30D", "2007-09-30", "2007-12-04"),
     ("2008-Q3", "SPY_2008_Q4_N-30D_0000950135-08-007648.txt",
      "0000950135-08-007648", "Form N-30D", "2008-09-30", "2008-11-26"),
+    ("2009-Q3", "SPY_2009_N-30D_0000950123-09-066888.txt",
+     "0000950123-09-066888", "Form N-30D", "2009-09-30", "2009-11-30"),
 ]
 
 # Quarters adjacent to the extracted annual reports that have no point-in-time filing.
 UNVERIFIED_HISTORICAL_PERIODS = [
-    ("1999-Q1", "No point-in-time regulatory filing available for 1999-03-31; unverified."),
-    ("1999-Q2", "No point-in-time regulatory filing available for 1999-06-30; unverified."),
-    ("2000-Q1", "No point-in-time regulatory filing available for 2000-03-31; unverified."),
-    ("2000-Q2", "No point-in-time regulatory filing available for 2000-06-30; unverified."),
-    ("2008-Q1", "No point-in-time regulatory filing available for 2008-03-31; unverified."),
-    ("2008-Q2", "No point-in-time regulatory filing available for 2008-06-30; unverified."),
+    (
+        f"{year}-{q}",
+        f"No point-in-time regulatory filing available for {year}-{dt}; unverified.",
+    )
+    for year in range(1995, 2010)
+    for q, dt in (("Q1", "03-31"), ("Q2", "06-30"))
 ]
 
 
@@ -622,6 +648,58 @@ def parse_xml_filing(xml_path: Path) -> Dict[str, Any]:
     }
 
 
+def build_universe_gap_report(
+    depth: int = 30,
+    parsed_filings: Optional[List[Tuple[str, Dict[str, Any]]]] = None,
+) -> Dict[str, Any]:
+    """Collect tickers in historical Form N-30D filings' top `depth` missing from data/raw/tickers/.
+
+    Enumerates the historical survivorship gap across all 15 annual filings (1995-2009).
+    For each missing constituent, records its best rank, company name, and the list of
+    periods where it ranks in the top `depth`.
+    """
+    if parsed_filings is None:
+        parsed_filings = [
+            (period, parse_n30d_filing(FILINGS_DIR / filename))
+            for period, filename, *_ in N30D_HISTORICAL_FILINGS
+        ]
+
+    missing: Dict[str, Dict[str, Any]] = {}
+    for period, parsed in parsed_filings:
+        for h in parsed["holdings"][:depth]:
+            ticker = h["ticker"]
+            if not (TICKERS_DIR / f"{ticker}.json").exists():
+                clean_name = re.sub(r"\s*\*+\s*$", "", h["name"]).strip()
+                if ticker not in missing:
+                    missing[ticker] = {
+                        "name": clean_name,
+                        "best_rank": h["rank"],
+                        "periods": [period],
+                    }
+                else:
+                    missing[ticker]["periods"].append(period)
+                    if h["rank"] < missing[ticker]["best_rank"]:
+                        missing[ticker]["best_rank"] = h["rank"]
+                        missing[ticker]["name"] = clean_name
+
+    sorted_missing = {
+        k: v
+        for k, v in sorted(
+            missing.items(), key=lambda item: (item[1]["best_rank"], item[0])
+        )
+    }
+
+    return {
+        "description": (
+            "Top constituents from historical SPY Form N-30D annual filings that have no "
+            "market data files in data/raw/tickers/, enumerating the historical survivorship gap."
+        ),
+        "source": "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (September 30 snapshots)",
+        "depth": depth,
+        "missing_tickers": sorted_missing,
+    }
+
+
 def main():
     manifest_path = FILINGS_DIR / "sec_filings_manifest.json"
     with open(manifest_path, "r", encoding="utf-8") as f:
@@ -647,9 +725,11 @@ def main():
             "note": note,
         }
 
+    parsed_historical = []
     for period, filename, acc, form, rep_dt, file_dt in N30D_HISTORICAL_FILINGS:
         parsed = parse_n30d_filing(FILINGS_DIR / filename)
         assert_top_holdings_resolved(parsed["holdings"], f"{period} ({filename})")
+        parsed_historical.append((period, parsed))
         top10 = parsed["holdings"][:10]
         ground_truth["periods"][period] = {
             "verified": True,
@@ -664,7 +744,7 @@ def main():
             "fund_total_value_usd": parsed["total_val_usd"],
         }
 
-    # 2. Modern Quarters (2020-Q1 .. 2024-Q2) parsed directly from Form NPORT-P XML
+    # 2. Modern Quarters (2020-Q1 .. 2024-Q4) parsed directly from Form NPORT-P XML
     for period, meta in sorted(manifest.items()):
         local_path = PROJECT_ROOT / meta["file_path"]
         parsed = parse_xml_filing(local_path)
@@ -699,6 +779,17 @@ def main():
     print(f"Successfully compiled {len(ground_truth['periods'])} ground-truth periods into {OUTPUT_FILE}")
     verified_count = sum(1 for p in ground_truth["periods"].values() if p["verified"])
     print(f"  Verified periods: {verified_count} / {len(ground_truth['periods'])}")
+
+    # 3. Universe gap report across all 15 historical filings
+    gap_report = build_universe_gap_report(depth=30, parsed_filings=parsed_historical)
+    with open(UNIVERSE_GAP_REPORT_FILE, "w", encoding="utf-8") as f:
+        json.dump(gap_report, f, indent=2)
+
+    print(f"\nUniverse gap report written to {UNIVERSE_GAP_REPORT_FILE}")
+    print(f"Missing tickers from Top 30 across 15 historical filings ({len(gap_report['missing_tickers'])} total):")
+    for ticker, info in gap_report["missing_tickers"].items():
+        periods_str = ", ".join(info["periods"])
+        print(f"  {ticker:<5} best rank #{info['best_rank']:<2} in {periods_str} ({info['name']})")
 
 
 if __name__ == "__main__":

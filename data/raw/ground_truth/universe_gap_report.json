@@ -1,0 +1,325 @@
+{
+  "description": "Top constituents from historical SPY Form N-30D annual filings that have no market data files in data/raw/tickers/, enumerating the historical survivorship gap.",
+  "source": "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (September 30 snapshots)",
+  "depth": 30,
+  "missing_tickers": {
+    "LU": {
+      "name": "Lucent Technologies, Inc",
+      "best_rank": 7,
+      "periods": [
+        "1997-Q3",
+        "1998-Q3",
+        "1999-Q3",
+        "2000-Q3"
+      ]
+    },
+    "RD": {
+      "name": "Royal Dutch Petroleum Co. (a)",
+      "best_rank": 7,
+      "periods": [
+        "1995-Q3",
+        "1996-Q3",
+        "1997-Q3",
+        "1998-Q3",
+        "1999-Q3",
+        "2000-Q3",
+        "2001-Q3"
+      ]
+    },
+    "EMC": {
+      "name": "EMC Corp.",
+      "best_rank": 10,
+      "periods": [
+        "2000-Q3"
+      ]
+    },
+    "SBC": {
+      "name": "SBC Communications, Inc",
+      "best_rank": 10,
+      "periods": [
+        "1995-Q3",
+        "1997-Q3",
+        "1998-Q3",
+        "1999-Q3",
+        "2000-Q3",
+        "2001-Q3",
+        "2002-Q3",
+        "2003-Q3",
+        "2004-Q3",
+        "2005-Q3"
+      ]
+    },
+    "AOL": {
+      "name": "AOL Time Warner, Inc.",
+      "best_rank": 12,
+      "periods": [
+        "1999-Q3",
+        "2000-Q3",
+        "2001-Q3",
+        "2002-Q3",
+        "2003-Q3"
+      ]
+    },
+    "SUNW": {
+      "name": "Sun Microsystems, Inc.",
+      "best_rank": 13,
+      "periods": [
+        "2000-Q3"
+      ]
+    },
+    "MOB": {
+      "name": "Mobil Corp",
+      "best_rank": 14,
+      "periods": [
+        "1995-Q3",
+        "1996-Q3",
+        "1997-Q3",
+        "1999-Q3"
+      ]
+    },
+    "NT": {
+      "name": "Nortel Networks Corp",
+      "best_rank": 14,
+      "periods": [
+        "2000-Q3"
+      ]
+    },
+    "DD": {
+      "name": "Du Pont (E.I.) de Nemours & Co., Inc",
+      "best_rank": 15,
+      "periods": [
+        "1995-Q3",
+        "1996-Q3",
+        "1997-Q3",
+        "1998-Q3"
+      ]
+    },
+    "MCIC": {
+      "name": "MCI Worldcom, Inc.",
+      "best_rank": 15,
+      "periods": [
+        "1998-Q3",
+        "1999-Q3"
+      ]
+    },
+    "COP": {
+      "name": "ConocoPhillips",
+      "best_rank": 17,
+      "periods": [
+        "2005-Q3",
+        "2006-Q3",
+        "2007-Q3",
+        "2008-Q3",
+        "2009-Q3"
+      ]
+    },
+    "BLS": {
+      "name": "BellSouth Corp",
+      "best_rank": 18,
+      "periods": [
+        "1995-Q3",
+        "1996-Q3",
+        "1998-Q3",
+        "1999-Q3",
+        "2001-Q3",
+        "2006-Q3"
+      ]
+    },
+    "DELL": {
+      "name": "Dell Inc.",
+      "best_rank": 19,
+      "periods": [
+        "1998-Q3",
+        "1999-Q3",
+        "2002-Q3",
+        "2003-Q3",
+        "2004-Q3",
+        "2005-Q3"
+      ]
+    },
+    "GTE": {
+      "name": "GTE Corp",
+      "best_rank": 20,
+      "periods": [
+        "1995-Q3",
+        "1996-Q3"
+      ]
+    },
+    "VIA": {
+      "name": "Viacom, Inc.",
+      "best_rank": 20,
+      "periods": [
+        "2000-Q3",
+        "2002-Q3",
+        "2003-Q3"
+      ]
+    },
+    "BEL": {
+      "name": "Bell Atlantic Corp",
+      "best_rank": 21,
+      "periods": [
+        "1997-Q3",
+        "1998-Q3",
+        "1999-Q3"
+      ]
+    },
+    "GS": {
+      "name": "Goldman Sachs Group, Inc",
+      "best_rank": 21,
+      "periods": [
+        "2007-Q3",
+        "2009-Q3"
+      ]
+    },
+    "GM": {
+      "name": "General Motors Corp",
+      "best_rank": 22,
+      "periods": [
+        "1995-Q3",
+        "1996-Q3"
+      ]
+    },
+    "SLB": {
+      "name": "Schlumberger, Ltd",
+      "best_rank": 22,
+      "periods": [
+        "2007-Q3",
+        "2008-Q3",
+        "2009-Q3"
+      ]
+    },
+    "SGP": {
+      "name": "Schering-Plough Corp",
+      "best_rank": 23,
+      "periods": [
+        "1998-Q3"
+      ]
+    },
+    "TWX": {
+      "name": "Time Warner, Inc",
+      "best_rank": 23,
+      "periods": [
+        "2000-Q3",
+        "2004-Q3",
+        "2005-Q3"
+      ]
+    },
+    "ABT": {
+      "name": "Abbott Lab",
+      "best_rank": 24,
+      "periods": [
+        "1995-Q3",
+        "1998-Q3",
+        "2001-Q3",
+        "2002-Q3",
+        "2004-Q3",
+        "2008-Q3",
+        "2009-Q3"
+      ]
+    },
+    "AN": {
+      "name": "Amoco Corp",
+      "best_rank": 24,
+      "periods": [
+        "1995-Q3",
+        "1996-Q3"
+      ]
+    },
+    "CPQ": {
+      "name": "Compaq Computer Corp.",
+      "best_rank": 24,
+      "periods": [
+        "1997-Q3"
+      ]
+    },
+    "G": {
+      "name": "Gillette Co",
+      "best_rank": 24,
+      "periods": [
+        "1996-Q3"
+      ]
+    },
+    "TYC": {
+      "name": "Tyco Laboratories, Inc",
+      "best_rank": 24,
+      "periods": [
+        "1999-Q3",
+        "2001-Q3"
+      ]
+    },
+    "WB": {
+      "name": "Wachovia Corp",
+      "best_rank": 25,
+      "periods": [
+        "2005-Q3",
+        "2006-Q3",
+        "2007-Q3"
+      ]
+    },
+    "MWD": {
+      "name": "Morgan Stanley, Dean Witter, Discover and Co",
+      "best_rank": 26,
+      "periods": [
+        "2000-Q3"
+      ]
+    },
+    "WYE": {
+      "name": "American Home Products Corp",
+      "best_rank": 26,
+      "periods": [
+        "1998-Q3",
+        "2001-Q3",
+        "2009-Q3"
+      ]
+    },
+    "BA": {
+      "name": "Boeing Co",
+      "best_rank": 28,
+      "periods": [
+        "1997-Q3"
+      ]
+    },
+    "MOT": {
+      "name": "Motorola, Inc",
+      "best_rank": 28,
+      "periods": [
+        "1995-Q3"
+      ]
+    },
+    "MS": {
+      "name": "Morgan Stanley",
+      "best_rank": 28,
+      "periods": [
+        "2006-Q3"
+      ]
+    },
+    "F": {
+      "name": "Ford Motor Co",
+      "best_rank": 29,
+      "periods": [
+        "1997-Q3"
+      ]
+    },
+    "AIT": {
+      "name": "Ameritech Corp",
+      "best_rank": 30,
+      "periods": [
+        "1995-Q3"
+      ]
+    },
+    "AXP": {
+      "name": "American Express Co",
+      "best_rank": 30,
+      "periods": [
+        "2004-Q3"
+      ]
+    },
+    "WLA": {
+      "name": "Warner-Lambert Co",
+      "best_rank": 30,
+      "periods": [
+        "1998-Q3"
+      ]
+    }
+  }
+}
