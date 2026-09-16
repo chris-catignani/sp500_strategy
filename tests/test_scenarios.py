@@ -12,9 +12,34 @@ from engine.scenarios import (
 class TestScenarios(unittest.TestCase):
     """Test suite for multi-horizon scenario matrix generation."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.default_scenario_data, cls.default_annual_data, cls.default_trades_data = (
+            build_scenario_and_apps_script_data()
+        )
+        cls.default_scenario_dict = {
+            "scenario_rows": cls.default_scenario_data["scenario_rows"],
+            "top3_annual": cls.default_annual_data["top_3"],
+            "top5_annual": cls.default_annual_data["top_5"],
+            "top10_annual": cls.default_annual_data["top_10"],
+            "world_top3_annual": cls.default_annual_data.get("world_top_3", []),
+            "world_top5_annual": cls.default_annual_data.get("world_top_5", []),
+            "world_top10_annual": cls.default_annual_data.get("world_top_10", []),
+            "spx_data": cls.default_annual_data["spx"],
+            "trades_data": cls.default_trades_data,
+            "era_data": cls.default_annual_data["era_data"],
+            "trajectory_data": cls.default_annual_data["trajectory_data"],
+            "drawdown_data": cls.default_annual_data["drawdown_data"],
+            "era_matrix": cls.default_annual_data.get("era_matrix", []),
+            "trajectory_matrix": cls.default_annual_data.get("trajectory_matrix", []),
+            "drawdown_matrix": cls.default_annual_data.get("drawdown_matrix", []),
+        }
+
     def test_build_scenario_and_apps_script_data_default(self):
         """Verify default invocation builds scenario data across universes and tax tiers."""
-        scenario_data, annual_data, trades_data = build_scenario_and_apps_script_data()
+        scenario_data = self.default_scenario_data
+        annual_data = self.default_annual_data
+        trades_data = self.default_trades_data
 
         self.assertIn("scenario_rows", scenario_data)
         scenario_rows = scenario_data["scenario_rows"]
@@ -119,7 +144,7 @@ class TestScenarios(unittest.TestCase):
 
     def test_build_default_scenario_data_helper(self):
         """Verify backward-compatible build_default_scenario_data dictionary contract."""
-        defaults = build_default_scenario_data()
+        defaults = self.default_scenario_dict
         self.assertIsInstance(defaults, dict)
         required_keys = [
             "scenario_rows",

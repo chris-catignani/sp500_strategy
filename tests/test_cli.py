@@ -13,6 +13,19 @@ from engine.selector import MarketCapSelector, PerformanceSelector
 class TestCLI(unittest.TestCase):
     """Test suite for CLI argument parsing, strategy execution, and reporting."""
 
+    @classmethod
+    def setUpClass(cls):
+        import engine.scenarios
+        import run_backtest
+        cls._cached_scenario_tuple = engine.scenarios.build_scenario_and_apps_script_data()
+        cls._orig_build_scenario = run_backtest.build_scenario_and_apps_script_data
+        run_backtest.build_scenario_and_apps_script_data = lambda *a, **kw: cls._cached_scenario_tuple
+
+    @classmethod
+    def tearDownClass(cls):
+        import run_backtest
+        run_backtest.build_scenario_and_apps_script_data = cls._orig_build_scenario
+
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.output_dir = os.path.join(self.test_dir, "outputs")
