@@ -1,0 +1,223 @@
+{
+  "1995": {
+    "year": 1995,
+    "form": "N-30D",
+    "filing_date": "1996-03-04",
+    "accession_number": "0000912057-96-003840",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000912057-96-003840.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_1995_N-30D_0000912057-96-003840.txt",
+    "file_size_bytes": 68259
+  },
+  "1996": {
+    "year": 1996,
+    "form": "N-30D",
+    "filing_date": "1997-02-26",
+    "accession_number": "0000912057-97-006798",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000912057-97-006798.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_1996_N-30D_0000912057-97-006798.txt",
+    "file_size_bytes": 72504
+  },
+  "1997": {
+    "year": 1997,
+    "form": "N-30D",
+    "filing_date": "1997-12-01",
+    "accession_number": "0000950135-97-004820",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-97-004820.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_1997_N-30D_0000950135-97-004820.txt",
+    "file_size_bytes": 75506
+  },
+  "1998": {
+    "year": 1998,
+    "form": "N-30D",
+    "filing_date": "1998-12-21",
+    "accession_number": "0000950135-98-006321",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-98-006321.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_1998_N-30D_0000950135-98-006321.txt",
+    "file_size_bytes": 70500
+  },
+  "1999": {
+    "year": 1999,
+    "form": "N-30D",
+    "filing_date": "1999-11-29",
+    "accession_number": "0000950135-99-005434",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-99-005434.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_1999_Q4_N-30D_0000950135-99-005434.txt"
+  },
+  "2000": {
+    "year": 2000,
+    "form": "N-30D",
+    "filing_date": "2000-11-21",
+    "accession_number": "0000950135-00-005227",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-00-005227.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2000_Q4_N-30D_0000950135-00-005227.txt"
+  },
+  "2001": {
+    "year": 2001,
+    "form": "N-30D",
+    "filing_date": "2001-11-21",
+    "accession_number": "0000950135-01-503664",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-01-503664.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2001_N-30D_0000950135-01-503664.txt",
+    "file_size_bytes": 68484
+  },
+  "2002": {
+    "year": 2002,
+    "form": "N-30D",
+    "filing_date": "2002-11-21",
+    "accession_number": "0000950135-02-005195",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-02-005195.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2002_N-30D_0000950135-02-005195.txt",
+    "file_size_bytes": 68942
+  },
+  "2003": {
+    "year": 2003,
+    "form": "N-30D",
+    "filing_date": "2003-11-26",
+    "accession_number": "0000950135-03-005842",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-03-005842.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2003_N-30D_0000950135-03-005842.txt",
+    "file_size_bytes": 68406
+  },
+  "2004": {
+    "year": 2004,
+    "form": "N-CSR",
+    "filing_date": "2004-12-03",
+    "accession_number": "0000950135-04-005558",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-04-005558.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2004_N-CSR_0000950135-04-005558.txt",
+    "file_size_bytes": 391112
+  },
+  "2005": {
+    "year": 2005,
+    "form": "N-30D",
+    "filing_date": "2005-12-01",
+    "accession_number": "0000950135-05-006765",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-05-006765.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2005_N-30D_0000950135-05-006765.txt",
+    "file_size_bytes": 77006
+  },
+  "2006": {
+    "year": 2006,
+    "form": "N-30D",
+    "filing_date": "2006-11-29",
+    "accession_number": "0000950135-06-007169",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-06-007169.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2006_N-30D_0000950135-06-007169.txt",
+    "file_size_bytes": 79230
+  },
+  "2007": {
+    "year": 2007,
+    "form": "N-30D",
+    "filing_date": "2007-12-04",
+    "accession_number": "0000950135-07-007280",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-07-007280.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2007_N-30D_0000950135-07-007280.txt",
+    "file_size_bytes": 79111
+  },
+  "2008": {
+    "year": 2008,
+    "form": "N-30D",
+    "filing_date": "2008-11-26",
+    "accession_number": "0000950135-08-007648",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-08-007648.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2008_Q4_N-30D_0000950135-08-007648.txt"
+  },
+  "2009": {
+    "year": 2009,
+    "form": "N-30D",
+    "filing_date": "2009-11-30",
+    "accession_number": "0000950123-09-066888",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950123-09-066888.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2009_N-30D_0000950123-09-066888.txt",
+    "file_size_bytes": 88759
+  },
+  "2010": {
+    "year": 2010,
+    "form": "N-30D",
+    "filing_date": "2010-11-30",
+    "accession_number": "0000950123-10-109631",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950123-10-109631.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2010_N-30D_0000950123-10-109631.txt",
+    "file_size_bytes": 533505
+  },
+  "2011": {
+    "year": 2011,
+    "form": "N-30D",
+    "filing_date": "2011-11-28",
+    "accession_number": "0000950123-11-100622",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950123-11-100622.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2011_N-30D_0000950123-11-100622.txt",
+    "file_size_bytes": 541721
+  },
+  "2012": {
+    "year": 2012,
+    "form": "N-30D",
+    "filing_date": "2012-11-29",
+    "accession_number": "0001193125-12-485808",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-12-485808.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2012_N-30D_0001193125-12-485808.txt",
+    "file_size_bytes": 750868
+  },
+  "2013": {
+    "year": 2013,
+    "form": "N-30D",
+    "filing_date": "2013-11-29",
+    "accession_number": "0001193125-13-457894",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-13-457894.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2013_N-30D_0001193125-13-457894.txt",
+    "file_size_bytes": 763033
+  },
+  "2014": {
+    "year": 2014,
+    "form": "N-30D",
+    "filing_date": "2014-05-30",
+    "accession_number": "0001193125-14-220028",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-14-220028.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2014_Q2_N-30D_0001193125-14-220028.txt"
+  },
+  "2015": {
+    "year": 2015,
+    "form": "N-30D",
+    "filing_date": "2015-11-30",
+    "accession_number": "0001193125-15-390230",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-15-390230.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2015_N-30D_0001193125-15-390230.txt",
+    "file_size_bytes": 862213
+  },
+  "2016": {
+    "year": 2016,
+    "form": "N-30D",
+    "filing_date": "2016-11-28",
+    "accession_number": "0001193125-16-777823",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-16-777823.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2016_N-30D_0001193125-16-777823.txt",
+    "file_size_bytes": 881393
+  },
+  "2017": {
+    "year": 2017,
+    "form": "N-30D",
+    "filing_date": "2017-11-29",
+    "accession_number": "0001193125-17-355427",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-17-355427.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2017_N-30D_0001193125-17-355427.txt",
+    "file_size_bytes": 906805
+  },
+  "2018": {
+    "year": 2018,
+    "form": "N-30D",
+    "filing_date": "2018-11-27",
+    "accession_number": "0001193125-18-334730",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-18-334730.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2018_N-30D_0001193125-18-334730.txt",
+    "file_size_bytes": 913085
+  },
+  "2019": {
+    "year": 2019,
+    "form": "N-30D",
+    "filing_date": "2019-11-27",
+    "accession_number": "0001193125-19-302203",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-19-302203.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2019_N-30D_0001193125-19-302203.txt",
+    "file_size_bytes": 917362
+  }
+}

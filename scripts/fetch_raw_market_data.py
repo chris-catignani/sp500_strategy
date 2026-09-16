@@ -17,6 +17,8 @@ TICKERS = [
     "BRK.B", "JPM", "LLY", "UNH", "V", "PG", "HD", "XOM",
     "JNJ", "WFC", "BAC", "C", "AIG", "IBM", "CVX", "WMT",
     "GE", "PFE", "CSCO", "INTC", "KO", "MRK", "MO", "T", "HPQ",
+    "AMGN", "BMY", "COST", "DIS", "FNMA", "MA", "MCD", "ORCL",
+    "PEP", "PM", "PYPL", "QCOM", "UPS", "VZ", "ABBV", "ADBE", "CMCSA",
 ]
 
 NON_US_TICKERS = [
