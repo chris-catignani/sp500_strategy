@@ -551,7 +551,7 @@ class TestN30DScheduleParser(unittest.TestCase):
     def test_universe_gap_report_matches_filings(self):
         """Every ticker in universe_gap_report.json has no raw json, and every omitted top-30 ticker has one."""
         from scripts.extract_ground_truth_from_sec import (
-            N30D_HISTORICAL_FILINGS, parse_n30d_filing, FILINGS_DIR,
+            FILINGS_DIR, iter_schedule_filings,
         )
 
         report_path = ROOT / "data" / "raw" / "ground_truth" / "universe_gap_report.json"
@@ -562,7 +562,9 @@ class TestN30DScheduleParser(unittest.TestCase):
         self.assertEqual(report["depth"], 30)
         self.assertEqual(
             report["source"],
-            "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (December 31 snapshots for 1995-1996, September 30 snapshots for 1997-2009)",
+            "26 SPY Form N-30D reports, fiscal years 1995-2019 (December 31 snapshots "
+            "for 1995-1996, September 30 snapshots for 1997-2019, plus the March 31, "
+            "2014 semi-annual report)",
         )
 
         tickers_dir = ROOT / "data" / "raw" / "tickers"
@@ -575,10 +577,10 @@ class TestN30DScheduleParser(unittest.TestCase):
                 f"Gap report claims {ticker} is missing, but data/raw/tickers/{ticker}.json exists",
             )
 
-        # Collect all tickers appearing in the top 30 across all 15 filings
+        # Collect all tickers appearing in the top 30 across all 26 archived schedules
         filing_top30_tickers = set()
-        for period, filename, *_ in N30D_HISTORICAL_FILINGS:
-            parsed = parse_n30d_filing(FILINGS_DIR / filename)
+        for _period, filename, _acc, _form, _rep, _filed, _ovr, parser in iter_schedule_filings():
+            parsed = parser(FILINGS_DIR / filename)
             for h in parsed["holdings"][:30]:
                 filing_top30_tickers.add(h["ticker"])
 
@@ -592,6 +594,170 @@ class TestN30DScheduleParser(unittest.TestCase):
 
         # Every ticker in gap report must actually appear in at least one filing's top 30
         self.assertEqual(reported_missing - filing_top30_tickers, set())
+
+
+class TestHtmlScheduleParser(unittest.TestCase):
+    """The 2010-2019 HTML-era Schedules of Investments must be parsed, not transcribed."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.extract_ground_truth_from_sec import (
+            parse_html_schedule_filing, FILINGS_DIR,
+        )
+        cls.parse = staticmethod(parse_html_schedule_filing)
+        cls.dir = FILINGS_DIR
+
+    def test_2010_parsed_total_matches_stated_total(self):
+        """The 2010 filing's parsed positions sum to the total it states, to the dollar."""
+        parsed = self.parse(self.dir / "SPY_2010_N-30D_0000950123-10-109631.txt")
+        self.assertEqual(parsed["stated_total_usd"], 78077851159.0)
+        self.assertEqual(parsed["total_val_usd"], parsed["stated_total_usd"])
+
+    def test_2019_page_break_repeat_rows_are_not_double_counted(self):
+        """The 2019 filing repeats three rows across a page break; each must count once."""
+        parsed = self.parse(self.dir / "SPY_2019_N-30D_0001193125-19-302203.txt")
+        self.assertEqual(parsed["stated_total_usd"], 274267350525.0)
+        self.assertEqual(parsed["total_val_usd"], parsed["stated_total_usd"])
+
+        unh = next(h for h in parsed["holdings"] if h["ticker"] == "UNH")
+        self.assertEqual(unh["val"], 2284798818.0)
+        self.assertEqual(unh["shares"], 10513523.0)
+
+    def test_all_html_era_filings_reconcile_and_resolve(self):
+        """Every 2010-2019 filing reconciles to its stated total and resolves its top 30."""
+        from scripts.extract_ground_truth_from_sec import (
+            HTML_ERA_FILINGS, assert_top_holdings_resolved,
+        )
+
+        self.assertEqual(len(HTML_ERA_FILINGS), 11)
+        for period, filename, *_ in HTML_ERA_FILINGS:
+            with self.subTest(period=period):
+                parsed = self.parse(self.dir / filename)
+                self.assertEqual(parsed["total_val_usd"], parsed["stated_total_usd"])
+                self.assertGreater(len(parsed["holdings"]), 450)
+                assert_top_holdings_resolved(
+                    parsed["holdings"], f"{period} ({filename})"
+                )
+
+    def test_fy2014_header_period_override_is_accepted(self):
+        """FY2014's header wrongly says 2013-09-30; the declared override accepts only that."""
+        from scripts.extract_ground_truth_from_sec import assert_filing_period_matches
+
+        path = self.dir / "SPY_2014_Q4_N-30D_0001193125-14-428689.txt"
+        assert_filing_period_matches(path, "2014-09-30", header_period_override="2013-09-30")
+
+    def test_filing_period_override_must_match_the_header_it_excuses(self):
+        """An override that does not equal the filing's own header value is still a failure."""
+        from scripts.extract_ground_truth_from_sec import (
+            ScheduleParseError, assert_filing_period_matches,
+        )
+
+        path = self.dir / "SPY_2014_Q4_N-30D_0001193125-14-428689.txt"
+        with self.assertRaises(ScheduleParseError):
+            assert_filing_period_matches(
+                path, "2014-09-30", header_period_override="2012-09-30"
+            )
+
+    def test_every_html_era_filing_passes_the_period_assertion(self):
+        """Each registered HTML-era filing agrees with its header, or declares the override."""
+        from scripts.extract_ground_truth_from_sec import (
+            HTML_ERA_FILINGS, assert_filing_period_matches,
+        )
+
+        for period, filename, _acc, _form, report_date, _filed, override in HTML_ERA_FILINGS:
+            with self.subTest(period=period):
+                assert_filing_period_matches(
+                    self.dir / filename, report_date, header_period_override=override
+                )
+
+    def test_only_fy2014_declares_a_header_override(self):
+        """The header override is a single documented exception, not a general relaxation."""
+        from scripts.extract_ground_truth_from_sec import HTML_ERA_FILINGS
+
+        overridden = [e[0] for e in HTML_ERA_FILINGS if e[6] is not None]
+        self.assertEqual(overridden, ["2014-Q3"])
+
+    def test_2019_alphabet_share_classes_consolidate_to_one_googl(self):
+        """The HTML filings list Alphabet twice; ranking must treat it as one issuer."""
+        parsed = self.parse(self.dir / "SPY_2019_N-30D_0001193125-19-302203.txt")
+        tickers = [h["ticker"] for h in parsed["holdings"]]
+        self.assertIn("GOOGL", tickers)
+        self.assertNotIn("GOOG", tickers)
+
+        googl = next(h for h in parsed["holdings"] if h["ticker"] == "GOOGL")
+        # Class C 4,090,422,764 + Class A 4,061,358,997
+        self.assertEqual(googl["val"], 8151781761.0)
+        self.assertEqual(parsed["holdings"][2]["ticker"], "GOOGL")
+
+    def test_html_era_consolidation_leaves_total_unchanged(self):
+        """Consolidating share classes must not create or destroy market value."""
+        from scripts.extract_ground_truth_from_sec import HTML_ERA_FILINGS
+
+        for period, filename, *_ in HTML_ERA_FILINGS:
+            with self.subTest(period=period):
+                parsed = self.parse(self.dir / filename)
+                self.assertEqual(
+                    round(sum(h["val"] for h in parsed["holdings"]), 2),
+                    round(parsed["stated_total_usd"], 2),
+                )
+
+
+class TestArchivedFilingCoverage(unittest.TestCase):
+    """No archived filing may sit unread. Zero rows is the failure this class exists to stop."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.extract_ground_truth_from_sec import (
+            FILINGS_DIR, HTML_ERA_FILINGS, N30D_HISTORICAL_FILINGS,
+            parse_html_schedule_filing, parse_n30d_filing,
+        )
+        cls.dir = FILINGS_DIR
+        cls.registry = {}
+        for entry in N30D_HISTORICAL_FILINGS:
+            cls.registry[entry[1]] = parse_n30d_filing
+        for entry in HTML_ERA_FILINGS:
+            cls.registry[entry[1]] = parse_html_schedule_filing
+        cls.expected_registered = len(N30D_HISTORICAL_FILINGS) + len(HTML_ERA_FILINGS)
+
+    def test_every_archived_spy_filing_is_registered_for_extraction(self):
+        """Each SPY_*.txt on disk is claimed by exactly one era's registry."""
+        self.assertEqual(len(self.registry), self.expected_registered)
+        archived = sorted(path.name for path in self.dir.glob("SPY_*.txt"))
+        self.assertEqual(sorted(self.registry), archived)
+
+    def test_manifest_points_at_the_filing_the_extraction_reads(self):
+        """The archive manifest and the extraction registry must name the same document.
+
+        The manifest's "2014" key previously named the March 31 semi-annual report,
+        which would have published a Q1 snapshot in the Q3 annual slot - the error #36
+        found in the 2004 entry, where the archived document was a different fund.
+        """
+        from scripts.extract_ground_truth_from_sec import HTML_ERA_FILINGS
+
+        with open(self.dir / "sec_annual_filings_manifest.json", "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+
+        self.assertEqual(
+            Path(manifest["2014"]["file_path"]).name,
+            "SPY_2014_Q4_N-30D_0001193125-14-428689.txt",
+        )
+        self.assertEqual(
+            Path(manifest["2014-semi-annual"]["file_path"]).name,
+            "SPY_2014_Q2_N-30D_0001193125-14-220028.txt",
+        )
+
+        registered = {entry[1] for entry in HTML_ERA_FILINGS}
+        for key in [str(y) for y in range(2010, 2020)] + ["2014-semi-annual"]:
+            with self.subTest(manifest_key=key):
+                self.assertIn(Path(manifest[key]["file_path"]).name, registered)
+
+    def test_every_archived_spy_filing_reconciles_to_its_stated_total(self):
+        """A filing that parses to zero rows, or to a sum the filing contradicts, fails."""
+        for filename, parser in sorted(self.registry.items()):
+            with self.subTest(filing=filename):
+                parsed = parser(self.dir / filename)
+                self.assertGreater(len(parsed["holdings"]), 0)
+                self.assertEqual(parsed["total_val_usd"], parsed["stated_total_usd"])
 
 
 class TestConsolidateHoldings(unittest.TestCase):
@@ -666,6 +832,22 @@ class TestConsolidateHoldings(unittest.TestCase):
         self.assertEqual(by_ticker["GOOGL"]["val"], 500.0)
         self.assertEqual(by_ticker["GOOGL"]["cusip"], "02079K305")
         self.assertEqual(by_ticker["GOOGL"]["name"], "Alphabet Inc.")
+
+    def test_single_class_issuer_keeps_its_filed_name(self):
+        """One class alone is not a consolidation; renaming it would misreport the filing.
+
+        SPY's 2006-2009 schedules list only Google Class A, years before the company
+        was renamed Alphabet. Relabelling that position "Alphabet Inc." would publish a
+        name no source document contains.
+        """
+        from scripts.extract_ground_truth_from_sec import consolidate_holdings
+
+        consolidated = consolidate_holdings([
+            {"name": "Google, Inc.", "ticker": "GOOGL", "cusip": "", "val": 300.0},
+        ])
+        self.assertEqual(len(consolidated), 1)
+        self.assertEqual(consolidated[0]["ticker"], "GOOGL")
+        self.assertEqual(consolidated[0]["name"], "Google, Inc.")
 
 
 class TestIssuerSeparation(unittest.TestCase):
@@ -747,6 +929,50 @@ class TestIssuerSeparation(unittest.TestCase):
             if year == 2009:
                 self.assertIn("TWX", by_ticker, f"{year}: missing TWX")
                 self.assertIn("TWC", by_ticker, f"{year}: missing TWC (Time Warner Cable)")
+
+    def test_html_era_filings_tickers_map_one_issuer_each(self):
+        """Across all 2010-2019 filings, no ticker may absorb multiple distinct source names.
+
+        Checks every position, not just the top 30: #36 shipped three patterns that
+        silently absorbed separately listed issuers because the check stopped at 30.
+        """
+        from scripts.extract_ground_truth_from_sec import (
+            FILINGS_DIR, HTML_ERA_FILINGS, _extract_html_positions,
+            _html_schedule_rows, _n30d_ticker, _resolve_html_schedule_bounds,
+        )
+
+        for period, filename, *_ in HTML_ERA_FILINGS:
+            with self.subTest(period=period):
+                path = FILINGS_DIR / filename
+                rows = _html_schedule_rows(path.read_text(encoding="utf-8", errors="replace"))
+                start, end = _resolve_html_schedule_bounds(rows, path.name)
+                positions = _extract_html_positions(rows, start, end)
+
+                ticker_to_names = {}
+                for pos in positions:
+                    ticker_to_names.setdefault(_n30d_ticker(pos["name"]), set()).add(pos["name"])
+
+                for ticker, names in sorted(ticker_to_names.items()):
+                    self.assertEqual(
+                        len(names), 1,
+                        f"{period}: ticker {ticker} backed by multiple distinct "
+                        f"source names: {sorted(names)}",
+                    )
+
+    def test_html_era_separately_listed_issuers_stay_separate(self):
+        """Alphabet's two share classes must reach ranking as two distinct positions."""
+        from scripts.extract_ground_truth_from_sec import (
+            FILINGS_DIR, _extract_html_positions, _html_schedule_rows,
+            _n30d_ticker, _resolve_html_schedule_bounds,
+        )
+
+        path = FILINGS_DIR / "SPY_2019_N-30D_0001193125-19-302203.txt"
+        rows = _html_schedule_rows(path.read_text(encoding="utf-8", errors="replace"))
+        start, end = _resolve_html_schedule_bounds(rows, path.name)
+        tickers = {_n30d_ticker(p["name"]) for p in _extract_html_positions(rows, start, end)}
+
+        self.assertIn("GOOGL", tickers)
+        self.assertIn("GOOG", tickers)
 
     def test_registered_issuer_consolidates_without_warning(self):
         from scripts.extract_ground_truth_from_sec import consolidate_holdings
@@ -861,6 +1087,35 @@ class TestIsValidSpyAnnualReport(unittest.TestCase):
             with self.assertRaises(ScheduleParseError) as ctx:
                 is_valid_spy_annual_report(file_path, 1995, content)
             self.assertIn(file_path.name, str(ctx.exception))
+
+    def test_schedule_parse_error_re_raised_for_html_era(self):
+        """A ScheduleParseError on a genuine SPY filing (2010-2019) must not be swallowed."""
+        from unittest.mock import patch
+        from scripts.download_all_historical_sec_filings import is_valid_spy_annual_report
+        from scripts.extract_ground_truth_from_sec import ScheduleParseError
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "SPY_2015_N-30D_0001193125-15-390230.txt"
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        with patch(
+            "scripts.download_all_historical_sec_filings.parse_html_schedule_filing",
+            side_effect=ScheduleParseError("stated total mismatch"),
+        ):
+            with self.assertRaises(ScheduleParseError) as ctx:
+                is_valid_spy_annual_report(file_path, 2015, content)
+            self.assertIn(file_path.name, str(ctx.exception))
+
+    def test_html_era_filing_is_parsed_during_validation(self):
+        """Validation must actually read the 2010-2019 schedule, not wave it through."""
+        from unittest.mock import patch
+        from scripts.download_all_historical_sec_filings import is_valid_spy_annual_report
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "SPY_2015_N-30D_0001193125-15-390230.txt"
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        with patch(
+            "scripts.download_all_historical_sec_filings.parse_html_schedule_filing"
+        ) as parser:
+            self.assertTrue(is_valid_spy_annual_report(file_path, 2015, content))
+        parser.assert_called_once_with(file_path)
 
 
 if __name__ == "__main__":

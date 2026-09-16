@@ -1,15 +1,18 @@
 """Extract and compile verified quarterly ground-truth S&P 500 Top 10 holdings from SEC filings.
 
-Parses all 18 SPY Form NPORT-P XML regulatory filings directly, verifies reporting dates (repPdDate),
-aggregates Alphabet share classes, and marks historical periods without point-in-time filing evidence as unverified.
+Parses all 20 SPY Form NPORT-P XML regulatory filings (2020-2024) and all 26 archived Form N-30D
+reports (1995-2019) directly - fixed-width text through 2009, HTML tables from 2010 - verifies
+reporting dates, aggregates Alphabet share classes, and marks historical periods without
+point-in-time filing evidence as unverified.
 
 Zero external dependencies - Python 3 standard library only.
 """
 
 import json
+from html.parser import HTMLParser
 from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple
 import warnings
 import xml.etree.ElementTree as ET
 
@@ -65,6 +68,10 @@ CUSIP_TO_TICKER = {
 }
 
 # Historical company names appearing in Form N-30D Schedules of Investments (1995-2019).
+# Overlaps NAME_FALLBACKS below, and the two are deliberately separate: this list is
+# order-sensitive and is the only mapping the schedule parsers have, while NAME_FALLBACKS
+# runs only when an NPORT-P holding's CUSIP and ticker both fail. An issuer added to one
+# usually belongs in the other - check both.
 # Includes constituents that no longer exist as independent issuers - these are required
 # to read the filings faithfully, whether or not the strategy can currently hold them.
 N30D_NAME_PATTERNS = [
@@ -167,25 +174,60 @@ N30D_NAME_PATTERNS = [
     (r"^Verizon\s+Communications", "VZ"),
     (r"^QUALCOMM", "QCOM"),
     (r"^Compaq\s+Computer", "CPQ"),
+    # Comcast's Special Class A (CMCSK) was listed separately from Class A (CMCSA)
+    # until the classes were combined in 2015, and must be matched first or the
+    # broader pattern swallows it and inflates CMCSA.
+    (r"^Comcast\s+Corp.*Special\s+Class\s*A", "CMCSK"),
     (r"^Comcast\s+Corp", "CMCSA"),
     (r"^Ford\s+Motor", "F"),
     (r"^GTE\s+Corp", "GTE"),
     (r"^Gillette\s+Co", "G"),
     (r"^Goldman\s+Sachs", "GS"),
+    # Google distributed Class C shares in April 2014 and was renamed Alphabet in 2015,
+    # so the FY2014 schedule lists two Google classes. They must be matched before the
+    # single-class pattern used for 2006-2013, which would otherwise absorb both.
+    (r"^Google.*Class\s*C", "GOOG"),
+    (r"^Google.*Class\s*A", "GOOGL"),
     (r"^Google[,\s]", "GOOGL"),
     (r"^McDonald'?s", "MCD"),
     # Morgan Stanley merged with Dean Witter Discover in 1997 and traded under MWD
     # until rebranding and changing ticker to MS in 2002. Must precede Morgan Stanley.
     (r"^Morgan\s+Stanley[,\s]+Dean\s+Witter", "MWD"),
     (r"^Morgan\s+Stanley", "MS"),
-    (r"^Motorola", "MOT"),
+    # Motorola split in January 2011 into Motorola Mobility (MMI, acquired by Google
+    # in 2012) and Motorola Solutions (MSI). Both were separate S&P 500 constituents,
+    # so they must be matched before the pre-split parent, and the parent is anchored
+    # to its own full name so a later Motorola entity fails loudly instead of merging.
+    (r"^Motorola\s+Mobility", "MMI"),
+    (r"^Motorola\s+Solutions", "MSI"),
+    (r"^Motorola,?\s*Inc", "MOT"),
     (r"^Schering-?Plough", "SGP"),
     (r"^Viacom\b", "VIA"),
     (r"^Wachovia\s+Corp", "WB"),
+    (r"^UnitedHealth\s+Group", "UNH"),
+    # 2010-2019 constituents. Share-class qualifiers are matched explicitly rather
+    # than by a bare issuer prefix: SPY holds exactly one class of each of these, so
+    # a class this project has not seen must fail loudly instead of being folded
+    # silently into its sibling.
+    (r"^Amazon\.com", "AMZN"),
+    (r"^Alphabet.*Class\s*C", "GOOG"),
+    (r"^Alphabet.*Class\s*A", "GOOGL"),
+    (r"^Berkshire\s+Hathaway.*Class\s*B", "BRK.B"),
+    (r"^Facebook.*Class\s*A", "META"),
+    (r"^Visa,?\s*Inc.*Class\s*A", "V"),
+    (r"^Mastercard,?\s*Inc.*Class\s*A", "MA"),
+    (r"^NVIDIA", "NVDA"),
+    (r"^Netflix", "NFLX"),
+    (r"^Gilead\s+Sciences", "GILD"),
+    # DowDuPont was the 2017-2019 merged entity, before the 2019 split into DOW,
+    # DD and CTVA; it traded as its own S&P 500 constituent under DWDP.
+    (r"^DowDuPont", "DWDP"),
+    (r"^AbbVie", "ABBV"),
     (r"^Warner-?Lambert", "WLA"),
 ]
 
-# Name pattern fallbacks if CUSIP lookup fails
+# Name pattern fallbacks if CUSIP lookup fails. See the note on N30D_NAME_PATTERNS above
+# for why the two lists overlap and when a new issuer belongs in both.
 NAME_FALLBACKS = [
     (r"Apple\s+Inc", "AAPL"),
     (r"Microsoft\s+Corp", "MSFT"),
@@ -256,6 +298,51 @@ N30D_HISTORICAL_FILINGS = [
      "0000950123-09-066888", "Form N-30D", "2009-09-30", "2009-11-30"),
 ]
 
+# Form N-30D annual and semi-annual reports filed as HTML (fiscal 2010-2019).
+# These carry the same Schedule of Investments as the fixed-width era but in HTML
+# tables, so they are read by parse_html_schedule_filing.
+#
+# The FY2014 annual report is the one entry whose SEC header cannot be trusted: the
+# submission declares CONFORMED PERIOD OF REPORT 2013-09-30, but the document is the
+# September 30, 2014 annual report - its cover page reads "Annual Report September 30,
+# 2014", its financial highlights lead with the year ended September 30, 2014, and it
+# reports $179,655,913,963 of total investments against FY2013's $144,553,504,942.
+# The header is a filer error, which is also why EDGAR returns no filing at period
+# 2014-09-30 for this CIK. The erroneous header value is declared explicitly below so
+# the period assertion stays a hard failure for every other filing.
+HTML_ERA_FILINGS = [
+    ("2010-Q3", "SPY_2010_N-30D_0000950123-10-109631.txt",
+     "0000950123-10-109631", "Form N-30D", "2010-09-30", "2010-11-30", None),
+    ("2011-Q3", "SPY_2011_N-30D_0000950123-11-100622.txt",
+     "0000950123-11-100622", "Form N-30D", "2011-09-30", "2011-11-28", None),
+    ("2012-Q3", "SPY_2012_N-30D_0001193125-12-485808.txt",
+     "0001193125-12-485808", "Form N-30D", "2012-09-30", "2012-11-29", None),
+    ("2013-Q3", "SPY_2013_N-30D_0001193125-13-457894.txt",
+     "0001193125-13-457894", "Form N-30D", "2013-09-30", "2013-11-29", None),
+    # Semi-annual report; a genuine March 31 point-in-time snapshot, so it is a Q1
+    # period rather than the Q3 annual slot the file name's "Q2" suggests.
+    ("2014-Q1", "SPY_2014_Q2_N-30D_0001193125-14-220028.txt",
+     "0001193125-14-220028", "Form N-30D", "2014-03-31", "2014-05-30", None),
+    ("2014-Q3", "SPY_2014_Q4_N-30D_0001193125-14-428689.txt",
+     "0001193125-14-428689", "Form N-30D", "2014-09-30", "2014-12-01", "2013-09-30"),
+    ("2015-Q3", "SPY_2015_N-30D_0001193125-15-390230.txt",
+     "0001193125-15-390230", "Form N-30D", "2015-09-30", "2015-11-30", None),
+    ("2016-Q3", "SPY_2016_N-30D_0001193125-16-777823.txt",
+     "0001193125-16-777823", "Form N-30D", "2016-09-30", "2016-11-28", None),
+    ("2017-Q3", "SPY_2017_N-30D_0001193125-17-355427.txt",
+     "0001193125-17-355427", "Form N-30D", "2017-09-30", "2017-11-29", None),
+    ("2018-Q3", "SPY_2018_N-30D_0001193125-18-334730.txt",
+     "0001193125-18-334730", "Form N-30D", "2018-09-30", "2018-11-27", None),
+    ("2019-Q3", "SPY_2019_N-30D_0001193125-19-302203.txt",
+     "0001193125-19-302203", "Form N-30D", "2019-09-30", "2019-11-27", None),
+]
+
+# (period, filename, accession, form, report_date, filing_date,
+#  header_period_override, parser) - what iter_schedule_filings yields.
+ScheduleFiling = Tuple[
+    str, str, str, str, str, str, Optional[str], Callable[[Path], Dict[str, Any]]
+]
+
 _QUARTER_DATES = (
     ("Q1", "03-31"),
     ("Q2", "06-30"),
@@ -263,11 +350,15 @@ _QUARTER_DATES = (
     ("Q4", "12-31"),
 )
 
-_verified_historical_periods = {entry[0] for entry in N30D_HISTORICAL_FILINGS}
-_historical_years = sorted({int(entry[0].split("-")[0]) for entry in N30D_HISTORICAL_FILINGS})
+_SCHEDULE_PERIODS = [entry[0] for entry in N30D_HISTORICAL_FILINGS] + [
+    entry[0] for entry in HTML_ERA_FILINGS
+]
 
-# Historical quarters adjacent to the extracted annual reports that have no point-in-time filing.
-# Derived from N30D_HISTORICAL_FILINGS rather than hardcoding so coverage cannot drift.
+_verified_historical_periods = set(_SCHEDULE_PERIODS)
+_historical_years = sorted({int(period.split("-")[0]) for period in _SCHEDULE_PERIODS})
+
+# Historical quarters adjacent to the extracted reports that have no point-in-time filing.
+# Derived from the filing registries rather than hardcoded so coverage cannot drift.
 UNVERIFIED_HISTORICAL_PERIODS = [
     (
         f"{year}-{q}",
@@ -347,11 +438,22 @@ def assert_top_holdings_resolved(holdings, filing_label, depth=30):
 _SEC_PERIOD = re.compile(r"^CONFORMED PERIOD OF REPORT:\s*(\d{4})(\d{2})(\d{2})", re.M)
 
 
-def assert_filing_period_matches(txt_path: Any, expected_report_date: str) -> None:
+def assert_filing_period_matches(
+    txt_path: Any,
+    expected_report_date: str,
+    header_period_override: Optional[str] = None,
+) -> None:
     """Refuse a filing whose own stated period disagrees with its configured one.
 
     Parses CONFORMED PERIOD OF REPORT: YYYYMMDD from the SEC header. Reads only
     the header (content[:4000]) to avoid loading the full document.
+
+    `header_period_override` names the one wrong value a known-defective header is
+    allowed to carry - currently only SPY's FY2014 annual report, whose submission
+    header repeats the prior year's period while the document itself is the
+    September 30, 2014 report. The override must equal the header exactly, so it
+    excuses one identified defect rather than weakening the check: any other
+    disagreement, including a different wrong value in the same filing, still fails.
     """
     path = Path(txt_path)
     with open(path, "r", encoding="utf-8", errors="replace") as f:
@@ -364,7 +466,7 @@ def assert_filing_period_matches(txt_path: Any, expected_report_date: str) -> No
         )
 
     stated_date = f"{match.group(1)}-{match.group(2)}-{match.group(3)}"
-    if stated_date != expected_report_date:
+    if stated_date != expected_report_date and stated_date != header_period_override:
         raise ScheduleParseError(
             f"{path.name}: conformed period of report ({stated_date}) "
             f"does not match expected report date ({expected_report_date})"
@@ -374,6 +476,12 @@ def assert_filing_period_matches(txt_path: Any, expected_report_date: str) -> No
 def _n30d_ticker(name: str) -> str:
     """Map a Schedule of Investments company name to its ticker symbol."""
     cleaned = re.sub(r"\s*\*+\s*$", "", name).strip()
+    # The HTML era typesets apostrophes as U+2019 ("McDonald’s Corp.") and leads
+    # issuer names with the definite article ("The Coca-Cola Co."). Both are
+    # typographic, not a different issuer, so they are normalised away before
+    # matching rather than duplicated across every affected pattern.
+    cleaned = cleaned.replace("\u2019", "'")
+    cleaned = re.sub(r"^The\s+", "", cleaned)
     for pattern, ticker in N30D_NAME_PATTERNS:
         if re.search(pattern, cleaned, re.IGNORECASE):
             return ticker
@@ -453,6 +561,49 @@ def _extract_n30d_positions(
     return positions
 
 
+def _rank_schedule_positions(
+    positions: List[Dict[str, Any]], stated_total: float
+) -> Dict[str, Any]:
+    """Consolidate, rank and weight schedule positions into the common holdings shape.
+
+    Every schedule parser - fixed-width and HTML - ends here, so consolidation of an
+    issuer's share classes, descending rank and weight are defined once rather than
+    once per filing format.
+    """
+    # First consolidate multiple positions (e.g. share classes) in the same issuer.
+    consolidated: Dict[str, Dict[str, Any]] = {}
+    for pos in positions:
+        ticker = _n30d_ticker(pos["name"])
+        if ticker in consolidated:
+            consolidated[ticker]["val"] += pos["val"]
+            consolidated[ticker]["shares"] += pos["shares"]
+        else:
+            consolidated[ticker] = {
+                "name": pos["name"],
+                "ticker": ticker,
+                "shares": pos["shares"],
+                "val": pos["val"],
+            }
+
+    # Then consolidate registered multi-class issuers at the issuer level, through the
+    # same registry the NPORT-P parser uses. The HTML-era filings list Alphabet as two
+    # positions, and ranking them separately would misstate the Top 10 exactly as it
+    # would for 2020-2024.
+    holdings = consolidate_holdings(list(consolidated.values()))
+
+    holdings.sort(key=lambda h: h["val"], reverse=True)
+    total_val = sum(h["val"] for h in holdings)
+    for i, h in enumerate(holdings, 1):
+        h["rank"] = i
+        h["weight"] = h["val"] / total_val if total_val > 0 else 0.0
+
+    return {
+        "total_val_usd": total_val,
+        "stated_total_usd": stated_total,
+        "holdings": holdings,
+    }
+
+
 def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
     """Parse a Form N-30D / N-CSR Schedule of Investments into ranked holdings.
 
@@ -491,32 +642,175 @@ def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
             f"stated total ({stated_total:,.2f}); diff = {diff:,.2f}"
         )
 
-    # Consolidate multiple positions (e.g. share classes) in the same issuer.
-    consolidated: Dict[str, Dict[str, Any]] = {}
-    for pos in positions:
-        ticker = _n30d_ticker(pos["name"])
-        if ticker in consolidated:
-            consolidated[ticker]["val"] += pos["val"]
-            consolidated[ticker]["shares"] += pos["shares"]
-        else:
-            consolidated[ticker] = {
-                "name": pos["name"],
-                "ticker": ticker,
-                "shares": pos["shares"],
-                "val": pos["val"],
-            }
+    return _rank_schedule_positions(positions, stated_total)
 
-    holdings = sorted(consolidated.values(), key=lambda h: h["val"], reverse=True)
-    total_val = sum(h["val"] for h in holdings)
-    for i, h in enumerate(holdings, 1):
-        h["rank"] = i
-        h["weight"] = h["val"] / total_val if total_val > 0 else 0.0
 
-    return {
-        "total_val_usd": total_val,
-        "stated_total_usd": stated_total,
-        "holdings": holdings,
-    }
+# ---------------------------------------------------------------------------
+# HTML-era Schedule of Investments (2010-2019)
+#
+# From fiscal 2010 the annual reports stopped being fixed-width text and became
+# HTML tables, so the dot-leader row grammar above cannot read them. The anchors
+# are the same two the fixed-width parser uses - the "Common Stocks / Shares /
+# Value" column header and the closing "Total Common Stocks" - because bounding
+# the read to a single fund's schedule is what keeps a multi-fund document from
+# being mistaken for one portfolio.
+# ---------------------------------------------------------------------------
+
+_HTML_NUMERIC_CELL = re.compile(r"^\d[\d,]*$")
+_HTML_TOTAL_ROW = re.compile(r"^\s*total\s+common\s+stocks", re.IGNORECASE)
+# Footnote markers are single lowercase letters in parentheses and may repeat.
+# Share-class qualifiers such as "(Class B)" are also trailing parentheticals and
+# must survive, so only single-letter groups are stripped.
+_HTML_FOOTNOTE_SUFFIX = re.compile(r"(?:\s*\([a-z]\))+\s*$")
+
+
+class _HtmlScheduleRowParser(HTMLParser):
+    """Collect each HTML table row as a list of its cells' visible text.
+
+    The filings nest font and paragraph markup inside every cell and pad the
+    layout with empty spacer cells, so cell text is accumulated across child
+    elements and blank cells are dropped.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.rows: List[List[str]] = []
+        self._row: Optional[List[str]] = None
+        self._cell: Optional[List[str]] = None
+
+    def handle_starttag(self, tag: str, attrs: Any) -> None:
+        if tag == "tr":
+            self._row = []
+        elif tag == "td":
+            self._cell = []
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "td" and self._cell is not None:
+            text = re.sub(r"\s+", " ", "".join(self._cell).replace("\xa0", " ")).strip()
+            if self._row is not None and text:
+                self._row.append(text)
+            self._cell = None
+        elif tag == "tr" and self._row is not None:
+            if self._row:
+                self.rows.append(self._row)
+            self._row = None
+
+    def handle_data(self, data: str) -> None:
+        if self._cell is not None:
+            self._cell.append(data)
+
+
+def _html_schedule_rows(html_text: str) -> List[List[str]]:
+    """Parse filing HTML into non-empty table rows of non-empty cell text."""
+    parser = _HtmlScheduleRowParser()
+    parser.feed(html_text)
+    parser.close()
+    return parser.rows
+
+
+def _resolve_html_schedule_bounds(rows: List[List[str]], label: str) -> Tuple[int, int]:
+    """Find the schedule column-header row index and the closing total row index after it.
+
+    Mirrors _resolve_n30d_schedule_bounds so the HTML and fixed-width parsers bound
+    a schedule identically, and is shared with the test suite so the two cannot drift.
+    """
+    start = None
+    for i, row in enumerate(rows):
+        lowered = [cell.lower() for cell in row]
+        if (
+            any(cell.startswith("common stocks") for cell in lowered)
+            and "shares" in lowered
+            and "value" in lowered
+        ):
+            start = i
+            break
+
+    if start is None:
+        raise ScheduleParseError(
+            f"{label}: missing schedule column header row (Common Stocks / Shares / Value)"
+        )
+
+    for i in range(start + 1, len(rows)):
+        if _HTML_TOTAL_ROW.match(rows[i][0]):
+            return start, i
+
+    raise ScheduleParseError(
+        f"{label}: missing closing 'Total Common Stocks' row after header row {start}"
+    )
+
+
+def _extract_html_positions(
+    rows: List[List[str]], start: int, end: int
+) -> List[Dict[str, Any]]:
+    """Extract position rows from HTML table rows within schedule bounds.
+
+    A position row leads with a company name and carries at least two numeric
+    cells; the last two are the share count and the market value. This is the
+    single definition of how an HTML-era schedule row is read, shared between
+    parse_html_schedule_filing and the test suite.
+    """
+    positions: List[Dict[str, Any]] = []
+    # The 2019 filing repeats the last three rows of a page at the top of the next
+    # one, which would count United Rentals, United Technologies and UnitedHealth
+    # twice. A row identical in issuer, share count and market value to one already
+    # read is such a repeat: a genuine second position in the same issuer is another
+    # share class and never carries identical figures. Over-dropping cannot pass
+    # unnoticed because the caller reconciles the sum against the stated total.
+    seen: set = set()
+    for row in rows[start + 1 : end]:
+        name = row[0]
+        if _HTML_NUMERIC_CELL.match(name):
+            continue
+        numeric = [cell for cell in row if _HTML_NUMERIC_CELL.match(cell)]
+        if len(numeric) < 2:
+            continue
+        shares = float(numeric[-2].replace(",", ""))
+        value = float(numeric[-1].replace(",", ""))
+        if shares <= 0 or value <= 0:
+            continue
+        clean_name = _HTML_FOOTNOTE_SUFFIX.sub("", name).strip()
+        key = (clean_name, shares, value)
+        if key in seen:
+            continue
+        seen.add(key)
+        positions.append({"name": clean_name, "shares": shares, "val": value})
+    return positions
+
+
+def parse_html_schedule_filing(txt_path: Path) -> Dict[str, Any]:
+    """Parse an HTML-era (2010-2019) Schedule of Investments into ranked holdings.
+
+    Returns the same shape as parse_n30d_filing and parse_xml_filing, so
+    consolidation, ranking and reconciliation are written once downstream.
+
+    Args:
+        txt_path: Path to the archived filing text.
+
+    Returns:
+        Dict with 'total_val_usd', 'stated_total_usd', and 'holdings'
+        (ranked descending by market value).
+    """
+    rows = _html_schedule_rows(txt_path.read_text(encoding="utf-8", errors="replace"))
+    start, end = _resolve_html_schedule_bounds(rows, txt_path.name)
+
+    stated_cells = [c for c in rows[end] if _HTML_NUMERIC_CELL.match(c)]
+    if not stated_cells:
+        raise ScheduleParseError(
+            f"{txt_path.name}: closing total row carries no value: {rows[end]!r}"
+        )
+    stated_total = float(stated_cells[-1].replace(",", ""))
+
+    positions = _extract_html_positions(rows, start, end)
+
+    parsed_sum = sum(pos["val"] for pos in positions)
+    diff = abs(parsed_sum - stated_total)
+    if diff >= 1.0:
+        raise ScheduleParseError(
+            f"{txt_path.name}: parsed sum ({parsed_sum:,.2f}) does not match "
+            f"stated total ({stated_total:,.2f}); diff = {diff:,.2f}"
+        )
+
+    return _rank_schedule_positions(positions, stated_total)
 
 
 CONSOLIDATED_ISSUERS: Dict[str, Dict[str, Any]] = {
@@ -610,6 +904,7 @@ def consolidate_holdings(
     _warn_unregistered_multi_class(raw_holdings, cusip_map, ticker_map)
 
     aggregated: Dict[str, Dict[str, Any]] = {}
+    members: Dict[str, List[Dict[str, Any]]] = {}
     passthrough: List[Dict[str, Any]] = []
 
     for h in raw_holdings:
@@ -627,11 +922,32 @@ def consolidate_holdings(
                     "cusip": spec["primary_cusip"],
                     "val": 0.0,
                 }
-            aggregated[issuer_key]["val"] += float(h.get("val", 0.0))
+                members[issuer_key] = []
+            record = aggregated[issuer_key]
+            members[issuer_key].append(dict(h))
+            record["val"] += float(h.get("val", 0.0))
+            # Schedule parsers carry a share count; NPORT-P holdings do not. Summing it
+            # only when present keeps one holdings shape across all three parsers.
+            if "shares" in h:
+                record["shares"] = record.get("shares", 0.0) + float(h["shares"])
         else:
             passthrough.append(dict(h))
 
-    return passthrough + list(aggregated.values())
+    # A registered issuer that contributed only one class was never consolidated, so it
+    # keeps the name and ticker the filing gave it. SPY's 2006-2009 schedules list only
+    # Google Class A, years before the Alphabet rename; relabelling that single position
+    # with the canonical issuer name would publish a name no source document contains.
+    resolved = []
+    for issuer_key, record in aggregated.items():
+        classes = members[issuer_key]
+        if len(classes) == 1:
+            sole = dict(classes[0])
+            sole["val"] = record["val"]
+            resolved.append(sole)
+        else:
+            resolved.append(record)
+
+    return passthrough + resolved
 
 
 def parse_xml_filing(xml_path: Path) -> Dict[str, Any]:
@@ -691,20 +1007,38 @@ def parse_xml_filing(xml_path: Path) -> Dict[str, Any]:
     }
 
 
+def iter_schedule_filings() -> Iterator[ScheduleFiling]:
+    """Yield every archived Schedule of Investments with the parser that reads it.
+
+    Both eras produce the same holdings shape, so consolidation, ranking,
+    reconciliation and the gap report are written against this one sequence rather
+    than once per filing format.
+
+    Yields:
+        (period, filename, accession, form, report_date, filing_date,
+         header_period_override, parser)
+    """
+    for period, filename, acc, form, rep_dt, file_dt in N30D_HISTORICAL_FILINGS:
+        yield period, filename, acc, form, rep_dt, file_dt, None, parse_n30d_filing
+    for period, filename, acc, form, rep_dt, file_dt, override in HTML_ERA_FILINGS:
+        yield period, filename, acc, form, rep_dt, file_dt, override, parse_html_schedule_filing
+
+
 def build_universe_gap_report(
     depth: int = 30,
     parsed_filings: Optional[List[Tuple[str, Dict[str, Any]]]] = None,
 ) -> Dict[str, Any]:
     """Collect tickers in historical Form N-30D filings' top `depth` missing from data/raw/tickers/.
 
-    Enumerates the historical survivorship gap across all 15 annual filings (1995-2009).
-    For each missing constituent, records its best rank, company name, and the list of
-    periods where it ranks in the top `depth`.
+    Enumerates the historical survivorship gap across all 26 archived schedules
+    (1995-2019). For each missing constituent, records its best rank, company name,
+    and the list of periods where it ranks in the top `depth`.
     """
     if parsed_filings is None:
         parsed_filings = [
-            (period, parse_n30d_filing(FILINGS_DIR / filename))
-            for period, filename, *_ in N30D_HISTORICAL_FILINGS
+            (period, parser(FILINGS_DIR / filename))
+            for period, filename, _acc, _form, _rep, _filed, _ovr, parser
+            in iter_schedule_filings()
         ]
 
     missing: Dict[str, Dict[str, Any]] = {}
@@ -737,7 +1071,11 @@ def build_universe_gap_report(
             "Top constituents from historical SPY Form N-30D annual filings that have no "
             "market data files in data/raw/tickers/, enumerating the historical survivorship gap."
         ),
-        "source": "15 SPY Form N-30D annual reports, fiscal years 1995-2009 (December 31 snapshots for 1995-1996, September 30 snapshots for 1997-2009)",
+        "source": (
+            "26 SPY Form N-30D reports, fiscal years 1995-2019 (December 31 snapshots "
+            "for 1995-1996, September 30 snapshots for 1997-2019, plus the March 31, "
+            "2014 semi-annual report)"
+        ),
         "depth": depth,
         "missing_tickers": sorted_missing,
     }
@@ -769,10 +1107,10 @@ def main():
         }
 
     parsed_historical = []
-    for period, filename, acc, form, rep_dt, file_dt in N30D_HISTORICAL_FILINGS:
+    for period, filename, acc, form, rep_dt, file_dt, override, parser in iter_schedule_filings():
         filing_path = FILINGS_DIR / filename
-        assert_filing_period_matches(filing_path, rep_dt)
-        parsed = parse_n30d_filing(filing_path)
+        assert_filing_period_matches(filing_path, rep_dt, header_period_override=override)
+        parsed = parser(filing_path)
         assert_top_holdings_resolved(parsed["holdings"], f"{period} ({filename})")
         parsed_historical.append((period, parsed))
         top10 = parsed["holdings"][:10]
@@ -825,13 +1163,13 @@ def main():
     verified_count = sum(1 for p in ground_truth["periods"].values() if p["verified"])
     print(f"  Verified periods: {verified_count} / {len(ground_truth['periods'])}")
 
-    # 3. Universe gap report across all 15 historical filings
+    # 3. Universe gap report across all 26 historical filings
     gap_report = build_universe_gap_report(depth=30, parsed_filings=parsed_historical)
     with open(UNIVERSE_GAP_REPORT_FILE, "w", encoding="utf-8") as f:
         json.dump(gap_report, f, indent=2)
 
     print(f"\nUniverse gap report written to {UNIVERSE_GAP_REPORT_FILE}")
-    print(f"Missing tickers from Top 30 across 15 historical filings ({len(gap_report['missing_tickers'])} total):")
+    print(f"Missing tickers from Top 30 across 26 historical filings ({len(gap_report['missing_tickers'])} total):")
     for ticker, info in gap_report["missing_tickers"].items():
         periods_str = ", ".join(info["periods"])
         print(f"  {ticker:<5} best rank #{info['best_rank']:<2} in {periods_str} ({info['name']})")

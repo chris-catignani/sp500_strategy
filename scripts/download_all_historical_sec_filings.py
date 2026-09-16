@@ -25,7 +25,11 @@ HEADERS = {"User-Agent": "AcademicResearch sp500strategy@example.com"}
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts.extract_ground_truth_from_sec import parse_n30d_filing, ScheduleParseError
+from scripts.extract_ground_truth_from_sec import (
+    parse_html_schedule_filing,
+    parse_n30d_filing,
+    ScheduleParseError,
+)
 
 OUTPUT_DIR = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
 
@@ -71,9 +75,10 @@ def is_valid_spy_annual_report(file_path: Path, year: int, content: str) -> bool
     2. Document-level exclusion: co-filed trusts sharing CIK 0000884394 (such as
        Select Sector SPDR Trust) share the conformed filer identity, so candidate
        descriptions containing 'SELECT SECTOR' are rejected.
-    3. Faithful-parse enforcement: for the fixed-width era (<= 2009), once filer identity
-       and document exclusion pass, the candidate IS SPY's report. Any ScheduleParseError
-       is a real reconciliation failure and must not be swallowed.
+    3. Faithful-parse enforcement: once filer identity and document exclusion pass, the
+       candidate IS SPY's report, in either era. Any ScheduleParseError is a real
+       reconciliation failure and must not be swallowed. The era selects the parser:
+       fixed-width text through 2009, HTML tables from 2010.
     """
     header_lines = content[:5000].splitlines()[:100]
     description = ""
@@ -97,15 +102,17 @@ def is_valid_spy_annual_report(file_path: Path, year: int, content: str) -> bool
     if "SELECT SECTOR" in description:
         return False
 
-    # 3. Faithful-parse enforcement for the fixed-width era:
-    # For year <= 2009, candidates passing the above checks are SPY's own reports.
-    # A ScheduleParseError indicates an extraction/reconciliation failure on SPY itself
-    # and must be raised rather than swallowed so it does not silently drop the filing.
-    if year <= 2009:
-        try:
-            parse_n30d_filing(file_path)
-        except ScheduleParseError as err:
-            raise ScheduleParseError(f"{Path(file_path).name}: {err}") from err
+    # 3. Faithful-parse enforcement:
+    # Candidates passing the above checks are SPY's own reports. A ScheduleParseError
+    # indicates an extraction/reconciliation failure on SPY itself and must be raised
+    # rather than swallowed so it does not silently drop the filing. The 2010-2019
+    # reports are HTML rather than fixed-width text, so they were previously exempt
+    # from this check; reading them with the HTML parser closes that carve-out.
+    parser = parse_n30d_filing if year <= 2009 else parse_html_schedule_filing
+    try:
+        parser(file_path)
+    except ScheduleParseError as err:
+        raise ScheduleParseError(f"{Path(file_path).name}: {err}") from err
 
     return True
 

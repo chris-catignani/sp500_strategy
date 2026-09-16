@@ -182,10 +182,24 @@
   "2014": {
     "year": 2014,
     "form": "N-30D",
+    "filing_date": "2014-12-01",
+    "accession_number": "0001193125-14-428689",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-14-428689.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2014_Q4_N-30D_0001193125-14-428689.txt",
+    "file_size_bytes": 769162,
+    "report_date": "2014-09-30",
+    "header_period_override": "2013-09-30",
+    "note": "FY2014 annual report. The SEC submission header declares CONFORMED PERIOD OF REPORT 2013-09-30, which is a filer error: the cover page reads 'Annual Report September 30, 2014', the financial highlights lead with the year ended September 30, 2014, and total investments are $179,655,913,963 against FY2013's $144,553,504,942. The erroneous header is also why EDGAR returns no filing at period 2014-09-30 for this CIK."
+  },
+  "2014-semi-annual": {
+    "year": 2014,
+    "form": "N-30D",
     "filing_date": "2014-05-30",
     "accession_number": "0001193125-14-220028",
     "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-14-220028.txt",
-    "file_path": "data/raw/ground_truth/sec_filings/SPY_2014_Q2_N-30D_0001193125-14-220028.txt"
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2014_Q2_N-30D_0001193125-14-220028.txt",
+    "report_date": "2014-03-31",
+    "note": "Semi-annual report, a March 31, 2014 point-in-time snapshot. Held as the 2014-Q1 period; it is not the FY2014 annual report and must not fill the Q3 annual slot."
   },
   "2015": {
     "year": 2015,
