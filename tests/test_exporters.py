@@ -537,18 +537,18 @@ class TestExporters(unittest.TestCase):
             data = json.loads(proc.stdout)
 
             # Compare standard tiers against exact backtest results
-            self.assertAlmostEqual(data["cagr0"], 0.142980, places=5)
-            self.assertAlmostEqual(data["cagr15"], 0.130214, places=5)
-            self.assertAlmostEqual(data["cagr20"], 0.125637, places=5)
-            self.assertAlmostEqual(data["cagr30"], 0.115907, places=5)
-            self.assertAlmostEqual(data["cagr37"], 0.108565, places=5)
+            self.assertAlmostEqual(data["cagr0"], 0.141779, places=5)
+            self.assertAlmostEqual(data["cagr15"], 0.129224, places=5)
+            self.assertAlmostEqual(data["cagr20"], 0.124719, places=5)
+            self.assertAlmostEqual(data["cagr30"], 0.115138, places=5)
+            self.assertAlmostEqual(data["cagr37"], 0.107903, places=5)
 
             # Piecewise interpolation: 25% is halfway between 20% and 30%
-            expected_25 = 0.125637 + 0.5 * (0.115907 - 0.125637)
+            expected_25 = 0.124719 + 0.5 * (0.115138 - 0.124719)
             self.assertAlmostEqual(data["cagr25Interp"], expected_25, places=5)
 
             # Custom dimension lookup
-            self.assertAlmostEqual(data["customDim"], 0.286515, places=5)
+            self.assertAlmostEqual(data["customDim"], 0.247871, places=5)
 
             # Benchmark lookups
             self.assertAlmostEqual(data["spxBench"], 0.092550, places=5)

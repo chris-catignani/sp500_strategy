@@ -7,6 +7,15 @@ from typing import Dict, List, Optional, Tuple, Union
 from engine.models import ConstituentSnapshot
 
 
+def _optional_float(value: Optional[Union[float, int, str]]) -> Optional[float]:
+    """Coerce a dataset field to float, preserving null as None.
+
+    A null ``trailing_1y_return`` means the trailing window is not computable from
+    primary data and must stay unknown rather than collapsing to 0.0.
+    """
+    return None if value is None else float(value)
+
+
 class DataLoader:
     """Loads point-in-time constituent snapshots and split-adjusted prices."""
 
@@ -222,7 +231,7 @@ class DataLoader:
                 ticker=c["ticker"],
                 name=c["name"],
                 market_cap_weight=float(c["market_cap_weight"]),
-                trailing_1y_return=float(c["trailing_1y_return"]),
+                trailing_1y_return=_optional_float(c["trailing_1y_return"]),
                 year=int(c["year"]),
             )
             for c in items
@@ -527,7 +536,7 @@ class DataLoader:
                     ticker=item["ticker"],
                     name=item["name"],
                     market_cap_weight=float(item["market_cap_weight"]),
-                    trailing_1y_return=float(item["trailing_1y_return"]),
+                    trailing_1y_return=_optional_float(item["trailing_1y_return"]),
                     year=int(item["year"]),
                     quarter=int(item.get("quarter", quarter)),
                 )

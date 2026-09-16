@@ -223,5 +223,56 @@ class TestSelector(unittest.TestCase):
         self.assertIn("resolve_selector", engine.__all__)
 
 
+
+class TestUnknownTrailingReturnHandling(unittest.TestCase):
+    """Constituents with no computable trailing return must not be scored as 0.0.
+
+    A missing price history (e.g. Philip Morris at 2008 year-end, spun off from Altria in
+    March 2008) previously fell back to a 0.0 trailing return. In a year where the entire
+    candidate pool was deeply negative, a synthetic 0.0 ranked such a name near the top of
+    the momentum ordering purely because data was absent.
+    """
+
+    def setUp(self):
+        self.universe = [
+            ConstituentSnapshot("WMT", "Walmart Inc.", 0.026, 0.20, 2008),
+            ConstituentSnapshot("WFC", "Wells Fargo & Company", 0.0123, 0.0195, 2008),
+            ConstituentSnapshot("PM", "Philip Morris International Inc.", 0.011, None, 2008),
+            ConstituentSnapshot("JNJ", "Johnson & Johnson", 0.022, -0.0761, 2008),
+            ConstituentSnapshot("XOM", "Exxon Mobil Corporation", 0.049, -0.1314, 2008),
+        ]
+
+    def test_performance_selector_excludes_unknown_trailing_return(self):
+        """PerformanceSelector must skip constituents whose trailing return is unknown."""
+        selector = PerformanceSelector(n=3)
+        with self.assertWarns(UserWarning):
+            targets = selector.select(self.universe)
+        tickers = [t.ticker for t in targets]
+        self.assertNotIn("PM", tickers)
+        self.assertEqual(tickers, ["WMT", "WFC", "JNJ"])
+
+    def test_performance_selector_unknown_does_not_outrank_losers(self):
+        """An unknown trailing return must never be treated as a 0.0 return."""
+        selector = PerformanceSelector(n=5)
+        with self.assertWarns(UserWarning):
+            targets = selector.select(self.universe)
+        self.assertNotIn("PM", [t.ticker for t in targets])
+
+    def test_performance_selector_raises_when_no_candidates_have_returns(self):
+        """A universe with no computable returns cannot be ranked by momentum."""
+        selector = PerformanceSelector(n=3)
+        unknown_only = [
+            ConstituentSnapshot("PM", "Philip Morris International Inc.", 0.011, None, 2008),
+        ]
+        with self.assertRaises(ValueError):
+            selector.select(unknown_only)
+
+    def test_market_cap_selector_retains_unknown_trailing_return(self):
+        """MarketCapSelector does not read trailing returns and must keep the constituent."""
+        selector = MarketCapSelector(n=5)
+        targets = selector.select(self.universe)
+        self.assertIn("PM", [t.ticker for t in targets])
+
+
 if __name__ == "__main__":
     unittest.main()

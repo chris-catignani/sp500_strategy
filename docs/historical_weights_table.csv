@@ -1,0 +1,621 @@
+year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,underlying_value_usd,anchor_value_usd,source_citation
+1994,1,GE,General Electric Company,0.0270,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,2,T,AT&T Inc.,0.0240,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,3,XOM,Exxon Mobil Corporation,0.0230,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,4,KO,The Coca-Cola Company,0.0200,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,5,MRK,Merck & Co. Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,6,PG,Procter & Gamble Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,7,MO,Altria Group Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,8,WMT,Walmart Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,9,IBM,International Business Machines Corp.,0.0140,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,10,MSFT,Microsoft Corporation,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,11,INTC,Intel Corporation,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,12,PFE,Pfizer Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
+1994,13,JNJ,Johnson & Johnson,0.0104,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,14,CVX,Chevron Corporation,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,15,PEP,PepsiCo Inc.,0.0094,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,16,BMY,Bristol-Myers Squibb Company,0.0090,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,17,AIG,American International Group Inc.,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,18,DIS,The Walt Disney Company,0.0081,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,19,VZ,Verizon Communications Inc.,0.0080,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,20,HD,The Home Depot Inc.,0.0078,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,1,GE,General Electric Company,0.0290,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,2,T,AT&T Inc.,0.0250,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,3,XOM,Exxon Mobil Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,4,KO,The Coca-Cola Company,0.0220,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,5,MRK,Merck & Co. Inc.,0.0200,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,6,MO,Altria Group Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,7,PG,Procter & Gamble Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,8,MSFT,Microsoft Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,9,WMT,Walmart Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,10,INTC,Intel Corporation,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,11,JNJ,Johnson & Johnson,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,12,PFE,Pfizer Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
+1995,13,IBM,International Business Machines Corp.,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,14,PEP,PepsiCo Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,15,BMY,Bristol-Myers Squibb Company,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,16,AIG,American International Group Inc.,0.0090,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,17,CVX,Chevron Corporation,0.0084,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,18,FNMA,Federal National Mortgage Association,0.0083,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,19,MCD,McDonald's Corporation,0.0082,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,20,LLY,Eli Lilly and Company,0.0078,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,1,GE,General Electric Company,0.0310,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,2,KO,The Coca-Cola Company,0.0270,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,3,XOM,Exxon Mobil Corporation,0.0250,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,4,T,AT&T Inc.,0.0230,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,5,MRK,Merck & Co. Inc.,0.0200,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,6,MO,Altria Group Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,7,MSFT,Microsoft Corporation,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,8,INTC,Intel Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,9,PG,Procter & Gamble Co.,0.0140,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,10,JNJ,Johnson & Johnson,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,11,WMT,Walmart Inc.,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,12,PFE,Pfizer Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
+1996,13,IBM,International Business Machines Corp.,0.0102,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,14,BMY,Bristol-Myers Squibb Company,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,15,DIS,The Walt Disney Company,0.0092,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,16,PEP,PepsiCo Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,17,CVX,Chevron Corporation,0.0090,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,18,AIG,American International Group Inc.,0.0088,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,19,CSCO,Cisco Systems Inc.,0.0086,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,20,LLY,Eli Lilly and Company,0.0083,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,1,GE,General Electric Company,0.0350,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,2,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,3,KO,The Coca-Cola Company,0.0260,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,4,XOM,Exxon Mobil Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,5,INTC,Intel Corporation,0.0210,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,6,MRK,Merck & Co. Inc.,0.0190,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,7,PG,Procter & Gamble Co.,0.0180,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,8,JNJ,Johnson & Johnson,0.0170,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,9,MO,Altria Group Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,10,PFE,Pfizer Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,11,WMT,Walmart Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,12,T,AT&T Inc.,0.0120,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
+1997,13,IBM,International Business Machines Corp.,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,14,BMY,Bristol-Myers Squibb Company,0.0096,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,15,LLY,Eli Lilly and Company,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,16,VZ,Verizon Communications Inc.,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,17,DIS,The Walt Disney Company,0.0084,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,18,AIG,American International Group Inc.,0.0080,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,19,C,Citigroup Inc.,0.0076,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,20,FNMA,Federal National Mortgage Association,0.0074,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,1,MSFT,Microsoft Corporation,0.0410,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,2,GE,General Electric Company,0.0380,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,3,INTC,Intel Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,4,CSCO,Cisco Systems Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,5,WMT,Walmart Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,6,XOM,Exxon Mobil Corporation,0.0200,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,7,KO,The Coca-Cola Company,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,8,MRK,Merck & Co. Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,9,PFE,Pfizer Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,10,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,11,JNJ,Johnson & Johnson,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,12,IBM,International Business Machines Corp.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
+1998,13,BMY,Bristol-Myers Squibb Company,0.0129,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,14,C,Citigroup Inc.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,15,BAC,Bank of America Corporation,0.0112,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,16,LLY,Eli Lilly and Company,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,17,VZ,Verizon Communications Inc.,0.0092,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,18,HD,The Home Depot Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,19,AIG,American International Group Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,20,T,AT&T Inc.,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,1,MSFT,Microsoft Corporation,0.0490,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,2,GE,General Electric Company,0.0410,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,3,CSCO,Cisco Systems Inc.,0.0330,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,4,WMT,Walmart Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,5,INTC,Intel Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,6,XOM,Exxon Mobil Corporation,0.0220,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,7,IBM,International Business Machines Corp.,0.0190,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,8,PFE,Pfizer Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,9,KO,The Coca-Cola Company,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,10,JNJ,Johnson & Johnson,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,11,C,Citigroup Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,12,AIG,American International Group Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
+1999,13,HD,The Home Depot Inc.,0.0138,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,14,ORCL,Oracle Corporation,0.0136,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,15,PG,Procter & Gamble Co.,0.0127,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,16,MRK,Merck & Co. Inc.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,17,QCOM,QUALCOMM Incorporated,0.0119,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,18,BMY,Bristol-Myers Squibb Company,0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,19,T,AT&T Inc.,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,20,VZ,Verizon Communications Inc.,0.0094,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,1,GE,General Electric Company,0.0400,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,2,XOM,Exxon Mobil Corporation,0.0330,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,3,PFE,Pfizer Inc.,0.0280,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,4,CSCO,Cisco Systems Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,5,MSFT,Microsoft Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,6,WMT,Walmart Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,7,C,Citigroup Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,8,AIG,American International Group Inc.,0.0190,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,9,INTC,Intel Corporation,0.0170,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,10,IBM,International Business Machines Corp.,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,11,MRK,Merck & Co. Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,12,JNJ,Johnson & Johnson,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
+2000,13,ORCL,Oracle Corporation,0.0135,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,14,KO,The Coca-Cola Company,0.0132,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,15,BMY,Bristol-Myers Squibb Company,0.0127,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,16,VZ,Verizon Communications Inc.,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,17,T,AT&T Inc.,0.0112,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,18,HD,The Home Depot Inc.,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,19,LLY,Eli Lilly and Company,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,20,PG,Procter & Gamble Co.,0.0094,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,1,GE,General Electric Company,0.0390,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,2,MSFT,Microsoft Corporation,0.0340,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,3,XOM,Exxon Mobil Corporation,0.0300,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,4,WMT,Walmart Inc.,0.0270,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,5,C,Citigroup Inc.,0.0250,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,6,PFE,Pfizer Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,7,JNJ,Johnson & Johnson,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,8,AIG,American International Group Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,9,INTC,Intel Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,10,IBM,International Business Machines Corp.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,11,MRK,Merck & Co. Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,12,CSCO,Cisco Systems Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
+2001,13,VZ,Verizon Communications Inc.,0.0121,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,14,HD,The Home Depot Inc.,0.0120,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,15,KO,The Coca-Cola Company,0.0118,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,16,PG,Procter & Gamble Co.,0.0103,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,17,BMY,Bristol-Myers Squibb Company,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,18,T,AT&T Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,19,BAC,Bank of America Corporation,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,20,CVX,Chevron Corporation,0.0096,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,1,MSFT,Microsoft Corporation,0.0360,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,2,GE,General Electric Company,0.0330,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,3,XOM,Exxon Mobil Corporation,0.0290,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,4,WMT,Walmart Inc.,0.0280,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,5,PFE,Pfizer Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,6,JNJ,Johnson & Johnson,0.0200,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,7,C,Citigroup Inc.,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,8,AIG,American International Group Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,9,PG,Procter & Gamble Co.,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,10,INTC,Intel Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,11,IBM,International Business Machines Corp.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,12,CSCO,Cisco Systems Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
+2002,13,MRK,Merck & Co. Inc.,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,14,KO,The Coca-Cola Company,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,15,VZ,Verizon Communications Inc.,0.0123,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,16,BAC,Bank of America Corporation,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,17,WFC,Wells Fargo & Company,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,18,PEP,PepsiCo Inc.,0.0087,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,19,LLY,Eli Lilly and Company,0.0086,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,20,CVX,Chevron Corporation,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,1,MSFT,Microsoft Corporation,0.0340,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,2,GE,General Electric Company,0.0320,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,3,XOM,Exxon Mobil Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,4,PFE,Pfizer Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,5,WMT,Walmart Inc.,0.0250,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,6,C,Citigroup Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,7,JNJ,Johnson & Johnson,0.0200,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,8,AIG,American International Group Inc.,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,9,INTC,Intel Corporation,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,10,CSCO,Cisco Systems Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,11,IBM,International Business Machines Corp.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,12,PG,Procter & Gamble Co.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
+2003,13,KO,The Coca-Cola Company,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,14,BAC,Bank of America Corporation,0.0117,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,15,WFC,Wells Fargo & Company,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,16,MRK,Merck & Co. Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,17,VZ,Verizon Communications Inc.,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,18,CVX,Chevron Corporation,0.0093,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,19,UPS,United Parcel Service Inc.,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,20,HD,The Home Depot Inc.,0.0081,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,1,GE,General Electric Company,0.0350,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,2,XOM,Exxon Mobil Corporation,0.0330,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,3,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,4,C,Citigroup Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,5,PFE,Pfizer Inc.,0.0230,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,6,WMT,Walmart Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,7,JNJ,Johnson & Johnson,0.0200,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,8,JPM,JPMorgan Chase & Co.,0.0180,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,9,AIG,American International Group Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,10,INTC,Intel Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,11,BAC,Bank of America Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,12,PG,Procter & Gamble Co.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
+2004,13,IBM,International Business Machines Corp.,0.0140,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,14,CSCO,Cisco Systems Inc.,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,15,VZ,Verizon Communications Inc.,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,16,CVX,Chevron Corporation,0.0111,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,17,WFC,Wells Fargo & Company,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,18,KO,The Coca-Cola Company,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,19,UPS,United Parcel Service Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,20,HD,The Home Depot Inc.,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,1,XOM,Exxon Mobil Corporation,0.0370,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,2,GE,General Electric Company,0.0340,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,3,MSFT,Microsoft Corporation,0.0270,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,4,C,Citigroup Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,5,PG,Procter & Gamble Co.,0.0230,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,6,JNJ,Johnson & Johnson,0.0210,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,7,PFE,Pfizer Inc.,0.0190,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,8,BAC,Bank of America Corporation,0.0180,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,9,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,10,IBM,International Business Machines Corp.,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,11,CVX,Chevron Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,12,AIG,American International Group Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
+2005,13,WMT,Walmart Inc.,0.0130,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,14,INTC,Intel Corporation,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,15,CSCO,Cisco Systems Inc.,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,16,WFC,Wells Fargo & Company,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,17,PEP,PepsiCo Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,18,AMGN,Amgen Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,19,KO,The Coca-Cola Company,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,20,HD,The Home Depot Inc.,0.0087,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,1,XOM,Exxon Mobil Corporation,0.0380,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,2,GE,General Electric Company,0.0330,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,3,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,4,C,Citigroup Inc.,0.0270,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,5,PG,Procter & Gamble Co.,0.0230,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,6,BAC,Bank of America Corporation,0.0200,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,7,JNJ,Johnson & Johnson,0.0190,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,8,JPM,JPMorgan Chase & Co.,0.0180,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,9,AIG,American International Group Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,10,CSCO,Cisco Systems Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,11,PFE,Pfizer Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,12,CVX,Chevron Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
+2006,13,WMT,Walmart Inc.,0.0135,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,14,GOOGL,Alphabet Inc. (Class A & C),0.0123,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,15,IBM,International Business Machines Corp.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,16,WFC,Wells Fargo & Company,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,17,INTC,Intel Corporation,0.0102,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,18,KO,The Coca-Cola Company,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,19,VZ,Verizon Communications Inc.,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,20,T,AT&T Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,1,XOM,Exxon Mobil Corporation,0.0430,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,2,GE,General Electric Company,0.0320,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,3,MSFT,Microsoft Corporation,0.0290,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,4,T,AT&T Inc.,0.0230,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,5,PG,Procter & Gamble Co.,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,6,JNJ,Johnson & Johnson,0.0200,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,7,GOOGL,Alphabet Inc. (Class A & C),0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,8,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,9,CVX,Chevron Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,10,CSCO,Cisco Systems Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,11,BAC,Bank of America Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,12,AAPL,Apple Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
+2007,13,WMT,Walmart Inc.,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,14,C,Citigroup Inc.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,15,INTC,Intel Corporation,0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,16,PFE,Pfizer Inc.,0.0115,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,17,IBM,International Business Machines Corp.,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,18,KO,The Coca-Cola Company,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,19,VZ,Verizon Communications Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,20,AIG,American International Group Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,1,XOM,Exxon Mobil Corporation,0.0490,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,2,WMT,Walmart Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,3,PG,Procter & Gamble Co.,0.0230,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,4,JNJ,Johnson & Johnson,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,5,GE,General Electric Company,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,6,MSFT,Microsoft Corporation,0.0200,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,7,T,AT&T Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,8,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,9,CVX,Chevron Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,10,IBM,International Business Machines Corp.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,11,CSCO,Cisco Systems Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,12,HPQ,HP Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
+2008,13,PFE,Pfizer Inc.,0.0127,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,14,KO,The Coca-Cola Company,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,15,VZ,Verizon Communications Inc.,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,16,WFC,Wells Fargo & Company,0.0123,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,17,GOOGL,Alphabet Inc. (Class A & C),0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,18,ORCL,Oracle Corporation,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,19,PM,Philip Morris International Inc.,0.0110,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,20,PEP,PepsiCo Inc.,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,1,XOM,Exxon Mobil Corporation,0.0430,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,2,MSFT,Microsoft Corporation,0.0320,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,3,AAPL,Apple Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,4,PG,Procter & Gamble Co.,0.0240,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,5,JNJ,Johnson & Johnson,0.0230,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,6,JPM,JPMorgan Chase & Co.,0.0220,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,7,GE,General Electric Company,0.0200,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,8,WMT,Walmart Inc.,0.0190,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,9,GOOGL,Alphabet Inc. (Class A & C),0.0180,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,10,BAC,Bank of America Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,11,IBM,International Business Machines Corp.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,12,CVX,Chevron Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
+2009,13,WFC,Wells Fargo & Company,0.0139,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,14,PFE,Pfizer Inc.,0.0132,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,15,CSCO,Cisco Systems Inc.,0.0131,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,16,KO,The Coca-Cola Company,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,17,T,AT&T Inc.,0.0124,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,18,ORCL,Oracle Corporation,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,19,INTC,Intel Corporation,0.0109,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,20,MRK,Merck & Co. Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,1,XOM,Exxon Mobil Corporation,0.0340,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,2,AAPL,Apple Inc.,0.0300,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,3,MSFT,Microsoft Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,4,GE,General Electric Company,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,5,CVX,Chevron Corporation,0.0200,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,6,IBM,International Business Machines Corp.,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,7,PG,Procter & Gamble Co.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,8,JNJ,Johnson & Johnson,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,9,JPM,JPMorgan Chase & Co.,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,10,BRK.B,Berkshire Hathaway Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,11,WMT,Walmart Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,12,GOOGL,Alphabet Inc. (Class A & C),0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
+2010,13,WFC,Wells Fargo & Company,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,14,ORCL,Oracle Corporation,0.0120,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,15,KO,The Coca-Cola Company,0.0110,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,16,C,Citigroup Inc.,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,17,BAC,Bank of America Corporation,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,18,PFE,Pfizer Inc.,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,19,T,AT&T Inc.,0.0093,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,20,INTC,Intel Corporation,0.0092,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,1,XOM,Exxon Mobil Corporation,0.0370,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,2,AAPL,Apple Inc.,0.0340,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,3,MSFT,Microsoft Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,4,IBM,International Business Machines Corp.,0.0230,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,5,CVX,Chevron Corporation,0.0220,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,6,JNJ,Johnson & Johnson,0.0200,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,7,PG,Procter & Gamble Co.,0.0190,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,8,GE,General Electric Company,0.0180,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,9,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,10,WMT,Walmart Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,11,GOOGL,Alphabet Inc. (Class A & C),0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,12,PFE,Pfizer Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
+2011,13,BRK.B,Berkshire Hathaway Inc.,0.0129,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,14,KO,The Coca-Cola Company,0.0121,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,15,WFC,Wells Fargo & Company,0.0120,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,16,PM,Philip Morris International Inc.,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,17,T,AT&T Inc.,0.0112,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,18,ORCL,Oracle Corporation,0.0110,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,19,INTC,Intel Corporation,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,20,VZ,Verizon Communications Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,1,AAPL,Apple Inc.,0.0410,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,2,XOM,Exxon Mobil Corporation,0.0310,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,3,GOOGL,Alphabet Inc. (Class A & C),0.0260,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,4,MSFT,Microsoft Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,5,BRK.B,Berkshire Hathaway Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,6,JNJ,Johnson & Johnson,0.0200,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,7,GE,General Electric Company,0.0190,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,8,WMT,Walmart Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,9,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,10,CVX,Chevron Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,11,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,12,IBM,International Business Machines Corp.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
+2012,13,WFC,Wells Fargo & Company,0.0135,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,14,PFE,Pfizer Inc.,0.0131,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,15,KO,The Coca-Cola Company,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,16,ORCL,Oracle Corporation,0.0115,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,17,T,AT&T Inc.,0.0112,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,18,PM,Philip Morris International Inc.,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,19,BAC,Bank of America Corporation,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,20,VZ,Verizon Communications Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,1,AAPL,Apple Inc.,0.0340,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,2,XOM,Exxon Mobil Corporation,0.0270,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,3,GOOGL,Alphabet Inc. (Class A & C),0.0250,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,4,MSFT,Microsoft Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,5,BRK.B,Berkshire Hathaway Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,6,JNJ,Johnson & Johnson,0.0200,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,7,GE,General Electric Company,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,8,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,9,WFC,Wells Fargo & Company,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,10,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,11,CVX,Chevron Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,12,WMT,Walmart Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
+2013,13,IBM,International Business Machines Corp.,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,14,PFE,Pfizer Inc.,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,15,AMZN,Amazon.com Inc.,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,16,KO,The Coca-Cola Company,0.0118,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,17,ORCL,Oracle Corporation,0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,18,BAC,Bank of America Corporation,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,19,C,Citigroup Inc.,0.0109,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,20,VZ,Verizon Communications Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,1,AAPL,Apple Inc.,0.0360,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,2,XOM,Exxon Mobil Corporation,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,3,MSFT,Microsoft Corporation,0.0250,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,4,BRK.B,Berkshire Hathaway Inc.,0.0230,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,5,JNJ,Johnson & Johnson,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,6,GOOGL,Alphabet Inc. (Class A & C),0.0200,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,7,WFC,Wells Fargo & Company,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,8,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,9,PG,Procter & Gamble Co.,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,10,GE,General Electric Company,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,11,CVX,Chevron Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,12,WMT,Walmart Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
+2014,13,META,Meta Platforms Inc.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,14,ORCL,Oracle Corporation,0.0120,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,15,VZ,Verizon Communications Inc.,0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,16,BAC,Bank of America Corporation,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,17,PFE,Pfizer Inc.,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,18,KO,The Coca-Cola Company,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,19,INTC,Intel Corporation,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,20,C,Citigroup Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,1,AAPL,Apple Inc.,0.0350,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,2,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,3,XOM,Exxon Mobil Corporation,0.0220,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,4,AMZN,Amazon.com Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,5,META,Meta Platforms Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,6,BRK.B,Berkshire Hathaway Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,7,JNJ,Johnson & Johnson,0.0160,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,8,GE,General Electric Company,0.0150,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,9,GOOGL,Alphabet Inc. (Class A & C),0.0140,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,10,JPM,JPMorgan Chase & Co.,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,11,WFC,Wells Fargo & Company,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,12,PG,Procter & Gamble Co.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,13,WMT,Walmart Inc.,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,14,PFE,Pfizer Inc.,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,15,VZ,Verizon Communications Inc.,0.0104,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,16,KO,The Coca-Cola Company,0.0104,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,17,V,Visa Inc.,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,18,BAC,Bank of America Corporation,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,19,DIS,The Walt Disney Company,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,20,CVX,Chevron Corporation,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,1,AAPL,Apple Inc.,0.0340,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,2,MSFT,Microsoft Corporation,0.0270,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,3,AMZN,Amazon.com Inc.,0.0200,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,4,XOM,Exxon Mobil Corporation,0.0190,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,5,META,Meta Platforms Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,6,BRK.B,Berkshire Hathaway Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,7,JNJ,Johnson & Johnson,0.0160,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,8,JPM,JPMorgan Chase & Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,9,GOOGL,Alphabet Inc. (Class A & C),0.0140,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,10,GE,General Electric Company,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,11,WFC,Wells Fargo & Company,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,12,T,AT&T Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,13,PG,Procter & Gamble Co.,0.0109,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,14,BAC,Bank of America Corporation,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,15,CVX,Chevron Corporation,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,16,VZ,Verizon Communications Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,17,WMT,Walmart Inc.,0.0092,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,18,PFE,Pfizer Inc.,0.0089,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,19,V,Visa Inc.,0.0088,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,20,KO,The Coca-Cola Company,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,1,AAPL,Apple Inc.,0.0370,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,2,MSFT,Microsoft Corporation,0.0310,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,3,AMZN,Amazon.com Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,4,META,Meta Platforms Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,5,BRK.B,Berkshire Hathaway Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,6,JNJ,Johnson & Johnson,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,7,JPM,JPMorgan Chase & Co.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,8,GOOGL,Alphabet Inc. (Class A & C),0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,9,XOM,Exxon Mobil Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,10,BAC,Bank of America Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,11,V,Visa Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,12,WFC,Wells Fargo & Company,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,13,WMT,Walmart Inc.,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,14,CVX,Chevron Corporation,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,15,PG,Procter & Gamble Co.,0.0104,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,16,HD,The Home Depot Inc.,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,17,INTC,Intel Corporation,0.0096,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,18,VZ,Verizon Communications Inc.,0.0096,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,19,UNH,UnitedHealth Group Inc.,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,20,PFE,Pfizer Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,1,MSFT,Microsoft Corporation,0.0410,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,2,AAPL,Apple Inc.,0.0380,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,3,AMZN,Amazon.com Inc.,0.0360,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,4,GOOGL,Alphabet Inc. (Class A & C),0.0320,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,5,BRK.B,Berkshire Hathaway Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,6,JNJ,Johnson & Johnson,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,7,META,Meta Platforms Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,8,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,9,V,Visa Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,10,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,11,XOM,Exxon Mobil Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,12,UNH,UnitedHealth Group Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
+2018,13,WMT,Walmart Inc.,0.0129,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,14,BAC,Bank of America Corporation,0.0129,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,15,PFE,Pfizer Inc.,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,16,VZ,Verizon Communications Inc.,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,17,INTC,Intel Corporation,0.0115,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,18,WFC,Wells Fargo & Company,0.0115,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,19,CVX,Chevron Corporation,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,20,KO,The Coca-Cola Company,0.0110,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,1,AAPL,Apple Inc.,0.0470,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,2,MSFT,Microsoft Corporation,0.0460,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,3,AMZN,Amazon.com Inc.,0.0320,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,4,META,Meta Platforms Inc.,0.0280,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,5,GOOGL,Alphabet Inc. (Class A & C),0.0270,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,6,BRK.B,Berkshire Hathaway Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,7,JPM,JPMorgan Chase & Co.,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,8,JNJ,Johnson & Johnson,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,9,V,Visa Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,10,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,11,UNH,UnitedHealth Group Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,12,HD,The Home Depot Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
+2019,13,WMT,Walmart Inc.,0.0127,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,14,BAC,Bank of America Corporation,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,15,MA,Mastercard Incorporated,0.0117,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,16,XOM,Exxon Mobil Corporation,0.0109,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,17,DIS,The Walt Disney Company,0.0108,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,18,INTC,Intel Corporation,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,19,VZ,Verizon Communications Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,20,KO,The Coca-Cola Company,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2020,1,AAPL,Apple Inc.,0.0670,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$22,041,931,111.17","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,2,MSFT,Microsoft Corporation,0.0531,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$17,478,852,123.48","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,3,AMZN,Amazon.com Inc.,0.0439,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$14,437,983,717.72","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,4,GOOGL,Alphabet Inc. (Class A & C),0.0327,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$10,762,563,770.32","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,5,META,Meta Platforms Inc.,0.0207,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$6,825,529,775.36","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,6,TSLA,Tesla Inc.,0.0169,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$5,562,176,326.07","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,7,BRK.B,Berkshire Hathaway Inc.,0.0143,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$4,690,333,834.17","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,8,JNJ,Johnson & Johnson,0.0131,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$4,306,383,431.70","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,9,JPM,JPMorgan Chase & Co.,0.0122,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$4,026,020,820.16","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,10,V,Visa Inc.,0.0117,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$3,855,131,998.56","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,11,PG,Procter & Gamble Co.,0.0109,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$3,586,107,814.92","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,12,UNH,UnitedHealth Group Inc.,0.0105,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$3,458,454,203.16","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,13,DIS,The Walt Disney Company,0.0104,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$3,409,512,457.78","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,14,NVDA,NVIDIA Corporation,0.0102,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$3,359,802,423.60","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,15,MA,Mastercard Incorporated,0.0099,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$3,263,884,345.80","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,16,HD,The Home Depot Inc.,0.0090,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$2,972,376,782.70","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,17,PYPL,PayPal Holdings Inc.,0.0087,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$2,852,276,365.20","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,18,VZ,Verizon Communications Inc.,0.0077,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$2,526,952,003.75","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,19,ADBE,Adobe Inc.,0.0076,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$2,493,768,860.92","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2020,20,CMCSA,Comcast Corporation,0.0076,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$2,486,816,125.20","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
+2021,1,AAPL,Apple Inc.,0.0686,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$31,224,573,977.22","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,2,MSFT,Microsoft Corporation,0.0626,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$28,489,051,734.40","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,3,GOOGL,Alphabet Inc. (Class A & C),0.0416,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$18,959,723,186.58","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,4,AMZN,Amazon.com Inc.,0.0360,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$16,408,367,164.16","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,5,TSLA,Tesla Inc.,0.0213,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$9,698,735,831.40","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,6,META,Meta Platforms Inc.,0.0197,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$8,979,417,891.15","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,7,NVDA,NVIDIA Corporation,0.0182,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$8,295,892,242.37","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,8,BRK.B,Berkshire Hathaway Inc.,0.0136,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$6,177,722,720.00","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,9,UNH,UnitedHealth Group Inc.,0.0117,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$5,335,924,427.52","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,10,JPM,JPMorgan Chase & Co.,0.0116,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$5,279,536,265.50","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,11,JNJ,Johnson & Johnson,0.0112,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$5,081,177,764.17","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,12,HD,The Home Depot Inc.,0.0109,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$4,941,431,107.76","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,13,PG,Procter & Gamble Co.,0.0098,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$4,467,706,774.80","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,14,V,Visa Inc.,0.0090,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$4,100,144,965.02","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,15,PFE,Pfizer Inc.,0.0082,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$3,739,480,608.00","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,16,BAC,Bank of America Corporation,0.0079,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$3,614,652,158.04","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,17,MA,Mastercard Incorporated,0.0077,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$3,521,871,746.12","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,18,DIS,The Walt Disney Company,0.0070,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$3,175,515,747.72","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,19,AVGO,Broadcom Inc.,0.0068,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$3,090,201,302.96","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2021,20,ADBE,Adobe Inc.,0.0067,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0109,"$3,039,809,621.94","$455,315,182,019.74","SPY SEC Form NPORT-P (Accession 0001752724-22-048845, Period 2021-12-31)"
+2022,1,AAPL,Apple Inc.,0.0605,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$21,561,266,462.43","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,2,MSFT,Microsoft Corporation,0.0556,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$19,839,026,522.28","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,3,GOOGL,Alphabet Inc. (Class A & C),0.0310,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$11,061,887,875.46","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,4,AMZN,Amazon.com Inc.,0.0232,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$8,273,467,440.00","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,5,BRK.B,Berkshire Hathaway Inc.,0.0173,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$6,176,239,270.00","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,6,UNH,UnitedHealth Group Inc.,0.0154,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$5,497,305,995.72","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,7,JNJ,Johnson & Johnson,0.0144,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$5,130,920,255.25","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,8,XOM,Exxon Mobil Corporation,0.0141,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$5,040,919,900.90","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,9,JPM,JPMorgan Chase & Co.,0.0122,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$4,365,066,705.30","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,10,NVDA,NVIDIA Corporation,0.0113,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$4,042,663,513.00","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,11,PG,Procter & Gamble Co.,0.0112,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,985,630,306.56","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,12,V,Visa Inc.,0.0106,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,769,655,405.04","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,13,TSLA,Tesla Inc.,0.0103,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,669,071,876.34","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,14,HD,The Home Depot Inc.,0.0101,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,586,334,453.40","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,15,CVX,Chevron Corporation,0.0099,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,543,394,296.42","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,16,MA,Mastercard Incorporated,0.0092,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,277,541,285.55","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,17,LLY,Eli Lilly and Company,0.0090,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,201,821,436.48","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,18,PFE,Pfizer Inc.,0.0090,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,191,885,941.44","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,19,ABBV,AbbVie Inc.,0.0089,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,171,668,004.84","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2022,20,MRK,Merck & Co. Inc.,0.0088,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0106,"$3,121,692,639.45","$356,586,863,853.80","SPY SEC Form NPORT-P (Accession 0001752724-23-046862, Period 2022-12-31)"
+2023,1,AAPL,Apple Inc.,0.0703,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$34,936,941,047.19","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,2,MSFT,Microsoft Corporation,0.0698,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$34,690,243,906.92","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,3,GOOGL,Alphabet Inc. (Class A & C),0.0382,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$18,973,860,932.66","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,4,AMZN,Amazon.com Inc.,0.0345,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$17,150,422,742.90","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,5,NVDA,NVIDIA Corporation,0.0306,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$15,182,451,788.68","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,6,META,Meta Platforms Inc.,0.0196,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$9,751,902,405.60","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,7,TSLA,Tesla Inc.,0.0172,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$8,525,543,111.36","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,8,BRK.B,Berkshire Hathaway Inc.,0.0162,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$8,054,451,710.02","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,9,JPM,JPMorgan Chase & Co.,0.0123,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$6,103,876,054.50","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,10,AVGO,Broadcom Inc.,0.0122,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$6,080,990,660.00","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,11,UNH,UnitedHealth Group Inc.,0.0122,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$6,044,340,473.01","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,12,LLY,Eli Lilly and Company,0.0116,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$5,769,574,861.96","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,13,V,Visa Inc.,0.0104,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$5,151,223,397.05","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,14,XOM,Exxon Mobil Corporation,0.0100,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$4,970,933,014.52","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,15,JNJ,Johnson & Johnson,0.0094,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$4,683,361,105.92","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,16,MA,Mastercard Incorporated,0.0088,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$4,383,732,903.48","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,17,HD,The Home Depot Inc.,0.0087,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$4,301,630,195.30","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,18,PG,Procter & Gamble Co.,0.0086,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$4,286,902,701.38","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,19,COST,Costco Wholesale Corporation,0.0073,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$3,627,772,616.72","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2023,20,MRK,Merck & Co. Inc.,0.0069,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0116,"$3,428,970,955.56","$496,970,597,849.56","SPY SEC Form NPORT-P (Accession 0001752724-24-043296, Period 2023-12-31)"
+2024,1,AAPL,Apple Inc.,0.0710,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,2,NVDA,NVIDIA Corporation,0.0680,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,3,MSFT,Microsoft Corporation,0.0650,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,4,AMZN,Amazon.com Inc.,0.0380,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,5,META,Meta Platforms Inc.,0.0270,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,6,GOOGL,Alphabet Inc. (Class A & C),0.0230,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,7,BRK.B,Berkshire Hathaway Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,8,TSLA,Tesla Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,9,AVGO,Broadcom Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,10,JPM,JPMorgan Chase & Co.,0.0140,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,11,LLY,Eli Lilly and Company,0.0130,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,12,UNH,UnitedHealth Group Inc.,0.0120,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
+2024,13,WMT,Walmart Inc.,0.0111,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,14,V,Visa Inc.,0.0086,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,15,MA,Mastercard Incorporated,0.0084,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,16,XOM,Exxon Mobil Corporation,0.0083,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,17,ORCL,Oracle Corporation,0.0083,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,18,COST,Costco Wholesale Corporation,0.0073,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,19,PG,Procter & Gamble Co.,0.0070,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,20,HD,The Home Depot Inc.,0.0069,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
