@@ -387,6 +387,44 @@ class TestN30DScheduleParser(unittest.TestCase):
                 f"{period} ground truth does not match parsed {filename}",
             )
 
+    def test_parsed_total_matches_filing_stated_total(self):
+        """For each of the 14 fixed-width filings (1995-2003, 2005-2009), total_val_usd == stated_total_usd."""
+        manifest_path = self.dir / "sec_annual_filings_manifest.json"
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+
+        target_years = [y for y in range(1995, 2010) if y != 2004]
+        for year in target_years:
+            filing_path = ROOT / manifest[str(year)]["file_path"]
+            with self.subTest(year=year, filename=filing_path.name):
+                parsed = self.parse(filing_path)
+                self.assertEqual(
+                    parsed["total_val_usd"],
+                    parsed["stated_total_usd"],
+                    f"{year} parsed total {parsed['total_val_usd']} != stated total {parsed['stated_total_usd']}",
+                )
+
+    def test_multi_fund_filing_is_refused(self):
+        """Parsing a multi-fund report (e.g. 2004 Select Sector SPDR Trust) raises ScheduleParseError."""
+        from scripts.extract_ground_truth_from_sec import ScheduleParseError
+
+        with self.assertRaises(ScheduleParseError):
+            self.parse(self.dir / "SPY_2004_N-CSR_0000950135-04-005558.txt")
+
+    def test_html_era_filing_is_refused(self):
+        """Parsing an HTML-era filing lacking fixed-width anchors raises ScheduleParseError."""
+        from scripts.extract_ground_truth_from_sec import ScheduleParseError
+
+        with self.assertRaises(ScheduleParseError):
+            self.parse(self.dir / "SPY_2010_N-30D_0000950123-10-109631.txt")
+
+    def test_1999_recovers_rows_without_dot_leaders(self):
+        """The 1999 filing's holdings include AIG with val == 167497004.0."""
+        parsed = self.parse(self.dir / "SPY_1999_Q4_N-30D_0000950135-99-005434.txt")
+        aig = next((h for h in parsed["holdings"] if h["ticker"] == "AIG"), None)
+        self.assertIsNotNone(aig, "AIG was not found in parsed 1999 holdings")
+        self.assertEqual(aig["val"], 167497004.0)
+
 
 class TestConsolidateHoldings(unittest.TestCase):
     """Unit tests for multi-class equity holdings consolidation at issuer level."""

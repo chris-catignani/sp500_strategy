@@ -207,12 +207,27 @@ def map_ticker(name: str, cusip: str, raw_ticker: str) -> str:
     return name
 
 
+# The schedule's column header. The 1999 filing misspells the section title as
+# "SCEDULE OF INVESTMENTS", so the column header - not the title - is the anchor.
+_N30D_SCHEDULE_HEADER = re.compile(
+    r"^\s*COMMON\s+STOCKS\b.*\bSHARES\b.*\bVALUE\b", re.IGNORECASE
+)
+# The schedule's closing total. A document with several of these carries several
+# funds' schedules and must not be read as one portfolio.
+_N30D_SCHEDULE_TOTAL = re.compile(
+    r"^\s*Total\s+(?:Common\s+Stocks|Investments)\b", re.IGNORECASE
+)
+_N30D_TOTAL_VALUE = re.compile(r"\$?\s*(\d{1,3}(?:,\d{3}){2,})")
 _N30D_ROW = re.compile(
-    r"^(?P<name>.*?)\s*\.{2,}\s*(?P<shares>[\d,]+)\s+\$?\s*(?P<value>[\d,]+)\s*$"
+    r"^(?P<name>.*?)[\s.]{2,}(?P<shares>\d[\d,]*)\s+\$?\s*(?P<value>\d[\d,]*)\s*$"
 )
 # A wrapped name fragment carries no figures - anything with digits or a currency marker
 # belongs to a table the schedule parser must not absorb into the next company name.
 _N30D_NAME_FRAGMENT = re.compile(r"^[A-Za-z(][A-Za-z0-9&.,'()/\- ]*$")
+
+
+class ScheduleParseError(ValueError):
+    """Raised when a filing's Schedule of Investments cannot be read faithfully."""
 
 
 def _n30d_ticker(name: str) -> str:
@@ -236,13 +251,44 @@ def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
         txt_path: Path to the archived filing text.
 
     Returns:
-        Dict with 'total_val_usd' and 'holdings' (ranked descending by market value).
+        Dict with 'total_val_usd', 'stated_total_usd', and 'holdings' (ranked descending by market value).
     """
     lines = txt_path.read_text(encoding="utf-8", errors="replace").splitlines()
 
+    headers = [i for i, line in enumerate(lines) if _N30D_SCHEDULE_HEADER.search(line)]
+    totals = [i for i, line in enumerate(lines) if _N30D_SCHEDULE_TOTAL.search(line)]
+
+    if not headers:
+        raise ScheduleParseError(
+            f"{txt_path.name}: missing schedule header anchor (_N30D_SCHEDULE_HEADER)"
+        )
+    if not totals:
+        raise ScheduleParseError(
+            f"{txt_path.name}: missing schedule total anchor (_N30D_SCHEDULE_TOTAL)"
+        )
+
+    start = headers[0]
+    totals_after_start = [i for i in totals if i > start]
+    if not totals_after_start:
+        raise ScheduleParseError(
+            f"{txt_path.name}: missing schedule total anchor after header line {start}"
+        )
+    end = totals_after_start[0]
+
+    # Stated total is within 3 lines of the closing anchor. Parenthetical cost
+    # figures must be stripped so they are not mistaken for the market-value total.
+    blob = " ".join(lines[end : end + 3])
+    cleaned_blob = re.sub(r"\(Cost[^)]*\)", " ", blob, flags=re.IGNORECASE | re.DOTALL)
+    matches = _N30D_TOTAL_VALUE.findall(cleaned_blob)
+    if not matches:
+        raise ScheduleParseError(
+            f"{txt_path.name}: unable to find stated total value in lines {end}..{end + 3}"
+        )
+    stated_total = float(matches[-1].replace(",", ""))
+
     positions: List[Dict[str, Any]] = []
     name_buffer: List[str] = []
-    for raw in lines:
+    for raw in lines[start + 1 : end]:
         line = raw.rstrip()
         if not line.strip():
             name_buffer = []
@@ -272,6 +318,14 @@ def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
         else:
             name_buffer = []
 
+    parsed_sum = sum(pos["val"] for pos in positions)
+    diff = abs(parsed_sum - stated_total)
+    if diff >= 1.0:
+        raise ScheduleParseError(
+            f"{txt_path.name}: parsed sum ({parsed_sum:,.2f}) does not match "
+            f"stated total ({stated_total:,.2f}); diff = {diff:,.2f}"
+        )
+
     # Consolidate multiple positions (e.g. share classes) in the same issuer.
     consolidated: Dict[str, Dict[str, Any]] = {}
     for pos in positions:
@@ -293,7 +347,11 @@ def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
         h["rank"] = i
         h["weight"] = h["val"] / total_val if total_val > 0 else 0.0
 
-    return {"total_val_usd": total_val, "holdings": holdings}
+    return {
+        "total_val_usd": total_val,
+        "stated_total_usd": stated_total,
+        "holdings": holdings,
+    }
 
 
 CONSOLIDATED_ISSUERS: Dict[str, Dict[str, Any]] = {
