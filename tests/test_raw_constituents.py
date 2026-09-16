@@ -97,7 +97,7 @@ class TestRawConstituents(unittest.TestCase):
 
 
     def test_xml_generated_candidates_and_weights(self):
-        """Verify 2020-2023 candidates and weights strictly reproduce the Form NPORT-P XML filings."""
+        """Verify 2020-2024 candidates and weights strictly reproduce the Form NPORT-P XML filings."""
         import sys
         root = Path(__file__).resolve().parent.parent
         sys.path.insert(0, str(root))

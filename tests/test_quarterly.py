@@ -456,7 +456,7 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         self.assertEqual(by_key[("2008-Q1", "WMT")], "UNVERIFIED")
 
     def test_out_of_sample_accuracy_excludes_circular_q4_periods(self) -> None:
-        """Q4 2020-2023 match by construction and must be excluded from the honest metric."""
+        """Q4 2020-2024 match by construction and must be excluded from the honest metric."""
         from scripts.audit_quarterly_expansion import (
             CIRCULAR_Q4_PERIODS,
             reconcile_with_ground_truth,
@@ -471,7 +471,7 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         ]
         self.assertEqual(len(oos), 15)
         oos_acc = sum(r["accuracy_pct"] for r in oos) / len(oos)
-        self.assertLess(oos_acc, 96.7)
+        self.assertLess(oos_acc, 96.5)
         self.assertGreater(oos_acc, 90.0)
 
 

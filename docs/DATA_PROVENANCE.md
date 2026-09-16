@@ -53,7 +53,7 @@ data/raw/
 │   ├── T.json             # Post-1998 SBC / AT&T Inc. raw response
 │   ├── T_CORP_HISTORICAL.json # Decoupled original AT&T Corp ("Ma Bell") historical series (1993–1998)
 │   ├── UNH.json           # UnitedHealth Group Inc. raw response
-│   └── ... (50 S&P 500 constituents; 66 files including World/benchmark tickers)
+│   └── ... (51 S&P 500 constituents; 67 files including World/benchmark tickers)
 └── constituents/
     ├── historical_index_weights.json       # Authoritative S&P 500 point-in-time constituent factsheet weights (Top 20)
     └── world_historical_index_weights.json # Authoritative All-World point-in-time constituent factsheet weights
@@ -173,7 +173,7 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
   - **Out-of-sample: 96.0%** (144/150) across the **15 NPORT-P quarters that are genuine tests**. This is the figure that measures the drift model.
   - Across all **20 NPORT-P quarters**, the headline figure is 97.0% (194/200) — but **five of those quarters are not independent evidence**. The 2020-Q4 … 2024-Q4 filings are the same documents the year-end candidate lists are parsed from, so they match 10/10 by construction. `scripts/audit_quarterly_expansion.py` reports both figures and `CIRCULAR_Q4_PERIODS` names the excluded quarters.
   - Across all **23 verified regulatory filing quarters** (20 XML + 3 Annual Reports), accuracy is 95.2% (219/230).
-  - **Known universe gap**: the three extracted historical filings each surface constituents the model cannot hold at all. Lucent Technologies (`LU`, #7 on 1999-09-30) and EMC Corp (`EMC`, #10 on 2000-09-30) are absent from the 50-ticker universe entirely — they are not mis-ranked, they are missing. Because the universe is composed almost exclusively of companies that still exist, and the missing names are disproportionately ones that later collapsed (LU fell ~99% and EMC ~96% between 2000 and 2002), results in the 1999–2002 window carry an **upward survivorship bias**. Quantifying and correcting this requires extracting the remaining 23 archived filings.
+  - **Known universe gap**: the three extracted historical filings each surface constituents the model cannot hold at all. Lucent Technologies (`LU`, #7 on 1999-09-30) and EMC Corp (`EMC`, #10 on 2000-09-30) are absent from the 51-ticker universe entirely — they are not mis-ranked, they are missing. Because the universe is composed almost exclusively of companies that still exist, and the missing names are disproportionately ones that later collapsed (LU fell ~99% and EMC ~96% between 2000 and 2002), results in the 1999–2002 window carry an **upward survivorship bias**. Quantifying and correcting this requires extracting the remaining 23 archived filings.
 
 #### 4.3.7 Empirical Mid-Year Promotion Findings & Selector Sensitivity
 The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/audit_quarterly_expansion.py) detects mid-year promotions, classifies each against the audited filings, and runs the side-by-side strategy comparison.
