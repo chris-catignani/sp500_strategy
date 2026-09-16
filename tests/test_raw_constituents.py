@@ -409,7 +409,39 @@ class TestN30DScheduleParser(unittest.TestCase):
         from scripts.extract_ground_truth_from_sec import ScheduleParseError
 
         with self.assertRaises(ScheduleParseError):
-            self.parse(self.dir / "SPY_2004_N-CSR_0000950135-04-005558.txt")
+            self.parse(self.dir / "SELECT_SECTOR_SPDR_2004_N-CSR_0000950135-04-005558.txt")
+
+    def test_2004_ground_truth_source_is_spy_not_select_sector(self):
+        """The 2004 manifest entry references SPY's conformed N-30D, not Select Sector."""
+        manifest_path = self.dir / "sec_annual_filings_manifest.json"
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+
+        entry = manifest["2004"]
+        self.assertEqual(entry["accession_number"], "0000950135-05-000037")
+        self.assertEqual(entry["form"], "N-30D")
+
+        filing_path = ROOT / entry["file_path"]
+        self.assertTrue(filing_path.exists(), f"{filing_path} does not exist")
+
+        lines = filing_path.read_text(encoding="utf-8", errors="replace").splitlines()[:40]
+        header_text = "\n".join(lines)
+        self.assertIn("SPDR TRUST SERIES 1", header_text)
+        self.assertIn("CONFORMED PERIOD OF REPORT:", header_text)
+        self.assertIn("20040930", header_text)
+
+    def test_select_sector_filing_is_flagged_not_spy(self):
+        """The mis-archived Select Sector filing is retained but flagged as non-SPY."""
+        manifest_path = self.dir / "sec_annual_filings_manifest.json"
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+
+        self.assertIn("2004-select-sector-spdr-trust", manifest)
+        entry = manifest["2004-select-sector-spdr-trust"]
+        self.assertFalse(entry.get("spy_schedule", True))
+
+        filing_path = ROOT / entry["file_path"]
+        self.assertTrue(filing_path.exists(), f"{filing_path} does not exist")
 
     def test_html_era_filing_is_refused(self):
         """Parsing an HTML-era filing lacking fixed-width anchors raises ScheduleParseError."""

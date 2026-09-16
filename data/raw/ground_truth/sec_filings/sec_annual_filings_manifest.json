@@ -80,12 +80,24 @@
   },
   "2004": {
     "year": 2004,
+    "form": "N-30D",
+    "filing_date": "2005-01-05",
+    "accession_number": "0000950135-05-000037",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-05-000037.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2004_N-30D_0000950135-05-000037.txt",
+    "file_size_bytes": 70111,
+    "note": "Amended by N-30D/A 0000950135-05-000099 (filed 2005-01-07), which carries an identical Schedule of Investments."
+  },
+  "2004-select-sector-spdr-trust": {
+    "year": 2004,
     "form": "N-CSR",
     "filing_date": "2004-12-03",
     "accession_number": "0000950135-04-005558",
     "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950135-04-005558.txt",
-    "file_path": "data/raw/ground_truth/sec_filings/SPY_2004_N-CSR_0000950135-04-005558.txt",
-    "file_size_bytes": 391112
+    "file_path": "data/raw/ground_truth/sec_filings/SELECT_SECTOR_SPDR_2004_N-CSR_0000950135-04-005558.txt",
+    "file_size_bytes": 391112,
+    "spy_schedule": false,
+    "note": "Document contains nine Select Sector SPDR fund schedules and no SPY schedule, so it cannot serve as SPY ground truth."
   },
   "2005": {
     "year": 2005,

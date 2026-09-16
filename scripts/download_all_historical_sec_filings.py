@@ -23,6 +23,10 @@ SEC_CIK = "884394"
 HEADERS = {"User-Agent": "AcademicResearch sp500strategy@example.com"}
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.extract_ground_truth_from_sec import parse_n30d_filing, ScheduleParseError
+
 OUTPUT_DIR = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
 
 TARGET_YEARS = list(range(1995, 2020))
@@ -57,6 +61,38 @@ def get_filings_for_quarter(year: int, qtr: int):
                 })
     return matches
 
+def is_valid_spy_annual_report(file_path: Path, year: int, content: str) -> bool:
+    """Verify that a candidate filing is SPY's own report rather than another trust.
+
+    EDGAR master indexes list all series sharing CIK 0000884394 together (such as
+    Select Sector SPDR Trust). A candidate must represent SPDR Trust Series 1 /
+    SPDR S&P 500 ETF Trust and, for the fixed-width era (<= 2009), must successfully
+    parse a single fund Schedule of Investments whose sum equals the stated total.
+    """
+    header_lines = content[:5000].splitlines()[:100]
+    description = ""
+    company_name = ""
+    for line in header_lines:
+        if "<DESCRIPTION>" in line:
+            description = line.replace("<DESCRIPTION>", "").strip().upper()
+        if "COMPANY CONFORMED NAME:" in line:
+            company_name = line.split("COMPANY CONFORMED NAME:")[-1].strip().upper()
+
+    # Reject filings that identify another trust under the shared CIK.
+    if "SELECT SECTOR" in description or "SELECT SECTOR" in company_name:
+        return False
+
+    # The 2010-2019 HTML filings legitimately raise ScheduleParseError today, but
+    # fixed-width filings (<= 2009) must parse cleanly with verified stated totals.
+    # Multi-fund filings have multiple schedules and totals, failing this check.
+    if year <= 2009:
+        try:
+            parse_n30d_filing(file_path)
+        except ScheduleParseError:
+            return False
+
+    return True
+
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     manifest_file = OUTPUT_DIR / "sec_annual_filings_manifest.json"
@@ -88,44 +124,60 @@ def main():
             print(f"  WARNING: No filing found for year {y}")
             continue
 
-        # Prefer N-CSR or N-30D (annual reports)
-        preferred = None
-        for q_year, q_num, m in filings_found:
-            if m["form"] in ["N-CSR", "N-30D", "10-K"]:
-                preferred = (q_year, q_num, m)
+        # Annual report forms (N-CSR, N-30D, 10-K) take precedence over interim forms.
+        annual_candidates = [c for c in filings_found if c[2]["form"] in ["N-CSR", "N-30D", "10-K"]]
+        other_candidates = [c for c in filings_found if c[2]["form"] not in ["N-CSR", "N-30D", "10-K"]]
+        candidates = annual_candidates + other_candidates
+
+        archived = False
+        for q_year, q_num, m in candidates:
+            file_url = f"https://www.sec.gov/Archives/{m['file']}"
+            raw_name = m["file"].split("/")[-1]
+            save_name = f"SPY_{y}_{m['form']}_{raw_name}"
+            save_path = OUTPUT_DIR / save_name
+
+            print(f"  Evaluating candidate {m['form']} filed on {m['date']} ({file_url})...")
+            try:
+                content = fetch_url(file_url)
+                with open(save_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+
+                if not is_valid_spy_annual_report(save_path, y, content):
+                    print(f"  Candidate {save_name} is not SPY's own report; falling through...")
+                    save_path.unlink(missing_ok=True)
+                    continue
+
+                # Extract accession number from file path or text
+                acc_match = re.search(r"(\d{10}-\d{2}-\d{6})", m["file"])
+                acc_num = acc_match.group(1) if acc_match else raw_name
+
+                entry = {
+                    "year": y,
+                    "form": m["form"],
+                    "filing_date": m["date"],
+                    "accession_number": acc_num,
+                    "sec_url": file_url,
+                    "file_path": str(save_path.relative_to(PROJECT_ROOT)),
+                    "file_size_bytes": len(content),
+                }
+                if y_str in existing_manifest and "note" in existing_manifest[y_str]:
+                    entry["note"] = existing_manifest[y_str]["note"]
+                elif y == 2004:
+                    entry["note"] = (
+                        "Amended by N-30D/A 0000950135-05-000099 (filed 2005-01-07), "
+                        "which carries an identical Schedule of Investments."
+                    )
+
+                existing_manifest[y_str] = entry
+                print(f"  Successfully archived {y} ({len(content):,} bytes)")
+                archived = True
                 break
-        if not preferred:
-            preferred = filings_found[0]
+            except Exception as e:
+                print(f"  Error downloading or validating {file_url}: {e}")
+                save_path.unlink(missing_ok=True)
 
-        q_year, q_num, m = preferred
-        file_url = f"https://www.sec.gov/Archives/{m['file']}"
-        raw_name = m['file'].split('/')[-1]
-        save_name = f"SPY_{y}_{m['form']}_{raw_name}"
-        save_path = OUTPUT_DIR / save_name
-
-        print(f"  Found {m['form']} filed on {m['date']} ({file_url})")
-        print(f"  Downloading to {save_name}...")
-        try:
-            content = fetch_url(file_url)
-            with open(save_path, "w", encoding="utf-8") as f:
-                f.write(content)
-            
-            # Extract accession number from file path or text
-            acc_match = re.search(r"(\d{10}-\d{2}-\d{6})", m['file'])
-            acc_num = acc_match.group(1) if acc_match else raw_name
-
-            existing_manifest[y_str] = {
-                "year": y,
-                "form": m["form"],
-                "filing_date": m["date"],
-                "accession_number": acc_num,
-                "sec_url": file_url,
-                "file_path": str(save_path.relative_to(PROJECT_ROOT)),
-                "file_size_bytes": len(content)
-            }
-            print(f"  Successfully archived {y} ({len(content):,} bytes)")
-        except Exception as e:
-            print(f"  Error downloading {file_url}: {e}")
+        if not archived:
+            print(f"  WARNING: No valid filing found for year {y}")
 
     # Save manifest
     with open(manifest_file, "w", encoding="utf-8") as f:
