@@ -1,9 +1,10 @@
 """Extract and compile verified quarterly ground-truth S&P 500 Top 10 holdings from SEC filings.
 
-Parses all 20 SPY Form NPORT-P XML regulatory filings (2020-2024) and all 26 archived Form N-30D
-reports (1995-2019) directly - fixed-width text through 2009, HTML tables from 2010 - verifies
-reporting dates, aggregates Alphabet share classes, and marks historical periods without
-point-in-time filing evidence as unverified.
+Parses all 20 SPY Form NPORT-P XML regulatory filings (2020-2024) and all 35 archived Form N-30D
+reports (1995-2019) directly - fixed-width text through 2009, HTML tables from 2010, annual
+reports throughout and semi-annual reports from 2010 - verifies reporting dates, aggregates
+Alphabet share classes, and marks historical periods without point-in-time filing evidence
+as unverified.
 
 Zero external dependencies - Python 3 standard library only.
 """
@@ -138,6 +139,9 @@ N30D_NAME_PATTERNS = [
     (r"^(Eli\s+Lilly|Lilly\s*\(Eli\))", "LLY"),
     (r"^Schlumberger", "SLB"),
     (r"^ConocoPhillips", "COP"),
+    # Occidental first reaches a top-30 rank in the 2011-03-31 semi-annual report
+    # (rank 30); it sits below the cut in every September 30 annual report.
+    (r"^Occidental\s+Petroleum", "OXY"),
     (r"^United\s+Technologies", "UTX"),
     (r"^United\s+Parcel\s+Service", "UPS"),
     (r"^Nortel\s+Networks", "NT"),
@@ -311,28 +315,49 @@ N30D_HISTORICAL_FILINGS = [
 # 2014-09-30 for this CIK. The erroneous header value is declared explicitly below so
 # the period assertion stays a hard failure for every other filing.
 HTML_ERA_FILINGS = [
+    # Q1 entries are semi-annual reports: genuine March 31 point-in-time snapshots.
+    # They share Form N-30D and the conformed filer name with the September 30 annual
+    # reports, so only the period separates them, and they must never fill a Q3 slot.
+    # The "Q2" in their file names is the calendar quarter they were FILED in (May or
+    # June), following the archive's SPY_YYYY_QN_FORM_ACCESSION convention.
+    ("2010-Q1", "SPY_2010_Q2_N-30D_0000950123-10-054787.txt",
+     "0000950123-10-054787", "Form N-30D", "2010-03-31", "2010-06-01", None),
     ("2010-Q3", "SPY_2010_N-30D_0000950123-10-109631.txt",
      "0000950123-10-109631", "Form N-30D", "2010-09-30", "2010-11-30", None),
+    ("2011-Q1", "SPY_2011_Q2_N-30D_0000950123-11-054920.txt",
+     "0000950123-11-054920", "Form N-30D", "2011-03-31", "2011-05-27", None),
     ("2011-Q3", "SPY_2011_N-30D_0000950123-11-100622.txt",
      "0000950123-11-100622", "Form N-30D", "2011-09-30", "2011-11-28", None),
+    ("2012-Q1", "SPY_2012_Q2_N-30D_0001193125-12-251254.txt",
+     "0001193125-12-251254", "Form N-30D", "2012-03-31", "2012-05-29", None),
     ("2012-Q3", "SPY_2012_N-30D_0001193125-12-485808.txt",
      "0001193125-12-485808", "Form N-30D", "2012-09-30", "2012-11-29", None),
+    ("2013-Q1", "SPY_2013_Q2_N-30D_0001193125-13-241016.txt",
+     "0001193125-13-241016", "Form N-30D", "2013-03-31", "2013-05-30", None),
     ("2013-Q3", "SPY_2013_N-30D_0001193125-13-457894.txt",
      "0001193125-13-457894", "Form N-30D", "2013-09-30", "2013-11-29", None),
-    # Semi-annual report; a genuine March 31 point-in-time snapshot, so it is a Q1
-    # period rather than the Q3 annual slot the file name's "Q2" suggests.
     ("2014-Q1", "SPY_2014_Q2_N-30D_0001193125-14-220028.txt",
      "0001193125-14-220028", "Form N-30D", "2014-03-31", "2014-05-30", None),
     ("2014-Q3", "SPY_2014_Q4_N-30D_0001193125-14-428689.txt",
      "0001193125-14-428689", "Form N-30D", "2014-09-30", "2014-12-01", "2013-09-30"),
+    ("2015-Q1", "SPY_2015_Q2_N-30D_0001193125-15-211393.txt",
+     "0001193125-15-211393", "Form N-30D", "2015-03-31", "2015-06-03", None),
     ("2015-Q3", "SPY_2015_N-30D_0001193125-15-390230.txt",
      "0001193125-15-390230", "Form N-30D", "2015-09-30", "2015-11-30", None),
+    ("2016-Q1", "SPY_2016_Q2_N-30D_0001193125-16-605805.txt",
+     "0001193125-16-605805", "Form N-30D", "2016-03-31", "2016-05-27", None),
     ("2016-Q3", "SPY_2016_N-30D_0001193125-16-777823.txt",
      "0001193125-16-777823", "Form N-30D", "2016-09-30", "2016-11-28", None),
+    ("2017-Q1", "SPY_2017_Q2_N-30D_0001193125-17-183633.txt",
+     "0001193125-17-183633", "Form N-30D", "2017-03-31", "2017-05-25", None),
     ("2017-Q3", "SPY_2017_N-30D_0001193125-17-355427.txt",
      "0001193125-17-355427", "Form N-30D", "2017-09-30", "2017-11-29", None),
+    ("2018-Q1", "SPY_2018_Q2_N-30D_0001193125-18-176552.txt",
+     "0001193125-18-176552", "Form N-30D", "2018-03-31", "2018-05-29", None),
     ("2018-Q3", "SPY_2018_N-30D_0001193125-18-334730.txt",
      "0001193125-18-334730", "Form N-30D", "2018-09-30", "2018-11-27", None),
+    ("2019-Q1", "SPY_2019_Q2_N-30D_0001193125-19-156288.txt",
+     "0001193125-19-156288", "Form N-30D", "2019-03-31", "2019-05-24", None),
     ("2019-Q3", "SPY_2019_N-30D_0001193125-19-302203.txt",
      "0001193125-19-302203", "Form N-30D", "2019-09-30", "2019-11-27", None),
 ]
@@ -438,22 +463,15 @@ def assert_top_holdings_resolved(holdings, filing_label, depth=30):
 _SEC_PERIOD = re.compile(r"^CONFORMED PERIOD OF REPORT:\s*(\d{4})(\d{2})(\d{2})", re.M)
 
 
-def assert_filing_period_matches(
-    txt_path: Any,
-    expected_report_date: str,
-    header_period_override: Optional[str] = None,
-) -> None:
-    """Refuse a filing whose own stated period disagrees with its configured one.
+def read_filing_period(txt_path: Any) -> str:
+    """Return a filing's own CONFORMED PERIOD OF REPORT as YYYY-MM-DD.
 
-    Parses CONFORMED PERIOD OF REPORT: YYYYMMDD from the SEC header. Reads only
-    the header (content[:4000]) to avoid loading the full document.
+    Reads only the SEC header (content[:4000]) to avoid loading the full document.
 
-    `header_period_override` names the one wrong value a known-defective header is
-    allowed to carry - currently only SPY's FY2014 annual report, whose submission
-    header repeats the prior year's period while the document itself is the
-    September 30, 2014 report. The override must equal the header exactly, so it
-    excuses one identified defect rather than weakening the check: any other
-    disagreement, including a different wrong value in the same filing, still fails.
+    The period is the one header field that separates SPY's March 31 semi-annual
+    report from its September 30 annual report: both are Form N-30D filed under the
+    same COMPANY CONFORMED NAME, so neither form type nor filer identity can tell
+    them apart. Anything selecting between the two must read this.
     """
     path = Path(txt_path)
     with open(path, "r", encoding="utf-8", errors="replace") as f:
@@ -464,8 +482,25 @@ def assert_filing_period_matches(
         raise ScheduleParseError(
             f"{path.name}: missing CONFORMED PERIOD OF REPORT in SEC header"
         )
+    return f"{match.group(1)}-{match.group(2)}-{match.group(3)}"
 
-    stated_date = f"{match.group(1)}-{match.group(2)}-{match.group(3)}"
+
+def assert_filing_period_matches(
+    txt_path: Any,
+    expected_report_date: str,
+    header_period_override: Optional[str] = None,
+) -> None:
+    """Refuse a filing whose own stated period disagrees with its configured one.
+
+    `header_period_override` names the one wrong value a known-defective header is
+    allowed to carry - currently only SPY's FY2014 annual report, whose submission
+    header repeats the prior year's period while the document itself is the
+    September 30, 2014 report. The override must equal the header exactly, so it
+    excuses one identified defect rather than weakening the check: any other
+    disagreement, including a different wrong value in the same filing, still fails.
+    """
+    path = Path(txt_path)
+    stated_date = read_filing_period(path)
     if stated_date != expected_report_date and stated_date != header_period_override:
         raise ScheduleParseError(
             f"{path.name}: conformed period of report ({stated_date}) "
@@ -1030,7 +1065,7 @@ def build_universe_gap_report(
 ) -> Dict[str, Any]:
     """Collect tickers in historical Form N-30D filings' top `depth` missing from data/raw/tickers/.
 
-    Enumerates the historical survivorship gap across all 26 archived schedules
+    Enumerates the historical survivorship gap across all 35 archived schedules
     (1995-2019). For each missing constituent, records its best rank, company name,
     and the list of periods where it ranks in the top `depth`.
     """
@@ -1072,9 +1107,9 @@ def build_universe_gap_report(
             "market data files in data/raw/tickers/, enumerating the historical survivorship gap."
         ),
         "source": (
-            "26 SPY Form N-30D reports, fiscal years 1995-2019 (December 31 snapshots "
-            "for 1995-1996, September 30 snapshots for 1997-2019, plus the March 31, "
-            "2014 semi-annual report)"
+            "35 SPY Form N-30D reports, 1995-2019 (December 31 snapshots for 1995-1996, "
+            "September 30 annual-report snapshots for 1997-2019, and March 31 "
+            "semi-annual-report snapshots for 2010-2019)"
         ),
         "depth": depth,
         "missing_tickers": sorted_missing,
@@ -1163,13 +1198,13 @@ def main():
     verified_count = sum(1 for p in ground_truth["periods"].values() if p["verified"])
     print(f"  Verified periods: {verified_count} / {len(ground_truth['periods'])}")
 
-    # 3. Universe gap report across all 26 historical filings
+    # 3. Universe gap report across all 35 historical filings
     gap_report = build_universe_gap_report(depth=30, parsed_filings=parsed_historical)
     with open(UNIVERSE_GAP_REPORT_FILE, "w", encoding="utf-8") as f:
         json.dump(gap_report, f, indent=2)
 
     print(f"\nUniverse gap report written to {UNIVERSE_GAP_REPORT_FILE}")
-    print(f"Missing tickers from Top 30 across 26 historical filings ({len(gap_report['missing_tickers'])} total):")
+    print(f"Missing tickers from Top 30 across 35 historical filings ({len(gap_report['missing_tickers'])} total):")
     for ticker, info in gap_report["missing_tickers"].items():
         periods_str = ", ".join(info["periods"])
         print(f"  {ticker:<5} best rank #{info['best_rank']:<2} in {periods_str} ({info['name']})")

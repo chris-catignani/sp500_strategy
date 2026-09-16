@@ -245,5 +245,104 @@
     "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-19-302203.txt",
     "file_path": "data/raw/ground_truth/sec_filings/SPY_2019_N-30D_0001193125-19-302203.txt",
     "file_size_bytes": 917362
+  },
+  "2010-semi-annual": {
+    "year": 2010,
+    "form": "N-30D",
+    "filing_date": "2010-06-01",
+    "accession_number": "0000950123-10-054787",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950123-10-054787.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2010_Q2_N-30D_0000950123-10-054787.txt",
+    "file_size_bytes": 533270,
+    "report_date": "2010-03-31",
+    "note": "Semi-annual report, a March 31, 2010 point-in-time snapshot. Held as the 2010-Q1 period; it is not the FY2010 annual report and must not fill the Q3 annual slot."
+  },
+  "2011-semi-annual": {
+    "year": 2011,
+    "form": "N-30D",
+    "filing_date": "2011-05-27",
+    "accession_number": "0000950123-11-054920",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950123-11-054920.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2011_Q2_N-30D_0000950123-11-054920.txt",
+    "file_size_bytes": 533903,
+    "report_date": "2011-03-31",
+    "note": "Semi-annual report, a March 31, 2011 point-in-time snapshot. Held as the 2011-Q1 period; it is not the FY2011 annual report and must not fill the Q3 annual slot."
+  },
+  "2012-semi-annual": {
+    "year": 2012,
+    "form": "N-30D",
+    "filing_date": "2012-05-29",
+    "accession_number": "0001193125-12-251254",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-12-251254.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2012_Q2_N-30D_0001193125-12-251254.txt",
+    "file_size_bytes": 753363,
+    "report_date": "2012-03-31",
+    "note": "Semi-annual report, a March 31, 2012 point-in-time snapshot. Held as the 2012-Q1 period; it is not the FY2012 annual report and must not fill the Q3 annual slot."
+  },
+  "2013-semi-annual": {
+    "year": 2013,
+    "form": "N-30D",
+    "filing_date": "2013-05-30",
+    "accession_number": "0001193125-13-241016",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-13-241016.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2013_Q2_N-30D_0001193125-13-241016.txt",
+    "file_size_bytes": 766279,
+    "report_date": "2013-03-31",
+    "note": "Semi-annual report, a March 31, 2013 point-in-time snapshot. Held as the 2013-Q1 period; it is not the FY2013 annual report and must not fill the Q3 annual slot."
+  },
+  "2015-semi-annual": {
+    "year": 2015,
+    "form": "N-30D",
+    "filing_date": "2015-06-03",
+    "accession_number": "0001193125-15-211393",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-15-211393.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2015_Q2_N-30D_0001193125-15-211393.txt",
+    "file_size_bytes": 848307,
+    "report_date": "2015-03-31",
+    "note": "Semi-annual report, a March 31, 2015 point-in-time snapshot. Held as the 2015-Q1 period; it is not the FY2015 annual report and must not fill the Q3 annual slot."
+  },
+  "2016-semi-annual": {
+    "year": 2016,
+    "form": "N-30D",
+    "filing_date": "2016-05-27",
+    "accession_number": "0001193125-16-605805",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-16-605805.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2016_Q2_N-30D_0001193125-16-605805.txt",
+    "file_size_bytes": 879551,
+    "report_date": "2016-03-31",
+    "note": "Semi-annual report, a March 31, 2016 point-in-time snapshot. Held as the 2016-Q1 period; it is not the FY2016 annual report and must not fill the Q3 annual slot."
+  },
+  "2017-semi-annual": {
+    "year": 2017,
+    "form": "N-30D",
+    "filing_date": "2017-05-25",
+    "accession_number": "0001193125-17-183633",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-17-183633.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2017_Q2_N-30D_0001193125-17-183633.txt",
+    "file_size_bytes": 900041,
+    "report_date": "2017-03-31",
+    "note": "Semi-annual report, a March 31, 2017 point-in-time snapshot. Held as the 2017-Q1 period; it is not the FY2017 annual report and must not fill the Q3 annual slot."
+  },
+  "2018-semi-annual": {
+    "year": 2018,
+    "form": "N-30D",
+    "filing_date": "2018-05-29",
+    "accession_number": "0001193125-18-176552",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-18-176552.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2018_Q2_N-30D_0001193125-18-176552.txt",
+    "file_size_bytes": 903000,
+    "report_date": "2018-03-31",
+    "note": "Semi-annual report, a March 31, 2018 point-in-time snapshot. Held as the 2018-Q1 period; it is not the FY2018 annual report and must not fill the Q3 annual slot."
+  },
+  "2019-semi-annual": {
+    "year": 2019,
+    "form": "N-30D",
+    "filing_date": "2019-05-24",
+    "accession_number": "0001193125-19-156288",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-19-156288.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SPY_2019_Q2_N-30D_0001193125-19-156288.txt",
+    "file_size_bytes": 901482,
+    "report_date": "2019-03-31",
+    "note": "Semi-annual report, a March 31, 2019 point-in-time snapshot. Held as the 2019-Q1 period; it is not the FY2019 annual report and must not fill the Q3 annual slot."
   }
 }
