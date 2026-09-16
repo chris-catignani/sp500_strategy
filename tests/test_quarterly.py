@@ -54,6 +54,14 @@ class TestQuarterlyDataLoading(unittest.TestCase):
                 self.assertEqual(s.quarter, q)
                 self.assertGreater(s.market_cap_weight, 0.0)
 
+    def test_quarterly_candidate_pool_size(self) -> None:
+        """Verify S&P 500 quarterly candidate pool contains 20 constituents and World contains 12."""
+        for q in (1, 2, 3, 4):
+            univ_sp500 = self.loader.load_quarterly_universe(2024, q, universe="sp500")
+            self.assertEqual(len(univ_sp500), 20, f"sp500 2024-Q{q} candidate count != 20")
+            univ_world = self.loader.load_quarterly_universe(2024, q, universe="world")
+            self.assertEqual(len(univ_world), 12, f"world 2024-Q{q} candidate count != 12")
+
     def test_tesla_inclusion_date_enforced(self) -> None:
         """Verify TSLA is not in quarterly candidates prior to its Dec 21, 2020 addition."""
         for universe in ("sp500", "world"):
@@ -407,6 +415,21 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         self.assertEqual(len(q_top3_96), 4)
         for q in q_top3_96:
             self.assertEqual(q.spinoff_proceeds, 0.0)
+
+    def test_audit_quarterly_expansion_execution(self) -> None:
+        """Verify audit script functions run cleanly and detect midyear promotions."""
+        from scripts.audit_quarterly_expansion import (
+            audit_midyear_promotions,
+            reconcile_with_ground_truth,
+        )
+        promotions = audit_midyear_promotions()
+        self.assertGreater(len(promotions), 0)
+        gt_results = reconcile_with_ground_truth()
+        self.assertGreaterEqual(len(gt_results), 20)
+        verified_results = [r for r in gt_results.values() if r.get("verified", True)]
+        self.assertGreaterEqual(len(verified_results), 18)
+        avg_acc = sum(r["accuracy_pct"] for r in verified_results) / len(verified_results)
+        self.assertGreaterEqual(avg_acc, 90.0)
 
 
 if __name__ == "__main__":

@@ -47,6 +47,23 @@ SP500_NAMES = {
     "MO": "Altria Group Inc.",
     "T": "AT&T Inc.",
     "HPQ": "HP Inc.",
+    "AMGN": "Amgen Inc.",
+    "BMY": "Bristol-Myers Squibb Company",
+    "COST": "Costco Wholesale Corporation",
+    "DIS": "The Walt Disney Company",
+    "FNMA": "Federal National Mortgage Association",
+    "MA": "Mastercard Incorporated",
+    "MCD": "McDonald's Corporation",
+    "ORCL": "Oracle Corporation",
+    "PEP": "PepsiCo Inc.",
+    "PM": "Philip Morris International Inc.",
+    "PYPL": "PayPal Holdings Inc.",
+    "QCOM": "QUALCOMM Incorporated",
+    "UPS": "United Parcel Service Inc.",
+    "VZ": "Verizon Communications Inc.",
+    "ABBV": "AbbVie Inc.",
+    "ADBE": "Adobe Inc.",
+    "CMCSA": "Comcast Corporation",
 }
 
 NON_US_NAMES = {
@@ -71,6 +88,18 @@ NAMES = {**SP500_NAMES, **NON_US_NAMES}
 
 EFFECTIVE_INCLUSION_DATES = {
     "TSLA": "2020-12-21",
+    "GOOGL": "2006-03-31",
+    "BRK.B": "2010-01-21",
+    "META": "2013-12-23",
+    "V": "2009-11-30",
+    "MA": "2008-07-18",
+    "PM": "2008-03-31",
+    "PYPL": "2015-07-20",
+    "QCOM": "1999-11-19",
+    "UPS": "2002-07-22",
+    "ABBV": "2013-01-02",
+    "ADBE": "1997-05-05",
+    "CMCSA": "2002-11-18",
 }
 QUARTER_END_DATES = {
     1: "03-31",
@@ -302,7 +331,7 @@ def build_quarterly_constituents(
                 })
 
             scored_candidates.sort(key=lambda x: x["market_cap_weight"], reverse=True)
-            result[q_key] = scored_candidates[:12]
+            result[q_key] = scored_candidates[:len(base_tickers)]
 
         # Q4: Official factsheet re-anchoring
         q4_key = f"{year}-Q4"
@@ -588,11 +617,15 @@ def main():
         for rank, ticker in enumerate(tickers):
             weight = weights[rank]
             name = SP500_NAMES[ticker]
-            p_curr = all_prices_data[ticker][str_year]
-            p_prev = all_prices_data[ticker][str(year - 1)]
+            p_curr = all_prices_data[ticker].get(str_year)
+            p_prev = all_prices_data[ticker].get(str(year - 1))
             div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
             spinoff_dist = all_annual_spinoffs.get(ticker, {}).get(year, 0.0)
-            ret_1y = round((p_curr - p_prev + div + spinoff_dist) / p_prev, 4) if p_prev > 0 else 0.0
+            ret_1y = (
+                round((p_curr - p_prev + div + spinoff_dist) / p_prev, 4)
+                if (p_curr is not None and p_prev is not None and p_prev > 0)
+                else 0.0
+            )
 
             c_list.append({
                 "ticker": ticker,
@@ -614,11 +647,15 @@ def main():
         for rank, ticker in enumerate(tickers):
             weight = weights[rank]
             name = NAMES[ticker]
-            p_curr = all_prices_data[ticker][str_year]
-            p_prev = all_prices_data[ticker][str(year - 1)]
+            p_curr = all_prices_data[ticker].get(str_year)
+            p_prev = all_prices_data[ticker].get(str(year - 1))
             div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
             spinoff_dist = all_annual_spinoffs.get(ticker, {}).get(year, 0.0)
-            ret_1y = round((p_curr - p_prev + div + spinoff_dist) / p_prev, 4) if p_prev > 0 else 0.0
+            ret_1y = (
+                round((p_curr - p_prev + div + spinoff_dist) / p_prev, 4)
+                if (p_curr is not None and p_prev is not None and p_prev > 0)
+                else 0.0
+            )
 
             c_list.append({
                 "ticker": ticker,

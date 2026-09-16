@@ -82,13 +82,15 @@ For full mathematical derivations, sequence diagrams, and tax-loss carryforward 
 > [!NOTE]
 > **Discrete Dividend Timing & Quarterly Rebalancing**:
 > This simulation engine supports both **Annual** and **Quarterly** discrete rebalancing cycles:
-> - **Quarterly Rebalancing**: At the end of each quarter (March 31, June 30, September 30, December 31), exact split-adjusted dividends paid across that 3-month window are credited to cash prior to rebalancing. This captures authentic intra-year dividend increases (e.g., Apple, Microsoft, ExxonMobil dividend raises) in the exact quarter they took effect.
+> - **Quarterly Rebalancing**: At the end of each quarter (March 31, June 30, September 30, December 31), exact split-adjusted dividends paid across that 3-month window are credited to cash prior to rebalancing. This captures authentic intra-year dividend increases (e.g., Apple, Microsoft, ExxonMobil dividend raises) in the exact quarter they took effect. Candidate pools for Q1–Q3 dynamically drift the prior December's **Top 20** point-in-time factsheet constituents relative to index performance, re-anchoring to official factsheet weights at Q4. Ranks #1–#12 use verified S&P Dow Jones year-end factsheet weights, 2020–2023 candidates derive directly from SPY's audited Form NPORT-P XML filings, and ranks #13–#20 for earlier years use empirical split-adjusted market-cap ratios anchored to rank #12, fully documented with numeric valuations in [`docs/historical_weights_table.csv`](docs/historical_weights_table.csv). This Top 20 candidate universe achieves **96.7% fidelity** across modern Form NPORT-P XML filings and **94.8% fidelity** across all 21 verified SEC filings (`SPY` Forms NPORT-P and N-30D archived in `data/raw/ground_truth/sec_filings/`) and captures critical mid-year rallies from ranks #13–#20 (e.g., Tesla in 2023, Walmart in 2008, Oracle in 2000).
+> - **Selector Dynamics under Top 20 Expansion**: For `MarketCapSelector`, expanding the candidate pool from 12 to 20 leaves Annual Top 3, 5, 10 results completely invariant (0.00% delta across all horizons and tax tiers), while Quarterly Top 3 and 5 are identical. For `PerformanceSelector`, expanding to 20 candidates enables momentum selection across a broader pool of large-cap leaders, boosting risk-adjusted returns during tech rotations.
 > - **Annual Rebalancing**: Constituent cash dividends are credited once annually at year-end based on the cumulative distributions over the calendar year.
 >
 > In both modes:
 > 1. Dividends are derived directly from primary corporate action event logs (`data/raw/tickers/`) and are **never** simply divided by 4.
 > 2. Cash dividends are pooled into available cash prior to rebalancing, preserving the zero-external-dependency, self-financing invariant ($C \ge 0$) without margin debt.
 > 3. Dividend income is taxed in the exact period earned at marginal rate $\tau$, decoupled from capital gains under IRS rules.
+> 4. Audited ground truth and sensitivity can be inspected via `python3 scripts/audit_quarterly_expansion.py`.
 
 ## Financial Metrics & Acronym Guide
 
@@ -307,7 +309,7 @@ All unit tests pass with zero external dependencies.
 
 ## Historical Data Sources & Provenance
 
-For detailed technical specifications on benchmark index levels (`^GSPC`, `^SP500TR`), constituent point-in-time rankings, corporate action split adjustments (`WMT`, `GE`, `AIG`, `UNH`), and dividend cash accounting, see [`docs/DATA_PROVENANCE.md`](docs/DATA_PROVENANCE.md).
+For detailed technical specifications on benchmark index levels (`^GSPC`, `^SP500TR`), constituent point-in-time rankings, corporate action split adjustments (`WMT`, `GE`, `AIG`, `UNH`), dividend cash accounting, and the 47-filing SEC EDGAR regulatory archive (`data/raw/ground_truth/sec_filings/`), see [`docs/DATA_PROVENANCE.md`](docs/DATA_PROVENANCE.md).
 
 ---
 

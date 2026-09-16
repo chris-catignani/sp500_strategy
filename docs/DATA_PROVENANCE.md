@@ -17,17 +17,17 @@ All historical constituent price, split, dividend, and benchmark index datasets 
   - **Start Date**: 1993-12-31 (providing the base year-end level for 1994 return and yield calculations).
   - **End Date**: 2024-12-31.
   - **Temporal Granularity**: Monthly candles (`interval=1mo`) with daily event resolution for corporate actions (`events=div,split`).
-  - **Universe**: 33 point-in-time constituents + 2 benchmark indices (`^GSPC` Price Index, `^SP500TR` Total Return Index).
+  - **Universe**: 47 point-in-time constituents + 2 benchmark indices (`^GSPC` Price Index, `^SP500TR` Total Return Index).
 
-### 2.2 Ticker Universe (33 Equities)
+### 2.2 Ticker Universe (47 Equities)
 | Category | Tickers |
 | :--- | :--- |
-| **Mega-Cap Tech** | `AAPL`, `MSFT`, `NVDA`, `AMZN`, `GOOGL`, `META`, `TSLA`, `AVGO`, `CSCO`, `INTC`, `IBM`, `HPQ` |
-| **Financials** | `BRK.B`, `JPM`, `BAC`, `WFC`, `C`, `AIG` |
-| **Healthcare & Pharma**| `UNH`, `LLY`, `JNJ`, `PFE`, `MRK` |
-| **Consumer & Retail** | `WMT`, `PG`, `HD`, `KO`, `MO` |
-| **Energy & Industrials**| `XOM`, `CVX`, `GE` |
-| **Telecom & Payments** | `T`, `V` |
+| **Mega-Cap Tech & Semis** | `AAPL`, `MSFT`, `NVDA`, `AMZN`, `GOOGL`, `META`, `TSLA`, `AVGO`, `CSCO`, `INTC`, `IBM`, `HPQ`, `ORCL`, `QCOM` |
+| **Financials** | `BRK.B`, `JPM`, `BAC`, `WFC`, `C`, `AIG`, `FNMA` |
+| **Healthcare & Pharma**| `UNH`, `LLY`, `JNJ`, `PFE`, `MRK`, `AMGN`, `BMY` |
+| **Consumer & Retail** | `WMT`, `PG`, `HD`, `KO`, `MO`, `COST`, `DIS`, `MCD`, `PEP`, `PM` |
+| **Energy & Industrials**| `XOM`, `CVX`, `GE`, `UPS` |
+| **Telecom & Payments** | `T`, `V`, `MA`, `PYPL`, `VZ` |
 
 ---
 
@@ -45,15 +45,17 @@ data/raw/
 │   └── FBGRX.json         # Fidelity Blue Chip Growth Fund (FBGRX) raw response
 ├── corporate_actions/
 │   └── spinoffs.json      # Raw corporate spinoff catalog (IRS Form 8937 / Section 355)
+├── ground_truth/
+│   └── quarterly_ground_truth_holdings.json # Audited SEC EDGAR Form N-Q/N-PORT/N-CSR holdings (1999-2024)
 ├── tickers/
 │   ├── AAPL.json          # Apple Inc. raw response (timestamps, quotes, splits, dividends)
 │   ├── BRK.B.json         # Berkshire Hathaway Class B (queried as BRK-B)
 │   ├── T.json             # Post-1998 SBC / AT&T Inc. raw response
 │   ├── T_CORP_HISTORICAL.json # Decoupled original AT&T Corp ("Ma Bell") historical series (1993–1998)
 │   ├── UNH.json           # UnitedHealth Group Inc. raw response
-│   └── ... (33 files)
+│   └── ... (47 files)
 └── constituents/
-    ├── historical_index_weights.json       # Authoritative S&P 500 point-in-time constituent factsheet weights
+    ├── historical_index_weights.json       # Authoritative S&P 500 point-in-time constituent factsheet weights (Top 20)
     └── world_historical_index_weights.json # Authoritative All-World point-in-time constituent factsheet weights
 ```
 
@@ -137,12 +139,50 @@ To eliminate lookahead bias and maintain strict point-in-time realism:
 3. **Q4 Factsheet Re-Anchoring**: At each Q4 (December 31), candidate rosters and constituent index weights re-anchor to the official S&P Dow Jones Indices year-end factsheet. This introduces any newly admitted constituents (such as TSLA in 2020-Q4) and resets drifted weights to audited benchmark reality, eliminating multi-year cumulative drift error.
 4. **Pluggable Dataset Architecture**: [`DataLoader.load_quarterly_universe()`](../engine/data_loader.py) checks for registered quarterly universe files in `data/`, enabling external point-in-time constituent datasets to be dropped in without engine modifications.
 
-#### 4.3.5 Quarterly Candidate Roster Selection & Float Drift Trade-offs
-Evaluating candidate constituents for quarters Q1–Q3 from the prior December's Top 12 roster with passive price drift relative to the benchmark index ($W_{i,0} \times \frac{P_{i,q}/P_{i,0}}{P_{\text{index},q}/P_{\text{index},0}}$) is an intentional, principled design decision:
-- **Zero Lookahead Guarantee**: Deriving candidates from the prior year-end factsheet ensures no future information from year $t$'s Q4 factsheet leaks into early-year decisions. Midyear entrants that attain mega-cap valuation during Q1–Q3 are formally admitted at the Q4 reconstitution.
-- **Architectural Simplicity vs EDGAR Fragility**: Scraping float-adjusted shares and constituent holdings across 120+ historical SEC EDGAR regulatory filings (Forms N-Q, N-PORT, N-CSR for SPY) would introduce massive web scraping fragility and require external XML/HTML dependencies, violating the project's zero-external-dependency rule.
-- **Economic Accuracy**: In capitalization-weighted indices, capitalization between reconstitutions is overwhelmingly driven by price return rather than share issuance. The mathematical drift model closely tracks true passive index weight evolution.
+#### 4.3.5 Quarterly Candidate Roster Expansion (Top 20 Universe) & Reproducible Derivation
+Evaluating candidate constituents for quarters Q1–Q3 from the prior December's point-in-time roster with passive price drift relative to the benchmark index ($W_{i,0} \times \frac{P_{i,q}/P_{i,0}}{P_{\text{index},q}/P_{\text{index},0}}$) is an intentional, principled design decision:
+- **Prior Architecture & Top 12 Limitation**: Previously, candidate pools were restricted to the prior year-end Top 12 constituents. While sufficient for Top 3 and Top 5 strategies, a Top 10 strategy suffered truncation when equities ranked #13–#20 experienced massive intra-year momentum (e.g., Tesla in 2023, Walmart in 2008, Oracle in 2000).
+- **Expanded Top 20 Universe & SPY Float-Adjusted Weighting**: The candidate universe is expanded to the **Top 20** largest companies in the S&P 500 at each year-end (1994–2024). Ranks #1–#12 are compiled directly from official S&P Dow Jones Indices year-end factsheets. Ranks #13–#20 for 1994–2019 and 2024 are derived from empirical point-in-time market capitalizations anchored to the audited rank-12 factsheet weight:
+  $$W_i = \text{round}\left(W_{12} \times \frac{\text{Cap}_i}{\text{Cap}_{12}}, 4\right)$$
+- **Programmatic Form NPORT-P XML Derivation (2020–2023)**: For modern periods covered by primary SEC Form NPORT-P XML filings (2020, 2021, 2022, 2023), Top 20 candidates and exact weights are parsed directly from SPY's December 31 XML filings by [`scripts/generate_historical_weights.py`](../scripts/generate_historical_weights.py) with Alphabet Class A (`02079K305`) & C (`02079K107`) consolidated into `GOOGL`:
+  - **2020-12-31**: Adobe Inc. (`ADBE`, #19, 0.76%) and Comcast Corp. (`CMCSA`, #20, 0.76%) enter the Top 20.
+  - **2021-12-31**: Adobe Inc. (`ADBE`, #20, 0.67%) and Broadcom Inc. (`AVGO`, #19, 0.68%) enter the Top 20. Walmart (`WMT`) is heavily float-adjusted due to ~50% Walton family ownership, placing it at rank #40 (0.51% weight in SPY) and outside the Top 20.
+  - **2022-12-31**: AbbVie Inc. (`ABBV`, #19, \$3.17B, 0.89%) and Merck & Co. Inc. (`MRK`, #20, \$3.12B, 0.88%) place ahead of Meta Platforms Inc. (`META`, #21, \$3.00B, 0.84%), correctly reflecting Meta's drawdown in 2022.
+  - **2023-12-31**: Costco Wholesale Corp. (`COST`, #19, 0.73%) and Merck & Co. Inc. (`MRK`, #20, 0.69%) place in the Top 20.
+- **Reproducible Weight Derivation Table with Numeric Valuations**: Every constituent rank, weight, formula, anchor valuation, and source citation across all 31 years (620 rows) is exported to [`docs/historical_weights_table.csv`](historical_weights_table.csv). The CSV includes explicit numeric values in `underlying_value_usd` and `anchor_value_usd` (exact `valUSD` and `total_fund_val` for XML years; numeric $Cap_i$ and $Cap_{12}$ in \$ billions for earlier years), enabling 100% exact reproduction of all weights.
+- **Zero Lookahead Guarantee**: Deriving candidates from the prior year-end factsheet ensures no future information from year $t$'s Q4 factsheet leaks into early-year decisions.
 
+#### 4.3.6 Primary Ground-Truth SEC EDGAR Regulatory Archive & Automated Parser
+To eliminate reliance on third-party aggregators and establish unassailable regulatory ground truth, **47 primary SEC EDGAR regulatory filings** of the SPDR S&P 500 ETF Trust (`SPY`, CIK `0000884394`) are permanently archived in `data/raw/ground_truth/sec_filings/`:
+- **Coverage Scope (1995–2024)**:
+  - **Modern XML Filings (2020-Q1 through 2024-Q2, 18 Quarters)**: Form `NPORT-P` filings containing exact portfolio valuations (`valUSD`) and percentage weights (`pctVal`) for all 505 constituents.
+  - **Historical Annual Reports (1995–2019, 25 Filings)**: Form `N-CSR` and `N-30D` filings containing the complete audited **Schedule of Investments**.
+- **Automated Standard-Library Parser (`scripts/extract_ground_truth_from_sec.py`)**:
+  - Automatically parses all 18 XML filings, reads `<formData><genInfo><repPdDate>` to verify the reporting date matches each calendar quarter end, aggregates Alphabet share classes, and extracts the audited Top 10.
+  - Programmatically generates [`data/raw/ground_truth/quarterly_ground_truth_holdings.json`](../data/raw/ground_truth/quarterly_ground_truth_holdings.json) with clean verification metadata.
+- **Audited Schedule of Investments Historical Reconciliation**:
+  - SPY's fiscal year ends September 30. Historical annual reports (Form N-30D) strictly validate **Q3**:
+    - **1999-Q3 (1999-09-30, Acc: `0000950135-99-005434`)**: Lucent Technologies (`LU`, \$248.0M) ranks #7 and Merck & Co. (`MRK`, \$189.2M) ranks #9; Pfizer is #11 and JNJ is outside the Top 10.
+    - **2000-Q3 (2000-09-30, Acc: `0000950135-00-005227`)**: EMC Corp (`EMC`, \$414.6M) ranks #10, replacing IBM (\$380.9M, #12).
+    - **2008-Q3 (2008-09-30, Acc: `0000950135-08-007648`)**: Bank of America (`BAC`, \$1,457.7M) ranks #9 and IBM (`IBM`, \$1,447.3M) ranks #10, replacing Wal-Mart (\$1,226.0M, #11) and Cisco (\$1,217.2M, #12).
+  - Quarters lacking point-in-time regulatory filing evidence (historical Q1/Q2, and 2024-Q3) are marked `"verified": false` and reported as `[UNVERIFIED - No Filing]`.
+- **Reconciliation Accuracy**:
+  - Across the **18 modern Form NPORT-P XML quarters**, the drifted candidate model achieves **96.7% average Top 10 match accuracy** (174/180 exact matches).
+  - Across all **21 verified regulatory filing quarters** (18 XML + 3 Annual Reports), the model achieves **94.8% average Top 10 match accuracy** (199/210 exact matches).
+
+#### 4.3.7 Empirical Mid-Year Promotion Findings & Selector Sensitivity
+The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/audit_quarterly_expansion.py) performs automated detection of mid-year promotions and side-by-side strategy comparisons:
+- **Mid-Year Promotions into Top 10**: Across 1994–2024 (124 quarters), the audit identified **68 total company-quarter promotion instances into the Top 10**, with **24 promotion instances originating from ranks #13–#20** that were previously locked out under the Top 12 restriction, representing **11 unique companies**:
+  - **`TSLA` (2023)**: Entered 2023 at rank #13, jumping to rank #7 in Q1, #6 in Q2, and #6 in Q3.
+  - **`ORCL` (2000)**: Entered 2000 at rank #14, jumping to rank #9 in Q1, #8 in Q2, and #9 in Q3 during the dot-com rally (verified at #8 in SPY's Sept 30, 2000 SEC filing).
+  - **`WMT` (2008)**: Climbed to rank #9 in Q1, #8 in Q2, and #7 in Q3 during the GFC defensive flight-to-safety.
+  - **`NVDA` (2021)**: Surged from rank #14 into rank #8 in 2021-Q2 and 2021-Q3.
+  - **`C` (1999)**: Climbed from rank #14 into rank #8 in 1999-Q2 and Q3.
+  - **`KO` & `PG` (2002)**: Jumped into Top 10 during the 2002 bear market rotation.
+- **Selector Qualification & Side-by-Side Sensitivity**:
+  - **True Top 12 Baseline (`TrueTop12DataLoader`)**: Strictly isolates candidate drift during Q1–Q3 to the prior December's base 12 companies, eliminating lookahead leakage.
+  - **`MarketCapSelector`**: Annual rebalancing is **completely unaffected** (0.00% delta across all tiers and horizons). In quarterly rebalancing, Top 3 and Top 5 are identical (0.00% delta across all 10y, 20y, 30y horizons). For Top 10, expanding to 20 candidates enables mid-year promotions from ranks #13–#20, raising 10y Pre-Tax CAGR from 21.82% to 22.06% (+0.24% delta) and 20y Pre-Tax CAGR from 13.57% to 14.16% (+0.59% delta).
+  - **`PerformanceSelector`**: Evaluates trailing 1-year returns across the candidate pool. Expanding candidates from 12 to 20 constituents broadens the eligible universe, allowing top-performing momentum stocks from ranks #13–#20 to be selected (e.g. 10y Top 3 Pre-Tax CAGR increases from 22.10% to 25.01%, +2.92% delta). Both models are reported side-by-side in `scripts/audit_quarterly_expansion.py`.
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).
