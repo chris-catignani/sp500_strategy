@@ -562,9 +562,9 @@ class TestN30DScheduleParser(unittest.TestCase):
         self.assertEqual(report["depth"], 30)
         self.assertEqual(
             report["source"],
-            "26 SPY Form N-30D reports, fiscal years 1995-2019 (December 31 snapshots "
-            "for 1995-1996, September 30 snapshots for 1997-2019, plus the March 31, "
-            "2014 semi-annual report)",
+            "35 SPY Form N-30D reports, 1995-2019 (December 31 snapshots for 1995-1996, "
+            "September 30 annual-report snapshots for 1997-2019, and March 31 "
+            "semi-annual-report snapshots for 2010-2019)",
         )
 
         tickers_dir = ROOT / "data" / "raw" / "tickers"
@@ -577,7 +577,7 @@ class TestN30DScheduleParser(unittest.TestCase):
                 f"Gap report claims {ticker} is missing, but data/raw/tickers/{ticker}.json exists",
             )
 
-        # Collect all tickers appearing in the top 30 across all 26 archived schedules
+        # Collect all tickers appearing in the top 30 across all 35 archived schedules
         filing_top30_tickers = set()
         for _period, filename, _acc, _form, _rep, _filed, _ovr, parser in iter_schedule_filings():
             parsed = parser(FILINGS_DIR / filename)
@@ -629,7 +629,7 @@ class TestHtmlScheduleParser(unittest.TestCase):
             HTML_ERA_FILINGS, assert_top_holdings_resolved,
         )
 
-        self.assertEqual(len(HTML_ERA_FILINGS), 11)
+        self.assertEqual(len(HTML_ERA_FILINGS), 20)
         for period, filename, *_ in HTML_ERA_FILINGS:
             with self.subTest(period=period):
                 parsed = self.parse(self.dir / filename)
@@ -689,6 +689,45 @@ class TestHtmlScheduleParser(unittest.TestCase):
         self.assertEqual(googl["val"], 8151781761.0)
         self.assertEqual(parsed["holdings"][2]["ticker"], "GOOGL")
 
+    def test_every_year_2010_2019_registers_a_q1_and_a_q3_period(self):
+        """Both of each year's reports are registered: March 31 semi-annual and September 30 annual."""
+        from scripts.extract_ground_truth_from_sec import HTML_ERA_FILINGS
+
+        by_period = {entry[0]: entry for entry in HTML_ERA_FILINGS}
+        for year in range(2010, 2020):
+            with self.subTest(year=year):
+                self.assertIn(f"{year}-Q1", by_period)
+                self.assertIn(f"{year}-Q3", by_period)
+                self.assertEqual(by_period[f"{year}-Q1"][4], f"{year}-03-31")
+                self.assertEqual(by_period[f"{year}-Q3"][4], f"{year}-09-30")
+
+    def test_semi_annual_and_annual_reports_are_distinct_documents(self):
+        """No year may register the same file for both its Q1 and its Q3 period.
+
+        Both reports are Form N-30D under the same conformed filer name, so a
+        mix-up would not announce itself; a shared file name is the symptom.
+        """
+        from scripts.extract_ground_truth_from_sec import HTML_ERA_FILINGS
+
+        filenames = [entry[1] for entry in HTML_ERA_FILINGS]
+        self.assertEqual(len(filenames), len(set(filenames)))
+
+        accessions = [entry[2] for entry in HTML_ERA_FILINGS]
+        self.assertEqual(len(accessions), len(set(accessions)))
+
+    def test_semi_annual_filings_state_their_own_march_31_period(self):
+        """Each Q1 filing's SEC header declares 03-31, with no override excusing it."""
+        from scripts.extract_ground_truth_from_sec import (
+            HTML_ERA_FILINGS, read_filing_period,
+        )
+
+        for period, filename, _acc, _form, report_date, _filed, override in HTML_ERA_FILINGS:
+            if not period.endswith("-Q1"):
+                continue
+            with self.subTest(period=period):
+                self.assertIsNone(override)
+                self.assertEqual(read_filing_period(self.dir / filename), report_date)
+
     def test_html_era_consolidation_leaves_total_unchanged(self):
         """Consolidating share classes must not create or destroy market value."""
         from scripts.extract_ground_truth_from_sec import HTML_ERA_FILINGS
@@ -747,9 +786,22 @@ class TestArchivedFilingCoverage(unittest.TestCase):
         )
 
         registered = {entry[1] for entry in HTML_ERA_FILINGS}
-        for key in [str(y) for y in range(2010, 2020)] + ["2014-semi-annual"]:
+        annual_keys = [str(y) for y in range(2010, 2020)]
+        semi_annual_keys = [f"{y}-semi-annual" for y in range(2010, 2020)]
+        for key in annual_keys + semi_annual_keys:
             with self.subTest(manifest_key=key):
                 self.assertIn(Path(manifest[key]["file_path"]).name, registered)
+
+        # An annual key must never name a March 31 document, and vice versa: that
+        # confusion is what put a semi-annual in the "2014" annual slot before #50.
+        for key in annual_keys:
+            with self.subTest(annual_key=key):
+                self.assertNotIn("-03-31", manifest[key].get("report_date", ""))
+        for key in semi_annual_keys:
+            with self.subTest(semi_annual_key=key):
+                self.assertEqual(
+                    manifest[key]["report_date"], f"{manifest[key]['year']}-03-31"
+                )
 
     def test_every_archived_spy_filing_reconciles_to_its_stated_total(self):
         """A filing that parses to zero rows, or to a sum the filing contradicts, fails."""
@@ -1039,7 +1091,10 @@ class TestIssuerSeparation(unittest.TestCase):
 
 
 class TestIsValidSpyAnnualReport(unittest.TestCase):
-    """Unit tests for is_valid_spy_annual_report validation and regression guards."""
+    """Unit tests for the download validators and their regression guards."""
+
+    SEMI_ANNUAL_2015 = "SPY_2015_Q2_N-30D_0001193125-15-211393.txt"
+    ANNUAL_2015 = "SPY_2015_N-30D_0001193125-15-390230.txt"
 
     def test_valid_spy_filing_fixed_width_era(self):
         """A genuine 1995-2009 SPY filing passes validation and parsing."""
@@ -1116,6 +1171,85 @@ class TestIsValidSpyAnnualReport(unittest.TestCase):
         ) as parser:
             self.assertTrue(is_valid_spy_annual_report(file_path, 2015, content))
         parser.assert_called_once_with(file_path)
+
+
+    def test_semi_annual_validator_accepts_a_genuine_march_31_report(self):
+        """A real semi-annual report passes: SPY's own document, period 2015-03-31."""
+        from scripts.download_all_historical_sec_filings import (
+            is_valid_spy_semi_annual_report,
+        )
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / self.SEMI_ANNUAL_2015
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        self.assertTrue(is_valid_spy_semi_annual_report(file_path, 2015, content))
+
+    def test_semi_annual_validator_rejects_the_same_year_annual_report(self):
+        """The period, not the form, separates the two reports.
+
+        FY2015's annual report is Form N-30D filed by 'SPDR S&P 500 ETF TRUST' -
+        identical on both counts to the semi-annual. Only CONFORMED PERIOD OF REPORT
+        (2015-09-30, not 2015-03-31) tells them apart, and it must.
+        """
+        from scripts.download_all_historical_sec_filings import (
+            is_valid_spy_semi_annual_report,
+        )
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / self.ANNUAL_2015
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        self.assertFalse(is_valid_spy_semi_annual_report(file_path, 2015, content))
+
+    def test_semi_annual_validator_rejects_a_neighbouring_years_report(self):
+        """A March 31 report from the wrong year is still the wrong filing for that key."""
+        from scripts.download_all_historical_sec_filings import (
+            is_valid_spy_semi_annual_report,
+        )
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / self.SEMI_ANNUAL_2015
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        self.assertFalse(is_valid_spy_semi_annual_report(file_path, 2016, content))
+
+    def test_semi_annual_validator_rejects_select_sector_document(self):
+        """Co-filed Select Sector documents are excluded from the semi-annual pass too."""
+        from scripts.download_all_historical_sec_filings import (
+            is_valid_spy_semi_annual_report,
+        )
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "SELECT_SECTOR_SPDR_2004_N-CSR_0000950135-04-005558.txt"
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        self.assertFalse(is_valid_spy_semi_annual_report(file_path, 2004, content))
+
+    def test_annual_validator_cannot_distinguish_a_semi_annual_report(self):
+        """Documents the limitation the semi-annual pass exists to work around.
+
+        is_valid_spy_annual_report asserts filer identity and a faithful parse, never
+        the period, so it accepts a March 31 semi-annual as readily as a September 30
+        annual report - the failure that once put a Q1 snapshot in the "2014" annual
+        manifest slot. The annual pass is safe only because it scans QTR4/QTR1, where
+        the semi-annual never files. If that ever changes, this test is the warning.
+        """
+        from scripts.download_all_historical_sec_filings import is_valid_spy_annual_report
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / self.SEMI_ANNUAL_2015
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        self.assertTrue(is_valid_spy_annual_report(file_path, 2015, content))
+
+    def test_semi_annual_schedule_parse_error_is_re_raised(self):
+        """A reconciliation failure on a genuine semi-annual must not be swallowed."""
+        from unittest.mock import patch
+        from scripts.download_all_historical_sec_filings import (
+            is_valid_spy_semi_annual_report,
+        )
+        from scripts.extract_ground_truth_from_sec import ScheduleParseError
+
+        file_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / self.SEMI_ANNUAL_2015
+        content = file_path.read_text(encoding="utf-8", errors="replace")
+        with patch(
+            "scripts.download_all_historical_sec_filings.parse_html_schedule_filing",
+            side_effect=ScheduleParseError("stated total mismatch"),
+        ):
+            with self.assertRaises(ScheduleParseError) as ctx:
+                is_valid_spy_semi_annual_report(file_path, 2015, content)
+            self.assertIn(file_path.name, str(ctx.exception))
 
 
 if __name__ == "__main__":

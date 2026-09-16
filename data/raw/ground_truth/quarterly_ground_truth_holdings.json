@@ -231,11 +231,6 @@
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2009-12-31; unverified."
     },
-    "2010-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2010-03-31; unverified."
-    },
     "2010-Q2": {
       "verified": false,
       "holdings": [],
@@ -245,11 +240,6 @@
       "verified": false,
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2010-12-31; unverified."
-    },
-    "2011-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2011-03-31; unverified."
     },
     "2011-Q2": {
       "verified": false,
@@ -261,11 +251,6 @@
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2011-12-31; unverified."
     },
-    "2012-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2012-03-31; unverified."
-    },
     "2012-Q2": {
       "verified": false,
       "holdings": [],
@@ -275,11 +260,6 @@
       "verified": false,
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2012-12-31; unverified."
-    },
-    "2013-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2013-03-31; unverified."
     },
     "2013-Q2": {
       "verified": false,
@@ -301,11 +281,6 @@
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2014-12-31; unverified."
     },
-    "2015-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2015-03-31; unverified."
-    },
     "2015-Q2": {
       "verified": false,
       "holdings": [],
@@ -315,11 +290,6 @@
       "verified": false,
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2015-12-31; unverified."
-    },
-    "2016-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2016-03-31; unverified."
     },
     "2016-Q2": {
       "verified": false,
@@ -331,11 +301,6 @@
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2016-12-31; unverified."
     },
-    "2017-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2017-03-31; unverified."
-    },
     "2017-Q2": {
       "verified": false,
       "holdings": [],
@@ -346,11 +311,6 @@
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2017-12-31; unverified."
     },
-    "2018-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2018-03-31; unverified."
-    },
     "2018-Q2": {
       "verified": false,
       "holdings": [],
@@ -360,11 +320,6 @@
       "verified": false,
       "holdings": [],
       "note": "No point-in-time regulatory filing available for 2018-12-31; unverified."
-    },
-    "2019-Q1": {
-      "verified": false,
-      "holdings": [],
-      "note": "No point-in-time regulatory filing available for 2019-03-31; unverified."
     },
     "2019-Q2": {
       "verified": false,
@@ -886,6 +841,40 @@
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2009_N-30D_0000950123-09-066888.txt",
       "fund_total_value_usd": 71621512714.0
     },
+    "2010-Q1": {
+      "verified": true,
+      "holdings": [
+        "XOM",
+        "MSFT",
+        "AAPL",
+        "GE",
+        "PG",
+        "JNJ",
+        "BAC",
+        "JPM",
+        "IBM",
+        "WFC"
+      ],
+      "weights": [
+        0.0299,
+        0.0211,
+        0.0202,
+        0.0184,
+        0.0174,
+        0.017,
+        0.017,
+        0.0168,
+        0.0158,
+        0.0153
+      ],
+      "accession_number": "0000950123-10-054787",
+      "form": "Form N-30D",
+      "report_date": "2010-03-31",
+      "filing_date": "2010-06-01",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950123-10-054787.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2010_Q2_N-30D_0000950123-10-054787.txt",
+      "fund_total_value_usd": 77006505023.0
+    },
     "2010-Q3": {
       "verified": true,
       "holdings": [
@@ -919,6 +908,40 @@
       "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950123-10-109631.txt",
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2010_N-30D_0000950123-10-109631.txt",
       "fund_total_value_usd": 78077851159.0
+    },
+    "2011-Q1": {
+      "verified": true,
+      "holdings": [
+        "XOM",
+        "AAPL",
+        "CVX",
+        "GE",
+        "IBM",
+        "MSFT",
+        "JPM",
+        "T",
+        "PG",
+        "WFC"
+      ],
+      "weights": [
+        0.0345,
+        0.0266,
+        0.0179,
+        0.0176,
+        0.0165,
+        0.0155,
+        0.0152,
+        0.015,
+        0.0143,
+        0.0138
+      ],
+      "accession_number": "0000950123-11-054920",
+      "form": "Form N-30D",
+      "report_date": "2011-03-31",
+      "filing_date": "2011-05-27",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0000950123-11-054920.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2011_Q2_N-30D_0000950123-11-054920.txt",
+      "fund_total_value_usd": 89617452687.0
     },
     "2011-Q3": {
       "verified": true,
@@ -954,6 +977,40 @@
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2011_N-30D_0000950123-11-100622.txt",
       "fund_total_value_usd": 80792014610.0
     },
+    "2012-Q1": {
+      "verified": true,
+      "holdings": [
+        "AAPL",
+        "XOM",
+        "IBM",
+        "MSFT",
+        "GE",
+        "CVX",
+        "T",
+        "PG",
+        "JNJ",
+        "WFC"
+      ],
+      "weights": [
+        0.0439,
+        0.0321,
+        0.019,
+        0.0189,
+        0.0167,
+        0.0166,
+        0.0145,
+        0.0145,
+        0.0142,
+        0.0141
+      ],
+      "accession_number": "0001193125-12-251254",
+      "form": "Form N-30D",
+      "report_date": "2012-03-31",
+      "filing_date": "2012-05-29",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-12-251254.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2012_Q2_N-30D_0001193125-12-251254.txt",
+      "fund_total_value_usd": 105647352386.0
+    },
     "2012-Q3": {
       "verified": true,
       "holdings": [
@@ -987,6 +1044,40 @@
       "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-12-485808.txt",
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2012_N-30D_0001193125-12-485808.txt",
       "fund_total_value_usd": 118116973886.0
+    },
+    "2013-Q1": {
+      "verified": true,
+      "holdings": [
+        "AAPL",
+        "XOM",
+        "GE",
+        "CVX",
+        "JNJ",
+        "IBM",
+        "MSFT",
+        "GOOGL",
+        "PG",
+        "PFE"
+      ],
+      "weights": [
+        0.0297,
+        0.0289,
+        0.0172,
+        0.0165,
+        0.0163,
+        0.016,
+        0.0154,
+        0.0152,
+        0.0151,
+        0.0149
+      ],
+      "accession_number": "0001193125-13-241016",
+      "form": "Form N-30D",
+      "report_date": "2013-03-31",
+      "filing_date": "2013-05-30",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-13-241016.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2013_Q2_N-30D_0001193125-13-241016.txt",
+      "fund_total_value_usd": 130576292610.0
     },
     "2013-Q3": {
       "verified": true,
@@ -1090,6 +1181,40 @@
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2014_Q4_N-30D_0001193125-14-428689.txt",
       "fund_total_value_usd": 179655913963.0
     },
+    "2015-Q1": {
+      "verified": true,
+      "holdings": [
+        "AAPL",
+        "XOM",
+        "MSFT",
+        "GOOGL",
+        "JNJ",
+        "BRK.B",
+        "WFC",
+        "GE",
+        "JPM",
+        "PG"
+      ],
+      "weights": [
+        0.0396,
+        0.0195,
+        0.0182,
+        0.0172,
+        0.0153,
+        0.0144,
+        0.0139,
+        0.0136,
+        0.0124,
+        0.0121
+      ],
+      "accession_number": "0001193125-15-211393",
+      "form": "Form N-30D",
+      "report_date": "2015-03-31",
+      "filing_date": "2015-06-03",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-15-211393.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2015_Q2_N-30D_0001193125-15-211393.txt",
+      "fund_total_value_usd": 183471955527.0
+    },
     "2015-Q3": {
       "verified": true,
       "holdings": [
@@ -1123,6 +1248,40 @@
       "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-15-390230.txt",
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2015_N-30D_0001193125-15-390230.txt",
       "fund_total_value_usd": 166521059535.0
+    },
+    "2016-Q1": {
+      "verified": true,
+      "holdings": [
+        "AAPL",
+        "GOOGL",
+        "MSFT",
+        "XOM",
+        "JNJ",
+        "GE",
+        "BRK.B",
+        "META",
+        "T",
+        "AMZN"
+      ],
+      "weights": [
+        0.0337,
+        0.0248,
+        0.0243,
+        0.0193,
+        0.0166,
+        0.0165,
+        0.0148,
+        0.0146,
+        0.0134,
+        0.0128
+      ],
+      "accession_number": "0001193125-16-605805",
+      "form": "Form N-30D",
+      "report_date": "2016-03-31",
+      "filing_date": "2016-05-27",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-16-605805.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2016_Q2_N-30D_0001193125-16-605805.txt",
+      "fund_total_value_usd": 181760028556.0
     },
     "2016-Q3": {
       "verified": true,
@@ -1158,6 +1317,40 @@
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2016_N-30D_0001193125-16-777823.txt",
       "fund_total_value_usd": 197172469106.0
     },
+    "2017-Q1": {
+      "verified": true,
+      "holdings": [
+        "AAPL",
+        "MSFT",
+        "GOOGL",
+        "AMZN",
+        "XOM",
+        "JNJ",
+        "META",
+        "BRK.B",
+        "JPM",
+        "GE"
+      ],
+      "weights": [
+        0.0372,
+        0.0251,
+        0.0245,
+        0.0173,
+        0.0168,
+        0.0167,
+        0.0165,
+        0.0156,
+        0.0155,
+        0.0128
+      ],
+      "accession_number": "0001193125-17-183633",
+      "form": "Form N-30D",
+      "report_date": "2017-03-31",
+      "filing_date": "2017-05-25",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-17-183633.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2017_Q2_N-30D_0001193125-17-183633.txt",
+      "fund_total_value_usd": 239941574841.0
+    },
     "2017-Q3": {
       "verified": true,
       "holdings": [
@@ -1192,6 +1385,40 @@
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2017_N-30D_0001193125-17-355427.txt",
       "fund_total_value_usd": 243028279842.0
     },
+    "2018-Q1": {
+      "verified": true,
+      "holdings": [
+        "AAPL",
+        "MSFT",
+        "GOOGL",
+        "AMZN",
+        "BRK.B",
+        "META",
+        "JPM",
+        "JNJ",
+        "XOM",
+        "BAC"
+      ],
+      "weights": [
+        0.0378,
+        0.0312,
+        0.0277,
+        0.0259,
+        0.0171,
+        0.017,
+        0.0168,
+        0.0153,
+        0.0141,
+        0.0128
+      ],
+      "accession_number": "0001193125-18-176552",
+      "form": "Form N-30D",
+      "report_date": "2018-03-31",
+      "filing_date": "2018-05-29",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-18-176552.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2018_Q2_N-30D_0001193125-18-176552.txt",
+      "fund_total_value_usd": 252110128784.0
+    },
     "2018-Q3": {
       "verified": true,
       "holdings": [
@@ -1225,6 +1452,40 @@
       "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-18-334730.txt",
       "local_file": "data/raw/ground_truth/sec_filings/SPY_2018_N-30D_0001193125-18-334730.txt",
       "fund_total_value_usd": 279260484352.0
+    },
+    "2019-Q1": {
+      "verified": true,
+      "holdings": [
+        "MSFT",
+        "AAPL",
+        "AMZN",
+        "GOOGL",
+        "META",
+        "BRK.B",
+        "JNJ",
+        "XOM",
+        "JPM",
+        "V"
+      ],
+      "weights": [
+        0.0383,
+        0.036,
+        0.0311,
+        0.0302,
+        0.0168,
+        0.0165,
+        0.0158,
+        0.0145,
+        0.014,
+        0.0116
+      ],
+      "accession_number": "0001193125-19-156288",
+      "form": "Form N-30D",
+      "report_date": "2019-03-31",
+      "filing_date": "2019-05-24",
+      "sec_edgar_url": "https://www.sec.gov/Archives/edgar/data/884394/0001193125-19-156288.txt",
+      "local_file": "data/raw/ground_truth/sec_filings/SPY_2019_Q2_N-30D_0001193125-19-156288.txt",
+      "fund_total_value_usd": 266306493364.0
     },
     "2019-Q3": {
       "verified": true,
