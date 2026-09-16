@@ -19,6 +19,9 @@ from engine.models import ConstituentSnapshot
 
 # Q4 periods whose ground truth is the same filing the year-end candidate list is built
 # from. They match 10/10 by construction and cannot corroborate the drift model.
+# NOTE: 1995-Q4 and 1996-Q4 are NOT circular and must NOT be added here. Their year-end
+# candidate lists derive from estimated factsheet anchors, not from these Form N-30D
+# filings, making them genuine independent tests against primary regulatory ground truth.
 CIRCULAR_Q4_PERIODS = frozenset({"2020-Q4", "2021-Q4", "2022-Q4", "2023-Q4", "2024-Q4"})
 
 
