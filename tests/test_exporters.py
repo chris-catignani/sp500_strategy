@@ -532,7 +532,7 @@ class TestExporters(unittest.TestCase):
             };
             console.log(JSON.stringify(results));
             """
-            proc = subprocess.run(["node", "-e", test_js], capture_output=True, text=True)
+            proc = subprocess.run(["node"], input=test_js, capture_output=True, text=True)
             self.assertEqual(proc.returncode, 0, f"Node execution error: {proc.stderr}")
             data = json.loads(proc.stdout)
 
