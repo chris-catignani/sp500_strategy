@@ -84,6 +84,7 @@ COMPANY_NAMES = {
     "ABBV": "AbbVie Inc.",
     "ADBE": "Adobe Inc.",
     "CMCSA": "Comcast Corporation",
+    "NFLX": "Netflix, Inc.",
 }
 
 # Form NPORT-P XML filings manifest for year-ends
@@ -92,6 +93,7 @@ XML_YEAR_ENDS = {
     "2021": ("SPY_2021-Q4_0001752724-22-048845.xml", "0001752724-22-048845"),
     "2022": ("SPY_2022-Q4_0001752724-23-046862.xml", "0001752724-23-046862"),
     "2023": ("SPY_2023-Q4_0001752724-24-043296.xml", "0001752724-24-043296"),
+    "2024": ("SPY_2024-Q4_0001752724-25-043826.xml", "0001752724-25-043826"),
 }
 
 # 1. Programmatically parse XML filings and update 2020-2023 directly

@@ -112,6 +112,7 @@ class TestRawConstituents(unittest.TestCase):
             "2021": "SPY_2021-Q4_0001752724-22-048845.xml",
             "2022": "SPY_2022-Q4_0001752724-23-046862.xml",
             "2023": "SPY_2023-Q4_0001752724-24-043296.xml",
+            "2024": "SPY_2024-Q4_0001752724-25-043826.xml",
         }
 
         for year, xml_file in xml_map.items():
@@ -151,6 +152,10 @@ class TestRawConstituents(unittest.TestCase):
         self.assertIn("COST", tickers_2023)
         self.assertIn("MRK", tickers_2023)
         self.assertNotIn("WMT", tickers_2023)
+
+        tickers_2024 = data["constituents_by_year"]["2024"]
+        self.assertIn("NFLX", tickers_2024)
+        self.assertNotIn("ORCL", tickers_2024)
 
     def test_sec_ground_truth_filing_accuracy(self):
         """Verify ground-truth historical and modern holdings against SEC filings."""
