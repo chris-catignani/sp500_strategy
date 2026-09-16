@@ -1,19 +1,19 @@
 """Test raw historical constituents data integrity."""
 
+import csv
 import json
-import unittest
 from pathlib import Path
+import sys
+import unittest
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 class TestRawConstituents(unittest.TestCase):
     def test_sp500_historical_weights_top20(self):
-        path = (
-            Path(__file__).resolve().parent.parent
-            / "data"
-            / "raw"
-            / "constituents"
-            / "historical_index_weights.json"
-        )
+        path = ROOT / "data" / "raw" / "constituents" / "historical_index_weights.json"
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         constituents = data["constituents_by_year"]
@@ -34,13 +34,7 @@ class TestRawConstituents(unittest.TestCase):
 
     def test_no_duplicate_tickers_per_year(self):
         """Verify no duplicate tickers exist in any year's factsheet."""
-        path = (
-            Path(__file__).resolve().parent.parent
-            / "data"
-            / "raw"
-            / "constituents"
-            / "historical_index_weights.json"
-        )
+        path = ROOT / "data" / "raw" / "constituents" / "historical_index_weights.json"
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         for year, tickers in data["constituents_by_year"].items():
@@ -52,13 +46,7 @@ class TestRawConstituents(unittest.TestCase):
 
     def test_strictly_positive_descending_weights(self):
         """Verify weights are strictly positive and weakly descending."""
-        path = (
-            Path(__file__).resolve().parent.parent
-            / "data"
-            / "raw"
-            / "constituents"
-            / "historical_index_weights.json"
-        )
+        path = ROOT / "data" / "raw" / "constituents" / "historical_index_weights.json"
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         for year, weights in data["weights_by_year"].items():
@@ -73,8 +61,7 @@ class TestRawConstituents(unittest.TestCase):
 
     def test_constituent_price_and_dividend_coverage(self):
         """Verify every constituent in factsheets has a raw ticker archive file with prices."""
-        root = Path(__file__).resolve().parent.parent
-        weights_path = root / "data" / "raw" / "constituents" / "historical_index_weights.json"
+        weights_path = ROOT / "data" / "raw" / "constituents" / "historical_index_weights.json"
         with open(weights_path, "r", encoding="utf-8") as f:
             data = json.load(f)
         
@@ -82,7 +69,7 @@ class TestRawConstituents(unittest.TestCase):
         for tickers in data["constituents_by_year"].values():
             all_tickers.update(tickers)
 
-        tickers_dir = root / "data" / "raw" / "tickers"
+        tickers_dir = ROOT / "data" / "raw" / "tickers"
         for t in all_tickers:
             ticker_file = tickers_dir / f"{t}.json"
             self.assertTrue(
@@ -98,12 +85,9 @@ class TestRawConstituents(unittest.TestCase):
 
     def test_xml_generated_candidates_and_weights(self):
         """Verify 2020-2024 candidates and weights strictly reproduce the Form NPORT-P XML filings."""
-        import sys
-        root = Path(__file__).resolve().parent.parent
-        sys.path.insert(0, str(root))
         from scripts.extract_ground_truth_from_sec import parse_xml_filing, FILINGS_DIR
 
-        weights_path = root / "data" / "raw" / "constituents" / "historical_index_weights.json"
+        weights_path = ROOT / "data" / "raw" / "constituents" / "historical_index_weights.json"
         with open(weights_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
@@ -161,9 +145,7 @@ class TestRawConstituents(unittest.TestCase):
 
     def test_sec_ground_truth_filing_accuracy(self):
         """Verify ground-truth historical and modern holdings against SEC filings."""
-        import csv
-        root = Path(__file__).resolve().parent.parent
-        gt_path = root / "data" / "raw" / "ground_truth" / "quarterly_ground_truth_holdings.json"
+        gt_path = ROOT / "data" / "raw" / "ground_truth" / "quarterly_ground_truth_holdings.json"
         with open(gt_path, "r", encoding="utf-8") as f:
             gt = json.load(f)
 
@@ -198,7 +180,7 @@ class TestRawConstituents(unittest.TestCase):
         self.assertTrue(gt_2024_q4["verified"])
 
         # Provenance table reproducibility check
-        csv_path = root / "docs" / "historical_weights_table.csv"
+        csv_path = ROOT / "docs" / "historical_weights_table.csv"
         self.assertTrue(csv_path.exists(), "historical_weights_table.csv does not exist")
         with open(csv_path, "r", encoding="utf-8") as f:
             reader = list(csv.DictReader(f))
@@ -231,9 +213,7 @@ class TestRawConstituents(unittest.TestCase):
 
     def test_provenance_table_marks_unsourced_ranks_unverified(self):
         """Ranks #13-#20 outside the NPORT-P years have no primary source and must say so."""
-        import csv
-        root = Path(__file__).resolve().parent.parent
-        with open(root / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
+        with open(ROOT / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
             reader = list(csv.DictReader(f))
 
         xml_years = {"2020", "2021", "2022", "2023", "2024"}
@@ -249,15 +229,48 @@ class TestRawConstituents(unittest.TestCase):
                     f"{row['year']} rank {row['rank']} claims a source it does not have",
                 )
 
+    def test_company_label_consistency(self):
+        """Verify GOOGL company label is harmonized across scripts, mappings, and datasets."""
+        from scripts.generate_historical_weights import COMPANY_NAMES
+        from scripts.build_datasets_from_raw import SP500_NAMES
+        from scripts.extract_ground_truth_from_sec import CONSOLIDATED_ISSUERS
+
+        canonical = "Alphabet Inc. (Class A & C)"
+        self.assertEqual(COMPANY_NAMES["GOOGL"], canonical)
+        self.assertEqual(SP500_NAMES["GOOGL"], canonical)
+        self.assertEqual(CONSOLIDATED_ISSUERS["GOOGL"]["canonical_name"], canonical)
+
+        datasets = [
+            "sp500_constituents.json",
+            "sp500_quarterly_constituents.json",
+            "world_constituents.json",
+            "world_quarterly_constituents.json",
+        ]
+        for ds in datasets:
+            with open(ROOT / "data" / ds, "r", encoding="utf-8") as f:
+                content = json.load(f)
+            items = []
+            if isinstance(content, dict):
+                for v in content.values():
+                    if isinstance(v, list):
+                        items.extend(v)
+            googl_found = False
+            for item in items:
+                if item.get("ticker") == "GOOGL":
+                    googl_found = True
+                    self.assertEqual(
+                        item.get("name"),
+                        canonical,
+                        f"Failed in {ds} for period {item.get('year')}-{item.get('quarter')}",
+                    )
+            self.assertTrue(googl_found, f"GOOGL not found in {ds}")
+
 
 class TestN30DScheduleParser(unittest.TestCase):
     """The historical Form N-30D Schedules of Investments must be parsed, not transcribed."""
 
     @classmethod
     def setUpClass(cls):
-        import sys
-        root = Path(__file__).resolve().parent.parent
-        sys.path.insert(0, str(root))
         from scripts.extract_ground_truth_from_sec import parse_n30d_filing, FILINGS_DIR
         cls.parse = staticmethod(parse_n30d_filing)
         cls.dir = FILINGS_DIR
@@ -307,8 +320,7 @@ class TestN30DScheduleParser(unittest.TestCase):
 
     def test_ground_truth_json_matches_parsed_filings(self):
         """The committed ground-truth JSON must reproduce what the parser reads."""
-        root = Path(__file__).resolve().parent.parent
-        gt_path = root / "data" / "raw" / "ground_truth" / "quarterly_ground_truth_holdings.json"
+        gt_path = ROOT / "data" / "raw" / "ground_truth" / "quarterly_ground_truth_holdings.json"
         with open(gt_path, "r", encoding="utf-8") as f:
             gt = json.load(f)
 
@@ -329,9 +341,6 @@ class TestConsolidateHoldings(unittest.TestCase):
     """Unit tests for multi-class equity holdings consolidation at issuer level."""
 
     def test_consolidate_holdings_alphabet(self):
-        import sys
-        root = Path(__file__).resolve().parent.parent
-        sys.path.insert(0, str(root))
         from scripts.extract_ground_truth_from_sec import consolidate_holdings
 
         raw_holdings = [
@@ -354,9 +363,6 @@ class TestConsolidateHoldings(unittest.TestCase):
         self.assertEqual(by_ticker["GOOGL"]["name"], "Alphabet Inc. (Class A & C)")
 
     def test_consolidate_holdings_synthetic_dual_class(self):
-        import sys
-        root = Path(__file__).resolve().parent.parent
-        sys.path.insert(0, str(root))
         from scripts.extract_ground_truth_from_sec import consolidate_holdings
 
         custom_issuers = {
@@ -385,9 +391,6 @@ class TestConsolidateHoldings(unittest.TestCase):
         self.assertEqual(by_ticker["TEST.A"]["name"], "Test Company Inc. (Class A & B)")
 
     def test_consolidate_holdings_ticker_fallback(self):
-        import sys
-        root = Path(__file__).resolve().parent.parent
-        sys.path.insert(0, str(root))
         from scripts.extract_ground_truth_from_sec import consolidate_holdings
 
         # Holdings without CUSIP but with valid ticker

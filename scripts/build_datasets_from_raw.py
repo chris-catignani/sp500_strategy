@@ -18,7 +18,7 @@ SP500_NAMES = {
     "MSFT": "Microsoft Corporation",
     "NVDA": "NVIDIA Corporation",
     "AMZN": "Amazon.com Inc.",
-    "GOOGL": "Alphabet Inc. (Class A)",
+    "GOOGL": "Alphabet Inc. (Class A & C)",
     "META": "Meta Platforms Inc.",
     "TSLA": "Tesla Inc.",
     "AVGO": "Broadcom Inc.",
