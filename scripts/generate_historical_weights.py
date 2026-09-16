@@ -86,15 +86,6 @@ COMPANY_NAMES = {
     "CMCSA": "Comcast Corporation",
 }
 
-# Approximate rank 12 market capitalization anchor in billions by era
-ERA_CAPS = {
-    1994: 42.0, 1995: 52.0, 1996: 62.0, 1997: 75.0, 1998: 95.0, 1999: 130.0,
-    2000: 120.0, 2001: 95.0, 2002: 80.0, 2003: 95.0, 2004: 110.0, 2005: 120.0,
-    2006: 135.0, 2007: 150.0, 2008: 115.0, 2009: 130.0, 2010: 145.0, 2011: 155.0,
-    2012: 175.0, 2013: 205.0, 2014: 230.0, 2015: 245.0, 2016: 265.0, 2017: 310.0,
-    2018: 320.0, 2019: 390.0, 2024: 480.0,
-}
-
 # Form NPORT-P XML filings manifest for year-ends
 XML_YEAR_ENDS = {
     "2020": ("SPY_2020-Q4_0001752724-21-043869.xml", "0001752724-21-043869"),
@@ -141,7 +132,6 @@ def build_provenance_csv():
     """Write comprehensive CSV table of constituent source values, calculations, and valuations."""
     rows = []
     for year in sorted(constituents_by_year.keys(), key=int):
-        yr_int = int(year)
         tickers = constituents_by_year[year]
         weights = weights_by_year[year]
         w12 = weights[11]
@@ -170,8 +160,8 @@ def build_provenance_csv():
                     "source_citation": f"SPY SEC Form NPORT-P (Accession {accession}, Period {year}-12-31)",
                 })
         else:
-            # Factsheet + Empirical Capitalization ratio years (1994-2019, 2024)
-            cap12 = ERA_CAPS[yr_int]
+            # Factsheet-anchored years (1994-2019, 2024): ranks #1-#12 are sourced
+            # from official factsheets; ranks #13-#20 remain unverified estimates.
             for rank, (ticker, weight) in enumerate(zip(tickers, weights), 1):
                 name = COMPANY_NAMES.get(ticker, ticker)
                 if rank <= 12:
@@ -181,19 +171,19 @@ def build_provenance_csv():
                     anchor_val = ""
                     source_cit = f"S&P Dow Jones Indices Year-End Factsheet {year}"
                 else:
-                    methodology = "Empirical Capitalization Ratio"
-                    formula = "round(W_12 * Cap_i / Cap_12, 4)"
-                    # Solve for cap_i to 2 decimal places reproducing exact weight
-                    best_capi = round(weight / w12 * cap12, 2)
-                    if round(w12 * best_capi / cap12, 4) != weight:
-                        for delta in [-0.05, -0.04, -0.03, -0.02, -0.01, 0.01, 0.02, 0.03, 0.04, 0.05]:
-                            candidate = round(best_capi + delta, 2)
-                            if round(w12 * candidate / cap12, 4) == weight:
-                                best_capi = candidate
-                                break
-                    underlying_val = f"${best_capi:.2f}B"
-                    anchor_val = f"${cap12:.2f}B"
-                    source_cit = f"SEC Form 10-K & Point-in-Time Capitalization Archives {year}"
+                    # These weights are ESTIMATES, not derived quantities. No primary
+                    # source in this repository reports a market capitalization for
+                    # ranks #13-#20 in these years, so no underlying or anchor value is
+                    # published here: back-solving Cap_i from the weight it is supposed
+                    # to explain would dress an assumption up as evidence.
+                    methodology = "Unverified Estimate (No Primary Source)"
+                    formula = "N/A - estimated, not derived"
+                    underlying_val = ""
+                    anchor_val = ""
+                    source_cit = (
+                        f"UNVERIFIED - no point-in-time filing archived for {year} "
+                        f"ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5"
+                    )
 
                 rows.append({
                     "year": year,

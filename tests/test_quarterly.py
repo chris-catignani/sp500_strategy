@@ -431,6 +431,49 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         avg_acc = sum(r["accuracy_pct"] for r in verified_results) / len(verified_results)
         self.assertGreaterEqual(avg_acc, 90.0)
 
+    def test_promotions_are_classified_against_audited_filings(self) -> None:
+        """Mid-year promotions must be tagged by whether a filing corroborates them."""
+        from scripts.audit_quarterly_expansion import (
+            audit_midyear_promotions,
+            classify_promotions,
+            reconcile_with_ground_truth,
+        )
+        promotions = [
+            p for p in audit_midyear_promotions() if p["from_expanded_tier"]
+        ]
+        counts = classify_promotions(promotions, reconcile_with_ground_truth())
+        self.assertEqual(sum(counts.values()), len(promotions))
+        self.assertTrue(all("status" in p for p in promotions))
+
+        by_key = {(p["period"], p["ticker"]): p["status"] for p in promotions}
+        # The 2008-09-30 filing places Wal-Mart at #11, outside the true Top 10, so the
+        # model's promotion to #7 is a false positive and must never read as evidence.
+        self.assertEqual(by_key[("2008-Q3", "WMT")], "CONTRADICTED")
+        # Oracle at #8 and Tesla in 2023 are corroborated by their filings.
+        self.assertEqual(by_key[("2000-Q3", "ORCL")], "CONFIRMED")
+        self.assertEqual(by_key[("2023-Q2", "TSLA")], "CONFIRMED")
+        # Quarters with no archived filing cannot corroborate anything.
+        self.assertEqual(by_key[("2008-Q1", "WMT")], "UNVERIFIED")
+
+    def test_out_of_sample_accuracy_excludes_circular_q4_periods(self) -> None:
+        """Q4 2020-2023 match by construction and must be excluded from the honest metric."""
+        from scripts.audit_quarterly_expansion import (
+            CIRCULAR_Q4_PERIODS,
+            reconcile_with_ground_truth,
+        )
+        gt = reconcile_with_ground_truth()
+        for period in CIRCULAR_Q4_PERIODS:
+            # These are the filings the year-end candidate lists are parsed from.
+            self.assertEqual(gt[period]["accuracy_pct"], 100.0)
+        oos = [
+            r for k, r in gt.items()
+            if r.get("verified") and r.get("form") == "NPORT-P" and k not in CIRCULAR_Q4_PERIODS
+        ]
+        self.assertEqual(len(oos), 14)
+        oos_acc = sum(r["accuracy_pct"] for r in oos) / len(oos)
+        self.assertLess(oos_acc, 96.7)
+        self.assertGreater(oos_acc, 90.0)
+
 
 if __name__ == "__main__":
     unittest.main()

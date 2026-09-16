@@ -60,6 +60,73 @@ CUSIP_TO_TICKER = {
     "20030N101": "CMCSA",  # Comcast Corp
 }
 
+# Historical company names appearing in Form N-30D Schedules of Investments (1995-2019).
+# Includes constituents that no longer exist as independent issuers - these are required
+# to read the filings faithfully, whether or not the strategy can currently hold them.
+N30D_NAME_PATTERNS = [
+    (r"^Lucent\s+Technologies", "LU"),
+    (r"^EMC\s+Corp", "EMC"),
+    (r"^Wal-?\s*Mart\s+Stores", "WMT"),
+    (r"^Walmart", "WMT"),
+    (r"^Exxon\s+Mobil", "XOM"),
+    (r"^Exxon\s+Corp", "XOM"),
+    (r"^General\s+Electric", "GE"),
+    (r"^Microsoft\s+Corp", "MSFT"),
+    (r"^Intel\s+Corp", "INTC"),
+    (r"^International\s+Business\s+Machines", "IBM"),
+    (r"^Cisco\s+Systems", "CSCO"),
+    (r"^Merck\s+&\s+Co", "MRK"),
+    (r"^Citigroup", "C"),
+    (r"^Pfizer", "PFE"),
+    (r"^Oracle\s+Corp", "ORCL"),
+    (r"^American\s+International\s+Group", "AIG"),
+    (r"^Johnson\s+&\s+Johnson", "JNJ"),
+    (r"^Procter\s+&\s+Gamble", "PG"),
+    (r"^JPMorgan\s+Chase", "JPM"),
+    (r"^Chevron(Texaco)?\s+Corp", "CVX"),
+    (r"^AT\s*&\s*T", "T"),
+    (r"^SBC\s+Communications", "SBC"),
+    (r"^Bank\s+of\s+America", "BAC"),
+    (r"^Coca[-\s]?Cola", "KO"),
+    # Philip Morris International was spun off from Altria in March 2008; both trade as
+    # separate S&P 500 constituents thereafter and must not be consolidated. The pre-2003
+    # "Philip Morris Cos." is the company that was renamed Altria.
+    (r"^Philip\s+Morris\s+International", "PM"),
+    (r"^Philip\s+Morris", "MO"),
+    (r"^Altria\s+Group", "MO"),
+    (r"^Wells\s+Fargo", "WFC"),
+    (r"^Hewlett-?\s*Packard", "HPQ"),
+    (r"^Amgen", "AMGN"),
+    (r"^PepsiCo", "PEP"),
+    (r"^Walt\s+Disney", "DIS"),
+    (r"^Abbott\s+Laboratories", "ABT"),
+    (r"^Eli\s+Lilly", "LLY"),
+    (r"^Schlumberger", "SLB"),
+    (r"^ConocoPhillips", "COP"),
+    (r"^United\s+Technologies", "UTX"),
+    (r"^Nortel\s+Networks", "NT"),
+    (r"^Sun\s+Microsystems", "SUNW"),
+    (r"^Dell\s+(Computer|Inc)", "DELL"),
+    (r"^Tyco\s+International", "TYC"),
+    (r"^WorldCom", "WCOM"),
+    (r"^MCI\s+", "MCIC"),
+    (r"^Time\s+Warner", "TWX"),
+    (r"^BellSouth", "BLS"),
+    (r"^Ameritech", "AIT"),
+    (r"^Mobil\s+Corp", "MOB"),
+    (r"^Amoco\s+Corp", "AN"),
+    (r"^E\.?I\.?\s+du\s*Pont|^DuPont", "DD"),
+    (r"^Fannie\s+Mae|^Federal\s+National\s+Mortgage", "FNMA"),
+    (r"^Freddie\s+Mac|^Federal\s+Home\s+Loan\s+Mortgage", "FMCC"),
+    (r"^Royal\s+Dutch", "RD"),
+    (r"^AOL\s+Time\s+Warner", "AOL"),
+    (r"^Bristol-?Myers\s+Squibb", "BMY"),
+    (r"^Apple", "AAPL"),
+    (r"^Home\s+Depot", "HD"),
+    (r"^Verizon\s+Communications", "VZ"),
+    (r"^QUALCOMM", "QCOM"),
+]
+
 # Name pattern fallbacks if CUSIP lookup fails
 NAME_FALLBACKS = [
     (r"Apple\s+Inc", "AAPL"),
@@ -92,6 +159,28 @@ NAME_FALLBACKS = [
 ]
 
 
+# Historical Form N-30D annual reports with an extracted Schedule of Investments.
+# SPY's fiscal year ends September 30, so each validates that year's Q3 only.
+N30D_HISTORICAL_FILINGS = [
+    ("1999-Q3", "SPY_1999_Q4_N-30D_0000950135-99-005434.txt",
+     "0000950135-99-005434", "Form N-30D", "1999-09-30", "1999-11-29"),
+    ("2000-Q3", "SPY_2000_Q4_N-30D_0000950135-00-005227.txt",
+     "0000950135-00-005227", "Form N-30D", "2000-09-30", "2000-11-21"),
+    ("2008-Q3", "SPY_2008_Q4_N-30D_0000950135-08-007648.txt",
+     "0000950135-08-007648", "Form N-30D", "2008-09-30", "2008-11-26"),
+]
+
+# Quarters adjacent to the extracted annual reports that have no point-in-time filing.
+UNVERIFIED_HISTORICAL_PERIODS = [
+    ("1999-Q1", "No point-in-time regulatory filing available for 1999-03-31; unverified."),
+    ("1999-Q2", "No point-in-time regulatory filing available for 1999-06-30; unverified."),
+    ("2000-Q1", "No point-in-time regulatory filing available for 2000-03-31; unverified."),
+    ("2000-Q2", "No point-in-time regulatory filing available for 2000-06-30; unverified."),
+    ("2008-Q1", "No point-in-time regulatory filing available for 2008-03-31; unverified."),
+    ("2008-Q2", "No point-in-time regulatory filing available for 2008-06-30; unverified."),
+]
+
+
 def strip_ns(tag: str) -> str:
     """Strip XML namespace."""
     return re.sub(r"\{.*?\}", "", tag)
@@ -110,6 +199,95 @@ def map_ticker(name: str, cusip: str, raw_ticker: str) -> str:
         if re.search(pattern, name, re.IGNORECASE):
             return t
     return name
+
+
+_N30D_ROW = re.compile(
+    r"^(?P<name>.*?)\s*\.{2,}\s*(?P<shares>[\d,]+)\s+\$?\s*(?P<value>[\d,]+)\s*$"
+)
+# A wrapped name fragment carries no figures - anything with digits or a currency marker
+# belongs to a table the schedule parser must not absorb into the next company name.
+_N30D_NAME_FRAGMENT = re.compile(r"^[A-Za-z(][A-Za-z0-9&.,'()/\- ]*$")
+
+
+def _n30d_ticker(name: str) -> str:
+    """Map a Schedule of Investments company name to its ticker symbol."""
+    cleaned = re.sub(r"\s*\*+\s*$", "", name).strip()
+    for pattern, ticker in N30D_NAME_PATTERNS:
+        if re.search(pattern, cleaned, re.IGNORECASE):
+            return ticker
+    return cleaned
+
+
+def parse_n30d_filing(txt_path: Path) -> Dict[str, Any]:
+    """Parse a Form N-30D / N-CSR Schedule of Investments into ranked holdings.
+
+    The schedule is fixed-width text where each position reads
+    ``Company Name ......  shares  market_value``. Long names wrap across up to three
+    indented continuation lines, so the name is accumulated until the numeric row is
+    reached. Positions in the same issuer (multiple share classes) are consolidated.
+
+    Args:
+        txt_path: Path to the archived filing text.
+
+    Returns:
+        Dict with 'total_val_usd' and 'holdings' (ranked descending by market value).
+    """
+    lines = txt_path.read_text(encoding="utf-8", errors="replace").splitlines()
+
+    positions: List[Dict[str, Any]] = []
+    name_buffer: List[str] = []
+    for raw in lines:
+        line = raw.rstrip()
+        if not line.strip():
+            name_buffer = []
+            continue
+
+        match = _N30D_ROW.match(line)
+        if match:
+            name = " ".join(name_buffer + [match.group("name").strip()])
+            name = re.sub(r"\s+", " ", name).strip()
+            shares = float(match.group("shares").replace(",", ""))
+            value = float(match.group("value").replace(",", ""))
+            # Schedule rows always carry both a share count and a market value; the
+            # statements of assets and operations elsewhere in the filing do not.
+            if name and shares > 0 and value > 0:
+                positions.append({"name": name, "shares": shares, "val": value})
+            name_buffer = []
+            continue
+
+        # Continuation of a wrapped company name: plain text with no figures.
+        fragment = line.strip()
+        if len(fragment) <= 60 and _N30D_NAME_FRAGMENT.match(fragment) and not any(
+            ch.isdigit() for ch in fragment
+        ):
+            name_buffer.append(fragment)
+            if len(name_buffer) > 3:
+                name_buffer = name_buffer[-3:]
+        else:
+            name_buffer = []
+
+    # Consolidate multiple positions (e.g. share classes) in the same issuer.
+    consolidated: Dict[str, Dict[str, Any]] = {}
+    for pos in positions:
+        ticker = _n30d_ticker(pos["name"])
+        if ticker in consolidated:
+            consolidated[ticker]["val"] += pos["val"]
+            consolidated[ticker]["shares"] += pos["shares"]
+        else:
+            consolidated[ticker] = {
+                "name": pos["name"],
+                "ticker": ticker,
+                "shares": pos["shares"],
+                "val": pos["val"],
+            }
+
+    holdings = sorted(consolidated.values(), key=lambda h: h["val"], reverse=True)
+    total_val = sum(h["val"] for h in holdings)
+    for i, h in enumerate(holdings, 1):
+        h["rank"] = i
+        h["weight"] = h["val"] / total_val if total_val > 0 else 0.0
+
+    return {"total_val_usd": total_val, "holdings": holdings}
 
 
 def parse_xml_filing(xml_path: Path) -> Dict[str, Any]:
@@ -195,34 +373,31 @@ def main():
         "periods": {},
     }
 
-    # 1. Historical Periods (1999, 2000, 2008) from audited Form N-30D Schedules of Investments
-    historical_specs = [
-        ("1999-Q1", False, [], "No point-in-time regulatory filing available for 1999-03-31; unverified.", None, None, None, None),
-        ("1999-Q2", False, [], "No point-in-time regulatory filing available for 1999-06-30; unverified.", None, None, None, None),
-        ("1999-Q3", True, ["MSFT", "GE", "INTC", "CSCO", "IBM", "WMT", "LU", "XOM", "MRK", "C"], None, "0000950135-99-005434", "Form N-30D", "1999-09-30", "1999-11-29"),
-        ("2000-Q1", False, [], "No point-in-time regulatory filing available for 2000-03-31; unverified.", None, None, None, None),
-        ("2000-Q2", False, [], "No point-in-time regulatory filing available for 2000-06-30; unverified.", None, None, None, None),
-        ("2000-Q3", True, ["GE", "CSCO", "MSFT", "XOM", "PFE", "INTC", "C", "ORCL", "AIG", "EMC"], None, "0000950135-00-005227", "Form N-30D", "2000-09-30", "2000-11-21"),
-        ("2008-Q1", False, [], "No point-in-time regulatory filing available for 2008-03-31; unverified.", None, None, None, None),
-        ("2008-Q2", False, [], "No point-in-time regulatory filing available for 2008-06-30; unverified.", None, None, None, None),
-        ("2008-Q3", True, ["XOM", "GE", "PG", "MSFT", "JNJ", "JPM", "CVX", "T", "BAC", "IBM"], None, "0000950135-08-007648", "Form N-30D", "2008-09-30", "2008-11-26"),
-    ]
-
-    for period, verified, holdings, note, acc, form, rep_dt, file_dt in historical_specs:
-        entry = {
-            "verified": verified,
-            "holdings": holdings,
+    # 1. Historical Periods from audited Form N-30D Schedules of Investments.
+    # SPY's fiscal year ends September 30, so these annual reports validate Q3 only.
+    # Holdings are PARSED from the archived filing text, never transcribed by hand.
+    for period, note in UNVERIFIED_HISTORICAL_PERIODS:
+        ground_truth["periods"][period] = {
+            "verified": False,
+            "holdings": [],
+            "note": note,
         }
-        if note:
-            entry["note"] = note
-        if acc:
-            entry["accession_number"] = acc
-            entry["form"] = form
-            entry["report_date"] = rep_dt
-            entry["filing_date"] = file_dt
-            entry["sec_edgar_url"] = f"https://www.sec.gov/Archives/edgar/data/884394/{acc}.txt"
-            entry["local_file"] = f"data/raw/ground_truth/sec_filings/SPY_{period[:4]}_Q4_{form.replace(' ', '_')}_{acc}.txt"
-        ground_truth["periods"][period] = entry
+
+    for period, filename, acc, form, rep_dt, file_dt in N30D_HISTORICAL_FILINGS:
+        parsed = parse_n30d_filing(FILINGS_DIR / filename)
+        top10 = parsed["holdings"][:10]
+        ground_truth["periods"][period] = {
+            "verified": True,
+            "holdings": [h["ticker"] for h in top10],
+            "weights": [round(h["weight"], 4) for h in top10],
+            "accession_number": acc,
+            "form": form,
+            "report_date": rep_dt,
+            "filing_date": file_dt,
+            "sec_edgar_url": f"https://www.sec.gov/Archives/edgar/data/884394/{acc}.txt",
+            "local_file": f"data/raw/ground_truth/sec_filings/{filename}",
+            "fund_total_value_usd": parsed["total_val_usd"],
+        }
 
     # 2. Modern Quarters (2020-Q1 .. 2024-Q2) parsed directly from Form NPORT-P XML
     for period, meta in sorted(manifest.items()):

@@ -197,11 +197,121 @@ class TestRawConstituents(unittest.TestCase):
             self.assertIn("underlying_value_usd", row)
             self.assertIn("anchor_value_usd", row)
             if row["methodology"] == "SEC Form NPORT-P Audited Holdings":
+                # Audited rows publish the exact figures the weight is computed from,
+                # and the published formula must actually reproduce the weight.
                 self.assertTrue(row["underlying_value_usd"].startswith("$"))
                 self.assertTrue(row["anchor_value_usd"].startswith("$"))
-            elif row["methodology"] == "Empirical Capitalization Ratio":
-                self.assertTrue(row["underlying_value_usd"].endswith("B"))
-                self.assertTrue(row["anchor_value_usd"].endswith("B"))
+                val = float(row["underlying_value_usd"].lstrip("$").replace(",", ""))
+                total = float(row["anchor_value_usd"].lstrip("$").replace(",", ""))
+                self.assertAlmostEqual(
+                    round(val / total, 4),
+                    float(row["weight"]),
+                    places=4,
+                    msg=f"{row['year']} rank {row['rank']} weight not reproducible from NPORT values",
+                )
+            elif row["methodology"] == "Unverified Estimate (No Primary Source)":
+                # No primary source reports these capitalizations, so the row must not
+                # publish numbers back-solved from the weight they purport to explain.
+                self.assertEqual(row["underlying_value_usd"], "")
+                self.assertEqual(row["anchor_value_usd"], "")
+                self.assertTrue(row["source_citation"].startswith("UNVERIFIED"))
+            else:
+                self.assertEqual(row["methodology"], "Official Factsheet Anchor")
+
+    def test_provenance_table_marks_unsourced_ranks_unverified(self):
+        """Ranks #13-#20 outside the NPORT-P years have no primary source and must say so."""
+        import csv
+        root = Path(__file__).resolve().parent.parent
+        with open(root / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
+            reader = list(csv.DictReader(f))
+
+        xml_years = {"2020", "2021", "2022", "2023"}
+        for row in reader:
+            if row["year"] in xml_years:
+                self.assertEqual(row["methodology"], "SEC Form NPORT-P Audited Holdings")
+            elif int(row["rank"]) <= 12:
+                self.assertEqual(row["methodology"], "Official Factsheet Anchor")
+            else:
+                self.assertEqual(
+                    row["methodology"],
+                    "Unverified Estimate (No Primary Source)",
+                    f"{row['year']} rank {row['rank']} claims a source it does not have",
+                )
+
+
+class TestN30DScheduleParser(unittest.TestCase):
+    """The historical Form N-30D Schedules of Investments must be parsed, not transcribed."""
+
+    @classmethod
+    def setUpClass(cls):
+        import sys
+        root = Path(__file__).resolve().parent.parent
+        sys.path.insert(0, str(root))
+        from scripts.extract_ground_truth_from_sec import parse_n30d_filing, FILINGS_DIR
+        cls.parse = staticmethod(parse_n30d_filing)
+        cls.dir = FILINGS_DIR
+
+    def test_1999_q3_schedule_top10(self):
+        """1999-09-30 (Acc 0000950135-99-005434): Lucent #7, Merck #9, no JNJ or PFE."""
+        parsed = self.parse(self.dir / "SPY_1999_Q4_N-30D_0000950135-99-005434.txt")
+        top10 = [h["ticker"] for h in parsed["holdings"][:10]]
+        self.assertEqual(
+            top10, ["MSFT", "GE", "INTC", "CSCO", "IBM", "WMT", "LU", "XOM", "MRK", "C"]
+        )
+        by_ticker = {h["ticker"]: h for h in parsed["holdings"][:12]}
+        self.assertAlmostEqual(by_ticker["LU"]["val"], 247966717.0, places=2)
+        self.assertAlmostEqual(by_ticker["MRK"]["val"], 189235584.0, places=2)
+        self.assertEqual(by_ticker["PFE"]["rank"], 11)
+
+    def test_2000_q3_schedule_top10(self):
+        """2000-09-30 (Acc 0000950135-00-005227): EMC #10, IBM displaced to #12."""
+        parsed = self.parse(self.dir / "SPY_2000_Q4_N-30D_0000950135-00-005227.txt")
+        top10 = [h["ticker"] for h in parsed["holdings"][:10]]
+        self.assertEqual(
+            top10, ["GE", "CSCO", "MSFT", "XOM", "PFE", "INTC", "C", "ORCL", "AIG", "EMC"]
+        )
+        by_ticker = {h["ticker"]: h for h in parsed["holdings"][:12]}
+        self.assertAlmostEqual(by_ticker["EMC"]["val"], 414591105.0, places=2)
+        self.assertEqual(by_ticker["IBM"]["rank"], 12)
+
+    def test_2008_q3_schedule_top10(self):
+        """2008-09-30 (Acc 0000950135-08-007648): BAC #9, IBM #10, WMT #11, CSCO #12."""
+        parsed = self.parse(self.dir / "SPY_2008_Q4_N-30D_0000950135-08-007648.txt")
+        top10 = [h["ticker"] for h in parsed["holdings"][:10]]
+        self.assertEqual(
+            top10, ["XOM", "GE", "PG", "MSFT", "JNJ", "JPM", "CVX", "T", "BAC", "IBM"]
+        )
+        by_ticker = {h["ticker"]: h for h in parsed["holdings"][:12]}
+        self.assertAlmostEqual(by_ticker["BAC"]["val"], 1457715385.0, places=2)
+        self.assertAlmostEqual(by_ticker["IBM"]["val"], 1447278479.0, places=2)
+        self.assertEqual(by_ticker["WMT"]["rank"], 11)
+        self.assertEqual(by_ticker["CSCO"]["rank"], 12)
+
+    def test_wrapped_constituent_names_are_joined(self):
+        """Names wrapped across lines (e.g. International Business Machines Corp.) must parse."""
+        parsed = self.parse(self.dir / "SPY_2008_Q4_N-30D_0000950135-08-007648.txt")
+        ibm = next(h for h in parsed["holdings"] if h["ticker"] == "IBM")
+        self.assertIn("International Business", ibm["name"])
+        self.assertIn("Machines", ibm["name"])
+
+    def test_ground_truth_json_matches_parsed_filings(self):
+        """The committed ground-truth JSON must reproduce what the parser reads."""
+        root = Path(__file__).resolve().parent.parent
+        gt_path = root / "data" / "raw" / "ground_truth" / "quarterly_ground_truth_holdings.json"
+        with open(gt_path, "r", encoding="utf-8") as f:
+            gt = json.load(f)
+
+        for period, filename in (
+            ("1999-Q3", "SPY_1999_Q4_N-30D_0000950135-99-005434.txt"),
+            ("2000-Q3", "SPY_2000_Q4_N-30D_0000950135-00-005227.txt"),
+            ("2008-Q3", "SPY_2008_Q4_N-30D_0000950135-08-007648.txt"),
+        ):
+            parsed = self.parse(self.dir / filename)
+            self.assertEqual(
+                gt["periods"][period]["holdings"],
+                [h["ticker"] for h in parsed["holdings"][:10]],
+                f"{period} ground truth does not match parsed {filename}",
+            )
 
 
 if __name__ == "__main__":

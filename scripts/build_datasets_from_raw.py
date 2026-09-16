@@ -319,7 +319,7 @@ def build_quarterly_constituents(
                 if p_curr is not None and p_1y_prior is not None and p_1y_prior > 0:
                     ret_1y = round((p_curr - p_1y_prior + div_1y) / p_1y_prior, 4)
                 else:
-                    ret_1y = 0.0
+                    ret_1y = None
 
                 scored_candidates.append({
                     "ticker": t,
@@ -349,7 +349,7 @@ def build_quarterly_constituents(
             ret_1y = (
                 round((p_curr - p_1y_prior + div_1y) / p_1y_prior, 4)
                 if (p_curr is not None and p_1y_prior is not None and p_1y_prior > 0)
-                else 0.0
+                else None
             )
             q4_list.append({
                 "ticker": t,
@@ -621,10 +621,12 @@ def main():
             p_prev = all_prices_data[ticker].get(str(year - 1))
             div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
             spinoff_dist = all_annual_spinoffs.get(ticker, {}).get(year, 0.0)
+            # None (not 0.0) when the trailing window is not computable: an imputed
+            # 0.0 outranks every genuine loser in a down year on fabricated evidence.
             ret_1y = (
                 round((p_curr - p_prev + div + spinoff_dist) / p_prev, 4)
                 if (p_curr is not None and p_prev is not None and p_prev > 0)
-                else 0.0
+                else None
             )
 
             c_list.append({
@@ -651,10 +653,12 @@ def main():
             p_prev = all_prices_data[ticker].get(str(year - 1))
             div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
             spinoff_dist = all_annual_spinoffs.get(ticker, {}).get(year, 0.0)
+            # None (not 0.0) when the trailing window is not computable: an imputed
+            # 0.0 outranks every genuine loser in a down year on fabricated evidence.
             ret_1y = (
                 round((p_curr - p_prev + div + spinoff_dist) / p_prev, 4)
                 if (p_curr is not None and p_prev is not None and p_prev > 0)
-                else 0.0
+                else None
             )
 
             c_list.append({

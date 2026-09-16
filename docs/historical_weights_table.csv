@@ -11,14 +11,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 1994,10,MSFT,Microsoft Corporation,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
 1994,11,INTC,Intel Corporation,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
 1994,12,PFE,Pfizer Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1994
-1994,13,JNJ,Johnson & Johnson,0.0104,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$39.71B,$42.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1994
-1994,14,CVX,Chevron Corporation,0.0100,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$38.18B,$42.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1994
-1994,15,PEP,PepsiCo Inc.,0.0094,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$35.89B,$42.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1994
-1994,16,BMY,Bristol-Myers Squibb Company,0.0090,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$34.36B,$42.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1994
-1994,17,AIG,American International Group Inc.,0.0085,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$32.45B,$42.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1994
-1994,18,DIS,The Walt Disney Company,0.0081,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$30.93B,$42.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1994
-1994,19,VZ,Verizon Communications Inc.,0.0080,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$30.55B,$42.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1994
-1994,20,HD,The Home Depot Inc.,0.0078,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$29.78B,$42.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1994
+1994,13,JNJ,Johnson & Johnson,0.0104,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,14,CVX,Chevron Corporation,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,15,PEP,PepsiCo Inc.,0.0094,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,16,BMY,Bristol-Myers Squibb Company,0.0090,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,17,AIG,American International Group Inc.,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,18,DIS,The Walt Disney Company,0.0081,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,19,VZ,Verizon Communications Inc.,0.0080,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1994,20,HD,The Home Depot Inc.,0.0078,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1994 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 1995,1,GE,General Electric Company,0.0290,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
 1995,2,T,AT&T Inc.,0.0250,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
 1995,3,XOM,Exxon Mobil Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
@@ -31,14 +31,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 1995,10,INTC,Intel Corporation,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
 1995,11,JNJ,Johnson & Johnson,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
 1995,12,PFE,Pfizer Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1995
-1995,13,IBM,International Business Machines Corp.,0.0101,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$47.75B,$52.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1995
-1995,14,PEP,PepsiCo Inc.,0.0097,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$45.85B,$52.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1995
-1995,15,BMY,Bristol-Myers Squibb Company,0.0091,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$43.02B,$52.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1995
-1995,16,AIG,American International Group Inc.,0.0090,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$42.55B,$52.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1995
-1995,17,CVX,Chevron Corporation,0.0084,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$39.71B,$52.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1995
-1995,18,FNMA,Federal National Mortgage Association,0.0083,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$39.24B,$52.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1995
-1995,19,MCD,McDonald's Corporation,0.0082,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$38.76B,$52.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1995
-1995,20,LLY,Eli Lilly and Company,0.0078,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$36.87B,$52.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1995
+1995,13,IBM,International Business Machines Corp.,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,14,PEP,PepsiCo Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,15,BMY,Bristol-Myers Squibb Company,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,16,AIG,American International Group Inc.,0.0090,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,17,CVX,Chevron Corporation,0.0084,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,18,FNMA,Federal National Mortgage Association,0.0083,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,19,MCD,McDonald's Corporation,0.0082,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1995,20,LLY,Eli Lilly and Company,0.0078,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1995 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 1996,1,GE,General Electric Company,0.0310,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
 1996,2,KO,The Coca-Cola Company,0.0270,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
 1996,3,XOM,Exxon Mobil Corporation,0.0250,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
@@ -51,14 +51,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 1996,10,JNJ,Johnson & Johnson,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
 1996,11,WMT,Walmart Inc.,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
 1996,12,PFE,Pfizer Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 1996
-1996,13,IBM,International Business Machines Corp.,0.0102,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$57.49B,$62.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1996
-1996,14,BMY,Bristol-Myers Squibb Company,0.0099,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$55.80B,$62.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1996
-1996,15,DIS,The Walt Disney Company,0.0092,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$51.85B,$62.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1996
-1996,16,PEP,PepsiCo Inc.,0.0091,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$51.29B,$62.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1996
-1996,17,CVX,Chevron Corporation,0.0090,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$50.73B,$62.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1996
-1996,18,AIG,American International Group Inc.,0.0088,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$49.60B,$62.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1996
-1996,19,CSCO,Cisco Systems Inc.,0.0086,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$48.47B,$62.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1996
-1996,20,LLY,Eli Lilly and Company,0.0083,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$46.78B,$62.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1996
+1996,13,IBM,International Business Machines Corp.,0.0102,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,14,BMY,Bristol-Myers Squibb Company,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,15,DIS,The Walt Disney Company,0.0092,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,16,PEP,PepsiCo Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,17,CVX,Chevron Corporation,0.0090,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,18,AIG,American International Group Inc.,0.0088,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,19,CSCO,Cisco Systems Inc.,0.0086,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1996,20,LLY,Eli Lilly and Company,0.0083,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 1996 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 1997,1,GE,General Electric Company,0.0350,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
 1997,2,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
 1997,3,KO,The Coca-Cola Company,0.0260,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
@@ -71,14 +71,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 1997,10,PFE,Pfizer Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
 1997,11,WMT,Walmart Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
 1997,12,T,AT&T Inc.,0.0120,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 1997
-1997,13,IBM,International Business Machines Corp.,0.0105,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$65.62B,$75.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1997
-1997,14,BMY,Bristol-Myers Squibb Company,0.0096,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$60.00B,$75.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1997
-1997,15,LLY,Eli Lilly and Company,0.0091,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$56.88B,$75.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1997
-1997,16,VZ,Verizon Communications Inc.,0.0085,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$53.12B,$75.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1997
-1997,17,DIS,The Walt Disney Company,0.0084,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$52.50B,$75.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1997
-1997,18,AIG,American International Group Inc.,0.0080,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$50.00B,$75.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1997
-1997,19,C,Citigroup Inc.,0.0076,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$47.50B,$75.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1997
-1997,20,FNMA,Federal National Mortgage Association,0.0074,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$46.25B,$75.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1997
+1997,13,IBM,International Business Machines Corp.,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,14,BMY,Bristol-Myers Squibb Company,0.0096,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,15,LLY,Eli Lilly and Company,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,16,VZ,Verizon Communications Inc.,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,17,DIS,The Walt Disney Company,0.0084,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,18,AIG,American International Group Inc.,0.0080,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,19,C,Citigroup Inc.,0.0076,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1997,20,FNMA,Federal National Mortgage Association,0.0074,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 1997 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 1998,1,MSFT,Microsoft Corporation,0.0410,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
 1998,2,GE,General Electric Company,0.0380,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
 1998,3,INTC,Intel Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
@@ -91,14 +91,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 1998,10,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
 1998,11,JNJ,Johnson & Johnson,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
 1998,12,IBM,International Business Machines Corp.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 1998
-1998,13,BMY,Bristol-Myers Squibb Company,0.0129,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$94.27B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1998
-1998,14,C,Citigroup Inc.,0.0122,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$89.15B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1998
-1998,15,BAC,Bank of America Corporation,0.0112,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$81.85B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1998
-1998,16,LLY,Eli Lilly and Company,0.0105,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$76.73B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1998
-1998,17,VZ,Verizon Communications Inc.,0.0092,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$67.23B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1998
-1998,18,HD,The Home Depot Inc.,0.0091,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$66.50B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1998
-1998,19,AIG,American International Group Inc.,0.0091,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$66.50B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1998
-1998,20,T,AT&T Inc.,0.0085,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$62.12B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1998
+1998,13,BMY,Bristol-Myers Squibb Company,0.0129,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,14,C,Citigroup Inc.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,15,BAC,Bank of America Corporation,0.0112,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,16,LLY,Eli Lilly and Company,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,17,VZ,Verizon Communications Inc.,0.0092,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,18,HD,The Home Depot Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,19,AIG,American International Group Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1998,20,T,AT&T Inc.,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 1998 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 1999,1,MSFT,Microsoft Corporation,0.0490,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
 1999,2,GE,General Electric Company,0.0410,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
 1999,3,CSCO,Cisco Systems Inc.,0.0330,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
@@ -111,14 +111,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 1999,10,JNJ,Johnson & Johnson,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
 1999,11,C,Citigroup Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
 1999,12,AIG,American International Group Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 1999
-1999,13,HD,The Home Depot Inc.,0.0138,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$128.14B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1999
-1999,14,ORCL,Oracle Corporation,0.0136,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$126.29B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1999
-1999,15,PG,Procter & Gamble Co.,0.0127,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$117.93B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1999
-1999,16,MRK,Merck & Co. Inc.,0.0122,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$113.29B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1999
-1999,17,QCOM,QUALCOMM Incorporated,0.0119,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$110.50B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1999
-1999,18,BMY,Bristol-Myers Squibb Company,0.0116,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$107.71B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1999
-1999,19,T,AT&T Inc.,0.0114,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$105.86B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1999
-1999,20,VZ,Verizon Communications Inc.,0.0094,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$87.29B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 1999
+1999,13,HD,The Home Depot Inc.,0.0138,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,14,ORCL,Oracle Corporation,0.0136,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,15,PG,Procter & Gamble Co.,0.0127,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,16,MRK,Merck & Co. Inc.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,17,QCOM,QUALCOMM Incorporated,0.0119,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,18,BMY,Bristol-Myers Squibb Company,0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,19,T,AT&T Inc.,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+1999,20,VZ,Verizon Communications Inc.,0.0094,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 1999 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2000,1,GE,General Electric Company,0.0400,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
 2000,2,XOM,Exxon Mobil Corporation,0.0330,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
 2000,3,PFE,Pfizer Inc.,0.0280,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
@@ -131,14 +131,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2000,10,IBM,International Business Machines Corp.,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
 2000,11,MRK,Merck & Co. Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
 2000,12,JNJ,Johnson & Johnson,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2000
-2000,13,ORCL,Oracle Corporation,0.0135,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$115.71B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2000
-2000,14,KO,The Coca-Cola Company,0.0132,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$113.14B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2000
-2000,15,BMY,Bristol-Myers Squibb Company,0.0127,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$108.86B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2000
-2000,16,VZ,Verizon Communications Inc.,0.0125,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$107.14B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2000
-2000,17,T,AT&T Inc.,0.0112,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$96.00B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2000
-2000,18,HD,The Home Depot Inc.,0.0098,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$84.00B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2000
-2000,19,LLY,Eli Lilly and Company,0.0097,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$83.14B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2000
-2000,20,PG,Procter & Gamble Co.,0.0094,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$80.57B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2000
+2000,13,ORCL,Oracle Corporation,0.0135,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,14,KO,The Coca-Cola Company,0.0132,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,15,BMY,Bristol-Myers Squibb Company,0.0127,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,16,VZ,Verizon Communications Inc.,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,17,T,AT&T Inc.,0.0112,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,18,HD,The Home Depot Inc.,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,19,LLY,Eli Lilly and Company,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2000,20,PG,Procter & Gamble Co.,0.0094,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2000 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2001,1,GE,General Electric Company,0.0390,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
 2001,2,MSFT,Microsoft Corporation,0.0340,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
 2001,3,XOM,Exxon Mobil Corporation,0.0300,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
@@ -151,14 +151,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2001,10,IBM,International Business Machines Corp.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
 2001,11,MRK,Merck & Co. Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
 2001,12,CSCO,Cisco Systems Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2001
-2001,13,VZ,Verizon Communications Inc.,0.0121,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$88.42B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2001
-2001,14,HD,The Home Depot Inc.,0.0120,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$87.69B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2001
-2001,15,KO,The Coca-Cola Company,0.0118,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$86.23B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2001
-2001,16,PG,Procter & Gamble Co.,0.0103,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$75.27B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2001
-2001,17,BMY,Bristol-Myers Squibb Company,0.0100,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$73.08B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2001
-2001,18,T,AT&T Inc.,0.0099,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$72.35B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2001
-2001,19,BAC,Bank of America Corporation,0.0099,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$72.35B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2001
-2001,20,CVX,Chevron Corporation,0.0096,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$70.15B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2001
+2001,13,VZ,Verizon Communications Inc.,0.0121,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,14,HD,The Home Depot Inc.,0.0120,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,15,KO,The Coca-Cola Company,0.0118,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,16,PG,Procter & Gamble Co.,0.0103,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,17,BMY,Bristol-Myers Squibb Company,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,18,T,AT&T Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,19,BAC,Bank of America Corporation,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2001,20,CVX,Chevron Corporation,0.0096,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2001 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2002,1,MSFT,Microsoft Corporation,0.0360,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
 2002,2,GE,General Electric Company,0.0330,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
 2002,3,XOM,Exxon Mobil Corporation,0.0290,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
@@ -171,14 +171,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2002,10,INTC,Intel Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
 2002,11,IBM,International Business Machines Corp.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
 2002,12,CSCO,Cisco Systems Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2002
-2002,13,MRK,Merck & Co. Inc.,0.0128,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$78.77B,$80.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2002
-2002,14,KO,The Coca-Cola Company,0.0125,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$76.92B,$80.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2002
-2002,15,VZ,Verizon Communications Inc.,0.0123,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$75.69B,$80.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2002
-2002,16,BAC,Bank of America Corporation,0.0114,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$70.15B,$80.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2002
-2002,17,WFC,Wells Fargo & Company,0.0095,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$58.46B,$80.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2002
-2002,18,PEP,PepsiCo Inc.,0.0087,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$53.54B,$80.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2002
-2002,19,LLY,Eli Lilly and Company,0.0086,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$52.92B,$80.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2002
-2002,20,CVX,Chevron Corporation,0.0085,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$52.31B,$80.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2002
+2002,13,MRK,Merck & Co. Inc.,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,14,KO,The Coca-Cola Company,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,15,VZ,Verizon Communications Inc.,0.0123,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,16,BAC,Bank of America Corporation,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,17,WFC,Wells Fargo & Company,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,18,PEP,PepsiCo Inc.,0.0087,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,19,LLY,Eli Lilly and Company,0.0086,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2002,20,CVX,Chevron Corporation,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2002 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2003,1,MSFT,Microsoft Corporation,0.0340,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
 2003,2,GE,General Electric Company,0.0320,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
 2003,3,XOM,Exxon Mobil Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
@@ -191,14 +191,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2003,10,CSCO,Cisco Systems Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
 2003,11,IBM,International Business Machines Corp.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
 2003,12,PG,Procter & Gamble Co.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2003
-2003,13,KO,The Coca-Cola Company,0.0125,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$91.35B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2003
-2003,14,BAC,Bank of America Corporation,0.0117,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$85.50B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2003
-2003,15,WFC,Wells Fargo & Company,0.0101,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$73.81B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2003
-2003,16,MRK,Merck & Co. Inc.,0.0099,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$72.35B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2003
-2003,17,VZ,Verizon Communications Inc.,0.0098,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$71.62B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2003
-2003,18,CVX,Chevron Corporation,0.0093,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$67.96B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2003
-2003,19,UPS,United Parcel Service Inc.,0.0085,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$62.12B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2003
-2003,20,HD,The Home Depot Inc.,0.0081,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$59.19B,$95.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2003
+2003,13,KO,The Coca-Cola Company,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,14,BAC,Bank of America Corporation,0.0117,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,15,WFC,Wells Fargo & Company,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,16,MRK,Merck & Co. Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,17,VZ,Verizon Communications Inc.,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,18,CVX,Chevron Corporation,0.0093,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,19,UPS,United Parcel Service Inc.,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2003,20,HD,The Home Depot Inc.,0.0081,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2003 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2004,1,GE,General Electric Company,0.0350,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
 2004,2,XOM,Exxon Mobil Corporation,0.0330,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
 2004,3,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
@@ -211,14 +211,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2004,10,INTC,Intel Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
 2004,11,BAC,Bank of America Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
 2004,12,PG,Procter & Gamble Co.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2004
-2004,13,IBM,International Business Machines Corp.,0.0140,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$110.00B,$110.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2004
-2004,14,CSCO,Cisco Systems Inc.,0.0128,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$100.57B,$110.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2004
-2004,15,VZ,Verizon Communications Inc.,0.0113,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$88.79B,$110.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2004
-2004,16,CVX,Chevron Corporation,0.0111,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$87.21B,$110.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2004
-2004,17,WFC,Wells Fargo & Company,0.0106,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$83.29B,$110.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2004
-2004,18,KO,The Coca-Cola Company,0.0101,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$79.36B,$110.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2004
-2004,19,UPS,United Parcel Service Inc.,0.0097,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$76.21B,$110.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2004
-2004,20,HD,The Home Depot Inc.,0.0095,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$74.64B,$110.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2004
+2004,13,IBM,International Business Machines Corp.,0.0140,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,14,CSCO,Cisco Systems Inc.,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,15,VZ,Verizon Communications Inc.,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,16,CVX,Chevron Corporation,0.0111,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,17,WFC,Wells Fargo & Company,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,18,KO,The Coca-Cola Company,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,19,UPS,United Parcel Service Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2004,20,HD,The Home Depot Inc.,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2004 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2005,1,XOM,Exxon Mobil Corporation,0.0370,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
 2005,2,GE,General Electric Company,0.0340,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
 2005,3,MSFT,Microsoft Corporation,0.0270,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
@@ -231,14 +231,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2005,10,IBM,International Business Machines Corp.,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
 2005,11,CVX,Chevron Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
 2005,12,AIG,American International Group Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2005
-2005,13,WMT,Walmart Inc.,0.0130,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$111.43B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2005
-2005,14,INTC,Intel Corporation,0.0126,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$108.00B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2005
-2005,15,CSCO,Cisco Systems Inc.,0.0107,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$91.71B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2005
-2005,16,WFC,Wells Fargo & Company,0.0107,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$91.71B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2005
-2005,17,PEP,PepsiCo Inc.,0.0100,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$85.71B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2005
-2005,18,AMGN,Amgen Inc.,0.0099,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$84.86B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2005
-2005,19,KO,The Coca-Cola Company,0.0098,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$84.00B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2005
-2005,20,HD,The Home Depot Inc.,0.0087,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$74.57B,$120.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2005
+2005,13,WMT,Walmart Inc.,0.0130,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,14,INTC,Intel Corporation,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,15,CSCO,Cisco Systems Inc.,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,16,WFC,Wells Fargo & Company,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,17,PEP,PepsiCo Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,18,AMGN,Amgen Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,19,KO,The Coca-Cola Company,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2005,20,HD,The Home Depot Inc.,0.0087,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2005 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2006,1,XOM,Exxon Mobil Corporation,0.0380,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
 2006,2,GE,General Electric Company,0.0330,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
 2006,3,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
@@ -251,14 +251,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2006,10,CSCO,Cisco Systems Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
 2006,11,PFE,Pfizer Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
 2006,12,CVX,Chevron Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2006
-2006,13,WMT,Walmart Inc.,0.0135,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$130.18B,$135.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2006
-2006,14,GOOGL,Alphabet Inc. (Class A & C),0.0123,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$118.61B,$135.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2006
-2006,15,IBM,International Business Machines Corp.,0.0122,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$117.64B,$135.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2006
-2006,16,WFC,Wells Fargo & Company,0.0105,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$101.25B,$135.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2006
-2006,17,INTC,Intel Corporation,0.0102,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$98.36B,$135.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2006
-2006,18,KO,The Coca-Cola Company,0.0099,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$95.46B,$135.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2006
-2006,19,VZ,Verizon Communications Inc.,0.0095,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$91.61B,$135.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2006
-2006,20,T,AT&T Inc.,0.0091,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$87.75B,$135.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2006
+2006,13,WMT,Walmart Inc.,0.0135,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,14,GOOGL,Alphabet Inc. (Class A & C),0.0123,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,15,IBM,International Business Machines Corp.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,16,WFC,Wells Fargo & Company,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,17,INTC,Intel Corporation,0.0102,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,18,KO,The Coca-Cola Company,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,19,VZ,Verizon Communications Inc.,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2006,20,T,AT&T Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2006 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2007,1,XOM,Exxon Mobil Corporation,0.0430,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
 2007,2,GE,General Electric Company,0.0320,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
 2007,3,MSFT,Microsoft Corporation,0.0290,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
@@ -271,14 +271,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2007,10,CSCO,Cisco Systems Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
 2007,11,BAC,Bank of America Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
 2007,12,AAPL,Apple Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2007
-2007,13,WMT,Walmart Inc.,0.0128,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$147.69B,$150.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2007
-2007,14,C,Citigroup Inc.,0.0122,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$140.77B,$150.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2007
-2007,15,INTC,Intel Corporation,0.0116,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$133.85B,$150.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2007
-2007,16,PFE,Pfizer Inc.,0.0115,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$132.69B,$150.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2007
-2007,17,IBM,International Business Machines Corp.,0.0113,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$130.38B,$150.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2007
-2007,18,KO,The Coca-Cola Company,0.0113,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$130.38B,$150.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2007
-2007,19,VZ,Verizon Communications Inc.,0.0100,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$115.38B,$150.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2007
-2007,20,AIG,American International Group Inc.,0.0097,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$111.92B,$150.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2007
+2007,13,WMT,Walmart Inc.,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,14,C,Citigroup Inc.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,15,INTC,Intel Corporation,0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,16,PFE,Pfizer Inc.,0.0115,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,17,IBM,International Business Machines Corp.,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,18,KO,The Coca-Cola Company,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,19,VZ,Verizon Communications Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2007,20,AIG,American International Group Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2007 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2008,1,XOM,Exxon Mobil Corporation,0.0490,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
 2008,2,WMT,Walmart Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
 2008,3,PG,Procter & Gamble Co.,0.0230,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
@@ -291,14 +291,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2008,10,IBM,International Business Machines Corp.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
 2008,11,CSCO,Cisco Systems Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
 2008,12,HPQ,HP Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2008
-2008,13,PFE,Pfizer Inc.,0.0127,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$112.35B,$115.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2008
-2008,14,KO,The Coca-Cola Company,0.0125,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$110.58B,$115.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2008
-2008,15,VZ,Verizon Communications Inc.,0.0125,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$110.58B,$115.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2008
-2008,16,WFC,Wells Fargo & Company,0.0123,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$108.81B,$115.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2008
-2008,17,GOOGL,Alphabet Inc. (Class A & C),0.0116,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$102.62B,$115.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2008
-2008,18,ORCL,Oracle Corporation,0.0114,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$100.85B,$115.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2008
-2008,19,PM,Philip Morris International Inc.,0.0110,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$97.31B,$115.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2008
-2008,20,PEP,PepsiCo Inc.,0.0105,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$92.88B,$115.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2008
+2008,13,PFE,Pfizer Inc.,0.0127,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,14,KO,The Coca-Cola Company,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,15,VZ,Verizon Communications Inc.,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,16,WFC,Wells Fargo & Company,0.0123,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,17,GOOGL,Alphabet Inc. (Class A & C),0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,18,ORCL,Oracle Corporation,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,19,PM,Philip Morris International Inc.,0.0110,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2008,20,PEP,PepsiCo Inc.,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2008 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2009,1,XOM,Exxon Mobil Corporation,0.0430,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
 2009,2,MSFT,Microsoft Corporation,0.0320,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
 2009,3,AAPL,Apple Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
@@ -311,14 +311,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2009,10,BAC,Bank of America Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
 2009,11,IBM,International Business Machines Corp.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
 2009,12,CVX,Chevron Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2009
-2009,13,WFC,Wells Fargo & Company,0.0139,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$129.07B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2009
-2009,14,PFE,Pfizer Inc.,0.0132,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$122.57B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2009
-2009,15,CSCO,Cisco Systems Inc.,0.0131,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$121.64B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2009
-2009,16,KO,The Coca-Cola Company,0.0126,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$117.00B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2009
-2009,17,T,AT&T Inc.,0.0124,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$115.14B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2009
-2009,18,ORCL,Oracle Corporation,0.0113,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$104.93B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2009
-2009,19,INTC,Intel Corporation,0.0109,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$101.21B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2009
-2009,20,MRK,Merck & Co. Inc.,0.0099,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$91.93B,$130.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2009
+2009,13,WFC,Wells Fargo & Company,0.0139,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,14,PFE,Pfizer Inc.,0.0132,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,15,CSCO,Cisco Systems Inc.,0.0131,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,16,KO,The Coca-Cola Company,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,17,T,AT&T Inc.,0.0124,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,18,ORCL,Oracle Corporation,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,19,INTC,Intel Corporation,0.0109,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2009,20,MRK,Merck & Co. Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2009 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2010,1,XOM,Exxon Mobil Corporation,0.0340,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
 2010,2,AAPL,Apple Inc.,0.0300,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
 2010,3,MSFT,Microsoft Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
@@ -331,14 +331,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2010,10,BRK.B,Berkshire Hathaway Inc.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
 2010,11,WMT,Walmart Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
 2010,12,GOOGL,Alphabet Inc. (Class A & C),0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2010
-2010,13,WFC,Wells Fargo & Company,0.0126,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$140.54B,$145.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2010
-2010,14,ORCL,Oracle Corporation,0.0120,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$133.85B,$145.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2010
-2010,15,KO,The Coca-Cola Company,0.0110,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$122.69B,$145.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2010
-2010,16,C,Citigroup Inc.,0.0107,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$119.35B,$145.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2010
-2010,17,BAC,Bank of America Corporation,0.0106,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$118.23B,$145.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2010
-2010,18,PFE,Pfizer Inc.,0.0105,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$117.12B,$145.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2010
-2010,19,T,AT&T Inc.,0.0093,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$103.73B,$145.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2010
-2010,20,INTC,Intel Corporation,0.0092,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$102.62B,$145.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2010
+2010,13,WFC,Wells Fargo & Company,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,14,ORCL,Oracle Corporation,0.0120,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,15,KO,The Coca-Cola Company,0.0110,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,16,C,Citigroup Inc.,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,17,BAC,Bank of America Corporation,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,18,PFE,Pfizer Inc.,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,19,T,AT&T Inc.,0.0093,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2010,20,INTC,Intel Corporation,0.0092,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2010 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2011,1,XOM,Exxon Mobil Corporation,0.0370,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
 2011,2,AAPL,Apple Inc.,0.0340,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
 2011,3,MSFT,Microsoft Corporation,0.0240,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
@@ -351,14 +351,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2011,10,WMT,Walmart Inc.,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
 2011,11,GOOGL,Alphabet Inc. (Class A & C),0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
 2011,12,PFE,Pfizer Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2011
-2011,13,BRK.B,Berkshire Hathaway Inc.,0.0129,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$142.82B,$155.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2011
-2011,14,KO,The Coca-Cola Company,0.0121,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$133.96B,$155.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2011
-2011,15,WFC,Wells Fargo & Company,0.0120,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$132.86B,$155.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2011
-2011,16,PM,Philip Morris International Inc.,0.0114,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$126.21B,$155.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2011
-2011,17,T,AT&T Inc.,0.0112,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$124.00B,$155.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2011
-2011,18,ORCL,Oracle Corporation,0.0110,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$121.79B,$155.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2011
-2011,19,INTC,Intel Corporation,0.0101,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$111.82B,$155.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2011
-2011,20,VZ,Verizon Communications Inc.,0.0100,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$110.71B,$155.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2011
+2011,13,BRK.B,Berkshire Hathaway Inc.,0.0129,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,14,KO,The Coca-Cola Company,0.0121,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,15,WFC,Wells Fargo & Company,0.0120,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,16,PM,Philip Morris International Inc.,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,17,T,AT&T Inc.,0.0112,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,18,ORCL,Oracle Corporation,0.0110,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,19,INTC,Intel Corporation,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2011,20,VZ,Verizon Communications Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2011 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2012,1,AAPL,Apple Inc.,0.0410,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
 2012,2,XOM,Exxon Mobil Corporation,0.0310,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
 2012,3,GOOGL,Alphabet Inc. (Class A & C),0.0260,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
@@ -371,14 +371,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2012,10,CVX,Chevron Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
 2012,11,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
 2012,12,IBM,International Business Machines Corp.,0.0140,Official Factsheet Anchor,W_factsheet,0.0140,,,S&P Dow Jones Indices Year-End Factsheet 2012
-2012,13,WFC,Wells Fargo & Company,0.0135,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$168.75B,$175.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2012
-2012,14,PFE,Pfizer Inc.,0.0131,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$163.75B,$175.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2012
-2012,15,KO,The Coca-Cola Company,0.0128,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$160.00B,$175.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2012
-2012,16,ORCL,Oracle Corporation,0.0115,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$143.75B,$175.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2012
-2012,17,T,AT&T Inc.,0.0112,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$140.00B,$175.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2012
-2012,18,PM,Philip Morris International Inc.,0.0106,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$132.50B,$175.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2012
-2012,19,BAC,Bank of America Corporation,0.0101,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$126.25B,$175.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2012
-2012,20,VZ,Verizon Communications Inc.,0.0100,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0140,$125.00B,$175.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2012
+2012,13,WFC,Wells Fargo & Company,0.0135,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,14,PFE,Pfizer Inc.,0.0131,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,15,KO,The Coca-Cola Company,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,16,ORCL,Oracle Corporation,0.0115,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,17,T,AT&T Inc.,0.0112,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,18,PM,Philip Morris International Inc.,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,19,BAC,Bank of America Corporation,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2012,20,VZ,Verizon Communications Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0140,,,UNVERIFIED - no point-in-time filing archived for 2012 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2013,1,AAPL,Apple Inc.,0.0340,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
 2013,2,XOM,Exxon Mobil Corporation,0.0270,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
 2013,3,GOOGL,Alphabet Inc. (Class A & C),0.0250,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
@@ -391,14 +391,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2013,10,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
 2013,11,CVX,Chevron Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
 2013,12,WMT,Walmart Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2013
-2013,13,IBM,International Business Machines Corp.,0.0128,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$201.85B,$205.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2013
-2013,14,PFE,Pfizer Inc.,0.0126,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$198.69B,$205.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2013
-2013,15,AMZN,Amazon.com Inc.,0.0125,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$197.12B,$205.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2013
-2013,16,KO,The Coca-Cola Company,0.0118,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$186.08B,$205.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2013
-2013,17,ORCL,Oracle Corporation,0.0116,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$182.92B,$205.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2013
-2013,18,BAC,Bank of America Corporation,0.0114,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$179.77B,$205.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2013
-2013,19,C,Citigroup Inc.,0.0109,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$171.88B,$205.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2013
-2013,20,VZ,Verizon Communications Inc.,0.0097,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$152.96B,$205.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2013
+2013,13,IBM,International Business Machines Corp.,0.0128,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,14,PFE,Pfizer Inc.,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,15,AMZN,Amazon.com Inc.,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,16,KO,The Coca-Cola Company,0.0118,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,17,ORCL,Oracle Corporation,0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,18,BAC,Bank of America Corporation,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,19,C,Citigroup Inc.,0.0109,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2013,20,VZ,Verizon Communications Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2013 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2014,1,AAPL,Apple Inc.,0.0360,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
 2014,2,XOM,Exxon Mobil Corporation,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
 2014,3,MSFT,Microsoft Corporation,0.0250,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
@@ -411,14 +411,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2014,10,GE,General Electric Company,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
 2014,11,CVX,Chevron Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
 2014,12,WMT,Walmart Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
-2014,13,META,Meta Platforms Inc.,0.0122,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$215.85B,$230.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2014
-2014,14,ORCL,Oracle Corporation,0.0120,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$212.31B,$230.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2014
-2014,15,VZ,Verizon Communications Inc.,0.0116,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$205.23B,$230.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2014
-2014,16,BAC,Bank of America Corporation,0.0114,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$201.69B,$230.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2014
-2014,17,PFE,Pfizer Inc.,0.0114,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$201.69B,$230.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2014
-2014,18,KO,The Coca-Cola Company,0.0106,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$187.54B,$230.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2014
-2014,19,INTC,Intel Corporation,0.0101,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$178.69B,$230.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2014
-2014,20,C,Citigroup Inc.,0.0099,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$175.15B,$230.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2014
+2014,13,META,Meta Platforms Inc.,0.0122,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,14,ORCL,Oracle Corporation,0.0120,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,15,VZ,Verizon Communications Inc.,0.0116,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,16,BAC,Bank of America Corporation,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,17,PFE,Pfizer Inc.,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,18,KO,The Coca-Cola Company,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,19,INTC,Intel Corporation,0.0101,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2014,20,C,Citigroup Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2015,1,AAPL,Apple Inc.,0.0350,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
 2015,2,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
 2015,3,XOM,Exxon Mobil Corporation,0.0220,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
@@ -431,14 +431,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2015,10,JPM,JPMorgan Chase & Co.,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
 2015,11,WFC,Wells Fargo & Company,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
 2015,12,PG,Procter & Gamble Co.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
-2015,13,WMT,Walmart Inc.,0.0106,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$236.09B,$245.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2015
-2015,14,PFE,Pfizer Inc.,0.0105,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$233.86B,$245.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2015
-2015,15,VZ,Verizon Communications Inc.,0.0104,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$231.64B,$245.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2015
-2015,16,KO,The Coca-Cola Company,0.0104,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$231.64B,$245.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2015
-2015,17,V,Visa Inc.,0.0098,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$218.27B,$245.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2015
-2015,18,BAC,Bank of America Corporation,0.0098,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$218.27B,$245.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2015
-2015,19,DIS,The Walt Disney Company,0.0097,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$216.05B,$245.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2015
-2015,20,CVX,Chevron Corporation,0.0095,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$211.59B,$245.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2015
+2015,13,WMT,Walmart Inc.,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,14,PFE,Pfizer Inc.,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,15,VZ,Verizon Communications Inc.,0.0104,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,16,KO,The Coca-Cola Company,0.0104,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,17,V,Visa Inc.,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,18,BAC,Bank of America Corporation,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,19,DIS,The Walt Disney Company,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2015,20,CVX,Chevron Corporation,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2016,1,AAPL,Apple Inc.,0.0340,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
 2016,2,MSFT,Microsoft Corporation,0.0270,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
 2016,3,AMZN,Amazon.com Inc.,0.0200,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
@@ -451,14 +451,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2016,10,GE,General Electric Company,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
 2016,11,WFC,Wells Fargo & Company,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
 2016,12,T,AT&T Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,13,PG,Procter & Gamble Co.,0.0109,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$262.59B,$265.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2016
-2016,14,BAC,Bank of America Corporation,0.0107,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$257.77B,$265.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2016
-2016,15,CVX,Chevron Corporation,0.0105,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$252.95B,$265.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2016
-2016,16,VZ,Verizon Communications Inc.,0.0097,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$233.68B,$265.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2016
-2016,17,WMT,Walmart Inc.,0.0092,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$221.64B,$265.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2016
-2016,18,PFE,Pfizer Inc.,0.0089,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$214.41B,$265.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2016
-2016,19,V,Visa Inc.,0.0088,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$212.00B,$265.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2016
-2016,20,KO,The Coca-Cola Company,0.0085,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0110,$204.77B,$265.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2016
+2016,13,PG,Procter & Gamble Co.,0.0109,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,14,BAC,Bank of America Corporation,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,15,CVX,Chevron Corporation,0.0105,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,16,VZ,Verizon Communications Inc.,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,17,WMT,Walmart Inc.,0.0092,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,18,PFE,Pfizer Inc.,0.0089,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,19,V,Visa Inc.,0.0088,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2016,20,KO,The Coca-Cola Company,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2017,1,AAPL,Apple Inc.,0.0370,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
 2017,2,MSFT,Microsoft Corporation,0.0310,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
 2017,3,AMZN,Amazon.com Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
@@ -471,14 +471,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2017,10,BAC,Bank of America Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
 2017,11,V,Visa Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
 2017,12,WFC,Wells Fargo & Company,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
-2017,13,WMT,Walmart Inc.,0.0114,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$271.85B,$310.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2017
-2017,14,CVX,Chevron Corporation,0.0106,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$252.77B,$310.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2017
-2017,15,PG,Procter & Gamble Co.,0.0104,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$248.00B,$310.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2017
-2017,16,HD,The Home Depot Inc.,0.0098,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$233.69B,$310.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2017
-2017,17,INTC,Intel Corporation,0.0096,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$228.92B,$310.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2017
-2017,18,VZ,Verizon Communications Inc.,0.0096,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$228.92B,$310.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2017
-2017,19,UNH,UnitedHealth Group Inc.,0.0095,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$226.54B,$310.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2017
-2017,20,PFE,Pfizer Inc.,0.0091,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$217.00B,$310.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2017
+2017,13,WMT,Walmart Inc.,0.0114,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,14,CVX,Chevron Corporation,0.0106,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,15,PG,Procter & Gamble Co.,0.0104,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,16,HD,The Home Depot Inc.,0.0098,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,17,INTC,Intel Corporation,0.0096,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,18,VZ,Verizon Communications Inc.,0.0096,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,19,UNH,UnitedHealth Group Inc.,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2017,20,PFE,Pfizer Inc.,0.0091,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2017 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2018,1,MSFT,Microsoft Corporation,0.0410,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
 2018,2,AAPL,Apple Inc.,0.0380,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
 2018,3,AMZN,Amazon.com Inc.,0.0360,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
@@ -491,14 +491,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2018,10,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
 2018,11,XOM,Exxon Mobil Corporation,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
 2018,12,UNH,UnitedHealth Group Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
-2018,13,WMT,Walmart Inc.,0.0129,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$317.54B,$320.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2018
-2018,14,BAC,Bank of America Corporation,0.0129,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$317.54B,$320.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2018
-2018,15,PFE,Pfizer Inc.,0.0126,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$310.15B,$320.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2018
-2018,16,VZ,Verizon Communications Inc.,0.0125,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$307.69B,$320.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2018
-2018,17,INTC,Intel Corporation,0.0115,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$283.08B,$320.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2018
-2018,18,WFC,Wells Fargo & Company,0.0115,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$283.08B,$320.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2018
-2018,19,CVX,Chevron Corporation,0.0113,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$278.15B,$320.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2018
-2018,20,KO,The Coca-Cola Company,0.0110,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$270.77B,$320.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2018
+2018,13,WMT,Walmart Inc.,0.0129,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,14,BAC,Bank of America Corporation,0.0129,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,15,PFE,Pfizer Inc.,0.0126,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,16,VZ,Verizon Communications Inc.,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,17,INTC,Intel Corporation,0.0115,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,18,WFC,Wells Fargo & Company,0.0115,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,19,CVX,Chevron Corporation,0.0113,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2018,20,KO,The Coca-Cola Company,0.0110,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2018 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2019,1,AAPL,Apple Inc.,0.0470,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
 2019,2,MSFT,Microsoft Corporation,0.0460,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
 2019,3,AMZN,Amazon.com Inc.,0.0320,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
@@ -511,14 +511,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2019,10,PG,Procter & Gamble Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
 2019,11,UNH,UnitedHealth Group Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
 2019,12,HD,The Home Depot Inc.,0.0130,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
-2019,13,WMT,Walmart Inc.,0.0127,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$381.00B,$390.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2019
-2019,14,BAC,Bank of America Corporation,0.0125,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$375.00B,$390.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2019
-2019,15,MA,Mastercard Incorporated,0.0117,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$351.00B,$390.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2019
-2019,16,XOM,Exxon Mobil Corporation,0.0109,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$327.00B,$390.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2019
-2019,17,DIS,The Walt Disney Company,0.0108,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$324.00B,$390.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2019
-2019,18,INTC,Intel Corporation,0.0107,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$321.00B,$390.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2019
-2019,19,VZ,Verizon Communications Inc.,0.0100,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$300.00B,$390.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2019
-2019,20,KO,The Coca-Cola Company,0.0100,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0130,$300.00B,$390.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2019
+2019,13,WMT,Walmart Inc.,0.0127,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,14,BAC,Bank of America Corporation,0.0125,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,15,MA,Mastercard Incorporated,0.0117,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,16,XOM,Exxon Mobil Corporation,0.0109,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,17,DIS,The Walt Disney Company,0.0108,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,18,INTC,Intel Corporation,0.0107,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,19,VZ,Verizon Communications Inc.,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2019,20,KO,The Coca-Cola Company,0.0100,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2019 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2020,1,AAPL,Apple Inc.,0.0670,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$22,041,931,111.17","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
 2020,2,MSFT,Microsoft Corporation,0.0531,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$17,478,852,123.48","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
 2020,3,AMZN,Amazon.com Inc.,0.0439,SEC Form NPORT-P Audited Holdings,"round(valUSD / total_fund_val, 4)",0.0105,"$14,437,983,717.72","$329,089,038,927.74","SPY SEC Form NPORT-P (Accession 0001752724-21-043869, Period 2020-12-31)"
@@ -611,11 +611,11 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2024,10,JPM,JPMorgan Chase & Co.,0.0140,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
 2024,11,LLY,Eli Lilly and Company,0.0130,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
 2024,12,UNH,UnitedHealth Group Inc.,0.0120,Official Factsheet Anchor,W_factsheet,0.0120,,,S&P Dow Jones Indices Year-End Factsheet 2024
-2024,13,WMT,Walmart Inc.,0.0111,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$444.00B,$480.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2024
-2024,14,V,Visa Inc.,0.0086,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$344.00B,$480.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2024
-2024,15,MA,Mastercard Incorporated,0.0084,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$336.00B,$480.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2024
-2024,16,XOM,Exxon Mobil Corporation,0.0083,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$332.00B,$480.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2024
-2024,17,ORCL,Oracle Corporation,0.0083,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$332.00B,$480.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2024
-2024,18,COST,Costco Wholesale Corporation,0.0073,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$292.00B,$480.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2024
-2024,19,PG,Procter & Gamble Co.,0.0070,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$280.00B,$480.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2024
-2024,20,HD,The Home Depot Inc.,0.0069,Empirical Capitalization Ratio,"round(W_12 * Cap_i / Cap_12, 4)",0.0120,$276.00B,$480.00B,SEC Form 10-K & Point-in-Time Capitalization Archives 2024
+2024,13,WMT,Walmart Inc.,0.0111,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,14,V,Visa Inc.,0.0086,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,15,MA,Mastercard Incorporated,0.0084,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,16,XOM,Exxon Mobil Corporation,0.0083,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,17,ORCL,Oracle Corporation,0.0083,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,18,COST,Costco Wholesale Corporation,0.0073,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,19,PG,Procter & Gamble Co.,0.0070,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
+2024,20,HD,The Home Depot Inc.,0.0069,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0120,,,UNVERIFIED - no point-in-time filing archived for 2024 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5

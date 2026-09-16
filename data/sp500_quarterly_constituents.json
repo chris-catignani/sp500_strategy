@@ -9706,7 +9706,7 @@
       "ticker": "PM",
       "name": "Philip Morris International Inc.",
       "market_cap_weight": 0.011,
-      "trailing_1y_return": 0.0,
+      "trailing_1y_return": null,
       "year": 2008,
       "quarter": 4
     },

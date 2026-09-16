@@ -17,6 +17,11 @@ from engine.selector import MarketCapSelector, PerformanceSelector
 from engine.models import ConstituentSnapshot
 
 
+# Q4 periods whose ground truth is the same filing the year-end candidate list is built
+# from. They match 10/10 by construction and cannot corroborate the drift model.
+CIRCULAR_Q4_PERIODS = frozenset({"2020-Q4", "2021-Q4", "2022-Q4", "2023-Q4"})
+
+
 def audit_midyear_promotions():
     """Detect all instances where a stock ranked > 10 at year-end drifted into Top 10 in Q1-Q3."""
     with open(REPO_ROOT / "data" / "sp500_quarterly_constituents.json", "r", encoding="utf-8") as f:
@@ -50,6 +55,34 @@ def audit_midyear_promotions():
                         })
 
     return promotions
+
+
+def classify_promotions(promotions, gt_results):
+    """Tag each promotion with whether the audited filing for that quarter agrees.
+
+    A promotion is only evidence for the Top 20 expansion if the point-in-time filing
+    shows the company genuinely in the Top 10. Promotions into quarters with no archived
+    filing are UNVERIFIED; ones the filing contradicts are CONTRADICTED - artifacts of
+    the drift model, not findings.
+
+    Args:
+        promotions: Promotion records from audit_midyear_promotions(), mutated in place.
+        gt_results: Reconciliation output keyed by period.
+
+    Returns:
+        Dict of status -> count.
+    """
+    counts = {"CONFIRMED": 0, "CONTRADICTED": 0, "UNVERIFIED": 0}
+    for promo in promotions:
+        gt = gt_results.get(promo["period"])
+        if gt is None or not gt.get("verified", False):
+            promo["status"] = "UNVERIFIED"
+        elif promo["ticker"] in gt["gt_tickers"]:
+            promo["status"] = "CONFIRMED"
+        else:
+            promo["status"] = "CONTRADICTED"
+        counts[promo["status"]] += 1
+    return counts
 
 
 def reconcile_with_ground_truth():
@@ -200,9 +233,28 @@ def main():
     print(f"    Total mid-year promotion instances (company-quarters): {len(promotions)}")
     print(f"    Promotions originating from ranks #13-#20 (previously missed): {len(expanded_tier_promotions)}")
     print(f"    Unique companies promoted from ranks #13-#20: {len(unique_expanded_companies)} ({', '.join(sorted(unique_expanded_companies))})")
-    print("\n    Notable promotions enabled by Top 20 expansion:")
+    status_counts = classify_promotions(
+        expanded_tier_promotions, reconcile_with_ground_truth()
+    )
+
+    print(
+        f"\n    Verified against audited filings: {status_counts['CONFIRMED']} confirmed, "
+        f"{status_counts['CONTRADICTED']} contradicted, {status_counts['UNVERIFIED']} unverified "
+        f"(no filing for that quarter)."
+    )
+    print("\n    Promotions enabled by Top 20 expansion:")
     for p in expanded_tier_promotions:
-        print(f"      {p['period']}: {p['ticker']:<5} ({p['name']:<25}) jumped from #{p['start_rank']} -> #{p['q_rank']} (drifted weight: {p['weight']})")
+        print(
+            f"      [{p['status']:<12}] {p['period']}: {p['ticker']:<5} ({p['name']:<25}) "
+            f"jumped from #{p['start_rank']} -> #{p['q_rank']} (drifted weight: {p['weight']})"
+        )
+    contradicted = [p for p in expanded_tier_promotions if p["status"] == "CONTRADICTED"]
+    if contradicted:
+        print(
+            "\n    NOTE: CONTRADICTED promotions are false positives of the drift model - the\n"
+            "    audited filing for that quarter shows the company outside the true Top 10.\n"
+            "    They must not be cited as evidence for the Top 20 expansion."
+        )
 
     # 2. Ground-Truth Reconciliation
     gt_results = reconcile_with_ground_truth()
@@ -211,10 +263,22 @@ def main():
     avg_accuracy = sum(r["accuracy_pct"] for r in verified_results.values()) / total_verified if total_verified else 0.0
     xml_results = {k: v for k, v in verified_results.items() if v.get("form") == "NPORT-P"}
     xml_accuracy = sum(r["accuracy_pct"] for r in xml_results.values()) / len(xml_results) if xml_results else 0.0
+
+    # Q4 2020-2023 are not independent checks: the year-end candidate lists are parsed
+    # from those very filings, so they match 10/10 by construction. The out-of-sample
+    # figure excludes them and is the one that actually measures the drift model.
+    out_of_sample = {k: v for k, v in xml_results.items() if k not in CIRCULAR_Q4_PERIODS}
+    oos_accuracy = (
+        sum(r["accuracy_pct"] for r in out_of_sample.values()) / len(out_of_sample)
+        if out_of_sample else 0.0
+    )
+
     print(f"\n[2] GROUND-TRUTH RECONCILIATION AGAINST AUDITED SEC FILINGS:")
     print(f"    Audited sample periods: {total_verified} verified quarters ({len(gt_results) - total_verified} unverified periods labeled)")
     print(f"    Average Top 10 match accuracy (all {total_verified} verified quarters): {avg_accuracy:.1f}%")
-    print(f"    Average Top 10 match accuracy ({len(xml_results)} modern Form NPORT-P XML quarters): {xml_accuracy:.1f}%\n")
+    print(f"    Average Top 10 match accuracy ({len(xml_results)} modern Form NPORT-P XML quarters): {xml_accuracy:.1f}%")
+    print(f"    OUT-OF-SAMPLE accuracy ({len(out_of_sample)} quarters, excluding the {len(CIRCULAR_Q4_PERIODS)} Q4 filings")
+    print(f"      the year-end candidate lists are themselves parsed from): {oos_accuracy:.1f}%\n")
     print(f"    {'Period':<9} {'Match':<7} {'Acc':<7} {'SEC Accession':<23} {'Discrepancies / Status'}")
     print("    " + "-" * 80)
     for period, r in gt_results.items():

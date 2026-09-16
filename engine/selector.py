@@ -131,12 +131,20 @@ class PerformanceSelector(BaseSelector):
     ) -> List[HoldingTarget]:
         """Select top N constituents from the candidate mega-cap universe by trailing 1-year total return.
 
+        Constituents whose trailing return is not computable from primary data
+        (``trailing_1y_return is None``) are excluded from the ranking. Imputing a value
+        would rank them against real returns on fabricated evidence - a 0.0 placeholder
+        outranks every loser in a down year purely because data is missing.
+
         Args:
             universe: Point-in-time constituent snapshots representing the eligible mega-cap universe.
             n: Optional override for constituent count. Defaults to self.n.
 
         Returns:
             List of HoldingTarget instances ordered by trailing_1y_return descending.
+
+        Raises:
+            ValueError: If no constituent in the universe has a computable trailing return.
         """
         eff_n = self.n if n is None else n
         if eff_n <= 0:
@@ -145,17 +153,36 @@ class PerformanceSelector(BaseSelector):
         if not universe:
             return []
 
-        if eff_n > len(universe):
+        rankable = [c for c in universe if c.trailing_1y_return is not None]
+        if not rankable:
+            raise ValueError(
+                f"No constituent in the universe has a computable trailing 1-year return; "
+                f"cannot rank {len(universe)} candidates by momentum."
+            )
+
+        excluded = len(universe) - len(rankable)
+        if excluded:
+            skipped = ", ".join(
+                c.ticker for c in universe if c.trailing_1y_return is None
+            )
             warnings.warn(
-                f"Requested Top {eff_n} constituents, but universe only contains {len(universe)}. "
-                f"Allocating across available {len(universe)} constituents.",
+                f"Excluding {excluded} constituent(s) with no computable trailing 1-year "
+                f"return from momentum ranking: {skipped}.",
+                UserWarning,
+                stacklevel=2,
+            )
+
+        if eff_n > len(rankable):
+            warnings.warn(
+                f"Requested Top {eff_n} constituents, but universe only contains {len(rankable)}. "
+                f"Allocating across available {len(rankable)} constituents.",
                 UserWarning,
                 stacklevel=2,
             )
 
         # Sort descending by trailing_1y_return
         sorted_constituents = sorted(
-            universe, key=lambda c: c.trailing_1y_return, reverse=True
+            rankable, key=lambda c: c.trailing_1y_return, reverse=True
         )
         selected = sorted_constituents[:eff_n]
         weights = self._compute_weights(selected, self.weight_by)

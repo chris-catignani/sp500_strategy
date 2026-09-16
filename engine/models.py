@@ -6,11 +6,16 @@ from typing import Dict, List, Any, Optional
 
 @dataclass
 class ConstituentSnapshot:
-    """Point-in-time constituent information at year-end or quarter-end."""
+    """Point-in-time constituent information at year-end or quarter-end.
+
+    ``trailing_1y_return`` is None when the trailing window is not computable from primary
+    data (e.g. a constituent spun off mid-window, with no price history one year prior).
+    Momentum selection excludes such constituents rather than imputing a return.
+    """
     ticker: str
     name: str
     market_cap_weight: float
-    trailing_1y_return: float
+    trailing_1y_return: Optional[float]
     year: int
     quarter: Optional[int] = None
 

@@ -123,7 +123,10 @@ class TestDataLoader(unittest.TestCase):
                 self.assertTrue(len(c.name) > 0)
                 self.assertIsInstance(c.market_cap_weight, (float, int))
                 self.assertGreater(c.market_cap_weight, 0.0)
-                self.assertIsInstance(c.trailing_1y_return, (float, int))
+                # None is a valid, meaningful value: the trailing window is not computable
+                # from primary data (e.g. PM at 2008 year-end, spun off in March 2008).
+                if c.trailing_1y_return is not None:
+                    self.assertIsInstance(c.trailing_1y_return, (float, int))
 
     def test_benchmark_years_top_constituents(self):
         """Verify key benchmark years feature historically accurate top constituents."""
