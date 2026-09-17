@@ -366,6 +366,26 @@ Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**,
 
 **Implied prices are as-traded.** They are not split-adjusted, and interpreting them without each registrant's split record inverts the reading: Lucent (`LU`) 1997→1999 reads as a 20% decline as-traded, where the split-adjusted move is a **219% rise** across its April 1998 and April 1999 two-for-one splits (both stated in Lucent's own Form 10-K405, accession `0000950117-01-501896`). Derivation of split-adjusted series from this archive is tracked in #55.
 
+#### 4.3.10 Audited December-31 Rosters from the Vanguard 500 Index Fund
+§4.3.5 records that ranks #13–#20 for 1994–2019 are `Unverified Estimate (No Primary Source)`: no primary source in this repository reported a point-in-time capitalization for those positions. For **1996–2003 that is no longer true.** The Vanguard 500 Index Fund tracks the S&P 500, so its Schedule of Investments at each December 31 is an audited point-in-time roster of the index, and ranking it by market value yields year-end ranks and weights that are **read rather than estimated**. Published to `data/raw/ground_truth/vanguard_audited_rosters.json` by `scripts/extract_vanguard_rosters.py`.
+
+- **Selection is by position count, not document order.** Each filing contains several Vanguard funds. In the FY2002 filing the *first* schedule belongs to a fund holding **148** stocks, which reconciles perfectly against its own stated total and is simply the wrong fund — so dollar-exact reconciliation alone cannot establish that the right schedule was read. Holding roughly five hundred stocks is the property that identifies an S&P 500 tracker, and both conditions are asserted by test.
+- **Dollar-exact reconciliation, or the year is withheld.** A roster that will not reconcile is **not published with a caveat**, because a short read is indistinguishable from a complete one once it is in a dataset.
+- **Coverage is 1996–2003, and the gaps are named.** The 1994 and 1995 filings lay their schedules out differently and no candidate span yields a plausible position count. The 2004–2006 HTML filings drop a small number of positions whose name and share cells render empty, leaving an orphaned value — visible as a \$23.8M shortfall against \$106B in FY2004. Both are recorded in `unreconciled_years`.
+
+##### What the audited roster says that the estimate does not
+At **2000-12-31** the filing places three constituents inside the Top 20 that the estimated roster omits entirely:
+
+| Rank | Constituent | Weight | In estimated roster? |
+|---:|---|---:|---|
+| 12 | SBC Communications (`SBC`) | 1.38% | **No** |
+| 16 | EMC Corp. (`EMC`) | 1.24% | **No** |
+| 19 | Royal Dutch Petroleum (`RD`) | 1.11% | **No** |
+
+This is the survivorship gap evidenced at a December 31 date rather than inferred from a September snapshot. The same filing places **Lucent (`LU`) at rank #60**, already collapsed from its #7 standing in SPY's September 1999 filing — so Lucent's contribution to the bias runs through the 1997–1999 year-ends, not 2000.
+
+**These rosters are the fund's holdings, not the index's published constituent weights.** A full-replication fund tracks the index closely, but its weights reflect its own positions and its total is its equity holdings rather than the index's float-adjusted capitalization. They are a far stronger basis than an unsourced estimate; they are not the index itself.
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).
