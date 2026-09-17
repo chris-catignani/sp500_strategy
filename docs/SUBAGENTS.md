@@ -63,6 +63,11 @@ Two lessons, and the second is the expensive one:
 - **Do not conclude a turn produced nothing from an empty log.** Check the working tree
   with `git status` before concluding, and again before staging anything. A background
   agent writes files long after its output stream goes quiet.
+- **Empty stdout is a known `agy -p` bug, not proof of failure.** Print mode can exit 0
+  with nothing on stdout while the reply landed only in agy's own transcript. Recover it:
+  `id=$(python3 -c "import json;print(json.load(open('$HOME/.gemini/antigravity-cli/cache/last_conversations.json'))['$(pwd)'])")`
+  then read `~/.gemini/antigravity-cli/brain/$id/.system_generated/logs/transcript.jsonl`
+  (newest entries last). Check this before `agy --continue`, not instead of `git status`.
 - **Never stage with `git add -A` while an agent may be running.** Stage by name. A
   scratch file reached `main` this way and needed a follow-up commit to remove.
 
