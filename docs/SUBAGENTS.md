@@ -50,6 +50,19 @@ background tasks, including a baseline test run."* The work survives in the work
 recover with `agy --continue` telling it the suite result and asking only for the report
 and commit.
 
+**Code-writing tasks died where a research task succeeded.** Under issue #55, three
+consecutive attempts at a roster-extraction task ended silently — no output, no files, no
+commit — while a research brief that only fetched URLs and wrote one JSON file succeeded
+under the same model, settings and permissions. The third attempt explicitly forbade
+`python3 -c` and inline quoting and still died, so **the cause was not established**. The
+work was brought back in-house rather than spend further turns on it.
+
+What this is worth: quoting remains the documented prime suspect, and a brief should still
+tell the agent to write a script to a file and run it as `python3 file.py` with no
+arguments. But do not assume that instruction is sufficient. Budget a fixed number of
+attempts for a code-writing delegation and take the work back when they are spent, rather
+than diagnosing an opaque failure one turn at a time.
+
 **Files outside the workspace may be unreadable.** Keep briefs and reports inside the repo
 (`.superpowers/` is gitignored) rather than in a system scratch directory.
 

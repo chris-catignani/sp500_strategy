@@ -1477,5 +1477,80 @@ class TestVanguardImpliedPrices(unittest.TestCase):
         self.assertIn("SBC 2005", notes)
 
 
+class TestVanguardAuditedRosters(unittest.TestCase):
+    """December-31 index rosters read from a filing rather than estimated (#55)."""
+
+    PATH = ROOT / "data" / "raw" / "ground_truth" / "vanguard_audited_rosters.json"
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.PATH, "r", encoding="utf-8") as f:
+            cls.data = json.load(f)
+        cls.rosters = cls.data["rosters_by_year"]
+
+    def test_every_published_roster_reconciles_dollar_exact(self):
+        """A schedule that reads short is indistinguishable from one that read fully.
+
+        This is the check whose absence once let a parser silently drop rows
+        (docs/DATA_PROVENANCE.md 4.3.6), so it is asserted on the published data and not
+        only inside the extractor.
+        """
+        for year, roster in self.rosters.items():
+            with self.subTest(year=year):
+                self.assertEqual(
+                    round(roster["parsed_total_usd_thousands"]),
+                    round(roster["stated_total_usd_thousands"]),
+                )
+
+    def test_every_published_roster_is_sp500_sized(self):
+        """Roughly five hundred holdings is what identifies the S&P 500 tracker.
+
+        Each filing contains several Vanguard funds. In the FY2002 filing the first
+        schedule belongs to a fund holding 148 stocks, which reconciles perfectly against
+        its own total and is simply the wrong fund, so reconciliation alone cannot
+        establish that the right schedule was read.
+        """
+        for year, roster in self.rosters.items():
+            with self.subTest(year=year):
+                self.assertGreaterEqual(roster["position_count"], 450)
+                self.assertLessEqual(roster["position_count"], 540)
+
+    def test_holdings_are_ranked_and_weighted_consistently(self):
+        for year, roster in self.rosters.items():
+            holdings = roster["holdings"]
+            with self.subTest(year=year):
+                self.assertEqual([h["rank"] for h in holdings], list(range(1, len(holdings) + 1)))
+                values = [h["value_usd_thousands"] for h in holdings]
+                self.assertEqual(values, sorted(values, reverse=True))
+                self.assertAlmostEqual(sum(h["weight"] for h in holdings), 1.0, places=3)
+
+    def test_withheld_years_are_recorded_with_a_reason(self):
+        """A year that could not be read is named, not quietly omitted."""
+        withheld = self.data["unreconciled_years"]
+        for year, reason in withheld.items():
+            with self.subTest(year=year):
+                self.assertTrue(reason.strip())
+                self.assertNotIn(year, self.rosters)
+
+    def test_audited_rosters_contradict_the_estimated_ones(self):
+        """The point of this dataset: estimates omit constituents the filings record.
+
+        At 2000-12-31 the filing places SBC, EMC and Royal Dutch inside the Top 20 while
+        the estimated roster omits all three. That gap is the survivorship bias #37 exists
+        to remove, evidenced here at a December 31 date rather than inferred from a
+        September snapshot.
+        """
+        estimates_path = ROOT / "data" / "raw" / "constituents" / "historical_index_weights.json"
+        with open(estimates_path, "r", encoding="utf-8") as f:
+            estimated = json.load(f)["constituents_by_year"]["2000"]
+
+        top20 = [h["name"] for h in self.rosters["2000"]["holdings"][:20]]
+        self.assertTrue(any(n.startswith("SBC Communications") for n in top20))
+        self.assertTrue(any(n.startswith("EMC Corp") for n in top20))
+        self.assertTrue(any(n.startswith("Royal Dutch") for n in top20))
+        for absent in ("SBC", "EMC", "RD"):
+            self.assertNotIn(absent, estimated)
+
+
 if __name__ == "__main__":
     unittest.main()
