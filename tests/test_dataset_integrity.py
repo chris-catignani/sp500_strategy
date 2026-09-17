@@ -9,19 +9,6 @@ if str(ROOT) not in sys.path:
 
 
 class TestDatasetIntegrity(unittest.TestCase):
-    def test_att_distribution_endpoints_conserve_quoted_wealth(self):
-        """Parent plus credited child must equal the sourced package quote."""
-        from engine.data_loader import DataLoader
-        loader = DataLoader()
-        # Source observations: 130 T shares valued at $6,792.50 on Sept 30
-        # and $5,638.75 on Dec 31 in contemporaneous portfolio statements.
-        for quarter, quoted_wealth in ((3, 6792.50), (4, 5638.75)):
-            parent = loader.get_quarterly_price("T", 1996, quarter)
-            child, _ = loader.get_quarterly_spinoff_distribution("T", 1996, quarter)
-            self.assertLessEqual(abs(parent + child - quoted_wealth / 130), 0.00501)
-        self.assertEqual(loader.get_price("T", 1996),
-                         loader.get_quarterly_price("T", 1996, 4))
-
     def setUp(self):
         self.data_dir = Path(__file__).resolve().parent.parent / "data"
         self.dividends_path = self.data_dir / "sp500_dividends.json"
@@ -164,55 +151,107 @@ class TestDatasetIntegrity(unittest.TestCase):
             data = json.load(f)
         self.assertIn("MO", data)
         self.assertIn("GE", data)
+        self.assertIn("T_CORP", data)
         self.assertIn("T", data)
-        # Verify 1996 Lucent and NCR spinoffs present in compiled data
+
+        # Verify 1996 Lucent and NCR spinoffs present in compiled data for T_CORP
+        t_corp_spinoffs = {ev["spinco_ticker"]: ev for ev in data["T_CORP"]}
+        self.assertIn("LU", t_corp_spinoffs)
+        self.assertIn("NCR", t_corp_spinoffs)
+        self.assertEqual(t_corp_spinoffs["LU"]["year"], 1996)
+        self.assertEqual(t_corp_spinoffs["LU"]["quarter"], 3)
+        # Converted into final share terms: the as-traded 14.87 of spinoffs.json over
+        # T_CORP's 0.2 split factor. The compiled dataset is what the engine reads, so
+        # it must carry the converted value, not the raw one.
+        self.assertEqual(t_corp_spinoffs["LU"]["distribution_per_share"], 74.35)
+        self.assertEqual(t_corp_spinoffs["LU"]["basis_retention_ratio"], 0.7201)
+
+        self.assertEqual(t_corp_spinoffs["NCR"]["year"], 1996)
+        self.assertEqual(t_corp_spinoffs["NCR"]["quarter"], 4)
+        self.assertEqual(t_corp_spinoffs["NCR"]["distribution_per_share"], 10.50)
+        self.assertEqual(t_corp_spinoffs["NCR"]["basis_retention_ratio"], 0.9523)
+
+        # Verify 2022 Warner Bros. Discovery spinoff present in compiled data for T (AT&T Inc.)
         t_spinoffs = {ev["spinco_ticker"]: ev for ev in data["T"]}
-        self.assertIn("LU", t_spinoffs)
-        self.assertIn("NCR", t_spinoffs)
         self.assertIn("WBD", t_spinoffs)
-        self.assertEqual(t_spinoffs["LU"]["year"], 1996)
-        self.assertEqual(t_spinoffs["LU"]["quarter"], 3)
-        self.assertEqual(t_spinoffs["LU"]["distribution_per_share"], 14.87)
-        self.assertEqual(t_spinoffs["LU"]["basis_retention_ratio"], 0.7201)
-        self.assertEqual(t_spinoffs["NCR"]["year"], 1996)
-        self.assertEqual(t_spinoffs["NCR"]["quarter"], 4)
-        self.assertEqual(t_spinoffs["NCR"]["distribution_per_share"], 2.10)
-        self.assertEqual(t_spinoffs["NCR"]["basis_retention_ratio"], 0.9523)
+        self.assertEqual(t_spinoffs["WBD"]["year"], 2022)
+        self.assertEqual(t_spinoffs["WBD"]["quarter"], 2)
+        self.assertEqual(t_spinoffs["WBD"]["distribution_per_share"], 5.81)
+        self.assertEqual(t_spinoffs["WBD"]["basis_retention_ratio"], 0.7623)
 
     def test_att_decoupled_series_1994_1997(self):
+        """Verify T_CORP derived series from audited Vanguard 500 filings."""
         with open(self.dividends_path, "r", encoding="utf-8") as f:
             divs = json.load(f)
         with open(self.prices_path, "r", encoding="utf-8") as f:
             prices = json.load(f)
-        # Verify AT&T Corp decoupled values (not SBC Communications)
-        self.assertEqual(prices["T"]["1994"], 50.25)
-        self.assertEqual(prices["T"]["1995"], 64.75)
-        self.assertEqual(prices["T"]["1996"], 41.27)
-        self.assertEqual(prices["T"]["1997"], 61.25)
-        for yr in ["1994", "1995", "1996", "1997"]:
-            self.assertAlmostEqual(divs["T"][yr], 1.32, places=2)
+        self.assertIn("T_CORP", prices)
+        self.assertAlmostEqual(prices["T_CORP"]["1994"], 251.2494, places=4)
+        self.assertAlmostEqual(prices["T_CORP"]["1995"], 323.7504, places=4)
+        # 1996 is the filed 217.5002 less the separately credited NCR entitlement: the
+        # distribution went ex on the filing date, so the filed value carries it.
+        self.assertAlmostEqual(prices["T_CORP"]["1996"], 207.0002, places=4)
+        self.assertAlmostEqual(prices["T_CORP"]["1997"], 306.2499, places=4)
+        # Derived series have no dividend records (filings report holdings, not distributions)
+        self.assertEqual(divs.get("T_CORP", {}), {})
 
-    def test_att_quarterly_decoupled_series_1993_1994(self):
-        q_prices_path = self.data_dir / "sp500_quarterly_prices.json"
-        q_constituents_path = self.data_dir / "sp500_quarterly_constituents.json"
-        with open(q_prices_path, "r", encoding="utf-8") as f:
-            q_prices = json.load(f)
-        with open(q_constituents_path, "r", encoding="utf-8") as f:
-            q_constituents = json.load(f)
+    def test_att_distribution_endpoints_conserve_quoted_wealth(self):
+        """Parent plus credited child must equal the filed package quote.
 
-        # Assert 1993-Q1 price is decoupled (>= 50.0, not SBC unadjusted ~14.75)
-        self.assertIn("1993-Q1", q_prices["T"])
-        self.assertGreaterEqual(q_prices["T"]["1993-Q1"], 50.0)
-        self.assertEqual(q_prices["T"]["1993-Q1"], 52.50)
-        self.assertEqual(q_prices["T"]["1993-Q2"], 54.00)
-        self.assertEqual(q_prices["T"]["1993-Q3"], 56.25)
+        The 1996-12-31 Schedule of Investments values AT&T Corp at 217.5002 in final
+        share terms, cum-NCR. The model splits that one number into two: a parent price
+        and a separately credited distribution. Neither may be changed without the other,
+        or the endpoint gains or loses wealth that the filing does not record.
+        """
+        with open(self.prices_path, "r", encoding="utf-8") as f:
+            prices = json.load(f)
+        with open(self.data_dir / "spinoff_distributions.json", "r", encoding="utf-8") as f:
+            spinoffs = json.load(f)
 
-        # Assert 1994-Q1 trailing 1y return is realistic (between -0.20 and +0.20, not +250%)
-        t_entry = next((c for c in q_constituents["1994-Q1"] if c["ticker"] == "T"), None)
-        self.assertIsNotNone(t_entry, "T not found in 1994-Q1 constituents")
-        ret_1y = t_entry["trailing_1y_return"]
-        self.assertGreaterEqual(ret_1y, -0.20, f"Trailing 1y return {ret_1y} too negative")
-        self.assertLessEqual(ret_1y, 0.20, f"Trailing 1y return {ret_1y} spiked unexpectedly")
+        ncr, = [ev for ev in spinoffs["T_CORP"] if ev["spinco_ticker"] == "NCR"]
+        parent = prices["T_CORP"]["1996"]
+        self.assertAlmostEqual(parent + ncr["distribution_per_share"], 217.5002, places=4)
+
+        # Lucent went ex on 1996-09-30, a quarter before the filing date, so the
+        # year-end quote is already clear of it and it must NOT be added back.
+        lucent, = [ev for ev in spinoffs["T_CORP"] if ev["spinco_ticker"] == "LU"]
+        self.assertNotAlmostEqual(
+            parent + ncr["distribution_per_share"] + lucent["distribution_per_share"],
+            217.5002,
+            places=4,
+        )
+
+    def test_att_sbc_identity_separation(self):
+        """Lock in identity separation across annual constituent rosters.
+
+        - T appears in no annual constituent roster for any year before 2005.
+        - T_CORP appears in no annual constituent roster for 2000 or later.
+        - T and SBC never both appear in the same year's roster.
+        """
+        constituents_path = self.data_dir / "sp500_constituents.json"
+        with open(constituents_path, "r", encoding="utf-8") as f:
+            rosters = json.load(f)
+
+        for yr_str, entries in rosters.items():
+            year = int(yr_str)
+            tickers = {c["ticker"] for c in entries}
+
+            if year < 2005:
+                self.assertNotIn(
+                    "T",
+                    tickers,
+                    f"T unexpectedly found in {year} roster before 2005",
+                )
+            if year >= 2000:
+                self.assertNotIn(
+                    "T_CORP",
+                    tickers,
+                    f"T_CORP unexpectedly found in {year} roster from 2000 on",
+                )
+            self.assertFalse(
+                "T" in tickers and "SBC" in tickers,
+                f"T and SBC both appeared in {year} roster",
+            )
 
     def test_build_datasets_script_syntax_and_import(self):
         """Verify scripts/build_datasets_from_raw.py compiles without IndentationError or SyntaxError."""

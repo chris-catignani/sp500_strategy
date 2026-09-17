@@ -6,6 +6,7 @@ Operates 100% offline using data/raw/.
 
 import datetime
 import json
+import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -95,6 +96,13 @@ NAMES = {**SP500_NAMES, **NON_US_NAMES}
 # NAMES requires a file in data/raw/tickers/ and raises when one is absent, which is the
 # correct behaviour for a vendor-sourced ticker and the wrong behaviour for these.
 DERIVED_NAMES = {
+    "AN": "Amoco Corp.",
+    "GM": "General Motors Corp.",
+    "MOT": "Motorola, Inc.",
+    "RD": "Royal Dutch Petroleum Co.",
+    "SBC": "SBC Communications Inc.",
+    "TYC": "Tyco International Ltd.",
+    "T_CORP": "AT&T Corp. (pre-2005 Ma Bell)",
     "LU": "Lucent Technologies, Inc.",
     "EMC": "EMC Corp.",
     "AOL": "America Online, Inc. / AOL Time Warner, Inc.",
@@ -113,7 +121,7 @@ DERIVED_NAMES = {
 # larger holding in every filing examined; routing through one class follows the
 # dual-class execution convention established for Alphabet in #38 and documented in
 # docs/DATA_PROVENANCE.md 4.3.8.
-DERIVED_SOURCE_KEYS = {"VIA": "VIA.B"}
+DERIVED_SOURCE_KEYS: Dict[str, str] = {}
 
 EFFECTIVE_INCLUSION_DATES = {
     "TSLA": "2020-12-21",
@@ -144,6 +152,63 @@ with open(RAW_DIR / "constituents" / "historical_index_weights.json", "r", encod
 YEAR_CONSTITUENTS = {int(k): v for k, v in raw_sp500["constituents_by_year"].items()}
 HISTORICAL_INDEX_WEIGHTS = {int(k): v for k, v in raw_sp500["weights_by_year"].items()}
 
+
+ESTIMATED_YEAR_CONSTITUENTS = {int(k): list(v) for k, v in raw_sp500["constituents_by_year"].items()}
+ESTIMATED_INDEX_WEIGHTS = {int(k): list(v) for k, v in raw_sp500["weights_by_year"].items()}
+
+
+def _apply_audited_rosters():
+    """Replace estimated year-end rosters with ones read from a primary filing.
+
+    For 1994-2006 the Vanguard 500 Index Fund's December-31 Schedule of Investments is an
+    audited point-in-time roster of the index (docs/DATA_PROVENANCE.md 4.3.10), so ranks
+    and weights for those years are read rather than estimated. Outside that span the
+    estimated rosters stand, including the 208 rows labelled Unverified Estimate.
+
+    This is the step that removes survivorship bias. The estimates omit constituents the
+    filings record -- SBC, EMC and Royal Dutch are all inside the audited 2000 Top 20 and
+    absent from the estimate for that year -- and a universe that drops constituents is
+    measuring something other than the strategy.
+    """
+    rosters_path = RAW_DIR / "ground_truth" / "vanguard_audited_rosters.json"
+    map_path = RAW_DIR / "constituents" / "issuer_ticker_map.json"
+    if not rosters_path.exists() or not map_path.exists():
+        return {}
+
+    with open(rosters_path, "r", encoding="utf-8") as f:
+        rosters = json.load(f)["rosters_by_year"]
+    with open(map_path, "r", encoding="utf-8") as f:
+        issuer_map = {
+            re.sub(r"^[#*^\s]+", "", k).strip().rstrip(".").strip(): v
+            for k, v in json.load(f)["map"].items()
+        }
+
+    replaced = {}
+    for year_key, roster in rosters.items():
+        year = int(year_key)
+        tickers, weights = [], []
+        for holding in roster["holdings"]:
+            if holding.get("unidentified"):
+                continue
+            name = re.sub(r"^[#*^\s]+", "", holding["name"]).strip().rstrip(".").strip()
+            ticker = issuer_map.get(name)
+            # A dual-class issuer appears twice; the first occurrence is the larger line
+            # and the convention is to route through one class (4.3.8).
+            if ticker is None or ticker in tickers:
+                continue
+            tickers.append(ticker)
+            weights.append(holding["weight"])
+            if len(tickers) == 20:
+                break
+        if len(tickers) == 20:
+            YEAR_CONSTITUENTS[year] = tickers
+            HISTORICAL_INDEX_WEIGHTS[year] = weights
+            replaced[year] = tickers
+    return replaced
+
+
+AUDITED_ROSTER_YEARS = _apply_audited_rosters()
+
 with open(RAW_DIR / "constituents" / "world_historical_index_weights.json", "r", encoding="utf-8") as f:
     raw_world = json.load(f)
 WORLD_YEAR_CONSTITUENTS = {int(k): v for k, v in raw_world["constituents_by_year"].items()}
@@ -168,6 +233,29 @@ MSCIWORLD_TR_LEVELS = {
     "2018": 5637.45, "2019": 7238.48, "2020": 8432.83, "2021": 10317.57, "2022": 8488.27,
     "2023": 10561.1, "2024": 12587.77
 }
+
+
+with open(RAW_DIR / "corporate_actions" / "splits.json", "r", encoding="utf-8") as f:
+    SPLITS_BY_TICKER = json.load(f)["splits_by_ticker"]
+
+
+def spinoff_split_factor(ticker: str, ex_date: str) -> float:
+    """Divisor converting a value quoted at ex_date into final share terms.
+
+    The same convention scripts/derive_constituent_series.py applies to prices: every
+    split effective after the quote compounds into the factor. A ticker with no filed
+    split record returns 1.0, which is correct for the vendor-priced constituents --
+    their series arrives already adjusted and their distributions are quoted on the
+    same basis.
+    """
+    record = SPLITS_BY_TICKER.get(ticker)
+    if not record:
+        return 1.0
+    factor = 1.0
+    for split in record["splits"]:
+        if split["effective_date"] > ex_date:
+            factor *= split["ratio"]
+    return factor
 
 
 def load_raw_chart(file_path: Path) -> dict:
@@ -550,66 +638,6 @@ def main():
         ticker_q_prices = extract_quarterly_closes(chart)
         ticker_q_divs = extract_quarterly_dividends(chart)
 
-        if ticker == "T":
-            t_corp_file = RAW_DIR / "tickers" / "T_CORP_HISTORICAL.json"
-            if not t_corp_file.exists():
-                raise FileNotFoundError(f"Missing required historical decoupled series: {t_corp_file}")
-            t_corp_chart = load_raw_chart(t_corp_file)
-            t_corp_prices = extract_year_end_closes(t_corp_chart)
-            t_corp_divs = extract_annual_dividends(t_corp_chart)
-            t_corp_q_prices = extract_quarterly_closes(t_corp_chart)
-            t_corp_q_divs = extract_quarterly_dividends(t_corp_chart)
-
-            # Strip pre-1999 SBC data so pre-1999 strictly originates from T_CORP_HISTORICAL
-            ticker_prices = {k: v for k, v in ticker_prices.items() if int(k) > 1998}
-            ticker_divs = {k: v for k, v in ticker_divs.items() if int(k) > 1998}
-            ticker_q_prices = {k: v for k, v in ticker_q_prices.items() if int(k.split("-")[0]) > 1998}
-            ticker_q_divs = {k: v for k, v in ticker_q_divs.items() if int(k.split("-")[0]) > 1998}
-
-            for yr_str, price in t_corp_prices.items():
-                if int(yr_str) <= 1998:
-                    ticker_prices[yr_str] = price
-
-            for yr_str, div in t_corp_divs.items():
-                if int(yr_str) <= 1998:
-                    ticker_divs[yr_str] = div
-
-            for q_key, q_price in t_corp_q_prices.items():
-                q_yr = int(q_key.split("-")[0])
-                if q_yr <= 1998:
-                    ticker_q_prices[q_key] = q_price
-
-            for q_key, q_div in t_corp_q_divs.items():
-                q_yr = int(q_key.split("-")[0])
-                if q_yr <= 1998:
-                    ticker_q_divs[q_key] = q_div
-
-            # The model credits children at distribution-date endpoints. The
-            # contemporary parent quotes still include those entitlements, so
-            # reconstruct a parent-only value rather than count them twice.
-            with open(RAW_DIR / "corporate_actions" / "att_1996_endpoint_valuations.json", encoding="utf-8") as f:
-                endpoint_valuations = json.load(f)["observations"]
-            with open(RAW_DIR / "corporate_actions" / "spinoffs.json", encoding="utf-8") as f:
-                att_events = json.load(f)["T"]
-            for observation in endpoint_valuations:
-                event, = [e for e in att_events
-                          if e["ex_date"] == observation["date"]
-                          and e["spinco_ticker"] == observation["spinco_ticker"]]
-                parent_value = round(observation["cum_distribution_close"]
-                                     - event["distribution_per_share"], 2)
-                if parent_value <= 0:
-                    raise ValueError("AT&T post-distribution value must be positive")
-                year, quarter = observation["year"], observation["quarter"]
-                ticker_q_prices[f"{year}-Q{quarter}"] = parent_value
-                if quarter == 4:
-                    ticker_prices[str(year)] = parent_value
-
-            # Keep chronological key ordering
-            ticker_prices = dict(sorted(ticker_prices.items(), key=lambda x: int(x[0])))
-            ticker_divs = dict(sorted(ticker_divs.items(), key=lambda x: int(x[0])))
-            ticker_q_prices = dict(sorted(ticker_q_prices.items()))
-            ticker_q_divs = dict(sorted(ticker_q_divs.items()))
-
         all_prices_data[ticker] = ticker_prices
         all_dividends_data[ticker] = ticker_divs
         all_quarterly_prices_data[ticker] = ticker_q_prices
@@ -620,13 +648,13 @@ def main():
     # Constituents with no vendor price series (issue #55). Their year-end prices are
     # derived from Vanguard Index Trust Schedules of Investments as value / shares and
     # split-adjusted from filing-cited records, so they are merged from a second input
-    # rather than read from data/raw/tickers/. The T_CORP_HISTORICAL splice above is the
-    # existing precedent for a conditional second source.
-    derived_path = RAW_DIR / "ground_truth" / "vanguard_implied_prices.json"
+    # rather than read from data/raw/tickers/. These derived records provide ground-truth
+    # pricing directly from fund filings when vendor price files are unavailable.
+    derived_path = RAW_DIR / "ground_truth" / "derived_constituent_series.json"
     derived_merged = 0
     if derived_path.exists():
         with open(derived_path, "r", encoding="utf-8") as f:
-            derived = json.load(f)["prices_by_ticker"]
+            derived = json.load(f)["series_by_ticker"]
 
         for ticker in sorted(DERIVED_NAMES):
             observations = derived.get(DERIVED_SOURCE_KEYS.get(ticker, ticker), {})
@@ -657,7 +685,20 @@ def main():
             f"{derived_path.relative_to(REPO_ROOT)}"
         )
 
-    # Load raw spinoff distributions for total return calculations
+    # Load raw spinoff distributions for total return calculations.
+    #
+    # spinoffs.json records each distribution as it was quoted on its ex-date, which is
+    # the right thing for a raw source file to hold. The engine, though, computes
+    # shares_held * distribution_per_share, and shares_held follows from a price series
+    # expressed in final share terms (4.3.12). A distribution and the price it is
+    # credited against must therefore share units, so each event is converted here by
+    # the same factor that adjusts prices.
+    #
+    # This is a no-op for every event in the catalog except AT&T Corp's two 1996
+    # distributions: splits.json carries records only for constituents priced from
+    # filings, and of those only T_CORP has a split after one of its own distributions
+    # -- the 1-for-5 reverse split of 2002-11-18, which puts its 1996 events five-for-one
+    # out of step with its 1996 price.
     all_quarterly_spinoffs: Dict[str, Dict[str, float]] = {}
     all_annual_spinoffs: Dict[str, Dict[int, float]] = {}
     spinoffs_raw = RAW_DIR / "corporate_actions" / "spinoffs.json"
@@ -671,10 +712,36 @@ def main():
             for ev in events:
                 y = int(ev["year"])
                 q = int(ev["quarter"])
-                d = float(ev["distribution_per_share"])
+                factor = spinoff_split_factor(t, ev["ex_date"])
+                d = round(float(ev["distribution_per_share"]) / factor, 4)
+                # The compiled dataset the engine reads must carry the converted value,
+                # not the as-traded one the raw file holds.
+                ev["distribution_per_share"] = d
                 q_key = f"{y}-Q{q}"
                 all_quarterly_spinoffs[t][q_key] = all_quarterly_spinoffs[t].get(q_key, 0.0) + d
                 all_annual_spinoffs[t][y] = all_annual_spinoffs[t].get(y, 0.0) + d
+
+    # The 1996-12-31 Schedule of Investments values AT&T Corp cum-NCR. The distribution
+    # went ex that same day, and the contemporaneous quote in
+    # att_1996_endpoint_valuations.json -- 43.375 against the filing's 43.50, one tick
+    # apart -- states explicitly that it carries the entitlement. Were the filed price
+    # ex-NCR, the cum value would be 45.60, a 2.20 gap between two same-day valuations of
+    # one security. The model credits the NCR shares separately, so the parent's year-end
+    # value must exclude them or the same wealth is counted twice.
+    #
+    # Lucent needs no such subtraction: it went ex on 1996-09-30, a quarter before the
+    # filing date, so the 12-31 quote is already clear of it.
+    ncr_events = [
+        ev for ev in spinoffs_data.get("T_CORP", [])
+        if ev["ex_date"] == "1996-12-31" and ev["spinco_ticker"] == "NCR"
+    ]
+    if ncr_events:
+        ncr_event, = ncr_events
+        cum_price = all_prices_data["T_CORP"]["1996"]
+        parent_price = round(cum_price - ncr_event["distribution_per_share"], 4)
+        if parent_price <= 0:
+            raise ValueError("AT&T Corp post-distribution value must be positive")
+        all_prices_data["T_CORP"]["1996"] = parent_price
 
     # 3. Build S&P 500 constituents
     sp500_constituents: Dict[str, List[dict]] = {}
@@ -686,7 +753,9 @@ def main():
         c_list = []
         for rank, ticker in enumerate(tickers):
             weight = weights[rank]
-            name = SP500_NAMES[ticker]
+            # A constituent read from an audited roster may be priced from a derived
+            # series rather than a vendor file, so both name maps are consulted.
+            name = SP500_NAMES.get(ticker) or DERIVED_NAMES[ticker]
             p_curr = all_prices_data[ticker].get(str_year)
             p_prev = all_prices_data[ticker].get(str(year - 1))
             div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
@@ -741,9 +810,33 @@ def main():
         world_constituents[str_year] = c_list
 
     # 5. Build Quarterly constituents (pluggable, re-anchoring at Q4)
+    # The quarterly path derives from the same audited rosters as the annual one, minus
+    # any constituent with no quarterly price. Constituents recovered from the audited
+    # rosters are priced from December-31 filings only (4.3.12), so they have no Q1-Q3
+    # observation to drift from and selecting one raises on a missing quarterly price.
+    #
+    # Dropping them leaves the quarterly universe a SUBSET of the annual one, which is
+    # what the zero-lookahead invariant requires: every quarterly candidate must appear in
+    # the prior year-end roster. Building the two from different roster sources instead
+    # would put them in disagreement, which that invariant correctly rejects.
+    #
+    # The consequence is that the quarterly path still carries the survivorship bias the
+    # annual path no longer does. That is a stated limitation, not a silent one: closing
+    # it needs quarterly coverage for these constituents, tracked in #63.
+    quarterly_year_constituents, quarterly_index_weights = {}, {}
+    for year, tickers in YEAR_CONSTITUENTS.items():
+        weights = HISTORICAL_INDEX_WEIGHTS[year]
+        kept = [
+            (ticker, weight)
+            for ticker, weight in zip(tickers, weights)
+            if any(key.startswith(f"{year}-Q") for key in all_quarterly_prices_data.get(ticker, {}))
+        ]
+        quarterly_year_constituents[year] = [t for t, _ in kept]
+        quarterly_index_weights[year] = [w for _, w in kept]
+
     sp500_quarterly_constituents = build_quarterly_constituents(
-        YEAR_CONSTITUENTS,
-        HISTORICAL_INDEX_WEIGHTS,
+        quarterly_year_constituents,
+        quarterly_index_weights,
         all_quarterly_prices_data,
         "^GSPC",
         SP500_NAMES,
@@ -786,11 +879,11 @@ def main():
         if k in all_quarterly_dividends_data
     }
 
-    # 7. Compile spinoff distributions from raw corporate actions
-    spinoffs_raw = RAW_DIR / "corporate_actions" / "spinoffs.json"
-    if spinoffs_raw.exists():
-        with open(spinoffs_raw, "r", encoding="utf-8") as f:
-            spinoffs_data = json.load(f)
+    # 7. Compile spinoff distributions from raw corporate actions.
+    # Written from the in-memory catalog, whose distributions have been converted into
+    # final share terms above. Re-reading the raw file here would ship the as-traded
+    # values to the engine and silently undo that conversion.
+    if spinoffs_data:
         with open(DATA_DIR / "spinoff_distributions.json", "w", encoding="utf-8") as f:
             json.dump(spinoffs_data, f, indent=2)
         print(f"Compiled spinoff distributions to {DATA_DIR / 'spinoff_distributions.json'}")
