@@ -125,6 +125,9 @@ def _text_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
     return positions, stated
 
 
+_UNIDENTIFIED_NAME = "(unidentified: issuer name and share count are blank in the filing)"
+
+
 def _html_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
     """Parse HTML table Schedule of Investments for Vanguard 500 Index Fund.
 
@@ -160,8 +163,40 @@ def _html_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
 
     positions: List[Dict[str, Any]] = []
     name_buffer: List[str] = []
-    for r in rows[start:end]:
+    running = 0.0
+    for index, r in enumerate(rows[start:end], start):
         cells = [c for c in r if not _is_footnote_cell(c)]
+
+        # A row carrying only a figure is either a sector subtotal or a position whose
+        # name and share cells are empty in the filing as filed. The two are told apart
+        # by what follows: a subtotal precedes a sector heading, which carries the
+        # sector's percentage in parentheses. Anything else is a real holding whose
+        # identity the document simply does not state, and it must still be counted or
+        # the schedule will not reconcile.
+        if len(cells) == 1 and _is_money(cells[0]):
+            figure = float(cells[0].replace("$", "").replace(",", "").strip())
+            # A subtotal restates what has already been counted, so it equals the running
+            # sum of positions since the previous subtotal. An orphaned holding does not.
+            # Testing the arithmetic rather than the surrounding layout keeps this exact:
+            # counting a subtotal double-counts a whole sector, and skipping an orphan
+            # leaves the schedule short, and reconciliation catches either way round.
+            is_sector_subtotal = abs(figure - running) < 1.0
+            if is_sector_subtotal:
+                running = 0.0
+            else:
+                if figure > 0:
+                    positions.append(
+                        {
+                            "name": _UNIDENTIFIED_NAME,
+                            "shares": 0.0,
+                            "val": figure,
+                            "unidentified": True,
+                        }
+                    )
+                    running += figure
+            name_buffer = []
+            continue
+
         if len(cells) >= 3 and _is_money(cells[1]) and _is_money(cells[2]):
             name = " ".join(name_buffer + [cells[0]])
             name = re.sub(r"\s+", " ", name).strip()
@@ -169,6 +204,7 @@ def _html_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
             val = float(cells[2].replace("$", "").replace(",", "").strip())
             if shares > 0 and val > 0:
                 positions.append({"name": name, "shares": shares, "val": val})
+                running += val
             name_buffer = []
         elif len(cells) == 1 and not _is_money(cells[0]) and "(" not in cells[0]:
             name_buffer.append(cells[0])
@@ -242,6 +278,9 @@ def build_roster(path: Path) -> Dict[str, Any]:
                 "shares": int(p["shares"]),
                 "value_usd_thousands": int(p["val"]),
                 "weight": round(p["val"] / parsed, 6),
+                # Carried through so a consumer can tell a holding the filing declined to
+                # name from one this parser failed to read.
+                **({"unidentified": True} if p.get("unidentified") else {}),
             }
             for i, p in enumerate(ranked, 1)
         ],
