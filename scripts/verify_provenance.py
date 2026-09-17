@@ -205,6 +205,11 @@ def verify_q1_rosters(verbose: bool) -> List[Result]:
     sources = [
         ("sei_q1_rosters.json", True, "stated_total_usd_thousands"),
         ("prudential_q1_rosters.json", False, "stated_total_usd"),
+        # SEI's September-30 report is its SEMI-ANNUAL, because its fiscal year ends March
+        # 31. Same trust as the first row, opposite grade. Checking both here is the point:
+        # a filer is not audited, a REPORT is, and this is the pair that proves the
+        # distinction is being read from the document rather than assumed from the CIK.
+        ("sei_q3_rosters.json", False, "stated_total_usd_thousands"),
     ]
     results = []
     for filename, expect_audited, total_field in sources:
@@ -214,7 +219,7 @@ def verify_q1_rosters(verbose: bool) -> List[Result]:
         with open(path, "r", encoding="utf-8") as f:
             rosters = json.load(f)["rosters_by_period"]
         for period, roster in sorted(rosters.items()):
-            result = Result(filename.split("_")[0], period)
+            result = Result(filename.rsplit("_rosters", 1)[0], period)
             filing = PROJECT_ROOT / roster["source_file"]
             if not filing.exists():
                 result.check("archived filing present", False, str(filing))
