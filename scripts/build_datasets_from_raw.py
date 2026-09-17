@@ -615,66 +615,6 @@ def main():
         ticker_q_prices = extract_quarterly_closes(chart)
         ticker_q_divs = extract_quarterly_dividends(chart)
 
-        if ticker == "T":
-            t_corp_file = RAW_DIR / "tickers" / "T_CORP_HISTORICAL.json"
-            if not t_corp_file.exists():
-                raise FileNotFoundError(f"Missing required historical decoupled series: {t_corp_file}")
-            t_corp_chart = load_raw_chart(t_corp_file)
-            t_corp_prices = extract_year_end_closes(t_corp_chart)
-            t_corp_divs = extract_annual_dividends(t_corp_chart)
-            t_corp_q_prices = extract_quarterly_closes(t_corp_chart)
-            t_corp_q_divs = extract_quarterly_dividends(t_corp_chart)
-
-            # Strip pre-1999 SBC data so pre-1999 strictly originates from T_CORP_HISTORICAL
-            ticker_prices = {k: v for k, v in ticker_prices.items() if int(k) > 1998}
-            ticker_divs = {k: v for k, v in ticker_divs.items() if int(k) > 1998}
-            ticker_q_prices = {k: v for k, v in ticker_q_prices.items() if int(k.split("-")[0]) > 1998}
-            ticker_q_divs = {k: v for k, v in ticker_q_divs.items() if int(k.split("-")[0]) > 1998}
-
-            for yr_str, price in t_corp_prices.items():
-                if int(yr_str) <= 1998:
-                    ticker_prices[yr_str] = price
-
-            for yr_str, div in t_corp_divs.items():
-                if int(yr_str) <= 1998:
-                    ticker_divs[yr_str] = div
-
-            for q_key, q_price in t_corp_q_prices.items():
-                q_yr = int(q_key.split("-")[0])
-                if q_yr <= 1998:
-                    ticker_q_prices[q_key] = q_price
-
-            for q_key, q_div in t_corp_q_divs.items():
-                q_yr = int(q_key.split("-")[0])
-                if q_yr <= 1998:
-                    ticker_q_divs[q_key] = q_div
-
-            # The model credits children at distribution-date endpoints. The
-            # contemporary parent quotes still include those entitlements, so
-            # reconstruct a parent-only value rather than count them twice.
-            with open(RAW_DIR / "corporate_actions" / "att_1996_endpoint_valuations.json", encoding="utf-8") as f:
-                endpoint_valuations = json.load(f)["observations"]
-            with open(RAW_DIR / "corporate_actions" / "spinoffs.json", encoding="utf-8") as f:
-                att_events = json.load(f)["T"]
-            for observation in endpoint_valuations:
-                event, = [e for e in att_events
-                          if e["ex_date"] == observation["date"]
-                          and e["spinco_ticker"] == observation["spinco_ticker"]]
-                parent_value = round(observation["cum_distribution_close"]
-                                     - event["distribution_per_share"], 2)
-                if parent_value <= 0:
-                    raise ValueError("AT&T post-distribution value must be positive")
-                year, quarter = observation["year"], observation["quarter"]
-                ticker_q_prices[f"{year}-Q{quarter}"] = parent_value
-                if quarter == 4:
-                    ticker_prices[str(year)] = parent_value
-
-            # Keep chronological key ordering
-            ticker_prices = dict(sorted(ticker_prices.items(), key=lambda x: int(x[0])))
-            ticker_divs = dict(sorted(ticker_divs.items(), key=lambda x: int(x[0])))
-            ticker_q_prices = dict(sorted(ticker_q_prices.items()))
-            ticker_q_divs = dict(sorted(ticker_q_divs.items()))
-
         all_prices_data[ticker] = ticker_prices
         all_dividends_data[ticker] = ticker_divs
         all_quarterly_prices_data[ticker] = ticker_q_prices
@@ -685,8 +625,8 @@ def main():
     # Constituents with no vendor price series (issue #55). Their year-end prices are
     # derived from Vanguard Index Trust Schedules of Investments as value / shares and
     # split-adjusted from filing-cited records, so they are merged from a second input
-    # rather than read from data/raw/tickers/. The T_CORP_HISTORICAL splice above is the
-    # existing precedent for a conditional second source.
+    # rather than read from data/raw/tickers/. These derived records provide ground-truth
+    # pricing directly from fund filings when vendor price files are unavailable.
     derived_path = RAW_DIR / "ground_truth" / "derived_constituent_series.json"
     derived_merged = 0
     if derived_path.exists():
