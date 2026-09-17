@@ -424,7 +424,12 @@ def build_quarterly_constituents(
                 p_curr = t_prices.get(q_key)
                 p_1y_prior = t_prices.get(f"{year - 1}-Q{q}")
 
-                if p_curr is not None and p_base is not None and p_base > 0:
+                # Constituents without a quarter-end price cannot be priced;
+                # carrying an undrifted anchor weight would let a stale number compete.
+                if p_curr is None:
+                    continue
+
+                if p_base is not None and p_base > 0:
                     stock_mult = p_curr / p_base
                     drifted_w = base_w_map[t] * (stock_mult / bmk_mult if bmk_mult > 0 else 1.0)
                 else:
@@ -685,6 +690,70 @@ def main():
             f"{derived_path.relative_to(REPO_ROOT)}"
         )
 
+    # The same constituents at Q2 and Q3 (issue #63). Without these they have only a
+    # December-31 observation, so they cannot be drifted or priced at a quarter end and
+    # drop out of the quarterly universe entirely - which left the quarterly path carrying
+    # a survivorship bias the annual path no longer has.
+    #
+    # Q1 is deliberately absent. No audited March-31 roster was found, and the sources that
+    # do exist are unarchived; see docs/DATA_PROVENANCE.md. The per-quarter eligibility
+    # rule in build_quarterly_constituents turns that absence into an explicit exclusion
+    # rather than a constituent carried at a stale undrifted weight.
+    derived_q_path = RAW_DIR / "ground_truth" / "derived_quarterly_constituent_series.json"
+    derived_q_merged = 0
+    incomplete_q_series: Dict[str, List[str]] = {}
+    if derived_q_path.exists():
+        with open(derived_q_path, "r", encoding="utf-8") as f:
+            derived_q = json.load(f)["series_by_ticker"]
+
+        for ticker in sorted(DERIVED_NAMES):
+            observations = derived_q.get(DERIVED_SOURCE_KEYS.get(ticker, ticker), {})
+            series = {
+                period: obs["split_adjusted_price_usd"]
+                for period, obs in observations.items()
+                if "split_adjusted_price_usd" in obs
+            }
+            # A quarterly series is only usable if it can price the constituent at EVERY
+            # quarter it could be held, not merely at the quarters where it could be
+            # bought. engine/backtest.py values every open position at every quarter end
+            # before selection runs, so a constituent bought at Q4 is still held at the
+            # following Q1 and must have a price there. Partial coverage therefore cannot
+            # be rescued by refusing to select it: the per-quarter eligibility rule in
+            # build_quarterly_constituents makes selection safe and does nothing for
+            # valuation.
+            #
+            # So a ticker is merged only where every year it is observed in carries all
+            # four quarters. With no Q1 source archived this admits nobody today, which is
+            # the honest result rather than a series that crashes the quarterly path or,
+            # worse, one patched with an invented Q1 price. Archiving Q1 flips this on.
+            years = {period[:4] for period in series}
+            if not all(
+                all(f"{year}-Q{q}" in series for q in (1, 2, 3, 4)) for year in years
+            ):
+                incomplete_q_series[ticker] = sorted(series)
+                continue
+            if not series:
+                continue
+            if ticker in all_quarterly_prices_data:
+                raise ValueError(
+                    f"{ticker}: derived quarterly prices would overwrite a vendor series "
+                    "from data/raw/tickers/. A constituent must have exactly one price "
+                    "source."
+                )
+            all_quarterly_prices_data[ticker] = dict(sorted(series.items()))
+            all_quarterly_dividends_data.setdefault(ticker, {})
+            derived_q_merged += 1
+
+        print(
+            f"Merged {derived_q_merged} derived quarterly constituent series from "
+            f"{derived_q_path.relative_to(REPO_ROOT)}"
+        )
+        if incomplete_q_series:
+            print(
+                f"  {len(incomplete_q_series)} withheld: quarterly coverage is incomplete, "
+                "so a holding could not be valued at every quarter end. Needs Q1 (#63)."
+            )
+
     # Load raw spinoff distributions for total return calculations.
     #
     # spinoffs.json records each distribution as it was quoted on its ex-date, which is
@@ -868,14 +937,18 @@ def main():
         for k in constituent_keys
         if k in all_dividends_data
     }
+    # constituent_keys, not SP500_NAMES alone: the derived constituents now carry Q2 and Q3
+    # observations (issue #63), and filtering them out here would publish a quarterly
+    # candidate the quarterly price file cannot price. The annual subset above has always
+    # included them; this keeps the two symmetric.
     sp500_quarterly_prices = {
         k: all_quarterly_prices_data[k]
-        for k in BENCHMARK_PRICE_KEYS + sorted(SP500_NAMES.keys())
+        for k in BENCHMARK_PRICE_KEYS + constituent_keys
         if k in all_quarterly_prices_data
     }
     sp500_quarterly_dividends = {
         k: all_quarterly_dividends_data[k]
-        for k in sorted(SP500_NAMES.keys())
+        for k in constituent_keys
         if k in all_quarterly_dividends_data
     }
 
