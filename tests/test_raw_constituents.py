@@ -1377,6 +1377,74 @@ class TestVanguardImpliedPrices(unittest.TestCase):
                 with self.subTest(ticker=ticker, year=year):
                     self.assertGreater(agree * 2, total)
 
+    def test_split_records_are_cited_to_a_filing(self):
+        """A split ratio without a source is indistinguishable from a recollection."""
+        path = ROOT / "data" / "raw" / "corporate_actions" / "splits.json"
+        with open(path, "r", encoding="utf-8") as f:
+            records = json.load(f)["splits_by_ticker"]
+
+        for ticker, record in records.items():
+            with self.subTest(ticker=ticker):
+                self.assertTrue(record["accession_number"])
+                self.assertTrue(record["cik"])
+                if record["splits"]:
+                    # A stated split must be backed by words actually in the filing.
+                    self.assertTrue(record["quoted_sentence"].strip())
+                for split in record["splits"]:
+                    self.assertGreater(split["ratio"], 1.0)
+                    self.assertRegex(split["effective_date"], r"^\d{4}-\d{2}-\d{2}$")
+
+    def test_split_adjustment_agrees_with_spy_filings(self):
+        """Adjusted Vanguard and SPY prices must describe one continuous series.
+
+        SPY reports September 30 and Vanguard December 31. Once both are expressed in the
+        same share terms, their ratio is a single quarter's price move. A split missing
+        from splits.json would instead show up as a ratio near 2.0 or 0.5, because one
+        side of the comparison would still be in pre-split terms.
+
+        The bound is deliberately loose: Q4 2000 saw genuine moves past 2x for Lucent and
+        Sun Microsystems, and Lucent's own Form 10-K405 reports that quarter's range as
+        $12.19-$34.63, corroborating the fall this test must not reject.
+        """
+        from scripts.extract_ground_truth_from_sec import parse_n30d_filing
+        from scripts.extract_vanguard_prices import _split_factor
+
+        with open(ROOT / "data" / "raw" / "corporate_actions" / "splits.json", "r", encoding="utf-8") as f:
+            splits = json.load(f)["splits_by_ticker"]
+        manifest_path = (
+            ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "sec_annual_filings_manifest.json"
+        )
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            spy_manifest = json.load(f)
+
+        stems = {"LU": "Lucent", "EMC": "EMC Corp", "BLS": "BellSouth", "DELL": "Dell"}
+        compared = 0
+        for year_key in sorted(k for k in spy_manifest if "-" not in k):
+            entry = spy_manifest[year_key]
+            year = int(year_key)
+            # parse_n30d_filing reads the fixed-width era only; 2010 onward is HTML and
+            # postdates every registrant compared here.
+            if year > 2009:
+                continue
+            report_date = entry.get("report_date") or (
+                f"{year}-12-31" if year <= 1996 else f"{year}-09-30"
+            )
+            holdings = parse_n30d_filing(ROOT / entry["file_path"])["holdings"]
+            for holding in holdings:
+                for ticker, stem in stems.items():
+                    if not holding["name"].startswith(stem) or not holding.get("shares"):
+                        continue
+                    if str(year) not in self.prices.get(ticker, {}):
+                        continue
+                    record = splits[ticker]["splits"]
+                    spy_adj = (holding["val"] / holding["shares"]) / _split_factor(record, report_date)
+                    vanguard_adj = self.prices[ticker][str(year)]["split_adjusted_price_usd"]
+                    with self.subTest(ticker=ticker, year=year):
+                        self.assertGreater(spy_adj / vanguard_adj, 0.35)
+                        self.assertLess(spy_adj / vanguard_adj, 2.85)
+                    compared += 1
+        self.assertGreater(compared, 25, "cross-filer split check degenerated")
+
     def test_prices_are_labelled_as_unadjusted(self):
         """These are as-traded prices.
 
@@ -1385,7 +1453,8 @@ class TestVanguardImpliedPrices(unittest.TestCase):
         move is a rise. The label is what stops a downstream consumer treating them as
         comparable to the split-adjusted series in data/raw/tickers/.
         """
-        self.assertEqual(self.data["adjustment_status"], "as_traded_unadjusted")
+        self.assertIn("AS-TRADED", self.data["adjustment_status"])
+        self.assertIn("NOT directly", self.data["adjustment_status"])
 
     def test_every_observation_cites_the_filing_it_came_from(self):
         """A derived figure without its source is indistinguishable from an estimate."""

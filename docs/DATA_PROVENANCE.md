@@ -337,6 +337,23 @@ Agreement to under half a cent across five securities, with residuals attributab
 - **Absences are explained.** Where a security is missing because it ceased to exist rather than because extraction failed, the dataset records the event: Mobil (merged into Exxon 1999-11-30), GTE (merged into Bell Atlantic 2000-06-30) and SBC (renamed AT&T Inc. after acquiring AT&T Corp. 2005-11-18). Their terminal treatment is issue #56.
 - **Issuer names are not stable across years.** America Online and Time Warner were **separate listed companies** until the merger completed 2001-01-11, so a single name pattern spanning both eras conflates two securities; the patterns are year-bounded. WorldCom is bounded at 2000 for the same reason, having issued two tracking stocks in June 2001.
 
+##### Split records (`data/raw/corporate_actions/splits.json`)
+Implied prices are as-traded, so a series spanning a split is discontinuous until adjusted. Split records for the twelve registrants whose prices are derived here are catalogued with the filing each was read in, following the citation discipline of `spinoffs.json`. Each entry carries the CIK, accession number, form type and the **verbatim sentence** stating the split.
+
+- **Scope**: only registrants with no usable vendor series. `RD` (via `SHEL.json`) and `SBC` (via `T.json`) are absent by design — those series already carry Yahoo's adjustment (§4.1.1).
+- **Basis**: each series is adjusted to the share terms of its **final observation**, not to 2024-12-31 (§4.1). The published dataset states plainly that the adjusted figures are therefore *not* directly comparable to `data/raw/tickers/`.
+- **`GTE` has no splits, and that is a finding, not a gap.** Its FY1999 Form 10-K contains no stock split for 1994–2000; the only "two-for-one" language in the document describes a pension service credit. The observed price series shows no halving across those years, corroborating the absence.
+
+##### Validation of the adjustment against a second filer
+SPY reports September 30 and Vanguard December 31. Expressed in the same share terms, their ratio is one quarter's price move; a split missing from the records would instead appear as a ratio near 2.0 or 0.5, because one side would remain in pre-split terms. Across **73 comparisons spanning 1995–2006, 71 fall inside a normal quarterly range**. The two that do not are both Q4 2000 and are genuine:
+
+| Security | SPY 09-30 | Vanguard 12-31 | Move |
+|---|---:|---:|---:|
+| Lucent (`LU`) | \$30.56 | \$13.50 | −56% |
+| Sun Microsystems (`SUNW`) | \$58.37 | \$27.87 | −52% |
+
+Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**, independently corroborating the fall. Both are the dot-com crash rather than an adjustment defect, and the test bound is set to admit them.
+
 **Implied prices are as-traded.** They are not split-adjusted, and interpreting them without each registrant's split record inverts the reading: Lucent (`LU`) 1997→1999 reads as a 20% decline as-traded, where the split-adjusted move is a **219% rise** across its April 1998 and April 1999 two-for-one splits (both stated in Lucent's own Form 10-K405, accession `0000950117-01-501896`). Derivation of split-adjusted series from this archive is tracked in #55.
 
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels

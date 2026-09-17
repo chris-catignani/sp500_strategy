@@ -34,6 +34,7 @@ from scripts.extract_ground_truth_from_sec import (
 )
 
 FILINGS_DIR = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
+SPLITS_PATH = PROJECT_ROOT / "data" / "raw" / "corporate_actions" / "splits.json"
 MANIFEST_PATH = FILINGS_DIR / "vanguard_annual_filings_manifest.json"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_implied_prices.json"
 
@@ -187,9 +188,24 @@ def _price_for(positions: List[Dict[str, Any]], pattern: str) -> Optional[Dict[s
     }
 
 
+def _split_factor(splits: List[Dict[str, Any]], as_of: str) -> float:
+    """Divisor converting an as-traded price at as_of into final share terms.
+
+    A price is quoted in the share terms of its own date, so expressing it in the terms
+    of the series' end means dividing by every split that took effect afterwards.
+    """
+    factor = 1.0
+    for split in splits:
+        if split["effective_date"] > as_of:
+            factor *= split["ratio"]
+    return factor
+
+
 def extract_all() -> Dict[str, Any]:
     with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
         manifest = json.load(f)
+    with open(SPLITS_PATH, "r", encoding="utf-8") as f:
+        split_records = json.load(f)["splits_by_ticker"]
 
     observations: Dict[str, Dict[str, Any]] = {}
     disagreements: List[str] = []
@@ -215,6 +231,15 @@ def extract_all() -> Dict[str, Any]:
                     f"(matched {found['matched_name']!r}). The pattern is matching more "
                     "than one security."
                 )
+            # Viacom's two listings share one issuer's split record.
+            split_key = ticker.split(".")[0]
+            record = split_records.get(split_key)
+            if record is not None:
+                factor = _split_factor(record["splits"], entry["report_date"])
+                found["split_factor"] = round(factor, 6)
+                found["split_adjusted_price_usd"] = round(found["price_usd"] / factor, 4)
+                found["split_source_accession"] = record["accession_number"]
+
             found.update({
                 "report_date": entry["report_date"],
                 "accession_number": entry["accession_number"],
@@ -243,7 +268,16 @@ def extract_all() -> Dict[str, Any]:
             "rounding their published precision admits: value is reported in thousands, "
             "so +/-$500 per position, or 500/shares per share."
         ),
-        "adjustment_status": "as_traded_unadjusted",
+        "adjustment_status": (
+            "price_usd is AS-TRADED. split_adjusted_price_usd, where present, is expressed "
+            "in the share terms of that registrant's final observation rather than of "
+            "2024-12-31: a registrant that stopped trading has no later corporate actions, "
+            "so adjustment to the present is undefined. It is therefore NOT directly "
+            "comparable to the series in data/raw/tickers/, which Yahoo adjusts to the "
+            "present. Tickers with no entry in splits.json carry no adjusted price because "
+            "their series is sourced from data/raw/tickers/ already."
+        ),
+        "split_records": "data/raw/corporate_actions/splits.json",
         "corporate_action_notes": sorted(set(notes)),
         "cross_schedule_disagreements": disagreements,
         "prices_by_ticker": observations,
