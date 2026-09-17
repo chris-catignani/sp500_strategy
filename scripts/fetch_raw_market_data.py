@@ -20,6 +20,10 @@ TICKERS = [
     "AMGN", "BMY", "COST", "DIS", "FNMA", "MA", "MCD", "ORCL",
     "PEP", "PM", "PYPL", "QCOM", "UPS", "VZ", "ABBV", "ADBE", "CMCSA",
     "NFLX",
+    # Constituents reaching a Top 20 in the audited December-31 rosters (issue #55).
+    # Each is a live ticker whose Yahoo series is the same registrant the filings name,
+    # verified by the price ratio resolving to an exact split factor in every year.
+    "COP", "SLB", "GILD",
 ]
 
 NON_US_TICKERS = [

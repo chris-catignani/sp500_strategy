@@ -1676,5 +1676,130 @@ class TestIssuerTickerMap(unittest.TestCase):
         self.assertNotEqual(self.mapping["GTE Corp"], self.mapping["Bell Atlantic Corp"])
 
 
+class TestDerivedConstituentSeries(unittest.TestCase):
+    """Series derived from the audited rosters rather than a name-pattern scan (#55)."""
+
+    PATH = ROOT / "data" / "raw" / "ground_truth" / "derived_constituent_series.json"
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.PATH, "r", encoding="utf-8") as f:
+            cls.data = json.load(f)
+        cls.series = cls.data["series_by_ticker"]
+
+    def test_agrees_with_the_name_pattern_extraction_it_supersedes(self):
+        """Two independent readings of the same filings must give the same price.
+
+        The earlier extraction matched issuer names with per-ticker regexes against the
+        raw filing; this one reads the reconciled roster and resolves names through the
+        issuer map. Agreement across every shared observation is what justifies replacing
+        the first with the second.
+        """
+        legacy_path = ROOT / "data" / "raw" / "ground_truth" / "vanguard_implied_prices.json"
+        with open(legacy_path, "r", encoding="utf-8") as f:
+            legacy = json.load(f)["prices_by_ticker"]
+
+        compared = 0
+        for ticker, years in legacy.items():
+            # Viacom Class A is deliberately unmapped, so only Class B is comparable.
+            if ticker == "VIA.A":
+                continue
+            base = ticker.split(".")[0]
+            for year, observation in years.items():
+                derived = self.series.get(base, {}).get(year)
+                if derived is None:
+                    continue
+                with self.subTest(ticker=base, year=year):
+                    self.assertAlmostEqual(
+                        derived["price_usd"], observation["price_usd"], delta=0.02
+                    )
+                compared += 1
+        self.assertGreater(compared, 100, "cross-method check degenerated")
+
+    def test_a_ticker_never_has_both_a_vendor_and_a_derived_series(self):
+        """One constituent, one price source.
+
+        The two are adjusted to different bases, so a ticker carrying both would produce a
+        series whose returns depend on which source a consumer happened to read.
+        """
+        for ticker in self.series:
+            with self.subTest(ticker=ticker):
+                self.assertFalse((ROOT / "data" / "raw" / "tickers" / f"{ticker}.json").exists())
+
+    def test_tickers_lacking_a_split_record_are_named(self):
+        """An as-traded series must announce itself.
+
+        Read as a return series it is wrong wherever a split falls inside the holding
+        period, so the dataset lists which tickers are in that state rather than leaving a
+        consumer to infer it from a missing field.
+        """
+        declared = set(self.data["tickers_without_a_split_record"])
+        actual = {
+            ticker
+            for ticker, years in self.series.items()
+            if any("split_adjusted_price_usd" not in o for o in years.values())
+        }
+        self.assertEqual(declared, actual)
+
+
+class TestVendorSeriesIdentity(unittest.TestCase):
+    """A vendor series must belong to the registrant the filings name.
+
+    Yahoo recycles a delisted company's symbol to an unrelated one, so a clean-looking
+    series is not evidence of identity: fetching LU today returns Lufax Holding. The
+    filings settle it. A filing's implied price divided by the vendor's adjusted close is
+    that year's cumulative corporate-action factor, which holds flat for years and then
+    steps by a split ratio. An unrelated company produces no such structure.
+    """
+
+    def test_fetched_series_track_the_filings_by_a_corporate_action_factor(self):
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "vanguard_audited_rosters.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            rosters = json.load(f)["rosters_by_year"]
+        with open(
+            ROOT / "data" / "raw" / "constituents" / "issuer_ticker_map.json", "r", encoding="utf-8"
+        ) as f:
+            issuer_map = {
+                re.sub(r"^[#*^\s]+", "", k).strip().rstrip(".").strip(): v
+                for k, v in json.load(f)["map"].items()
+            }
+
+        import datetime
+
+        for ticker in ("COP", "SLB", "GILD"):
+            raw_path = ROOT / "data" / "raw" / "tickers" / f"{ticker}.json"
+            with open(raw_path, "r", encoding="utf-8") as f:
+                chart = json.load(f)["chart"]["result"][0]
+            closes = {}
+            quote = chart["indicators"]["quote"][0]["close"]
+            for stamp, close in zip(chart["timestamp"], quote):
+                moment = datetime.datetime.utcfromtimestamp(stamp)
+                if moment.month == 12 and close:
+                    closes[str(moment.year)] = close
+
+            ratios = []
+            for year, roster in rosters.items():
+                for holding in roster["holdings"]:
+                    name = re.sub(r"^[#*^\s]+", "", holding["name"]).strip().rstrip(".").strip()
+                    if issuer_map.get(name) != ticker or holding["shares"] <= 0:
+                        continue
+                    vendor = closes.get(year)
+                    if vendor:
+                        implied = holding["value_usd_thousands"] * 1000.0 / holding["shares"]
+                        ratios.append(round(implied / vendor, 2))
+
+            with self.subTest(ticker=ticker):
+                self.assertGreaterEqual(len(ratios), 3)
+                # Every factor is at least 1: a vendor close is adjusted downward for
+                # later splits, never upward.
+                self.assertTrue(all(r >= 0.99 for r in ratios))
+                # A handful of distinct factors, not a different one every year. An
+                # unrelated company would scatter.
+                self.assertLessEqual(len(set(ratios)), 4)
+
+
 if __name__ == "__main__":
     unittest.main()

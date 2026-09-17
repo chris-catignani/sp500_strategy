@@ -32,6 +32,7 @@
     "GTE Corp": "GTE",
     "General Electric Co": "GE",
     "General Motors Corp": "GM",
+    "Gilead Sciences, Inc": "GILD",
     "Hewlett-Packard Co": "HPQ",
     "Home Depot, Inc": "HD",
     "Intel Corp": "INTC",
@@ -54,11 +55,15 @@
     "Royal Dutch Petroleum Co": "RD",
     "Royal Dutch Petroleum Co. ADR": "RD",
     "SBC Communications Inc": "SBC",
+    "Schlumberger Ltd": "SLB",
+    "Sun Microsystems, Inc": "SUNW",
     "The Coca-Cola Co": "KO",
     "The Procter & Gamble Co": "PG",
     "Tyco International Ltd": "TYC",
     "Verizon Communications": "VZ",
     "Verizon Communications Inc": "VZ",
+    "Viacom Inc. Class B": "VIA",
+    "Viacom International Class B": "VIA",
     "Wal-Mart Stores, Inc": "WMT",
     "Wells Fargo & Co": "WFC"
   },
@@ -72,5 +77,7 @@
   },
   "not_matched_deliberately": {
     "# Microsoft Corp": "A stray footnote marker on the 1996 filing's Microsoft row. Normalisation strips leading markers, so this resolves to Microsoft Corp rather than being mapped separately."
-  }
+  },
+  "below_top20": "Entries beyond the Top 20 are included where the constituent is required elsewhere: a name absent from every Top 20 still needs a price when a portfolio holds it into a later year, and the gap report (universe_gap_report.json) reaches rank 30.",
+  "share_classes": "Viacom listed Class A and Class B separately at different prices. Only Class B is mapped, following the single-line dual-class execution convention established for Alphabet in #38 and documented in docs/DATA_PROVENANCE.md 4.3.8. Class A is left unmapped deliberately so it cannot be conflated with Class B."
 }
