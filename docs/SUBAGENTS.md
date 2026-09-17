@@ -75,6 +75,21 @@ Output arriving late is worth waiting for: the delegated extractor was better th
 hand-written replacement and was adopted after its stated totals were each checked against
 the filing they claim to come from.
 
+**The turn can die in superpowers bootstrap, before it ever reads your brief.** A fourth
+attempt under #55 was recovered from the transcript and had reached only five steps in
+five seconds: it read `using-superpowers/SKILL.md`, which tells it to read the reference
+file for its harness, then ran `find_by_name` for `*antigravity-tools*` with `MaxDepth: 3`
+under the plugin root. The real file sits at depth 4
+(`skills/using-superpowers/references/antigravity-tools.md`), so the search missed it and
+returned the only other match, `tests/antigravity/test-antigravity-tools.sh` — a shell
+script. The turn ended there, with empty stdout and an untouched working tree.
+
+This makes the earlier notes about quoting and about code-writing tasks unreliable as
+diagnoses: in this instance the brief was never reached, so nothing about the task's shape
+can explain the outcome. **Read the transcript before theorising.** It is the only place
+the failure is visible, and it named the cause in one read after three attempts had been
+written off on guesswork.
+
 **Files outside the workspace may be unreadable.** Keep briefs and reports inside the repo
 (`.superpowers/` is gitignored) rather than in a system scratch directory.
 
