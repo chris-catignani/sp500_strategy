@@ -47,7 +47,7 @@ data/raw/
 │   └── spinoffs.json      # Raw corporate spinoff catalog (IRS Form 8937 / Section 355)
 ├── ground_truth/
 │   ├── quarterly_ground_truth_holdings.json # Audited SEC EDGAR Form N-30D / NPORT-P holdings (1995–2024, 55 verified quarters across 120 labeled periods)
-│   ├── sec_filings/                         # Archive of 56 filings (20 NPORT-P XML, 35 historical annual & semi-annual reports, superseded Select Sector doc)
+│   ├── sec_filings/                         # Archive of 69 filings: 56 SPY (20 NPORT-P XML, 35 historical annual & semi-annual reports, superseded Select Sector doc) + 13 Vanguard Index Trust December-31 annual reports
 │   └── universe_gap_report.json             # Historical survivorship gap report (39 missing constituents at depth 30)
 ├── tickers/
 │   ├── AAPL.json          # Apple Inc. raw response (timestamps, quotes, splits, dividends)
@@ -305,6 +305,30 @@ The simulation engine aggregates all registered share classes into a single cons
 
 **Limitation**: only `GOOGL` prices are archived (`data/raw/tickers/GOOGL.json`); no `GOOG` price series is held in this repository. Any realized price spread between Class A and Class C is therefore outside the model, and its effect on returns is neither measured nor bounded here. No claim is made that the spread is negligible — that would require a Class C price series this repository does not have.
 
+
+#### 4.3.9 Second-Filer December-31 Archive (Vanguard Index Trust, CIK `0000036405`)
+SPY's fiscal year ended September 30 from 1997 onward (§4.3.6), so **no SPY filing anchors a December 31 price for 1997–2019**. That is a property of the filer, not of the regulatory record: other S&P 500 index funds file on a December 31 fiscal year. **Vanguard Index Trust** does, and its Schedule of Investments carries the same shares-and-value columns, so an exact year-end implied close follows from `value / shares` for any constituent it holds.
+
+- **Archive scope**: 13 annual reports, fiscal years 1994–2006 (`VG500_*.txt` in `data/raw/ground_truth/sec_filings/`, catalogued in `vanguard_annual_filings_manifest.json`). Form `N-30D` through FY2002 and Form `N-CSR` from FY2003; fixed-width text through FY2003 and HTML from FY2004, both already handled by the parsers in §4.3.6. The span covers every year a constituent missing from `data/raw/tickers/` is required. FY1993 (`0000893220-94-000129`) exists and is unarchived because nothing requires it.
+- **Full submissions, not inner documents**: each archived file is the complete `{accession}.txt` submission, because only that carries the SEC header. **`CONFORMED PERIOD OF REPORT` is the single field separating a December 31 annual report from a June 30 semi-annual one** — Vanguard files both as Form `N-30D` under the same `COMPANY CONFORMED NAME`, so neither form type nor filer identity distinguishes them. `scripts/download_vanguard_annual_filings.py` refuses and deletes any download whose stated period is not `{year}-12-31`, and `TestVanguardArchiveCoverage` re-asserts it against the documents on disk. This is the same failure mode that once placed a March 31 snapshot in an annual slot (§4.3.6).
+- **Pinned accessions**: unlike the SPY archiver, which discovers filings by scanning EDGAR master indexes, every Vanguard accession is pinned in the script. The set was enumerated once from the submissions API and is closed, so discovery would add failure modes without adding information.
+- **Two manifests, one directory**: both manifests are keyed by bare year, so a Vanguard entry in the SPY manifest would collide with the SPY filing for that year and silently displace it. The separation is asserted by test.
+- **Amendments recorded, not archived**: the FY2001 `N-30D/A` (`0000932471-02-000470`) and FY2005 `N-CSR/A` (`0000932471-06-000605`) differ from their parents by **26 and 7 bytes** respectively — EDGAR header only — and carry identical Schedules of Investments. Archiving them would add ~8MB to record a 33-byte difference. They are noted in the manifest, following the SPY FY2004 precedent (§4.3.6).
+
+##### Independent cross-filer validation (1995-12-31)
+SPY's fiscal year ended December 31 through 1996, so its FY1995 annual report covers **the same date** as Vanguard's. Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:
+
+| Constituent | Vanguard-implied | SPY-implied | Delta |
+|---|---:|---:|---:|
+| Mobil Corp. (`MOB`) | \$112.00 | \$112.00 | \$0.0002 |
+| GTE Corp. (`GTE`) | \$44.00 | \$44.00 | \$0.0000 |
+| BellSouth Corp. (`BLS`) | \$43.50 | \$43.50 | \$0.0001 |
+| Royal Dutch Petroleum (`RD`) | \$141.13 | \$141.13 | \$0.0048 |
+| SBC Communications (`SBC`) | \$57.50 | \$57.50 | \$0.0001 |
+
+Agreement to under half a cent across five securities, with residuals attributable to share-count rounding in the published schedules rather than to method error. This is the strongest available check on the implied-price method, and it is repeatable for 1996, the other year SPY filed a December 31 snapshot.
+
+**Implied prices are as-traded.** They are not split-adjusted, and interpreting them without each registrant's split record inverts the reading: Lucent (`LU`) 1997→1999 reads as a 20% decline as-traded, where the split-adjusted move is a **219% rise** across its April 1998 and April 1999 two-for-one splits (both stated in Lucent's own Form 10-K405, accession `0000950117-01-501896`). Derivation of split-adjusted series from this archive is tracked in #55.
 
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).

@@ -1252,5 +1252,72 @@ class TestIsValidSpyAnnualReport(unittest.TestCase):
             self.assertIn(file_path.name, str(ctx.exception))
 
 
+class TestVanguardArchiveCoverage(unittest.TestCase):
+    """Vanguard Index Trust's December 31 filings (issue #55).
+
+    SPY's fiscal year ends September 30, so no SPY filing anchors a December 31 price
+    for 1997-2019. These filings do. The archive is only useful if every document on
+    disk is a year-end annual report and the manifest says so truthfully.
+    """
+
+    FILINGS_DIR = ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
+    MANIFEST = FILINGS_DIR / "vanguard_annual_filings_manifest.json"
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.MANIFEST, "r", encoding="utf-8") as f:
+            cls.manifest = json.load(f)
+
+    def test_every_archived_vanguard_filing_is_claimed_by_the_manifest(self):
+        """No archived filing may sit unclaimed, and no entry may name a missing file."""
+        on_disk = sorted(path.name for path in self.FILINGS_DIR.glob("VG500_*.txt"))
+        claimed = sorted(Path(entry["file_path"]).name for entry in self.manifest.values())
+        self.assertEqual(claimed, on_disk)
+        self.assertEqual(len(self.manifest), 13)
+
+    def test_every_filing_states_a_december_31_period(self):
+        """The SEC header, not the filename, decides what a filing is.
+
+        Vanguard files a June 30 semi-annual under the same form as its December 31
+        annual report, so form type and filer identity cannot separate them. Asserting
+        the period on disk keeps a semi-annual from occupying a year-end slot, which is
+        the failure documented in docs/DATA_PROVENANCE.md 4.3.6.
+        """
+        from scripts.extract_ground_truth_from_sec import read_filing_period
+
+        for year_key, entry in self.manifest.items():
+            path = ROOT / entry["file_path"]
+            with self.subTest(year=year_key):
+                self.assertTrue(path.exists(), f"missing archived filing: {path}")
+                period = read_filing_period(path)
+                self.assertEqual(period, f"{year_key}-12-31")
+                self.assertEqual(entry["report_date"], period)
+
+    def test_manifest_sizes_match_the_archived_documents(self):
+        """A truncated download must not pass as a complete filing."""
+        for year_key, entry in self.manifest.items():
+            path = ROOT / entry["file_path"]
+            with self.subTest(year=year_key):
+                self.assertEqual(path.stat().st_size, entry["file_size_bytes"])
+
+    def test_vanguard_filings_are_kept_out_of_the_spy_manifest(self):
+        """Two filers, two manifests.
+
+        Both are keyed by bare year, so a Vanguard entry in the SPY manifest would
+        collide with the SPY filing for the same year and silently displace it.
+        """
+        spy_manifest_path = self.FILINGS_DIR / "sec_annual_filings_manifest.json"
+        with open(spy_manifest_path, "r", encoding="utf-8") as f:
+            spy_manifest = json.load(f)
+
+        for entry in spy_manifest.values():
+            self.assertNotIn("VG500", entry["file_path"])
+            self.assertNotIn("/36405/", entry["sec_url"])
+
+        for entry in self.manifest.values():
+            self.assertIn("VG500", entry["file_path"])
+            self.assertIn("/36405/", entry["sec_url"])
+
+
 if __name__ == "__main__":
     unittest.main()
