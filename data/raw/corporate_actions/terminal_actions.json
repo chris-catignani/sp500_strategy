@@ -1,6 +1,6 @@
 {
   "description": "What a holder of one share received when each constituent stopped trading independently. Input for terminal-value modelling (#56); not yet consumed by the engine.",
-  "verification": "Every entry was checked against the filing it cites: the document was fetched and the quoted sentence confirmed present, and each cash figure and exchange ratio confirmed to appear in the text. Eleven matched verbatim; DELL matched in substance and RD required reading which share line the ratio belongs to. Both are noted on their entries.",
+  "verification": "Every entry is re-checkable by scripts/verify_provenance.py, which fetches each cited filing and confirms the quoted sentence and every recorded figure appear in it. All thirteen pass. Run it when a figure is questioned rather than relying on this field.",
   "not_yet_modelled": "The engine has no acquisition or delisting path. Consuming this is #56, which must also decide the LU case: its acquirer chain leaves this repository's universe, so converting into the acquirer's shares is not possible and the treatment has to be chosen explicitly.",
   "actions_by_ticker": {
     "AN": {
@@ -44,7 +44,7 @@
       "acquirer_ticker": null,
       "quoted_sentence": "At the effective time of the Merger (the \u201cEffective Time\u201d), each share of the common stock, par value $0.01 per share, of the Company (the \u201cCommon Stock\u201d) issued and outstanding immediately prior to the Effective Time (other than certain excluded shares and shares held by any of the Company\u2019s stockholders who are entitled to, properly exercise and do not withdraw appraisal rights under Delaware law (\u201cDissenting Shares\u201d)) was converted into the right to receive $13.75 in cash, without interest (the \u201cMerger Consideration\u201d), less any applicable withholding taxes, whereupon all such shares were automatically canceled upon the conversion thereof and ceased to exist. In addition, promptly after the Effective Time, each share of Common Stock held as of the close of business on October 28, 2013 is entitled to receive the $0.13 per share special cash dividend declared by the Company\u2019s board of directors on October 18, 2013.",
       "verification": "confirmed_at_source",
-      "note": "Verified by substance rather than by verbatim match: the filing reads 'was converted into the right to receive $13.75 in cash, without interest (the Merger Consideration)'. The recorded quotation is reformatted from the same passage."
+      "note": "Recorded as a substance-only match when first checked by hand. It is in fact verbatim: the earlier check compared against raw filing source, where markup and entities sit inside the sentence. scripts/verify_provenance.py strips those before comparing and matches it exactly."
     },
     "EMC": {
       "company_name": "EMC Corp",

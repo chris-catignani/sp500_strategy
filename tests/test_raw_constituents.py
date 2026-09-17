@@ -1954,5 +1954,47 @@ class TestTerminalActions(unittest.TestCase):
                 self.assertIn(ticker, self.actions)
 
 
+class TestProvenanceVerifier(unittest.TestCase):
+    """The verifier itself, exercised on the checks that need no network."""
+
+    def test_archived_roster_totals_still_match_their_filings(self):
+        """Runs the real verifier over the archived filings on disk.
+
+        The network-dependent checks cannot run here, but the roster check reads archived
+        documents and is the same code path. Exercising it keeps the verifier working, so
+        that reaching for it in six months does not first mean repairing it.
+        """
+        import sys
+
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.verify_provenance import verify_rosters
+
+        results = verify_rosters(verbose=False)
+        self.assertEqual(len(results), 13)
+        for result in results:
+            with self.subTest(year=result.subject):
+                self.assertTrue(result.ok, f"{result.subject}: {result.checks}")
+
+    def test_normalisation_sees_through_filing_markup(self):
+        """A quotation must match the prose, not the encoding.
+
+        Filings write "December&nbsp;2000" and break sentences across pages. Comparing raw
+        source reported two correct records as unsupported, which is a fact about the
+        encoding rather than about the claim.
+        """
+        import sys
+
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.verify_provenance import _normalise
+
+        self.assertIn("December 2000", _normalise("In December&nbsp;2000, the Company"))
+        self.assertIn(
+            "after adjusting for", _normalise("after <PAGE> 22 adjusting for")
+        )
+        self.assertIn("A and B", _normalise("<FONT SIZE=2>A</FONT> and  <B>B</B>"))
+
+
 if __name__ == "__main__":
     unittest.main()
