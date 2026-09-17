@@ -790,6 +790,89 @@ GE $86.19, Boeing $52.12, Raytheon Cl B $58.38 — match the values established 
   — the one that was broken — and left every audited annual roster byte-identical.
 
 
+#### 4.3.15 Issuer-Reported Dividends and Quarter-End Closes (issue #76)
+
+The constituents priced from fund schedules (4.3.12) have **no dividend series**: a Schedule
+of Investments reports holdings, not distributions. The figure is recoverable, but only from
+the issuer rather than the fund. Item 5 of a Form 10-K ("Market for Registrant's Common
+Equity"), and the quarterly-information note to the financial statements, report **per-share
+dividends declared and quarter-end stock prices, by calendar quarter**.
+
+`scripts/extract_issuer_dividend_tables.py` reads those tables from **168 pinned annual
+filings across the 19 issuers** and publishes `data/raw/ground_truth/issuer_dividend_tables.json`.
+
+- **Cited, not archived.** The filing list is pinned in
+  `data/raw/ground_truth/issuer_filing_manifest.json` and the documents are re-read from
+  EDGAR on demand, the convention every record in `splits.json` already follows. Archiving
+  168 filings would add roughly 170MB to record figures that already carry an accession.
+- **Nothing consumes this dataset.** No published figure moves. It is the evidence the
+  dividend gap needs, not the fix; wiring it into `sp500_dividends.json` remains #76.
+
+##### Reconcile or withhold, and what it cost
+
+The first extraction pass published 335 quarters and **about a third of them were wrong** --
+not invented, but read from the wrong cell of the right table. AT&T's FY1994 report states
+`Dividends declared .33 .33 .33 .33`; that pass published 1994-Q1 through Q3 as `0.33` and
+**1994-Q4 as `327.0`**. Seventy-five dividend values exceeded \$5 a quarter and sixty-two
+high/low pairs were inverted. **A number read from the wrong cell carries a real accession
+and reads as sourced, which makes it worse than an obvious invention, not better.**
+
+The rule that fixes it is the one 4.3.10 already applies to rosters: **dollar-exact
+reconciliation, or the year is withheld.** A year's four quarterly figures must sum to the
+annual per-share dividend stated in the same filing. If they do not, or the annual figure
+cannot be read, all four quarters are withheld and the year is recorded in `withheld` with
+both figures. Three structural checks reject a row outright: `high < low`, a close outside
+its own high/low band, and a dividend exceeding 25% of its own share price.
+
+Applied, this cut **335 published quarters to 64**, with 16 years reconciled, 55 withheld and
+27 structural rejects. That is the correct trade. Lower coverage that can be trusted beats
+broader coverage that cannot, and a short read is indistinguishable from a complete one once
+it is in a dataset.
+
+##### Grade: filing-quoted, and unaudited
+
+**Every published row is `audited: false`,** and this is a property of where the table sits
+rather than of the filer. An auditor's report covers the consolidated financial statements;
+Item 5 sits in Part II outside them, and the quarterly note is typically headed
+`QUARTERLY INFORMATION (UNAUDITED)` -- AT&T's says exactly that. The figures are
+**filing-quoted and unaudited**, the same grade as the Q2 price observations and the 1995-96
+Q3 series (4.3.14). That is a real grade, not a weak one; it is simply not the audited
+annual per-share line, which some registrants also carry on the income statement.
+
+**Figures are published as the filing states them**, in the registrant's then-current share
+terms, with an `as_filed_basis_note` where the filing says so. They are *not* converted to
+the derived series' basis. BellSouth is why: it reports 1996 at \$0.36 a quarter in its FY1997
+filing and at \$0.18 in filings after its December 1998 two-for-one. Both are correct in
+their own basis. Conversion is the consumer's job and needs `splits.json`.
+
+##### What it covers, and what it does not
+
+Quarters are published for five issuers: `AN`, `BLS`, `DD`, `GTE` and `T_CORP`. Of the six
+constituents that ever reach a Top-10 slot in either path, this dataset resolves three:
+`T_CORP` (1993, 1994 and 2003, including the closes that corroborate its prices), and `AOL`
+and `MCIC`, which carry a **`never_paid_statement`** quoted from their own filings -- a
+*sourced zero*, which is a different and stronger claim than an empty series, and not a
+zero-fill, because the zero is read. `RD` and `SBC` are absent and were always the vendor
+route. **`LU` is absent outright** and is the one real gap among constituents that matter.
+
+**112 of 168 filings were refused, and that is mostly a finding rather than a failure.**
+Sixty-eight refusals read "Item 5 / financial statements incorporated by reference to annual
+report": a 1990s 10-K frequently incorporates the table by reference to a shareholder report
+filed separately. Eleven were recovered by splitting each submission on `<DOCUMENT>` and
+reading its `EX-13`. Some resist even that -- AT&T's FY1999 `EX-13` is titled "SPECIFIED
+PORTIONS OF COMPANY'S ANNUAL REPORT" and does not contain the quarterly note.
+
+##### A by-product worth more than the dividends
+
+The same pass collected **517 verbatim split sentences**. One of them retired a caveat: the
+`MCIC` record in `splits.json` carried a quotation truncated at a page break, noting "Confirm
+the effective date before use." The complete sentence, from the same accession, reads *"On
+November 18, 1999, the Board of Directors authorized a three-for-two stock split in the form
+of a 50% stock dividend which was distributed on December 30, 1999"* -- confirming both the
+ratio and the distribution date already recorded. Checking every derived series against the
+closes its registrant reported is issue #84.
+
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).
