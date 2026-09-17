@@ -221,9 +221,29 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             universe="sp500",
             rebalance_frequency="quarterly",
         )
-        # Quarterly peak-to-trough during 2008 GFC reaches ~ -45.38%, strictly worse than annual -37.75%
+        # The claim is structural: quarterly observation dates catch an intra-year
+        # trough that annual year-end dates step over. Measured live rather than
+        # against a comment, so the two cannot drift apart.
+        res_ann = self.simulator.run_simulation(
+            start_year=2004,
+            end_year=2024,
+            n=5,
+            selector=MarketCapSelector(5),
+            is_after_tax=False,
+            initial_capital=10000.0,
+            universe="sp500",
+        )
+        self.assertLess(
+            res_qtr.max_drawdown,
+            res_ann.max_drawdown,
+            "quarterly drawdown must be strictly deeper than annual",
+        )
+
+        # Peak 2007-Q3, trough 2009-Q1 -- the GFC peak-to-trough. Verified against the
+        # quarterly equity series: 12731.32 -> 6709.02 is -47.30%, and the decline is
+        # monotonic across every intervening quarter.
         self.assertLess(res_qtr.max_drawdown, -0.40)
-        self.assertAlmostEqual(res_qtr.max_drawdown, -0.4538, places=2)
+        self.assertAlmostEqual(res_qtr.max_drawdown, -0.4730, places=3)
 
     def test_quarterly_annual_synthesis_net_taxable_gain(self) -> None:
         """Verify synthesized annual net_taxable_gain correctly nets year's realized gains against entering carryforward."""

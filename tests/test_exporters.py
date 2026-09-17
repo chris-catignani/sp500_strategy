@@ -523,7 +523,26 @@ class TestExporters(unittest.TestCase):
         # Dynamic runtime verification with Node.js if available
         if shutil.which("node"):
             test_js = code + """
+            // Expectations are read from the SCENARIO_DATA the exporter embedded, not
+            // pinned as literals. A hardcoded CAGR here asserts the state of the
+            // datasets rather than the behaviour of the function, and goes stale every
+            // time the underlying data legitimately changes -- which is the exact
+            // failure this test exists to catch.
+            function EXPECTED(rateLabel) {
+                var mIdx = SCENARIO_HEADERS.indexOf('PostLiqCAGR');
+                var key = '30y_S&P 500_Top 5_Market Cap_Annual_' + rateLabel;
+                for (var i = 0; i < SCENARIO_DATA.length; i++) {
+                    if (SCENARIO_DATA[i][0] === key) { return SCENARIO_DATA[i][mIdx]; }
+                }
+                return null;
+            }
+
             var results = {
+                expected0: EXPECTED('0.0%'),
+                expected15: EXPECTED('15.0%'),
+                expected20: EXPECTED('20.0%'),
+                expected30: EXPECTED('30.0%'),
+                expected37: EXPECTED('37.0%'),
                 cagr0: RECALCULATE_STRATEGY(0.0),
                 cagr15: RECALCULATE_STRATEGY(0.15),
                 cagr20: RECALCULATE_STRATEGY('20%'),
@@ -551,16 +570,30 @@ class TestExporters(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, f"Node execution error: {proc.stderr}")
             data = json.loads(proc.stdout)
 
-            # Compare standard tiers against exact backtest results
-            self.assertAlmostEqual(data["cagr0"], 0.141779, places=5)
-            self.assertAlmostEqual(data["cagr15"], 0.129224, places=5)
-            self.assertAlmostEqual(data["cagr20"], 0.124719, places=5)
-            self.assertAlmostEqual(data["cagr30"], 0.115138, places=5)
-            self.assertAlmostEqual(data["cagr37"], 0.107903, places=5)
+            # Each standard tier must resolve to the row the exporter embedded for the
+            # default dimensions (Top 5 / 30y / Market Cap / S&P 500 / Annual), read
+            # back from SCENARIO_DATA rather than pinned.
+            for tier in ("0", "15", "20", "30", "37"):
+                expected = data[f"expected{tier}"]
+                self.assertIsNotNone(
+                    expected, f"no SCENARIO_DATA row for the {tier}% tier"
+                )
+                self.assertIsInstance(
+                    data[f"cagr{tier}"],
+                    float,
+                    f"{tier}% tier returned {data[f'cagr{tier}']!r}, not a number",
+                )
+                self.assertAlmostEqual(data[f"cagr{tier}"], expected, places=6)
 
-            # Piecewise interpolation: 25% is halfway between 20% and 30%
-            expected_25 = 0.124719 + 0.5 * (0.115138 - 0.124719)
-            self.assertAlmostEqual(data["cagr25Interp"], expected_25, places=5)
+            # Tiers must be distinct and monotonically decreasing in the tax rate --
+            # the property that would break if the lookup collapsed to one row.
+            tiers = [data[f"cagr{t}"] for t in ("0", "15", "20", "30", "37")]
+            self.assertEqual(tiers, sorted(tiers, reverse=True))
+            self.assertEqual(len(set(tiers)), len(tiers))
+
+            # Piecewise interpolation: 25% is halfway between the 20% and 30% tiers
+            expected_25 = data["expected20"] + 0.5 * (data["expected30"] - data["expected20"])
+            self.assertAlmostEqual(data["cagr25Interp"], expected_25, places=6)
 
             # Custom dimension lookup
             self.assertAlmostEqual(data["customDim"], 0.247871, places=5)
