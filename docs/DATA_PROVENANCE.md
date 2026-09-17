@@ -526,7 +526,8 @@ series, and both were silent.
   case within their own series (`BellSouth Corp` twelve times, `Bellsouth Corp` once). An
   unresolved holding is skipped by `continue`, so this looked exactly like absent data: 18 of
   19 constituents resolved in NO SEI filing, and 6 resolved in no SPY filing at all. Q3 rose
-  from 72 observations to 163 on the fix alone, with no new filing archived.
+  from 72 observations to 163 on that fix alone, with no new filing archived. (It stands at
+  192 now; the rest came later, from a source rather than a lookup.)
 
 ##### Finding the rest of them, by gap rather than by guess
 
@@ -563,7 +564,7 @@ thirteen filings are refused by its extractor, so the overlap is **1995 and 1996
 than the eleven years both filers cover on paper; the refusal reasons are recorded in
 `prudential_q1_rosters.json` rather than worked around.
 
-Across those two periods, **26 issuer-price pairs agree to a median of 0.0085%**, worst case
+Across those two periods, **28 issuer-price pairs agree to a median of 0.0085%**, worst case
 0.125% (Tyco at 1995-Q1). The residual is rounding, not disagreement: SEI reports value in
 whole thousands against a fund roughly a tenth of Prudential's size, so its implied price is
 the coarser of the two. Prudential's side lands on clean eighths — Royal Dutch $99.375,
