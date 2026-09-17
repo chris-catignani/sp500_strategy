@@ -181,14 +181,14 @@
       "cik": "0000723527",
       "accession_number": "0000912057-01-505916",
       "form": "10-K",
-      "quoted_sentence": "STOCK SPLITS: On November 18, 1999, the Board of Directors authorized a three-for-",
+      "quoted_sentence": "STOCK SPLITS: On November 18, 1999, the Board of Directors authorized a three-for-two stock split in the form of a 50% stock dividend which was distributed on December 30, 1999 to shareholders of record on December 15, 1999.",
       "splits": [
         {
           "effective_date": "1999-12-30",
           "ratio": 1.5
         }
       ],
-      "note": "The quoted sentence is truncated in the filing text at the page break; the ratio is three-for-two. Confirm the effective date before use."
+      "note": "The quotation was previously truncated at a page break and carried the caveat 'Confirm the effective date before use.' The complete sentence was recovered under #76 from the same accession and confirms both figures already recorded: three-for-two, distributed 1999-12-30. The recorded effective_date is the distribution date, following the SBC precedent."
     },
     "MOB": {
       "company": "Mobil Corp.",
