@@ -391,6 +391,16 @@ The published dataset therefore covers **twelve December-31 rosters spanning 199
 
 **These rosters are the fund's holdings, not the index's published constituent weights.** A full-replication fund tracks the index closely, but its weights reflect its own positions and its total is its equity holdings rather than the index's float-adjusted capitalization. They are a far stronger basis than an unsourced estimate; they are not the index itself.
 
+#### 4.3.11 Issuer Identity Across Filings (`data/raw/constituents/issuer_ticker_map.json`)
+Filed issuer names are not stable, so the audited rosters (§4.3.10) cannot be read by name alone. A registrant is renamed (Philip Morris to Altria, SBC to AT&T Inc.), merges under a new name (Exxon to ExxonMobil, Citicorp to Citigroup), or is punctuated differently between two filings. Matching on the name splits one issuer into several or conflates two, and **both errors are silent**: an unmapped issuer simply does not appear in the candidate universe, which reintroduces survivorship bias through a lookup miss rather than a missing download.
+
+The map resolves all **58 filed name variants** appearing in any 1994–2006 Top 20 to **46 distinct tickers**, and a test asserts that no Top-20 name goes unmapped.
+
+- **A rename keeps one series.** Where the same registrant continues under a new name, both names map to the ticker whose price series covers the whole period — `Bell Atlantic` and `Verizon` to `VZ`, `BankAmerica` and `Bank of America` to `BAC`.
+- **Distinct registrants keep distinct tickers, which resolves the AT&T collision from primary evidence.** §4.5 records that `T` conflates two companies and decouples them with a hand-built series. The filings settle it directly: **`AT&T Corp` and `SBC Communications` are listed as separate issuers in the same years**, so they are priced separately rather than one standing in for the other. Mobil and GTE likewise remain distinct from the registrants that absorbed them.
+
+**Eight of the 46 tickers have no price series yet**: `AN`, `COP`, `GM`, `MOT`, `RD`, `SBC`, `TYC` and `T_CORP`. Each is present in the rosters with shares and market value, so each is derivable by the method in §4.3.9, and each additionally requires a split record cited to a filing before its series can be read as a return.
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).
