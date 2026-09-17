@@ -1,0 +1,134 @@
+{
+  "1995": {
+    "fiscal_year": 1995,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000950109-95-002026",
+    "report_date": "1995-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000950109-95-002026.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_1995_Q1_N-30D_0000950109-95-002026.txt",
+    "file_size_bytes": 102393
+  },
+  "1996": {
+    "fiscal_year": 1996,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000935069-96-000067",
+    "report_date": "1996-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-96-000067.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_1996_Q1_N-30D_0000935069-96-000067.txt",
+    "file_size_bytes": 112617
+  },
+  "1997": {
+    "fiscal_year": 1997,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000935069-97-000083",
+    "report_date": "1997-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-97-000083.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_1997_Q1_N-30D_0000935069-97-000083.txt",
+    "file_size_bytes": 111857
+  },
+  "1998": {
+    "fiscal_year": 1998,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000935069-98-000088",
+    "report_date": "1998-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-98-000088.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_1998_Q1_N-30D_0000935069-98-000088.txt",
+    "file_size_bytes": 122279
+  },
+  "1999": {
+    "fiscal_year": 1999,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000935069-99-000097",
+    "report_date": "1999-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-99-000097.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_1999_Q1_N-30D_0000935069-99-000097.txt",
+    "file_size_bytes": 117699
+  },
+  "2000": {
+    "fiscal_year": 2000,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000935069-00-000275",
+    "report_date": "2000-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-00-000275.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_2000_Q1_N-30D_0000935069-00-000275.txt",
+    "file_size_bytes": 119867
+  },
+  "2001": {
+    "fiscal_year": 2001,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000935069-01-500170",
+    "report_date": "2001-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-01-500170.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_2001_Q1_N-30D_0000935069-01-500170.txt",
+    "file_size_bytes": 127674
+  },
+  "2002": {
+    "fiscal_year": 2002,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000935069-02-000435",
+    "report_date": "2002-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-02-000435.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_2002_Q1_N-30D_0000935069-02-000435.txt",
+    "file_size_bytes": 164796
+  },
+  "2003": {
+    "fiscal_year": 2003,
+    "quarter": "Q1",
+    "form": "N-30D",
+    "accession_number": "0000935069-03-000686",
+    "report_date": "2003-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-03-000686.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_2003_Q1_N-30D_0000935069-03-000686.txt",
+    "file_size_bytes": 171079
+  },
+  "2004": {
+    "fiscal_year": 2004,
+    "quarter": "Q1",
+    "form": "N-CSR",
+    "accession_number": "0000935069-04-000812",
+    "report_date": "2004-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-04-000812.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_2004_Q1_N-CSR_0000935069-04-000812.txt",
+    "file_size_bytes": 212410
+  },
+  "2005": {
+    "fiscal_year": 2005,
+    "quarter": "Q1",
+    "form": "N-CSR",
+    "accession_number": "0000935069-05-001458",
+    "report_date": "2005-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-05-001458.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_2005_Q1_N-CSR_0000935069-05-001458.txt",
+    "file_size_bytes": 278069
+  },
+  "2006": {
+    "fiscal_year": 2006,
+    "quarter": "Q1",
+    "form": "N-CSR",
+    "accession_number": "0000935069-06-001685",
+    "report_date": "2006-03-31",
+    "audited": true,
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/766589/0000935069-06-001685.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/SEI_2006_Q1_N-CSR_0000935069-06-001685.txt",
+    "file_size_bytes": 237271
+  }
+}

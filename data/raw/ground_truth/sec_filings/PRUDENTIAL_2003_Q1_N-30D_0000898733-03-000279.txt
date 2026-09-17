@@ -1,0 +1,2783 @@
+-----BEGIN PRIVACY-ENHANCED MESSAGE-----
+Proc-Type: 2001,MIC-CLEAR
+Originator-Name: webmaster@www.sec.gov
+Originator-Key-Asymmetric:
+ MFgwCgYEVQgBAQICAf8DSgAwRwJAW2sNKK9AVtBzYZmr6aGjlWyK3XmZv3dTINen
+ TWSM7vrzLADbmYQaionwg5sDW3P6oaM5D3tdezXMm7z1T+B+twIDAQAB
+MIC-Info: RSA-MD5,RSA,
+ AY7zt+/VpIW9qBfE3VwRSLg4ia/mEFrgFRefIerq8UOhpqO1VzZ3dhb9H61lCJ4E
+ AvXOzzuMN8m99/1uqOX4Cg==
+
+<SEC-DOCUMENT>0000898733-03-000279.txt : 20030528
+<SEC-HEADER>0000898733-03-000279.hdr.sgml : 20030528
+<ACCEPTANCE-DATETIME>20030528094144
+ACCESSION NUMBER:		0000898733-03-000279
+CONFORMED SUBMISSION TYPE:	N-30D
+PUBLIC DOCUMENT COUNT:		1
+CONFORMED PERIOD OF REPORT:	20030331
+FILED AS OF DATE:		20030528
+EFFECTIVENESS DATE:		20030528
+
+FILER:
+
+	COMPANY DATA:	
+		COMPANY CONFORMED NAME:			PRUDENTIAL INDEX SERIES FUND
+		CENTRAL INDEX KEY:			0000887991
+		STATE OF INCORPORATION:			DE
+		FISCAL YEAR END:			0930
+
+	FILING VALUES:
+		FORM TYPE:		N-30D
+		SEC ACT:		1940 Act
+		SEC FILE NUMBER:	811-06677
+		FILM NUMBER:		03720738
+
+	BUSINESS ADDRESS:	
+		STREET 1:		100 MULBERRY ST
+		STREET 2:		9TH FL
+		CITY:			NEWARK
+		STATE:			NJ
+		ZIP:			07102
+		BUSINESS PHONE:		8008247513
+
+	MAIL ADDRESS:	
+		STREET 1:		ONE SEAPORT PLZ
+		STREET 2:		ONE SEAPORT PLZ
+		CITY:			NEW YORK
+		STATE:			NY
+		ZIP:			10292
+
+	FORMER COMPANY:	
+		FORMER CONFORMED NAME:	PRUDENTIAL DRYDEN FUND
+		DATE OF NAME CHANGE:	19970620
+
+	FORMER COMPANY:	
+		FORMER CONFORMED NAME:	PRUDENTIAL INSTITUTIONAL FUND
+		DATE OF NAME CHANGE:	19920929
+</SEC-HEADER>
+<DOCUMENT>
+<TYPE>N-30D
+<SEQUENCE>1
+<FILENAME>mf16012.txt
+<DESCRIPTION>STOCK INDEX FUND -- PROSPECTUS -- 5/28/03
+<TEXT>
+<Page>
+
+                                         SEMIANNUAL REPORT
+                                         MARCH 31, 2003
+
+PRUDENTIAL
+STOCK INDEX FUND
+
+FUND TYPE
+Large-capitalization stock
+
+OBJECTIVE
+Provide investment results that correspond
+to the price and yield performance of the
+S&P 500 Index
+
+This report is not authorized for distribution to prospective
+investors unless preceded or accompanied by a current prospectus.
+
+The views expressed in this report and information about the Fund's portfolio
+holdings are for the period covered by this report and are subject to change
+thereafter.
+
+Prudential Financial is a service mark of
+The Prudential Insurance Company of America,
+Newark, NJ, and its affiliates.               PRUDENTIAL FINANCIAL (LOGO)
+
+<Page>
+
+Prudential Index Series Fund    Prudential Stock Index Fund
+
+Performance at a Glance
+
+FUND OBJECTIVE
+The Prudential Stock Index Fund (the Fund) seeks to provide investment results
+that correspond to the price and yield performance of the Standard & Poor's
+500 Composite Stock Price Index (S&P 500 Index). There can be no assurance
+that the Fund will achieve its investment objective.
+
+Cumulative Total Returns1                                  As of 3/31/03
+
+<Table>
+<Caption>
+                Six Months      One Year         Five Years         Ten Years      Since Inception2
+<S>             <C>         <C>                 <C>                 <C>            <C>
+Class A           4.73%     -25.10% (-25.14)         N/A               N/A         -38.35% (-38.51)
+Class B           4.31      -25.68  (-25.72)         N/A               N/A         -39.93  (-40.09)
+Class C           4.31      -25.71  (-25.75)         N/A               N/A         -39.90  (-40.06)
+Class Z           4.85      -24.97  (-25.01)   -18.21% (-18.47)  118.20% (117.28)  137.44  (136.44)
+Class I           4.90      -24.88  (-24.92)   -17.86  (-18.12)        N/A          -3.94  (-4.29)
+S&P 500 Index3    5.01          -24.75             -17.43            126.63             ***
+Lipper Avg.4      4.65          -25.24             -19.53            118.45            ****
+</Table>
+
+Average Annual Total Returns1                             As of 3/31/03
+
+<Table>
+<Caption>
+                      One Year          Five Years       Ten Years     Since Inception2
+<S>               <C>                   <C>              <C>           <C>
+Class A           -27.53% (-27.57)         N/A              N/A        -14.23% (-14.29)
+Class B           -29.39  (-29.43)         N/A              N/A        -14.56  (-14.63)
+Class C           -27.19  (-27.22)         N/A              N/A        -14.29  (-14.36)
+Class Z           -24.97  (-25.01)    -3.94% (-4.00)    8.11% (8.07)     8.67    (8.63)
+Class I           -24.88  (-24.92)    -3.86  (-3.92)        N/A         -0.71   (-0.77)
+S&P 500 Index3       -24.75              -3.76              8.53             ***
+Lipper Avg.4         -25.24              -4.26              8.12            ****
+</Table>
+
+Past performance is not indicative of future results. Principal value and
+investment return will fluctuate so that an investor's shares, when redeemed,
+may be worth more or less than their original cost. 1Source: Prudential
+Investments LLC and Lipper Inc. The cumulative total returns do not take into
+account applicable sales charges. The average annual total returns do take
+into account applicable sales charges. Without the distribution and service
+(12b-1) fee waiver of 0.05% for Class A shares annually, the returns would
+have been lower. The Fund charges a maximum front-end sales charge of 3.25%
+for Class A shares in most circumstances, and a 12b-1 fee of up to 0.30%
+annually. In some circumstances, Class A shares may not be subject to a front-
+end sales charge, but may be subject to a 1% contingent deferred sales charge
+(CDSC) for the first year. Class B shares are subject to a declining CDSC of
+5%, 4%, 3%, 2%, 1%, and 1% for the first six years respectively after
+purchase, and a 12b-1 fee of 1.00% annually. Approximately seven years after
+purchase, Class B shares will automatically convert to Class A shares on a
+quarterly basis. Class C shares are subject to a front-end sales charge of 1%,
+a CDSC of 1% for shares redeemed within 18 months of purchase, and a 12b-1 fee
+of 1.00% annually. Class Z and Class I shares are not subject to a sales
+charge or 12b-1 fee. Without waiver of fees and/or expense subsidization, the
+Fund's total returns would have been lower, as indicated in parentheses. The
+returns in the tables do not reflect the deduction of taxes that a shareholder
+would pay on fund distributions or following the redemption of fund shares.
+2Inception dates: Class A, B, and C, 11/18/99; Class Z, 11/5/92; and Class I,
+8/1/97. 3The S&P 500 Index is an unmanaged index of 500 stocks of large U.S.
+companies. It gives a broad look at how stock prices in the United States have
+performed. 4The Lipper S&P 500 Index Objective
+
+<Page>
+
+www.prudential.com    (800) 225-1852
+
+Semiannual Report    March 31, 2003
+
+Funds Average (Lipper Average) represents returns based on an average return
+of all funds in the Lipper S&P 500 Index Objective Funds category for the
+periods noted. Funds in the Lipper Average are passively managed, have limited
+expenses, and are designed to replicate the performance of the S&P 500 Index
+on a reinvested basis. Investors cannot invest directly in an index. The
+returns for the S&P 500 Index and the Lipper Average would be lower if they
+included the effects of sales charges, operating expenses of a mutual fund, or
+taxes. Returns for the Lipper Average reflect the deduction of operating
+expenses, but not sales charges or taxes. ***The S&P 500 Index Since Inception
+cumulative total returns are -36.00% for Class A, B, and C, 147.56% for Class
+Z, and -3.64% for Class I. The S&P 500 Index Since Inception average annual
+total returns are -12.53% for Class A, B, and C, 9.09% for Class Z, and -0.65%
+for Class I. ****Lipper Average Since Inception cumulative total returns are -
+37.19% for Class A, B, and C, 138.40% for Class Z, and -6.24% for Class I.
+Lipper Average Since Inception average annual total returns are -13.02% for
+Class A, B, and C, 8.69% for Class Z, and -1.13% for Class I.
+
+    S&P 500 Index1                                      As of 3/31/03
+
+                        (CHART)
+
+
+Source: Factset and Standard & Poor's.
+
+"Standard & Poor's(r)," "S&P(r)," "S&P 500(r)," "Standard & Poor's 500," and
+ "500" are trademarks of The McGraw-Hill Companies, Inc., and have been
+licensed for use by Prudential Investments LLC, its affiliates, and
+subsidiaries. The Prudential Stock Index Fund is not sponsored, endorsed,
+sold, or promoted by S&P, and S&P makes no representation regarding the
+advisability of investing in the Fund. The performance cited does not
+represent the performance of the Prudential Stock Index Fund. Past
+performance is not indicative of future results. Investors cannot invest
+directly in an index.
+
+                                                                      1
+<Page>
+
+PRUDENTIAL FINANCIAL (LOGO)                        May 15, 2003
+
+DEAR SHAREHOLDER,
+The Prudential Stock Index Fund's semiannual reporting period--the six months
+between October 2002 and March 2003--was particularly volatile. Nonetheless,
+the Fund had a positive return over the period--a pleasant contrast to
+the previous year. Its return was slightly below the 5.01% return
+of the S&P 500 Index during the same period (primarily because of Fund
+expenses) but above the Lipper S&P 500 Index Objective Funds Average. In the
+following report, the Fund's adviser describes the factors that affected
+different market sectors over this period.
+
+In March 2003 I was named president of the Prudential Index Series Fund.
+I am pleased to lead an organization aimed at offering a high-quality product
+based on consistent investment disciplines--a point of stability in today's
+turbulent markets. The large swings of stock prices during the Fund's
+reporting period suggest that some people abandoned their investment plans
+because of market turbulence or economic and geopolitical uncertainty. At
+Prudential Financial, we recommend that you make any change to your investment
+strategy in consultation with a financial professional, and that you base it
+on sound principles. We appreciate your continued confidence in Prudential
+mutual funds.
+
+
+Sincerely,
+
+Judy A. Rice, President
+Prudential Index Series Fund/Prudential Stock Index Fund
+
+2
+
+<Page>
+
+Prudential Index Series Fund    Prudential Stock Index Fund
+
+Semiannual Report    March 31, 2003
+
+Investment Adviser's Report
+
+A NOTE OF OPTIMISM SPARKED A REBOUND
+The S&P 500 Index had a moderate gain over the Fund's semiannual reporting
+period. After the long summer decline, stocks rebounded in October and
+November 2002. Some analysts attributed this to a pent-up demand for equities
+that had been hidden by war-related uncertainty. Others noted that the
+significant gains were made by "beaten-down" stocks, and so were measured
+against very low initial share prices. For example, the three stocks in the
+Index with the largest percentage gains were Corning, which previously had
+fallen from a high of $70.13 to $1.10; Dynegy, which had fallen from a high of
+$57.95 to a low of $0.51; and Yahoo, which peaked at $200.75 and
+bottomed at $8.11.
+
+As uncertainty about the impending war in Iraq and its consequences increased,
+the Index gave up most of its gain. There was a brief upswing in March when
+war in Iraq became imminent and many investors expected the war to be brief.
+However, the markets declined again in the last weeks of the quarter as it
+appeared that geopolitical uncertainty would extend for weeks or months, and
+that it was slowing economic recovery.
+
+TECHNOLOGY AND TELECOMMUNICATIONS REBOUNDED
+The market rally was driven by information technology and telecommunication
+services, the only two sectors registering double-digit gains. These
+sectors included stocks, such as those of Internet-related businesses, that
+were rebounding from large losses. Ill-conceived and borderline Internet
+businesses had largely disappeared by the beginning of this period. The
+companies that survived generally had sound business models and strong
+management. Investors recognized this during the Fund's reporting period as
+the Internet software & services component of the Index more than doubled. The
+reconsideration of Internet stocks also buoyed networking equipment shares.
+Other information technology components of the Index that gained--office
+electronics, computer software & peripherals, and computer hardware--were
+probably driven more by economic optimism than by the
+
+                                                                      3
+
+<Page>
+
+Prudential Index Series Fund    Prudential Stock Index Fund
+
+Semiannual Report    March 31, 2003
+
+Internet rebound. In telecommunication services, the depressed wireless
+services group pulled up the sector.
+
+HEALTHCARE ALSO HAD A MODEST GAIN
+The rise of the healthcare sector was driven by biotechnology stocks, led by
+Genzyme. It had several drugs approved following a period in which many drug-
+developing companies faced negative Food and Drug Administration (FDA)
+rulings. In contrast, healthcare facilities were at the bottom of the overall
+market. They include Tenet Healthcare, which had the largest decline of any
+stock in the Index because of government investigations ranging from its
+Medicare billing practices to alleged unnecessary medical procedures at one of
+its Northern California hospitals.
+
+FINANCIALS HAD A MODEST DECLINE
+Slower growth and a January uptick in loan losses hurt MBNA shares.
+UnumProvident, the largest disability insurance company in the United States,
+had one of the largest share price declines in the market. It faced lawsuits
+for denying payments as well as financial reporting issues that threatened its
+ability to raise capital. American International Group (AIG) added to its
+reserves for insurance claims and faced questions about the succession plan
+for its long-standing and highly regarded CEO. Other substantial declines were
+largely due to exposure to the equity markets. Financial stocks that moved up
+included companies that lend to consumers and the bond-oriented investment
+banks Bear Stearns and Lehman Brothers. Moody's rose because of the increased
+demand for external monitors of corporate practices.
+
+CONSUMER DISCRETIONARY STOCKS WERE MIXED
+The returns of consumer discretionary stocks were widely dispersed as
+individual company performances outweighed any general trends. On the positive
+side, retailers having a good year, such as The Gap, J.C. Penney, Best Buy,
+and Tiffany, had strong share price gains, as did eBay. Clothing companies
+with popular products such as Reebok, Liz Claiborne, and Nike also fared well.
+The home builders Centex and Pulte Homes rode the continuing strength of the
+housing market.
+
+4
+
+<Page>
+
+                                    www.prudential.com    (800) 225-1852
+
+The negative side included less successful retailers such as Circuit City,
+Sears Roebuck, and Dillards, and clothing companies, including Jones Apparel.
+Fear that consumers would reduce their spending hurt restaurant chains
+generally, including Darden Restaurants, McDonald's, Wendy's International,
+and Yum! Brands. Discounted financing and other sales incentives were needed
+to sustain automobile sales, so the major automobile and auto component stocks
+were among the poorer performers.
+
+INDUSTRIAL CYCLICALS WERE WEAK, BUT ENERGY WAS STRONG
+The industrial, utilities, and materials sectors had modest declines. These
+sectors tend to rise when the economy is strong and fall when it weakens.
+(Some utilities are less cyclical, but energy use tends to fall off in a slow
+economy.) Tires & rubber and steel were among the industry groups that fell
+farthest.
+
+In contrast, the energy sector rode the escalating prices of oil and natural
+gas to an overall positive return. Although oil prices dropped quickly from a
+high of almost $40 a barrel in February as damage to Iraqi production capacity
+appeared to be minor, the war wasn't the only cause of high oil and natural
+gas prices. Political unrest in Venezuela and Nigeria, Japan's shutting down
+of its nuclear reactors because of safety problems with their design, and the
+inherent limitations of today's energy reserves also may have kept prices up.
+
+INVESTORS FEARED CONSUMER WEAKENING
+Consumer spending has sustained the economy during this slowdown, and consumer
+staples stocks were a relative haven. With a decline in consumer confidence,
+many investors began to reassess the premium some of these companies had
+warranted. Consumers traded down to discount brands because of the weak
+economy, hurting supermarket chains, tobacco companies, brewers, and many
+leading product brands, including Pepsi Bottling, Kimberly-Clark, and Coca-
+Cola. Manufacturers of lower-priced goods, such as Avon Products and Wrigley,
+gained, benefiting from this trend.
+
+Prudential Stock Index Fund Management Team
+- -------------------------------------------------------------------------
+The Portfolio of Investments following this report shows the size of the
+Fund's positions at period-end.
+
+                                                                 5
+
+<Page>
+
+
+                                       SEMIANNUAL REPORT
+                                       MARCH 31, 2003
+
+PRUDENTIAL
+STOCK INDEX FUND
+
+
+                                       FINANCIAL STATEMENTS
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited)
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+LONG-TERM INVESTMENTS  94.8%
+Common Stocks
+- -------------------------------------------------------------------------------------
+Aerospace/Defense  1.6%
+     187,084       Boeing Co.                                     $      4,688,325
+      45,006       General Dynamics Corp.                                2,478,481
+     188,615       Honeywell International, Inc.                         4,028,816
+     101,956       Lockheed Martin Corp.                                 4,848,008
+      39,974       Northrop Grumman Corp.                                3,429,769
+      90,344       Raytheon Co.                                          2,563,059
+      41,763       Rockwell Automation, Inc.                               864,494
+      41,763       Rockwell Collins, Inc.                                  767,186
+     104,920       United Technologies Corp.                             6,062,278
+                                                                  ----------------
+                                                                        29,730,416
+- -------------------------------------------------------------------------------------
+Agricultural Products  0.1%
+      57,692       Monsanto Co.                                            946,149
+- -------------------------------------------------------------------------------------
+Airlines  0.1%
+      26,684       Delta Airlines, Inc.                                    237,487
+     170,374       Southwest Airlines Co.                                2,446,571
+                                                                  ----------------
+                                                                         2,684,058
+- -------------------------------------------------------------------------------------
+Aluminum  0.2%
+     192,444       Alcoa, Inc.                                           3,729,565
+- -------------------------------------------------------------------------------------
+Automobiles & Trucks  0.6%
+       9,479       Cummins, Inc.                                           233,183
+      35,740       Dana Corp.                                              252,324
+     123,484       Delphi Automotive Systems Corp.                         843,396
+     408,463(c)    Ford Motor Co.                                        3,071,642
+     123,178(c)    General Motors Corp.                                  4,141,244
+      38,799       Genuine Parts Co.                                     1,183,758
+      20,076       Johnson Controls, Inc.                                1,454,305
+      17,560       Navistar International Corp.(a)                         432,152
+      31,370       Visteon Corp.                                           186,338
+                                                                  ----------------
+                                                                        11,798,342
+</Table>
+
+    See Notes to Financial Statements                                      7
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+Banking  7.1%
+      80,300       AmSouth Bancorporation                         $      1,596,364
+     334,567       Bank of America Corp.                                22,362,458
+     173,536       Bank of New York Co., Inc.                            3,557,488
+     257,916       Bank One Corp.                                        8,929,052
+     107,958       BB&T Corp.                                            3,393,120
+      48,067(c)    Capital One Financial Corp.                           1,442,491
+      51,014       Charter One Financial, Inc.                           1,411,047
+      37,361       Comerica, Inc.                                        1,415,235
+     129,573       Fifth Third Bancorp                                   6,496,790
+      28,500       First Tennessee National Corp.                        1,131,735
+     233,934       FleetBoston Financial Corp.                           5,586,344
+      34,892       Golden West Financial Corp.                           2,509,781
+      54,429       Huntington Bancshares, Inc.                           1,011,835
+     449,129       JP Morgan Chase & Co.                                10,648,849
+      94,635       KeyCorp                                               2,134,966
+      93,746       Mellon Financial Corp.                                1,993,040
+     136,098       National City Corp.                                   3,790,329
+      37,200(c)    North Fork Bancorporation, Inc.                       1,095,540
+      49,962       Northern Trust Corp.                                  1,521,343
+      64,936       PNC Financial Services Group                          2,751,988
+      65,102       Providian Financial Corp.(a)                            427,069
+      74,400       SouthTrust Corp.                                      1,899,432
+      76,162       State Street Corp.                                    2,409,004
+      63,083(c)    SunTrust Banks, Inc.                                  3,321,320
+      44,800       Union Planters Corp.                                  1,177,792
+     429,595       US Bancorp                                            8,153,713
+     303,265       Wachovia Corp.                                       10,332,238
+     376,140       Wells Fargo & Co.                                    16,922,539
+      20,500       Zions Bancorporation                                    876,990
+                                                                  ----------------
+                                                                       130,299,892
+- -------------------------------------------------------------------------------------
+Beverages  2.8%
+       7,947       Adolph Coors Co.                                        385,430
+     190,954       Anheuser-Busch Co., Inc.                              8,900,366
+      15,138       Brown-Forman Corp.                                    1,164,112
+     556,132       Coca-Cola Co.                                        22,512,223
+</Table>
+
+    8                                      See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+     104,200       Coca-Cola Enterprises, Inc.                    $      1,947,498
+      62,000       Pepsi Bottling Group, Inc.                            1,111,660
+     384,205       PepsiCo, Inc.                                        15,368,200
+                                                                  ----------------
+                                                                        51,389,489
+- -------------------------------------------------------------------------------------
+Chemicals  1.0%
+      50,532       Air Products & Chemicals, Inc.                        2,093,541
+     202,036       Dow Chemical Co.                                      5,578,214
+     219,944       E.I. du Pont de Nemours & Co.                         8,547,024
+      17,693       Eastman Chemical Co.                                    512,920
+      27,031       Hercules, Inc.(a)                                       235,170
+      47,770       Rohm & Haas Co.                                       1,422,590
+      15,316       Sigma-Aldrich Corp.                                     681,409
+                                                                  ----------------
+                                                                        19,070,868
+- -------------------------------------------------------------------------------------
+Chemical - Specialty  0.2%
+      27,704       Engelhard Corp.                                         593,420
+      10,890       Great Lakes Chemical Corp.                              241,758
+      37,679       Praxair, Inc.                                         2,123,211
+                                                                  ----------------
+                                                                         2,958,389
+- -------------------------------------------------------------------------------------
+Commercial Services  0.2%
+     111,200       Concord EFS, Inc.(a)                                  1,045,280
+      39,000       Convergys Corp.(a)                                      514,800
+      34,388       Moodys Corp.                                          1,589,757
+                                                                  ----------------
+                                                                         3,149,837
+- -------------------------------------------------------------------------------------
+Computer Hardware  2.6%
+      75,112(c)    Apple Computer, Inc.(a)                               1,062,084
+     577,240       Dell Computer Corp.(a)                               15,764,424
+      67,792       Gateway, Inc.(a)                                        159,989
+     377,534       International Business Machines Corp.                29,609,992
+      19,900       NCR Corp.(a)                                            364,966
+                                                                  ----------------
+                                                                        46,961,455
+- -------------------------------------------------------------------------------------
+Computer Software & Services  7.2%
+      54,620       Adobe Systems, Inc.                                   1,683,935
+</Table>
+
+    See Notes to Financial Statements                                      9
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+      24,210       Autodesk, Inc.                                 $        369,445
+     133,878       Automatic Data Processing, Inc.                       4,122,104
+      55,600       BMC Software, Inc.(a)                                   839,004
+   1,611,644       Cisco Systems, Inc.(a)                               20,919,139
+      40,900       Citrix Systems, Inc.(a)                                 538,244
+     131,258(c)    Computer Associates International, Inc.               1,792,984
+      36,951(c)    Computer Sciences Corp.(a)                            1,202,755
+      84,100       Compuware Corp.(a)                                      285,099
+      69,500(c)    eBay, Inc.(a)                                         5,927,655
+      31,300(c)    Electronic Arts, Inc.(a)                              1,835,432
+     487,104       EMC Corp.(a)                                          3,521,762
+     166,164       First Data Corp.                                      6,149,730
+      46,300       Intuit, Inc.(a)                                       1,722,360
+      42,320(c)    KLA-Tencor Corp.(a)                                   1,521,065
+      17,600       Mercury Interactive Corp.(a)                            522,368
+     131,916(c)    Micron Technology, Inc.(a)                            1,073,796
+   2,382,812       Microsoft Corp.                                      57,687,878
+      90,202       Novell, Inc.(a)                                         193,934
+      31,900(c)    Novellus Systems, Inc.(a)                               869,913
+      31,600(c)    NVIDIA Corp.(a)                                         406,060
+   1,193,340(c)    Oracle Corp.(a)                                      12,946,546
+      62,779       Parametric Technology Corp.(a)                          136,230
+      70,400(c)    PeopleSoft, Inc.(a)                                   1,077,120
+     106,100       Siebel Systems, Inc.(a)                                 849,861
+     697,696       Sun Microsystems, Inc.(a)                             2,274,489
+      63,300       SunGuard Data Systems, Inc.(a)                        1,348,290
+      89,777(c)    VERITAS Software Corp.(a)                             1,578,280
+                                                                  ----------------
+                                                                       133,395,478
+- -------------------------------------------------------------------------------------
+Construction  0.1%
+      18,237       Fluor Corp.                                             614,222
+      11,691(c)    KB Home                                                 531,356
+      14,543       Pulte Homes, Inc.                                       729,332
+      21,500       Vulcan Materials Co.                                    649,945
+                                                                  ----------------
+                                                                         2,524,855
+</Table>
+
+    10                                     See Notes to Financial Statements
+
+<Page>
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+Containers  0.1%
+      11,516       Ball Corp.                                     $        641,441
+      13,305       Bemis Co.                                               559,608
+      35,258       Pactiv Corp.(a)                                         715,738
+                                                                  ----------------
+                                                                         1,916,787
+- -------------------------------------------------------------------------------------
+Cosmetics & Soaps  2.5%
+      12,457(c)    Alberto-Culver Co.                                      613,881
+      52,472       Avon Products, Inc.                                   2,993,528
+      47,732(c)    Clorox Co.                                            2,203,786
+     121,730       Colgate-Palmolive Co.                                 6,626,981
+     233,839       Gillette Co.                                          7,234,979
+      20,975       International Flavors & Fragrances, Inc.                652,113
+     290,519       Procter & Gamble Co.                                 25,870,717
+                                                                  ----------------
+                                                                        46,195,985
+- -------------------------------------------------------------------------------------
+Diversified Gas
+      11,923       NICOR, Inc.                                             325,736
+- -------------------------------------------------------------------------------------
+Drugs & Medical Supplies  13.3%
+     348,774       Abbott Laboratories                                  13,117,390
+      28,582       Allergan, Inc.                                        1,949,578
+      22,700       AmerisourceBergen Corp.                               1,191,750
+     286,804       Amgen, Inc.(a)                                       16,505,570
+      13,038       Bausch & Lomb, Inc.                                     428,820
+     132,674       Baxter International, Inc.                            2,473,043
+      56,612       Becton Dickinson & Co.                                1,949,717
+      32,800(c)    Biogen, Inc.(a)                                         982,688
+      57,023       Biomet, Inc.                                          1,747,755
+      90,962       Boston Scientific Corp.(a)                            3,707,611
+     431,614       Bristol-Myers Squibb Co.                              9,120,004
+      12,056       C.R. Bard, Inc.                                         760,251
+     100,473(c)    Cardinal Health, Inc.                                 5,723,947
+      82,200       Forest Laboratories, Inc.(a)                          4,436,334
+      48,900       Genzyme Corp.(a)                                      1,782,405
+      68,248       Guidant Corp.                                         2,470,578
+     664,169       Johnson & Johnson                                    38,435,460
+</Table>
+
+    See Notes to Financial Statements                                     11
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+      57,933       King Pharmaceuticals, Inc.(a)                  $        691,141
+     250,997       Lilly (Eli) & Co.                                    14,344,479
+      55,300       MedImmune, Inc.(a)                                    1,815,499
+     270,258       Medtronic, Inc.                                      12,194,041
+     501,944       Merck & Co., Inc.                                    27,496,492
+   1,378,062       Pfizer, Inc.                                         42,940,412
+     289,901       Pharmacia Corp.                                      12,552,713
+      22,600(c)    Quest Diagnostics, Inc.(a)                            1,348,994
+     327,024       Schering-Plough Corp.                                 5,830,838
+      41,332       St. Jude Medical, Inc.(a)                             2,014,935
+      43,200       Stryker Corp.                                         2,965,680
+      23,900       Watson Pharmaceuticals, Inc.(a)                         687,603
+     294,091       Wyeth                                                11,122,522
+      43,511       Zimmer Holdings, Inc.(a)                              2,115,940
+                                                                  ----------------
+                                                                       244,904,190
+- -------------------------------------------------------------------------------------
+Education  0.1%
+      38,800       Apollo Group, Inc.(a)                                 1,936,120
+- -------------------------------------------------------------------------------------
+Electronics  3.8%
+      79,924       Advanced Micro Devices, Inc.(a)                         493,930
+     105,496       Agilent Technologies, Inc.(a)                         1,387,273
+      85,800       Altera Corp.(a)                                       1,161,732
+      80,200       Analog Devices, Inc.(a)                               2,205,500
+     105,800       Electronic Data Systems Corp.                         1,862,080
+      94,775       Emerson Electric Co.                                  4,298,046
+     675,302       Hewlett-Packard Co.                                  10,500,946
+   1,482,088       Intel Corp.                                          24,128,393
+      45,100       Jabil Circuit, Inc.(a)                                  789,250
+      70,100       Linear Technology Corp.                               2,163,987
+      87,544       LSI Logic Corp.(a)                                      395,699
+      72,700       Maxim Integrated Products, Inc.                       2,625,924
+      43,250       Molex, Inc.                                             929,010
+     510,913       Motorola, Inc.                                        4,220,141
+      42,276       National Semiconductor Corp.(a)                         720,383
+      27,170       PerkinElmer, Inc.                                       241,541
+      37,500       PMC-Sierra, Inc.(a)                                     223,125
+      19,400(c)    QLogic Corp.(a)                                         720,516
+</Table>
+
+    12                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+     119,500       Sanmina Corp.(a)                               $        482,780
+     184,500       Solectron Corp.(a)                                      557,190
+      22,624       Tektronix, Inc.(a)                                      388,002
+      39,900       Teradyne, Inc.(a)                                       464,436
+     389,052       Texas Instruments, Inc.                               6,368,781
+      17,733       Thomas & Betts Corp.(a)                                 251,454
+      77,700       Xilinx, Inc.(a)                                       1,818,957
+                                                                  ----------------
+                                                                        69,399,076
+- -------------------------------------------------------------------------------------
+Financial Services  7.6%
+      24,300       Ambac Financial Group, Inc.                           1,227,636
+     294,259       American Express Co.                                  9,778,227
+      21,998       Bear, Stearns & Co., Inc.                             1,443,069
+     300,011(c)    Charles Schwab Corp.                                  2,166,079
+   1,146,055       Citigroup, Inc.                                      39,481,595
+      29,337       Countrywide Credit Industries, Inc.                   1,686,877
+      14,219       Deluxe Corp.                                            570,608
+      29,930(c)    Equifax, Inc.                                           598,301
+     222,834       Fannie Mae                                           14,562,202
+      43,200(c)    Fiserv, Inc.(a)                                       1,359,936
+      58,414       Franklin Resources, Inc.                              1,922,405
+     156,832       Freddie Mac                                           8,327,779
+     106,400(c)    Goldman Sachs Group, Inc.                             7,243,712
+      41,360       H&R Block, Inc.                                       1,765,658
+      48,900       Janus Capital Group, Inc.                               556,971
+      65,600       John Hancock Financial Services, Inc.                 1,822,368
+      53,474       Lehman Brothers Holdings, Inc.                        3,088,123
+      48,000       Marshall & Ilsley Corp.                               1,226,880
+     281,964       MBNA Corp.                                            4,243,558
+     192,134       Merrill Lynch & Co., Inc.                             6,801,544
+     240,136       Morgan Stanley                                        9,209,216
+      87,025       Paychex, Inc.                                         2,390,577
+     124,900       Prudential Financial, Inc.(e)                         3,653,325
+      49,500       Regions Financial Corp.                               1,603,800
+      34,064(c)    SLM Corp.                                             3,778,379
+      65,666       Synovus Financial Corp.                               1,174,765
+</Table>
+
+    See Notes to Financial Statements                                     13
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+      26,000       T. Rowe Price Group, Inc.                      $        705,094
+     211,287       Washington Mutual, Inc.                               7,452,092
+                                                                  ----------------
+                                                                       139,840,776
+- -------------------------------------------------------------------------------------
+Foods  1.5%
+     140,859       Archer-Daniels-Midland Co.                            1,521,277
+      90,847       Campbell Soup Co.                                     1,907,787
+     119,843       ConAgra, Inc.                                         2,406,447
+      82,972       General Mills, Inc.                                   3,779,375
+      78,514       H.J. Heinz & Co.                                      2,292,609
+      30,358       Hershey Foods Corp.                                   1,902,232
+      89,870       Kellogg Co.                                           2,754,516
+      31,300       McCormick & Co., Inc.                                   755,582
+     175,486       Sara Lee Corp.                                        3,281,588
+     146,580(c)    Sysco Corp.                                           3,728,995
+      49,604       Wm. Wrigley Jr. Co.(a)                                2,802,626
+                                                                  ----------------
+                                                                        27,133,034
+- -------------------------------------------------------------------------------------
+Forest Products  0.8%
+      14,449       Boise Cascade Corp.                                     315,711
+      59,230(c)    Georgia-Pacific Corp.                                   823,297
+     104,084       International Paper Co.                               3,518,039
+     115,316       Kimberly-Clark Corp.                                  5,242,266
+      29,156       Louisiana-Pacific Corp.(a)                              231,207
+      43,735       MeadWestvaco Corp.                                      996,283
+      43,300       Plum Creek Timber Co., Inc.                             934,847
+      10,245(c)    Temple-Inland, Inc.                                     383,163
+      48,800       Weyerhaeuser Co.                                      2,334,104
+                                                                  ----------------
+                                                                        14,778,917
+- -------------------------------------------------------------------------------------
+Gas Distribution  0.1%
+      35,000       KeySpan Corp.                                         1,128,750
+- -------------------------------------------------------------------------------------
+Gas Pipelines  0.3%
+      39,797       Cinergy Corp.                                         1,339,169
+     129,704(c)    El Paso Corp.                                           784,709
+      27,400       Kinder Morgan, Inc.                                   1,233,000
+</Table>
+
+    14                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+       6,832       Peoples Energy Corp.                           $        244,381
+      47,998       Sempra Energy                                         1,198,030
+     116,992       Williams Companies, Inc.                                535,823
+                                                                  ----------------
+                                                                         5,335,112
+- -------------------------------------------------------------------------------------
+Health Care  0.4%
+      32,500       Anthem, Inc.(a)                                       2,153,125
+      24,960(c)    Manor Care, Inc.(a)                                     479,981
+      63,376       McKesson Corp.                                        1,579,964
+      30,700       Quintiles Transnational Corp.(a)                        373,312
+      33,900       Wellpoint Health Networks, Inc.(a)                    2,601,825
+                                                                  ----------------
+                                                                         7,188,207
+- -------------------------------------------------------------------------------------
+Hospital Management  0.8%
+     113,631       HCA, Inc.                                             4,699,778
+      52,000       Health Management Associates, Inc.                      988,000
+      33,810       Humana, Inc.(a)                                         324,576
+      61,110(c)    IMS Health, Inc.                                        953,927
+     108,372       Tenet Healthcare Corp.(a)                             1,809,813
+      68,512       United Health Group, Inc.                             6,280,495
+                                                                  ----------------
+                                                                        15,056,589
+- -------------------------------------------------------------------------------------
+Housing Related  0.4%
+      14,797       Centex Corp.                                            804,365
+      43,100       Leggett & Platt, Inc.                                   787,868
+     102,326       Masco Corp.                                           1,905,310
+      19,318       Maytag Corp.                                            367,622
+      58,827(c)    Newell Rubbermaid, Inc.                               1,667,745
+      19,438       Stanley Works                                           466,318
+      12,240       Tupperware Corp.                                        169,157
+      16,039(c)    Whirlpool Corp.                                         786,392
+                                                                  ----------------
+                                                                         6,954,777
+- -------------------------------------------------------------------------------------
+Insurance  4.2%
+      59,200(c)    ACE Ltd.                                              1,713,840
+      35,393       Aetna, Inc.                                           1,744,875
+     115,800       AFLAC, Inc.                                           3,711,390
+</Table>
+
+    See Notes to Financial Statements                                     15
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+     156,408       Allstate Corp.                                 $      5,188,053
+     583,538       American International Group, Inc.                   28,855,954
+      67,989(c)    Aon Corp.                                             1,406,013
+      38,434       Chubb Corp.                                           1,703,395
+      29,897       CIGNA Corp.                                           1,366,891
+      35,114       Cincinnati Financial Corp.                            1,231,448
+      55,753       Hartford Financial Services Group, Inc.               1,967,523
+      32,986       Jefferson-Pilot Corp.                                 1,269,301
+      40,230       Lincoln National Corp.                                1,126,440
+     119,240       Marsh & McLennan Companies, Inc.                      5,083,201
+      32,958       MBIA, Inc.                                            1,273,497
+     158,200(c)    Metlife, Inc.                                         4,173,316
+      22,120       MGIC Investment Corp.                                   868,652
+      75,900       Principal Financial Group, Inc.                       2,059,926
+      48,779       Progressive Corp.                                     2,893,083
+      29,029       SAFECO Corp.                                          1,015,144
+      50,217(c)    St. Paul Companies, Inc.                              1,596,901
+      28,315       Torchmark Corp.                                       1,013,677
+     221,069       Travelers Property Casualty Corp., Class B            3,119,284
+      51,326       UnumProvident Corp.                                     502,995
+      29,700       XL Capital Ltd.                                       2,102,166
+                                                                  ----------------
+                                                                        76,986,965
+- -------------------------------------------------------------------------------------
+Internet  0.2%
+      12,000       Symantec Corp.(a)                                       470,160
+     132,600(c)    Yahoo!, Inc.(a)                                       3,185,052
+                                                                  ----------------
+                                                                         3,655,212
+- -------------------------------------------------------------------------------------
+Leisure  0.5%
+      19,099       Brunswick Corp.                                         362,881
+     129,100(c)    Carnival Corp.                                        3,112,601
+      23,724       Harrah's Entertainment, Inc.(a)                         846,947
+      38,154(c)    Hasbro, Inc.                                            529,959
+      18,900(c)    International Game Tech., Inc.(a)                     1,547,910
+      95,613       Mattel, Inc.                                          2,151,292
+                                                                  ----------------
+                                                                         8,551,590
+</Table>
+
+    16                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+Lodging  0.2%
+      84,021       Hilton Hotels Corp.                            $        975,484
+      56,252       Marriott International, Inc.                          1,789,376
+                                                                  ----------------
+                                                                         2,764,860
+- -------------------------------------------------------------------------------------
+Machinery  0.7%
+      76,228       Caterpillar, Inc.                                     3,750,418
+      22,120       Cooper Industries, Inc.                                 789,905
+      53,840       Deere & Co.                                           2,113,758
+      45,362       Dover Corp.                                           1,098,668
+      15,377       Eaton Corp.                                           1,075,621
+      38,995       Ingersoll-Rand Co.                                    1,504,817
+      25,923       PACCAR, Inc.                                          1,303,149
+      25,092       Parker Hannifin Corp.                                   972,064
+      12,042       Snap-On, Inc.                                           298,160
+      40,402       Thermo Electron Corp.(a)                                731,276
+                                                                  ----------------
+                                                                        13,637,836
+- -------------------------------------------------------------------------------------
+Media  3.7%
+     992,724       AOL Time Warner(a)                                   10,780,983
+     137,338       Clear Channel Communications, Inc.(a)                 4,658,505
+     514,890       Comcast Corp.(a)                                     14,720,705
+      24,240       Donnelley (R.R.) & Sons, Co.                            444,077
+      19,804       Dow Jones & Co., Inc.                                   701,854
+      59,889       Gannett Co., Inc.                                     4,217,982
+      82,012       Interpublic Group of Companies, Inc.                    762,712
+      18,183       Knight-Ridder, Inc.                                   1,063,706
+      44,200       McGraw Hill Companies, Inc.                           2,457,078
+      10,496       Meredith Corp.                                          400,737
+      32,390       New York Times Co.                                    1,397,628
+     459,513       The Walt Disney Co.                                   7,820,911
+      68,027       Tribune Co.                                           3,061,895
+      48,900(c)    Univision Communications, Inc.(a)                     1,198,539
+     392,952       Viacom, Inc.(a)                                      14,350,607
+                                                                  ----------------
+                                                                        68,037,919
+</Table>
+
+    See Notes to Financial Statements                                     17
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+Mineral Resources  0.2%
+      35,628(c)    Freeport-McMoran Copper & Gold, Inc.(a)        $        607,457
+      87,997       Newmont Mining Corp.                                  2,301,122
+      18,130(c)    Phelps Dodge Corp.(a)                                   588,862
+                                                                  ----------------
+                                                                         3,497,441
+- -------------------------------------------------------------------------------------
+Miscellaneous Basic Industry  5.5%
+      41,700       American Power Conversion Corp.(a)                      593,808
+      16,300       American Standard Companies, Inc.(a)                  1,120,951
+      49,464       Applera Corp.-Applied Biosystems Group                  783,015
+     362,588       Applied Materials, Inc.(a)                            4,561,357
+      63,300       Applied Micro Circuits Corp.(a)                         206,358
+      82,100(c)    Calpine Corp.(a)                                        270,930
+     232,359(c)    Cendant Corp.(a)                                      2,950,959
+      42,700(c)    Chiron Corp.(a)                                       1,601,250
+      14,383       Crane Co.                                               250,552
+      35,600(c)    Danaher Corp.                                         2,341,056
+      80,500(c)    Dynegy, Inc.                                            210,105
+      30,241       Ecolab, Inc.                                          1,491,789
+      27,700       EOG Resources, Inc.                                   1,095,812
+      33,308       Fortune Brands, Inc.                                  1,427,914
+   2,224,972       General Electric Co.                                 56,736,786
+      20,474       Grainger (W.W.), Inc.                                   878,335
+      66,900       Harley-Davidson, Inc.                                 2,656,599
+      67,568       Illinois Tool Works, Inc.                             3,929,079
+      20,786       ITT Industries, Inc.                                  1,110,180
+      40,768       Loews Corp.                                           1,624,197
+      10,661(c)    Millipore Corp.(a)                                      348,615
+      32,100       Nabors Industries Ltd.(a)                             1,279,827
+      41,667       Omnicom Group, Inc.                                   2,257,101
+      25,504       Pall Corp.                                              510,080
+      15,600       Power-One, Inc.(a)                                       68,640
+      36,974       PPG Industries, Inc.                                  1,666,788
+      38,400       Robert Half International, Inc.(a)                      511,104
+      17,418(c)    Sealed Air Corp.(a)                                     698,984
+      51,450       Symbol Technologies, Inc.                               442,985
+      30,967       Textron, Inc.                                           850,354
+</Table>
+
+    18                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+      23,700       TMP Worldwide, Inc.(a)                         $        254,301
+     444,780       Tyco International Ltd.                               5,719,871
+      29,200(c)    Waters Corp.(a)                                         617,872
+                                                                  ----------------
+                                                                       101,067,554
+- -------------------------------------------------------------------------------------
+Miscellaneous Consumer Growth  0.8%
+      87,699       3M Co.                                               11,403,501
+      12,598(c)    American Greetings Corp.(a)                             165,034
+      15,832       Black & Decker Corp.                                    551,904
+     255,997(c)    Corning, Inc.(a)                                      1,495,022
+      65,265(c)    Eastman Kodak Co.                                     1,931,844
+                                                                  ----------------
+                                                                        15,547,305
+- -------------------------------------------------------------------------------------
+Office Equipment & Supplies  0.7%
+      24,568       Avery Dennison Corp.                                  1,441,405
+      37,100       Cintas Corp.                                          1,220,590
+      28,352       Lexmark International Group, Inc.(a)                  1,898,166
+      76,300(c)    Network Appliance, Inc.(a)                              853,797
+      66,800       Office Depot, Inc.(a)                                   790,244
+      53,925       Pitney Bowes, Inc.                                    1,721,286
+     106,850       Staples, Inc.(a)                                      1,958,560
+      72,290       Unisys Corp.(a)                                         669,405
+     163,498(c)    Xerox Corp.(a)                                        1,422,433
+                                                                  ----------------
+                                                                        11,975,886
+- -------------------------------------------------------------------------------------
+Petroleum  5.2%
+      19,478       Amerada Hess Corp.                                      862,096
+      54,918       Anadarko Petroleum Corp.                              2,498,769
+      35,474       Apache Corp.                                          2,190,180
+      13,545       Ashland Oil, Inc.                                       401,880
+      35,200       BJ Services Co.(a)                                    1,210,528
+      44,582       Burlington Resources, Inc.                            2,127,007
+     238,590(c)    ChevronTexaco Corp.                                  15,424,844
+     150,341       ConocoPhillips                                        8,058,278
+      34,900       Devon Energy Corp.                                    1,682,878
+   1,505,114       Exxon Mobil Corp.                                    52,603,734
+      23,459       Kerr-McGee Corp.                                        952,670
+      70,360       Marathon Oil Corp.                                    1,686,529
+</Table>
+    See Notes to Financial Statements                                     19
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+      82,138       Occidental Petroleum Corp.                     $      2,460,855
+      17,914       Sunoco, Inc.                                            655,115
+      68,363       Transocean Sedco Forex, Inc.                          1,398,023
+      60,739(c)    Unocal Corp.                                          1,598,043
+                                                                  ----------------
+                                                                        95,811,429
+- -------------------------------------------------------------------------------------
+Petroleum Services  0.6%
+      74,579       Baker Hughes, Inc.                                    2,232,150
+     101,911       Halliburton Co.                                       2,112,615
+       9,310       McDermott International, Inc.(a)                         26,999
+      28,400       Nobel Corp.(a)                                          892,328
+      87,452       PG&E Corp.(a)                                         1,176,229
+      23,810       Rowan Companies, Inc.                                   468,105
+     125,121       Schlumberger Ltd.                                     4,755,849
+                                                                  ----------------
+                                                                        11,664,275
+- -------------------------------------------------------------------------------------
+Railroads  0.4%
+      84,323       Burlington Northern Santa Fe Corp.                    2,099,643
+      47,903       CSX Corp.                                             1,366,193
+      87,511       Norfolk Southern Corp.                                1,624,204
+      55,729       Union Pacific Corp.                                   3,065,095
+                                                                  ----------------
+                                                                         8,155,135
+- -------------------------------------------------------------------------------------
+Real Estate Investment Trust  0.4%
+      20,400       Apartment Investment & Management Co., Class
+                    A                                                      744,192
+      90,900       Equity Office Properties Trust                        2,313,405
+      58,500       Equity Residential Properties Trust                   1,408,095
+      41,500       Simon Property Group, Inc.                            1,486,945
+      45,000       Starwood Hotels & Resorts Worldwide, Inc.             1,070,550
+                                                                  ----------------
+                                                                         7,023,187
+- -------------------------------------------------------------------------------------
+Restaurants  0.5%
+      37,353(c)    Darden Restaurants, Inc.                                666,751
+     284,030       McDonald's Corp.                                      4,107,074
+      90,400       Starbucks Corp.(a)                                    2,328,704
+      27,679       Wendy's International, Inc.                             761,449
+      65,932       Yum! Brands, Inc.(a)                                  1,604,126
+                                                                  ----------------
+                                                                         9,468,104
+</Table>
+
+    20                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+Retail  7.0%
+      82,213(c)    Albertson's, Inc.                              $      1,549,715
+      61,000       AutoNation, Inc.(a)                                     777,750
+      21,800       AutoZone, Inc.(a)                                     1,497,878
+      65,200       Bed Bath & Beyond, Inc.(a)                            2,252,008
+      71,400       Best Buy Co., Inc.(a)                                 1,925,658
+      25,024       Big Lots, Inc.(a)                                       281,520
+      50,478       Circuit City Stores, Inc.                               262,486
+     101,008(c)    Costco Wholesale Corp.(a)                             3,033,270
+      87,296(c)    CVS Corp.                                             2,082,010
+      16,723(c)    Dillards, Inc.                                          216,061
+      74,050       Dollar General Corp.                                    904,151
+      37,200       Family Dollar Stores, Inc.                            1,148,736
+      46,075       Federated Department Stores, Inc.(a)                  1,291,021
+     200,513       Gap, Inc.                                             2,905,433
+     517,684       Home Depot, Inc.                                     12,610,782
+      57,584(c)    J.C. Penney Co., Inc.                                 1,130,950
+      28,700(c)    Jones Apparel Group, Inc.(a)                            787,241
+      76,100       Kohl's Corp.(a)                                       4,305,738
+     171,134       Kroger Co.(a)                                         2,250,412
+     116,522       Limited, Inc.                                         1,499,638
+      23,792(c)    Liz Claiborne, Inc.                                     735,649
+     174,848       Lowe's Companies, Inc.                                7,137,295
+      66,171       May Department Stores Co.                             1,316,141
+      57,338       Nike, Inc.                                            2,948,320
+      29,700       Nordstrom, Inc.                                         481,140
+      38,654(c)    Radioshack Corp.                                        861,598
+      14,349(c)    Reebok International Ltd.(a)                            471,365
+      96,000(c)    Safeway, Inc.(a)                                      1,817,280
+      69,396(c)    Sears, Roebuck & Co.                                  1,675,913
+      31,816       Sherwin-Williams Co.                                    840,897
+      29,212       Supervalu, Inc.                                         452,786
+     206,582       Target Corp.                                          6,044,589
+      31,100       Tiffany & Co.                                           777,500
+     118,732(c)    TJX Companies, Inc.                                   2,089,683
+      50,807       Toys 'R' Us, Inc.(a)                                    425,255
+     985,526       Wal-Mart Stores, Inc.                                51,276,918
+</Table>
+
+    See Notes to Financial Statements                                     21
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+     231,778       Walgreen Co.                                   $      6,832,815
+      30,940(c)    Winn-Dixie Stores, Inc.(a)                              409,027
+                                                                  ----------------
+                                                                       129,306,629
+- -------------------------------------------------------------------------------------
+Rubber
+      13,588       Cooper Tire & Rubber Co.                                165,774
+      26,899       Goodrich Corp.                                          378,200
+      39,571(c)    Goodyear Tire & Rubber Co.                              204,582
+                                                                  ----------------
+                                                                           748,556
+- -------------------------------------------------------------------------------------
+Steel - Producers  0.1%
+      24,418       Allegheny Technologies, Inc.                             70,812
+      18,428       Nucor Corp.                                             703,397
+      17,809       United States Steel Corp.                               175,063
+      16,408       Worthington Industries, Inc.                            195,747
+                                                                  ----------------
+                                                                         1,145,019
+- -------------------------------------------------------------------------------------
+Telecommunications  1.5%
+     170,400       ADC Telecommunications, Inc.(a)                         351,024
+      70,534       Alltel Corp.                                          3,157,102
+      20,422(c)    Andrew Corp.(a)                                         112,321
+     595,754       AT&T Wireless Services, Inc.(a)                       3,931,976
+      83,955       Avaya, Inc.(a)                                          171,268
+      58,400       Broadcom Corp.(a)                                       721,240
+      35,250       CenturyTel, Inc.                                        972,900
+      92,800       CIENA Corp.(a)                                          405,536
+      60,900       Citizens Communications Co.(a)                          607,782
+      45,700(c)    Comverse Technology, Inc.(a)                            516,867
+     301,700       JDS Uniphase Corp.(a)                                   859,845
+     814,867       Lucent Technologies, Inc.(a)                          1,197,855
+     212,340(c)    Nextel Communications, Inc.(a)                        2,843,233
+     175,200       Qualcomm, Inc.                                        6,317,712
+     368,736       Qwest Communications International, Inc.(a)           1,286,889
+      36,876(c)    Scientific- Atlanta, Inc.                               506,676
+     202,184       Sprint Corp. (FON Group)                              2,375,662
+</Table>
+
+    22                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+     221,692(c)    Sprint Corp. (PCS Group)(a)                    $        966,577
+      92,794       Tellabs, Inc.(a)                                        537,277
+                                                                  ----------------
+                                                                        27,839,742
+- -------------------------------------------------------------------------------------
+Textiles  0.1%
+      24,234       V.F. Corp.                                              911,925
+- -------------------------------------------------------------------------------------
+Tobacco  0.8%
+     458,479       Altria Group, Inc.                                   13,736,031
+      20,200       R.J. Reynolds Tobacco Holdings, Inc.                    651,652
+      40,999       UST, Inc.                                             1,131,572
+                                                                  ----------------
+                                                                        15,519,255
+- -------------------------------------------------------------------------------------
+Travel Services
+      30,041       Sabre Holdings Corp.(a)                                 477,952
+- -------------------------------------------------------------------------------------
+Trucking & Shipping  1.0%
+      66,816(c)    FedEx Corp.                                           3,679,557
+      14,221       Ryder System, Inc.                                      291,673
+     253,100       United Parcel Service, Inc., Class B                 14,426,700
+                                                                  ----------------
+                                                                        18,397,930
+- -------------------------------------------------------------------------------------
+Utilities - Communications  2.6%
+     170,566       AT&T Corp.                                            2,763,169
+     414,756       BellSouth Corp.                                       8,987,762
+     738,001       SBC Communications, Inc.                             14,804,300
+     611,933       Verizon Communications, Inc.                         21,631,832
+                                                                  ----------------
+                                                                        48,187,063
+- -------------------------------------------------------------------------------------
+Utilities - Electric  2.2%
+     117,100       AES Corp.(a)                                            423,902
+      27,600(c)    Allegheny Energy, Inc.                                  171,396
+      37,169       Ameren Corp.                                          1,451,449
+      85,091       American Electric Power Co., Inc.                     1,944,329
+      65,779       CenterPoint Energy, Inc.                                463,742
+      28,100       CMS Energy Corp.                                        123,921
+      46,351       Consolidated Edison, Inc.                             1,783,123
+      35,629       Constellation Energy Group, Inc.                        987,992
+</Table>
+
+    See Notes to Financial Statements                                     23
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited) Cont'd.
+<Table>
+<Caption>
+Shares             Description                                    Value (Note 1)
+- ----------------------------------------------------------------------------------------
+<C>                <S>                                            <C>                <C>
+      69,152       Dominion Resources, Inc.                       $      3,828,946
+      36,587       DTE Energy Co.                                        1,414,088
+     195,862       Duke Energy Corp.                                     2,847,834
+      72,962       Edison International(a)                                 998,850
+      49,815       Entergy Corp.                                         2,398,592
+      71,028       Exelon Corp.                                          3,580,522
+      65,906       FirstEnergy Corp.                                     2,076,039
+      41,836       FPL Group, Inc.                                       2,465,395
+      94,699(c)    Mirant Corp.(a)                                         151,518
+      55,200(c)    NiSource, Inc.                                        1,004,640
+      20,000       Pinnacle West Capital Corp.                             664,800
+      37,926       PPL Corp.                                             1,350,545
+      53,458       Progress Energy, Inc.                                 2,092,881
+      50,497       Public Service Enterprise Group, Inc.                 1,852,735
+     161,115       Southern Co.                                          4,582,111
+      36,900(c)    TECO Energy, Inc.                                       392,247
+      72,314(c)    TXU Corp.                                             1,290,805
+      82,883(c)    Xcel Energy, Inc.                                     1,061,731
+                                                                  ----------------
+                                                                        41,404,133
+- -------------------------------------------------------------------------------------
+Waste Management  0.2%
+      48,600       Allied Waste Industries, Inc.(a)                        388,314
+     132,913       Waste Management, Inc.                                2,815,097
+                                                                  ----------------
+                                                                         3,203,411
+                                                                  ----------------
+                   Total long-term investments (cost
+                    $2,131,238,491)                                  1,745,719,162
+                                                                  ----------------
+CONTINGENT VALUE OBLIGATIONS
+- -------------------------------------------------------------------------------------
+Utilities-Electric
+      21,700       Progress Energy, Inc.(a)(f)
+                    (cost $11,827)                                               0
+
+SHORT-TERM INVESTMENTS  10.5%
+- -------------------------------------------------------------------------------------
+Mutual Fund  10.2%
+ 187,101,385(d)    Prudential Core Investment Fund--Taxable
+                    Money Market Series (Note 3)                       187,101,385
+</Table>
+
+    24                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Portfolio of Investments as of March 31, 2003 (Unaudited)
+
+<Table>
+<Caption>
+Principal
+Amount
+(000)          Description                                          Value (Note 1)
+- ------------------------------------------------------------------------------------------
+<C>            <S>                                                  <C>                <C>
+U.S. Government Securities  0.3%
+               United States Treasury Bills
+ $  5,000(b)   1.135%, 6/19/03                                      $      4,987,995
+    1,400(b)   1.1555%, 6/19/03                                            1,396,638
+                                                                    ----------------
+                                                                           6,384,633
+                                                                    ----------------
+               Total short-term investments (cost $193,485,383)          193,486,018
+                                                                    ----------------
+               Total Investments  105.3%
+                (cost $2,324,723,874)                                  1,939,205,180
+               Liabilities in excess of other assets  (5.3%)             (97,369,189)
+                                                                    ----------------
+               Net Assets  100%                                     $  1,841,835,991
+                                                                    ----------------
+                                                                    ----------------
+</Table>
+
+- ------------------------------
+(a) Non-income producing security.
+(b) Pledged as initial margin for financial futures contracts.
+(c) Securities, or portion thereof, on loan, see Note 4.
+(d) Represents security, or a portion thereof, purchased with cash collateral
+    received for securities on loan.
+(e) Affiliated security.
+(f) Fair valued security, see Note 1.
+
+    See Notes to Financial Statements                                     25
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Statement of Assets and Liabilities (Unaudited)
+<Table>
+<Caption>
+                                                                  March 31, 2003
+- --------------------------------------------------------------------------------------
+<S>                                                               <C>              <C>
+ASSETS
+Investments at value, including collateral for securities on
+   loan of $91,387,039 (cost $2,324,723,874)                      $1,939,205,180
+Cash                                                                         244
+Receivable for investments sold                                        3,060,979
+Receivable for Fund shares sold                                        2,999,475
+Dividends and interest receivable                                      2,399,873
+Receivable for securities lending income                                  23,851
+Prepaid expenses                                                          15,537
+                                                                  --------------
+      Total assets                                                 1,947,705,139
+                                                                  --------------
+LIABILITIES
+Payable to broker for collateral for securities on loan               98,628,525
+Payable for Fund shares reacquired                                     3,563,263
+Due to broker - variation margin                                       1,675,725
+Payable for investments purchased                                      1,111,731
+Management fee payable                                                   467,042
+Accrued expenses                                                         203,858
+Securities lending rebate payable                                        107,914
+Distribution fee payable                                                 106,849
+Payable to securities lending agent                                        4,241
+                                                                  --------------
+      Total liabilities                                              105,869,148
+                                                                  --------------
+NET ASSETS                                                        $1,841,835,991
+                                                                  --------------
+                                                                  --------------
+Net assets were comprised of:
+   Common stock, at par                                           $       97,089
+   Paid-in capital in excess of par                                2,443,257,152
+                                                                  --------------
+                                                                   2,443,354,241
+   Undistributed net investment income                                 9,284,537
+   Accumulated net realized loss on investments                     (224,234,192)
+   Net unrealized depreciation on investments                       (386,568,595)
+                                                                  --------------
+Net assets, March 31, 2003                                        $1,841,835,991
+                                                                  --------------
+                                                                  --------------
+</Table>
+
+    26                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Statement of Assets and Liabilities (Unaudited) Cont'd.
+<Table>
+<Caption>
+                                                                  March 31, 2003
+- --------------------------------------------------------------------------------------
+<S>                                                               <C>              <C>
+Class A:
+   Net asset value and redemption price per share
+      ($48,741,799 / 2,571,390 shares of beneficial interest
+      issued and outstanding)                                             $18.96
+   Maximum sales charge (3.25% of offering price)                            .64
+   Offering price to public                                               $19.60
+                                                                  --------------
+                                                                  --------------
+Class B:
+   Net asset value, offering and redemption price per share
+      ($74,869,973 / 3,973,810 shares of beneficial interest
+      issued and outstanding)                                             $18.84
+                                                                  --------------
+                                                                  --------------
+Class C:
+   Net asset value and redemption price per share
+      ($39,741,478 / 2,109,319 shares of beneficial interest
+      issued and outstanding)                                             $18.84
+   Sales charge (1% of offering price)                                       .19
+   Offering price to public                                               $19.03
+                                                                  --------------
+                                                                  --------------
+Class Z:
+   Net asset value, offering and redemption price per share
+      ($627,888,756 / 33,091,549 shares of beneficial
+      interest issued and outstanding)                                    $18.97
+                                                                  --------------
+                                                                  --------------
+Class I:
+   Net asset value, offering and redemption price per share
+      ($1,050,593,985 / 55,342,546 shares of beneficial
+      interest issued and outstanding)                                    $18.98
+                                                                  --------------
+                                                                  --------------
+</Table>
+
+    See Notes to Financial Statements                                     27
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Statement of Operations (Unaudited)
+<Table>
+<Caption>
+                                                                     Six Months
+                                                                       Ended
+                                                                   March 31, 2003
+- ---------------------------------------------------------------------------------------
+<S>                                                                <C>              <C>
+NET INVESTMENT INCOME
+   Dividends                                                        $ 17,269,599
+   Interest                                                               48,276
+   Income from securities loaned, net                                    114,028
+                                                                   --------------
+      Total income                                                    17,431,903
+                                                                   --------------
+Expenses
+   Management fee                                                      2,807,751
+   Distribution fee--Class A                                              57,340
+   Distribution fee--Class B                                             381,701
+   Distribution fee--Class C                                             206,516
+   Transfer agent fee--Class A                                            23,680
+   Transfer agent fee--Class B                                           104,967
+   Transfer agent fee--Class C                                            33,830
+   Transfer agent fee--Class Z                                           542,190
+   Transfer agent fee--Class I                                            12,358
+   Reports to shareholders                                               125,000
+   Custodian's fees and expenses                                         100,000
+   Registration fees                                                      62,000
+   Legal fees and expenses                                                25,000
+   Insurance expense                                                      19,000
+   Audit fee                                                              15,000
+   Trustees' fees                                                         13,000
+   Miscellaneous                                                          19,389
+                                                                   --------------
+    Total expenses                                                     4,548,722
+Less: Expense subsidy (Note 2)                                          (675,209)
+                                                                   --------------
+    Net expenses                                                       3,873,513
+                                                                   --------------
+Net investment income                                                 13,558,390
+                                                                   --------------
+REALIZED AND UNREALIZED GAIN (LOSS) ON INVESTMENTS
+Net realized loss on:
+   Investment transactions                                           (16,652,048)
+   Financial futures contracts                                          (887,496)
+                                                                   --------------
+                                                                     (17,539,544)
+                                                                   --------------
+Net change in unrealized appreciation (depreciation) on:
+   Investments                                                        83,491,431
+   Financial futures contracts                                         4,321,998
+                                                                   --------------
+                                                                      87,813,429
+                                                                   --------------
+Net gain on investments                                               70,273,885
+                                                                   --------------
+NET INCREASE IN NET ASSETS RESULTING FROM OPERATIONS                $ 83,832,275
+                                                                   --------------
+                                                                   --------------
+</Table>
+
+    28                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Statement of Changes in Net Assets (Unaudited)
+<Table>
+<Caption>
+                                                Six Months             Year
+                                                  Ended               Ended
+                                              March 31, 2003    September 30, 2002
+- ----------------------------------------------------------------------------------
+<S>                                           <C>               <C>                  <C>
+INCREASE (DECREASE) IN NET ASSETS
+Operations
+   Net investment income                      $   13,558,390      $   26,134,724
+   Net realized loss on investment
+      transactions                               (17,539,544)       (148,348,927)
+   Net change in unrealized appreciation
+      (depreciation) on investments               87,813,429        (352,873,516)
+                                              --------------    ------------------
+   Net increase (decrease) in net assets
+      resulting from operations                   83,832,275        (475,087,719)
+                                              --------------    ------------------
+Dividends and distributions (Note 1):
+   Dividends from net investment income
+      Class A                                       (453,916)           (404,050)
+      Class B                                       (126,697)            (70,492)
+      Class C                                        (68,315)            (56,309)
+      Class Z                                     (8,444,819)         (9,557,783)
+      Class I                                    (14,660,492)        (15,867,500)
+                                              --------------    ------------------
+                                                 (23,754,239)        (25,956,134)
+                                              --------------    ------------------
+Fund share transactions (net of
+   conversions)
+   (Note 6):
+   Net proceeds from shares sold                 263,117,932         684,984,357
+   Net asset value of shares issued in
+      reinvestment of dividends                   18,168,390          20,222,382
+   Cost of shares reacquired                    (232,343,886)       (638,648,840)
+                                              --------------    ------------------
+   Net increase in net assets from Fund
+      share transactions                          48,942,436          66,557,899
+                                              --------------    ------------------
+Net increase (decrease)                          109,020,472        (434,485,954)
+NET ASSETS
+Beginning of period                            1,732,815,519       2,167,301,473
+                                              --------------    ------------------
+End of period(a)                              $1,841,835,991      $1,732,815,519
+                                              --------------    ------------------
+                                              --------------    ------------------
+- ---------------
+(a) Includes undistributed net investment
+    income of:                                $    9,284,537      $   19,480,386
+                                              --------------    ------------------
+                                              --------------    ------------------
+</Table>
+
+    See Notes to Financial Statements                                     29
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited)
+
+      The Prudential Index Series Fund (the 'Company') is registered under the
+Investment Company Act of 1940 as an open-end, diversified management investment
+company. The Company was established as a Delaware business trust on May 11,
+1992 and currently consists of one separate fund, which is the Prudential Stock
+Index Fund (the 'Fund'). Investment operations of the Fund commenced on November
+5, 1992. The Fund's investment objective is to provide investment results that
+correspond to the price and yield performance of Standard & Poor's 500 Composite
+Stock Price Index.
+
+Note 1. Accounting Policies
+The following is a summary of significant accounting policies followed by the
+Fund.
+
+      Securities Valuation:    Securities listed on a securities exchange are
+valued at the last quoted sales price on such exchange on the valuation date or,
+if there was no sale on such day, at the mean between the last reported bid and
+ask prices or at the last bid price on such day in the absence of an asked
+price. Securities traded via Nasdaq are valued at the official closing price
+provided by Nasdaq. Securities that are actively traded in the over-the-counter
+market, including listed securities for which the primary market is believed by
+Prudential Investments LLC ('PI' or 'Manager'), in consultation with Prudential
+Investment Management, Inc. ('PIM' or 'Subadviser'), to be over-the-counter, are
+valued by an independent pricing agent or principal market maker. Options on
+securities and indices traded on an exchange are valued at the mean between the
+most recently quoted bid and asked prices on such exchange. Futures contracts
+and options thereon traded on a commodities exchange or board of trade are
+valued at the last sale price at the close of trading on such exchange or board
+of trade or, if there was no sale on the applicable commodities exchange or
+board of trade on such day, at the mean between the most recently quoted bid and
+asked prices on such exchange or board of trade or at the last bid price in the
+absence of an asked price. Investments in mutual funds are valued at their net
+asset value as of the close of the New York Stock Exchange on the date of
+valuation.
+
+      Short-term securities which mature in more than 60 days are valued at
+current market quotations. Short-term securities which mature in 60 days or less
+are valued at amortized cost, which approximates market value.
+
+      Securities for which reliable market quotations are not readily available
+or for which the pricing agent does not provide a valuation or methodology, or
+provides a valuation or methodology that, in the judgement of the Manager or
+Subadviser, does represent fair value are valued by a Valuation Committee
+appointed by the Board of Trustees in consultation with the Manager and
+Subadviser.
+
+    30
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited) Cont'd.
+
+      Repurchase Agreements:    In connection with transactions in repurchase
+agreements with United States financial institutions, it is the Fund's policy
+that its custodian or designated subcustodians under triparty repurchase
+agreements, as the case may be, take possession of the underlying collateral
+securities, the value of which exceeds the principal amount of the repurchase
+transaction, including accrued interest. To the extent that any repurchase
+transaction exceeds one business day, the value of the collateral is
+marked-to-market on a daily basis to ensure the adequacy of the collateral. If
+the seller defaults and the value of the collateral declines or, if bankruptcy
+proceedings are commenced with respect to the seller of the security,
+realization of the collateral by the Fund may be delayed or limited.
+
+      Financial Futures Contracts:    A financial futures contract is an
+agreement to purchase (long) or sell (short) an agreed amount of securities at a
+set price for delivery on a future date. Upon entering into a financial futures
+contract, the Fund is required to pledge to the broker an amount of cash and/or
+other assets equal to a certain percentage of the contract amount. This amount
+is known as the 'initial margin.' Subsequent payments, known as 'variation
+margin,' are made or received by the Fund each day, depending on the daily
+fluctuations in the value of the underlying security. Such variation margin is
+recorded for financial statement purposes on a daily basis as unrealized gain or
+loss. When the contract expires or is closed, the gain or loss is realized and
+is presented in the Statement of Operations as net realized gain or loss on
+financial futures contracts.
+
+      The Fund invests in financial futures contracts in order to hedge its
+existing portfolio securities, or securities the Fund intends to purchase,
+against fluctuations in value caused by changes in prevailing interest rates or
+market conditions. Should interest rates move unexpectedly, the Fund may not
+achieve the anticipated benefits of the financial futures contracts and may
+realize a loss. The use of futures transactions involves the risk of imperfect
+correlation in movements in the price of futures contracts, interest rates and
+the underlying hedged assets.
+
+      Financial futures contracts involve elements of both market and credit
+risk in excess of the amounts reflected on the Statement of Assets and
+Liabilities.
+
+      Securities Lending:    The Fund may lend its portfolio securities to
+qualified institutions. The loans are secured by collateral in an amount equal
+to at least the market value at all times of the loaned securities. During the
+time the securities are on loan, the Fund will continue to receive the interest
+and dividends or amounts equivalent thereto on the loaned securities. The Fund
+receives compensation, net of any rebate and securities lending agent fee, for
+lending its securities in the form of interest or dividends on the collateral
+received for securities loaned. Loans are subject to termination at the option
+of the borrower or the Fund. Upon termination of the loan, the
+                                                                          31
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited) Cont'd.
+
+borrower will return to the lender securities identical to the loaned
+securities. The Fund bears the risk of delay in recovery of, or even loss of
+rights in, the securities loaned should the borrower of the securities fail
+financially.
+
+      Securities Transactions and Net Investment Income:    Securities
+transactions are recorded on the trade date. Realized and unrealized gains
+(losses) on sales of securities are calculated on the identified cost basis.
+Dividend income is recorded on the ex-dividend date and interest income is
+recorded on the accrual basis. Expenses are recorded on the accrual basis which
+may require the use of certain estimates by management.
+
+      Net investment income (loss) (other than distribution and transfer agent
+fees) and unrealized and realized gains or losses are allocated daily to each
+class of shares based upon the relative proportion of net assets of each class
+at the beginning of the day. Transfer agent fees are incurred based on
+shareholder activity and number of accounts for each class.
+
+      Dividends and Distributions:    The Fund expects to pay dividends of net
+investment income and distributions of net capital gains, if any, annually.
+Dividends and distributions, which are determined in accordance with federal
+income tax regulations which may differ from generally accepted accounting
+principles, are recorded on the ex-dividend date.
+
+      Taxes:    It is the Fund's policy to continue to meet the requirements of
+the Internal Revenue Code applicable to regulated investment companies and to
+distribute all of its taxable net income and net capital gains, if any, to its
+shareholders. Therefore, no federal income tax provision is required.
+
+      Withholding taxes on foreign dividends are recorded, net of reclaimable
+amounts, at the time the related income is earned.
+
+Note 2. Agreements
+The Fund has a management agreement with PI. Pursuant to this agreement, PI has
+responsibility for all investment advisory services and supervises the
+subadviser's performance of such services. PI has entered into a subadvisory
+agreement with PIM. PIM furnishes investment advisory services in connection
+with the management of the Fund. In connection therewith, the subadviser is
+obligated to keep certain books and records of the Fund. PI pays for the
+services of PIM, the cost of compensation of officers of the Fund, occupancy and
+certain clerical and bookkeeping costs of the Fund. The Fund bears all other
+costs and expenses.
+
+      The management fee paid to PI is computed daily and payable monthly, at an
+annual rate of .30% of 1% of the average daily net assets of the Fund.
+
+    32
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited) Cont'd.
+
+      PI has contractually agreed to reimburse the Fund for transfer agent fees
+to the extent that they exceed .10% of the average daily net assets for each
+share class. PI has also contractually agreed to reimburse the Fund for certain
+operating expenses, excluding transfer agent fees, so that total operating
+expenses, excluding transfer fees, do not exceed .55%, 1.30%, 1.30%, .30% and
+..30% of the average daily net assets for Class A, Class B, Class C, Class Z and
+Class I shares, respectively. For the six months ended March 31, 2003, PI
+subsidized $675,209 of the expenses of the Fund (.04%, .22%, .10%, .11% and .04%
+of the average daily net assets of the Class A, Class B, Class C, Class Z and
+Class I shares, respectively; $0.0043, $0.0208, $0.0100, $0.0104 and $0.0040 per
+Class A, Class B, Class C, Class Z and Class I shares, respectively).
+
+      The Fund has a distribution agreement with Prudential Investment
+Management Services LLC ('PIMS'), which acts as the distributor of the Class A,
+Class B, Class C, Class Z and Class I shares of the Fund. The Fund compensates
+PIMS for distributing and servicing the Fund's Class A, Class B and Class C
+shares, pursuant to plans of distribution, (the 'Class A, B and C plans'),
+regardless of expenses actually incurred by PIMS. The distribution fees are
+accrued daily and payable monthly. No distribution or service fees are paid to
+PIMS as distributor for Class Z and Class I shares of the Fund.
+
+      Pursuant to the Class A, B and C Plans, the Fund compensates PIMS for
+distribution-related activities at an annual rate of up to .30 of 1%, 1% and 1%
+of the average daily net assets of the Class A, B and C shares, respectively.
+PIMS has contractually agreed to limit such fees to .25 of 1% on the average
+daily net assets of the Class A shares.
+
+      PIMS has advised the Fund that it received approximately $10,500 and
+$35,900 in front-end sales charges resulting from sales of Class A and Class C
+shares, respectively during the six months ended March 31, 2003. From these
+fees, PIMS paid such sales charges to dealers which in turn paid commissions to
+salespersons and incurred other distribution costs.
+
+      PIMS has advised the Fund that for the six months ended March 31, 2003, it
+received approximately $109,200 and $17,500 in contingent deferred sales charges
+imposed upon certain redemptions by Class B and Class C shareholders,
+respectively.
+
+      PI, PIM and PIMS are indirect, wholly-owned subsidiaries of Prudential
+Financial, Inc. ('Prudential').
+
+      The Fund, along with other affiliated registered investment companies (the
+'Funds'), is a party to a syndicated credit agreement ('SCA') with a group of
+banks. For the six months ended March 31, 2003, the SCA provides for a
+commitment of
+                                                                          33
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited) Cont'd.
+
+$800 million and allows the Funds to increase the commitment to $1 billion, if
+necessary. Interest on any borrowings will be at market rates. The Funds pay a
+commitment fee of .08 of 1% of the unused portion of the SCA. The commitment fee
+is accrued and paid quarterly on a pro rata basis by the Funds. The expiration
+date of the SCA is May 2, 2003. The Fund did not borrow any amounts pursuant to
+the SCA during the six months ended March 31, 2003. On May 2, 2003, the SCA was
+renewed under the same terms and conditions ('May 2003 renewal'). The expiration
+date of the May 2003 renewal is April 30, 2004.
+
+Note 3. Other Transactions With Affiliates
+Prudential Mutual Fund Services LLC ('PMFS'), an affiliate of PI, and an
+indirect wholly-owned subsidiary of Prudential, serves as the Fund's transfer
+agent. During the six months ended March 31, 2003, the Fund incurred fees of
+approximately $20,800, $83,800, $30,000, $485,000, and $13 for the Class A,
+Class B, Class C, Class Z and Class I shares, respectively, for the services of
+PMFS. As of March 31, 2003 approximately $3,500, $13,900, $4,900, $78,500 and $1
+for the Class A, Class B, Class C, Class Z and Class I shares, respectively, of
+such fees were due to PMFS. Transfer agent fees and expenses in the Statement of
+Operations include certain out-of-pocket expenses paid to nonaffiliates.
+
+      The Fund pays networking fees to affiliated and unaffiliated
+broker/dealers. These networking fees are payments made to broker/dealers that
+clear mutual fund transactions through a national clearing system. The Fund
+incurred fees of approximately $2,800, $16,600, $3,500, $9,200 and $6,400 for
+the Class A, Class B, Class C, Class Z and Class I shares, respectively, in
+total networking fees, of which the amount relating to the services of
+Prudential Securities, Inc. ('PSI'), an affiliate of PI and an indirect,
+wholly-owned subsidiary of Prudential was approximately $2,700, $15,900, $3,200,
+$8,700 and $6,100 for the Class A, Class B, Class C, Class Z and Class I shares,
+respectively, for the six months ended March 31, 2003. As of March 31, 2003,
+approximately $6,000 of such fees were due to PSI. These amounts are included in
+transfer agent's fees and expenses on the Statement of Operations.
+
+      PSI is the securities lending agent for the Fund. For the six months ended
+March 31, 2003, PSI has been compensated approximately $38,000 for these
+services of which approximately $4,200 is payable at period end.
+
+      The Fund invests in the Taxable Money Market Series (the 'Portfolio'), a
+portfolio of the Prudential Core Investment Fund, pursuant to an exemptive order
+received from the Securities and Exchange Commission. The Portfolio is a money
+market mutual
+
+    34
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited) Cont'd.
+
+fund registered under the Investment Company Act of 1940, as amended, and
+managed by PI. For the six months ended March 31, 2003, the Fund earned income
+from the Portfolio of approximately $628,200 and $114,000, respectively, by
+investing its excess cash and collateral received from securities lending.
+
+Note 4. Portfolio Securities
+Purchases and sales of portfolio securities, excluding short-term investments,
+for the six months ended March 31, 2003 aggregated $49,815,030 and $23,148,304
+respectively.
+
+      During the six months ended March 31, 2003, the Fund entered into
+financial futures contracts. Details of open contracts at March 31, 2003 were as
+follows:
+
+<Table>
+<Caption>
+                                                        Value at        Value at
+Number of                               Expiration      March 31,         Trade          Unrealized
+Contracts              Type                Date           2003            Date          Depreciation
+- ---------     ----------------------    ----------     -----------     -----------     --------------
+<C>           <C>                       <S>            <C>             <C>             <C>
+                  Long Position:
+   427        S&P 500 Index Futures     Jun 03         $90,417,250     $91,467,150      $ (1,049,900)
+</Table>
+
+      As of March 31, 2003, the Fund had securities on loan with an aggregate
+market value of $91,387,039. The Fund received $98,628,525 in cash as collateral
+for securities on loan which was used to purchase highly liquid short-term
+investments in accordance with the Fund's securities lending procedures.
+
+Note 5. Tax Information
+Distributions to shareholders, which are determined in accordance with federal
+income tax regulations, which may differ from generally accepted accounting
+principals, are recorded on the ex-dividend date.
+
+      For federal income tax purposes, the Fund had a capital loss carryforward
+as of September 30, 2002 of approximately $58,117,000, of which $1,876,000
+expires in 2009 and $56,241,000 expires in 2010. Accordingly, no capital gains
+distribution is expected to be paid to shareholders until net gains have been
+realized in excess of this amount.
+
+      The Fund elected for United States Federal income tax purposes, to treat
+net short-term capital losses of approximately $13,369,500 and net long-term
+capital losses of $133,356,200 incurred in the eleven months ended September 30,
+2002 as having occurred in the current fiscal year.
+                                                                          35
+
+<Page>
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited) Cont'd.
+
+      The United States federal income tax basis of the Fund's investments and
+the net unrealized depreciation as of March 31, 2003 were as follows:
+
+<Table>
+<Caption>
+   Tax Basis                                              Net Unrealized
+ of Investments      Appreciation       Depreciation       Depreciation
+- ----------------   ----------------   ----------------   ----------------
+<S>                <C>                <C>                <C>
+ $2,229,747,077      $187,138,152       $576,409,598      $(389,271,446)
+</Table>
+
+      The difference between book basis and tax basis was primarily attributable
+to deferred losses on wash sales.
+
+Note 6. Capital
+The Fund offers Class A, Class B, Class C, Class Z and Class I shares. Class A
+shares are sold with a front-end sales charge of up to 3.25%. Certain investors
+who purchase $1 million or more of Class A shares are subject to a 1% contingent
+deferred sales charge during the first 12 months. Class B shares are sold with a
+contingent deferred sales charge which declines from 5% to zero depending upon
+the period of time the shares are held. Class C shares are sold with a front-end
+sales charge of 1% and a contingent deferred sales charge of 1% during the first
+18 months. Class B shares will automatically convert to Class A shares on a
+quarterly basis approximately seven years after purchase. Class Z and Class I
+shares are not subject to any sales or redemption charge and are offered
+exclusively for sale to a limited group of investors.
+
+      The Fund has authorized an unlimited number of shares of beneficial
+interest at $.001 par value divided into five classes, designated Class A, Class
+B, Class C, Class Z and Class I. As of March 31, 2003 Prudential owned 883,629
+Class A shares of the Fund.
+
+      Transactions in shares of beneficial interest were as follows:
+<Table>
+<Caption>
+Class A                                                     Shares           Amount
+- -------------------------------------------------------  -------------    -------------
+<S>                                                      <C>              <C>
+Six months ended March 31, 2003:
+Shares sold                                                    773,304    $  14,835,675
+Shares issued in reinvestment of dividends                      21,728          438,245
+Shares reacquired                                             (552,757)     (10,683,123)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding before
+  conversion                                                   242,275        4,590,797
+Shares issued upon conversion from Class B                      46,236          883,368
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                  288,511    $   5,474,165
+                                                         -------------    -------------
+                                                         -------------    -------------
+</Table>
+
+    36
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited) Cont'd.
+<Table>
+<Caption>
+Class A                                                     Shares           Amount
+- -------------------------------------------------------  -------------    -------------
+<S>                                                      <C>              <C>
+Year ended September 30, 2002:
+Shares sold                                                  1,300,887    $  31,258,217
+Shares issued in reinvestment of dividends                      14,951          387,834
+Shares reacquired                                             (876,186)     (20,107,602)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding before
+  conversion                                                   439,652       11,538,449
+Shares issued upon conversion from Class B                      74,782        1,766,366
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                  514,434    $  13,304,815
+                                                         -------------    -------------
+                                                         -------------    -------------
+<Caption>
+Class B
+- -------------------------------------------------------
+<S>                                                      <C>              <C>
+Six months ended March 31, 2003:
+Shares sold                                                    584,021    $  11,446,454
+Shares issued in reinvestment of dividends                       6,016          120,925
+Shares reacquired                                             (474,448)      (9,141,725)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding before
+  conversion                                                   115,589        2,425,654
+Shares reacquired upon conversion into Class A                 (46,464)        (883,368)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                   69,125    $   1,542,286
+                                                         -------------    -------------
+                                                         -------------    -------------
+Year ended September 30, 2002:
+Shares sold                                                  1,590,331    $  37,902,961
+Shares issued in reinvestment of dividends                       2,569           66,389
+Shares reacquired                                             (937,879)     (21,058,100)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding before
+  conversion                                                   655,021       16,911,250
+Shares reacquired upon conversion into Class A                 (75,293)      (1,766,366)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                  579,728    $  15,144,884
+                                                         -------------    -------------
+                                                         -------------    -------------
+<Caption>
+Class C
+- -------------------------------------------------------
+<S>                                                      <C>              <C>
+Six months ended March 31, 2003:
+Shares sold                                                    330,765    $   6,474,551
+Shares issued in reinvestment of dividends                       3,296           66,243
+Shares reacquired                                             (365,982)      (7,050,864)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                  (31,921)   $    (510,070)
+                                                         -------------    -------------
+                                                         -------------    -------------
+Year ended September 30, 2002:
+Shares sold                                                    929,429    $  22,170,556
+Shares issued in reinvestment of dividends                       2,137           55,226
+Shares reacquired                                             (675,754)     (15,208,575)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                  255,812    $   7,017,207
+                                                         -------------    -------------
+                                                         -------------    -------------
+</Table>
+                                                                          37
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Notes to Financial Statements (Unaudited) Cont'd.
+<Table>
+<Caption>
+Class Z                                                     Shares           Amount
+- -------------------------------------------------------  -------------    -------------
+<S>                                                      <C>              <C>
+Six months ended March 31, 2003:
+Shares sold                                                  5,282,721    $ 103,386,397
+Shares issued in reinvestment of dividends                     372,419        7,515,405
+Shares reacquired                                           (5,801,431)    (113,664,056)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                 (146,291)   $  (2,762,254)
+                                                         -------------    -------------
+                                                         -------------    -------------
+Year ended September 30, 2002:
+Shares sold                                                  9,766,951    $ 232,969,484
+Shares issued in reinvestment of dividends                     321,795        8,353,809
+Shares reacquired                                          (10,890,145)    (252,953,720)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                 (801,399)   $ (11,630,427)
+                                                         -------------    -------------
+                                                         -------------    -------------
+<Caption>
+Class I
+- -------------------------------------------------------
+<S>                                                      <C>              <C>
+Six months ended March 31, 2003:
+Shares sold                                                  6,533,092    $ 126,974,855
+Shares issued in reinvestment of dividends                     496,906       10,027,572
+Shares reacquired                                           (4,714,673)     (91,804,118)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                2,315,325    $  45,198,309
+                                                         -------------    -------------
+                                                         -------------    -------------
+Year ended September 30, 2002:
+Shares sold                                                 15,091,496    $ 360,683,139
+Shares issued in reinvestment of dividends                     437,394       11,359,124
+Shares reacquired                                          (14,298,447)    (329,320,843)
+                                                         -------------    -------------
+Net increase (decrease) in shares outstanding                1,230,443    $  42,721,420
+                                                         -------------    -------------
+                                                         -------------    -------------
+</Table>
+
+    38
+
+<Page>
+
+
+                                                        SEMI ANNUAL REPORT
+                                                        MARCH 31, 2003
+
+
+            PRUDENTIAL
+            STOCK INDEX FUND
+- --------------------------------------------------------------------------------
+
+
+                                                        FINANCIAL HIGHLIGHTS
+
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited)
+<Table>
+<Caption>
+                                                                      Class A
+                                                                  ----------------
+                                                                  Six Months Ended
+                                                                   March 31, 2003
+- ----------------------------------------------------------------------------------------
+<S>                                                               <C>                <C>
+PER SHARE OPERATING PERFORMANCE:
+Net asset value, beginning of period                                  $  18.28
+                                                                      --------
+Income from investment operations:
+Net investment income(a)                                                   .11
+Net realized and unrealized gain (loss) on investment
+transactions                                                               .77
+                                                                      --------
+      Total from investment operations                                     .88
+                                                                      --------
+Less distributions:
+Dividends from net investment income                                      (.20)
+Distributions from net realized gains                                       --
+                                                                      --------
+      Total distributions                                                 (.20)
+                                                                      --------
+Net asset value, end of period                                        $  18.96
+                                                                      --------
+                                                                      --------
+TOTAL RETURN(b)                                                           4.73%
+RATIOS/SUPPLEMENTAL DATA:
+Net assets, end of period (000)                                       $ 48,742
+Average net assets (000)                                              $ 45,998
+Ratios to average net assets:(a)
+   Expenses, including distribution and service (12b-1)
+      fees(f)                                                              .65%(c)
+   Expenses, excluding distribution and service (12b-1) fees               .40%(c)
+   Net investment income                                                  1.20%(c)
+For Class A, B and C shares:(g)
+   Portfolio turnover rate                                                   1%
+</Table>
+
+- ------------------------------
+(a) Net of expense subsidy.
+(b) Total return does not consider the effects of sales loads. Total return is
+    calculated assuming a purchase of shares on the first day and a sale on the
+    last day of each period reported and includes reinvestment of dividends and
+    distributions. Total return for periods of less than a full year are not
+    annualized. Total return includes the effect of expense subsidies.
+(c) Annualized.
+(d) Commencement of offering of Class A shares.
+(e) Less than $.005 per share.
+(f) The distributor of the Fund has contractually agreed to limit its
+    distribution and service (12b-1) fees to .25 of 1% of the average daily net
+    assets of the Class A shares.
+(g) Not annualized for periods of less than one full year.
+
+    40                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+<Table>
+<Caption>
+                       Class A
+- -----------------------------------------------------------
+                                 November 18, 1999(d)
+                                       Through
+  Year Ended September 30,          September 30,
+- ----------------------------
+      2002            2001               2000
+- -----------------------------------------------------------
+<S>                  <C>         <C>                    <C>
+    $  23.30         $ 32.06           $  31.53
+    --------         -------           --------
+         .21             .21                .12
+       (5.02)          (8.76)               .41
+    --------         -------           --------
+       (4.81)          (8.55)               .53
+    --------         -------           --------
+        (.21)           (.21)                --
+          --              --(e)              --
+    --------         -------           --------
+        (.21)           (.21)                --
+    --------         -------           --------
+    $  18.28         $ 23.30           $  32.06
+    --------         -------           --------
+    --------         -------           --------
+      (20.90)%        (26.81)%             1.68%
+    $ 41,723         $41,198           $ 30,432
+    $ 49,658         $37,775           $ 19,055
+         .65%            .65%               .65%(c)
+         .40%            .40%               .40%(c)
+         .92%            .79%               .72%(c)
+           7%              3%                 2%
+</Table>
+
+    See Notes to Financial Statements                                     41
+ 
+<PAGE>
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+<Table>
+<Caption>
+                                                                      Class B
+                                                                  ----------------
+                                                                  Six Months Ended
+                                                                   March 31, 2003
+- ----------------------------------------------------------------------------------------
+<S>                                                               <C>                <C>
+PER SHARE OPERATING PERFORMANCE:
+Net asset value, beginning of period                                  $  18.09
+                                                                      --------
+Income from investment operations:
+Net investment income (loss)(a)                                            .05
+Net realized and unrealized gain (loss) on investment
+transactions                                                               .73
+                                                                      --------
+      Total from investment operations                                     .78
+                                                                      --------
+Less distributions:
+Dividends from net investment income                                      (.03)
+Distributions from net realized gains                                       --
+                                                                      --------
+      Total distributions                                                 (.03)
+                                                                      --------
+Net asset value, end of period                                        $  18.84
+                                                                      --------
+                                                                      --------
+TOTAL RETURN(b)                                                           4.31%
+RATIOS/SUPPLEMENTAL DATA:
+Net assets, end of period (000)                                       $ 74,870
+Average net assets (000)                                              $ 76,550
+Ratios to average net assets:(a)
+   Expenses, including distribution and service (12b-1) fees              1.40%(c)
+   Expenses, excluding distribution and service (12b-1) fees               .40%(c)
+   Net investment income (loss)                                            .46%(c)
+</Table>
+
+- ------------------------------
+(a) Net of expense subsidy.
+(b) Total return does not consider the effects of sales loads. Total return is
+    calculated assuming a purchase of shares on the first day and a sale on the
+    last day of each period reported and includes reinvestment of dividends and
+    distributions. Total return for periods of less than a full year are not
+    annualized. Total return includes the effect of expense subsidies.
+(c) Annualized.
+(d) Commencement of offering of Class B shares.
+(e) Less than $.005 per share.
+
+    42                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+<Table>
+<Caption>
+                       Class B
+- -----------------------------------------------------------
+                                 November 18, 1999(d)
+                                       Through
+  Year Ended September 30,          September 30,
+- ----------------------------
+      2002            2001               2000
+- -----------------------------------------------------------
+<S>                  <C>         <C>                    <C>
+    $  23.06         $ 31.85           $  31.53
+    --------         -------           --------
+         .05             .04               (.01)
+       (5.00)          (8.74)               .33
+    --------         -------           --------
+       (4.95)          (8.70)               .32
+    --------         -------           --------
+        (.02)           (.09)                --
+          --              --(e)              --
+    --------         -------           --------
+        (.02)           (.09)                --
+    --------         -------           --------
+    $  18.09         $ 23.06           $  31.85
+    --------         -------           --------
+    --------         -------           --------
+      (21.49)%        (27.39)%             1.01%
+    $ 70,630         $76,668           $ 70,903
+    $ 87,868         $78,694           $ 42,919
+        1.40%           1.40%              1.40%(c)
+         .40%            .40%               .40%(c)
+         .16%            .05%              (.05)%(c)
+</Table>
+
+    See Notes to Financial Statements                                     43
+ 
+<PAGE>
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+
+<Table>
+<Caption>
+                                                                      Class C
+                                                                  ----------------
+                                                                  Six Months Ended
+                                                                   March 31, 2003
+- ----------------------------------------------------------------------------------------
+<S>                                                               <C>                <C>
+PER SHARE OPERATING PERFORMANCE:
+Net asset value, beginning of period                                  $  18.09
+                                                                      --------
+Income from investment operations:
+Net investment income(a)                                                   .04
+Net realized and unrealized gain (loss) on investment
+transactions                                                               .74
+                                                                      --------
+      Total from investment operations                                     .78
+                                                                      --------
+Less distributions:
+Dividends from net investment income                                      (.03)
+Distributions from net realized gains                                       --
+                                                                      --------
+      Total distributions                                                 (.03)
+                                                                      --------
+Net asset value, end of period                                        $  18.84
+                                                                      --------
+                                                                      --------
+TOTAL RETURN(b)                                                           4.31%
+RATIOS/SUPPLEMENTAL DATA:
+Net assets, end of period (000)                                       $ 39,741
+Average net assets (000)                                              $ 41,417
+Ratios to average net assets:(a)
+   Expenses, including distribution and service (12b-1) fees              1.40%(c)
+   Expenses, excluding distribution and service (12b-1) fees               .40%(c)
+   Net investment income (loss)                                            .46%(c)
+</Table>
+
+- ------------------------------
+(a) Net of expense subsidy.
+(b) Total return does not consider the effects of sales loads. Total return is
+    calculated assuming a purchase of shares on the first day and a sale on the
+    last day of each period reported and includes reinvestment of dividends and
+    distributions. Total returns for periods of less than a full year are not
+    annualized. Total return includes the effect of expense subsidies.
+(c) Annualized.
+(d) Commencement of offering of Class C shares.
+(e) Less than $.005 per share.
+
+    44                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+<Table>
+<Caption>
+                       Class C
+- -----------------------------------------------------------
+                                 November 18, 1999(d)
+                                       Through
+  Year Ended September 30,          September 30,
+- ----------------------------
+      2002            2001               2000
+- -----------------------------------------------------------
+<S>                  <C>         <C>                    <C>
+    $  23.06         $ 31.85           $  31.53
+    --------         -------           --------
+         .04             .05                 --(e)
+       (4.98)          (8.75)               .32
+    --------         -------           --------
+       (4.94)          (8.70)               .32
+    --------         -------           --------
+        (.03)           (.09)                --
+          --              --(e)              --
+    --------         -------           --------
+        (.03)           (.09)                --
+    --------         -------           --------
+    $  18.09         $ 23.06           $  31.85
+    --------         -------           --------
+    --------         -------           --------
+      (21.47)%        (27.37)%             1.01%
+    $ 38,729         $43,487           $ 32,308
+    $ 49,960         $41,230           $ 20,854
+        1.40%           1.37%              1.37%(c)
+         .40%            .37%               .37%(c)
+         .16%            .09%              (.01)%(c)
+</Table>
+
+    See Notes to Financial Statements                                     45
+ 
+<PAGE>
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+<Table>
+<Caption>
+                                                                      Class Z
+                                                                  ----------------
+                                                                  Six Months Ended
+                                                                   March 31, 2003
+- ----------------------------------------------------------------------------------------
+<S>                                                               <C>                <C>
+PER SHARE OPERATING PERFORMANCE:
+Net asset value, beginning of period                                  $  18.32
+                                                                  ----------------
+Income from investment operations:
+Net investment income(a)                                                   .14
+Net realized and unrealized gain (loss) on investment
+transactions                                                               .76
+                                                                  ----------------
+      Total from investment operations                                     .90
+                                                                  ----------------
+Less distributions:
+Dividends from net investment income                                      (.25)
+Distributions from net realized gains                                       --
+                                                                  ----------------
+      Total distributions                                                 (.25)
+                                                                  ----------------
+Net asset value, end of period                                        $  18.97
+                                                                  ----------------
+                                                                  ----------------
+TOTAL RETURN(b)                                                           4.85%
+RATIOS/SUPPLEMENTAL DATA:
+Net assets, end of period (000)                                       $627,889
+Average net assets (000)                                              $653,978
+Ratios to average net assets:(a)
+   Expenses                                                                .40%(d)
+   Net investment income                                                  1.46%(d)
+For Class Z and I shares:
+   Portfolio turnover rate                                                   1%(e)
+</Table>
+
+- ------------------------------
+(a) Net of expense subsidy.
+(b) Total return does not consider the effects of sales loads. Total return is
+    calculated assuming a purchase of shares on the first day and a sale on the
+    last day of each period reported and includes reinvestment of dividends and
+    distributions. Total return for periods of less than a full year are not
+    annualized. Total return includes the effect of expense subsidies.
+(c) Less than $.005 per share.
+(d) Annualized.
+(e) Not annualized.
+
+    46                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+<Table>
+<Caption>
+                                                 Class Z
+- ----------------------------------------------------------------------------------------------------------
+                                         Year Ended September 30,
+- ----------------------------------------------------------------------------------------------------------
+      2002                 2001                 2000                 1999                 1998
+- ----------------------------------------------------------------------------------------------------------
+<S>                  <C>                  <C>                  <C>                  <C>                <C>
+    $  23.35             $  32.12             $  28.96             $  23.11             $  21.86
+- ----------------     ----------------     ----------------     ----------------     ----------------
+         .28                  .28                  .29                  .22                  .15
+       (5.03)               (8.78)                3.53                 6.07                 1.69
+- ----------------     ----------------     ----------------     ----------------     ----------------
+       (4.75)               (8.50)                3.82                 6.29                 1.84
+- ----------------     ----------------     ----------------     ----------------     ----------------
+        (.28)                (.27)                (.32)                (.26)                (.21)
+          --                   --(c)              (.34)                (.18)                (.38)
+- ----------------     ----------------     ----------------     ----------------     ----------------
+        (.28)                (.27)                (.66)                (.44)                (.59)
+- ----------------     ----------------     ----------------     ----------------     ----------------
+    $  18.32             $  23.35             $  32.12             $  28.96             $  23.11
+- ----------------     ----------------     ----------------     ----------------     ----------------
+- ----------------     ----------------     ----------------     ----------------     ----------------
+      (20.71)%             (26.67)%              13.28%               27.41%                8.61%
+    $609,033             $794,954             $995,426             $866,762             $381,374
+    $812,314             $928,287             $980,790             $681,129             $313,721
+         .40%                 .40%                 .40%                 .40%                 .40%
+        1.16%                1.04%                 .95%                1.16%                1.30%
+           7%                   3%                   2%                   3%                   1%
+</Table>
+
+    See Notes to Financial Statements                                     47
+
+<Page>
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+
+<Table>
+<Caption>
+                                                                      Class I
+                                                                  ----------------
+                                                                  Six Months Ended
+                                                                   March 31, 2003
+- ----------------------------------------------------------------------------------------
+<S>                                                               <C>                <C>
+PER SHARE OPERATING PERFORMANCE:
+Net asset value, beginning of period                                 $    18.34
+                                                                  ----------------
+Income from investment operations:
+Net investment income(a)                                                    .15
+Net realized and unrealized gain (loss) on investment
+transactions                                                                .77
+                                                                  ----------------
+      Total from investment operations                                      .92
+                                                                  ----------------
+Less distributions:
+Dividends from net investment income                                       (.28)
+Distributions from net realized gains                                        --
+                                                                  ----------------
+      Total distributions                                                  (.28)
+                                                                  ----------------
+Net asset value, end of period                                       $    18.98
+                                                                  ----------------
+                                                                  ----------------
+TOTAL RETURN(b)                                                            4.90%
+RATIOS/SUPPLEMENTAL DATA:
+Net assets, end of period (000)                                      $1,050,594
+Average net assets (000)                                             $1,059,033
+Ratios to average net assets:(a)
+   Expenses                                                                 .30%(d)
+   Net investment income                                                   1.56%(d)
+</Table>
+
+- ------------------------------
+(a) Net of expense subsidy.
+(b) Total return does not consider the effects of sales loads. Total return is
+    calculated assuming a purchase of shares on the first day and a sale on the
+    last day of each period reported and includes reinvestment of dividends and
+    distributions. Total return for periods of less than a full year are not
+    annualized. Total return includes the effect of expense subsidies.
+(c) Less than $.005 per share.
+(d) Annualized.
+
+    48                                     See Notes to Financial Statements
+
+<Page>
+
+       Prudential Index Series Fund     Prudential Stock Index Fund
+             Financial Highlights (Unaudited) Cont'd.
+<Table>
+<Caption>
+                                                 Class I
+- ----------------------------------------------------------------------------------------------------------
+                                         Year Ended September 30,
+- ----------------------------------------------------------------------------------------------------------
+      2002                 2001                 2000                 1999                 1998
+- ----------------------------------------------------------------------------------------------------------
+<S>                  <C>                  <C>                  <C>                  <C>                <C>
+   $    23.38           $    32.16           $    28.99           $    23.13            $  21.87
+- ----------------     ----------------     ----------------     ----------------     ----------------
+          .30                  .30                  .33                  .36                 .31
+        (5.04)               (8.78)                3.53                 5.96                1.55
+- ----------------     ----------------     ----------------     ----------------     ----------------
+        (4.74)               (8.48)                3.86                 6.32                1.86
+- ----------------     ----------------     ----------------     ----------------     ----------------
+         (.30)                (.30)                (.35)                (.28)               (.22)
+           --                   --(c)              (.34)                (.18)               (.38)
+- ----------------     ----------------     ----------------     ----------------     ----------------
+         (.30)                (.30)                (.69)                (.46)               (.60)
+- ----------------     ----------------     ----------------     ----------------     ----------------
+   $    18.34           $    23.38           $    32.16           $    28.99            $  23.13
+- ----------------     ----------------     ----------------     ----------------     ----------------
+- ----------------     ----------------     ----------------     ----------------     ----------------
+       (20.64)%             (26.58)%              13.38%               27.55%               8.69%
+   $  972,700           $1,210,995           $1,501,345           $1,019,034            $639,408
+   $1,278,422           $1,431,444           $1,317,874           $  915,642            $505,605
+          .30%                 .30%                 .30%                 .30%                .30%
+         1.26%                1.14%                1.05%                1.26%               1.42%
+</Table>
+
+    See Notes to Financial Statements                                     49
+ 
+<PAGE>
+<Page>
+
+Prudential Index Series Fund    Prudential Stock Index Fund
+
+Getting the Most from Your Prudential Mutual Fund
+
+How many times have you read these reports--or other financial materials--and
+stumbled across a word that you don't understand?
+
+Many shareholders have run into the same problem. We'd like to help. So we'll
+use this space from time to time to explain some of the words you might have
+read, but not understood. And if you have a favorite word that no one can
+explain to your satisfaction, please write to us.
+
+Basis Point: 1/100th of 1%. For example, one-half of one percent is 50
+basis points.
+
+Collateralized Mortgage Obligations (CMOs): Mortgage-backed bonds that
+separate mortgage pools into different maturity classes called tranches.
+These instruments are sensitive to changes in interest rates and homeowner
+refinancing activity. They are subject to prepayment and maturity extension
+risk.
+
+Derivatives: Securities that derive their value from other securities. The
+rate of return of these financial instruments rises and falls--sometimes very
+suddenly--in response to changes in some specific interest rate, currency,
+stock, or other variable.
+
+Discount Rate: The interest rate charged by the Federal Reserve on loans to
+member banks.
+
+Federal Funds Rate: The interest rate charged by one bank to
+another on overnight loans.
+
+Futures Contract: An agreement to purchase or sell a specific amount of
+a commodity or financial instrument at a set price at a specified date in
+the future.
+
+<Page>
+
+www.prudential.com    (800) 225-1852
+
+Leverage: The use of borrowed assets to enhance return. The expectation is
+that the interest rate charged on borrowed funds will be lower than the return
+on the investment. While leverage can increase profits, it can also magnify
+losses.
+
+Liquidity: The ease with which a financial instrument (or product) can be
+bought or sold (converted into cash) in the financial markets.
+
+Price/Earnings Ratio: The price of a share of stock divided by the earnings
+per share for a 12-month period.
+
+Option: An agreement to purchase or sell something, such as shares of stock,
+by a certain time for a specified price. An option need not be exercised.
+
+Spread: The difference between two values; often used to describe the
+difference between "bid" and "asked" prices of a security, or between the
+yields of two similar maturity bonds.
+
+Yankee Bond: A bond sold by a foreign company or government on the U.S. market
+and denominated in U.S. dollars.
+
+<Page>
+
+Prudential Index Series Fund    Prudential Stock Index Fund
+
+Getting the Most from Your Prudential Mutual Fund
+
+When you invest through Prudential Mutual Funds, you receive financial advice
+from a Prudential Securities Financial Advisor or Pruco Securities registered
+representative. Your financial professional can provide you with the following
+services:
+
+THERE'S NO REWARD WITHOUT RISK; BUT IS THIS RISK WORTH IT?
+Your financial professional can help you match the reward you seek with the
+risk you can tolerate. Risk can be difficult to gauge--sometimes even the
+simplest investments bear surprising risks. The educated investor knows that
+markets seldom move in just one direction. There are times when a
+market sector or asset class will lose value or provide little in the way of
+total return. Managing your own expectations is easier with help from someone
+who understands the markets, and who knows you!
+
+KEEPING UP WITH THE JONESES
+A financial professional can help you wade through the numerous available
+mutual funds to find the ones that fit your individual investment
+profile and risk tolerance. While the newspapers and popular magazines are
+full of advice about investing, they are aimed at generic groups of
+people or representative individuals--not at you personally. Your financial
+professional will review your investment objectives with you. This means you
+can make financial decisions based on the assets and liabilities in your
+current portfolio and your risk tolerance--not just based on the current
+investment fad.
+
+BUY LOW, SELL HIGH
+Buying at the top of a market cycle and selling at the bottom are among the
+most common investor mistakes. But sometimes it's difficult to hold on to an
+investment when it's losing value every month. Your financial professional can
+answer questions when you're confused or worried about your investment, and
+should remind you that you're investing for the long haul.
+
+<Page>
+
+www.prudential.com    (800) 225-1852
+
+FOR MORE INFORMATION
+
+Prudential Mutual Funds
+Gateway Center Three
+100 Mulberry Street
+Newark, NJ 07102-4077
+(800) 225-1852
+
+Trustees
+Saul K. Fenster
+Delayne Dedrick Gold
+Robert F. Gunia
+Douglas H. McCorkindale
+W. Scott McDonald, Jr.
+Thomas T. Mooney
+Stephen P. Munn
+David R. Odenath, Jr.
+Richard A. Redeker
+Judy A. Rice
+Robin B. Smith
+Louis A. Weil, III
+Clay T. Whitehead
+
+Officers
+Judy A. Rice, President
+Robert F. Gunia, Vice President
+Grace C. Torres, Treasurer
+Maria G. Master, Secretary
+Marguerite E.H. Morrison, Assistant Secretary
+Maryanne Ryan, Anti-Money Laundering
+   Compliance Officer
+
+Manager
+Prudential Investments LLC
+Gateway Center Three
+100 Mulberry Street
+Newark, NJ 07102-4077
+
+Investment Adviser
+Prudential Investment
+   Management, Inc.
+Gateway Center Two
+Newark, NJ 07102
+
+Distributor
+Prudential Investment Management Services LLC
+Gateway Center Three, 14th Floor
+Newark, NJ 07102-4077
+
+Custodian
+State Street Bank and Trust Company
+One Heritage Drive
+North Quincy, MA 02171
+
+Transfer Agent
+Prudential Mutual Fund Services LLC
+PO Box 8098
+Philadelphia, PA 19101
+
+Independent Accountants
+PricewaterhouseCoopers LLP
+1177 Avenue of the Americas
+New York, NY 10036
+
+Legal Counsel
+Sullivan & Cromwell LLP
+125 Broad Street
+New York, NY 10004-2498
+
+Fund Symbols    Nasdaq      CUSIP
+- ------------    ------      -----
+Class A         PSIAX     74438C100
+Class B         PBSIX     74438C209
+Class C         PSICX     74438C308
+Class Z         PSIFX     74438C407
+Class I         PDSIX     74438C506
+
+The views expressed in this report and
+information about the Fund's portfolio holdings
+are for the period covered by this report and
+are subject to change thereafter.
+
+The accompanying financial statements as of
+March 31, 2003, were not audited and, accordingly,
+no auditors' opinion is expressed on them.
+
+Mutual funds are not insured by the FDIC or any federal government agency,
+are not a deposit of or guaranteed by any bank or any bank affiliate, and
+may lose value.
+
+<Page>
+
+PRUDENTIAL FINANANCIAL (LOGO)
+
+Fund Symbols    Nasdaq    CUSIP
+- ------------    ------    -----
+Class A    PSIAX    74438C100
+Class B    PBSIX    74438C209
+Class C    PSICX    74438C308
+Class Z    PSIFX    74438C407
+Class I    PDSIX    74438C506
+
+MF174E2    IFS-A080087
+
+</TEXT>
+</DOCUMENT>
+</SEC-DOCUMENT>
+-----END PRIVACY-ENHANCED MESSAGE-----

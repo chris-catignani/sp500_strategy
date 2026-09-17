@@ -1,0 +1,1232 @@
+-----BEGIN PRIVACY-ENHANCED MESSAGE-----
+Proc-Type: 2001,MIC-CLEAR
+Originator-Name: webmaster@www.sec.gov
+Originator-Key-Asymmetric:
+ MFgwCgYEVQgBAQICAf8DSgAwRwJAW2sNKK9AVtBzYZmr6aGjlWyK3XmZv3dTINen
+ TWSM7vrzLADbmYQaionwg5sDW3P6oaM5D3tdezXMm7z1T+B+twIDAQAB
+MIC-Info: RSA-MD5,RSA,
+ VvKHlY/H8XlqeuEuEN6cnbJIZlYQ0E8EIUaQiCw6gj0LusPZ4aQW0FjUpszjIAGL
+ EWrebaGuNcM3qI/qMeEJSw==
+
+<SEC-DOCUMENT>0000887991-97-000005.txt : 19970618
+<SEC-HEADER>0000887991-97-000005.hdr.sgml : 19970618
+ACCESSION NUMBER:		0000887991-97-000005
+CONFORMED SUBMISSION TYPE:	N-30D
+PUBLIC DOCUMENT COUNT:		1
+CONFORMED PERIOD OF REPORT:	19970331
+FILED AS OF DATE:		19970617
+SROS:			NONE
+
+FILER:
+
+	COMPANY DATA:	
+		COMPANY CONFORMED NAME:			PRUDENTIAL INSTITUTIONAL FUND
+		CENTRAL INDEX KEY:			0000887991
+		STANDARD INDUSTRIAL CLASSIFICATION:	UNKNOWN SIC - 0000 [0000]
+		STATE OF INCORPORATION:			DE
+		FISCAL YEAR END:			0930
+
+	FILING VALUES:
+		FORM TYPE:		N-30D
+		SEC ACT:		1940 Act
+		SEC FILE NUMBER:	811-06677
+		FILM NUMBER:		97625280
+
+	BUSINESS ADDRESS:	
+		STREET 1:		PRUDENTIAL PLAZA
+		STREET 2:		751 BROAD ST
+		CITY:			NEWARK
+		STATE:			NJ
+		ZIP:			07102
+		BUSINESS PHONE:		8008247513
+
+	MAIL ADDRESS:	
+		STREET 2:		ONE SEAPORT PLZ
+		CITY:			NEW YORK
+		STATE:			NY
+		ZIP:			10292
+</SEC-HEADER>
+<DOCUMENT>
+<TYPE>N-30D
+<SEQUENCE>1
+<DESCRIPTION>PRUDENTIAL DRYDEN FUND-ACTIVE BALANCED FUND
+<TEXT>
+
+(ICON)
+
+Prudential
+Active
+Balanced
+Fund
+
+SEMI
+ANNUAL
+REPORT
+
+March 31, 1997
+
+(LOGO)
+
+<PAGE>
+
+Prudential Active Balanced Fund
+
+A Series of the Prudential Dryden Fund
+
+Performance At A Glance.
+
+Led by large companies, stocks continued their record bull market run for much 
+of the last six months before faltering somewhat toward the end of the period 
+on fears of rising interest rates and slowing corporate earnings growth. Rising
+short-term interest rates and the prospect of even higher rates to come also 
+hurt bond market performance. The Prudential Active Balanced Fund, which 
+invests in both stocks and bonds, did not perform as well as the average 
+balanced fund, as measured by Lipper Analytical Services. Our somewhat smaller 
+position in stocks, due to our continuing concerns over record stock market 
+valuations, restrained performance.
+
+<TABLE>
+Cumulative Total Returns1                      As of 3/31/97
+<CAPTION>
+                             One         Five        Ten             Since
+                             Year        Years      Years         Inception2
+     <S>                    <C>         <C>        <C>           <C>
+      Class A                N/A         N/A        N/A           1.5%
+      Class B                N/A         N/A        N/A           1.3
+      Class C                N/A         N/A        N/A           1.3
+      Class Z                4.7%        8.3%      36.1%         50.1
+Lipper Balanced Fds3         5.4        10.7       43.7          ***
+</TABLE>
+
+<TABLE>
+Average Annual Total Returns1                    As of 3/31/97
+<CAPTION>
+                                  One           Three           Since
+                                  Year          Years         Inception2
+     <S>                         <C>            <C>           <C>
+    Class Z                       8.3%          10.8%         10.0%
+</TABLE>
+
+Past performance is not indicative of future results. Principal and investment 
+return will fluctuate so that an investor's shares, when redeemed, may be worth
+more or less than their original cost.
+
+1Source: Prudential Investments Fund Management and Lipper Analytical Services.
+The cumulative total returns do not take into account sales charges. The 
+average annual returns do take into account applicable sales charges. The Fund 
+charges a maximum front-end sales load of 5% for Class A shares. Class B shares
+are subject to a declining contingent deferred sales charge (CDSC) of 5%, 4%, 
+3%, 2%, 1% and 1% for six years. Class C shares have a 1% CDSC for one year. 
+Class B shares will automatically convert to Class A shares on a quarterly 
+basis, after approximately seven years. Class Z shares are not subject to a 
+sales charge or distribution fee. Since Class A, B, and C shares have been in 
+existence less than a year, no average annual total returns are presented.
+
+2Inception dates: 11/6/96 for Class A, B and C; 1/4/93 for Class Z.
+
+3Lipper average returns are for 322 funds for six months, 294 funds for one 
+year and 177 funds for three years.
+
+*** The Lipper Since Inception category return for Class A, Class B and Class C
+is -1.0% which includes 338 funds, and Class Z is 52.8% for 108 funds.
+
+How Investments Compared.
+    (As of 3/31/97)
+
+        (GRAPH)
+
+Source: Lipper Analytical Services. Financial markets change, so a mutual 
+fund's past performance should never be used to predict future results. The 
+risks to each of the investments listed above are different -- we provide 
+12-month total returns for several Lipper mutual fund categories to show you 
+that reaching for higher yields means tolerating more risk. The greater the 
+risk, the larger the potential reward or loss. In addition, we've included 
+historical 20-year average annual returns. These returns assume the 
+reinvestment of dividends.
+
+U.S. Growth Funds will fluctuate a great deal. Investors have received higher 
+historical total returns from stocks than from most other invest-ments. Smaller
+capitalization stocks offer greater potential for long-term growth but may be 
+more volatile than larger capitalization stocks.
+
+General Bond Funds provide more income than stock funds, which can help smooth 
+out their total returns year by year. But their prices still fluctuate 
+(sometimes significantly) and their returns have been historically lower than 
+those of stock funds.
+
+General Municipal Debt Funds invest in bonds issued by state governments, state
+agencies and/or municipalities. This investment provides income that is usually
+exempt from federal and state income taxes.
+
+Taxable Money Market Funds attempt to preserve a constant share value; they 
+don't fluctuate much in price but, historically, their returns have been 
+generally among the lowest of the major investment categories.
+
+<PAGE>
+
+Bradley Goldberg, Fund Manager                      (PICTURE)
+
+Portfolio
+Manager's Report
+
+The Prudential Active Balanced Fund invests in a combination of stocks, bonds 
+and lower-risk money market instruments, such as short-term U.S. Treasury 
+securities. By diversifying in this way, the Fund aims to benefit from rising 
+stock markets while providing investors with greater protection should stocks 
+fall. In short, the Fund seeks to approach expected long-term returns of an 
+all-equity portfolio, while taking less risk. There can be no assurance that 
+the Fund will achieve its investment objective.
+
+We're Active.
+We actively manage our allocation to stocks, bonds and cash. We will shift 
+investments to capitalize on intermediate term opportunities (12 to 18 months) 
+and to maximize total return. We'll hold anywhere from 40% to 75% in stocks, 
+25% to 60% in bonds, and zero to 35% in cash, depending on market conditions.
+
+Strategy Session.
+- --------------------------------------------------------------------------
+We remained relatively cautious on the stock market, particularly in view of 
+the recent period of higher short-term interest rates.
+
+Relatively Less In Stocks.
+We maintained a somewhat smaller position in stocks during the period in 
+response to record stock market valuations. For example, we held 46% of total 
+net assets in stocks as of March 31, 1997, in contrast with the traditional 
+balanced fund position of 60% in equities. We continue to look for stocks we 
+believe to be attractively priced, yet with good earnings growth potential.
+
+Neutral In Bonds.
+We believe bonds offer good long-term value, but on a short-term basis there 
+is some uncertainty regarding the recent Federal Reserve Board action to raise 
+interest rates. We therefore maintained the average duration of our bond 
+holdings at 5 years. (Duration is a measure of the sensitivity of bond prices 
+to changes in interest rates.)
+
+Cash For Opportunities.
+We continue to hold a moderate amount of cash -- 18% of total net assets. We 
+believe our cash position will allow us to take advantage of opportunities in 
+both stocks and bonds as they present themselves.
+
+     Portfolio Breakdown.
+ Expressed as a percentage of
+total net assets as of 3/31/97.
+
+           (GRAPH)
+
+
+<PAGE>
+
+What Went Well.
+- -----------------------------------------------
+Earnings Were Up.
+Several of our stocks performed exceptionally well during the period. Although 
+we found them in a variety of different industries, they had one thing in 
+common -- all were experiencing strong corporate earnings growth.
+
+- -- Delta Airlines benefited from the recent boom in domestic airline industry 
+   and recently reported earnings above Wall Street expectations.
+
+- -- The New York Times continued to execute its operating strategy well. 
+   Earnings received a boost from increases in advertising lineage and rates 
+   combined with reductions in newsprint costs.
+
+- -- CIGNA, the insurance and financial services company, also exceeded 
+   expectations. Its ongoing restructuring is on target, with all sectors of 
+   the business on or ahead of plan.
+
+Five Largest Holdings.
+
+2.3%   CIGNA
+       Insurance
+2.2%   General Motors
+       Automobiles
+2.0%   New York Times
+       Media
+1.6%   International Business Machines
+       Computers
+1.6%   Dresser
+       Petroleum Services
+
+Expressed as a percentage of total investments as of 3/31/97.
+
+And Not So Well.
+- -----------------------------------------------
+Stocks Were Volatile.
+After rising almost relentlessly for six years, the stock market suddenly 
+became volatile as March ended. The stock market continued to be quite narrow 
+in focus with large company or so-called Blue Chip stocks getting most of the
+attention.
+
+Also, earnings news for some of our stocks was not good. Computer giant IBM 
+suffered during the period due to investor nervousness about the level of first
+quarter earnings. Newmont Mining also did not perform as well as we had hoped, 
+suffering from decreasing gold prices. Despite the setback, we continue to hold
+Newmont because we like its production growth profile.
+
+A Tough Time For Bonds.
+With the unexpected strength of the economy, interest rates were on the rise, 
+creating a difficult time for bonds. We do believe, however, if rates continue 
+to rise, that bonds will become more attractive relative to our low inflation 
+outlook. Therefore we may be looking for buying opportunities in this sector.
+
+Looking Ahead.
+- -----------------
+We expect the equity markets will remain volatile for some time to come. 
+Consequently, we are content to hold less in stocks than we normally would as 
+we wait for the more attractive price levels. We continue to look for solid 
+stocks that will provide the highest possible return for the lowest level of 
+risk.
+
+We believe opportunities will appear as the year progresses to put our cash 
+reserves to work in both stocks and bonds. We plan to use cash 
+opportunistically as these situations present themselves.
+
+                                          1
+<PAGE>
+
+
+President's Letter                               May 14, 1997
+   (PICTURE)
+                            We're On Your Side
+
+Dear Shareholder:
+
+The past few months were mixed for most U.S. stock and bond investors. The 
+recent news was good: The Dow Jones Industrial Average set several record highs
+in May and long-term interest rates were easing. The average stock and bond 
+mutual fund finished the four-month period ending in April in positive 
+territory. It was a different story only a few weeks earlier when the Dow 
+declined significantly from another record high set in mid-March, and long-term
+interest rates were at the highest levels in six months.
+
+The reasons behind these recent market swings have been widely publicized -- 
+higher interest rates and inflationary pressures. And while we are watching 
+market developments closely, we are also very concerned about you and how 
+you're dealing with events. We realize that staying the course during times of 
+market uncertainty isn't easy. Here are some thoughts that may help:
+
+- -- Keep Your Expectations Realistic. The best investors know that financial 
+markets rise and fall -- and so too, will the value of their investments. Over 
+time, however, stocks have been shown to produce very attractive returns that 
+were well ahead of inflation.
+
+- -- Remember Your Time Horizon. If your investment goals are long term (several 
+years or more), your time horizon should also be long term. During this period,
+it's not unusual for stocks and bonds to experience several periods of market 
+uncertainty.
+
+- -- We're On Your Side. Your Prudential Securities Financial Advisor or 
+Prudential Registered Representative can help you understand what's happening 
+in the financial markets. They can assist you in making informed decisions 
+based upon a thorough knowledge of your financial needs and long-term goals. 
+Call him or her today.
+
+Thank you for your continued confidence in Prudential mutual funds. We'll do 
+everything we can to keep you informed and to earn your trust.
+
+Sincerely,
+
+Brian M. Storms
+President, Prudential Mutual Funds & Annuities
+
+                                    2
+<PAGE>
+
+Portfolio of Investments as of     THE PRUDENTIAL DRYDEN FUND
+March 31, 1997 (Unaudited)         ACTIVE BALANCED FUND
+- ------------------------------------------------------------
+- ------------------------------------------------------------
+<TABLE>
+<CAPTION>
+Shares      Description                     Value (Note 1)
+<C>         <S>                                    <C>
+- ------------------------------------------------------------
+LONG-TERM INVESTMENTS--81.9%
+COMMON STOCKS--46.0%
+- ------------------------------------------------------------
+Airlines--1.3%
+   22,800   Delta Airlines, Inc.                   $   1,918,050
+- ------------------------------------------------------------
+Automobiles & Trucks--3.2%
+   57,000   General Motors Corp.                       3,156,375
+   27,000   General Motors Corp., Class H              1,464,750
+                                                   -------------
+                                                       4,621,125
+- ------------------------------------------------------------
+Banking--2.9%
+   11,500   Chase Manhattan Corp.                      1,076,687
+   22,800   Fleet Financial Group, Inc.                1,305,300
+  144,400   Hibernia Corp.                             1,895,250
+                                                   -------------
+                                                       4,277,237
+- ------------------------------------------------------------
+Business Services--0.5%
+   20,300   Manpower, Inc.                               730,800
+- ------------------------------------------------------------
+Chemicals--2.1%
+   27,300   Betz Laboratories, Inc.                    1,723,312
+   43,100   Dexter Corp.                               1,298,388
+                                                   -------------
+                                                       3,021,700
+- ------------------------------------------------------------
+Chemicals-Specialty--1.7%
+   82,100   Engelhard Corp.                            1,724,100
+   17,500   Morton International, Inc.                   739,375
+                                                   -------------
+                                                       2,463,475
+- ------------------------------------------------------------
+Commercial Services--1.7%
+   35,375   CUC International Inc.(a)                    795,937
+   49,800   Ogden Corp.                                1,052,025
+   15,100   York International Corp.                     632,313
+                                                   -------------
+                                                       2,480,275
+Computer Software & Services--0.4%
+   13,700   Symbol Technologies, Inc.(a)           $     661,025
+- ------------------------------------------------------------
+Computers--2.8%
+   18,200   Hewlett-Packard Co.                          969,150
+   17,200   International Business Machines
+              Corp.                                    2,362,850
+  112,600   Unisys Corp.(a)                              717,825
+                                                   -------------
+                                                       4,049,825
+- ------------------------------------------------------------
+Drugs & Medical Supplies--1.2%
+   30,500   Pharmacia & Upjohn, Inc.                   1,117,063
+   15,100   Vertex Pharmaceuticals, Inc.(a)              611,550
+                                                   -------------
+                                                       1,728,613
+- ------------------------------------------------------------
+Electronics--0.3%
+   35,600   International Rectifier Corp.(a)             422,750
+- ------------------------------------------------------------
+Industrial Technology/Instruments--1.0%
+   33,000   Millipore Corp.                            1,398,375
+- ------------------------------------------------------------
+Insurance--2.3%
+   22,800   CIGNA Corp.                                3,331,650
+- ------------------------------------------------------------
+Lodging--0.6%
+   36,500   Hilton Hotels Corp.                          885,125
+- ------------------------------------------------------------
+Machinery--1.6%
+   15,000   Case Corp.                                   761,250
+    8,800   Caterpillar Inc.                             706,200
+   22,300   Kennametal, Inc.                             808,375
+                                                   -------------
+                                                       2,275,825
+</TABLE>
+- --------------------------------------------------------------------------------
+See Notes to Financial Statements.     3
+ 
+
+<PAGE>
+
+Portfolio of Investments as of     THE PRUDENTIAL DRYDEN FUND
+March 31, 1997 (Unaudited)         ACTIVE BALANCED FUND
+- ------------------------------------------------------------
+- ------------------------------------------------------------
+<TABLE>
+<CAPTION>
+Shares      Description                     Value (Note 1)
+<C>         <S>                                    <C>
+- ------------------------------------------------------------
+Media--5.1%
+   42,900   McGraw-Hill Companies, Inc.            $   2,193,263
+   66,700   New York Times Co.                         2,943,137
+    8,600   Omnicom Group                                428,925
+   47,800   Tribune Co.                                1,935,900
+                                                   -------------
+                                                       7,501,225
+- ------------------------------------------------------------
+Mineral Resources--1.8%
+   30,200   ASARCO Inc.                                  849,375
+   44,474   Newmont Mining Corp.                       1,723,367
+                                                   -------------
+                                                       2,572,742
+- ------------------------------------------------------------
+Miscellaneous Basic Industry--4.0%
+   39,450   Avalon Properties, Inc.                    1,084,875
+   19,900   Champion International Corp.                 905,450
+   28,700   Reynolds Metals Co.                        1,779,400
+  118,900   Westinghouse Electric Corp.                2,110,475
+                                                   -------------
+                                                       5,880,200
+- ------------------------------------------------------------
+Office Equipment & Supplies--0.7%
+   17,400   Xerox Corp.                                  989,625
+- ------------------------------------------------------------
+Petroleum--2.1%
+   26,200   Amerada Hess Corp.                         1,388,600
+   60,823   Union Pacific Resources Group, Inc.        1,627,015
+                                                   -------------
+                                                       3,015,615
+Paper--0.7%
+   32,900   Boise Cascade Corp.                    $   1,003,450
+- ------------------------------------------------------------
+Petroleum Services--2.6%
+   27,200   Anadarko Petroleum Corp.                   1,526,600
+   76,700   Dresser Industries, Inc.                   2,320,175
+                                                   -------------
+                                                       3,846,775
+- ------------------------------------------------------------
+Publishing--0.7%
+   31,400   American Greetings Corp.                   1,002,838
+- ------------------------------------------------------------
+Railroads--0.6%
+   14,961   Union Pacific Corp.                          849,037
+- ------------------------------------------------------------
+Retail--1.4%
+  115,179   Limited, Inc.                              2,116,414
+- ------------------------------------------------------------
+Steel-Producers--0.7%
+   40,000   USX Corp. -U.S. Steel Group                1,065,000
+- ------------------------------------------------------------
+Telecommunications--0.8%
+   32,100   MCI Communications Corp.                   1,143,563
+- ------------------------------------------------------------
+Trucking & Shipping--1.2%
+   58,800   Ryder System, Inc.                         1,719,900
+                                                   -------------
+            Total common stocks
+              (cost $56,956,080)                      66,972,234
+                                                   -------------
+</TABLE>
+- --------------------------------------------------------------------------------
+See Notes to Financial Statements.     4
+ 
+
+<PAGE>
+
+Portfolio of Investments as of     THE PRUDENTIAL DRYDEN FUND
+March 31, 1997 (Unaudited)         ACTIVE BALANCED FUND
+- ------------------------------------------------------------
+- ------------------------------------------------------------
+<TABLE>
+<CAPTION>
+Shares      Description                     Value (Note 1)
+<C>         <S>                                    <C>
+- ------------------------------------------------------------
+DEBT OBLIGATIONS--35.9%
+- ------------------------------------------------------------
+U.S. Government Securities--35.9%
+   $5,030   United States Treasury Bond,
+            7.875%, 2/15/21                        $   5,389,947
+            United States Treasury Notes,
+    6,575   8.875%, 11/15/98                           6,823,600
+    5,510   7.50%, 11/15/01                            5,665,823
+   17,435   6.25%, 2/15/03                            16,960,942
+   18,480   5.75%, 8/15/03                            17,443,457
+                                                   -------------
+            Total debt obligations
+              (cost $52,515,892)                      52,283,769
+                                                   -------------
+            Total long-term investments
+              (cost $109,471,972)                    119,256,003
+                                                   -------------
+SHORT-TERM INVESTMENTS--16.9%
+- ------------------------------------------------------------
+Repurchase Agreement--16.9%
+   24,526   Joint Repurchase Agreement Account,
+              6.438%, 04/01/97 (Note 4)
+              (cost $24,526,000)                      24,526,000
+- ------------------------------------------------------------
+Total Investments--98.8%
+            (cost $133,997,972; Note 3)              143,782,003
+            Other assets in excess of
+              liabilities--1.2%                        1,799,284
+                                                   -------------
+            Net Assets--100%                       $ 145,581,287
+                                                   -------------
+                                                   -------------
+</TABLE>
+- ---------------
+(a) Non-income producing security.
+- --------------------------------------------------------------------------------
+See Notes to Financial Statements.     5
+ 
+
+<PAGE>
+Statement of Assets and Liabilities                 THE PRUDENTIAL DRYDEN FUND
+(Unaudited)                                         ACTIVE BALANCED FUND
+- --------------------------------------------------------------------------------
+<TABLE>
+<CAPTION>
+Assets                                                                                                         March 31, 1997
+<S>                                                                                                              <C>
+Investments, at value (cost $133,997,972)..................................................................       $143,782,003
+Cash.......................................................................................................                744
+Receivable for investments sold............................................................................          1,135,065
+Dividends and interest receivable..........................................................................            799,847
+Receivable for Fund shares sold............................................................................            365,507
+Other assets...............................................................................................             12,959
+                                                                                                                 --------------
+    Total assets...........................................................................................        146,096,125
+                                                                                                                 --------------
+Liabilities
+Payable for Fund shares reacquired.........................................................................            377,199
+Management fee payable.....................................................................................             82,138
+Payable for investments purchased..........................................................................              6,012
+Distribution fee payable...................................................................................                 28
+Accrued expenses...........................................................................................             49,461
+                                                                                                                 --------------
+    Total liabilities......................................................................................            514,838
+                                                                                                                 --------------
+Net Assets.................................................................................................       $145,581,287
+                                                                                                                 --------------
+                                                                                                                 --------------
+Net assets were comprised of:
+   Common stock, at par....................................................................................       $     11,674
+   Paid-in capital in excess of par........................................................................        128,913,040
+                                                                                                                 --------------
+                                                                                                                   128,924,714
+   Undistributed net investment income.....................................................................          1,025,019
+   Accumulated net realized gain on investments............................................................          5,847,523
+   Net unrealized appreciation on investments..............................................................          9,784,031
+                                                                                                                 --------------
+Net assets, March 31, 1997.................................................................................       $145,581,287
+                                                                                                                 --------------
+                                                                                                                 --------------
+Class A:
+   Net asset value and redemption price per share
+      ($2,228.10 / 178.886 shares of common stock issued and outstanding)..................................             $12.46
+   Maximum sales charge (5.0% of offering price)...........................................................                .65
+   Maximum offering price to public........................................................................             $13.11
+Class B:
+   Net asset value, offering price and redemption price per share
+      ($50,245 / 4,041 shares of common stock issued and outstanding)......................................             $12.43
+Class C:
+   Net asset value, offering price and redemption price per share
+      ($196.77 / 15.827 shares of common stock issued and outstanding).....................................             $12.43
+Class Z:
+   Net asset value, offering price and redemption price per share
+      ($145,528,617 / 11,670,294 shares of common stock issued and outstanding)............................             $12.47
+</TABLE>
+- --------------------------------------------------------------------------------
+See Notes to Financial Statements.     6
+ 
+
+<PAGE>
+
+THE PRUDENTIAL DRYDEN FUND
+ACTIVE BALANCED FUND
+Statement of Operations (Unaudited)
+- ------------------------------------------------------------
+<TABLE>
+<CAPTION>
+                                                 Six Months
+                                                   Ended
+Net Investment Income                          March 31, 1997
+<S>                                            <C>
+Income
+   Interest.................................    $  2,437,209
+   Dividends (net of foreign withholding
+      taxes of $522)........................         663,573
+                                               --------------
+    Total income............................       3,100,782
+                                               --------------
+Expenses
+   Distribution fee--Class A................               2
+   Distribution fee--Class B................              33
+   Distribution fee--Class C................               1
+   Management fee...........................         514,076
+   Transfer agent's fees and expenses.......          61,700
+   Registration fees........................          50,000
+   Custodian's fees and expenses............          43,000
+   Reports to shareholders..................          22,500
+   Administration fee.......................          21,553
+   Legal fees...............................          10,500
+   Audit fee................................          10,000
+   Organization expense.....................           6,588
+   Directors' fees..........................           5,000
+   Miscellaneous............................           5,689
+                                               --------------
+    Total expenses..........................         750,642
+                                               --------------
+Net investment income.......................       2,350,140
+                                               --------------
+Realized and Unrealized Gain on
+Investment Transactions
+Net realized gain on investment
+   transactions.............................       6,492,245
+Net change in unrealized appreciation on
+   investments..............................      (1,210,241)
+                                               --------------
+Net gain on investments.....................       5,282,004
+                                               --------------
+Net Increase in Net Assets
+Resulting from Operations...................    $  7,632,144
+                                               --------------
+                                               --------------
+</TABLE>
+
+THE PRUDENTIAL DRYDEN FUND
+ACTIVE BALANCED FUND
+Statement of Changes in Net Assets (Unaudited)
+- ------------------------------------------------------------
+<TABLE>
+<CAPTION>
+                                     Six Months
+                                       Ended         Year Ended
+Increase                             March 31,      September 30,
+in Net Assets                           1997            1996
+<S>                                 <C>             <C>
+Operations
+   Net investment income..........  $  2,350,140        4,391,687
+   Net realized gain on
+      investment..................     6,492,245        9,129,045
+   Net change in unrealized
+      appreciation on
+      investments.................    (1,210,241)      (1,120,181)
+                                    ------------    -------------
+   Net increase in net assets
+      resulting from operations...     7,632,144       12,400,551
+                                    ------------    -------------
+Dividends and distributions
+   Dividends to shareholders from
+      net investment income
+      Class A.....................           (64)              --
+      Class B.....................            (6)              --
+      Class C.....................            (6)              --
+      Class Z.....................    (4,627,738)      (3,972,955)
+                                    ------------    -------------
+                                      (4,627,814)      (3,972,955)
+                                    ------------    -------------
+   Distributions to shareholders
+      from net realized gains
+      Class A.....................          (128)              --
+      Class B.....................           (12)              --
+      Class C.....................           (12)              --
+      Class Z.....................    (9,255,475)      (1,932,789)
+                                    ------------    -------------
+                                      (9,255,627)      (1,932,789)
+                                    ------------    -------------
+Fund share transactions
+   Net proceeds from shares
+      sold........................    36,626,039       36,454,403
+   Net asset value of shares
+      issued to shareholders in
+      reinvestment of
+      distributions...............    13,883,406        5,905,744
+   Cost of shares reacquired......   (52,265,158)      (8,618,544)
+                                    ------------    -------------
+   Net increase (decrease) in net
+      assets from Fund share
+      transactions................    (1,755,713)      13,741,603
+                                    ------------    -------------
+Total increase (decrease).........    (8,007,010)      20,236,410
+Net Assets
+Beginning of period...............   153,588,297      133,351,887
+                                    ------------    -------------
+End of period.....................  $145,581,287    $ 153,588,297
+                                    ------------    -------------
+                                    ------------    -------------
+</TABLE>
+- --------------------------------------------------------------------------------
+See Notes to Financial Statements.     7
+ 
+
+<PAGE>
+
+Notes to Financial Statements                        THE PRUDENTIAL DRYDEN FUND
+(Unaudited)                                          ACTIVE BALANCED FUND
+- --------------------------------------------------------------------------------
+The Prudential Dryden Fund, (the 'Company') is registered under the Investment
+Company Act of 1940 as an open-end, diversified management investment company.
+The Company was established as a Delaware business trust on May 11, 1992 and
+currently consists of two separate funds: Stock Index Fund and Active Balanced
+Fund (the 'Fund'). Prior to October 28, 1996 the Company was named the
+Prudential Institutional Fund and prior to September 20, 1996, it consisted of
+seven separate funds, five of which were reorganized on September 20, 1996 and
+combined with existing funds in the Prudential Mutual Funds family of funds (see
+Note 6.)
+The Company had no operations until July 7, 1992 when 10,000 shares of
+beneficial interest of the Company were sold for $100,000 to Prudential
+Institutional Fund Management, Inc. ('PIFM'). Investment operations of the Fund
+commenced on January 4, 1993. The Fund's investment objective is to achieve
+total returns approaching equity returns, while accepting less risk than an
+all-equity portfolio, through an actively-managed portfolio of equity
+securities, fixed income securities and money market instruments.
+- ------------------------------------------------------------
+Note 1. Accounting Policies
+The following is a summary of significant accounting policies followed by the
+Fund.
+Securities Valuation: Securities, including options, warrants, futures contracts
+and options thereon, for which the primary market is on a national securities
+exchange, commodities exchange or board of trade and NASDAQ national market
+equity securities are valued at the last sale price on such exchange or board of
+trade on the date of valuation or, if there was no sale on such day, at the
+average of readily closing bid and asked prices quoted on such day.
+Securities, that are actively traded in the over-the-counter market, including
+listed securities for which the primary market is believed to be
+over-the-counter, shall be valued at the average of the most recently quoted bid
+and asked prices provided by a principal market maker or dealer.
+U.S. government securities for which market quotations are available shall be
+valued at a price provided by an independent broker/dealer or pricing service.
+Securities for which reliable market quotations are not available or for which
+the pricing agent or principal market maker does not provide a valuation or
+provides a valuation that, in the judgement of the subadviser, does not
+represent fair value, shall by valued at fair value as determined under
+procedures established by the Trustees.
+In connection with transactions in repurchase agreements, it is the Fund's
+policy that its custodian or designated subcustodians, as the case may be under
+triparty repurchase agreements, take possession of the underlying collateral
+securities, the value of which exceeds the principal amount of the repurchase
+transaction, including accrued interest. To the extent that any repurchase
+transaction exceeds one business day, the value of the collateral is
+marked-to-market on a daily basis to ensure the adequacy of the collateral. If
+the seller defaults, and the value of the collateral declines or, if bankruptcy
+proceedings are commenced with respect to the seller of the security,
+realization of the collateral by the Fund may be delayed or limited.
+Securities Transactions and Investment Income: Securities transactions are
+recorded on the trade date. Realized gains and losses on sales of securities are
+calculated on the identified cost basis. Dividend income is recorded on the
+ex-dividend date and interest income is recorded on the accrual basis. Expenses
+are recorded on the accrual basis which may require the use of certain estimates
+by management.
+Dividends and Distributions: Dividends and distributions of the Fund are
+declared in cash and automatically reinvested in additional shares of the Fund.
+The Fund will declare and distribute its net investment income and net capital
+gains, if any, at least annually. Dividends and distributions are recorded on
+the ex-dividend date.
+Income distributions and capital gain distributions are determined in accordance
+with income tax regulations which may differ from generally accepted accounting
+principles.
+Taxes: It is the Fund's policy to continue to meet the requirements of the
+Internal Revenue Code applicable to regulated investment companies and to
+distribute all of its taxable net income to its shareholders. Therefore, no
+federal income tax provision is required.
+Withholding taxes on foreign dividends have been provided for in accordance with
+the Fund's understanding of the applicable country's tax rules and rates.
+Deferred Organizational Expenses: Approximately $450,000 of costs were incurred
+in connection with the organization and initial registration of the Company and
+have been deferred and are being amortized ratably over the date each of the
+Funds' commenced investment operations.
+- --------------------------------------------------------------------------------
+                                       8
+ 
+
+<PAGE>
+
+Notes to Financial Statements                        THE PRUDENTIAL DRYDEN FUND
+(Unaudited)                                          ACTIVE BALANCED FUND
+- --------------------------------------------------------------------------------
+Note 2. Agreements
+The Fund had a management agreement with PIFM through October 30, 1996. Pursuant
+to this agreement, PIFM had responsibility for all investment advisory services
+and supervises the subadviser's performance of such services.
+PIFM had a subadvisory agreement with Jennison Associates Capital Corp.
+('Jennison') through October 30, 1996. Jennison furnished investment advisory
+services in connection with the management of the Fund. PIFM paid for the costs
+and expenses attributable to the subadvisory agreements and the salaries and
+expenses of all personnel of the Fund except for fees and expenses of
+unaffiliated Trustees. The Fund paid for all other costs and expenses.
+Through October 30, 1996 the management fee paid PIFM was computed daily and
+payable monthly at an annual rate of .70 of 1% of the average daily net assets
+of the Fund. Effective October 31, 1996 the management fee paid PMF was computed
+daily and payable monthly at an annual rate of .65 of 1% of the average daily
+net assets of the Fund. Pursuant to the subadvisory agreement, Jennison was
+compensated by PMF for its services at an annual rate of .30 of 1% of the Fund's
+average daily net assets up to and including $300 million and .25 of 1% of the
+Fund's average daily net assets in excess of $300 million.
+Effective October 31, 1996 the Fund entered into a management agreement with
+Prudential Investments Fund Management LLC ('PMF'). Pursuant to this agreement
+PMF has responsibility for all investment advisory services. PMF entered into a
+subadvisory agreement with Jennison. Jennison, subject to the supervision of
+PMF, manages the assets of the Fund in accordance with its investment objectives
+and policies and in a manner consistent with the previous arrangement. PMF pays
+for the compensation of officers of the Fund, occupancy and certain clerical and
+bookkeeping costs of the Fund. The Fund will bear all other costs and expenses.
+The Fund had an administration agreement with PMF through October 30, 1996. The
+administration fee paid PMF was computed daily and payable monthly, at an annual
+rate of .17% of the Company's average daily net assets up to $250 million and
+ .15% of the Company's average daily net assets in excess of $250 million. PMF
+furnished to the Fund such services as the Fund may require in connection with
+the administration of the Fund's business affairs. PMF also provided certain
+transfer agent services through its wholly-owned subsidiary, Prudential Mutual
+Fund Services, Inc. ('PMFS'). For such services, PMFS was paid .03% of the
+Company's average daily net assets up to $250 million and .02% of the Company's
+average daily net assets in excess of $250 million from the administration fee
+paid to PMF.
+Effective October 31, 1996 Prudential Securities Incorporated ('PSI') became the
+distributor of the Fund's Class A, Class B and Class C shares. PSI also will
+incur the expenses of distributing the Fund's Class Z shares under the
+distribution agreement, none of which is reimbursed by or paid for by the Fund.
+Pursuant to plans of distribution (the 'Class A, B and C plans'), the Fund
+compensates PSI for distribution-related activities at an annual rate of up to
+ .30 of 1%, 1% and 1% of the average daily net assets of the Class A, B and C
+shares, respectively. Such expenses under the Class A, Class B and Class C plans
+will be .25%, 1% and 1%, respectively, of the average daily net assets of the
+Fund.
+PIFM, Jennison, PMF and PSI are indirect wholly-owned subsidiaries of The
+Prudential Insurance Company of America.
+- ------------------------------------------------------------
+Note 3. Portfolio Securities
+Purchases and sales of portfolio securities, excluding short-term investments,
+for the six months ended March 31, 1997 aggregated $28,911,422 and $36,690,586,
+respectively.
+The cost basis of investments for federal income tax purposes is $133,961,911.
+As of March 31, 1997, net unrealized appreciation for federal income tax
+purposes was $9,820,092 (gross unrealized appreciation--$11,469,015, gross
+unrealized depreciation--$1,648,923).
+- --------------------------------------------------------------------------------
+                                       9
+ 
+
+<PAGE>
+
+Notes to Financial Statements                        THE PRUDENTIAL DRYDEN FUND
+(Unaudited)                                          ACTIVE BALANCED FUND
+- --------------------------------------------------------------------------------
+Note 4. Joint Repurchase Agreement Account
+The Fund, along with other affiliated registered investment companies, transfers
+uninvested cash balances into a single joint account, the daily aggregate
+balance of which is invested in one or more repurchase agreements collateralized
+by U.S. Treasury or federal agency obligations. At March 31, 1997, the Fund had
+a 2.55% undivided interest in the repurchase agreements in the joint account.
+The undivided interest represented $24,526,000 in principal amount. As of such
+date, each repurchase agreement in the joint account and the collateral
+therefore was as follows:
+Bear, Stearns & Co., Inc., 6.40%, in the principal amount of $315,000,000,
+repurchase price $315,056,000, due 4/1/97. The value of the collateral including
+accrued interest was $321,684,450.
+CS First Boston Corp., 6.45%, in the principal amount of $250,000,000,
+repurchase price $250,044,792, due 4/1/97. The value of the collateral including
+accrued interest was $256,162,625.
+Goldman, Sachs & Co., Inc., 6.50%, in the principal amount of $315,000,000,
+repurchase price $315,056,875, due 4/1/97. The value of the collateral including
+accrued interest was $321,300,771.
+J.P. Morgan Securities, Inc., 6.00%, in the principal amount of $18,220,000,
+repurchase price $18,223,037, due 4/1/97. The value of the collateral including
+accrued interest was $18,584,479.
+UBS Securities, Inc., 6.40% in the principal amount of $65,000,000, repurchase
+price $65,011,556, due 4/1/97. The value of the collateral including accrued
+interest was $66,300,284.
+- ------------------------------------------------------------
+Note 5. Capital
+The Fund has authorized an unlimited number of shares of beneficial interest at
+$.001 par value per share. Transactions in shares of beneficial interest were as
+follows:
+<TABLE>
+<CAPTION>
+Class A                                 Shares         Amount
+- -----------------------------------   ----------    ------------
+<S>                                   <C>           <C>
+October 31, 1996(a)
+  through March 31, 1997:
+Shares sold........................          165    $      2,242
+Shares issued in reinvestment of
+  dividends and distributions......           14             183
+                                      ----------    ------------
+Net increase in shares
+  outstanding......................          179    $      2,425
+                                      ----------    ------------
+                                      ----------    ------------
+<CAPTION>
+Class B                                 Shares         Amount
+- -----------------------------------   ----------    ------------
+<S>                                   <C>           <C>
+October 31, 1996(a)
+  through March 31, 1997:
+Shares sold........................        4,115    $     52,384
+Shares issued in reinvestment of
+  dividends and distributions......            1               9
+Shares reacquired..................          (75)           (964)
+                                      ----------    ------------
+Net increase in shares
+  outstanding......................        4,041    $     51,429
+                                      ----------    ------------
+                                      ----------    ------------
+<CAPTION>
+Class C
+- -----------------------------------
+<S>                                   <C>           <C>
+October 31, 1996(a)
+  through March 31, 1997:
+Shares sold........................           15             200
+Shares issued in reinvestment of
+  dividends and distributions......            1               9
+                                      ----------    ------------
+Net increase in shares
+  outstanding......................           16    $        209
+                                      ----------    ------------
+                                      ----------    ------------
+<CAPTION>
+Class Z
+- -----------------------------------
+<S>                                   <C>           <C>
+Six months ended March 31, 1997:
+Shares sold........................    2,879,807    $ 36,571,213
+Shares issued in reinvestment of
+  dividends and distributions......    1,097,487      13,883,205
+Shares reacquired..................   (4,113,338)    (52,264,194)
+                                      ----------    ------------
+Net decrease in shares
+  outstanding......................     (136,044)   $ (1,809,776)
+                                      ----------    ------------
+                                      ----------    ------------
+Year ended September 30, 1996:
+Shares sold........................    2,893,381    $ 36,454,403
+Shares issued in reinvestment of
+  dividends and distributions......      483,285       5,905,744
+Shares reacquired..................   (2,273,501)    (28,618,544)
+                                      ----------    ------------
+Net increase in shares
+  outstanding......................    1,103,165    $ 13,741,603
+                                      ----------    ------------
+                                      ----------    ------------
+</TABLE>
+- ---------------
+(a) Commencement of offering of Class A, B, and C shares.
+Of the shares outstanding at March 31, 1997, PIFM and affiliates owned 514,745
+shares of the Fund.
+- --------------------------------------------------------------------------------
+                                       10
+
+<PAGE>
+
+Notes to Financial Statements                        THE PRUDENTIAL DRYDEN FUND
+(Unaudited)                                          ACTIVE BALANCED FUND
+- --------------------------------------------------------------------------------
+Note 6. Reorganization
+On May 17, 1996, the Trustees of the Company approved an Agreement and a Plan of
+Reorganization (the 'Plan of Reorganization') for five other series of the
+Company. The Plan of Reorganization was approved by shareholders on September 6,
+1996. This Fund approved a new manager, distributor and transfer agency
+agreements on October 30, 1996.
+Under the Plan of Reorganization, all of the assets and liabilities of the
+Growth Stock Fund, Balanced Fund, Income Fund and Money Market Fund ('Series')
+were transferred at net asset value for equivalent value Class Z shares of
+Prudential Jennison Fund, Inc., Prudential Allocation Fund--Balanced Portfolio,
+Prudential Government Income Fund, Inc. and Prudential MoneyMart Assets, Inc.,
+respectively. These Series then ceased operations.
+International Stock Fund joined the Prudential Global Fund as separate series of
+a newly named Prudential World Fund. Existing shareholders became Class Z
+shareholders and the International Stock Fund also began offering Classes A, B
+and C shares.
+Stock Index Fund and the Fund remained with The Prudential Institutional Fund
+(renamed the Prudential Dryden Fund) as separate funds. Existing shareholders of
+the Fund became Class Z shareholders and the Fund began offering Classes A, B
+and C shares. Stock Index Fund offers a single class of shares. Effective
+October 30, 1996 these funds were managed by PMF, PMFS will provide transfer
+agency services and PSI will act as distributor.
+- --------------------------------------------------------------------------------
+                                       11
+ 
+
+<PAGE>
+                                              THE PRUDENTIAL DRYDEN FUND
+Financial Highlights (Unaudited)              ACTIVE BALANCED FUND
+- --------------------------------------------------------------------------------
+<TABLE>
+<CAPTION>
+                                        Class A         Class B         Class C                     Class Z
+                                      -----------     -----------     -----------     ------------------------------------
+                                      October 31,     October 31,     October 31,
+                                        1996(e)         1996(e)         1996(e)       Six Months     Year Ended September
+                                        Through         Through         Through         Ended                 30,
+                                       March 31,       March 31,       March 31,      March 31,      ---------------------
+                                         1997            1997            1997            1997          1996         1995
+                                      -----------     -----------     -----------     ----------     --------     --------
+<S>                                   <C>             <C>             <C>             <C>            <C>          <C>
+PER SHARE OPERATING
+PERFORMANCE:
+Net asset value, beginning of
+   period.........................      $ 13.40         $ 13.40         $ 13.40        $  13.01      $  12.46     $  10.92
+                                          -----           -----           -----       ----------     --------     --------
+Income from investment
+   operations:
+Net investment income.............          .18             .14             .14             .20           .29(b)       .33(b)
+Net realized and unrealized gain
+   (loss) on investment
+   transactions...................          .05             .06             .06             .43           .81         1.54
+                                          -----           -----           -----       ----------     --------     --------
+   Total from investment
+      operations..................          .23             .20             .20             .63          1.10         1.87
+                                          -----           -----           -----       ----------     --------     --------
+Less distributions:
+Dividends from net investment
+   income.........................         (.39)           (.39)           (.39)           (.39)         (.37)        (.29)
+Distributions from net realized
+   gains..........................         (.78)           (.78)           (.78)           (.78)         (.18)        (.04)
+                                          -----           -----           -----       ----------     --------     --------
+   Total distributions............        (1.17)          (1.17)          (1.17)          (1.17)         (.55)        (.33)
+                                          -----           -----           -----       ----------     --------     --------
+Net asset value, end of period....      $ 12.46         $ 12.43         $ 12.43        $  12.47      $  13.01     $  12.46
+                                          -----           -----           -----       ----------     --------     --------
+                                          -----           -----           -----       ----------     --------     --------
+TOTAL RETURN(d)...................         1.50%           1.34%           1.34%           4.71%         9.11%       17.66%
+RATIOS/SUPPLEMENTAL DATA:
+Net assets, end of period (000)...      $     2         $    50         $ 197(f)       $145,529      $153,588     $133,352
+Average net assets (000)..........      $     2         $     7         $ 163(f)       $156,582      $142,026     $104,821
+Ratios to average net assets:(b)
+   Expenses, including
+      distribution fees...........         1.21%(c)        1.96%(c)        1.96%(c)         .96%(c)      1.00%        1.00%
+   Expenses, excluding
+      distribution fees...........          .96%(c)         .96%(c)         .96%(c)         .96%(c)       N/A          N/A
+   Net investment income..........         2.75%(c)        2.00%(c)        2.00%(c)        3.00%(c)      3.09%        3.53%
+Portfolio turnover rate...........           23%             23%             23%             23%           51%          30%
+Average commission rate paid per
+   share..........................      $ .0604         $ .0604         $ .0604        $  .0604      $  .0654          N/A
+<CAPTION>
+                                                 January 4,
+                                                   1993(a)
+                                                   Through
+                                                September 30,
+                                     1994           1993
+                                    -------     -------------
+<S>                                   <C>       <C>
+PER SHARE OPERATING
+PERFORMANCE:
+Net asset value, beginning of
+   period.........................  $ 11.05        $ 10.00
+                                    -------         ------
+Income from investment
+   operations:
+Net investment income.............      .24(b)         .21(b)
+Net realized and unrealized gain
+   (loss) on investment
+   transactions...................     (.12)           .84
+                                    -------         ------
+   Total from investment
+      operations..................      .12           1.05
+                                    -------         ------
+Less distributions:
+Dividends from net investment
+   income.........................     (.14)            --
+Distributions from net realized
+   gains..........................     (.11)            --
+                                    -------         ------
+   Total distributions............     (.25)            --
+                                    -------         ------
+Net asset value, end of period....  $ 10.92        $ 11.05
+                                    -------         ------
+                                    -------         ------
+TOTAL RETURN(d)...................     1.07%         10.50%
+RATIOS/SUPPLEMENTAL DATA:
+Net assets, end of period (000)...  $81,176        $38,786
+Average net assets (000)..........  $58,992        $12,815
+Ratios to average net assets:(b)
+   Expenses, including
+      distribution fees...........     1.00%          1.00%(c)
+   Expenses, excluding
+      distribution fees...........      N/A            N/A
+   Net investment income..........     3.06%          2.68%(c)
+Portfolio turnover rate...........       40%            47%
+Average commission rate paid per
+   share..........................      N/A            N/A
+</TABLE>
+- ---------------
+(a) Commencement of investment operations.
+(b) Net of expense subsidy.
+(c) Annualized.
+(d) Total return is calculated assuming a purchase of shares on the first day
+    and a sale on the last day of each period reported and includes reinvestment
+    of dividends and distributions. Total return for periods of less than a full
+    year are not annualized. Total return includes the effect of expense
+    subsidies.
+(e) Commencement of offering of Class A, B and C shares.
+(f) Figure is actual and not rounded to nearest thousand.
+N/A--Data not required for these periods.
+- --------------------------------------------------------------------------------
+See Notes to Financial Statements.     12
+
+
+<PAGE>
+
+Prudential Mutual Funds
+Gateway Center Three
+100 Mulberry Street
+Newark, NJ  07102-4077
+
+(800) 225-1852
+http://www.prudential.com
+
+       (LOGO)
+
+Trustees
+Edward D. Beach
+Delayne Dedrick Gold
+Robert F. Gunia
+Donald D. Lennox
+Douglas H. McCorkindale
+Mendel A. Melzer
+Thomas T. Mooney
+Stephen P. Munn
+Richard A. Redeker
+Robin B. Smith
+Louis A. Weil, III
+Clay T. Whitehead
+
+Officers
+Richard A. Redeker, President
+Thomas Early, Vice President
+Robert F. Gunia, Vice President
+Eugene S. Stark, Treasurer
+S. Jane Rose, Secretary
+Marguerite E.H. Morrison, Assistant Secretary
+
+Manager
+Prudential Investments Fund Management LLC
+Gateway Center Three
+100 Mulberry Street
+Newark, NJ 07102-4077
+
+Investment Adviser
+The Prudential Investment Corporation
+Prudential Plaza
+Newark, NJ 07101
+
+Distributor
+Prudential Securities Incorporated
+One Seaport Plaza
+New York, NY 10292
+
+Custodian
+State Street Bank and Trust Company
+One Heritage Drive
+North Quincy, MA 02171
+
+Transfer Agent
+Prudential Mutual Fund Services LLC
+P.O. Box 15005
+New Brunswick, NJ 08906
+
+Independent Auditors
+Price Waterhouse LLP
+1177 Avenue of the Americas
+New York, NY 10036
+
+Legal Counsel
+Kirkpatrick and Lockhart LLP
+1800 Massachusetts Ave., N.W.
+Washington, D.C. 20036
+
+The views expressed in this report and information about the Fund's portfolio 
+holdings are for the period covered by this report and are subject to change 
+thereafter.
+
+The accompanying financial statements as of March 31, 1997 were not audited 
+and, accordingly, no opinion is expressed on them.
+
+This report is not authorized for distribution to prospective investors unless 
+preceded or accompanied by a current prospectus.
+
+
+ BULK RATE
+U.S. POSTAGE
+   PAID
+Permit 6807
+New York, NY
+
+
+74431F506
+74431F605       MF174E4
+74431F704       Cat# 42M271T
+74431F803
+
+</TEXT>
+</DOCUMENT>
+</SEC-DOCUMENT>
+-----END PRIVACY-ENHANCED MESSAGE-----
