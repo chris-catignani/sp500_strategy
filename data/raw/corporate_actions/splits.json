@@ -222,7 +222,7 @@
       "cik": "0000072911",
       "accession_number": "0000950144-01-003499",
       "form": "10-K",
-      "quoted_sentence": "after 21 adjusting for Nortel Networks Limited's August 17, 1999 stock dividend and the Company's May 5, 2000 stock split.",
+      "quoted_sentence": "adjusting for Nortel Networks Limited's August 17, 1999 stock dividend and the Company's May 5, 2000 stock split.",
       "splits": [
         {
           "effective_date": "1999-08-17",
@@ -233,7 +233,7 @@
           "ratio": 2.0
         }
       ],
-      "note": "The 1999 event is described as a stock dividend rather than a split. Its ratio is not stated in the quoted sentence and is recorded here as 2.0 on the basis of the observed price series; flagged for confirmation before the NT series is used."
+      "note": "The 1999 event is described as a stock dividend rather than a split. Its ratio is not stated in the quoted sentence and is recorded here as 2.0 on the basis of the observed price series; flagged for confirmation before the NT series is used. The sentence spans a page break in the filing, so the source text carries page furniture in the middle of it; the quotation here is the prose with that removed."
     },
     "RD": {
       "company": "Royal Dutch Petroleum Co.",

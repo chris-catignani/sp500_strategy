@@ -444,6 +444,28 @@ Yahoo recycles a delisted company's symbol, so a clean-looking series is not evi
 
 Adding these three closes them in the survivorship gap report: **36 missing constituents at depth 30, of which 14 reach a Top 20**, down from 39 and 17.
 
+#### 4.3.13 Re-checking a Sourced Claim (`scripts/verify_provenance.py`)
+Every sourced figure in this repository records where it came from: an accession number, and usually the sentence it was read in. That is enough to **find** a source but not enough to know anyone looked at it — a field reading `confirmed_at_source` is an assertion, and this script exists to replace the assertion with a check.
+
+It fetches each cited filing from SEC EDGAR and re-confirms that the quoted sentence is present and that each recorded figure appears in the document. Run it when a figure is questioned, before relying on a dataset in new work, or after editing one:
+
+```
+python3 scripts/verify_provenance.py            # splits, terminal actions, rosters
+python3 scripts/verify_provenance.py splits     # one dataset
+```
+
+Current state: **31 claims re-checked, 0 failed**, with two skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM`, recorded as `none_found`. Both are corroborated offline by the test suite instead.
+
+**It is deliberately not part of the test suite.** It needs the network and reaches a third-party service, so it cannot gate a commit. The suite asserts the offline invariants — that quotations are non-empty, that figures agree across datasets, that cross-filer prices reconcile — and this checks the one thing they cannot: that the filing still says what we recorded it saying. A test does exercise the roster path, which reads archived documents, so the verifier cannot rot unnoticed.
+
+##### It found two defects on its first run
+Both were in claims already checked by hand, and both were about **comparing against raw filing source rather than prose**:
+
+- A filing writes `December&nbsp;2000` where the recorded quotation reads `December 2000`, so Sun Microsystems' correct record was reported unsupported. The verifier now strips markup and decodes entities before comparing.
+- Nortel's recorded quotation read `"after 21 adjusting for..."`. The `21` is a **page number**: the sentence spans a page break and the page furniture was captured inside the quotation when it was first recorded. The quotation is corrected and the record notes why.
+
+The same correction showed that Dell's action, recorded as a substance-only match, is verbatim after all. The hand-check that produced that note was comparing encoding, not prose.
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).
