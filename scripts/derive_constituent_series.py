@@ -36,11 +36,35 @@ TICKERS_DIR = PROJECT_ROOT / "data" / "raw" / "tickers"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "derived_constituent_series.json"
 
 # Footnote markers and trailing punctuation vary between filings and carry no meaning.
+# SPY and SEI put the non-income-producing marker AFTER the name ("EMC Corp. *",
+# "Sun Microsystems*") where Vanguard puts it before, so both ends are stripped. Leaving
+# the trailing marker on silently dropped six constituents out of the SPY September-30
+# rosters: the name failed to resolve, and an unresolved holding is skipped without
+# comment.
 _MARKERS = re.compile(r"^[#*^\s]+")
+_TRAILING_MARKERS = re.compile(r"[#*^\s]+$")
+# A single-letter parenthetical at the end of a name is a footnote reference, not part of
+# the issuer and not a share class: SEI's "(D)" is "on loan at March 31" and Prudential's
+# "(a)" is "non-income producing", both read from the legends of their own filings. The
+# letter is stripped so "General Motors (D)" and "General Motors" are one issuer. A share
+# class sits BEFORE the footnote ("Dillard's, Cl A (D)") and survives this.
+_TRAILING_FOOTNOTE = re.compile(r"\s*\([A-Za-z]\)\s*$")
 
 
 def normalise(name: str) -> str:
-    return _MARKERS.sub("", name).strip().rstrip(".").strip()
+    """Filed issuer name to a comparison key.
+
+    Case is folded because filers are not consistent about it within their own series:
+    SPY writes "BellSouth Corp" in twelve filings and "Bellsouth Corp" in one, "EMC Corp"
+    and "EMC CORP", "MCI WorldCom" and "MCI Worldcom". Each variant was a silent drop. No
+    two issuers in the map differ only by case, so folding cannot conflate them -- which
+    test_issuer_names_do_not_collide_on_case asserts, so it stays true.
+    """
+    name = _MARKERS.sub("", name)
+    name = _TRAILING_MARKERS.sub("", name)
+    name = _TRAILING_FOOTNOTE.sub("", name)
+    name = _TRAILING_MARKERS.sub("", name)
+    return name.strip().rstrip(".").strip().casefold()
 
 
 def _split_factor(splits, as_of: str) -> float:

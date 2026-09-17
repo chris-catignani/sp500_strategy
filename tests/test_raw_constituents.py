@@ -1665,8 +1665,31 @@ class TestIssuerTickerMap(unittest.TestCase):
 
     @staticmethod
     def _normalise(name):
-        """Strip footnote markers and trailing punctuation, which vary between filings."""
-        return re.sub(r"^[#*^\s]+", "", name).strip().rstrip(".").strip()
+        """The real normaliser, not a copy of it.
+
+        This was a reimplementation of scripts.derive_constituent_series.normalise, and it
+        drifted: the real one learned to strip TRAILING footnote markers and to fold case,
+        and this copy did not, so the test kept passing over names the pipeline was
+        silently dropping. A test that reimplements the thing it is checking can only
+        catch the bugs its author already thought of.
+        """
+        from scripts.derive_constituent_series import normalise
+
+        return normalise(name)
+
+    def test_issuer_names_do_not_collide_on_case(self):
+        """Folding case must not merge two issuers into one.
+
+        normalise() folds case because filers are inconsistent about it within their own
+        series. That is only safe while no two mapped issuers differ by case alone, which
+        is a property of the data rather than of the code, so it is asserted rather than
+        assumed.
+        """
+        by_key = {}
+        for name, ticker in self.mapping.items():
+            by_key.setdefault(self._normalise(name), set()).add(ticker)
+        collisions = {k: sorted(v) for k, v in by_key.items() if len(v) > 1}
+        self.assertEqual(collisions, {})
 
     def test_every_top20_issuer_resolves_to_a_ticker(self):
         """An unmapped issuer would be dropped from the roster silently.
@@ -2021,6 +2044,134 @@ class TestProvenanceVerifier(unittest.TestCase):
             "after adjusting for", _normalise("after <PAGE> 22 adjusting for")
         )
         self.assertIn("A and B", _normalise("<FONT SIZE=2>A</FONT> and  <B>B</B>"))
+
+
+class TestQ1Rosters(unittest.TestCase):
+    """The March-31 schedules that closed quarterly coverage (#63)."""
+
+    GROUND_TRUTH = ROOT / "data" / "raw" / "ground_truth"
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.GROUND_TRUTH / "sei_q1_rosters.json", "r", encoding="utf-8") as f:
+            cls.sei = json.load(f)
+        with open(
+            cls.GROUND_TRUTH / "prudential_q1_rosters.json", "r", encoding="utf-8"
+        ) as f:
+            cls.prudential = json.load(f)
+
+    def test_published_holdings_sum_to_the_stated_total(self):
+        """The reconciliation must hold for the values actually PUBLISHED.
+
+        Prudential reports exact dollars, and its extractor first wrote
+        value_usd_thousands as int(val / 1000). The guard passed, because it reconciled
+        the pre-truncation values, while the published holdings no longer summed to the
+        filing's total and six 1994 positions had been rounded down to zero. A guard that
+        checks a different number from the one published is not checking the published
+        number, so this checks the published one.
+        """
+        for label, data in (("SEI", self.sei), ("Prudential", self.prudential)):
+            for period, roster in sorted(data["rosters_by_period"].items()):
+                with self.subTest(filer=label, period=period):
+                    total = sum(h["value_usd_thousands"] for h in roster["holdings"])
+                    self.assertAlmostEqual(
+                        total,
+                        roster["stated_total_usd_thousands"],
+                        places=2,
+                        msg=f"{label} {period} holdings do not sum to the stated total",
+                    )
+
+    def test_a_holding_with_no_printed_value_is_flagged_rather_than_priced_at_zero(self):
+        """A $0.00 price would be an artefact wearing a filing's provenance.
+
+        SEI prints value in whole thousands and leaves the column empty for a position
+        worth under $500 -- JWP at 1995-Q1, a holding in a company then in bankruptcy.
+        Zero is what the column says; it is not a quotation. The roster records the
+        absence explicitly so the derivation skips the row, rather than dividing by
+        shares and publishing $0.00 beside prices read off a filing.
+        """
+        for label, data in (("SEI", self.sei), ("Prudential", self.prudential)):
+            for period, roster in sorted(data["rosters_by_period"].items()):
+                for holding in roster["holdings"]:
+                    if holding["shares"] <= 0:
+                        continue
+                    with self.subTest(filer=label, period=period, name=holding["name"]):
+                        if holding["value_usd_thousands"] <= 0:
+                            self.assertTrue(
+                                holding.get("no_value_printed"),
+                                "a valueless row must say so rather than imply $0.00",
+                            )
+                            continue
+                        price = holding["value_usd_thousands"] * 1000.0 / holding["shares"]
+                        self.assertGreater(price, 0.0)
+
+    def test_audit_grade_is_recorded_per_filer(self):
+        """SEI's March-31 schedule is audited; Prudential's is not.
+
+        Read from the filings, not from the submissions API, whose fiscalYearEnd reports
+        0930 for SEI and is wrong for that trust. scripts/verify_provenance.py q1_rosters
+        re-checks this against the archived documents themselves.
+        """
+        for period, roster in self.sei["rosters_by_period"].items():
+            with self.subTest(filer="SEI", period=period):
+                self.assertTrue(roster["audited"])
+        for period, roster in self.prudential["rosters_by_period"].items():
+            with self.subTest(filer="Prudential", period=period):
+                self.assertFalse(roster["audited"])
+
+    def test_the_two_filers_agree_on_the_periods_they_share(self):
+        """Two independent filers pricing the same issuer on the same date.
+
+        Q1 is the only quarter with two filers, so it is the only one that can be checked
+        this way. Agreement is not exact and is not expected to be: SEI rounds value to
+        whole thousands against a fund roughly a tenth of Prudential's size, so its
+        implied price is the coarser of the two. The tolerance is set where that rounding
+        lives; a real disagreement -- the wrong fund's schedule, or a misread column --
+        would be orders of magnitude larger.
+        """
+        from scripts.derive_constituent_series import normalise
+
+        with open(
+            ROOT / "data" / "raw" / "constituents" / "issuer_ticker_map.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            issuer_map = {normalise(k): v for k, v in json.load(f)["map"].items()}
+
+        def priced(roster):
+            out = {}
+            for h in roster["holdings"]:
+                ticker = issuer_map.get(normalise(h["name"]))
+                if ticker and h["shares"] > 0:
+                    out[ticker] = h["value_usd_thousands"] * 1000.0 / h["shares"]
+            return out
+
+        shared = set(self.sei["rosters_by_period"]) & set(
+            self.prudential["rosters_by_period"]
+        )
+        self.assertTrue(shared, "the two filers must overlap somewhere to be a check")
+
+        compared = 0
+        for period in sorted(shared):
+            a = priced(self.sei["rosters_by_period"][period])
+            b = priced(self.prudential["rosters_by_period"][period])
+            for ticker in sorted(set(a) & set(b)):
+                compared += 1
+                with self.subTest(period=period, ticker=ticker):
+                    self.assertLess(
+                        abs(a[ticker] - b[ticker]) / b[ticker],
+                        0.01,
+                        f"{ticker} at {period}: SEI ${a[ticker]:.4f} against "
+                        f"Prudential ${b[ticker]:.4f}",
+                    )
+        self.assertGreaterEqual(compared, 20)
+
+    def test_refusals_are_recorded_with_a_reason(self):
+        """A filing that would not parse is refused in the open, never approximated."""
+        for label, data in (("SEI", self.sei), ("Prudential", self.prudential)):
+            for key, reason in data.get("refused_filings", {}).items():
+                with self.subTest(filer=label, filing=key):
+                    self.assertTrue(reason.strip())
 
 
 if __name__ == "__main__":

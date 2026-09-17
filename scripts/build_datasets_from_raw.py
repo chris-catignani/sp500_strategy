@@ -695,10 +695,13 @@ def main():
     # drop out of the quarterly universe entirely - which left the quarterly path carrying
     # a survivorship bias the annual path no longer has.
     #
-    # Q1 is deliberately absent. No audited March-31 roster was found, and the sources that
-    # do exist are unarchived; see docs/DATA_PROVENANCE.md. The per-quarter eligibility
-    # rule in build_quarterly_constituents turns that absence into an explicit exclusion
-    # rather than a constituent carried at a stale undrifted weight.
+    # Q1 arrives from the March-31 schedules of SEI Index Funds (audited, 1995-2006) and
+    # Prudential (unaudited, 1994), and Q4 from the audited December-31 rosters that
+    # already price these constituents annually. Coverage is still not complete, and the
+    # gaps are sources rather than parsing: there is no September-30 filing before
+    # 1997-Q3, SEI's 2004 schedule is corrupt as filed, and only Q3 exists after 2006.
+    # Eligibility below is what makes partial coverage safe, so the series is merged as it
+    # stands rather than withheld whole.
     derived_q_path = RAW_DIR / "ground_truth" / "derived_quarterly_constituent_series.json"
     derived_q_merged = 0
     incomplete_q_series: Dict[str, List[str]] = {}
@@ -713,27 +716,22 @@ def main():
                 for period, obs in observations.items()
                 if "split_adjusted_price_usd" in obs
             }
-            # A quarterly series is only usable if it can price the constituent at EVERY
-            # quarter it could be held, not merely at the quarters where it could be
-            # bought. engine/backtest.py values every open position at every quarter end
-            # before selection runs, so a constituent bought at Q4 is still held at the
-            # following Q1 and must have a price there. Partial coverage therefore cannot
-            # be rescued by refusing to select it: the per-quarter eligibility rule in
-            # build_quarterly_constituents makes selection safe and does nothing for
-            # valuation.
+            # Every price that was read from a filing is published. Whether the
+            # constituent may be SELECTED in a given year is decided by the eligibility
+            # rule in section 5, which is where the valuation requirement belongs: a
+            # constituent that cannot be priced at some quarter is simply not a candidate
+            # for the year that would hold it there.
             #
-            # So a ticker is merged only where every year it is observed in carries all
-            # four quarters. With no Q1 source archived this admits nobody today, which is
-            # the honest result rather than a series that crashes the quarterly path or,
-            # worse, one patched with an invented Q1 price. Archiving Q1 flips this on.
-            years = {period[:4] for period in series}
-            if not all(
-                all(f"{year}-Q{q}" in series for q in (1, 2, 3, 4)) for year in years
-            ):
-                incomplete_q_series[ticker] = sorted(series)
-                continue
+            # Withholding the whole ticker instead, as this did while Q1 was missing, is
+            # too blunt now that coverage is partial rather than absent - one unsourceable
+            # year would discard every sourced year the constituent has.
             if not series:
                 continue
+            incomplete_q_series[ticker] = sorted(
+                year
+                for year in {period[:4] for period in series}
+                if not all(f"{year}-Q{q}" in series for q in (1, 2, 3, 4))
+            )
             if ticker in all_quarterly_prices_data:
                 raise ValueError(
                     f"{ticker}: derived quarterly prices would overwrite a vendor series "
@@ -748,10 +746,12 @@ def main():
             f"Merged {derived_q_merged} derived quarterly constituent series from "
             f"{derived_q_path.relative_to(REPO_ROOT)}"
         )
-        if incomplete_q_series:
+        partial = {t: y for t, y in incomplete_q_series.items() if y}
+        if partial:
             print(
-                f"  {len(incomplete_q_series)} withheld: quarterly coverage is incomplete, "
-                "so a holding could not be valued at every quarter end. Needs Q1 (#63)."
+                f"  {len(partial)} carry years without all four quarters; those years are "
+                "not eligible for selection. Gaps are sources, not parsing: no Q3 filing "
+                "before 1997, SEI's 2004 schedule corrupt as filed, Q3 only after 2006."
             )
 
     # Load raw spinoff distributions for total return calculations.
@@ -889,16 +889,43 @@ def main():
     # the prior year-end roster. Building the two from different roster sources instead
     # would put them in disagreement, which that invariant correctly rejects.
     #
-    # The consequence is that the quarterly path still carries the survivorship bias the
-    # annual path no longer does. That is a stated limitation, not a silent one: closing
-    # it needs quarterly coverage for these constituents, tracked in #63.
+    # A constituent is a candidate for `year` only where it can be priced at every quarter
+    # that year could hold it. engine/backtest.py values every open position at every
+    # quarter end BEFORE selection runs (backtest.py:180), so the requirement is the four
+    # quarters of `year` plus the following Q1: a constituent bought at Q4 is still held
+    # when the next year's first valuation happens, and declining to select it then does
+    # not help, because it is already held. The following Q1 is not required in the final
+    # year, which liquidates rather than carrying a position forward.
+    #
+    # Asking only for SOME quarter of `year`, as this did, is what made partial coverage
+    # unsafe: the constituent was kept for the year, carried at its stale undrifted
+    # prior-year-end weight wherever a quarter was missing, and then raised KeyError at
+    # data_loader.py:445 if it won a slot. Every ticker priced from a vendor file already
+    # satisfies the stricter rule, so this narrows nothing that was previously sound.
     quarterly_year_constituents, quarterly_index_weights = {}, {}
+    horizon = {
+        key
+        for series in all_quarterly_prices_data.values()
+        for key in series
+    }
     for year, tickers in YEAR_CONSTITUENTS.items():
         weights = HISTORICAL_INDEX_WEIGHTS[year]
+        # A roster year is consumed at two places: it re-anchors ITS OWN Q4, and it is the
+        # zero-lookahead candidate list for the NEXT year's Q1-Q3 (line 401), which drift
+        # from its Q4 price. So the year's roster must be priceable at its own Q4 and
+        # through all four quarters of the following year -- the fourth because a
+        # constituent absent from the next roster stops being a target at that Q4 and is
+        # sold there, which still needs a price.
+        #
+        # Consecutive roster years chain: year Y+1 carries its own Q4 and Y+2's quarters,
+        # so a constituent held across several years is priced at every quarter in
+        # between, and the last roster it appears in covers the quarter it is sold at.
+        required = {f"{year}-Q4"} | {f"{int(year) + 1}-Q{q}" for q in (1, 2, 3, 4)}
+        required &= horizon
         kept = [
             (ticker, weight)
             for ticker, weight in zip(tickers, weights)
-            if any(key.startswith(f"{year}-Q") for key in all_quarterly_prices_data.get(ticker, {}))
+            if required <= set(all_quarterly_prices_data.get(ticker, {}))
         ]
         quarterly_year_constituents[year] = [t for t, _ in kept]
         quarterly_index_weights[year] = [w for _, w in kept]

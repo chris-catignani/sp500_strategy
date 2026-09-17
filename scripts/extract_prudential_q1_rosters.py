@@ -148,15 +148,19 @@ def parse_prudential_filing(path: Path) -> Dict[str, Any]:
         "position_count": len(ranked),
         "stated_total_usd": int(stated),
         "parsed_total_usd": int(parsed),
-        "stated_total_usd_thousands": int(stated / 1000),
-        "parsed_total_usd_thousands": int(parsed / 1000),
+        # Prudential reports EXACT DOLLARS. Truncating to whole thousands here would
+        # publish a value that no longer sums to the stated total, and would round the
+        # smallest positions to zero -- an implied price of $0.00 wearing the same field
+        # name the Vanguard and SEI rosters use for a figure read straight off a filing.
+        "stated_total_usd_thousands": round(stated / 1000.0, 3),
+        "parsed_total_usd_thousands": round(parsed / 1000.0, 3),
         "holdings": [
             {
                 "rank": i,
                 "name": _clean_name(p["name"]),
                 "shares": int(p["shares"]),
                 "value_usd": int(p["val"]),
-                "value_usd_thousands": int(p["val"] / 1000),
+                "value_usd_thousands": round(p["val"] / 1000.0, 3),
                 "weight": round(p["val"] / parsed, 6),
             }
             for i, p in enumerate(ranked, 1)

@@ -193,6 +193,12 @@ def parse_sei_filing(path: Path) -> Dict[str, Any]:
                 "shares": int(p["shares"]),
                 "value_usd_thousands": int(p["val"]),
                 "weight": round(p["val"] / parsed, 6),
+                # SEI prints value in whole thousands and leaves the column EMPTY for a
+                # position worth less than $500 -- "JWP* 6,100" at 1995-Q1, a holding in
+                # a company then in bankruptcy. Zero is what the column says, but value
+                # divided by shares would be a $0.00 price, which is an artefact rather
+                # than a quotation. Flagged so a consumer skips it instead of pricing it.
+                **({"no_value_printed": True} if p["val"] <= 0 else {}),
             }
             for i, p in enumerate(ranked, 1)
         ],

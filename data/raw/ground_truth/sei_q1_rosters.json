@@ -3534,7 +3534,8 @@
           "name": "JWP*",
           "shares": 6100,
           "value_usd_thousands": 0,
-          "weight": 0.0
+          "weight": 0.0,
+          "no_value_printed": true
         }
       ],
       "period": "1995-Q1",
