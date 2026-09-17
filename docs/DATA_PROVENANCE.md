@@ -401,6 +401,26 @@ The map resolves all **58 filed name variants** appearing in any 1994–2006 Top
 
 **Eight of the 46 tickers have no price series yet**: `AN`, `COP`, `GM`, `MOT`, `RD`, `SBC`, `TYC` and `T_CORP`. Each is present in the rosters with shares and market value, so each is derivable by the method in §4.3.9, and each additionally requires a split record cited to a filing before its series can be read as a return.
 
+#### 4.3.12 Constituent Series Derived from the Audited Rosters
+`scripts/derive_constituent_series.py` publishes `data/raw/ground_truth/derived_constituent_series.json`: year-end price series for constituents with no vendor price file, read from the audited rosters (§4.3.10) as market value divided by share count, with issuers resolved through the map in §4.3.11.
+
+This **supersedes the name-pattern extraction** of §4.3.9 as the source of constituent series. The rosters are strictly better to read from: each reconciles dollar-exact to its filing's stated total, so a missing position is caught rather than silently skipped, and the map removes the per-ticker regexes that previously matched *Exxon Mobil* for Mobil and *DuPont Photomasks* for DuPont. **Where both methods produce a price they agree on every shared observation**, which is asserted by test and is what justifies the replacement.
+
+One constituent has one price source. A ticker with a file in `data/raw/tickers/` is never derived over, because the two are adjusted to different bases and a series carrying both would give returns that depend on which source a consumer read.
+
+##### Verifying a vendor series belongs to the registrant the filings name
+Yahoo recycles a delisted company's symbol, so a clean-looking series is not evidence of identity — fetching `LU` today returns Lufax Holding (§3). The filings settle it. A filing's implied price divided by the vendor's adjusted close is that year's cumulative corporate-action factor: it holds flat for years, then steps by a split ratio. An unrelated company produces no such structure.
+
+`COP`, `SLB` and `GILD` were fetched on this basis and verified before use:
+
+| Ticker | Factor by year | Reading |
+|---|---|---|
+| `SLB` | 4.000 (1994–96) → 2.000 (1997–2005) → 1.000 (2006) | two-for-one splits in 1997 and 2006 |
+| `GILD` | 4.000 (2004–06) | two two-for-one splits after 2006 |
+| `COP` | 2.624 (2003–04) → 1.312 (2005–06) | two-for-one split in 2005; the residual 1.312 is the 2012 Phillips 66 spinoff, exactly the adjustment described in §4.1.1 |
+
+Adding these three closes them in the survivorship gap report: **36 missing constituents at depth 30, of which 14 reach a Top 20**, down from 39 and 17.
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).

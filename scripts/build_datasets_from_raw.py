@@ -65,6 +65,9 @@ SP500_NAMES = {
     "ADBE": "Adobe Inc.",
     "CMCSA": "Comcast Corporation",
     "NFLX": "Netflix, Inc.",
+    "COP": "ConocoPhillips",
+    "SLB": "Schlumberger Limited",
+    "GILD": "Gilead Sciences, Inc.",
 }
 
 NON_US_NAMES = {
