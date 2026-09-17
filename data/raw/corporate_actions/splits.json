@@ -4,27 +4,18 @@
   "adjustment_basis": "Each series is adjusted to the share terms of its final observation, not to 2024-12-31. A registrant that stopped trading has no subsequent corporate actions, so adjustment to the present is undefined; see docs/DATA_PROVENANCE.md 4.1.",
   "verification": "Every ratio below was read in the cited filing. Each quoted_sentence is verbatim from the document at the cited accession.",
   "splits_by_ticker": {
-    "LU": {
-      "company": "Lucent Technologies, Inc.",
-      "cik": "0001006240",
-      "accession_number": "0000950117-01-501896",
-      "form": "10-K405",
-      "quoted_sentence": "All per share data have been restated to reflect the two-for-one splits of our common stock that became effective on April 1, 1998 and April 1, 1999.",
-      "splits": [
-        {"effective_date": "1998-04-01", "ratio": 2.0},
-        {"effective_date": "1999-04-01", "ratio": 2.0}
-      ]
-    },
-    "EMC": {
-      "company": "EMC Corp.",
-      "cik": "0000790070",
-      "accession_number": "0000912057-01-007516",
+    "AN": {
+      "company": "Amoco Corp.",
+      "cik": "0000093397",
+      "accession_number": "0000093397-98-000003",
       "form": "10-K",
-      "quoted_sentence": "the following stock splits have been effected in the form of a stock dividend: - a two-for-one stock split effective November 17, 1997, for stockholders of record on October 31, 1997; - a two-for-one stock split effective May 28, 1999, for stockholders of record on May 14, 1999; and - a two-for-one stock split effective June 2, 2000, for stockholders of record on May 19, 2000.",
+      "source_type": "filing_quoted",
+      "quoted_sentence": "Amoco also declared a two-for-one split of each share of common stock outstanding on March 31, 1998.",
       "splits": [
-        {"effective_date": "1997-11-17", "ratio": 2.0},
-        {"effective_date": "1999-05-28", "ratio": 2.0},
-        {"effective_date": "2000-06-02", "ratio": 2.0}
+        {
+          "effective_date": "1998-03-31",
+          "ratio": 2.0
+        }
       ]
     },
     "AOL": {
@@ -34,57 +25,36 @@
       "form": "10-K",
       "quoted_sentence": "In November 1994, April 1995, November 1995, March 1998, November 1998, February 1999, and November 1999 the Company effected two-for-one splits of the outstanding shares",
       "splits": [
-        {"effective_date": "1994-11-30", "ratio": 2.0},
-        {"effective_date": "1995-04-30", "ratio": 2.0},
-        {"effective_date": "1995-11-30", "ratio": 2.0},
-        {"effective_date": "1998-03-31", "ratio": 2.0},
-        {"effective_date": "1998-11-30", "ratio": 2.0},
-        {"effective_date": "1999-02-28", "ratio": 2.0},
-        {"effective_date": "1999-11-30", "ratio": 2.0}
+        {
+          "effective_date": "1994-11-30",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1995-04-30",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1995-11-30",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1998-03-31",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1998-11-30",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1999-02-28",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1999-11-30",
+          "ratio": 2.0
+        }
       ],
       "note": "The filing states month and year only, so each effective_date uses the month end. Every split falls mid-year, so year-end adjustment factors are unaffected by the day."
-    },
-    "SUNW": {
-      "company": "Sun Microsystems, Inc.",
-      "cik": "0000709519",
-      "accession_number": "0000912057-01-532905",
-      "form": "10-K",
-      "quoted_sentence": "In December 2000, December 1999 and April 1999, the Company effected two-for-one splits of its common stock paid in the form of",
-      "splits": [
-        {"effective_date": "1999-04-30", "ratio": 2.0},
-        {"effective_date": "1999-12-31", "ratio": 2.0},
-        {"effective_date": "2000-12-31", "ratio": 2.0}
-      ],
-      "note": "Month and year only in the filing; month end used. The December 1999 and December 2000 splits sit at a year boundary, so the adjusted series is sensitive to whether the year-end observation is pre- or post-split. Both are validated against the observed price series rather than assumed."
-    },
-    "MOB": {
-      "company": "Mobil Corp.",
-      "cik": "0000067182",
-      "accession_number": "0000928385-99-001036",
-      "form": "10-K",
-      "quoted_sentence": "Effective May 20, 1997, Mobil increased the authorized shares of common stock from 600,000,000 to 1,200,000,000 and recorded a two-for-one stock split of the Company's issued",
-      "splits": [{"effective_date": "1997-05-20", "ratio": 2.0}]
-    },
-    "NT": {
-      "company": "Nortel Networks Corp.",
-      "cik": "0000072911",
-      "accession_number": "0000950144-01-003499",
-      "form": "10-K",
-      "quoted_sentence": "after 21 adjusting for Nortel Networks Limited's August 17, 1999 stock dividend and the Company's May 5, 2000 stock split.",
-      "splits": [
-        {"effective_date": "1999-08-17", "ratio": 2.0},
-        {"effective_date": "2000-05-05", "ratio": 2.0}
-      ],
-      "note": "The 1999 event is described as a stock dividend rather than a split. Its ratio is not stated in the quoted sentence and is recorded here as 2.0 on the basis of the observed price series; flagged for confirmation before the NT series is used."
-    },
-    "MCIC": {
-      "company": "WorldCom, Inc. (formerly MCI WorldCom)",
-      "cik": "0000723527",
-      "accession_number": "0000912057-01-505916",
-      "form": "10-K",
-      "quoted_sentence": "STOCK SPLITS: On November 18, 1999, the Board of Directors authorized a three-for-",
-      "splits": [{"effective_date": "1999-12-30", "ratio": 1.5}],
-      "note": "The quoted sentence is truncated in the filing text at the page break; the ratio is three-for-two. Confirm the effective date before use."
     },
     "BLS": {
       "company": "BellSouth Corp.",
@@ -92,8 +62,41 @@
       "accession_number": "0001047469-99-007204",
       "form": "10-K",
       "quoted_sentence": "The market price and dividend information listed below has been adjusted for the two-for-one stock split effective in December 1998.",
-      "splits": [{"effective_date": "1998-12-31", "ratio": 2.0}],
+      "splits": [
+        {
+          "effective_date": "1998-12-31",
+          "ratio": 2.0
+        }
+      ],
       "note": "December effective date sits at a year boundary; validated against the observed series."
+    },
+    "COP": {
+      "company": "ConocoPhillips",
+      "cik": "0001163165",
+      "accession_number": "0001104659-06-012015",
+      "form": "10-K",
+      "source_type": "filing_quoted",
+      "quoted_sentence": "On April 7, 2005, our Board of Directors declared a two-for-one common stock split effected in the form of a 100 percent stock dividend.",
+      "splits": [
+        {
+          "effective_date": "2005-06-01",
+          "ratio": 2.0
+        }
+      ],
+      "note": "COP is priced from data/raw/tickers/COP.json, which Yahoo has already adjusted, so this record is not applied. It is kept because the same split is visible as the 2.624 to 1.312 step in the filing-to-vendor ratio that verified COP's identity (docs/DATA_PROVENANCE.md 4.3.12)."
+    },
+    "DD": {
+      "company": "E.I. du Pont de Nemours and Co.",
+      "cik": "0000030554",
+      "accession_number": "0001036050-98-000429",
+      "form": "10-K",
+      "quoted_sentence": "The company's common stock was split two-for-one effective May 15, 1997; all per share data and common stock information have been restated to reflect",
+      "splits": [
+        {
+          "effective_date": "1997-05-15",
+          "ratio": 2.0
+        }
+      ]
     },
     "DELL": {
       "company": "Dell Computer Corp.",
@@ -102,10 +105,50 @@
       "form": "10-K",
       "quoted_sentence": "On each of March 6, 1998, September 4, 1998 and March 5, 1999, the Company effected a two-for-one common stock split by paying a 100% stock dividend to stockholders of record",
       "splits": [
-        {"effective_date": "1998-03-06", "ratio": 2.0},
-        {"effective_date": "1998-09-04", "ratio": 2.0},
-        {"effective_date": "1999-03-05", "ratio": 2.0}
+        {
+          "effective_date": "1998-03-06",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1998-09-04",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1999-03-05",
+          "ratio": 2.0
+        }
       ]
+    },
+    "EMC": {
+      "company": "EMC Corp.",
+      "cik": "0000790070",
+      "accession_number": "0000912057-01-007516",
+      "form": "10-K",
+      "quoted_sentence": "the following stock splits have been effected in the form of a stock dividend: - a two-for-one stock split effective November 17, 1997, for stockholders of record on October 31, 1997; - a two-for-one stock split effective May 28, 1999, for stockholders of record on May 14, 1999; and - a two-for-one stock split effective June 2, 2000, for stockholders of record on May 19, 2000.",
+      "splits": [
+        {
+          "effective_date": "1997-11-17",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1999-05-28",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "2000-06-02",
+          "ratio": 2.0
+        }
+      ]
+    },
+    "GM": {
+      "company": "General Motors Corp.",
+      "cik": "0000040730",
+      "accession_number": "0000950124-07-001502",
+      "form": "10-K",
+      "source_type": "none_found",
+      "quoted_sentence": "",
+      "splits": [],
+      "note": "No stock split found in GM's filings for 1994-2006. The derived price series shows no discontinuity across those years, corroborating the absence."
     },
     "GTE": {
       "company": "GTE Corp.",
@@ -116,22 +159,182 @@
       "splits": [],
       "note": "No stock split found in GTE's FY1999 Form 10-K for any year in the 1994-2000 window. The only two-for-one language in that filing describes a pension service credit, not a share split. The observed price series shows no halving across those years, corroborating the absence."
     },
+    "LU": {
+      "company": "Lucent Technologies, Inc.",
+      "cik": "0001006240",
+      "accession_number": "0000950117-01-501896",
+      "form": "10-K405",
+      "quoted_sentence": "All per share data have been restated to reflect the two-for-one splits of our common stock that became effective on April 1, 1998 and April 1, 1999.",
+      "splits": [
+        {
+          "effective_date": "1998-04-01",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1999-04-01",
+          "ratio": 2.0
+        }
+      ]
+    },
+    "MCIC": {
+      "company": "WorldCom, Inc. (formerly MCI WorldCom)",
+      "cik": "0000723527",
+      "accession_number": "0000912057-01-505916",
+      "form": "10-K",
+      "quoted_sentence": "STOCK SPLITS: On November 18, 1999, the Board of Directors authorized a three-for-",
+      "splits": [
+        {
+          "effective_date": "1999-12-30",
+          "ratio": 1.5
+        }
+      ],
+      "note": "The quoted sentence is truncated in the filing text at the page break; the ratio is three-for-two. Confirm the effective date before use."
+    },
+    "MOB": {
+      "company": "Mobil Corp.",
+      "cik": "0000067182",
+      "accession_number": "0000928385-99-001036",
+      "form": "10-K",
+      "quoted_sentence": "Effective May 20, 1997, Mobil increased the authorized shares of common stock from 600,000,000 to 1,200,000,000 and recorded a two-for-one stock split of the Company's issued",
+      "splits": [
+        {
+          "effective_date": "1997-05-20",
+          "ratio": 2.0
+        }
+      ]
+    },
+    "MOT": {
+      "company": "Motorola, Inc.",
+      "cik": "0000068505",
+      "accession_number": "0000950131-00-006101",
+      "form": "10-K",
+      "source_type": "filing_quoted",
+      "quoted_sentence": "On June 1, 2000, the Company had a 3-for-1 common stock split in the form of a 200% stock dividend.",
+      "splits": [
+        {
+          "effective_date": "2000-06-01",
+          "ratio": 3.0
+        }
+      ]
+    },
+    "NT": {
+      "company": "Nortel Networks Corp.",
+      "cik": "0000072911",
+      "accession_number": "0000950144-01-003499",
+      "form": "10-K",
+      "quoted_sentence": "after 21 adjusting for Nortel Networks Limited's August 17, 1999 stock dividend and the Company's May 5, 2000 stock split.",
+      "splits": [
+        {
+          "effective_date": "1999-08-17",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "2000-05-05",
+          "ratio": 2.0
+        }
+      ],
+      "note": "The 1999 event is described as a stock dividend rather than a split. Its ratio is not stated in the quoted sentence and is recorded here as 2.0 on the basis of the observed price series; flagged for confirmation before the NT series is used."
+    },
+    "RD": {
+      "company": "Royal Dutch Petroleum Co.",
+      "cik": "0000085486",
+      "accession_number": null,
+      "form": null,
+      "source_type": "vendor_event",
+      "quoted_sentence": "",
+      "splits": [
+        {
+          "effective_date": "1997-06-01",
+          "ratio": 4.0
+        }
+      ],
+      "note": "Not filing-quoted. Royal Dutch was a foreign private issuer filing Form 20-F rather than 10-K, and EDGAR's 20-F listing for this filer does not reach 1997. The split is recorded in Yahoo's corporate-action feed for SHEL, and is independently corroborated: SPY's 1995 filing implies $141.13 per share while SHEL.json closes 1995 at $35.28, a ratio of 4.0003, which is the same four-for-one adjustment showing as an exact factor between as-traded and vendor-adjusted prices."
+    },
+    "SBC": {
+      "company": "SBC Communications Inc.",
+      "cik": "0000732717",
+      "accession_number": "0000732717-99-000007",
+      "form": "10-K",
+      "source_type": "filing_quoted",
+      "quoted_sentence": "Common Stock Split - On January 30, 1998, the Board of Directors of SBC declared a two-for-one stock split, effected in the form of a stock dividend.",
+      "splits": [
+        {
+          "effective_date": "1998-03-19",
+          "ratio": 2.0
+        }
+      ],
+      "note": "The filing states the declaration date of January 30, 1998; the effective date recorded here is the distribution date. Both fall inside 1998, so the year-end adjustment factor is unaffected by the choice."
+    },
+    "SUNW": {
+      "company": "Sun Microsystems, Inc.",
+      "cik": "0000709519",
+      "accession_number": "0000912057-01-532905",
+      "form": "10-K",
+      "quoted_sentence": "In December 2000, December 1999 and April 1999, the Company effected two-for-one splits of its common stock paid in the form of",
+      "splits": [
+        {
+          "effective_date": "1999-04-30",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1999-12-31",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "2000-12-31",
+          "ratio": 2.0
+        }
+      ],
+      "note": "Month and year only in the filing; month end used. The December 1999 and December 2000 splits sit at a year boundary, so the adjusted series is sensitive to whether the year-end observation is pre- or post-split. Both are validated against the observed price series rather than assumed."
+    },
+    "TYC": {
+      "company": "Tyco International Ltd.",
+      "cik": "0000833444",
+      "accession_number": "0000912057-00-054429",
+      "form": "10-K",
+      "source_type": "filing_quoted",
+      "quoted_sentence": "The price and dividends for Tyco common shares have been restated to reflect a two-for-one stock split distributed on October 21, 1999.",
+      "splits": [
+        {
+          "effective_date": "1997-10-22",
+          "ratio": 2.0
+        },
+        {
+          "effective_date": "1999-10-21",
+          "ratio": 2.0
+        }
+      ],
+      "note": "The quoted sentence covers the 1999 split. The 1997 split is reported in the same filing's restated share data. Tyco's 2007 separation included a reverse split, which falls outside the 1994-2006 window these series cover."
+    },
+    "T_CORP": {
+      "company": "AT&T Corp. (the pre-2005 registrant)",
+      "cik": "0000005907",
+      "accession_number": "0000950123-03-003510",
+      "form": "10-K",
+      "source_type": "filing_quoted",
+      "quoted_sentence": "A 1-for-5 reverse stock split of AT&T common stock was effected on November 18, 2002.",
+      "splits": [
+        {
+          "effective_date": "2002-11-18",
+          "ratio": 0.2
+        }
+      ],
+      "note": "A reverse split, so the ratio is below 1. INCOMPLETE FOR TOTAL RETURN: the same filing records the AT&T Wireless split-off (2001) and the AT&T Broadband distribution to Comcast (2002), which are distributions rather than splits and are not modelled in data/raw/corporate_actions/spinoffs.json. The as-traded series therefore understates this registrant's return across 2001-2002 until those are added."
+    },
     "VIA": {
       "company": "Viacom Inc.",
       "cik": "0000813828",
       "accession_number": "0000950130-00-001551",
       "form": "10-K",
       "quoted_sentence": "On February 25, 1999, the Board of Directors of the Company declared a 2- for-1 common stock split, to be effected in the form of a dividend.",
-      "splits": [{"effective_date": "1999-03-31", "ratio": 2.0}],
+      "splits": [
+        {
+          "effective_date": "1999-03-31",
+          "ratio": 2.0
+        }
+      ],
       "note": "The filing states the declaration date; the effective date is recorded as the month end following declaration and should be confirmed before use."
-    },
-    "DD": {
-      "company": "E.I. du Pont de Nemours and Co.",
-      "cik": "0000030554",
-      "accession_number": "0001036050-98-000429",
-      "form": "10-K",
-      "quoted_sentence": "The company's common stock was split two-for-one effective May 15, 1997; all per share data and common stock information have been restated to reflect",
-      "splits": [{"effective_date": "1997-05-15", "ratio": 2.0}]
     }
-  }
+  },
+  "source_types": "Every record states how it was established. filing_quoted means a verbatim sentence was read in the cited SEC filing. vendor_event means the split is recorded in a vendor's corporate-action feed rather than a filing, and the entry says what corroborates it. none_found means the registrant's own filings were searched and no split was found in the window, which is a finding rather than an absence of effort."
 }
