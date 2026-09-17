@@ -485,6 +485,44 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         self.assertLess(oos_acc, 96.5)
         self.assertGreater(oos_acc, 90.0)
 
+    def test_quarterly_constituent_excluded_when_quarter_end_price_missing(self) -> None:
+        """Constituents without a quarter-end price must be excluded from that quarter's candidates."""
+        from scripts.build_datasets_from_raw import build_quarterly_constituents
+
+        years = range(1994, 2025)
+        # Two tickers: FULL has coverage across all quarters; PARTIAL misses Q1 price in 2024
+        year_constituents = {y: ["FULL", "PARTIAL"] for y in years}
+        historical_weights = {y: [60.0, 40.0] for y in years}
+        name_map = {"FULL": "Full Corp", "PARTIAL": "Partial Corp"}
+
+        # Build quarterly prices for all quarters 1993-Q4 through 2024-Q4
+        quarterly_prices = {"FULL": {}, "PARTIAL": {}, "SP500": {}}
+        for y in range(1993, 2025):
+            for q in (1, 2, 3, 4):
+                k = f"{y}-Q{q}"
+                quarterly_prices["SP500"][k] = 100.0
+                quarterly_prices["FULL"][k] = 50.0
+                quarterly_prices["PARTIAL"][k] = 50.0
+
+        # Remove PARTIAL's 2024-Q1 price, keep Q2 and Q4 (and Q3)
+        del quarterly_prices["PARTIAL"]["2024-Q1"]
+
+        result = build_quarterly_constituents(
+            year_constituents=year_constituents,
+            historical_weights=historical_weights,
+            quarterly_prices=quarterly_prices,
+            benchmark_key="SP500",
+            name_map=name_map,
+        )
+
+        q1_tickers = [c["ticker"] for c in result["2024-Q1"]]
+        q2_tickers = [c["ticker"] for c in result["2024-Q2"]]
+
+        self.assertNotIn("PARTIAL", q1_tickers)
+        self.assertIn("PARTIAL", q2_tickers)
+        self.assertIn("FULL", q1_tickers)
+        self.assertIn("FULL", q2_tickers)
+
 
 if __name__ == "__main__":
     unittest.main()

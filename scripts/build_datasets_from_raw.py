@@ -424,7 +424,12 @@ def build_quarterly_constituents(
                 p_curr = t_prices.get(q_key)
                 p_1y_prior = t_prices.get(f"{year - 1}-Q{q}")
 
-                if p_curr is not None and p_base is not None and p_base > 0:
+                # Constituents without a quarter-end price cannot be priced;
+                # carrying an undrifted anchor weight would let a stale number compete.
+                if p_curr is None:
+                    continue
+
+                if p_base is not None and p_base > 0:
                     stock_mult = p_curr / p_base
                     drifted_w = base_w_map[t] * (stock_mult / bmk_mult if bmk_mult > 0 else 1.0)
                 else:
