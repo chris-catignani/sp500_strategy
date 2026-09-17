@@ -188,10 +188,65 @@ def verify_rosters(verbose: bool) -> List[Result]:
     return results
 
 
+def verify_q1_rosters(verbose: bool) -> List[Result]:
+    """Re-read each March-31 roster's total AND its audit grade from the filing on disk.
+
+    The grade is checked here rather than trusted because it is the claim this issue got
+    wrong twice, both times by reading something other than the document: first the
+    submissions API's `fiscalYearEnd`, which reports 0930 for SEI and is wrong for that
+    trust, and then the presence of an "(UNAUDITED)" string that sits on SEI's Notice to
+    Shareholders rather than on its schedule.
+
+    So the assertion is positive and negative at once. SEI must carry a Report of
+    Independent Accountants and be flagged audited; Prudential must carry none and be
+    flagged unaudited. A filing that changed sides would fail here rather than quietly
+    re-grade a price.
+    """
+    sources = [
+        ("sei_q1_rosters.json", True, "stated_total_usd_thousands"),
+        ("prudential_q1_rosters.json", False, "stated_total_usd"),
+    ]
+    results = []
+    for filename, expect_audited, total_field in sources:
+        path = PROJECT_ROOT / "data" / "raw" / "ground_truth" / filename
+        if not path.exists():
+            continue
+        with open(path, "r", encoding="utf-8") as f:
+            rosters = json.load(f)["rosters_by_period"]
+        for period, roster in sorted(rosters.items()):
+            result = Result(filename.split("_")[0], period)
+            filing = PROJECT_ROOT / roster["source_file"]
+            if not filing.exists():
+                result.check("archived filing present", False, str(filing))
+                results.append(result)
+                continue
+
+            text = filing.read_text(encoding="utf-8", errors="replace")
+            stated = roster[total_field]
+            # SEI reports value in whole thousands, Prudential in exact dollars, so each
+            # is looked for in the units its own filing prints.
+            printed = f"{int(round(stated)):,}"
+            result.check("stated total in filing", printed in text, printed)
+            result.check(
+                "positions reconcile",
+                round(roster["parsed_total_usd"]) == round(roster["stated_total_usd"]),
+                "",
+            )
+            has_opinion = "REPORT OF INDEPENDENT" in text.upper()
+            result.check(
+                "audit grade matches the filing",
+                has_opinion == expect_audited == roster["audited"],
+                f"auditor's report {'present' if has_opinion else 'absent'}",
+            )
+            results.append(result)
+    return results
+
+
 DATASETS = {
     "splits": verify_splits,
     "terminal": verify_terminal_actions,
     "rosters": verify_rosters,
+    "q1_rosters": verify_q1_rosters,
 }
 
 

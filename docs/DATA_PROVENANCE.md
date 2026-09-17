@@ -471,73 +471,171 @@ The same correction showed that Dell's action, recorded as a substance-only matc
 The constituents priced from the audited December-31 rosters (4.3.12) had a Q4 observation
 and nothing else, so they could not be drifted or priced at a quarter end and were dropped
 from the quarterly universe. That left the quarterly path carrying a survivorship bias the
-annual path no longer has.
+annual path no longer has. All four quarters are now sourced from filings.
 
-##### What each quarter can be sourced from, and at what grade
+##### What each quarter is sourced from, and at what grade
 
 A filer's fiscal year end decides which of its two yearly reports falls on a given date. An
 annual report carries a Report of Independent Accountants; a semi-annual does not.
 
-| Quarter | Source | Fiscal year end (per the filing) | Archived | Grade |
-|---|---|---|---|---|
-| Q1 (Mar 31) | SEI Index Funds (CIK 766589), 1995-2006 | **0331** | **no** | **audited** |
-| Q1 (Mar 31) | Prudential / Dryden (CIK 887991), 1994 only | 0930 | **no** | unaudited |
-| Q2 (Jun 30) | Vanguard 500 Index Fund semi-annual | 1231 | yes (#63) | **unaudited** |
-| Q3 (Sep 30) | SPDR S&P 500 Trust annual | 0930 | yes (4.3.6) | **audited** |
-| Q4 (Dec 31) | Vanguard 500 Index Fund annual | 1231 | yes (4.3.9) | **audited** |
-
-The March-31 sources were established by an exhaustive census of EDGAR: 5,174 filers that
-filed a shareholder report in QTR2 or QTR3 of any year 1994-2006, every one of their
-submissions records read, no name filtering. 1,195 file at a March-31 period and 260 of
-those are audited grade; the only index fund among the 260 tracks natural gas utilities.
-Prudential's schedule at `19940331` holds 502 positions and SEI's at `19980331` holds 509,
-both confirmed by reading the filings.
+| Quarter | Source | Years | Grade |
+|---|---|---|---|
+| Q1 (Mar 31) | SEI Index Funds (CIK 766589) | 1995-2003, 2005-2006 | **audited** |
+| Q1 (Mar 31) | Prudential / Dryden (CIK 887991) | 1994 only | unaudited |
+| Q2 (Jun 30) | Vanguard 500 Index Fund semi-annual | 1994-2004, 2006 | unaudited |
+| Q3 (Sep 30) | SPDR S&P 500 Trust annual | 1997-2009 | **audited** |
+| Q4 (Dec 31) | Vanguard 500 Index Fund annual | 1994-2006 | **audited** |
 
 **SEI's March-31 schedule is audited.** Its Report of Independent Accountants states: *"We
 have audited the accompanying statements of net assets of the S&P 500 Index and Bond Index
 Portfolios of SEI Index Funds (the 'Trust') as of March 31, 1998 ... Our procedures included
 confirmation of securities owned as of March 31, 1998, by correspondence with the custodian
-and broker."* The Statement of Net Assets is the schedule the roster is read from.
-Confirmed at `19960331` and `20030331` as well.
+and broker."* The Statement of Net Assets is the schedule the roster is read from. Confirmed
+at `19960331` and `20030331` as well.
 
 This contradicts the submissions API, which reports `fiscalYearEnd` `0930` for CIK 766589.
-**The field is wrong for this trust**, and the filing's own prose ("fiscal year ended March
-31, 1998") agrees with the auditor rather than with the API. Prudential's filings, by
-contrast, carry no auditor's report at all and mark the schedule `MARCH 31, 1994
-(UNAUDITED)`, so Prudential is genuinely unaudited and is needed only for 1994.
+**The field is wrong for this trust.** The only `(UNAUDITED)` string in the filing sits on a
+Notice to Shareholders tax notice, not on the schedule, so grepping for the word without
+reading where it sat would have produced the same wrong answer a second way.
 
 ##### The grade census is computed from an unreliable field
 
 The count of filers at a March-31 period (1,195) is read from `reportDate` and is sound. The
 split into 260 audited and 935 unaudited is computed from `fiscalYearEnd` and **is not**:
 SEI sits on the wrong side of it. Establishing any filer's grade means opening its filing.
+No negative claim about audited March-31 rosters is supported by that census.
+`NATIONS FUND TRUST` (CIK 769100) remains an open lead, but it files at March 31 only for
+1996-2002 and so could not have unblocked Q1 on its own.
 
-The practical consequence is that no negative claim about audited March-31 rosters is
-supported by this census. One was found by accident, in a filer the census had classified as
-unaudited. `NATIONS FUND TRUST` (CIK 769100) remains an open lead on the same question — it
-files at March 31 and states in its own words that it runs a fund which *"seeks to match the
-performance of the S&P 500"* — but the document carrying that fund's schedule has not been
-located.
+##### Three things had to be true, and only one of them was Q1
 
-##### Q2 and Q3 are derived; neither is published to the engine
+Archiving Q1 was necessary and **not sufficient**. Two further defects were withholding the
+series, and both were silent.
 
-`data/raw/ground_truth/derived_quarterly_constituent_series.json` holds **232 observations
-across all 19 constituents** — 160 unaudited Q2 and 72 audited Q3 — each stamped with an
+- **Q4 was absent from the quarterly file.** The audited December-31 rosters were merged
+  into the ANNUAL dataset keyed by year and never keyed as `YYYY-Q4`, so a constituent had
+  no Q4 in its quarterly series and could not satisfy a rule that asks for every quarter it
+  might be held at. The same rosters are now read a second time as Q4; all 183 values are
+  identical to the Q4 fallback in `data_loader.py`, which is what makes the second read safe
+  rather than a second opinion.
+- **Issuer resolution was dropping constituents without comment.** `normalise()` stripped
+  footnote markers only from the START of a name, and SPY and SEI put them at the end
+  (`EMC Corp. *`, `Sun Microsystems*`). SEI also writes terse names (`Motorola`, `BellSouth`,
+  `E.I. du Pont de Nemours`) that no map entry matched, and filers are inconsistent about
+  case within their own series (`BellSouth Corp` twelve times, `Bellsouth Corp` once). An
+  unresolved holding is skipped by `continue`, so this looked exactly like absent data: 18 of
+  19 constituents resolved in NO SEI filing, and 6 resolved in no SPY filing at all. Q3 rose
+  from 72 observations to 163 on the fix alone, with no new filing archived.
+
+##### Two filers at March 31, and what they agree on
+
+SEI and Prudential both file at March 31, so Q1 is the only quarter that can be checked by
+pricing the same issuer on the same date from two independent filings. Ten of Prudential's
+thirteen filings are refused by its extractor, so the overlap is **1995 and 1996** rather
+than the eleven years both filers cover on paper; the refusal reasons are recorded in
+`prudential_q1_rosters.json` rather than worked around.
+
+Across those two periods, **26 issuer-price pairs agree to a median of 0.0085%**, worst case
+0.125% (Tyco at 1995-Q1). The residual is rounding, not disagreement: SEI reports value in
+whole thousands against a fund roughly a tenth of Prudential's size, so its implied price is
+the coarser of the two. Prudential's side lands on clean eighths — Royal Dutch $99.375,
+BellSouth $57.75, Allied-Signal $36.625 — which is the check that a 1994-1996 schedule has
+been read correctly.
+
+**Prudential's exact dollars are the finer figure and were nearly lost.** Its extractor first
+published `value_usd_thousands` as `int(val / 1000)`, which stopped the holdings summing to
+the stated total and rounded six 1994 positions to zero — an implied price of $0.00 wearing
+the same field name the audited rosters use for a figure read off a filing. The exact dollars
+survived in `value_usd`, so the fix was a float division rather than a re-parse, but the
+reconciliation guard had passed because it ran on the pre-truncation values. A guard that
+checks a different number from the one published is not checking the published number.
+
+##### What is still missing, and why it is not patched
+
+| Gap | Cause |
+|---|---|
+| Q3 before 1997 | SPY's September-30 archive begins at `19970930`. No source. |
+| **Q1 2004** | SEI's schedule is corrupt **as filed**: the Microsoft value reads `0,600`, short by exactly the 40,000k the reconciliation misses. EDGAR's own bytes are byte-identical to the archived copy. Prudential's 2004 is the HTML era its extractor refuses. |
+| Q2 2005 | The FY2005 semi-annual is refused for cause (see below). |
+| Anything after 2006 | Only Q3 exists; the other three filers stop. |
+
+The 2004 hole is worth stating plainly because it would be so easy to close wrongly. The
+missing digit can be computed from the reconciliation gap. Doing so would put a figure that
+was *derived from an arithmetic identity* beside figures *read off filings*, under the same
+field name and with the same accession cited. That is the substitution this document exists
+to prevent, so 2004 is absent instead, and the absence propagates: DELL's roster years are
+2003 and 2004, which require 2004-Q1 and 2005-Q2, so DELL never becomes a quarterly
+candidate despite having thirteen years of prices.
+
+##### Partial coverage is safe only if eligibility asks the right question
+
+`engine/backtest.py:180` values every OPEN POSITION at every quarter end *before* selection
+runs. A constituent bought at Q4 is therefore still held when the next year's first
+valuation happens, and declining to select it does not help — it is already held. The
+previous eligibility rule kept a constituent for a year if it had **any** quarter of that
+year, which carried it at a stale undrifted prior-year-end weight wherever a quarter was
+missing and raised `KeyError` at `data_loader.py:445` if it won a slot.
+
+A roster year is consumed twice: it re-anchors its own Q4, and it is the zero-lookahead
+candidate list for the NEXT year's Q1-Q3, which drift from its Q4 price. So a roster year is
+admitted only where the constituent can be priced at **its own Q4 and through all four
+quarters of the following year** — the fourth because a constituent absent from the next
+roster stops being a target at that Q4 and is sold there, which still needs a price.
+Consecutive roster years chain, so a constituent held across several years is priced at every
+quarter in between. Every ticker priced from a vendor file already satisfies this, so it
+narrows nothing that was previously sound.
+
+This replaced withholding the series outright, which was too blunt once coverage became
+partial rather than absent: one unsourceable year would have discarded every sourced year a
+constituent has.
+
+##### What this bought
+
+`data/raw/ground_truth/derived_quarterly_constituent_series.json` holds **690 observations
+across all 19 constituents** — 172 Q1, 172 Q2, 163 Q3, 183 Q4 — each stamped with an
 `audited` flag per observation rather than per dataset, so a consumer reading one price can
 tell which grade it holds.
 
-**They are withheld from `data/sp500_quarterly_prices.json` all the same**, and the reason
-is the finding that matters here. `engine/backtest.py` values every open position at every
-quarter end *before* selection runs. A constituent bought at Q4 is still held at the
-following Q1 and must be priced there. Declining to select it does not help, because it is
-already held — so partial coverage is not a weaker version of full coverage, it is a run
-that raises `KeyError` part way through. `scripts/build_datasets_from_raw.py` therefore
-merges a quarterly series only where every observed year carries all four quarters, which
-today admits none of the 19.
+**Ten of the nineteen now appear in the quarterly universe**, spanning 1996-Q4 to 2003-Q3:
+`AOL DD EMC LU MOB NT RD SBC TYC T_CORP`. The other nine are eligible by price but sit in the
+base roster only for years the two source holes block.
 
-Publishing Q2 and Q3 anyway would have required inventing a Q1 price by carry-forward or
-interpolation. That is an estimate, and an estimate presented beside audited filing-derived
-prices is precisely what this document exists to prevent.
+The measured effect is confined to one figure in the whole scenario matrix: **S&P 500 30y Top
+10 (Quarterly) falls from 13.48% to 13.04% CAGR**, cumulative return from 2823.99% to
+2542.50%, and max drawdown deepens from -57.32% to -61.20%. Nothing else moves, because the
+constituents admitted all sit in 1996-2003, outside the 10y and 20y windows. The result got
+worse, which is the point: the strategy was being flattered by the absence of AT&T Corp,
+Lucent, Nortel and Royal Dutch from the quarterly universe.
+
+##### Issuer identity across two more filers
+
+Two names resolve by period or by evidence rather than by a map entry, and both are recorded
+in `issuer_ticker_map.json`:
+
+- **`AT&T` denotes two registrants.** SEI writes it for AT&T Corp through its 2005 schedule,
+  alongside a separate `SBC Communications` line. SBC renamed itself AT&T Inc. in November
+  2005, so in SEI's 2006 schedule the same string is that registrant and the SBC line is
+  gone. It is resolved by period in `derive_quarterly_constituent_series.py`: `T_CORP` while
+  Ma Bell was filing under it, `T` afterwards. A single map entry could only assert one of
+  the two, and asserting `T_CORP` would have extended its series a year past the registrant's
+  existence — the collision 4.5 settled, re-entering through a lookup table.
+- **SPY's unclassed `Viacom, Inc` IS mapped to Class B, on evidence.** That trust lists
+  exactly one Viacom line in every filing from 1997 to 2009, and from 2005 it labels that
+  same line Class B, with the share count running continuously across the change.
+  Prudential's unclassed `Viacom Inc` is **not** mapped, because nothing in its own filings
+  identifies the class and SEI names the class explicitly for the same periods.
+
+`MCI Communications`, `AT&T Wireless Services` and `Tyco Electronics` are deliberately
+unmapped: each is a distinct registrant from the one this repository prices, and two of them
+appear in the same filings as their relatives.
+
+##### Position counts read from the filings
+
+SEI's `19980331` schedule holds **512 positions**, not the 509 recorded here before. The 512
+rows carry no duplicates and sum dollar-exact to the filing's stated `Total Common Stocks` of
+$1,719,623k; three spurious rows would have broken that reconciliation by their value.
+Prudential's `19940331` holds **502**, as previously recorded. Implied prices at 1998-03-31 —
+GE $86.19, Boeing $52.12, Raytheon Cl B $58.38 — match the values established independently.
 
 ##### Two parser results worth recording
 
@@ -546,13 +644,13 @@ prices is precisely what this document exists to prevent.
   against its own stated total of $10.3bn. But the 500 Index Fund held $103.9bn that day.
   Reconciliation proves a schedule was read completely, not that the right schedule was
   read. `extract_vanguard_semiannual_rosters.py` additionally requires the roster to be the
-  largest `Total Common Stocks` figure in its filing, and refuses FY2005 on that basis. Q2
-  coverage is therefore 12 of 13 years.
+  largest `Total Common Stocks` figure in its filing, and refuses FY2005 on that basis.
 - **The HTML schedule heading is matched from the start of its cell.** Footnote blocks in
   the later filings run to several hundred characters and mention common stock in passing
   with parentheses nearby, so an unanchored search selected the footnotes and bounded the
   schedule around the net-assets summary. Anchoring changed the parse of exactly one filing
   — the one that was broken — and left every audited annual roster byte-identical.
+
 
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).

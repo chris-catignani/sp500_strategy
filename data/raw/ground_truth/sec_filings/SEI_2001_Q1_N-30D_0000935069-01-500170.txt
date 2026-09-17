@@ -1,0 +1,2440 @@
+-----BEGIN PRIVACY-ENHANCED MESSAGE-----
+Proc-Type: 2001,MIC-CLEAR
+Originator-Name: webmaster@www.sec.gov
+Originator-Key-Asymmetric:
+ MFgwCgYEVQgBAQICAf8DSgAwRwJAW2sNKK9AVtBzYZmr6aGjlWyK3XmZv3dTINen
+ TWSM7vrzLADbmYQaionwg5sDW3P6oaM5D3tdezXMm7z1T+B+twIDAQAB
+MIC-Info: RSA-MD5,RSA,
+ UZm4e21JZgW3SGKKKXZKdvOXqxW5WzVMnE5F4F2Kusl5IneNnxmSpT2/k+PJnm49
+ Em/6PzuhhBc366iKMNeV8A==
+
+<SEC-DOCUMENT>0000935069-01-500170.txt : 20010530
+<SEC-HEADER>0000935069-01-500170.hdr.sgml : 20010530
+ACCESSION NUMBER:		0000935069-01-500170
+CONFORMED SUBMISSION TYPE:	N-30D
+PUBLIC DOCUMENT COUNT:		1
+CONFORMED PERIOD OF REPORT:	20010331
+FILED AS OF DATE:		20010529
+
+FILER:
+
+	COMPANY DATA:	
+		COMPANY CONFORMED NAME:			SEI INDEX FUNDS
+		CENTRAL INDEX KEY:			0000766589
+		STANDARD INDUSTRIAL CLASSIFICATION:	 []
+		STATE OF INCORPORATION:			MA
+		FISCAL YEAR END:			0930
+
+	FILING VALUES:
+		FORM TYPE:		N-30D
+		SEC ACT:		
+		SEC FILE NUMBER:	811-04283
+		FILM NUMBER:		1649857
+
+	BUSINESS ADDRESS:	
+		STREET 1:		2 OLIVER ST
+		CITY:			BOSTON
+		STATE:			MA
+		ZIP:			02109
+		BUSINESS PHONE:		8003425734
+
+	MAIL ADDRESS:	
+		STREET 2:		530 E SWEDESFORD RD
+		CITY:			WAYNE
+		STATE:			PA
+		ZIP:			19087-1693
+
+	FORMER COMPANY:	
+		FORMER CONFORMED NAME:	TRUSTFUNDS INDEX FUNDS
+		DATE OF NAME CHANGE:	19890518
+
+	FORMER COMPANY:	
+		FORMER CONFORMED NAME:	TRUSTFUNDS EQUITY INDEX FUNDS
+		DATE OF NAME CHANGE:	19860310
+</SEC-HEADER>
+<DOCUMENT>
+<TYPE>N-30D
+<SEQUENCE>1
+<FILENAME>index.txt
+<DESCRIPTION>SEI INDEX FUNDS ANNUAL REPORT N-30D FILING
+<TEXT>
+
+SEI INVESTMENTS
+
+                                              Annual Report as of March 31, 2001
+
+
+                                                                 SEI Index Funds
+
+                                                                   S&P 500 Index
+
+                                                                      Bond Index
+
+<PAGE>
+TABLE OF CONTENTS
+
+- --------------------------------------------------------------------------------
+Management's Discussion and Analysis of Fund Performance
+- --------------------------------------------------------------------------------
+   S&P 500 Index Fund                                      1
+- --------------------------------------------------------------------------------
+   Bond Index Fund                                         2
+- --------------------------------------------------------------------------------
+Report of Independent Public Accountants                   4
+- --------------------------------------------------------------------------------
+Statement of Net Assets/Schedule of Investments            5
+- --------------------------------------------------------------------------------
+Statement of Assets and Liabilities                       16
+- --------------------------------------------------------------------------------
+Statements of Operations                                  17
+- --------------------------------------------------------------------------------
+Statements of Changes in Net Assets                       18
+- --------------------------------------------------------------------------------
+Financial Highlights                                      19
+- --------------------------------------------------------------------------------
+Notes to Financial Statements                             20
+- --------------------------------------------------------------------------------
+Notice to Shareholders                                    24
+- --------------------------------------------------------------------------------
+
+<PAGE>
+MANAGEMENT'S DISCUSSION AND ANALYSIS OF FUND PERFORMANCE
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+- --------------------------------------------------------------------------------
+                           S&P 500 INDEX FUND CLASS A
+- --------------------------------------------------------------------------------
+                          AVERAGE ANNUAL TOTAL RETURN1
+- --------------------------------------------------------------------------------
+                Annualized     Annualized    Annualized
+  One Year        3 Year         5 Year     Inception to
+   Return         Return         Return         Date
+- --------------------------------------------------------------------------------
+   -22.07%         2.65%         13.71%        13.55%
+- --------------------------------------------------------------------------------
+
+COMPARISON OF CHANGE IN THE VALUE OF A $10,000 INVESTMENT IN THE SEI S&P 500
+INDEX FUND, CLASS A, VERSUS THE S&P 500 COMPOSITE INDEX
+
+[LINE GRAPH OMITTED]
+[PLOT POINTS TO FOLLOW:]
+
+     SEI S&P 500 INDEX FUND, CLASS A    S&P 500 COMPOSITE INDEX
+2/29/96       10000                                10000
+3/96          10092                                10096
+3/97          12032                                12097
+3/98          17738                                17900
+3/99          20949                                21210
+3/00          24619                                25015
+3/01          19186                                19592
+
+
+
+1   FOR THE PERIODS ENDED MARCH 31, 2001. PAST PERFORMANCE IS NO INDICATION OF
+    FUTURE PERFORMANCE. CLASS A SHARES WERE OFFERED BEGINNING 02/28/96.
+    EFFECTIVE 07/31/97, THE BOARD OF TRUSTEES APPROVED THE RENAMING OF CLASS A
+    SHARES TO CLASS E SHARES.
+
+
+- --------------------------------------------------------------------------------
+                           S&P 500 INDEX FUND CLASS E
+- --------------------------------------------------------------------------------
+                          AVERAGE ANNUAL TOTAL RETURN1
+- --------------------------------------------------------------------------------
+   One    Annualized   Annualized  Annualized  Annualized
+   Year     3 Year       5 Year      10 Year    Inception
+  Return    Return       Return      Return      to Date
+- --------------------------------------------------------------------------------
+  -21.97%    2.82%       13.90%      14.14%      14.76%
+- --------------------------------------------------------------------------------
+
+COMPARISON OF CHANGE IN THE VALUE OF A $10,000 INVESTMENT IN THE SEI S&P 500
+INDEX FUND, CLASS E, VERSUS THE S&P 500 COMPOSITE INDEX
+
+[LINE GRAPH OMITTED]
+[PLOT POINTS TO FOLLOW:]
+
+     SEI S&P 500 INDEX FUND, CLASS E    S&P 500 COMPOSITE INDEX
+3/31/91         10000                             10000
+3/92            11072                             11107
+3/93            12729                             12796
+3/94            12882                             12981
+3/95            14848                             14998
+3/96            19582                             19808
+3/97            23392                             23734
+3/98            34532                             35118
+3/99            40840                             41612
+3/00            48106                             49077
+3/01            37537                             38437
+
+
+
+      OBJECTIVES: The S&P 500 Index Fund (the "Fund") seeks to provide
+investment results that correspond to the aggregate price and dividend
+performance of the securities in the S&P 500 Composite Stock Price Index (the
+"Index").
+      STRATEGY: The S&P 500 Index Fund attempts to match the performance of the
+widely followed Index by replicating its composition in full. The forty largest
+stocks in the index account for approximately 50% of the weighting of the index,
+and the index represents more than three quarters of the market value of the
+common stocks listed on the New York Stock Exchange. Deviation of performance
+between the Fund and the Index, measured as tracking error, is typically
+attributable to trading costs and cash reserves held for liquidity needs. The
+presence of cash in the fund may result in underperformance relative to the
+Index in rising markets and outperformance in declining markets. Transactions
+costs incurred by the Fund during security purchases and sales will also
+contribute to tracking error. To mitigate these effects, the Fund may use stock
+index futures to hedge its cash position. Futures contracts enable the Fund to
+maintain exposure to the market with reduced trading expenses, since the cost of
+the futures contract is relatively nominal. The value of stock index futures
+held by the Fund may not exceed 20% of the Fund's assets.
+      ANALYSIS: The SEI S&P 500 Fund returned -22.07% for the fiscal year
+compared to the index return of -21.68%. Although the index posted its worst
+performance in many years, the poor performance was primarily concentrated in
+the technology and communications sectors. The losses were also limited
+predominantly to the largest companies in the index. Because the S&P 500 Index
+is a capitalization-weighted benchmark, the largest companies drive the
+performance. At the beginning of the
+
+                                                                               1
+      <PAGE>
+MANAGEMENT'S DISCUSSION AND ANALYSIS OF FUND PERFORMANCE
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+
+S&P 500 INDEX (CONTINUED)
+fiscal year the 25 largest stocks in the index had an average historical PE
+ratio of 50.7. The rest of the portfolio had an average PE of 22.8. At the end
+of the fiscal year, the same 25 stocks have an average PE of 24.6 while the rest
+of the portfolio had a PE of 22.1.
+      Healthcare companies, financial services and utility stocks had a strong
+showing in the prior year but were not able to offset the steep losses in the
+technology sector. The sharp decline can be attributed to the bursting of the
+technology bubble and a slow-down in the overall economy. In the prior year
+investors had bid up the prices and valuations of technology stocks, especially
+any company related to the Internet, as if growth in the industry would not slow
+down.
+      As the economy began to decelerate, earnings slowed down or turned
+negative, especially within the technology sector. Investors reacted by dumping
+technology stocks, particularly in the networking and communications industries.
+      As the technology stocks started falling in March 2001, investors rotated
+towards the defensive healthcare, financial services and utilities sectors.
+These sectors are considered defensive because demand for their products remain
+strong in almost any economic environment.
+      Healthcare stocks were among the best performing companies over the fiscal
+year, primarily due to a strong showing in the year 2000. Within this sector,
+generic drug companies and specialized service companies such as home healthcare
+and rehabilitation services generated the highest returns. Money center banks
+and savings and loans led the financial sector. These financial institutions
+generally outperform in falling interest rate environments because the spread in
+the interest rates for loans and the interest rate they pay on their savings
+accounts increases.
+      Electric companies and power producers were among the best performing
+companies in the utilities sector. Deregulation has decreased the amount of
+restrictions that power producers have faced in the past and allowed these
+companies to increase their capacity and become more profitable.
+
+- --------------------------------------------------------------------------------
+                                 BOND INDEX FUND
+- --------------------------------------------------------------------------------
+                          AVERAGE ANNUAL TOTAL RETURN1
+- --------------------------------------------------------------------------------
+   One    Annualized   Annualized  Annualized  Annualized
+   Year     3 Year       5 Year      10 Year    Inception
+  Return    Return       Return      Return      to Date
+- --------------------------------------------------------------------------------
+  12.03%     6.55%        7.13%       7.45%       7.67%
+- --------------------------------------------------------------------------------
+
+COMPARISON OF CHANGE IN THE VALUE OF A $10,000 INVESTMENT IN THE SEI BOND INDEX
+FUND, VERSUS THE SALOMON BROAD BOND INDEX AND THE
+LEHMAN AGGREGATE BOND INDEX
+
+
+[LINE GRAPH OMITTED]
+[PLOT POINTS TO FOLLOW:]
+                                Salomon Broad    Lehman Aggregate
+                 SEI Bond Index   Bond Index        Bond Index
+      3/31/91         10000         10000             10000
+      3/92            10948         11167             11139
+      3/93            12342         12661             12619
+      3/94            12601         12983             12917
+      3/95            13173         13634             13563
+      3/96            14531         15117             15025
+      3/97            15165         15857             15763
+      3/98            16956         17757             17654
+      3/99            18015         18911             18798
+      3/00            18307         19253             19152
+      3/01            20509         21674             21552
+
+1   FOR THE PERIODS ENDED MARCH 31, 2001. PAST PERFORMANCE IS NO INDICATION OF
+    FUTURE PERFORMANCE. THE FUND WAS OFFERED BEGINNING 05/19/86.
+
+BOND INDEX FUND
+      OBJECTIVES. The Bond Index Fund seeks to provide investment results that
+correspond to the aggregate price and performance of the Lehman Aggregate Bond
+Index (the "Lehman Index"). The Fund's ability to duplicate the performance of
+the Lehman Index will depend to some extent on the size and timing of cash flows
+into and out of the Fund, the extent of the Fund's expenses, and the capability
+of the Fund to select a representative sample of the securities included in the
+Lehman Index.
+      The Lehman Index is made up of the Government/Corporate Index, the
+Mortgage Backed Securities Index and the Asset-Backed Securities Index. The
+Lehman Index includes fixed rate debt issues rated investment grade
+
+2
+      <PAGE>
+
+BOND INDEX (CONTINUED)
+(Baa3) or higher by Moody's Investor Service. All issues have at least one year
+to maturity and an outstanding par value of at least $100 million. Price, coupon
+and total return are reported for all sectors on a month-end basis. All returns
+are market value weighted inclusive of accrued interest.
+      STRATEGY. The Fund intends to invest its assets primarily in up to 300
+debt obligations included in the Lehman Index so long as the net assets of the
+Fund are less than $100 million. The Fund will be invested in 100 to 500 of such
+obligations at net asset levels of $100 million or more. The Fund will be
+managed in a manner designed to generally reflect the current performance of the
+Lehman Index. Obligations included in the Lehman Index have been categorized
+into sectors which have been organized on the basis of type of issuer and then
+further classified by quality and remaining term to maturity.
+      The percentage of the Fund's assets to be invested in the aggregate
+obligations included in a particular sector of the Lehman Index will
+approximate, to the maximum extent feasible, the percentage such sector
+represents in that Index. The ability of the Fund to duplicate the Lehman
+Index's performance can be influenced by the Fund's asset size. To the extent
+that the size of Fund assets limits the number of issues that the Fund can
+purchase, there is more potential for deviation from the Lehman Index's
+performance than at larger asset levels. Under these circumstances, the Fund
+will implement strategies designed to minimize this potential for greater
+deviation.
+      ANALYSIS. The investment-grade fixed income market posted an impressive
+performance for the fiscal year ending March 31, 2001, returning 12.53% as
+measured by the Lehman Index. The SEI Bond Index Fund returned 12.03% for the
+same period. The Fund's moderate underperformance was the direct result of cash
+flow timing and exposure to California utilities.
+      The fiscal year began on a negative note with heightened inflationary
+fears, rising oil prices, an active Federal Reserve and an inverted yield curve
+wreaking havoc in the market. Fed policy makers attempted to quell the rising
+tide of inflation during the first half of 2000, raising interest rates to 6.50%
+by the end of May. The Treasury curve began the period inverted from 2-30 years,
+reacting to further Fed tightening expectations and supply pressures brought on
+by the budget surplus-inspired Treasury buyback program. Mortgages led the
+spread sectors on an overall declining trend in implied volatility while
+corporate debt suffered through increasing investor risk aversion and
+overwhelming supply expectations.
+      The later half of the fiscal year was characterized by a dramatic change
+in the market as economic indicators began to point to a rapidly slowing
+economy, expectations increased for a Fed rate cut and the equity market
+sell-off intensified. The curve steepened severely, falling over 200 basis
+points on the front end as the Fed adopted an easing bias in December and cut
+rates 3 times in the first quarter of 2001. The falling rate environment hurt
+mortgage product as prepayment concerns swamped return. Agency debt finished the
+fiscal year as the best performing spread sector, as the likelihood of
+Congressional reform faded into the Presidential election and appears all
+finished in 2001. Corporates continued to suffer from deteriorating credit
+fundamentals into calendar year-end only to bounce back in the new year on Fed
+induced confidence and investor appetite for higher yields amid the dwindling
+level of Treasuries. Of special note among corporates, California utilities
+experienced exceptional volatility as capped retail prices contributed to
+escalating debts and possible bankruptcies amid skyrocketing wholesale energy
+prices. The failure of the California legislature to act quickly severely
+impacted the performance of the bonds. The Fund's allocation to this paper
+negatively impacted performance in January.
+
+                                                                               3
+      <PAGE>
+REPORT OF INDEPENDENT PUBLIC ACCOUNTANTS
+- --------------------------------------------------------------------------------
+
+To the Shareholders and Board of Trustees of
+SEI Index Funds:
+
+     We have audited the accompanying statement of net assets of the S&P 500
+Index and the statement of assets and liabilities, including the schedule of
+investments, of the Bond Index of SEI Index Funds (the Trust) as of March 31,
+2001, and the related statements of operations, the statements of changes in net
+assets, and the financial highlights for the periods presented. These financial
+statements and financial highlights are the responsibility of the Trust's
+management. Our responsibility is to express an opinion on these financial
+statements and financial highlights based on our audits.
+     We conducted our audits in accordance with auditing standards generally
+accepted in the United States. Those standards require that we plan and perform
+the audit to obtain reasonable assurance about whether the financial statements
+and financial highlights are free of material misstatement. An audit includes
+examining, on a test basis, evidence supporting the amounts and disclosures in
+the financial statements and financial highlights. Our procedures included
+confirmation of securities owned as of March 31, 2001, by correspondence with
+the custodian and brokers. An audit also includes assessing the accounting
+principles used and significant estimates made by management, as well as
+evaluating the overall financial statement presentation. We believe that our
+audits provide a reasonable basis for our opinion.
+     In our opinion, the financial statements and financial highlights referred
+to above present fairly, in all material respects, the financial position of the
+S&P 500 Index and Bond Index Funds of SEI Index Funds as of March 31, 2001, the
+results of their operations, the changes in their net assets, and the financial
+highlights for the periods presented, in conformity with accounting principles
+generally accepted in the United States.
+
+
+
+Arthur Andersen LLP
+
+Philadelphia, Pennsylvania
+May 12, 2001
+
+4
+<PAGE>
+STATEMENT OF NET ASSETS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+S&P 500 INDEX FUND
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+COMMON STOCKS -- 97.7%
+AEROSPACE & DEFENSE -- 1.2%
+   BF Goodrich                        24,750       $   950
+   Boeing                            200,371        11,163
+   General Dynamics                   47,860         3,003
+   Lockheed Martin                   103,432         3,687
+   Northrop Grumman                   17,265         1,502
+   Raytheon                           81,940         2,407
+   United Technologies               113,044         8,286
+                                                  --------
+                                                    30,998
+                                                  --------
+AIR TRANSPORTATION -- 0.7%
+   AMR*                               36,170         1,270
+   Delta Air Lines                    29,570         1,168
+   FedEx*                             71,204         2,968
+   Honeywell International           191,603         7,817
+   Southwest Airlines                182,100         3,232
+   Textron                            34,210         1,944
+   US Airways Group*                  16,165           573
+                                                  --------
+                                                    18,972
+                                                  --------
+APPAREL/TEXTILES -- 0.1%
+   Cintas                             40,600         1,600
+   Liz Claiborne                      12,450           586
+   VF                                 27,260           954
+                                                  --------
+                                                     3,140
+                                                  --------
+AUTOMOTIVE -- 1.1%
+   Cooper Tire & Rubber               17,400           197
+   Dana                               35,557           611
+   Delphi Automotive Systems         134,517         1,906
+   Ford Motor                        445,316        12,522
+   General Motors                    131,730         6,830
+   Genuine Parts                      41,492         1,075
+   Goodyear Tire & Rubber             38,170           910
+   ITT Industries                     21,165           820
+   Navistar International*            14,226           324
+   Paccar                             18,308           820
+   Rockwell International             43,830         1,593
+   TRW                                29,920         1,017
+   Visteon                            31,396           472
+                                                  --------
+                                                    29,097
+                                                  --------
+BANKS -- 6.8%
+   Amsouth Bancorporation             90,100         1,515
+   Bank of America                   391,012        21,408
+   Bank of New York                  177,900         8,760
+   Bank One                          277,701        10,047
+   BB&T                               96,500         3,394
+   Charter One Financial              50,020         1,416
+   Comerica                           42,500         2,614
+   Fifth Third Bancorp               111,875         5,978
+
+
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+   First Union                       235,314      $  7,765
+   FleetBoston Financial             260,100         9,819
+   Golden West Financial              38,015         2,467
+   Huntington Bancshares              60,254           859
+   JP Morgan Chase                   456,987        20,519
+   Keycorp                           102,342         2,640
+   Mellon Financial                  117,220         4,750
+   National City                     146,400         3,916
+   Northern Trust                     53,300         3,331
+   Old Kent Financial                 33,205         1,262
+   PNC Financial Services Group       69,660         4,719
+   Regions Financial                  58,000         1,649
+   SouthTrust                         40,700         1,862
+   State Street                       38,900         3,633
+   Suntrust Banks                     71,130         4,609
+   Synovus Financial                  69,100         1,866
+   Union Planters                     33,400         1,286
+   US Bancorp                        462,970        10,741
+   Wachovia                           50,378         3,035
+   Washington Mutual                 139,747         7,651
+   Wells Fargo                       410,652        20,315
+                                                  --------
+                                                   173,826
+                                                  --------
+BEAUTY PRODUCTS -- 1.8%
+   Alberto-Culver, Cl B               13,480           535
+   Avon Products                      57,140         2,285
+   Colgate-Palmolive                 137,376         7,591
+   Gillette                          252,976         7,885
+   International Flavors
+     & Fragrances                     23,495           518
+   Kimberly-Clark                    128,274         8,701
+   Procter & Gamble                  312,208        19,544
+                                                  --------
+                                                    47,059
+                                                  --------
+BROADCASTING, NEWSPAPERS & ADVERTISING -- 1.0%
+   Clear Channel Communications*     140,535         7,652
+   Comcast, Cl A*                    225,654         9,463
+   Interpublic Group                  74,000         2,542
+   Omnicom Group                      42,500         3,522
+   Univision Communications, Cl A*    49,600         1,893
+                                                  --------
+                                                    25,072
+                                                  --------
+BUILDING & CONSTRUCTION -- 0.2%
+   Centex                             14,280           595
+   Fluor                              17,730           789
+   KB Home                            10,537           344
+   Masco                             107,280         2,590
+   Pulte                               9,790           396
+   Vulcan Materials                   24,300         1,138
+                                                  --------
+                                                     5,852
+                                                  --------
+
+                                                                               5
+<PAGE>
+STATEMENT OF NET ASSETS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+
+S&P 500 INDEX FUND--CONTINUED
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+CHEMICALS -- 1.1%
+   Air Products & Chemicals           55,040      $  2,114
+   Ashland                            16,725           642
+   Dow Chemical                      215,279         6,796
+   Eastman Chemical                   18,491           910
+   EI du Pont de Nemours             250,586        10,199
+   Engelhard                          30,717           794
+   FMC*                                7,265           535
+   Great Lakes Chemical               12,000           369
+   Hercules                           25,795           335
+   PPG Industries                     40,490         1,866
+   Praxair                            38,065         1,700
+   Rohm & Haas                        52,823         1,627
+   Sigma-Aldrich                      18,500           886
+                                                  --------
+                                                    28,773
+                                                  --------
+COMPUTERS & SERVICES -- 6.1%
+   Apple Computer*                    83,140         1,835
+   Autodesk                           13,500           413
+   Cabletron Systems*                 44,400           573
+   Cisco Systems*                  1,747,900        27,639
+   Compaq Computer                   405,756         7,385
+   Computer Sciences*                 40,520         1,311
+   Dell Computer*                    621,500        15,965
+   Electronic Data Systems           112,400         6,279
+   EMC-Mass*                         525,600        15,453
+   Gateway*                           77,600         1,304
+   Hewlett-Packard                   464,220        14,516
+   International Business Machines   421,420        40,532
+   Lexmark International*             30,600         1,393
+   NCR*                               23,000           898
+   Palm*                             136,134         1,144
+   Sapient*                           29,100           209
+   Seagate Escrow Security* (A)       53,300            --
+   Sun Microsystems*                 783,100        12,036
+   Symbol Technologies                35,200         1,228
+   Unisys*                            75,785         1,061
+   Veritas Software*                  98,200         4,541
+                                                  --------
+                                                   155,715
+                                                  --------
+CONTAINERS & PACKAGING -- 0.1%
+   Ball                                6,795           312
+   Bemis                              12,690           420
+   Newell Rubbermaid                  64,036         1,697
+   Pactiv*                            37,912           459
+   Sealed Air*                        20,086           669
+                                                  --------
+                                                     3,557
+                                                  --------
+DATA PROCESSING -- 0.6%
+   Automatic Data Processing         152,640         8,301
+   First Data                         94,904         5,667
+   IMS Health                         70,464         1,755
+                                                  --------
+                                                    15,723
+                                                  --------
+
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+DIVERSIFIED MANUFACTURING -- 1.4%
+   Cooper Industries                  22,395       $   749
+   Crane                              14,519           378
+   Danaher                            34,100         1,860
+   Illinois Tool Works                72,634         4,129
+   Minnesota Mining
+     & Manufacturing                  95,130         9,884
+   National Service Industries         9,885           232
+   Tyco International Ltd.           420,940        18,197
+                                                  --------
+                                                    35,429
+                                                  --------
+DRUGS -- 9.5%
+   Abbott Laboratories               371,520        17,532
+   Allergan                           31,500         2,336
+   Alza*                              56,840         2,302
+   American Home Products            314,780        18,493
+   Biogen*                            35,600         2,254
+   Bristol-Myers Squibb              469,680        27,899
+   Cardinal Health                    67,358         6,517
+   Chiron*                            46,000         2,018
+   Eli Lilly                         270,820        20,761
+   Forest Laboratories*               42,300         2,506
+   King Pharmaceuticals*              40,600         1,654
+   McKesson HBOC                      68,491         1,832
+   Medimmune*                         50,900         1,826
+   Merck                             554,050        42,052
+   Pfizer                          1,515,635        62,065
+   Pharmacia                         309,855        15,607
+   Schering-Plough                   351,220        12,830
+   Watson Pharmaceutical*             24,700         1,299
+                                                  --------
+                                                   241,783
+                                                  --------
+ELECTRICAL SERVICES -- 7.0%
+   AES*                              127,600         6,375
+   Allegheny Energy                   26,500         1,226
+   Ameren                             32,900         1,347
+   American Electric Power            77,365         3,636
+   Calpine*                           67,700         3,728
+   Cinergy                            38,192         1,281
+   Citizens Communications*           63,700           806
+   CMS Energy                         31,400           929
+   Consolidated Edison                50,890         1,888
+   Constellation Energy Group         38,595         1,702
+   Dominion Resources                 57,408         3,701
+   DTE Energy                         34,235         1,363
+   Duke Energy                       184,112         7,869
+   Edison International               78,340           990
+   Emerson Electric                  103,130         6,394
+   Entergy                            53,520         2,034
+   Exelon                             76,458         5,016
+   FirstEnergy                        54,205         1,513
+   FPL Group                          42,428         2,601
+   General Electric                2,380,280        99,639
+   GPU                                29,200           949
+
+6
+   <PAGE>
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+   Niagara Mohawk Holdings*           38,465       $   650
+   NiSource                           49,018         1,525
+   PG&E                               93,045         1,158
+   Pinnacle West Capital              20,400           936
+   PPL                                34,900         1,534
+   Progress Energy                    49,435         2,129
+   Progress Energy* (A)               23,000            --
+   Public Service Enterprise Group    51,483         2,222
+   Reliant Energy                     70,751         3,201
+   Southern                          162,326         5,696
+   TXU                                62,035         2,563
+   XCEL Energy                        81,820         2,464
+                                                  --------
+                                                   179,065
+                                                  --------
+ELECTRONIC & OTHER ELECTRICAL EQUIPMENT-- 0.5%
+   Adaptec*                           23,700           206
+   Adobe Systems                      57,800         2,021
+   American Power Conversion*         46,800           603
+   Eaton                              16,530         1,132
+   Jabil Circuit*                     45,800           990
+   Molex                              46,900         1,655
+   Sanmina*                           73,600         1,440
+   Solectron*                        155,100         2,948
+   Tektronix                          22,710           620
+   Thomas & Betts                     13,940           242
+                                                  --------
+                                                    11,857
+                                                  --------
+ENTERTAINMENT -- 2.2%
+   AOL Time Warner*                1,039,492        41,736
+   Walt Disney                       499,701        14,291
+                                                  --------
+                                                    56,027
+                                                  --------
+ENVIRONMENTAL SERVICES -- 0.2%
+   Allied Waste Industries*           47,300           742
+   Ecolab                             30,500         1,294
+   Waste Management                  149,314         3,688
+                                                  --------
+                                                     5,724
+                                                  --------
+FINANCIAL SERVICES -- 6.5%
+   American Express                  319,541        13,197
+   Bear Stearns                       25,708         1,176
+   Capital One Financial              47,300         2,625
+   Charles Schwab                    332,432         5,126
+   CIT Group                          62,900         1,817
+   Citigroup                       1,206,454        54,266
+   Countrywide Credit Industries      27,900         1,377
+   Equifax                            34,000         1,063
+   Fannie Mae                        242,060        19,268
+   Franklin Resources                 58,700         2,296
+   Freddie Mac                       166,900        10,820
+   Household International           113,091         6,700
+
+
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+   Lehman Brothers Holdings           60,000      $  3,762
+   MBNA                              204,612         6,773
+   Merrill Lynch                     194,100        10,753
+   Moody's                            39,032         1,076
+   Morgan Stanley Dean Witter        268,322        14,355
+   Providian Financial                68,690         3,369
+   Stilwell Financial                 53,400         1,432
+   T. Rowe Price Group                29,100           911
+   USA Education                      39,400         2,862
+                                                  --------
+                                                   165,024
+                                                  --------
+FOOD, BEVERAGE & TOBACCO -- 4.9%
+   Adolph Coors, Cl B                  8,865           580
+   Anheuser-Busch                    216,700         9,953
+   Archer-Daniels-Midland            152,228         2,002
+   Brown-Forman, Cl B                 16,460         1,020
+   Campbell Soup                     100,960         3,016
+   Coca-Cola                         597,460        26,981
+   Coca-Cola Enterprises             100,400         1,785
+   Conagra Foods                     128,884         2,351
+   Fortune Brands                     37,140         1,278
+   General Mills                      68,220         2,934
+   HJ Heinz                           83,520         3,358
+   Hershey Foods                      32,700         2,267
+   Kellogg                            97,480         2,635
+   Pepsico                           346,780        15,241
+   Philip Morris                     534,130        25,344
+   Quaker Oats                        31,660         3,073
+   Ralston Purina Group               74,380         2,317
+   Sara Lee                          198,760         4,289
+   Supervalu                          31,760           423
+   Sysco                             162,340         4,304
+   Unilever ADR                      137,250         7,225
+   UST                                39,140         1,176
+   Wm Wrigley Jr.                     54,310         2,620
+                                                  --------
+                                                   126,172
+                                                  --------
+FOOTWEAR -- 0.1%
+   Nike, Cl B                         64,820         2,628
+   Reebok International Ltd.*         13,720           341
+                                                  --------
+                                                     2,969
+                                                  --------
+GAS/NATURAL GAS -- 1.2%
+   Dynegy, Cl A                       77,600         3,958
+   El Paso                           119,347         7,793
+   Enron                             179,368        10,421
+   KeySpan                            32,300         1,232
+   Kinder Morgan                      27,500         1,463
+   Nicor                              11,000           410
+   Oneok                               7,100           290
+   Peoples Energy                      8,440           328
+
+                                                                               7
+   <PAGE>
+STATEMENT OF NET ASSETS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+
+S&P 500 INDEX FUND--CONTINUED
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+   Sempra Energy                      49,127      $  1,144
+   Williams                          116,090         4,974
+                                                  --------
+                                                    32,013
+                                                  --------
+HOTEL & MOTEL -- 0.2%
+   Harrah's Entertainment*            27,985           824
+   Hilton Hotels                      88,605           926
+   Marriott International, Cl A       57,640         2,374
+   Starwood Hotels & Resorts
+     Worldwide                        46,400         1,578
+                                                  --------
+                                                     5,702
+                                                  --------
+HOUSEHOLD PRODUCTS -- 0.2%
+   Clorox                             56,719         1,784
+   Leggett & Platt                    47,100           906
+   Maytag                             18,430           594
+   Sherwin-Williams                   38,560           983
+   Tupperware                         13,850           330
+   Whirlpool                          16,005           800
+                                                  --------
+                                                     5,397
+                                                  --------
+INSURANCE -- 4.4%
+   Aetna*                             34,587         1,242
+   Aflac                             127,300         3,506
+   Allstate                          175,604         7,365
+   AMBAC Financial Group              25,300         1,605
+   American General                  120,778         4,620
+   American International Group      559,221        45,017
+   AON                                61,475         2,182
+   Chubb                              41,918         3,037
+   Cigna                              36,890         3,961
+   Cincinnati Financial               38,600         1,464
+   Conseco                            78,153         1,258
+   Hartford Financial Services        56,730         3,347
+   Jefferson-Pilot                    24,805         1,684
+   Lincoln National                   45,960         1,952
+   Loews                              47,400         2,816
+   Marsh & McLennan                   66,015         6,273
+   MBIA                               23,600         1,904
+   Metlife*                          183,700         5,520
+   MGIC Investment                    25,700         1,758
+   Progressive                        17,600         1,708
+   Safeco                             30,720           866
+   St. Paul                           52,276         2,303
+   Torchmark                          30,374         1,179
+   UnitedHealth Group                 76,800         4,551
+   UnumProvident                      57,873         1,691
+                                                  --------
+                                                   112,809
+                                                  --------
+
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+LEISURE PRODUCTS -- 0.1%
+   Brunswick                          21,030      $    413
+   Hasbro                             41,367           534
+   Mattel                            102,565         1,820
+                                                  --------
+                                                     2,767
+                                                  --------
+MACHINERY & MANUFACTURING OPERATIONS-- 0.6%
+   Black & Decker                     19,435           714
+   Briggs & Stratton                   5,240           201
+   Caterpillar                        82,600         3,666
+   Cummins Engine                      9,940           373
+   Deere                              56,390         2,049
+   Dover                              48,840         1,750
+   Ingersoll-Rand                     38,605         1,533
+   McDermott International            14,565           184
+   Pall                               29,493           646
+   Parker Hannifin                    27,978         1,111
+   Snap-On                            13,997           408
+   Stanley Works                      20,630           680
+   Timken                             14,440           226
+   WW Grainger                        22,580           764
+                                                  --------
+                                                    14,305
+                                                  --------
+MARINE TRANSPORTATION -- 0.2%
+   Carnival                          140,500         3,888
+                                                  --------
+MEASURING DEVICES -- 0.2%
+   Agilent Technologies*             109,637         3,369
+   Applied Biosystems
+     Group-- Applera                  50,660         1,406
+   PerkinElmer                        12,040           631
+   Thermo Electron*                   43,200           971
+                                                  --------
+                                                     6,377
+                                                  --------
+MEDICAL PRODUCTS & SERVICES -- 3.5%
+   Amgen*                            250,200        15,059
+   Bausch & Lomb                      12,780           584
+   Baxter International               70,673         6,653
+   Becton Dickinson                   61,620         2,176
+   Biomet                             42,900         1,690
+   Boston Scientific*                 97,400         1,966
+   CR Bard                            12,135           551
+   Guidant*                           74,000         3,329
+   HCA - The Healthcare              132,659         5,342
+   Healthsouth*                       92,812         1,196
+   Humana*                            40,700           427
+   Johnson & Johnson                 333,940        29,210
+   Manor Care*                        24,647           503
+
+8
+   <PAGE>
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+
+   Medtronic                         288,580     $  13,200
+   St. Jude Medical*                  20,450         1,101
+   Stryker                            47,000         2,456
+   Tenet Healthcare*                  77,060         3,391
+   Wellpoint Health Networks*         15,000         1,430
+                                                  --------
+                                                    90,264
+                                                  --------
+METAL & METAL INDUSTRIES -- 0.7%
+   Alcan                              76,352         2,749
+   Alcoa                             207,754         7,469
+   Allegheny Technologies             19,274           336
+   Barrick Gold                       95,100         1,359
+   Freeport-McMoran Copper
+     & Gold, Cl B*                    35,700           466
+   Homestake Mining                   63,200           332
+   Inco Ltd.*                         43,700           648
+   Newmont Mining                     46,122           743
+   Nucor                              18,680           749
+   Phelps Dodge                       18,881           759
+   Placer Dome                        78,729           681
+   USX-U.S. Steel Group               21,367           314
+   Worthington Industries             20,522           191
+                                                  --------
+                                                    16,796
+                                                  --------
+MISCELLANEOUS BUSINESS SERVICES-- 0.6%
+   BroadVision*                       64,700           346
+   Cendant*                          184,810         2,696
+   Concord EFS*                       51,900         2,099
+   Convergys                          37,000         1,335
+   Deluxe                             17,355           411
+   Fiserv*                            29,800         1,333
+   H&R Block                          21,870         1,095
+   Intuit*                            49,700         1,379
+   Paychex                            89,525         3,318
+   Robert Half International*         42,700           954
+                                                  --------
+                                                    14,966
+                                                  --------
+MOTORCYCLES -- 0.1%
+   Harley-Davidson                    72,800         2,763
+                                                  --------
+OFFICE SUPPLIES & EQUIPMENT -- 0.2%
+   Avery Dennison                     26,430         1,375
+   Pitney Bowes                       60,520         2,103
+   Xerox                             160,350           960
+                                                  --------
+                                                     4,438
+                                                  --------
+
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+PAPER & PAPER PRODUCTS -- 0.5%
+   Boise Cascade                      13,731       $   431
+   Georgia-Pacific Group              54,293         1,596
+   International Paper               115,590         4,170
+   Louisiana-Pacific                  25,012           240
+   Mead                               23,820           598
+   Potlatch                            6,870           219
+   Temple-Inland                      11,890           526
+   Westvaco                           24,190           586
+   Weyerhaeuser                       52,170         2,650
+   Willamette Industries              26,300         1,210
+                                                  --------
+                                                    12,226
+                                                  --------
+PETROLEUM & FUEL PRODUCTS -- 6.7%
+   Amerada Hess                       21,330         1,666
+   Anadarko Petroleum                 59,841         3,757
+   Apache                             29,700         1,711
+   Baker Hughes                       79,748         2,896
+   Burlington Resources               51,863         2,321
+   Chevron                           154,220        13,541
+   Conoco, Cl B                      149,767         4,231
+   Devon Energy                       30,896         1,798
+   EOG Resources                      28,100         1,159
+   Exxon Mobil                       835,008        67,636
+   Halliburton                       106,310         3,907
+   Kerr-McGee                         22,652         1,470
+   Nabors Industries*                 35,300         1,830
+   Noble Drilling*                    32,200         1,486
+   Occidental Petroleum               88,730         2,196
+   Phillips Petroleum                 61,335         3,376
+   Rowan*                             22,605           622
+   Royal Dutch Petroleum ADR         512,840        28,432
+   Schlumberger Ltd.                 137,534         7,923
+   Sunoco                             20,370           661
+   Texaco                            132,120         8,773
+   Tosco                              34,800         1,488
+   Transocean Sedco Forex             76,116         3,300
+   Unocal                             58,390         2,019
+   USX-Marathon Group                 74,535         2,009
+                                                  --------
+                                                   170,208
+                                                  --------
+PHOTOGRAPHIC EQUIPMENT & SUPPLIES -- 0.1%
+   Eastman Kodak                      72,065         2,875
+                                                  --------
+
+
+                                                                               9
+<PAGE>
+STATEMENT OF NET ASSETS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+
+S&P 500 INDEX FUND--CONCLUDED
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+PRINTING & PUBLISHING -- 0.6%
+   American Greetings, Cl A           15,300       $   162
+   Dow Jones                          21,100         1,105
+   Gannett                            63,370         3,784
+   Knight Ridder                      17,570           944
+   McGraw-Hill                        46,940         2,800
+   Meredith                           12,080           422
+   New York Times, Cl A               38,960         1,596
+   RR Donnelley & Sons                29,360           770
+   Tribune                            72,620         2,959
+                                                  --------
+                                                    14,542
+                                                  --------
+RAILROADS -- 0.4%
+   Burlington Northern Santa Fe       94,200         2,862
+   CSX                                51,118         1,723
+   Norfolk Southern                   92,400         1,547
+   Union Pacific                      59,540         3,349
+                                                  --------
+                                                     9,481
+                                                  --------
+RETAIL -- 6.8%
+   Albertson's                        98,323         3,129
+   Autozone*                          27,300           765
+   Bed Bath & Beyond*                 68,700         1,687
+   Best Buy*                          49,900         1,794
+   Circuit City Stores-
+     Circuit City Group               49,500           525
+   Consolidated Stores*               26,824           270
+   CVS                                94,113         5,505
+   Darden Restaurants                 28,860           685
+   Dillards, Cl A                     21,220           466
+   Dollar General                     79,385         1,623
+   Federated Department Stores*       47,700         1,982
+   Gap                               204,130         4,842
+   Harcourt General                   17,566           978
+   Home Depot                        556,283        23,976
+   JC Penney                          63,030         1,008
+   K Mart*                           116,180         1,092
+   Kohls*                             79,600         4,911
+   Kroger*                           196,620         5,071
+   Limited                           102,296         1,608
+   Longs Drug Stores                   8,990           266
+   Lowe's                             91,988         5,377
+   May Department Stores              71,543         2,538
+   McDonald's                        315,000         8,363
+   Nordstrom                          32,160           524
+   Office Depot*                      71,600           627
+   RadioShack                         44,687         1,640
+   Safeway*                          120,400         6,640
+   Sears Roebuck                      80,225         2,830
+   Staples*                          108,750         1,618
+   Starbucks*                         45,500         1,931
+   Target                            215,160         7,763
+   Tiffany                            35,100           956
+
+- --------------------------------------------------------------------------------
+                                                  MARKET
+DESCRIPTION                           SHARES    VALUE (000)
+- --------------------------------------------------------------------------------
+   TJX                                67,140      $  2,148
+   Toys R Us*                         47,365         1,189
+   Tricon Global Restaurants*         35,198         1,344
+   Wal-Mart Stores                 1,073,040        54,189
+   Walgreens                         243,960         9,954
+   Wendy's International              27,275           609
+   Winn-Dixie Stores                  33,760           958
+                                                  --------
+                                                   173,381
+                                                  --------
+SEMI-CONDUCTORS/INSTRUMENTS -- 4.2%
+   Advanced Micro Devices*            75,260         1,997
+   Altera*                            95,200         2,041
+   Analog Devices*                    86,400         3,131
+   Applied Materials*                194,400         8,456
+   Applied Micro Circuits*            71,700         1,183
+   Avaya*                             67,894           883
+   Broadcom, Cl A*                    58,700         1,696
+   Conexant Systems*                  58,400           522
+   Intel                           1,616,760        42,541
+   JDS Uniphase*                     313,800         5,786
+   Johnson Controls                   20,730         1,295
+   Kla-Tencor*                        44,300         1,744
+   Linear Technology                  76,100         3,125
+   LSI Logic*                         76,700         1,206
+   Maxim Integrated Products*         68,000         2,828
+   Micron Technology                 142,500         5,918
+   Millipore                          11,190           518
+   National Semiconductor*            41,812         1,118
+   Novellus Systems*                  33,800         1,371
+   Power-One*                         18,800           272
+   QLogic*                            22,100           497
+   Teradyne*                          41,900         1,383
+   Texas Instruments                 416,580        12,906
+   Vitesse Semiconductor*             45,700         1,088
+   Xilinx*                            79,300         2,785
+                                                  --------
+                                                   106,290
+                                                  --------
+SOFTWARE -- 4.1%
+   BMC Software*                      58,582         1,260
+   Citrix Systems*                    44,500           940
+   Computer Associates
+     International                   138,452         3,766
+   Compuware*                         88,400           862
+   Mercury Interactive*               19,400           812
+   Microsoft*                      1,281,600        70,087
+   Novell*                            76,300           381
+   Oracle*                         1,341,856        20,101
+   Parametric Technology*             63,900           579
+   Peoplesoft*                        68,563         1,607
+   Siebel Systems*                   103,200         2,807
+   Yahoo*                            134,100         2,112
+                                                  --------
+                                                   105,314
+                                                  --------
+
+10
+<PAGE>
+- --------------------------------------------------------------------------------
+                                   SHARES/FACE    MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+TELEPHONES & TELECOMMUNICATIONS-- 8.7%
+   ADC Telecommunications*           186,700      $  1,587
+   Alltel                             75,182         3,944
+   Andrew*                            19,515           281
+   AT&T                              903,084        19,236
+   BellSouth                         449,812        18,406
+   CenturyTel                         33,800           972
+   Comverse Technology*               39,900         2,350
+   Corning                           220,938         4,571
+   Global Crossing Ltd.*             212,760         2,870
+   Lucent Technologies               817,632         8,152
+   Motorola                          524,751         7,483
+   Network Appliance*                 77,100         1,296
+   Nextel Communications, Cl A*      183,000         2,631
+   Nortel Networks                   764,300        10,738
+   Qualcomm*                         181,000        10,249
+   Qwest Communications
+     International*                  397,828        13,944
+   SBC Communications                813,185        36,292
+   Scientific-Atlanta                 38,768         1,612
+   Sprint (FON Group)                212,400         4,671
+   Sprint (PCS Group)*               223,900         4,254
+   Tellabs*                           98,600         4,012
+   Verizon Communications            649,032        31,997
+   Viacom, Cl B*                     419,079        18,427
+   WorldCom*                         691,610        12,924
+                                                ----------
+                                                   222,899
+                                                ----------
+TESTING LABORATORIES -- 0.0%
+   Quintiles Transnational*           27,700           523
+                                                ----------
+TRAVEL SERVICES -- 0.1%
+   Sabre Holdings*                    31,632         1,460
+                                                ----------
+TRUCKING & LEASING -- 0.0%
+   Ryder System                       14,330           258
+                                                ----------
+WHOLESALE -- 0.2%
+   Costco Wholesale*                 107,716         4,228
+                                                ----------
+Total Common Stocks
+(Cost $1,729,788)                                2,498,004
+                                                ----------
+
+U.S. TREASURY OBLIGATIONS -- 0.3%
+   U.S. Treasury Bills (B)
+     5.099%-6.321%, 5/31/01          $ 6,000         5,957
+                                                ----------
+Total U.S. Treasury Obligations
+   (Cost $5,942)                                     5,957
+                                                ----------
+
+- --------------------------------------------------------------------------------
+                                      FACE        MARKET
+DESCRIPTION                       AMOUNT (000)  VALUE (000)
+- --------------------------------------------------------------------------------
+REPURCHASE AGREEMENT -- 1.9%
+   JP Morgan
+     5.270%, dated 3/30/01,
+     matures 4/02/01, repurchase
+     price $48,255,359 (collateralized
+     by various FNMA obligations, par
+     value $48,859,992, 6.500%-8.000%,
+     02/01/16-03/01/31, total
+     market value $49,210,423)       $48,241     $  48,241
+                                                ----------
+Total Repurchase Agreement
+   (Cost $48,241)                                   48,241
+                                                ----------
+Total Investments -- 99.9%
+   (Cost $1,783,971)                             2,552,202
+                                                ----------
+Other Assets and Liabilities, Net-- 0.1%             3,729
+                                                ----------
+
+NET ASSETS:
+Fund Shares of Class A
+   (unlimited authorization -- no par value)
+   based on 26,832,999 outstanding shares
+   of beneficial interest                          928,358
+Fund Shares of Class E
+   (unlimited authorization -- no par value)
+   based on 44,289,486 outstanding shares
+   of beneficial interest                          946,987
+Undistributed net investment income                  7,824
+Accumulated net realized loss on investments       (97,362)
+Net unrealized appreciation on futures               1,893
+Net unrealized appreciation on investments         768,231
+                                                ----------
+Total Net Assets-- 100.0%                       $2,555,931
+                                                ==========
+Net Asset Value, Offering and Redemption
+   Price Per Share-- Class A                        $35.88
+                                                ==========
+Net Asset Value, Offering and Redemption
+   Price Per Share-- Class E                        $35.97
+                                                ==========
+
+*NON-INCOME PRODUCING SECURITY
+
+(A) SECURITY FAIR VALUED USING METHODS DETERMINED IN GOOD FAITH BY THE VALUATION
+    COMMITTEE OF THE BOARD OF TRUSTEES.
+(B) SECURITIES PLEDGED AS COLLATERAL ON OPEN FUTURES CONTRACTS. THE RATES SHOWN
+    ARE EFFECTIVE YIELDS AT THE TIME OF PURCHASE.
+ADR -- AMERICAN DEPOSITARY RECEIPT
+CL -- CLASS
+FNMA -- FEDERAL NATIONAL MORTGAGE ASSOCIATION
+LTD. -- LIMITED
+
+THE ACCOMPANYING NOTES ARE AN INTEGRAL PART OF THE FINANCIAL STATEMENTS.
+
+                                                                              11
+<PAGE>
+SCHEDULE OF INVESTMENTS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+
+
+BOND INDEX FUND
+- --------------------------------------------------------------------------------
+                                       FACE       MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+
+U.S. TREASURY OBLIGATIONS--20.4%
+   U.S. Treasury Bonds
+     11.750%, 02/15/10 - 11/15/14     $  600        $  834
+     11.625%, 11/15/02                   200           223
+     10.750%, 08/15/05                    75            93
+      9.125%, 05/15/09                   650           731
+      8.875%, 02/15/19                   990         1,358
+      8.750%, 05/15/17                   445           597
+      8.500%, 02/15/20                   200           268
+      8.000%, 11/15/21                   180           232
+      6.625%, 02/15/27                   100           113
+      6.500%, 11/15/26                   625           698
+      6.375%, 08/15/27                   650           716
+      6.250%, 08/15/23                   625           674
+      6.125%, 08/15/29                   200           215
+      5.250%, 02/15/29                   325           308
+   U.S. Treasury Notes
+      7.250%, 08/15/04                   800           868
+      7.000%, 07/15/06                   200           221
+      6.750%, 05/15/05                   300           324
+      6.500%, 08/15/05 - 10/15/06      1,045         1,126
+      6.250%, 01/31/02 - 06/30/02        550           563
+      6.000%, 08/15/09                   400           427
+      5.500%, 02/15/08                   500           519
+      4.250%, 11/15/03                 1,100         1,097
+                                                 ---------
+Total U.S. Treasury Obligations
+   (Cost $11,485)                                   12,205
+                                                 ---------
+
+U.S. AGENCY MORTGAGE-BACKED OBLIGATIONS--33.0%
+   FHLMC
+     10.500%, 12/01/17 - 06/01/19         15            17
+      9.500%, 08/01/17 - 02/01/21         47            51
+      9.000%, 11/01/04 - 07/01/09         16            17
+      8.500%, 10/01/01 - 01/01/10         31            33
+      8.000%, 01/01/11 - 08/01/30        322           332
+      7.500%, 05/01/07 - 11/01/29      1,139         1,167
+      7.000%, 09/01/03 - 10/01/29      1,581         1,603
+      6.500%, 07/01/08 - 05/01/29      2,126         2,129
+      6.300%, 06/01/04                   300           301
+      6.000%, 11/01/13 - 04/01/29      1,204         1,186
+      5.500%, 02/01/14                   166           163
+   FNMA
+      9.500%, 02/01/21                     3             3
+      9.000%, 11/01/26                    30            31
+      8.500%, 05/01/07 - 04/01/30        154           160
+      8.000%, 08/01/07 - 02/01/30        602           622
+      7.500%, 06/01/07 - 06/01/30      1,297         1,328
+      7.000%, 02/01/08 - 12/01/29      2,013         2,040
+      6.500%, 03/01/03 - 06/01/29      2,253         2,250
+      6.000%, 05/01/04 - 12/01/28      1,251         1,234
+      5.500%, 12/01/13 - 02/01/29        254           247
+
+- --------------------------------------------------------------------------------
+                                       FACE       MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+   GNMA
+     11.500%, 04/15/15                 $  22         $  24
+     10.000%, 09/15/18 - 02/20/21         12            14
+      9.500%, 09/15/09 - 07/15/17         22            22
+      9.000%, 11/15/19 - 09/15/25        217           231
+      8.500%, 02/15/17 - 11/15/22        152           158
+      8.000%, 10/15/07 - 03/15/30        783           810
+      7.500%, 01/15/23 - 01/15/30        830           849
+      7.000%, 05/15/23 - 07/15/29        898           912
+      6.500%, 03/15/11 - 01/15/29        960           962
+      6.000%, 09/15/28 - 02/15/29        436           428
+   GNMA TBA
+      7.000%, 04/23/31                   400           406
+                                                 ---------
+Total U.S. Agency Mortgage-Backed Obligations
+   (Cost $19,411)                                   19,730
+                                                 ---------
+
+U.S. GOVERNMENT AGENCY OBLIGATIONS--9.5%
+   FFCB
+      6.000%, 10/01/01                   300           302
+   FHLB
+      6.000%, 08/15/02                   225           229
+      5.800%, 09/02/08                   250           253
+      5.440%, 10/15/03                   150           153
+   FHLMC
+      7.900%, 09/19/01                   150           152
+      7.000%, 07/15/05                   335           358
+      6.750%, 09/15/29                   100           106
+      6.450%, 04/29/09                   600           603
+      5.750%, 04/15/08                   250           253
+      5.000%, 01/15/04                   800           805
+   FNMA
+      7.500%, 02/11/02                   100           103
+      7.125%, 01/15/30                    35            39
+      6.250%, 05/15/29                    25            25
+      5.250%, 01/15/09                   650           635
+      4.750%, 11/14/03                   700           700
+   FNMA (A)
+      5.951%, 07/05/14                   415           193
+   FNMA MTN
+      6.240%, 01/14/08                   150           152
+   Resolution Funding
+      8.875%, 04/15/30                   230           325
+   TVA
+      6.375%, 06/15/05                   200           208
+      6.000%, 03/15/13                   100           101
+                                                 ---------
+Total U.S. Government Agency Obligations
+   (Cost $5,375)                                     5,695
+                                                 ---------
+
+
+12
+<PAGE>
+- --------------------------------------------------------------------------------
+                                       FACE       MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+CORPORATE BONDS--17.2%
+   Alcoa
+      6.750%, 01/15/28                 $  85         $  84
+   Alltel
+      6.800%, 05/01/29                   100            90
+   American Airlines
+      7.024%, 10/15/09                   125           130
+   AT&T Capital MTN
+      6.600%, 05/15/05                   200           201
+   Auburn Hills Trust
+     12.000%, 05/01/20                   100           145
+   Bank of America
+      7.625%, 04/15/05                   100           106
+   Bank One MTN
+      6.000%, 02/17/09                   150           144
+   BellSouth Telecommunications
+      6.500%, 06/15/05                   100           103
+   Boeing
+      6.750%, 09/15/02                   150           153
+   Bowater
+      9.000%, 08/01/09                   150           163
+   Burlington Northern Santa Fe
+      6.125%, 03/15/09                   100            97
+   Capital One Bank
+      6.700%, 05/15/08                   100            93
+   Caterpillar
+      8.000%, 02/15/23                    50            55
+   Chase Manhattan
+      8.625%, 05/01/02                   150           156
+   CitiFinancial
+      6.500%, 08/01/04                   150           154
+   Citigroup
+      8.625%, 02/01/07                   200           225
+   CNA Financial
+      6.600%, 12/15/08                   100            93
+   Coastal
+      9.625%, 05/15/12                   125           150
+   Coca-Cola Enterprises
+      8.500%, 02/01/22                   100           118
+   ConAgra Foods
+      7.400%, 09/15/04                   260           271
+   Countrywide Home Loan MTN
+      7.200%, 10/30/06                   100           105
+   CP&L Energy
+      7.500%, 03/01/23                    85            82
+   DaimlerChrysler
+      7.450%, 03/01/27                    40            37
+   EI du Pont de Nemours
+      8.250%, 09/15/06                   100           112
+   Eli Lilly
+      7.125%, 06/01/25                    65            68
+   Enron
+      6.750%, 09/01/04                   100           102
+
+- --------------------------------------------------------------------------------
+                                       FACE       MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+   EOP Operating LP
+      6.800%, 01/15/09                $  150        $  149
+   Federated Department Stores
+      8.125%, 10/15/02                   150           155
+   FleetBoston Financial
+      6.375%, 05/15/08                   150           151
+   Ford Motor
+      6.625%, 02/15/28                   125           110
+   Ford Motor Credit
+      7.500%, 01/15/03                   125           129
+      6.125%, 01/09/06                   400           398
+   France Telecom (B)
+      7.200%, 03/01/06                   175           178
+   General Electric Capital MTN
+      7.000%, 02/03/03                   425           440
+   General Electric Global Insurance
+      7.000%, 02/15/26                   100           102
+   General Motors Acceptance
+      8.500%, 01/01/03                   150           157
+   Hertz
+      7.000%, 01/15/28                   100            90
+   Household Finance MTN
+      6.125%, 07/15/02                   100           101
+   JP Morgan
+      5.750%, 10/15/08                   200           193
+   Kellogg (B)
+      7.450%, 04/01/31                    50            50
+   May Department Stores
+      9.875%, 12/01/02                   100           108
+   Midamerican Energy Holdings
+      8.480%, 09/15/28                    70            76
+   Morgan Stanley Dean Witter
+      6.875%, 03/01/07                   200           209
+   National City Bank of Michigan
+      8.500%, 05/15/02                   250           259
+   NB Capital Trust IV
+      8.250%, 04/15/27                   125           124
+   New Century Energies
+      7.125%, 06/01/06                   200           209
+   News America Holdings
+      7.700%, 10/30/25                   150           141
+   Niagara Mohawk Power
+      7.750%, 05/15/06                   225           243
+   Nordstrom
+      5.625%, 01/15/09                   100            88
+   Occidental Petroleum
+      7.375%, 11/15/08                   200           209
+   Oracle
+      6.720%, 02/15/04                   100           101
+   Park Place Entertainment
+      7.375%, 06/01/02                    50            50
+   Procter & Gamble
+      6.450%, 01/15/26                    65            63
+
+                                                                              13
+   <PAGE>
+SCHEDULE OF INVESTMENTS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+
+
+BOND INDEX FUND--CONCLUDED
+- --------------------------------------------------------------------------------
+                                       FACE       MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+   Qwest Cap Funding (B)
+      7.900%, 08/15/10                $  170        $  180
+   Raytheon
+      7.200%, 08/15/27                   200           185
+   Rhom & Haas
+      7.400%, 07/15/09                   200           212
+   Safeway
+      6.500%, 11/15/08                   135           137
+   Salomon Smith Barney Holdings
+      7.375%, 05/15/07                   250           264
+   Societe Generale
+      7.400%, 06/01/06                   100           106
+   Southwestern Bell Telephone
+      6.625%, 09/01/24                    60            54
+   Sprint
+      9.250%, 04/15/22                   150           162
+   Sun Microsystems
+      7.350%, 08/15/04                   200           207
+   Target
+      6.400%, 02/15/03                   150           154
+   TCI Communications
+      8.750%, 08/01/15                   100           114
+   Texas Utilities Electric
+      6.750%, 03/01/03                   150           153
+   Time Warner
+      6.950%, 01/15/28                    80            74
+   Union Pacific
+      6.625%, 02/01/29                   100            91
+   Viacom
+      7.750%, 06/01/05                   275           294
+   Virginia Electric Power
+      7.375%, 07/01/02                   150           154
+   Wells Fargo
+      8.375%, 05/15/02                   230           239
+                                                 ---------
+Total Corporate Bonds
+   (Cost $10,167)                                   10,300
+                                                 ---------
+
+ASSET-BACKED OBLIGATIONS--2.2%
+   DaimlerChrysler Auto Trust
+     Ser 2000-B, Cl A4
+      7.630%, 06/08/05                   350           370
+   Discover Card Master Trust I,
+     Ser 1998-6, Cl A
+      5.850%, 01/17/06                   400           407
+   Discover Card Master Trust I,
+     Ser 1999-6, Cl A
+      6.850%, 07/17/07                   100           105
+   Ford Motor Credit
+     Ser 2000-G, Cl A4
+      6.620%, 07/15/04                   229           236
+
+- --------------------------------------------------------------------------------
+                                       FACE       MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+   Peco Energy Transition Trust,
+     Ser 1999-A, Cl A7
+      6.130%, 03/01/09                $  150     $     151
+   Sears Credit Account Master Trust II,
+     Ser 1995-3, Cl A
+      7.000%, 10/15/04                    63            63
+                                                 ---------
+Total Asset-Backed Obligations
+   (Cost $1,298)                                     1,332
+                                                 ---------
+
+MORTGAGE-BACKED SECURITIES--2.1%
+   Bear Stearns Commercial Mortgage
+     Securities, Ser 1999-WF2, Cl A2
+      7.080%, 06/15/09                   200           210
+   DLJ Commercial Mortgage,
+     Ser 1998-CF2, Cl A1B
+      6.240%, 11/12/31                   200           201
+   Heller Financial Commercial
+     Mortgage, Ser 1999-PH1, Cl A2
+      6.847%, 05/15/31                   200           207
+   JP Morgan Commercial Mortgage,
+     Ser 2000-C10, Cl A2
+      7.371%, 08/15/32                   200           212
+   Morgan Stanley Capital I,
+     Ser 1998-WF1, Cl A
+      6.250%, 07/15/07                   418           427
+                                                 ---------
+Total Mortgage-Backed Securities
+   (Cost $1,187)                                     1,257
+                                                 ---------
+
+YANKEE BONDS--7.8%
+   Associates
+      5.750%, 11/01/03                   375           378
+   Canada Government
+      5.250%, 11/05/08                   265           261
+   DaimlerChrysler Holdings
+      6.900%, 09/01/04                   100           102
+   Deutsche Telekom
+      8.000%, 06/15/10                   250           255
+   Diageo Capital PLC
+      6.625%, 06/24/04                   250           259
+   Electronic Data Systems
+      7.125%, 10/15/09                    75            79
+   Goldman Sachs Group MTN
+      7.350%, 10/01/09                   100           104
+   Hydro-Quebec
+      9.500%, 11/15/30                    50            67
+   Inter-American Development Bank
+      5.750%, 02/26/08                    80            81
+
+14
+   <PAGE>
+- --------------------------------------------------------------------------------
+                                       FACE       MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+   International Bank
+      8.250%, 09/01/16                $  200        $  243
+   Kingdom of Spain
+      7.000%, 07/19/05                   160           171
+   LB Baden-Wuerttemberg
+      7.875%, 04/15/04                   250           269
+   Marconi PLC
+      7.750%, 09/15/10                   125           120
+   Norsk Hydro
+      6.360%, 01/15/09                   160           160
+   Province of Ontario
+      8.000%, 10/17/01                   250           254
+      6.000%, 02/21/06                   100           102
+   Province of Saskatchewan
+      9.125%, 02/15/21                    50            64
+   Quebec Province
+      8.625%, 01/19/05                   250           277
+   Republic of Ireland
+      7.875%, 12/01/01                   200           204
+   Republic of Italy
+      6.875%, 09/27/23                   100           107
+   Santander Financial
+      7.750%, 05/15/05                   250           265
+   Sanwa Finance Aruba
+      8.350%, 07/15/09                   100           105
+   Sumitomo Bank
+      8.500%, 06/15/09                   100           106
+   Trans-Canada Pipelines
+      8.625%, 05/15/12                   150           174
+   Tyco International Group
+      6.125%, 01/15/09                   100            97
+   Wal-Mart Stores
+      6.875%, 08/10/09                   100           106
+   Walt Disney
+      6.750%, 03/30/06                   100           106
+   Worldcom
+      6.400%, 08/15/05                   150           147
+                                                 ---------
+Total Yankee Bonds
+   (Cost $4,467)                                     4,663
+                                                 ---------
+
+- --------------------------------------------------------------------------------
+                                       FACE       MARKET
+DESCRIPTION                        AMOUNT (000) VALUE (000)
+- --------------------------------------------------------------------------------
+REPURCHASE AGREEMENT--1.2%
+   Morgan Stanley Dean Witter,
+     4.750%, dated 3/30/01, matures
+     4/02/01, repurchase price $720,591
+     (collateralized by various U.S.
+     Treasury obligations, par value $737,273,
+     5.375%, 04/19/01-03/01/31, total
+     market value $735,078)             $720        $  720
+                                                 ---------
+Total Repurchase Agreement
+   (Cost $720)                                         720
+                                                 ---------
+Total Investments -- 93.4%
+   (Cost $54,110)                                   55,902
+                                                 ---------
+Other Assets and Liabilities, Net-- 6.6%             3,953
+                                                 ---------
+Total Net Assets-- 100.0%                          $59,855
+                                                 =========
+
+(A) ZERO COUPON SECURITY. THE RATE REPORTED ON THE STATEMENT OF NET ASSETS IS
+    THE EFFECTIVE YIELD AT MARCH 31, 2001.
+(B) SECURITIES SOLD WITHIN TERMS OF A PRIVATE PLACEMENT MEMORANDUM, EXEMPT FROM
+    REGISTRATION UNDER SECTION 144A OF THE SECURITIES ACT OF 1933, AS AMENDED,
+    AND MAY BE SOLD ONLY TO DEALERS IN THAT PROGRAM OR OTHER "ACCREDITED
+    INVESTORS."
+
+CL -- CLASS
+FFCB -- FEDERAL FARM CREDIT BANK
+FHLB -- FEDERAL HOME LOAN BANK
+FHLMC -- FEDERAL HOME LOAN MORTGAGE CORPORATION
+FNMA -- FEDERAL NATIONAL MORTGAGE ASSOCIATION
+GNMA -- GOVERNMENT NATIONAL MORTGAGE ASSOCIATION
+LP -- LIMITED PARTNERSHIP
+MTN -- MEDIUM TERM NOTE
+PLC -- PUBLIC LIABILITY COMPANY
+SER -- SERIES
+TBA -- TO BE ANNOUNCED
+TVA -- TENNESSEE VALLEY AUTHORITY
+
+THE ACCOMPANYING NOTES ARE AN INTEGRAL PART OF THE FINANCIAL STATEMENTS.
+
+
+                                                                              15
+<PAGE>
+STATEMENT OF ASSETS & LIABILITIES
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+                                                                   -----------
+                                                                   BOND INDEX
+                                                                      FUND
+                                                                      (000)
+                                                                   -----------
+ASSETS:
+   Investments (Cost $54,110)                                        $55,902
+   Cash                                                                    4
+   Receivable for investment securities sold                           4,521
+   Receivable for capital shares sold                                    679
+   Income receivable                                                       2
+                                                                     -------
+   Total Assets                                                       61,108
+                                                                     -------
+LIABILITIES:
+   Income distribution payable                                           297
+   Payable for investment securities purchased                           406
+   Payable for capital shares redeemed                                   516
+   Accrued expenses                                                       34
+                                                                     -------
+   Total Liabilities                                                   1,253
+                                                                     -------
+   TOTAL NET ASSETS                                                  $59,855
+                                                                     =======
+NET ASSETS:
+   Fund shares of Class A (unlimited authorization -- no par value)
+     based on 5,629,894 outstanding shares of beneficial interest     58,766
+   Undistributed net investment income                                     1
+   Accumulated net realized loss on investments                         (704)
+   Net unrealized appreciation on investments                          1,792
+                                                                     -------
+
+   TOTAL NET ASSETS-- 100%                                           $59,855
+                                                                     =======
+   NET ASSET VALUE, OFFERING AND REDEMPTION
+     PRICE PER SHARE-- CLASS A                                        $10.63
+                                                                     =======
+
+THE ACCOMPANYING NOTES ARE AN INTEGRAL PART OF THE FINANCIAL STATEMENTS.
+16
+<PAGE>
+STATEMENTS OF OPERATIONS (000)
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- FOR THE YEAR ENDED MARCH 31, 2001
+
+
+
+<TABLE>
+<CAPTION>
+                                                                                 ----------         ----------
+                                                                                   S&P 500              BOND
+                                                                                    INDEX              INDEX
+                                                                                    FUND                FUND
+                                                                                 ----------         ---------
+INVESTMENT INCOME:
+<S>                                                                              <C>                  <C>
+   Dividends                                                                     $  34,564            $   --
+   Interest                                                                          3,626             4,354
+                                                                                 ---------            ------
+   Total investment income                                                          38,190             4,354
+                                                                                 ---------            ------
+EXPENSES:
+   Management fees                                                                   6,558               228
+   Investment advisory fees                                                            894                46
+   Custodian/Wire Agent Fees                                                           350                 6
+   Transfer Agent fees                                                                  46                 1
+   Professional fees                                                                    97                 2
+   Registration fees                                                                   159                 4
+   Trustee fees                                                                         20                 1
+   Pricing                                                                              14                 4
+   Insurance Expense                                                                    29                 1
+   Shareholder Servicing Fees                                                        6,417               164
+   Printing Expense                                                                     92                 3
+   Licensing Fee                                                                        46                --
+   Other expenses                                                                       36                --
+                                                                                 ---------            ------
+   Total expenses                                                                   14,758               460
+                                                                                 ---------            ------
+   Less: Waiver of Management Fees                                                    (875)              (48)
+     Waiver of Shareholder Servicing Fees                                           (4,869)             (164)
+                                                                                 ---------            ------
+   Net Expenses                                                                      9,014               248
+                                                                                 ---------            ------
+
+NET INVESTMENT INCOME                                                               29,176             4,106
+                                                                                 ---------            ------
+NET REALIZED AND UNREALIZED GAIN (LOSS) ON INVESTMENTS
+   Net realized Gain (Loss) from Securities Sold                                   (56,688)              171
+   Net Realized Loss from Futures Contracts                                        (13,285)               --
+                                                                                 ---------            ------
+
+   Net Realized Gain (Loss) from Investment Transactions                           (69,973)              171
+                                                                                 ---------            ------
+
+   Change in unrealized Appreciation (Depreciation) on investment Securities      (665,199)            3,147
+   Change in Unrealized Depreciation on Futures Contracts                             (136)               --
+                                                                                 ---------            ------
+
+   Net Change in Unrealized Appreciation (Depreciation) of Investments            (665,335)            3,147
+                                                                                 ---------            ------
+
+   Net Realized and Unrealized Gain (Loss) on Investments                         (735,308)            3,318
+                                                                                 ---------            ------
+NET INCREASE (DECREASE) IN NET ASSETS FROM OPERATIONS                            $(706,132)           $7,424
+                                                                                 =========            ======
+</TABLE>
+AMOUNTS DESIGNATED AS "--" ARE ZERO OR HAVE BEEN ROUNDED TO ZERO. THE
+
+
+ACCOMPANYING NOTES ARE AN INTEGRAL PART OF THE FINANCIAL STATEMENTS.
+                                                                              17
+<PAGE>
+STATEMENTS OF CHANGES IN NET ASSETS (000)
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- FOR THE YEARS ENDED MARCH 31,
+<TABLE>
+<CAPTION>
+                                                                         ---------------------    ---------------------
+                                                                              S&P 500 INDEX            BOND INDEX
+                                                                                  FUND                    FUND
+                                                                         ---------------------    ---------------------
+                                                                             2001       2000        2001        2000
+                                                                          ----------  --------    ---------   ---------
+OPERATIONS:
+<S>                                                                      <C>         <C>            <C>       <C>
+   Net investment income                                                 $   29,176  $   26,830     $  4,106  $   3,815
+   Net realized Gain (Loss) from Investment Transactions                    (69,973)    (12,091)         171       (404)
+   Net change in unrealized Appreciation (depreciation)
+     of investments                                                        (665,335)    423,912        3,147     (2,209)
+                                                                         ----------  ----------  -----------  ---------
+   Net increase (Decrease) in net assets from operations                   (706,132)    438,651        7,424      1,202
+                                                                         ----------  ----------  -----------  ---------
+DISTRIBUTIONS TO SHAREHOLDERS:
+   Net investment income:
+     Class A                                                                 (8,552)     (7,075)      (4,122)    (3,798)
+     Class E                                                                (19,061)    (19,070)          --         --
+   Net Capital gains:
+     Class A                                                                     --      (5,677)          --         --
+     Class E                                                                     --     (13,435)          --         --
+                                                                         ----------  ----------  -----------  ---------
+     Total distributions                                                    (27,613)    (45,257)      (4,122)    (3,798)
+                                                                         ----------  ----------  -----------  ---------
+CAPITAL SHARE TRANSACTIONS:
+CLASS A:
+   Proceeds from Shares issued                                              737,039     448,334       25,277     36,555
+   Reinvestment of cash distributions                                         7,994      12,084        1,090        860
+   Cost of Shares redeemed                                                 (522,371)   (266,547)     (40,315)   (21,299)
+                                                                         ----------  ----------  -----------  ---------
+   Increase (Decrease) in Net Assets Derived from
+     Class A Transactions                                                   222,662     193,871      (13,948)    16,116
+                                                                         ----------  ----------  -----------  ---------
+CLASS E:
+   Proceeds from Shares issued                                              422,447     553,797           --         --
+   Reinvestment of cash distributions                                        13,270      21,923           --         --
+   Cost of Shares redeemed                                                 (426,755)   (399,088)          --         --
+                                                                         ----------  ----------  -----------  ---------
+   increase in Net Assets Derived from
+     Class E transactions                                                     8,962     176,632           --         --
+                                                                         ----------  ----------  -----------  ---------
+   increase (Decrease) in Net Assets Derived from
+     Capital Share transactions                                             231,624     370,503      (13,948)    16,116
+                                                                         ----------  ----------  -----------  ---------
+   Net increase (Decrease) in net assets                                   (502,121)    763,897      (10,646)    13,520
+                                                                         ----------  ----------  -----------  ---------
+NET ASSETS:
+   Beginning of Period                                                    3,058,052   2,294,155       70,501     56,981
+                                                                         ----------  ----------  -----------  ---------
+   End of Period                                                         $2,555,931  $3,058,052  $    59,855  $  70,501
+                                                                         ==========  ==========  ===========  =========
+SHARES ISSUED AND REDEEMED:
+CLASS A:
+   Shares issued                                                             17,410      10,455        2,452      3,589
+   Shares issued in lieu of cash distributions                                  183         283          106         85
+   Shares redeemed                                                          (12,362)     (6,272)      (3,909)    (2,092)
+                                                                         ----------  ----------  -----------  ---------
+     Total Class A transactions                                               5,231       4,466       (1,351)     1,582
+                                                                         ----------  ----------  -----------  ---------
+CLASS E:
+   Shares issued                                                              9,815      13,075          --          --
+   Shares issued in lieu of cash distributions                                  301         512          --          --
+   Shares Redeemed                                                           (9,992)     (9,354)          --         --
+                                                                         ----------  ----------  -----------  ---------
+     Total Class E transactions                                                 124       4,233          --          --
+                                                                         ----------  ----------  -----------  ---------
+   Net Increase (Decrease) From Share Transactions                            5,355       8,699       (1,351)     1,582
+                                                                         ==========  ==========  ===========  =========
+</TABLE>
+AMOUNTS DESIGNATED AS "--" ARE ZERO OR HAVE BEEN ROUNDED TO ZERO. THE
+
+ACCOMPANYING NOTES ARE AN INTEGRAL PART OF THE FINANCIAL STATEMENTS.
+
+18
+<PAGE>
+FINANCIAL HIGHLIGHTS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- FOR THE YEAR ENDED MARCH 31, 2001
+
+FOR A SHARE OUTSTANDING THROUGHOUT EACH YEAR
+
+
+<TABLE>
+<CAPTION>
+
+
+
+
+          NET              REALIZED AND                   NET        NET                           RATIO OF
+         ASSET              UNREALIZED    DIVIDENDS  DISTRIBUTIONS   ASSET              ASSETS       RATIO      NET INVESTMENT
+         VALUE,     NET        GAINS      FROM NET       FROM        VALUE,              END     OF EXPENSES      INCOME
+       BEGINNING INVESTMENT (LOSSES) ON  INVESTMENT      CAPITAL      END      TOTAL  OF PERIOD  TO AVERAGE     TO AVERAGE
+       OF PERIOD  INCOME     SECURITIES    INCOME        GAINS    OF PERIOD   RETURN    (000)    NET ASSETS     NET ASSETS
+- ------------------------------------------------------------------------------------------------------------------------------
+- ------------------
+S&P 500 INDEX FUND
+- ------------------
+  CLASS A (+)
+<S>         <C>     <C>       <C>        <C>         <C>          <C>         <C>      <C>            <C>         <C>
+  2001      $46.42  $0.37     $(10.55)   $(0.36)     $    --      $35.88      (22.07)% $  962,678     0.40%       0.88%
+  2000       40.13   0.39        6.60     (0.39)       (0.31)      46.42       17.52    1,002,691     0.40        0.93
+  1999       34.71   0.40        5.76     (0.40)       (0.34)      40.13       18.05      687,706     0.40        1.11
+  1998       24.06   0.41       10.86     (0.41)       (0.21)      34.71       47.43      451,077     0.40        1.37
+  1997       20.87   0.48        3.47     (0.43)       (0.33)      24.06       19.22      108,770     0.40        1.84
+  CLASS E (++)
+  2001      $46.54  $0.44     $(10.59)   $(0.42)     $    --      $35.97      (21.97)% $1,593,253     0.25%       1.03%
+  2000       40.23   0.45        6.62     (0.45)       (0.31)      46.54       17.79    2,055,361     0.25        1.07
+  1999       34.77   0.57        5.68     (0.45)       (0.34)      40.23       18.29    1,606,449     0.25        1.26
+  1998       24.10   0.45       10.88     (0.45)       (0.21)      34.77       47.62    1,300,924     0.25        1.55
+  1997       20.88   0.46        3.54     (0.45)       (0.33)      24.10       19.46      835,889     0.25        2.03
+
+
+- ---------------
+BOND INDEX FUND
+- ---------------
+  2001      $10.10  $0.64     $  0.53    $(0.64)     $   --       $10.63       12.03%  $   59,855     0.38%       6.24%
+  2000       10.55   0.61       (0.45)    (0.61)         --        10.10        1.62       70,501     0.38        6.02
+  1999       10.52   0.62        0.03     (0.62)         --        10.55        6.25       56,981     0.38        5.79
+  1998       10.01   0.64        0.51     (0.64)         --        10.52       11.81       43,282     0.38        6.22
+  1997       10.26   0.64       (0.21)    (0.68)         --        10.01        4.36       35,691     0.38        6.26
+</TABLE>
+
+
+                         RATIO OF
+           RATIO OF   NET INVESTMENT
+           EXPENSES       INCOME
+          TO AVERAGE    TO AVERAGE
+          NET ASSETS    NET ASSETS    PORTFOLIO
+          (EXCLUDING    (EXCLUDING    TURNOVER
+           WAIVERS)      WAIVERS)       RATE
+- -----------------------------------------------
+- ------------------
+S&P 500 INDEX FUND
+- ------------------
+  CLASS A (+)
+  2001              0.43%        0.85%            12%
+  2000              0.43         0.90              7
+  1999              0.44         1.07              7
+  1998              0.44         1.33              4
+  1997              0.46         1.78              2
+  CLASS E (++)
+  2001              0.53%        0.75%            12%
+  2000              0.52         0.80              7
+  1999              0.54         0.97              7
+  1998              0.54         1.26              4
+  1997              0.54         1.74              2
+
+
+- ---------------
+BOND INDEX FUND
+- ---------------
+  2001              0.70%        5.92%            29%
+  2000              0.71         5.69             47
+  1999              0.72         5.45             40
+  1998              0.78         5.82             44
+  1997              0.71         5.93             46
+
++  ON JULY 31, 1997 THE BOARD OF TRUSTEES APPROVED THE RENAMING OF THE CLASS E
+   SHARES TO CLASS A SHARES.
+++ ON JULY 31, 1997 THE BOARD OF TRUSTEES APPROVED THE RENAMING OF THE CLASS A
+   SHARES TO CLASS E SHARES.
+
+
+THE ACCOMPANYING NOTES ARE AN INTEGRAL PART OF THE FINANCIAL STATEMENTS.
+                                                                              19
+<PAGE>
+NOTES TO FINANCIAL STATEMENTS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+1.   ORGANIZATION
+SEI Index Funds (the "Trust") was organized as a Massachusetts Business Trust
+under a Declaration of Trust dated March 6, 1985. The Trust is registered under
+the Investment Company Act of 1940, as amended, as a diversified, open-end
+management investment company with two funds: the S&P 500 Index Fund and the
+Bond Index Fund (the "Funds"). The Trust's prospectus provides a description of
+each Fund's investment objectives, policies and strategies. The trust is
+registered to offer Class A and Class E shares of the S&P 500 Index Fund and
+Class A shares of the Bond Index Fund. The assets of each Fund are segregated,
+and a shareholder's interest is limited to the Fund in which shares are held.
+
+2.   SIGNIFICANT ACCOUNTING POLICIES
+The following is a summary of the significant accounting policies followed by
+the Funds.
+     SECURITY VALUATION -- Investments in equity securities which are traded on
+a national securities exchange (or reported on the NASDAQ national market
+system) are stated at the last quoted sales price if readily available for such
+equity securities on each business day; other equity securities traded in the
+over-the-counter market and listed equity securities for which no sale was
+reported on that date are stated at the last quoted bid price. Securities not
+listed on an exchange or for which market quotations cannot be obtained are
+valued at their fair value as determined by a Fair Valuation Committee under the
+direction of the Board of Trustees. Although the Committee uses their best
+judgement in estimating the fair value of these investments, there are inherent
+limitations in any estimation technique. Because of the inherent uncertainty of
+valuation, the Fund's values may differ from the values that the Fund could
+realize in a current transaction.
+     Debt obligations exceeding sixty days to maturity for which market
+quotations are readily available are valued at the most recently quoted bid
+price. Debt obligations with sixty days or less remaining until maturity may be
+valued at their amortized cost.
+     FEDERAL INCOME TAXES -- It is each Fund's intention to continue to qualify
+as a regulated investment company for Federal income tax purposes by complying
+with the appropriate provisions of the Internal Revenue Code. Accordingly, no
+provisions for Federal income taxes are required in the accompanying financial
+statements.
+     SECURITY TRANSACTIONS AND RELATED INCOME -- Security transactions are
+accounted for on the date the security is purchased or sold (trade date).
+Dividend income is recognized on the ex-dividend date, and interest income is
+recognized on the accrual basis. Costs used in determining realized gains and
+losses on the sales of investment securities are those of the specific
+securities sold adjusted for the accretion and amortization of purchase
+discounts and premiums during the respective holding periods. Purchase discounts
+and premiums on securities held by the Funds are accreted and amortized to
+maturity using a method which approximates the effective interest method.
+     REPURCHASE AGREEMENTS -- Securities pledged as collateral for Repurchase
+Agreements are held by the custodian bank until the respective agreements
+mature. Provisions of the Repurchase Agreements and procedures adopted by SEI
+Investments Fund Management (the "Manager") and the adviser ensure that the
+market value of the collateral, including accrued interest thereon, is
+sufficient in the event of default by the counterparty. If the counterparty
+defaults and the value of the collateral declines or if the counterparty enters
+into an insolvency proceeding, realization of the collateral by the Funds may be
+delayed or limited.
+     FUTURES CONTRACTS -- The S&P 500 Index Fund invests in S&P 500 futures
+contracts. The S&P 500 Index Fund's investment in S&P 500 Index futures
+contracts is intended to assist the Fund in more closely approximating the
+performance of the S&P
+
+20
+     <PAGE>
+500 Index. Initial margin deposits of cash or securities are made upon entering
+into futures contracts. The contracts are marked to market daily and the
+resulting changes in value are accounted for as unrealized gains and losses.
+Variation margin payments are paid or received, depending upon whether
+unrealized losses or gains are incurred. When the contract is closed, the Fund
+records a realized gain or loss equal to the difference between the proceeds
+from (or cost of) the closing transaction and the amount invested in the
+contract.
+     Risks related to futures contracts include the possibility that there may
+not be a liquid market for the contracts, the changes in the values of the
+contract may not directly correlate with changes in the values of the underlying
+securities, and that the counterparty to a contract may default on its
+obligation to perform. Futures contracts involve risk of loss in excess of the
+amounts recognized in the Statement of Net Assets to the extent of the contract
+amounts.
+     A summary of the open S&P 500 Index futures contracts held by the S&P 500
+Index Fund at March 31, 2001, is as follows:
+
+               CONTRACT                         UNREALIZED
+  NUMBER OF      VALUE                         APPRECIATION
+  CONTRACTS      (000)          EXPIRATION         (000)
+ -----------   ---------       -------------   ------------
+     189        $55,245          06/18/01         $1,893
+
+     CLASSES -- Class specific expenses are borne by that class of shares.
+Income, expenses, and realized and unrealized gains/losses are allocated to the
+respective classes on the basis of relative daily net assets.
+     EXPENSES -- Expenses that are directly related to one of the Funds are
+charged directly to that Fund. Other operating expenses of the Trust are
+prorated to the Funds on the basis of relative net assets.
+     NET ASSET VALUE PER SHARE -- The net asset value per share of each Fund is
+calculated on each business day. In general, it is computed by dividing the
+assets of each fund, less its liabilities, by the number of outstanding shares
+of the Fund.
+     RECLASSIFICATION OF COMPONENTS OF NET ASSETS -- The timing and
+characterization of certain income and capital gains distributions are
+determined annually in accordance with federal tax regulations which may differ
+from generally accepted accounting principles. As a result, net investment
+income (loss) and net realized gain (loss) on investment transactions for the
+reporting period may differ significantly from distributions during such period.
+These book/tax differences may be temporary or permanent in nature. To the
+extent these differences are permanent, they are charged or credited to
+paid-in-capital or accumulated net realized gain, as appropriate, in the period
+that the differences arise. Accordingly, the following permanent difference, has
+been reclassified to/from the following accounts during the fiscal year ended
+March 31, 2001:
+                                               UNDISTRIBUTED
+                                 ACCUMULATED  NET INVESTMENT
+                PAID-IN-CAPITAL REALIZED GAIN     INCOME
+   FUNDS             (000)          (000)          (000)
+   -----        --------------  ------------- --------------
+S&P 500
+    Index Fund     $(1,478)          $763          $715
+
+     OTHER -- Distributions from net investment income for the Funds are paid to
+shareholders in the form of monthly dividends for the Bond Index Fund and
+quarterly for the S&P 500 Index Fund. Any net realized capital gains on sales of
+securities are distributed to shareholders at least annually.
+     Dividends from net investment income and distributions from net realized
+capital gains are determined in accordance with U.S. Federal income tax
+regulations, which may differ from those amounts determined under accounting
+principles generally accepted in the United States of America.
+     USES OF ESTIMATES IN THE PREPARATION OF FINANCIAL STATEMENTS -- The
+preparation of financial statements, in conformity with accounting principles
+generally accepted in the United States of America, requires management to make
+estimates and assumptions that affect the reported amount of assets and
+liabilities and disclosure of contingent assets and liabilities at the date of
+the financial statements and the reported amounts of revenue and expenses during
+the reporting period. Actual results could differ from those estimates.
+
+                                                                              21
+     <PAGE>
+NOTES TO FINANCIAL STATEMENTS
+- --------------------------------------------------------------------------------
+SEI INDEX FUNDS -- MARCH 31, 2001
+
+
+
+3.   TRANSACTIONS WITH AFFILIATES
+The Trust and the Manager are parties to management agreements for the S&P 500
+Index Fund and bond Index Fund dated July 25, 1986 and January 20, 1986,
+respectively, under which the Manager provides management, administrative,
+transfer agent, and shareholder services to the Funds for an annual fee equal to
+ .22% of the average daily net assets of the S&P 500 Index Fund and .35% of
+average daily net assets of the Bond Index Fund. The Manager has agreed to waive
+its fee so that the total annual expenses of each Fund will not exceed voluntary
+expense limitations adopted by the Manager. In the event that the total annual
+expenses of a Fund, after reflecting a waiver of all fees by the Manager, exceed
+the specific limitation, the Manager has agreed to bear such excess. Any such
+waiver is voluntary and may be terminated at any time at the Manager's sole
+discretion.
+     Certain officers of the Trust are also officers of the Manager. The Trust
+pays each unaffiliated Trustee an annual fee for attendance at quarterly,
+interim and committee meetings. Compensation of officers is paid by the Manager.
+     SEI Investments Distribution Company ("the Distributor"), a wholly-owned
+subsidiary of SEI Investments and a registered broker-dealer, acts as the
+distributor of the shares of the Trust under the Distribution Agreements. The
+Trust has adopted shareholder servicing plans (the "Plans") for its Class A and
+Class E shares pursuant to which shareholder servicing fees of up to .15% or
+ .25%, respectively, and for the Bond Index Fund up to .25%, of the average daily
+net assets attributable to the particular class of shares are paid to the
+Distributor. Under the Plans, the Distributor may perform, or may compensate
+other service providers for performing, certain shareholder and administrative
+services. Under the Plans, the Distributor may retain as a profit any difference
+between the fee it receives and the amount it pays to third parties.
+
+4.   INVESTMENT ADVISORY AND CUSTODIAN AGREEMENT
+Under an investment advisory agreement dated November 18, 1998, SEI Investments
+Management Corporation ("SIMC") serves as the Investment Adviser of the S&P 500
+Index Fund. For its services as Investment Adviser, SIMC receives a monthly fee
+at an annual rate of .03% of the average daily net assets of the S&P 500 Index
+Fund. World Asset Management serves as an investment sub-advisor of the S&P 500
+Index Fund and is party to an investment sub-advisory agreement with the Trust
+and SIMC dated November 18, 1998. Mellon Bond Associates serves as the
+Investment Adviser of the Bond Index Fund under an advisory agreement dated
+October 2, 1996. For its services as Investment Adviser, Mellon Bond Associates
+receives a monthly fee at an annual rate of .07% of the average daily net assets
+of the Bond Index Fund.
+     Comerica Bank, an affiliate of World Asset Management, serves as custodian
+of the Funds under an agreement dated January 3, 1986.
+
+5.   INVESTMENT TRANSACTIONS
+The cost of security purchases and the proceeds from the sale of securities,
+other than temporary cash investments, during the period ended March 31, 2001,
+were as follows:
+
+                              U.S.
+                           GOVERNMENT
+                           SECURITIES  ALL OTHER   TOTAL
+                              (000)      (000)     (000)
+                           ------------------------------
+S&P 500 INDEX FUND
+Purchases                   $   --    $546,313  $546,313
+Sales                           --     339,834   339,834
+BOND INDEX FUND
+Purchases                   12,588       5,784    18,372
+Sales                       29,941       5,526    35,467
+
+     Subsequent to October 31, 2000, the S&P 500 Index Fund recognized net
+capital losses for tax purposes in the amount of $22,548,338 that have
+
+
+
+22
+     <PAGE>
+
+been deferred to 2001 and can be used to offset future capital gains at March
+31, 2001. The Funds also had capital loss carryforwards at March 31, 2001 as
+follows:
+
+    EXPIRATION          S&P 500        BOND INDEX
+       YEAR           INDEX FUND          FUND
+    ----------        ----------       ----------
+       2002                  $--        $121,767
+       2003                   --         100,980
+       2004                   --         241,696
+       2008                   --         174,383
+       2009           18,571,840          54,745
+
+     For tax purposes, the losses in the Funds can be carried forward for a
+maximum of eight years to offset any net realized capital gains.
+     The S&P 500 Fund had cumulative wash sales at March 31, 2001, amounting to
+$54,335,667. These wash sale losses can not be used for Federal income tax
+purposes in the current year and have deferred for use in future years.
+     The aggregate gross unrealized appreciation and depreciation on securities
+at March 31, 2001, for each Fund is as follows:
+                                                    NET
+                        APPRECIATED DEPRECIATED  UNREALIZED
+               FEDERAL  SECURITIES  SECURITIES  APPRECIATION
+              TAX COST     (000)       (000)       (000)
+              --------  ----------- ----------- ------------
+S&P 500 Index
+  Fund       $1,838,307   $972,341  $(256,553)   $715,788
+Bond Index
+  Fund           54,121      1,937       (156)      1,781
+
+     The Bond Index Fund invests primarily in securities issued or guaranteed as
+to principal and interest by the U.S. Government or its agencies or
+instrumentalities. The ability of the issuers of the repurchase agreements and
+other bonds held by the Fund to meet their obligations may be affected by
+economic developments in a specific industry, state or region. The market value
+of the Fund's investments will change in response to interest rate changes and
+other factors. During periods of falling interest rates, the values of fixed
+income securities generally rise. Conversely, during periods of rising interest
+rates, the values of such securities generally decline. Changes by recognized
+rating agencies in the ability of an issuer to make payments of interest and
+principal may also affect the value of these investments. A summary of credit
+quality ratings for securities held by the Fund at March 31, 2001 (unaudited),
+is as follows:
+                                                   % OF
+                                                   FUND
+                MOODY'S                            VALUE
+                -------                          ----------
+U.S. Government Securities                        67.31%
+Repurchase Agreements                              1.29
+Other Bonds
+     Aaa                                           6.63
+     Aa                                            5.59
+     A                                            13.15
+     Baa                                           6.03
+                                                 ------
+                                                 100.00%
+                                                 ======
+6.   LINE OF CREDIT
+The Funds have a bank line of credit. Borrowings under the line of credit are
+secured by investment securities of the Funds equal to 110% of such borrowings
+which may not exceed 10% of the Funds' total assets. During the year ended March
+31, 2001, no borrowings were made from this line of credit.
+
+7.   RECENTLY ISSUED ACCOUNTING STANDARDS
+On November 21, 2000, the American Institute of Certified Public Accountants
+("AICPA") issued the AICPA Audit and Accounting Guide "Audits of Investment
+Companies" (the "Guide"), effective for annual financial statements issued for
+fiscal years beginning after December 15, 2000. Management does not expect any
+material impact on results of operations or financial condition of the Fund upon
+adoption of the provisions of the Guide.
+
+                                                                              23
+<PAGE>
+NOTICE TO SHAREHOLDERS
+- --------------------------------------------------------------------------------
+MARCH 31, 2001 -- (UNAUDITED)
+
+For shareholders that do not have a March 31, 2001 taxable year end, this notice
+is for informational purposes only. For shareholders with a March 31, 2001
+taxable year end, please consult your tax advisor as to the pertinence of this
+notice.
+
+For the fiscal year ended March 31, 2001 the Funds of the SEI Index Funds are
+designating long term capital gains and qualifying dividend income with regard
+to distributions paid during the year as follows:
+
+                           (A)                  (B)
+                        LONG TERM            ORDINARY
+                      CAPITAL GAINS           INCOME              TOTAL
+                      DISTRIBUTIONS        DISTRIBUTIONS      DISTRIBUTIONS
+FUND                   (TAX BASIS)          (TAX BASIS)        (TAX BASIS)
+- ----------            -------------        -------------      -------------
+S&P 500 Index              0%                  100%                100%
+Bond Index (2)             0%                  100%                100%
+
+                           (C)                  (D)                 (E)
+                       QUALIFYING           TAX-EXEMPT            FOREIGN
+FUND                  DIVIDENDS(1)           INTEREST           TAX CREDIT
+- ----------            -------------        -------------      -------------
+S&P 500 Index            100%                   0%                   0%
+Bond Index                 0%                   0%                   0%
+
+
+(1) Qualifying dividends represent dividends which qualify for the corporate
+    dividends received deduction.
+
+(2) The Bond Index fund satisfies CA, CT and NY's statutory requirements to
+    pass-through income from Federal obligations. Accordingly, the pro-rata
+    portion of income from Federal obligations may be exempt for those
+    respective state's income tax purposes.
+
+Items (A) and (B) are based on the percentage of each Fund's total distribution.
+Item (C) is based on the percentage of ordinary income of the Fund.
+Items (D) and (E) are based on the percentage of gross income of the Fund.
+
+24
+<PAGE>
+SEI INDEX FUNDS ANNUAL REPORT MARCH 31, 2001
+
+
+Robert A. Nesher
+CHAIRMAN
+
+TRUSTEES
+William M. Doran
+F. Wendell Gooch
+James M. Storey
+George J. Sullivan, Jr.
+Rosemarie B. Greco
+
+OFFICERS
+Edward D. Loughlin
+PRESIDENT AND
+CHIEF EXECUTIVE OFFICER
+
+James R. Foggo
+CONTROLLER AND
+CHIEF FINANCIAL OFFICER
+
+Lydia Gavalis
+VICE PRESIDENT,
+ASSISTANT SECRETARY
+
+Cynthia M. Parrish
+VICE PRESIDENT,
+ASSISTANT SECRETARY
+
+Todd Cipperman
+VICE PRESIDENT,
+ASSISTANT SECRETARY
+
+Robert S. Ludwig
+VICE PRESIDENT,
+ASSISTANT SECRETARY
+
+Timothy D. Barto
+VICE PRESIDENT,
+ASSISTANT SECRETARY
+
+Sherry K. Vetterlein
+VICE PRESIDENT,
+ASSISTANT SECRETARY
+
+William E. Zitelli
+VICE PRESIDENT,
+ASSISTANT SECRETARY
+
+Christine McCullough
+VICE PRESIDENT,
+ASSISTANT SECRETARY
+
+Richard W. Grant
+SECRETARY
+
+INVESTMENT ADVISER
+SEI Investments Management Corporation
+
+Mellon Bond Associates
+
+SUB-ADVISER
+World Asset Management
+
+MANAGER AND SHAREHOLDER SERVICING AGENT
+SEI Investments Fund Management
+
+DISTRIBUTOR
+SEI Investments Distribution Co.
+
+LEGAL COUNSEL
+Morgan, Lewis & Bockius LLP
+
+INDEPENDENT PUBLIC ACCOUNTANTS
+Arthur Andersen
+
+This annual report and the financial statements contained herein are submitted
+for the general information of the shareholders of the Trust and must be
+preceded or accompanied by a current prospectus. Shares of the SEI Funds are not
+deposits or obligations of, or guaranteed or endorsed by, any bank. The shares
+are not federally insured by the Federal Deposit Insurance Corporation (FDIC),
+the Federal Reserve Board, or any other government agency. Investment in the
+shares involves risk, including the possible loss of principal.
+
+FOR MORE INFORMATION CALL
+1 800 DIAL SEI
+1 800 342 5734
+
+<PAGE>
+SEI INVESTMENTS
+
+SEI Investments Distribution Co.
+Oaks, PA 19456
+1 800-DIAL-SEI  /  1 800 342 5734
+
+
+
+SEI-F-031 (03/01)
+
+</TEXT>
+</DOCUMENT>
+</SEC-DOCUMENT>
+-----END PRIVACY-ENHANCED MESSAGE-----

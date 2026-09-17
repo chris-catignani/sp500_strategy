@@ -43,6 +43,9 @@ from scripts.extract_ground_truth_from_sec import (
 )
 
 ROSTERS_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_semiannual_rosters.json"
+SEI_Q1_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sei_q1_rosters.json"
+PRUDENTIAL_Q1_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "prudential_q1_rosters.json"
+ANNUAL_ROSTERS_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_audited_rosters.json"
 MAP_PATH = PROJECT_ROOT / "data" / "raw" / "constituents" / "issuer_ticker_map.json"
 SPLITS_PATH = PROJECT_ROOT / "data" / "raw" / "corporate_actions" / "splits.json"
 TICKERS_DIR = PROJECT_ROOT / "data" / "raw" / "tickers"
@@ -81,10 +84,126 @@ def _q3_rosters() -> Dict[str, Dict[str, Any]]:
     return out
 
 
+def _resolve(name: str, period: str, issuer_map: Dict[str, str]) -> Any:
+    """Name to ticker, with the one string that changes registrant mid-series.
+
+    SEI writes "AT&T" for AT&T Corp through its 2005 schedule, listing SBC Communications
+    separately on the same page. SBC renamed itself AT&T Inc. in November 2005, so in the
+    2006 schedule "AT&T" is that registrant and the SBC line is gone. The string is
+    therefore resolved by period: T_CORP while Ma Bell was filing under it, and T -- which
+    has a vendor price file and is skipped by the caller -- afterwards. A single map entry
+    could only assert one of the two, and asserting T_CORP would extend its series a year
+    past the registrant's existence. See docs/DATA_PROVENANCE.md 4.5.
+    """
+    if name == normalise("AT&T"):
+        return "T_CORP" if period < "2006" else "T"
+    return issuer_map.get(name)
+
+
+def _q1_rosters() -> Dict[str, Dict[str, Any]]:
+    """March-31 schedules, SEI preferred over Prudential where both filed (issue #63).
+
+    Both filers already publish holdings in the shape this module consumes, so no unit
+    conversion happens here: SEI reports thousands natively, and the Prudential extractor
+    divides its exact-dollar values by 1000.0 as a float rather than truncating them.
+
+    SEI wins the two overlapping periods because its March-31 statement of net assets is
+    AUDITED -- its Report of Independent Accountants covers the schedule at that date and
+    confirms the securities with the custodian. Prudential carries no auditor's report at
+    all. The displaced Prudential rosters are not discarded: they are the independent
+    second opinion in _cross_filer_check below.
+    """
+    out: Dict[str, Dict[str, Any]] = {}
+    for path in (PRUDENTIAL_Q1_PATH, SEI_Q1_PATH):  # SEI second, so it overwrites
+        if not path.exists():
+            continue
+        with open(path, "r", encoding="utf-8") as f:
+            for period, roster in json.load(f)["rosters_by_period"].items():
+                out[period] = roster
+    return out
+
+
+def _q4_rosters() -> Dict[str, Dict[str, Any]]:
+    """December-31 schedules from the audited Vanguard annual filings (4.3.10).
+
+    The same rosters already price these constituents annually through
+    derive_constituent_series.py, which merges into the ANNUAL dataset keyed by year. The
+    quarterly path never saw them, so a constituent had no Q4 in its quarterly series and
+    could not satisfy a rule that asks for every quarter it might be held at. This reads
+    the same archived filings a second time and keys them as Q4.
+    """
+    if not ANNUAL_ROSTERS_PATH.exists():
+        return {}
+    out: Dict[str, Dict[str, Any]] = {}
+    with open(ANNUAL_ROSTERS_PATH, "r", encoding="utf-8") as f:
+        for year, roster in json.load(f)["rosters_by_year"].items():
+            out[f"{year}-Q4"] = {**roster, "audited": True}
+    return out
+
+
+def _cross_filer_check(issuer_map: Dict[str, str]) -> Dict[str, Any]:
+    """Price the same issuer on the same date from two independent filers.
+
+    Q1 is the only quarter with two filers, so it is the only quarter that can be checked
+    this way -- a stronger check than Q2 or Q4 currently carries, where a parse error and
+    a true price move look alike. Ten of Prudential's thirteen filings were refused by its
+    extractor, so the overlap is 1995 and 1996 rather than the eleven years both filers
+    cover on paper. The refusals are recorded in prudential_q1_rosters.json.
+
+    Agreement is not expected to be exact. SEI rounds value to whole thousands against a
+    fund roughly a tenth of Prudential's size, so its implied price is the coarser of the
+    two; the residual is that rounding, not a disagreement about the price.
+    """
+    if not (SEI_Q1_PATH.exists() and PRUDENTIAL_Q1_PATH.exists()):
+        return {}
+    with open(SEI_Q1_PATH, "r", encoding="utf-8") as f:
+        sei = json.load(f)["rosters_by_period"]
+    with open(PRUDENTIAL_Q1_PATH, "r", encoding="utf-8") as f:
+        pru = json.load(f)["rosters_by_period"]
+
+    def priced(roster: Dict[str, Any]) -> Dict[str, float]:
+        out: Dict[str, float] = {}
+        for h in roster["holdings"]:
+            ticker = issuer_map.get(normalise(h["name"]))
+            if ticker and h["shares"] > 0:
+                out[ticker] = h["value_usd_thousands"] * 1000.0 / h["shares"]
+        return out
+
+    periods = sorted(set(sei) & set(pru))
+    comparisons = []
+    for period in periods:
+        a, b = priced(sei[period]), priced(pru[period])
+        for ticker in sorted(set(a) & set(b)):
+            comparisons.append(
+                {
+                    "period": period,
+                    "ticker": ticker,
+                    "sei_price_usd": round(a[ticker], 4),
+                    "prudential_price_usd": round(b[ticker], 4),
+                    "difference_usd": round(a[ticker] - b[ticker], 4),
+                    "relative_difference": round(abs(a[ticker] - b[ticker]) / b[ticker], 6),
+                }
+            )
+    worst = max(comparisons, key=lambda c: c["relative_difference"], default=None)
+    return {
+        "description": (
+            "Independent price agreement between the two March-31 filers on the periods "
+            "where both produced a roster. SEI is the published source; Prudential is the "
+            "check."
+        ),
+        "overlapping_periods": periods,
+        "published_filer": "SEI Index Funds (audited); Prudential is unaudited",
+        "issuers_compared": len(comparisons),
+        "max_relative_difference": worst["relative_difference"] if worst else None,
+        "worst_pair": worst,
+        "comparisons": comparisons,
+    }
+
+
 def derive() -> Dict[str, Any]:
     with open(ROSTERS_PATH, "r", encoding="utf-8") as f:
         rosters = json.load(f)["rosters_by_period"]
-    rosters = {**rosters, **_q3_rosters()}
+    rosters = {**rosters, **_q3_rosters(), **_q1_rosters(), **_q4_rosters()}
     with open(MAP_PATH, "r", encoding="utf-8") as f:
         issuer_map = {normalise(k): v for k, v in json.load(f)["map"].items()}
     with open(SPLITS_PATH, "r", encoding="utf-8") as f:
@@ -94,9 +213,14 @@ def derive() -> Dict[str, Any]:
     for period in sorted(rosters):
         roster = rosters[period]
         for holding in roster["holdings"]:
-            if holding.get("unidentified") or holding["shares"] <= 0:
+            if (
+                holding.get("unidentified")
+                or holding.get("no_value_printed")
+                or holding["shares"] <= 0
+                or holding["value_usd_thousands"] <= 0
+            ):
                 continue
-            ticker = issuer_map.get(normalise(holding["name"]))
+            ticker = _resolve(normalise(holding["name"]), period, issuer_map)
             if ticker is None:
                 continue
             # A vendor file is the authoritative source where one exists; deriving over it
@@ -128,21 +252,39 @@ def derive() -> Dict[str, Any]:
     return {
         "description": (
             "Quarter-end price series for S&P 500 constituents with no vendor price file, "
-            "derived as market value divided by share count from the Vanguard June-30 "
-            "semi-annual rosters (Q2) and the SPY September-30 annual filings (Q3)."
+            "derived as market value divided by share count from the March-31 schedules of "
+            "SEI Index Funds and Prudential (Q1), the Vanguard June-30 semi-annual rosters "
+            "(Q2), the SPY September-30 annual filings (Q3) and the Vanguard December-31 "
+            "annual rosters (Q4)."
         ),
         "sources": {
+            "Q1": (
+                "data/raw/ground_truth/sei_q1_rosters.json (1995-2003, 2005-2006) and "
+                "data/raw/ground_truth/prudential_q1_rosters.json (1994). 2004 has no Q1 "
+                "from either filer: SEI's schedule is corrupt as filed -- its Microsoft "
+                "value reads '0,600' in EDGAR's own bytes, short by exactly the 40,000k "
+                "the reconciliation misses -- and Prudential's 2004 is the HTML era its "
+                "extractor refuses. Reconstructing the missing digit from the "
+                "reconciliation gap would be an inferred figure wearing a filing's "
+                "provenance, so the year is absent instead."
+            ),
             "Q2": "data/raw/ground_truth/vanguard_semiannual_rosters.json",
             "Q3": "SPY September-30 annual filings in data/raw/ground_truth/sec_filings/",
+            "Q4": "data/raw/ground_truth/vanguard_audited_rosters.json",
         },
         "issuer_resolution": "data/raw/constituents/issuer_ticker_map.json",
         "split_records": "data/raw/corporate_actions/splits.json",
         "grade": (
-            "MIXED, recorded per observation in the audited flag. Q3 is audited: SPY's "
-            "fiscal year ends September 30 from 1997, so its September report is the "
-            "annual one. Q2 is unaudited: Vanguard's fiscal year ends December 31, so its "
-            "June report is the semi-annual one. Do not read the two as one grade."
+            "MIXED, recorded per observation in the audited flag. Audited: Q1 from 1995 "
+            "(SEI's Report of Independent Accountants covers its March-31 statement of net "
+            "assets and confirms the securities with the custodian), Q3 (September 30 is "
+            "SPY's fiscal year end from 1997) and Q4 (December 31 is Vanguard's). "
+            "Unaudited: Q2, Vanguard's semi-annual, and Q1 1994 alone, which comes from "
+            "Prudential because SEI's series starts in 1995. Do not read these as one "
+            "grade. Audit status here was read out of each filing; the submissions API's "
+            "fiscalYearEnd reports 0930 for SEI and is wrong for that trust."
         ),
+        "cross_filer_validation": _cross_filer_check(issuer_map),
         "adjustment_status": (
             "price_usd is AS-TRADED. split_adjusted_price_usd is present only where a "
             "filing-cited split record exists, and is expressed in the share terms of "
@@ -162,9 +304,15 @@ def main() -> None:
     series = data["series_by_ticker"]
     total = sum(len(v) for v in series.values())
     audited = sum(1 for v in series.values() for o in v.values() if o["audited"])
+    by_quarter: Dict[str, int] = {}
+    for obs in series.values():
+        for period in obs:
+            by_quarter[period[-2:]] = by_quarter.get(period[-2:], 0) + 1
     print(
         f"{total} observations across {len(series)} tickers "
-        f"({audited} audited Q3, {total - audited} unaudited Q2)"
+        f"({audited} audited, {total - audited} unaudited; "
+        + ", ".join(f"{q} {by_quarter[q]}" for q in sorted(by_quarter))
+        + ")"
     )
     for ticker in sorted(series):
         periods = sorted(series[ticker])

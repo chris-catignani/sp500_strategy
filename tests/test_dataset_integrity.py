@@ -305,29 +305,72 @@ class TestDerivedConstituentSeries(unittest.TestCase):
             with self.subTest(ticker=ticker):
                 self.assertEqual(self.dividends.get(ticker, {}), {})
 
-    def test_derived_series_are_absent_from_the_quarterly_datasets(self):
-        """Quarterly coverage is incomplete, so these constituents are withheld (#63).
+    def test_derived_series_reach_the_quarterly_datasets(self):
+        """Quarterly coverage now exists for these constituents (#63).
 
-        The reason changed with #63 and is worth stating precisely, because the earlier
-        one is no longer true. Q2 and Q3 observations DO now exist, in
-        data/raw/ground_truth/derived_quarterly_constituent_series.json, derived from the
-        Vanguard June-30 semi-annual and SPY September-30 annual filings. What is missing
-        is Q1: no archived source prices these constituents at March 31.
-
-        A partial series cannot be published. engine/backtest.py values every open position
-        at every quarter end before selection runs, so a constituent bought at Q4 is still
-        held at the following Q1 and must be priced there. Refusing to select it does not
-        help; it is already held. So build_datasets_from_raw.py merges a quarterly series
-        only where every observed year carries all four quarters, which today admits none
-        of them.
-
-        This test therefore asserts the withholding, not the absence of the data.
+        They were withheld entirely while no archived source priced them at March 31. Q1
+        is now sourced -- SEI Index Funds' audited March-31 statements of net assets for
+        1995-2006, and Prudential's unaudited 1994 -- and Q4 is derived from the same
+        audited December-31 rosters that already price them annually.
         """
         with open(ROOT / "data" / "sp500_quarterly_prices.json", "r", encoding="utf-8") as f:
             quarterly = json.load(f)
         for ticker in self.derived:
             with self.subTest(ticker=ticker):
-                self.assertNotIn(ticker, quarterly)
+                self.assertIn(ticker, quarterly)
+                self.assertTrue(quarterly[ticker])
+
+    def test_every_quarterly_candidate_can_be_priced_wherever_it_is_held(self):
+        """The rule that makes partial coverage safe, asserted against the built data.
+
+        engine/backtest.py values every OPEN POSITION at every quarter end before
+        selection runs (backtest.py:180), so buying a constituent commits the run to
+        pricing it again at the next quarter end -- the one where it is sold if it has
+        dropped out of the universe. The exact requirement is therefore: every quarter a
+        constituent can be a candidate in must carry a price, and so must the quarter
+        immediately after it.
+
+        This is the invariant that replaced withholding the series outright. Asserting it
+        on the built dataset rather than trusting the builder is the point: the earlier
+        rule -- keep the ticker if it has ANY quarter of the year -- also produced a
+        dataset that looked complete, and its failure showed up only as a KeyError part
+        way through a run.
+        """
+        with open(ROOT / "data" / "sp500_quarterly_prices.json", "r", encoding="utf-8") as f:
+            quarterly = json.load(f)
+        with open(
+            ROOT / "data" / "sp500_quarterly_constituents.json", "r", encoding="utf-8"
+        ) as f:
+            constituents = json.load(f)
+
+        def next_quarter(key):
+            year, q = int(key[:4]), int(key[-1])
+            return f"{year}-Q{q + 1}" if q < 4 else f"{year + 1}-Q1"
+
+        horizon = sorted({k for series in quarterly.values() for k in series})
+        candidate_quarters = {}
+        for key, entries in constituents.items():
+            for entry in entries:
+                ticker = entry["ticker"] if isinstance(entry, dict) else entry
+                candidate_quarters.setdefault(ticker, set()).add(key)
+
+        for ticker, quarters in sorted(candidate_quarters.items()):
+            if ticker not in quarterly:
+                continue
+            priced = set(quarterly[ticker])
+            needed = set(quarters)
+            # The quarter a position is sold in, for every quarter it could be bought in.
+            # Past the end of the price horizon there is no next quarter to value at.
+            needed |= {
+                nxt for q in quarters if (nxt := next_quarter(q)) <= horizon[-1]
+            }
+            with self.subTest(ticker=ticker):
+                self.assertEqual(
+                    sorted(needed - priced),
+                    [],
+                    f"{ticker} is a quarterly candidate but has no price where an open "
+                    f"position would be valued",
+                )
 
 
 if __name__ == "__main__":

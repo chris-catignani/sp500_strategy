@@ -1231,6 +1231,14 @@
       "quarter": 4
     },
     {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.016193,
+      "trailing_1y_return": 0.2099,
+      "year": 1996,
+      "quarter": 4
+    },
+    {
       "ticker": "IBM",
       "name": "International Business Machines Corp.",
       "market_cap_weight": 0.013823,
@@ -1271,6 +1279,14 @@
       "quarter": 4
     },
     {
+      "ticker": "DD",
+      "name": "DD",
+      "market_cap_weight": 0.009398,
+      "trailing_1y_return": 0.3506,
+      "year": 1996,
+      "quarter": 4
+    },
+    {
       "ticker": "WMT",
       "name": "Walmart Inc.",
       "market_cap_weight": 0.009282,
@@ -1299,6 +1315,14 @@
       "name": "Citigroup Inc.",
       "market_cap_weight": 0.008572,
       "trailing_1y_return": 0.4634,
+      "year": 1996,
+      "quarter": 4
+    },
+    {
+      "ticker": "MOB",
+      "name": "MOB",
+      "market_cap_weight": 0.00852,
+      "trailing_1y_return": 0.0915,
       "year": 1996,
       "quarter": 4
     }
@@ -1353,6 +1377,14 @@
       "quarter": 1
     },
     {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0162,
+      "trailing_1y_return": 0.239,
+      "year": 1997,
+      "quarter": 1
+    },
+    {
       "ticker": "MO",
       "name": "Altria Group Inc.",
       "market_cap_weight": 0.016,
@@ -1389,6 +1421,14 @@
       "name": "Walmart Inc.",
       "market_cap_weight": 0.0111,
       "trailing_1y_return": 0.2239,
+      "year": 1997,
+      "quarter": 1
+    },
+    {
+      "ticker": "DD",
+      "name": "DD",
+      "market_cap_weight": 0.0103,
+      "trailing_1y_return": 0.2772,
       "year": 1997,
       "quarter": 1
     },
@@ -1431,6 +1471,14 @@
       "trailing_1y_return": 0.4693,
       "year": 1997,
       "quarter": 1
+    },
+    {
+      "ticker": "MOB",
+      "name": "MOB",
+      "market_cap_weight": 0.0089,
+      "trailing_1y_return": 0.1272,
+      "year": 1997,
+      "quarter": 1
     }
   ],
   "1997-Q2": [
@@ -1471,6 +1519,14 @@
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0182,
       "trailing_1y_return": 0.6086,
+      "year": 1997,
+      "quarter": 2
+    },
+    {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0173,
+      "trailing_1y_return": 0.4146,
       "year": 1997,
       "quarter": 2
     },
@@ -1539,6 +1595,14 @@
       "quarter": 2
     },
     {
+      "ticker": "DD",
+      "name": "DD",
+      "market_cap_weight": 0.0105,
+      "trailing_1y_return": 0.5893,
+      "year": 1997,
+      "quarter": 2
+    },
+    {
       "ticker": "AIG",
       "name": "American International Group Inc.",
       "market_cap_weight": 0.0104,
@@ -1559,6 +1623,14 @@
       "name": "HP Inc.",
       "market_cap_weight": 0.0084,
       "trailing_1y_return": 0.1347,
+      "year": 1997,
+      "quarter": 2
+    },
+    {
+      "ticker": "MOB",
+      "name": "MOB",
+      "market_cap_weight": 0.0082,
+      "trailing_1y_return": 0.2464,
       "year": 1997,
       "quarter": 2
     }
@@ -1609,6 +1681,14 @@
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0166,
       "trailing_1y_return": 0.4439,
+      "year": 1997,
+      "quarter": 3
+    },
+    {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0165,
+      "trailing_1y_return": null,
       "year": 1997,
       "quarter": 3
     },
@@ -1691,6 +1771,22 @@
       "trailing_1y_return": 0.4379,
       "year": 1997,
       "quarter": 3
+    },
+    {
+      "ticker": "DD",
+      "name": "DD",
+      "market_cap_weight": 0.0096,
+      "trailing_1y_return": null,
+      "year": 1997,
+      "quarter": 3
+    },
+    {
+      "ticker": "MOB",
+      "name": "MOB",
+      "market_cap_weight": 0.0081,
+      "trailing_1y_return": null,
+      "year": 1997,
+      "quarter": 3
     }
   ],
   "1997-Q4": [
@@ -1731,6 +1827,14 @@
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.016857,
       "trailing_1y_return": 0.353,
+      "year": 1997,
+      "quarter": 4
+    },
+    {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.015384,
+      "trailing_1y_return": 0.2694,
       "year": 1997,
       "quarter": 4
     },
@@ -1821,6 +1925,22 @@
       "trailing_1y_return": 0.4397,
       "year": 1997,
       "quarter": 4
+    },
+    {
+      "ticker": "DD",
+      "name": "DD",
+      "market_cap_weight": 0.008999,
+      "trailing_1y_return": 0.2728,
+      "year": 1997,
+      "quarter": 4
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.008889,
+      "trailing_1y_return": 0.4155,
+      "year": 1997,
+      "quarter": 4
     }
   ],
   "1998-Q1": [
@@ -1877,6 +1997,14 @@
       "name": "Intel Corporation",
       "market_cap_weight": 0.0149,
       "trailing_1y_return": 0.1241,
+      "year": 1998,
+      "quarter": 1
+    },
+    {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0142,
+      "trailing_1y_return": 0.2986,
       "year": 1998,
       "quarter": 1
     },
@@ -1941,6 +2069,22 @@
       "name": "Verizon Communications Inc.",
       "market_cap_weight": 0.0093,
       "trailing_1y_return": 0.7205,
+      "year": 1998,
+      "quarter": 1
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0093,
+      "trailing_1y_return": 0.6579,
+      "year": 1998,
+      "quarter": 1
+    },
+    {
+      "ticker": "DD",
+      "name": "DD",
+      "market_cap_weight": 0.009,
+      "trailing_1y_return": 0.283,
       "year": 1998,
       "quarter": 1
     },
@@ -2027,6 +2171,14 @@
       "quarter": 2
     },
     {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0133,
+      "trailing_1y_return": 0.008,
+      "year": 1998,
+      "quarter": 2
+    },
+    {
       "ticker": "BMY",
       "name": "Bristol-Myers Squibb Company",
       "market_cap_weight": 0.0129,
@@ -2067,10 +2219,26 @@
       "quarter": 2
     },
     {
+      "ticker": "DD",
+      "name": "DD",
+      "market_cap_weight": 0.0096,
+      "trailing_1y_return": 0.1869,
+      "year": 1998,
+      "quarter": 2
+    },
+    {
       "ticker": "LLY",
       "name": "Eli Lilly and Company",
       "market_cap_weight": 0.0083,
       "trailing_1y_return": 0.2263,
+      "year": 1998,
+      "quarter": 2
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0083,
+      "trailing_1y_return": 0.2929,
       "year": 1998,
       "quarter": 2
     },
@@ -2181,6 +2349,14 @@
       "quarter": 3
     },
     {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0129,
+      "trailing_1y_return": -0.1419,
+      "year": 1998,
+      "quarter": 3
+    },
+    {
       "ticker": "PG",
       "name": "Procter & Gamble Co.",
       "market_cap_weight": 0.0121,
@@ -2205,10 +2381,26 @@
       "quarter": 3
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0103,
+      "trailing_1y_return": 0.4481,
+      "year": 1998,
+      "quarter": 3
+    },
+    {
       "ticker": "VZ",
       "name": "Verizon Communications Inc.",
       "market_cap_weight": 0.0095,
       "trailing_1y_return": 0.2426,
+      "year": 1998,
+      "quarter": 3
+    },
+    {
+      "ticker": "DD",
+      "name": "DD",
+      "market_cap_weight": 0.008,
+      "trailing_1y_return": -0.0883,
       "year": 1998,
       "quarter": 3
     }
@@ -2295,6 +2487,22 @@
       "quarter": 4
     },
     {
+      "ticker": "LU",
+      "name": "LU",
+      "market_cap_weight": 0.014492,
+      "trailing_1y_return": 1.7543,
+      "year": 1998,
+      "quarter": 4
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.013625,
+      "trailing_1y_return": 0.2286,
+      "year": 1998,
+      "quarter": 4
+    },
+    {
       "ticker": "BMY",
       "name": "Bristol-Myers Squibb Company",
       "market_cap_weight": 0.01332,
@@ -2331,6 +2539,14 @@
       "name": "Citigroup Inc.",
       "market_cap_weight": 0.011287,
       "trailing_1y_return": -0.0674,
+      "year": 1998,
+      "quarter": 4
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.010514,
+      "trailing_1y_return": 0.4642,
       "year": 1998,
       "quarter": 4
     },
@@ -2433,6 +2649,22 @@
       "quarter": 1
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0138,
+      "trailing_1y_return": 0.2162,
+      "year": 1999,
+      "quarter": 1
+    },
+    {
+      "ticker": "LU",
+      "name": "LU",
+      "market_cap_weight": 0.0136,
+      "trailing_1y_return": 0.6852,
+      "year": 1999,
+      "quarter": 1
+    },
+    {
       "ticker": "PG",
       "name": "Procter & Gamble Co.",
       "market_cap_weight": 0.0125,
@@ -2461,6 +2693,14 @@
       "name": "Bank of America Corporation",
       "market_cap_weight": 0.0117,
       "trailing_1y_return": -0.009,
+      "year": 1999,
+      "quarter": 1
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0088,
+      "trailing_1y_return": 0.0803,
       "year": 1999,
       "quarter": 1
     },
@@ -2531,6 +2771,14 @@
       "quarter": 2
     },
     {
+      "ticker": "LU",
+      "name": "LU",
+      "market_cap_weight": 0.0159,
+      "trailing_1y_return": 0.6213,
+      "year": 1999,
+      "quarter": 2
+    },
+    {
       "ticker": "MRK",
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0158,
@@ -2591,6 +2839,22 @@
       "name": "Procter & Gamble Co.",
       "market_cap_weight": 0.0105,
       "trailing_1y_return": -0.0198,
+      "year": 1999,
+      "quarter": 2
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0102,
+      "trailing_1y_return": 0.45,
+      "year": 1999,
+      "quarter": 2
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.009,
+      "trailing_1y_return": -0.023,
       "year": 1999,
       "quarter": 2
     },
@@ -2661,6 +2925,14 @@
       "quarter": 3
     },
     {
+      "ticker": "LU",
+      "name": "LU",
+      "market_cap_weight": 0.0164,
+      "trailing_1y_return": 0.8787,
+      "year": 1999,
+      "quarter": 3
+    },
+    {
       "ticker": "MRK",
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0148,
@@ -2717,6 +2989,14 @@
       "quarter": 3
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0096,
+      "trailing_1y_return": 0.1491,
+      "year": 1999,
+      "quarter": 3
+    },
+    {
       "ticker": "BAC",
       "name": "Bank of America Corporation",
       "market_cap_weight": 0.0093,
@@ -2729,6 +3009,14 @@
       "name": "Altria Group Inc.",
       "market_cap_weight": 0.008,
       "trailing_1y_return": -0.2218,
+      "year": 1999,
+      "quarter": 3
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0075,
+      "trailing_1y_return": null,
       "year": 1999,
       "quarter": 3
     }
@@ -2783,6 +3071,14 @@
       "quarter": 4
     },
     {
+      "ticker": "LU",
+      "name": "LU",
+      "market_cap_weight": 0.019034,
+      "trailing_1y_return": 0.3602,
+      "year": 1999,
+      "quarter": 4
+    },
+    {
       "ticker": "IBM",
       "name": "International Business Machines Corp.",
       "market_cap_weight": 0.015809,
@@ -2799,10 +3095,34 @@
       "quarter": 4
     },
     {
+      "ticker": "AOL",
+      "name": "AOL",
+      "market_cap_weight": 0.013694,
+      "trailing_1y_return": 0.8859,
+      "year": 1999,
+      "quarter": 4
+    },
+    {
       "ticker": "AIG",
       "name": "American International Group Inc.",
       "market_cap_weight": 0.013592,
       "trailing_1y_return": 0.4012,
+      "year": 1999,
+      "quarter": 4
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.013505,
+      "trailing_1y_return": -0.0909,
+      "year": 1999,
+      "quarter": 4
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.013169,
+      "trailing_1y_return": -0.3256,
       "year": 1999,
       "quarter": 4
     },
@@ -2843,6 +3163,14 @@
       "name": "The Coca-Cola Company",
       "market_cap_weight": 0.011684,
       "trailing_1y_return": -0.1212,
+      "year": 1999,
+      "quarter": 4
+    },
+    {
+      "ticker": "NT",
+      "name": "NT",
+      "market_cap_weight": 0.010954,
+      "trailing_1y_return": 3.0299,
       "year": 1999,
       "quarter": 4
     }
@@ -2921,10 +3249,42 @@
       "quarter": 1
     },
     {
+      "ticker": "LU",
+      "name": "LU",
+      "market_cap_weight": 0.0152,
+      "trailing_1y_return": 0.1276,
+      "year": 2000,
+      "quarter": 1
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0143,
+      "trailing_1y_return": -0.2952,
+      "year": 2000,
+      "quarter": 1
+    },
+    {
       "ticker": "AIG",
       "name": "American International Group Inc.",
       "market_cap_weight": 0.0135,
       "trailing_1y_return": 0.1367,
+      "year": 2000,
+      "quarter": 1
+    },
+    {
+      "ticker": "NT",
+      "name": "NT",
+      "market_cap_weight": 0.0134,
+      "trailing_1y_return": 3.0561,
+      "year": 2000,
+      "quarter": 1
+    },
+    {
+      "ticker": "AOL",
+      "name": "AOL",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": -0.0788,
       "year": 2000,
       "quarter": 1
     },
@@ -2941,6 +3301,14 @@
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0115,
       "trailing_1y_return": -0.2105,
+      "year": 2000,
+      "quarter": 1
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0114,
+      "trailing_1y_return": -0.1088,
       "year": 2000,
       "quarter": 1
     },
@@ -3035,6 +3403,22 @@
       "quarter": 2
     },
     {
+      "ticker": "LU",
+      "name": "LU",
+      "market_cap_weight": 0.0152,
+      "trailing_1y_return": -0.1214,
+      "year": 2000,
+      "quarter": 2
+    },
+    {
+      "ticker": "NT",
+      "name": "NT",
+      "market_cap_weight": 0.015,
+      "trailing_1y_return": 2.1447,
+      "year": 2000,
+      "quarter": 2
+    },
+    {
       "ticker": "AIG",
       "name": "American International Group Inc.",
       "market_cap_weight": 0.0149,
@@ -3051,6 +3435,14 @@
       "quarter": 2
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0121,
+      "trailing_1y_return": -0.2543,
+      "year": 2000,
+      "quarter": 2
+    },
+    {
       "ticker": "KO",
       "name": "The Coca-Cola Company",
       "market_cap_weight": 0.0116,
@@ -3059,10 +3451,26 @@
       "quarter": 2
     },
     {
+      "ticker": "AOL",
+      "name": "AOL",
+      "market_cap_weight": 0.0097,
+      "trailing_1y_return": -0.0452,
+      "year": 2000,
+      "quarter": 2
+    },
+    {
       "ticker": "HD",
       "name": "The Home Depot Inc.",
       "market_cap_weight": 0.0094,
       "trailing_1y_return": 0.1659,
+      "year": 2000,
+      "quarter": 2
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0083,
+      "trailing_1y_return": -0.4334,
       "year": 2000,
       "quarter": 2
     },
@@ -3165,6 +3573,22 @@
       "quarter": 3
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0142,
+      "trailing_1y_return": -0.0208,
+      "year": 2000,
+      "quarter": 3
+    },
+    {
+      "ticker": "NT",
+      "name": "NT",
+      "market_cap_weight": 0.0132,
+      "trailing_1y_return": 1.3358,
+      "year": 2000,
+      "quarter": 3
+    },
+    {
       "ticker": "KO",
       "name": "The Coca-Cola Company",
       "market_cap_weight": 0.0113,
@@ -3177,6 +3601,30 @@
       "name": "The Home Depot Inc.",
       "market_cap_weight": 0.0101,
       "trailing_1y_return": 0.1607,
+      "year": 2000,
+      "quarter": 3
+    },
+    {
+      "ticker": "AOL",
+      "name": "AOL",
+      "market_cap_weight": 0.01,
+      "trailing_1y_return": 0.0337,
+      "year": 2000,
+      "quarter": 3
+    },
+    {
+      "ticker": "LU",
+      "name": "LU",
+      "market_cap_weight": 0.008,
+      "trailing_1y_return": -0.5289,
+      "year": 2000,
+      "quarter": 3
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0078,
+      "trailing_1y_return": -0.3247,
       "year": 2000,
       "quarter": 3
     },
@@ -3279,6 +3727,14 @@
       "quarter": 4
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.013775,
+      "trailing_1y_return": -0.0205,
+      "year": 2000,
+      "quarter": 4
+    },
+    {
       "ticker": "KO",
       "name": "The Coca-Cola Company",
       "market_cap_weight": 0.012878,
@@ -3303,6 +3759,14 @@
       "quarter": 4
     },
     {
+      "ticker": "EMC",
+      "name": "EMC",
+      "market_cap_weight": 0.0124,
+      "trailing_1y_return": 0.2174,
+      "year": 2000,
+      "quarter": 4
+    },
+    {
       "ticker": "BMY",
       "name": "Bristol-Myers Squibb Company",
       "market_cap_weight": 0.012321,
@@ -3315,6 +3779,14 @@
       "name": "Verizon Communications Inc.",
       "market_cap_weight": 0.01153,
       "trailing_1y_return": -0.1599,
+      "year": 2000,
+      "quarter": 4
+    },
+    {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.011067,
+      "trailing_1y_return": 0.0021,
       "year": 2000,
       "quarter": 4
     },
@@ -3409,6 +3881,14 @@
       "quarter": 1
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0146,
+      "trailing_1y_return": 0.0626,
+      "year": 2001,
+      "quarter": 1
+    },
+    {
       "ticker": "VZ",
       "name": "Verizon Communications Inc.",
       "market_cap_weight": 0.0129,
@@ -3421,6 +3901,14 @@
       "name": "Johnson & Johnson",
       "market_cap_weight": 0.0118,
       "trailing_1y_return": 0.2637,
+      "year": 2001,
+      "quarter": 1
+    },
+    {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0115,
+      "trailing_1y_return": -0.0369,
       "year": 2001,
       "quarter": 1
     },
@@ -3461,6 +3949,14 @@
       "name": "Oracle Corporation",
       "market_cap_weight": 0.0079,
       "trailing_1y_return": -0.6252,
+      "year": 2001,
+      "quarter": 1
+    },
+    {
+      "ticker": "EMC",
+      "name": "EMC",
+      "market_cap_weight": 0.0062,
+      "trailing_1y_return": -0.5296,
       "year": 2001,
       "quarter": 1
     }
@@ -3563,10 +4059,26 @@
       "quarter": 2
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0125,
+      "trailing_1y_return": -0.0738,
+      "year": 2001,
+      "quarter": 2
+    },
+    {
       "ticker": "CSCO",
       "name": "Cisco Systems Inc.",
       "market_cap_weight": 0.012,
       "trailing_1y_return": -0.7137,
+      "year": 2001,
+      "quarter": 2
+    },
+    {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0115,
+      "trailing_1y_return": -0.0535,
       "year": 2001,
       "quarter": 2
     },
@@ -3599,6 +4111,14 @@
       "name": "Bristol-Myers Squibb Company",
       "market_cap_weight": 0.0094,
       "trailing_1y_return": -0.0842,
+      "year": 2001,
+      "quarter": 2
+    },
+    {
+      "ticker": "EMC",
+      "name": "EMC",
+      "market_cap_weight": 0.0058,
+      "trailing_1y_return": -0.6224,
       "year": 2001,
       "quarter": 2
     }
@@ -3669,6 +4189,14 @@
       "quarter": 3
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0172,
+      "trailing_1y_return": -0.0576,
+      "year": 2001,
+      "quarter": 3
+    },
+    {
       "ticker": "MRK",
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.0166,
@@ -3717,6 +4245,14 @@
       "quarter": 3
     },
     {
+      "ticker": "RD",
+      "name": "RD",
+      "market_cap_weight": 0.0116,
+      "trailing_1y_return": -0.1616,
+      "year": 2001,
+      "quarter": 3
+    },
+    {
       "ticker": "HD",
       "name": "The Home Depot Inc.",
       "market_cap_weight": 0.0096,
@@ -3737,6 +4273,14 @@
       "name": "Oracle Corporation",
       "market_cap_weight": 0.0076,
       "trailing_1y_return": -0.6805,
+      "year": 2001,
+      "quarter": 3
+    },
+    {
+      "ticker": "EMC",
+      "name": "EMC",
+      "market_cap_weight": 0.0028,
+      "trailing_1y_return": -0.8815,
       "year": 2001,
       "quarter": 3
     }
@@ -3823,6 +4367,14 @@
       "quarter": 4
     },
     {
+      "ticker": "AOL",
+      "name": "AOL",
+      "market_cap_weight": 0.01358,
+      "trailing_1y_return": -0.0776,
+      "year": 2001,
+      "quarter": 4
+    },
+    {
       "ticker": "MRK",
       "name": "Merck & Co. Inc.",
       "market_cap_weight": 0.012783,
@@ -3839,6 +4391,14 @@
       "quarter": 4
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.012584,
+      "trailing_1y_return": -0.1797,
+      "year": 2001,
+      "quarter": 4
+    },
+    {
       "ticker": "VZ",
       "name": "Verizon Communications Inc.",
       "market_cap_weight": 0.012311,
@@ -3851,6 +4411,14 @@
       "name": "The Home Depot Inc.",
       "market_cap_weight": 0.011421,
       "trailing_1y_return": 0.1213,
+      "year": 2001,
+      "quarter": 4
+    },
+    {
+      "ticker": "TYC",
+      "name": "TYC",
+      "market_cap_weight": 0.01123,
+      "trailing_1y_return": 0.0613,
       "year": 2001,
       "quarter": 4
     },
@@ -3969,6 +4537,14 @@
       "quarter": 1
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": -0.1611,
+      "year": 2002,
+      "quarter": 1
+    },
+    {
       "ticker": "VZ",
       "name": "Verizon Communications Inc.",
       "market_cap_weight": 0.012,
@@ -3997,6 +4573,22 @@
       "name": "The Home Depot Inc.",
       "market_cap_weight": 0.0109,
       "trailing_1y_return": 0.1332,
+      "year": 2002,
+      "quarter": 1
+    },
+    {
+      "ticker": "AOL",
+      "name": "AOL",
+      "market_cap_weight": 0.01,
+      "trailing_1y_return": -0.411,
+      "year": 2002,
+      "quarter": 1
+    },
+    {
+      "ticker": "TYC",
+      "name": "TYC",
+      "market_cap_weight": 0.0062,
+      "trailing_1y_return": -0.2523,
       "year": 2002,
       "quarter": 1
     }
@@ -4115,6 +4707,14 @@
       "quarter": 2
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0114,
+      "trailing_1y_return": -0.2386,
+      "year": 2002,
+      "quarter": 2
+    },
+    {
       "ticker": "CSCO",
       "name": "Cisco Systems Inc.",
       "market_cap_weight": 0.0113,
@@ -4127,6 +4727,22 @@
       "name": "The Home Depot Inc.",
       "market_cap_weight": 0.0095,
       "trailing_1y_return": -0.2174,
+      "year": 2002,
+      "quarter": 2
+    },
+    {
+      "ticker": "AOL",
+      "name": "AOL",
+      "market_cap_weight": 0.0072,
+      "trailing_1y_return": -0.7225,
+      "year": 2002,
+      "quarter": 2
+    },
+    {
+      "ticker": "TYC",
+      "name": "TYC",
+      "market_cap_weight": 0.003,
+      "trailing_1y_return": -0.7521,
       "year": 2002,
       "quarter": 2
     }
@@ -4253,10 +4869,34 @@
       "quarter": 3
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0091,
+      "trailing_1y_return": -0.5734,
+      "year": 2002,
+      "quarter": 3
+    },
+    {
       "ticker": "HD",
       "name": "The Home Depot Inc.",
       "market_cap_weight": 0.0082,
       "trailing_1y_return": -0.3133,
+      "year": 2002,
+      "quarter": 3
+    },
+    {
+      "ticker": "AOL",
+      "name": "AOL",
+      "market_cap_weight": 0.007,
+      "trailing_1y_return": -0.6465,
+      "year": 2002,
+      "quarter": 3
+    },
+    {
+      "ticker": "TYC",
+      "name": "TYC",
+      "market_cap_weight": 0.0038,
+      "trailing_1y_return": -0.6901,
       "year": 2002,
       "quarter": 3
     }
@@ -4387,6 +5027,14 @@
       "name": "Cisco Systems Inc.",
       "market_cap_weight": 0.011675,
       "trailing_1y_return": -0.2766,
+      "year": 2002,
+      "quarter": 4
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.011103,
+      "trailing_1y_return": -0.3079,
       "year": 2002,
       "quarter": 4
     },
@@ -4561,6 +5209,14 @@
       "quarter": 1
     },
     {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0085,
+      "trailing_1y_return": -0.4642,
+      "year": 2003,
+      "quarter": 1
+    },
+    {
       "ticker": "MO",
       "name": "Altria Group Inc.",
       "market_cap_weight": 0.0079,
@@ -4711,6 +5367,14 @@
       "name": "Wells Fargo & Company",
       "market_cap_weight": 0.0095,
       "trailing_1y_return": 0.03,
+      "year": 2003,
+      "quarter": 2
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.0094,
+      "trailing_1y_return": -0.1623,
       "year": 2003,
       "quarter": 2
     },
@@ -4873,6 +5537,14 @@
       "name": "PepsiCo Inc.",
       "market_cap_weight": 0.0086,
       "trailing_1y_return": 0.2571,
+      "year": 2003,
+      "quarter": 3
+    },
+    {
+      "ticker": "SBC",
+      "name": "SBC",
+      "market_cap_weight": 0.008,
+      "trailing_1y_return": 0.107,
       "year": 2003,
       "quarter": 3
     }
