@@ -1559,20 +1559,41 @@ class TestVanguardAuditedRosters(unittest.TestCase):
                 self.assertTrue(reason.strip())
                 self.assertNotIn(year, self.rosters)
 
-    def test_unreconciled_filing_refuses_to_publish_short_read(self):
-        """FY2004 has an empty constituent row in the SEC filing with market value $24,416k.
+    def test_a_holding_the_filing_does_not_name_is_counted_and_labelled(self):
+        """FY2004 carries a row whose name and share cells are blank in the filing itself.
 
-        build_roster must raise ScheduleParseError rather than invent figures or publish short.
+        The document states a market value of $24,416 thousand with no issuer and no share
+        count. Dropping it leaves the schedule short of its own stated total; naming it
+        would be invention. It is therefore counted at its stated value and labelled
+        unidentified, so the year reconciles without anything being made up.
+
+        At 0.023% of the fund it cannot reach the Top 20, which is what this dataset is
+        read for, and the test pins that so the compromise stays harmless.
         """
-        from scripts.extract_ground_truth_from_sec import ScheduleParseError
-        from scripts.extract_vanguard_rosters import build_roster
+        roster = self.rosters["2004"]
+        unidentified = [h for h in roster["holdings"] if h.get("unidentified")]
+        self.assertEqual(len(unidentified), 1)
 
-        filing_2004 = (
-            ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "VG500_2004_N-CSR_0000932471-05-000480.txt"
-        )
-        with self.assertRaises(ScheduleParseError) as ctx:
-            build_roster(filing_2004)
-        self.assertIn("-24,416", str(ctx.exception))
+        holding = unidentified[0]
+        self.assertEqual(holding["value_usd_thousands"], 24416)
+        self.assertEqual(holding["shares"], 0)
+        self.assertIn("unidentified", holding["name"])
+        self.assertGreater(holding["rank"], 20)
+        self.assertLess(holding["weight"], 0.001)
+
+    def test_no_other_year_carries_an_unidentified_holding(self):
+        """The FY2004 blank row is a defect in one document, not a routine allowance.
+
+        A sector subtotal also renders as a lone figure, and counting one as a holding
+        would double-count a whole sector. Subtotals are told apart arithmetically: a
+        subtotal equals the running sum of positions since the previous subtotal. If that
+        rule ever mistook one, unidentified holdings would appear in other years too.
+        """
+        for year, roster in self.rosters.items():
+            if year == "2004":
+                continue
+            with self.subTest(year=year):
+                self.assertEqual([h for h in roster["holdings"] if h.get("unidentified")], [])
 
     def test_audited_rosters_contradict_the_estimated_ones(self):
         """The point of this dataset: estimates omit constituents the filings record.
