@@ -1,0 +1,121 @@
+{
+  "1994": {
+    "fiscal_year": 1994,
+    "form": "N-30D",
+    "accession_number": "0000893220-95-000088",
+    "report_date": "1994-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000893220-95-000088.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_1994_N-30D_0000893220-95-000088.txt",
+    "file_size_bytes": 568783
+  },
+  "1995": {
+    "fiscal_year": 1995,
+    "form": "N-30D",
+    "accession_number": "0000893220-96-000339",
+    "report_date": "1995-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000893220-96-000339.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_1995_N-30D_0000893220-96-000339.txt",
+    "file_size_bytes": 699545
+  },
+  "1996": {
+    "fiscal_year": 1996,
+    "form": "N-30D",
+    "accession_number": "0000893220-97-000517",
+    "report_date": "1996-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000893220-97-000517.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_1996_N-30D_0000893220-97-000517.txt",
+    "file_size_bytes": 786784
+  },
+  "1997": {
+    "fiscal_year": 1997,
+    "form": "N-30D",
+    "accession_number": "0000893220-98-000471",
+    "report_date": "1997-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000893220-98-000471.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_1997_N-30D_0000893220-98-000471.txt",
+    "file_size_bytes": 873883
+  },
+  "1998": {
+    "fiscal_year": 1998,
+    "form": "N-30D",
+    "accession_number": "0000893220-99-000267",
+    "report_date": "1998-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000893220-99-000267.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_1998_N-30D_0000893220-99-000267.txt",
+    "file_size_bytes": 1258734
+  },
+  "1999": {
+    "fiscal_year": 1999,
+    "form": "N-30D",
+    "accession_number": "0000893220-00-000244",
+    "report_date": "1999-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000893220-00-000244.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_1999_N-30D_0000893220-00-000244.txt",
+    "file_size_bytes": 1203270
+  },
+  "2000": {
+    "fiscal_year": 2000,
+    "form": "N-30D",
+    "accession_number": "0000893220-01-000239",
+    "report_date": "2000-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000893220-01-000239.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2000_N-30D_0000893220-01-000239.txt",
+    "file_size_bytes": 1529852
+  },
+  "2001": {
+    "fiscal_year": 2001,
+    "form": "N-30D",
+    "accession_number": "0000932471-02-000460",
+    "report_date": "2001-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-02-000460.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2001_N-30D_0000932471-02-000460.txt",
+    "file_size_bytes": 1468605,
+    "note": "Amended by N-30D/A 0000932471-02-000470 (filed 2002-03-11), which carries an identical Schedule of Investments and differs from this document only in the EDGAR header. Recorded rather than archived."
+  },
+  "2002": {
+    "fiscal_year": 2002,
+    "form": "N-30D",
+    "accession_number": "0000932471-03-000327",
+    "report_date": "2002-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-03-000327.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2002_N-30D_0000932471-03-000327.txt",
+    "file_size_bytes": 1496496
+  },
+  "2003": {
+    "fiscal_year": 2003,
+    "form": "N-CSR",
+    "accession_number": "0000932471-04-000399",
+    "report_date": "2003-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-04-000399.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2003_N-CSR_0000932471-04-000399.txt",
+    "file_size_bytes": 1683499
+  },
+  "2004": {
+    "fiscal_year": 2004,
+    "form": "N-CSR",
+    "accession_number": "0000932471-05-000480",
+    "report_date": "2004-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-05-000480.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2004_N-CSR_0000932471-05-000480.txt",
+    "file_size_bytes": 6604698
+  },
+  "2005": {
+    "fiscal_year": 2005,
+    "form": "N-CSR",
+    "accession_number": "0000932471-06-000510",
+    "report_date": "2005-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-06-000510.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2005_N-CSR_0000932471-06-000510.txt",
+    "file_size_bytes": 7065706,
+    "note": "Amended by N-CSR/A 0000932471-06-000605 (filed 2006-03-16), which carries an identical Schedule of Investments and differs from this document only in the EDGAR header. Recorded rather than archived."
+  },
+  "2006": {
+    "fiscal_year": 2006,
+    "form": "N-CSR",
+    "accession_number": "0000932471-07-000538",
+    "report_date": "2006-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-07-000538.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2006_N-CSR_0000932471-07-000538.txt",
+    "file_size_bytes": 11677447
+  }
+}
