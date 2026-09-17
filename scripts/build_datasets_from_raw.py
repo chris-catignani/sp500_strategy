@@ -6,6 +6,7 @@ Operates 100% offline using data/raw/.
 
 import datetime
 import json
+import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -95,6 +96,13 @@ NAMES = {**SP500_NAMES, **NON_US_NAMES}
 # NAMES requires a file in data/raw/tickers/ and raises when one is absent, which is the
 # correct behaviour for a vendor-sourced ticker and the wrong behaviour for these.
 DERIVED_NAMES = {
+    "AN": "Amoco Corp.",
+    "GM": "General Motors Corp.",
+    "MOT": "Motorola, Inc.",
+    "RD": "Royal Dutch Petroleum Co.",
+    "SBC": "SBC Communications Inc.",
+    "TYC": "Tyco International Ltd.",
+    "T_CORP": "AT&T Corp. (pre-2005 Ma Bell)",
     "LU": "Lucent Technologies, Inc.",
     "EMC": "EMC Corp.",
     "AOL": "America Online, Inc. / AOL Time Warner, Inc.",
@@ -113,7 +121,7 @@ DERIVED_NAMES = {
 # larger holding in every filing examined; routing through one class follows the
 # dual-class execution convention established for Alphabet in #38 and documented in
 # docs/DATA_PROVENANCE.md 4.3.8.
-DERIVED_SOURCE_KEYS = {"VIA": "VIA.B"}
+DERIVED_SOURCE_KEYS: Dict[str, str] = {}
 
 EFFECTIVE_INCLUSION_DATES = {
     "TSLA": "2020-12-21",
@@ -143,6 +151,63 @@ with open(RAW_DIR / "constituents" / "historical_index_weights.json", "r", encod
     raw_sp500 = json.load(f)
 YEAR_CONSTITUENTS = {int(k): v for k, v in raw_sp500["constituents_by_year"].items()}
 HISTORICAL_INDEX_WEIGHTS = {int(k): v for k, v in raw_sp500["weights_by_year"].items()}
+
+
+ESTIMATED_YEAR_CONSTITUENTS = {int(k): list(v) for k, v in raw_sp500["constituents_by_year"].items()}
+ESTIMATED_INDEX_WEIGHTS = {int(k): list(v) for k, v in raw_sp500["weights_by_year"].items()}
+
+
+def _apply_audited_rosters():
+    """Replace estimated year-end rosters with ones read from a primary filing.
+
+    For 1994-2006 the Vanguard 500 Index Fund's December-31 Schedule of Investments is an
+    audited point-in-time roster of the index (docs/DATA_PROVENANCE.md 4.3.10), so ranks
+    and weights for those years are read rather than estimated. Outside that span the
+    estimated rosters stand, including the 208 rows labelled Unverified Estimate.
+
+    This is the step that removes survivorship bias. The estimates omit constituents the
+    filings record -- SBC, EMC and Royal Dutch are all inside the audited 2000 Top 20 and
+    absent from the estimate for that year -- and a universe that drops constituents is
+    measuring something other than the strategy.
+    """
+    rosters_path = RAW_DIR / "ground_truth" / "vanguard_audited_rosters.json"
+    map_path = RAW_DIR / "constituents" / "issuer_ticker_map.json"
+    if not rosters_path.exists() or not map_path.exists():
+        return {}
+
+    with open(rosters_path, "r", encoding="utf-8") as f:
+        rosters = json.load(f)["rosters_by_year"]
+    with open(map_path, "r", encoding="utf-8") as f:
+        issuer_map = {
+            re.sub(r"^[#*^\s]+", "", k).strip().rstrip(".").strip(): v
+            for k, v in json.load(f)["map"].items()
+        }
+
+    replaced = {}
+    for year_key, roster in rosters.items():
+        year = int(year_key)
+        tickers, weights = [], []
+        for holding in roster["holdings"]:
+            if holding.get("unidentified"):
+                continue
+            name = re.sub(r"^[#*^\s]+", "", holding["name"]).strip().rstrip(".").strip()
+            ticker = issuer_map.get(name)
+            # A dual-class issuer appears twice; the first occurrence is the larger line
+            # and the convention is to route through one class (4.3.8).
+            if ticker is None or ticker in tickers:
+                continue
+            tickers.append(ticker)
+            weights.append(holding["weight"])
+            if len(tickers) == 20:
+                break
+        if len(tickers) == 20:
+            YEAR_CONSTITUENTS[year] = tickers
+            HISTORICAL_INDEX_WEIGHTS[year] = weights
+            replaced[year] = tickers
+    return replaced
+
+
+AUDITED_ROSTER_YEARS = _apply_audited_rosters()
 
 with open(RAW_DIR / "constituents" / "world_historical_index_weights.json", "r", encoding="utf-8") as f:
     raw_world = json.load(f)
@@ -622,11 +687,11 @@ def main():
     # split-adjusted from filing-cited records, so they are merged from a second input
     # rather than read from data/raw/tickers/. The T_CORP_HISTORICAL splice above is the
     # existing precedent for a conditional second source.
-    derived_path = RAW_DIR / "ground_truth" / "vanguard_implied_prices.json"
+    derived_path = RAW_DIR / "ground_truth" / "derived_constituent_series.json"
     derived_merged = 0
     if derived_path.exists():
         with open(derived_path, "r", encoding="utf-8") as f:
-            derived = json.load(f)["prices_by_ticker"]
+            derived = json.load(f)["series_by_ticker"]
 
         for ticker in sorted(DERIVED_NAMES):
             observations = derived.get(DERIVED_SOURCE_KEYS.get(ticker, ticker), {})
@@ -686,7 +751,9 @@ def main():
         c_list = []
         for rank, ticker in enumerate(tickers):
             weight = weights[rank]
-            name = SP500_NAMES[ticker]
+            # A constituent read from an audited roster may be priced from a derived
+            # series rather than a vendor file, so both name maps are consulted.
+            name = SP500_NAMES.get(ticker) or DERIVED_NAMES[ticker]
             p_curr = all_prices_data[ticker].get(str_year)
             p_prev = all_prices_data[ticker].get(str(year - 1))
             div = all_dividends_data.get(ticker, {}).get(str_year, 0.0)
@@ -741,9 +808,33 @@ def main():
         world_constituents[str_year] = c_list
 
     # 5. Build Quarterly constituents (pluggable, re-anchoring at Q4)
+    # The quarterly path derives from the same audited rosters as the annual one, minus
+    # any constituent with no quarterly price. Constituents recovered from the audited
+    # rosters are priced from December-31 filings only (4.3.12), so they have no Q1-Q3
+    # observation to drift from and selecting one raises on a missing quarterly price.
+    #
+    # Dropping them leaves the quarterly universe a SUBSET of the annual one, which is
+    # what the zero-lookahead invariant requires: every quarterly candidate must appear in
+    # the prior year-end roster. Building the two from different roster sources instead
+    # would put them in disagreement, which that invariant correctly rejects.
+    #
+    # The consequence is that the quarterly path still carries the survivorship bias the
+    # annual path no longer does. That is a stated limitation, not a silent one: closing
+    # it needs quarterly coverage for these constituents, tracked in #63.
+    quarterly_year_constituents, quarterly_index_weights = {}, {}
+    for year, tickers in YEAR_CONSTITUENTS.items():
+        weights = HISTORICAL_INDEX_WEIGHTS[year]
+        kept = [
+            (ticker, weight)
+            for ticker, weight in zip(tickers, weights)
+            if any(key.startswith(f"{year}-Q") for key in all_quarterly_prices_data.get(ticker, {}))
+        ]
+        quarterly_year_constituents[year] = [t for t, _ in kept]
+        quarterly_index_weights[year] = [w for _, w in kept]
+
     sp500_quarterly_constituents = build_quarterly_constituents(
-        YEAR_CONSTITUENTS,
-        HISTORICAL_INDEX_WEIGHTS,
+        quarterly_year_constituents,
+        quarterly_index_weights,
         all_quarterly_prices_data,
         "^GSPC",
         SP500_NAMES,
