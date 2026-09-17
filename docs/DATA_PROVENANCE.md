@@ -344,6 +344,29 @@ Implied prices are as-traded, so a series spanning a split is discontinuous unti
 - **Basis**: each series is adjusted to the share terms of its **final observation**, not to 2024-12-31 (§4.1). The published dataset states plainly that the adjusted figures are therefore *not* directly comparable to `data/raw/tickers/`.
 - **`GTE` has no splits, and that is a finding, not a gap.** Its FY1999 Form 10-K contains no stock split for 1994–2000; the only "two-for-one" language in the document describes a pension service credit. The observed price series shows no halving across those years, corroborating the absence.
 
+##### How each split record was established
+Every record names its source type, because a ratio is only as good as what stands behind it.
+
+- **`filing_quoted`** — a verbatim sentence read in the cited filing. Eighteen of the twenty registrants.
+- **`none_found`** — the registrant's own filings were searched and no split was found in the window. `GM` and `GTE` are recorded this way. This is a finding, not an absence of effort: `GTE`'s only "two-for-one" language describes a pension service credit, and neither registrant's price series shows a discontinuity.
+- **`vendor_event`** — `RD` alone. Royal Dutch was a foreign private issuer filing Form **20-F** rather than 10-K, and EDGAR's 20-F listing for that filer does not reach 1997, so the four-for-one split of 1997-06-01 comes from a vendor corporate-action feed rather than a filing.
+
+The one vendor-sourced record is corroborated independently rather than taken on trust. Yahoo's `SHEL` series **is** Royal Dutch before 2005 (§4.3.9), so applying the split to the filing-derived as-traded price must reproduce that vendor close:
+
+| Year | Filing-derived, adjusted | `SHEL.json` close |
+|---|---:|---:|
+| 1995 | \$35.28 | \$35.28 |
+| 1996 | \$42.69 | \$42.69 |
+| 1997 | \$54.19 | \$54.19 |
+| 1998 | \$47.88 | \$47.88 |
+| 2000 | \$60.56 | \$60.56 |
+| 2001 | \$49.02 | \$49.02 |
+
+Six years agree to the cent. The remaining two, 1994 and 1999, differ by about 0.2% because the fund values at its own year-end business day while the vendor's December close is the month's last trade, which are not always the same session. A wrong ratio would be out by a factor of four, so the check is decisive despite the tolerance.
+
+##### A record that is deliberately incomplete
+`T_CORP` (the pre-2005 AT&T Corp.) carries its 2002 one-for-five reverse split, but the same filing records the **AT&T Wireless split-off of 2001** and the **AT&T Broadband distribution to Comcast in 2002**. Those are distributions, not splits, and are not modelled in `spinoffs.json`. The note on the record says so: this registrant's series **understates its return across 2001–2002** until they are added. Recorded rather than silently carried, because the series otherwise looks complete.
+
 ##### Validation of the adjustment against a second filer
 SPY reports September 30 and Vanguard December 31. Expressed in the same share terms, their ratio is one quarter's price move; a split missing from the records would instead appear as a ratio near 2.0 or 0.5, because one side would remain in pre-split terms. Across **73 comparisons spanning 1995–2006, 71 fall inside a normal quarterly range**. The two that do not are both Q4 2000 and are genuine:
 

@@ -1385,13 +1385,21 @@ class TestVanguardImpliedPrices(unittest.TestCase):
 
         for ticker, record in records.items():
             with self.subTest(ticker=ticker):
-                self.assertTrue(record["accession_number"])
                 self.assertTrue(record["cik"])
-                if record["splits"]:
-                    # A stated split must be backed by words actually in the filing.
-                    self.assertTrue(record["quoted_sentence"].strip())
+                source = record.get("source_type", "filing_quoted")
+                if source == "filing_quoted":
+                    self.assertTrue(record["accession_number"])
+                    if record["splits"]:
+                        # A stated split must be backed by words actually in the filing.
+                        self.assertTrue(record["quoted_sentence"].strip())
+                else:
+                    # A record established any other way must say what stands behind it.
+                    self.assertTrue(record.get("note", "").strip())
                 for split in record["splits"]:
-                    self.assertGreater(split["ratio"], 1.0)
+                    # A reverse split has a ratio below one: AT&T Corp's 2002 one-for-five
+                    # is 0.2. Only a ratio of exactly one would be meaningless.
+                    self.assertGreater(split["ratio"], 0.0)
+                    self.assertNotEqual(split["ratio"], 1.0)
                     self.assertRegex(split["effective_date"], r"^\d{4}-\d{2}-\d{2}$")
 
     def test_split_adjustment_agrees_with_spy_filings(self):
@@ -1799,6 +1807,81 @@ class TestVendorSeriesIdentity(unittest.TestCase):
                 # A handful of distinct factors, not a different one every year. An
                 # unrelated company would scatter.
                 self.assertLessEqual(len(set(ratios)), 4)
+
+
+class TestSplitRecordProvenance(unittest.TestCase):
+    """How each split record was established, and what corroborates the weakest one."""
+
+    PATH = ROOT / "data" / "raw" / "corporate_actions" / "splits.json"
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.PATH, "r", encoding="utf-8") as f:
+            cls.records = json.load(f)["splits_by_ticker"]
+
+    def test_every_record_states_how_it_was_established(self):
+        """A ratio is only as good as its source, so the source is part of the record."""
+        for ticker, record in self.records.items():
+            with self.subTest(ticker=ticker):
+                self.assertIn(
+                    record.get("source_type", "filing_quoted"),
+                    {"filing_quoted", "vendor_event", "none_found"},
+                )
+
+    def test_a_filing_quoted_record_carries_the_sentence(self):
+        """The claim is the quotation. Without it there is nothing to check against."""
+        for ticker, record in self.records.items():
+            if record.get("source_type", "filing_quoted") != "filing_quoted":
+                continue
+            with self.subTest(ticker=ticker):
+                self.assertTrue(record["accession_number"])
+                if record["splits"]:
+                    self.assertTrue(record["quoted_sentence"].strip())
+
+    def test_the_vendor_sourced_split_is_corroborated_independently(self):
+        """Royal Dutch is the one record not quoted from a filing.
+
+        It was a foreign private issuer filing Form 20-F, and EDGAR's listing for this
+        filer does not reach 1997, so the four-for-one split comes from a vendor feed. It
+        is checkable anyway: Yahoo's SHEL series is Royal Dutch before 2005, and applying
+        the split to the filing-derived as-traded price must reproduce that vendor close.
+        Agreement means the ratio and its date are both right.
+        """
+        import datetime
+
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "derived_constituent_series.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            derived = json.load(f)["series_by_ticker"]["RD"]
+
+        with open(ROOT / "data" / "raw" / "tickers" / "SHEL.json", "r", encoding="utf-8") as f:
+            chart = json.load(f)["chart"]["result"][0]
+        closes = {}
+        for stamp, close in zip(chart["timestamp"], chart["indicators"]["quote"][0]["close"]):
+            moment = datetime.datetime.utcfromtimestamp(stamp)
+            if moment.month == 12 and close:
+                closes[str(moment.year)] = close
+
+        self.assertEqual(self.records["RD"]["source_type"], "vendor_event")
+        compared = 0
+        for year, observation in derived.items():
+            vendor = closes.get(year)
+            if vendor is None or int(year) >= 2005:
+                continue
+            with self.subTest(year=year):
+                # Six of the eight years agree to the cent. The other two, 1994 and 1999,
+                # differ by about 0.2%: the fund values at its own year-end business day
+                # and the vendor's December close is the month's last trade, which are not
+                # always the same session. The bound is relative and set wide enough to
+                # admit that while a wrong ratio, which would be off by a factor of four,
+                # still fails by orders of magnitude.
+                self.assertLess(
+                    abs(observation["split_adjusted_price_usd"] / vendor - 1.0), 0.005
+                )
+            compared += 1
+        self.assertGreaterEqual(compared, 5, "corroboration degenerated to nothing")
 
 
 if __name__ == "__main__":
