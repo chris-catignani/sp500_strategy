@@ -1352,8 +1352,8 @@
         "accession_number": "0000887991-94-000003",
         "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_1994_Q1_N-30D_0000887991-94-000003.txt",
         "audited": false,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 256.25,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 170.8333,
         "split_source_accession": "0000950123-03-003510"
       },
       "1994-Q2": {
@@ -1366,8 +1366,8 @@
         "accession_number": "0000893220-94-000389",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1994_Q2_N-30D_0000893220-94-000389.txt",
         "audited": false,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 271.8754,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 181.2503,
         "split_source_accession": "0000950123-03-003510"
       },
       "1994-Q4": {
@@ -1380,8 +1380,8 @@
         "accession_number": "0000893220-95-000088",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1994_N-30D_0000893220-95-000088.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 251.2494,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 167.4996,
         "split_source_accession": "0000950123-03-003510"
       },
       "1995-Q1": {
@@ -1394,8 +1394,8 @@
         "accession_number": "0000950109-95-002026",
         "source_file": "data/raw/ground_truth/sec_filings/SEI_1995_Q1_N-30D_0000950109-95-002026.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 258.8299,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 172.5533,
         "split_source_accession": "0000950123-03-003510"
       },
       "1995-Q2": {
@@ -1408,8 +1408,8 @@
         "accession_number": "0000893220-95-000545",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1995_Q2_N-30D_0000893220-95-000545.txt",
         "audited": false,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 265.6249,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 177.0833,
         "split_source_accession": "0000950123-03-003510"
       },
       "1995-Q4": {
@@ -1422,8 +1422,8 @@
         "accession_number": "0000893220-96-000339",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1995_N-30D_0000893220-96-000339.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 323.7504,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 215.8336,
         "split_source_accession": "0000950123-03-003510"
       },
       "1996-Q1": {
@@ -1436,8 +1436,8 @@
         "accession_number": "0000935069-96-000067",
         "source_file": "data/raw/ground_truth/sec_filings/SEI_1996_Q1_N-30D_0000935069-96-000067.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 306.2579,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 204.172,
         "split_source_accession": "0000950123-03-003510"
       },
       "1996-Q2": {
@@ -1450,8 +1450,8 @@
         "accession_number": "0000893220-96-001508",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1996_Q2_N-30D_0000893220-96-001508.txt",
         "audited": false,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 310.0001,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 206.6667,
         "split_source_accession": "0000950123-03-003510"
       },
       "1996-Q3": {
@@ -1464,8 +1464,8 @@
         "accession_number": "0000935069-96-000144",
         "source_file": "data/raw/ground_truth/sec_filings/SEI_1996_Q3_N-30D_0000935069-96-000144.txt",
         "audited": false,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 261.2495,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 174.1663,
         "split_source_accession": "0000950123-03-003510"
       },
       "1996-Q4": {
@@ -1478,8 +1478,8 @@
         "accession_number": "0000893220-97-000517",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1996_N-30D_0000893220-97-000517.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 217.5002,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 145.0002,
         "split_source_accession": "0000950123-03-003510"
       },
       "1997-Q1": {
@@ -1492,8 +1492,8 @@
         "accession_number": "0000935069-97-000083",
         "source_file": "data/raw/ground_truth/sec_filings/SEI_1997_Q1_N-30D_0000935069-97-000083.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 173.7453,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 115.8302,
         "split_source_accession": "0000950123-03-003510"
       },
       "1997-Q2": {
@@ -1506,8 +1506,8 @@
         "accession_number": "0000893220-97-001476",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1997_Q2_N-30D_0000893220-97-001476.txt",
         "audited": false,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 175.3124,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 116.8749,
         "split_source_accession": "0000950123-03-003510"
       },
       "1997-Q3": {
@@ -1520,8 +1520,8 @@
         "accession_number": "0000950135-97-004820",
         "source_file": "data/raw/ground_truth/sec_filings/SPY_1997_N-30D_0000950135-97-004820.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 221.5625,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 147.7083,
         "split_source_accession": "0000950123-03-003510"
       },
       "1997-Q4": {
@@ -1534,8 +1534,8 @@
         "accession_number": "0000893220-98-000471",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1997_N-30D_0000893220-98-000471.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 306.2499,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 204.1666,
         "split_source_accession": "0000950123-03-003510"
       },
       "1998-Q1": {
@@ -1548,8 +1548,8 @@
         "accession_number": "0000935069-98-000088",
         "source_file": "data/raw/ground_truth/sec_filings/SEI_1998_Q1_N-30D_0000935069-98-000088.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 328.1279,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 218.7519,
         "split_source_accession": "0000950123-03-003510"
       },
       "1998-Q2": {
@@ -1562,8 +1562,8 @@
         "accession_number": "0000893220-98-001414",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1998_Q2_N-30D_0000893220-98-001414.txt",
         "audited": false,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 285.6251,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 190.4167,
         "split_source_accession": "0000950123-03-003510"
       },
       "1998-Q3": {
@@ -1576,8 +1576,8 @@
         "accession_number": "0000950135-98-006321",
         "source_file": "data/raw/ground_truth/sec_filings/SPY_1998_N-30D_0000950135-98-006321.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 292.1875,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 194.7917,
         "split_source_accession": "0000950123-03-003510"
       },
       "1998-Q4": {
@@ -1590,8 +1590,8 @@
         "accession_number": "0000893220-99-000267",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1998_N-30D_0000893220-99-000267.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 376.2501,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 250.8334,
         "split_source_accession": "0000950123-03-003510"
       },
       "1999-Q1": {
@@ -1604,8 +1604,8 @@
         "accession_number": "0000935069-99-000097",
         "source_file": "data/raw/ground_truth/sec_filings/SEI_1999_Q1_N-30D_0000935069-99-000097.txt",
         "audited": true,
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 399.0685,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 266.0457,
         "split_source_accession": "0000950123-03-003510"
       },
       "1999-Q2": {

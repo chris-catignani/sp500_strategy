@@ -1,6 +1,6 @@
 {
   "description": "Stock split records for delisted registrants whose price history is derived from fund Schedules of Investments (issue #55). Implied prices from those schedules are as-traded; these records convert them to an internally consistent series.",
-  "scope": "Only registrants with no usable vendor price series. Tickers sourced from data/raw/tickers/ (including RD via SHEL.json and SBC via T.json) already carry Yahoo's split adjustment and are absent here by design.",
+  "scope": "Only registrants with no usable vendor price series, which is every ticker priced from the audited rosters. RD and SBC are included: although Yahoo carries a successor series for each (SHEL and T), neither ticker has its own file in data/raw/tickers/, so both are derived from filings under the one-price-source rule at docs/DATA_PROVENANCE.md 4.3.12 and both need a split record of their own. An earlier revision of this field said they were absent by design; that described a design the one-price-source rule replaced.",
   "adjustment_basis": "Each series is adjusted to the share terms of its final observation, not to 2024-12-31. A registrant that stopped trading has no subsequent corporate actions, so adjustment to the present is undefined; see docs/DATA_PROVENANCE.md 4.1.",
   "verification": "Every ratio below was read in the cited filing. Each quoted_sentence is verbatim from the document at the cited accession.",
   "splits_by_ticker": {
@@ -315,11 +315,18 @@
       "quoted_sentence": "A 1-for-5 reverse stock split of AT&T common stock was effected on November 18, 2002.",
       "splits": [
         {
+          "effective_date": "1999-04-15",
+          "ratio": 1.5,
+          "accession_number": "0000950123-02-003272",
+          "form": "10-K",
+          "quoted_sentence": "The number of shares of AT&T common stock outstanding and per share data have been adjusted to reflect the three-for-two stock split paid on April 15, 1999."
+        },
+        {
           "effective_date": "2002-11-18",
           "ratio": 0.2
         }
       ],
-      "note": "A reverse split, so the ratio is below 1. INCOMPLETE FOR TOTAL RETURN: the same filing records the AT&T Wireless split-off (2001) and the AT&T Broadband distribution to Comcast (2002), which are distributions rather than splits and are not modelled in data/raw/corporate_actions/spinoffs.json. The as-traded series therefore understates this registrant's return across 2001-2002 until those are added."
+      "note": "Two splits from two filings, so the 1999 record carries its own accession and sentence while the 2002 reverse split is the one the record-level quotation states. A reverse split, so that ratio is below 1. The three-for-two was MISSING until issue #76: without it every pre-April-1999 price read 1.5x too high and the quarterly series showed a phantom -30.1% across 1999-Q1 to 1999-Q2 ($79.81 at March 31 pre-split against $55.81 at June 30 post-split, where the real move is +4.9%). The cross-filer check at 4.3.9 could not catch it: it compares September 30 against December 31, and both sides of every pair fall on the same side of April 1999. STILL INCOMPLETE FOR TOTAL RETURN: the AT&T Wireless split-off (2001) and the AT&T Broadband distribution to Comcast (2002) are distributions rather than splits and are not modelled in data/raw/corporate_actions/spinoffs.json, so the series understates this registrant's return across 2001-2002."
     },
     "VIA": {
       "company": "Viacom Inc.",
