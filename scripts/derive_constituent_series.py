@@ -21,6 +21,7 @@ collapse that never happened.
 """
 
 import json
+import html
 import re
 import sys
 from pathlib import Path
@@ -41,6 +42,8 @@ OUTPUT_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "derived_constitu
 # the trailing marker on silently dropped six constituents out of the SPY September-30
 # rosters: the name failed to resolve, and an unresolved holding is skipped without
 # comment.
+_WHITESPACE = re.compile(r"\s+")
+_SPACED_AMPERSAND = re.compile(r"\s*&\s*")
 _MARKERS = re.compile(r"^[#*^\s]+")
 _TRAILING_MARKERS = re.compile(r"[#*^\s]+$")
 # A single-letter parenthetical at the end of a name is a footnote reference, not part of
@@ -54,12 +57,24 @@ _TRAILING_FOOTNOTE = re.compile(r"\s*\([A-Za-z]\)\s*$")
 def normalise(name: str) -> str:
     """Filed issuer name to a comparison key.
 
+    HTML entities are decoded first. The later filings are HTML, and their extractors
+    leave `&amp;` in the name, so every issuer with an ampersand in its title failed to
+    resolve in the Vanguard 2004-Q2 roster -- 32 of them, including AT&T Corp and E.I. du
+    Pont de Nemours. Nothing announced this: an unresolved holding is skipped silently.
+
     Case is folded because filers are not consistent about it within their own series:
     SPY writes "BellSouth Corp" in twelve filings and "Bellsouth Corp" in one, "EMC Corp"
     and "EMC CORP", "MCI WorldCom" and "MCI Worldcom". Each variant was a silent drop. No
     two issuers in the map differ only by case, so folding cannot conflate them -- which
     test_issuer_names_do_not_collide_on_case asserts, so it stays true.
     """
+    name = html.unescape(name)
+    # Runs of whitespace, and whitespace around an ampersand, are typography rather than
+    # identity: SPY writes "AT & T Corp" in 1997 and 1998 where every other filing writes
+    # "AT&T Corp", which cost AT&T Corp those two quarters. Vanguard's HTML era does the
+    # same to "M & T Bank" and "H & R Block".
+    name = _WHITESPACE.sub(" ", name)
+    name = _SPACED_AMPERSAND.sub("&", name)
     name = _MARKERS.sub("", name)
     name = _TRAILING_MARKERS.sub("", name)
     name = _TRAILING_FOOTNOTE.sub("", name)

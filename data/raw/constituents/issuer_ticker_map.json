@@ -59,6 +59,7 @@
     "Eli Lilly & Co": "LLY",
     "Lucent Technologies": "LU",
     "Lucent Technologies, Inc": "LU",
+    "MCI WorldCom": "MCIC",
     "MCI WorldCom, Inc": "MCIC",
     "Altria Group, Inc": "MO",
     "Philip Morris Cos., Inc": "MO",
@@ -88,6 +89,7 @@
     "SBC Communications Inc": "SBC",
     "SBC Communications, Inc": "SBC",
     "SBC Telecommunications": "SBC",
+    "Southwestern Bell": "SBC",
     "Schlumberger Ltd": "SLB",
     "Sun Microsystems": "SUNW",
     "Sun Microsystems Inc": "SUNW",
@@ -108,6 +110,7 @@
     "Viacom, Inc": "VIA",
     "Viacom, Inc. (Class B)": "VIA",
     "Viacom, Inc., (Class B)": "VIA",
+    "Bell Atlantic": "VZ",
     "Bell Atlantic Corp": "VZ",
     "Verizon Communications": "VZ",
     "Verizon Communications Inc": "VZ",
@@ -123,7 +126,8 @@
     "XOM": "Exxon Corp. is the continuing registrant after the 1999 Mobil merger. Mobil is priced separately as MOB up to its 1998 year end.",
     "C": "Citicorp combined with Travelers to form Citigroup in 1998. The repository prices the combined entity as C throughout.",
     "BAC": "BankAmerica Corp. became Bank of America Corp.; one registrant, one series.",
-    "T": "SBC Communications acquired AT&T Corp. in 2005 and adopted the AT&T Inc. name. SBC is priced as SBC up to its 2004 year end and as T from 2005; the separate Ma Bell registrant is T_CORP."
+    "T": "SBC Communications acquired AT&T Corp. in 2005 and adopted the AT&T Inc. name. SBC is priced as SBC up to its 2004 year end and as T from 2005; the separate Ma Bell registrant is T_CORP.",
+    "SBC": "Southwestern Bell Corporation renamed itself SBC Communications in April 1995, so its March-31 1995 schedule files under the old name. One registrant, one series; the same rule that maps Philip Morris to Altria."
   },
   "not_matched_deliberately": {
     "# Microsoft Corp": "A stray footnote marker on the 1996 filing's Microsoft row. Normalisation strips leading markers, so this resolves to Microsoft Corp rather than being mapped separately.",

@@ -527,6 +527,33 @@ series, and both were silent.
   19 constituents resolved in NO SEI filing, and 6 resolved in no SPY filing at all. Q3 rose
   from 72 observations to 163 on the fix alone, with no new filing archived.
 
+##### Finding the rest of them, by gap rather than by guess
+
+The first resolution pass was keyword-targeted and was therefore incomplete by
+construction: it could only find variants of names somebody had already thought to look
+for. What it missed was found by asking a different question — **where does a constituent
+appear before and after a period but not in it?** An interior gap in a series is either a
+company leaving the index or a name that failed to resolve, and the two are easy to tell
+apart by opening the filing. Scoped that way the candidate list is small enough to decide
+one name at a time, which it has to be, because none of these can be automated safely.
+
+Three more classes of silent drop surfaced, all systematic rather than one-off:
+
+| Variant | Canonical | What it cost |
+|---|---|---|
+| `E.I. du Pont de Nemours &amp; Co` | `... & Co` | **32 issuers** in Vanguard 2004-Q2 — every name with an ampersand, including `AT&amp;T Corp` |
+| `AT & T Corp` | `AT&T Corp` | AT&T Corp's 1997-Q3 and 1998-Q3, and with them half its quarterly span |
+| `MCI WorldCom` | `MCI WorldCom, Inc` | MCIC's 1999-Q1, which was the whole of its eligibility |
+
+`normalise()` now decodes HTML entities, collapses runs of whitespace, and closes the
+spaces around an ampersand. Two aliases were added by hand because they are renames rather
+than typography: `Southwestern Bell` is SBC before its April 1995 rename, and
+`MCI WorldCom` is the suffix-less form SEI writes.
+
+Resolving those put **MCIC into the quarterly universe** and doubled T_CORP's span from 8
+quarters to 16. Both were invisible until the gap question was asked, and neither would
+have been found by looking harder at the names already known.
+
 ##### Two filers at March 31, and what they agree on
 
 SEI and Prudential both file at March 31, so Q1 is the only quarter that can be checked by
@@ -591,18 +618,18 @@ constituent has.
 
 ##### What this bought
 
-`data/raw/ground_truth/derived_quarterly_constituent_series.json` holds **690 observations
-across all 19 constituents** — 172 Q1, 172 Q2, 163 Q3, 183 Q4 — each stamped with an
+`data/raw/ground_truth/derived_quarterly_constituent_series.json` holds **697 observations
+across all 19 constituents** — 175 Q1, 174 Q2, 165 Q3, 183 Q4 — each stamped with an
 `audited` flag per observation rather than per dataset, so a consumer reading one price can
 tell which grade it holds.
 
-**Ten of the nineteen now appear in the quarterly universe**, spanning 1996-Q4 to 2003-Q3:
-`AOL DD EMC LU MOB NT RD SBC TYC T_CORP`. The other nine are eligible by price but sit in the
+**Eleven of the nineteen now appear in the quarterly universe**, spanning 1996-Q4 to
+2003-Q3: `AOL DD EMC LU MCIC MOB NT RD SBC TYC T_CORP`. The other nine are eligible by price but sit in the
 base roster only for years the two source holes block.
 
 The measured effect is confined to one figure in the whole scenario matrix: **S&P 500 30y Top
-10 (Quarterly) falls from 13.48% to 13.04% CAGR**, cumulative return from 2823.99% to
-2542.50%, and max drawdown deepens from -57.32% to -61.20%. Nothing else moves, because the
+10 (Quarterly) falls from 13.48% to 13.03% CAGR**, cumulative return from 2823.99% to
+2534.73%, and max drawdown deepens from -57.32% to -61.20%. Nothing else moves, because the
 constituents admitted all sit in 1996-2003, outside the 10y and 20y windows. The result got
 worse, which is the point: the strategy was being flattered by the absence of AT&T Corp,
 Lucent, Nortel and Royal Dutch from the quarterly universe.

@@ -1255,6 +1255,14 @@
       "quarter": 4
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.012467,
+      "trailing_1y_return": -0.0661,
+      "year": 1996,
+      "quarter": 4
+    },
+    {
       "ticker": "JNJ",
       "name": "Johnson & Johnson",
       "market_cap_weight": 0.01172,
@@ -1441,6 +1449,14 @@
       "quarter": 1
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0097,
+      "trailing_1y_return": -0.1556,
+      "year": 1997,
+      "quarter": 1
+    },
+    {
       "ticker": "AIG",
       "name": "American International Group Inc.",
       "market_cap_weight": 0.0095,
@@ -1619,6 +1635,14 @@
       "quarter": 2
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0084,
+      "trailing_1y_return": -0.1608,
+      "year": 1997,
+      "quarter": 2
+    },
+    {
       "ticker": "HPQ",
       "name": "HP Inc.",
       "market_cap_weight": 0.0084,
@@ -1765,6 +1789,14 @@
       "quarter": 3
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0099,
+      "trailing_1y_return": null,
+      "year": 1997,
+      "quarter": 3
+    },
+    {
       "ticker": "HPQ",
       "name": "HP Inc.",
       "market_cap_weight": 0.0098,
@@ -1867,6 +1899,14 @@
       "name": "International Business Machines Corp.",
       "market_cap_weight": 0.013459,
       "trailing_1y_return": 0.3913,
+      "year": 1997,
+      "quarter": 4
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.013172,
+      "trailing_1y_return": 0.408,
       "year": 1997,
       "quarter": 4
     },
@@ -2021,6 +2061,14 @@
       "name": "Procter & Gamble Co.",
       "market_cap_weight": 0.0132,
       "trailing_1y_return": 0.4877,
+      "year": 1998,
+      "quarter": 1
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0124,
+      "trailing_1y_return": 0.8886,
       "year": 1998,
       "quarter": 1
     },
@@ -2219,6 +2267,14 @@
       "quarter": 2
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0105,
+      "trailing_1y_return": 0.6292,
+      "year": 1998,
+      "quarter": 2
+    },
+    {
       "ticker": "DD",
       "name": "DD",
       "market_cap_weight": 0.0096,
@@ -2361,6 +2417,14 @@
       "name": "Procter & Gamble Co.",
       "market_cap_weight": 0.0121,
       "trailing_1y_return": 0.0449,
+      "year": 1998,
+      "quarter": 3
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.012,
+      "trailing_1y_return": 0.3188,
       "year": 1998,
       "quarter": 3
     },
@@ -2511,6 +2575,14 @@
       "quarter": 4
     },
     {
+      "ticker": "MCIC",
+      "name": "MCIC",
+      "market_cap_weight": 0.013166,
+      "trailing_1y_return": null,
+      "year": 1998,
+      "quarter": 4
+    },
+    {
       "ticker": "MO",
       "name": "Altria Group Inc.",
       "market_cap_weight": 0.01305,
@@ -2629,6 +2701,14 @@
       "name": "International Business Machines Corp.",
       "market_cap_weight": 0.0159,
       "trailing_1y_return": 0.715,
+      "year": 1999,
+      "quarter": 1
+    },
+    {
+      "ticker": "MCIC",
+      "name": "MCIC",
+      "market_cap_weight": 0.0155,
+      "trailing_1y_return": null,
       "year": 1999,
       "quarter": 1
     },
@@ -2791,6 +2871,14 @@
       "name": "Citigroup Inc.",
       "market_cap_weight": 0.0145,
       "trailing_1y_return": 0.1867,
+      "year": 1999,
+      "quarter": 2
+    },
+    {
+      "ticker": "MCIC",
+      "name": "MCIC",
+      "market_cap_weight": 0.0141,
+      "trailing_1y_return": null,
       "year": 1999,
       "quarter": 2
     },
@@ -2965,6 +3053,14 @@
       "quarter": 3
     },
     {
+      "ticker": "MCIC",
+      "name": "MCIC",
+      "market_cap_weight": 0.0126,
+      "trailing_1y_return": 0.4706,
+      "year": 1999,
+      "quarter": 3
+    },
+    {
       "ticker": "PG",
       "name": "Procter & Gamble Co.",
       "market_cap_weight": 0.012,
@@ -3016,7 +3112,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.0075,
-      "trailing_1y_return": null,
+      "trailing_1y_return": -0.2556,
       "year": 1999,
       "quarter": 3
     }

@@ -1677,6 +1677,50 @@ class TestIssuerTickerMap(unittest.TestCase):
 
         return normalise(name)
 
+    def test_normalisation_absorbs_the_ways_filers_vary_a_name(self):
+        """Each case here cost real observations before it was handled.
+
+        These are not hypothetical inputs. Every one was found by sweeping unresolved
+        names across the four roster sources, and each was silently dropping holdings:
+        an unresolved name is skipped with `continue`, so the constituent simply did not
+        appear, which is indistinguishable from a filing that never listed it.
+        """
+        from scripts.derive_constituent_series import normalise
+
+        for variant, canonical, cost in [
+            ("AT & T Corp", "AT&T Corp", "SPY 1997-Q3 and 1998-Q3, AT&T Corp"),
+            ("E.I. du Pont de Nemours &amp; Co", "E.I. du Pont de Nemours & Co",
+             "32 ampersand issuers in Vanguard 2004-Q2"),
+            ("EMC Corp. *", "EMC Corp", "trailing marker, six constituents across SPY"),
+            ("Bellsouth Corp", "BellSouth Corp", "SPY 2001-Q3, BellSouth"),
+            ("General Motors (D)", "General Motors", "SEI's on-loan footnote"),
+            ("Sun Microsystems Inc.(a)", "Sun Microsystems Inc",
+             "Prudential's non-income-producing footnote"),
+        ]:
+            with self.subTest(variant=variant):
+                self.assertEqual(
+                    normalise(variant),
+                    normalise(canonical),
+                    f"this variant cost: {cost}",
+                )
+
+    def test_normalisation_keeps_distinctions_that_matter(self):
+        """Folding must not reach a share class or a genuinely different issuer.
+
+        MEMC Electronic Materials sits beside EMC Corp in the same SPY filings, and
+        Viacom's Class A is deliberately unmapped so it cannot be conflated with Class B.
+        Both would be lost to a looser matcher.
+        """
+        from scripts.derive_constituent_series import normalise
+
+        self.assertNotEqual(
+            normalise("MEMC Electronic Materials, Inc. *"), normalise("EMC Corp. *")
+        )
+        self.assertNotEqual(
+            normalise("Viacom, Inc. (Class A)"), normalise("Viacom, Inc. (Class B)")
+        )
+        self.assertEqual(normalise("Dillard's, Cl A (D)"), normalise("Dillard's, Cl A"))
+
     def test_issuer_names_do_not_collide_on_case(self):
         """Folding case must not merge two issuers into one.
 
