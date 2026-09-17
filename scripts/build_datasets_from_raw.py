@@ -750,8 +750,9 @@ def main():
         if partial:
             print(
                 f"  {len(partial)} carry years without all four quarters; those years are "
-                "not eligible for selection. Gaps are sources, not parsing: no Q3 filing "
-                "before 1997, SEI's 2004 schedule corrupt as filed, Q3 only after 2006."
+                "not eligible for selection. Gaps are sources, not parsing: no September-30 "
+                "filing for 1994, SEI's 2004 schedule corrupt as filed, no Q2 2005, and "
+                "only Q3 after 2006."
             )
 
     # Load raw spinoff distributions for total return calculations.
