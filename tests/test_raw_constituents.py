@@ -1615,5 +1615,66 @@ class TestVanguardAuditedRosters(unittest.TestCase):
             self.assertNotIn(absent, estimated)
 
 
+class TestIssuerTickerMap(unittest.TestCase):
+    """Filed issuer names resolved to the ticker each is priced under (#55)."""
+
+    MAP_PATH = ROOT / "data" / "raw" / "constituents" / "issuer_ticker_map.json"
+    ROSTERS_PATH = ROOT / "data" / "raw" / "ground_truth" / "vanguard_audited_rosters.json"
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.MAP_PATH, "r", encoding="utf-8") as f:
+            cls.mapping = json.load(f)["map"]
+        with open(cls.ROSTERS_PATH, "r", encoding="utf-8") as f:
+            cls.rosters = json.load(f)["rosters_by_year"]
+
+    @staticmethod
+    def _normalise(name):
+        """Strip footnote markers and trailing punctuation, which vary between filings."""
+        return re.sub(r"^[#*^\s]+", "", name).strip().rstrip(".").strip()
+
+    def test_every_top20_issuer_resolves_to_a_ticker(self):
+        """An unmapped issuer would be dropped from the roster silently.
+
+        That is the failure this map exists to prevent: a constituent the filings record
+        would simply not appear in the candidate universe, which is survivorship bias
+        reintroduced by a lookup miss rather than by a missing download.
+        """
+        known = {self._normalise(k) for k in self.mapping}
+        unmapped = {
+            holding["name"]
+            for roster in self.rosters.values()
+            for holding in roster["holdings"][:20]
+            if self._normalise(holding["name"]) not in known
+            and not holding.get("unidentified")
+        }
+        self.assertEqual(unmapped, set())
+
+    def test_renamed_registrants_share_one_ticker(self):
+        """A rename must not split one registrant's history into two series."""
+        for before, after in [
+            ("Philip Morris Cos., Inc", "Altria Group, Inc"),
+            ("BankAmerica Corp", "Bank of America Corp"),
+            ("Bell Atlantic Corp", "Verizon Communications"),
+            ("Exxon Corp", "ExxonMobil Corp"),
+            ("Citicorp", "Citigroup, Inc"),
+        ]:
+            with self.subTest(registrant=after):
+                self.assertEqual(self.mapping[before], self.mapping[after])
+
+    def test_distinct_registrants_keep_distinct_tickers(self):
+        """The AT&T collision, resolved from primary data rather than by splicing.
+
+        The filings list AT&T Corp and SBC Communications as separate issuers in the same
+        years, so the two are priced separately instead of one series standing in for
+        both. Mobil and GTE likewise remain distinct from the registrants that absorbed
+        them.
+        """
+        self.assertNotEqual(self.mapping["AT&T Corp"], self.mapping["SBC Communications Inc"])
+        self.assertNotEqual(self.mapping["AT&T Corp"], self.mapping["AT&T Inc."])
+        self.assertNotEqual(self.mapping["Mobil Corp"], self.mapping["Exxon Corp"])
+        self.assertNotEqual(self.mapping["GTE Corp"], self.mapping["Bell Atlantic Corp"])
+
+
 if __name__ == "__main__":
     unittest.main()
