@@ -1488,6 +1488,29 @@ class TestVanguardAuditedRosters(unittest.TestCase):
             cls.data = json.load(f)
         cls.rosters = cls.data["rosters_by_year"]
 
+    def test_every_reconciled_vanguard_filing_produces_a_roster(self):
+        """Every archived VG500 filing produces a roster, or is recorded as unreconciled."""
+        manifest_path = ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "vanguard_annual_filings_manifest.json"
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            manifest = json.load(f)
+
+        unreconciled = self.data.get("unreconciled_years", {})
+        for year in manifest:
+            with self.subTest(year=year):
+                if year in unreconciled:
+                    self.assertNotIn(year, self.rosters)
+                    self.assertTrue(unreconciled[year].strip())
+                else:
+                    self.assertIn(year, self.rosters)
+                    roster = self.rosters[year]
+                    self.assertGreaterEqual(roster["position_count"], 450)
+                    self.assertTrue(roster["report_date"])
+                    self.assertTrue(roster["accession_number"])
+                    self.assertTrue(roster["source_file"])
+                    self.assertIn("stated_total_usd", roster)
+                    self.assertIn("parsed_total_usd", roster)
+                    self.assertEqual(len(roster["holdings"]), roster["position_count"])
+
     def test_every_published_roster_reconciles_dollar_exact(self):
         """A schedule that reads short is indistinguishable from one that read fully.
 
@@ -1501,6 +1524,9 @@ class TestVanguardAuditedRosters(unittest.TestCase):
                     round(roster["parsed_total_usd_thousands"]),
                     round(roster["stated_total_usd_thousands"]),
                 )
+                self.assertEqual(roster["parsed_total_usd"], roster["stated_total_usd"])
+                holdings_sum = sum(h["value_usd_thousands"] for h in roster["holdings"])
+                self.assertEqual(holdings_sum, round(roster["stated_total_usd_thousands"]))
 
     def test_every_published_roster_is_sp500_sized(self):
         """Roughly five hundred holdings is what identifies the S&P 500 tracker.
@@ -1516,6 +1542,7 @@ class TestVanguardAuditedRosters(unittest.TestCase):
                 self.assertLessEqual(roster["position_count"], 540)
 
     def test_holdings_are_ranked_and_weighted_consistently(self):
+        """Weights sum to 1.0 within float tolerance and rank ordering is descending by value."""
         for year, roster in self.rosters.items():
             holdings = roster["holdings"]
             with self.subTest(year=year):
@@ -1531,6 +1558,21 @@ class TestVanguardAuditedRosters(unittest.TestCase):
             with self.subTest(year=year):
                 self.assertTrue(reason.strip())
                 self.assertNotIn(year, self.rosters)
+
+    def test_unreconciled_filing_refuses_to_publish_short_read(self):
+        """FY2004 has an empty constituent row in the SEC filing with market value $24,416k.
+
+        build_roster must raise ScheduleParseError rather than invent figures or publish short.
+        """
+        from scripts.extract_ground_truth_from_sec import ScheduleParseError
+        from scripts.extract_vanguard_rosters import build_roster
+
+        filing_2004 = (
+            ROOT / "data" / "raw" / "ground_truth" / "sec_filings" / "VG500_2004_N-CSR_0000932471-05-000480.txt"
+        )
+        with self.assertRaises(ScheduleParseError) as ctx:
+            build_roster(filing_2004)
+        self.assertIn("-24,416", str(ctx.exception))
 
     def test_audited_rosters_contradict_the_estimated_ones(self):
         """The point of this dataset: estimates omit constituents the filings record.

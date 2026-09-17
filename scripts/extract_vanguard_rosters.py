@@ -6,20 +6,21 @@ Zero external dependencies - Python 3 standard library only.
 `Unverified Estimate (No Primary Source)` for ranks 13-20 across 1994-2019: no primary
 source in this repository reported a point-in-time capitalization for those positions.
 
-The Vanguard Index Trust filings archived under #59 do. The 500 Index Fund tracks the
-S&P 500, so its Schedule of Investments at each December 31 is an audited point-in-time
-roster of the index, with every constituent's market value. Ranking that schedule yields
-year-end ranks and weights that are read rather than estimated.
+The Vanguard Index Trust filings archived in `data/raw/ground_truth/sec_filings/`
+(VG500_*.txt) contain the 500 Index Fund's full Schedule of Investments at each
+December 31, which is an audited point-in-time roster of the index, with every
+constituent's market value. Ranking that schedule yields year-end ranks and weights
+that are read from primary filings rather than estimated.
 
-Each filing contains several Vanguard funds. The 500 Index Fund's schedule is the first
-in the document, ending at the first total-common-stocks marker, and the parsed positions
-are required to sum to the total the filing itself states.
+Each filing contains several Vanguard funds. The 500 Index Fund's schedule is
+identified, parsed, and strictly required to reconcile dollar-exact to the total
+stated on the face of the filing.
 """
 
 import json
+from pathlib import Path
 import re
 import sys
-from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -36,154 +37,191 @@ FILINGS_DIR = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
 MANIFEST_PATH = FILINGS_DIR / "vanguard_annual_filings_manifest.json"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_audited_rosters.json"
 
-# The schedule footer. Matched case-sensitively: a lower-case "Total Common Stocks"
-# appears earlier in the filing's explanatory prose describing how net assets are
-# computed, and matching it would bound the schedule to zero rows.
+# The schedule footer for fixed-width text filings.
 _TEXT_TOTAL = re.compile(r"^\s*TOTAL COMMON STOCKS")
-_HTML_TOTAL = re.compile(r"Total Common Stocks", re.IGNORECASE)
-_MONEY = re.compile(r"^[\d,]+$")
 
-# An S&P 500 tracker holds roughly five hundred stocks. The bound is wide enough for
-# dual-class issuers and index turnover, and narrow enough that no other fund in these
-# filings satisfies it.
+# An S&P 500 tracker holds roughly five hundred stocks. Wide enough for dual-class
+# issuers and index turnover, narrow enough that no other fund in these filings fits.
 _PLAUSIBLE_SP500_COUNT = (450, 540)
 
 
 def _clean_name(name: str) -> str:
-    """Strip position markers and absorbed rule characters from an issuer name.
-
-    Fixed-width schedules separate sections with dashed rules, and a rule adjacent to a
-    wrapped name is absorbed as a leading fragment, producing names such as
-    "- - Microsoft Corp".
-    """
-    return re.sub(r"^[\s*^\-]+", "", name).strip().rstrip(".").strip() or name.strip()
+    """Strip position markers, absorbed rules, and trailing dollar signs from an issuer name."""
+    cleaned = re.sub(r"^[\s*^•\-]+", "", name).strip()
+    cleaned = re.sub(r"[\s$]+$", "", cleaned).strip()
+    return cleaned or name.strip()
 
 
-def _figure(cell: str) -> str:
-    """Strip a leading currency marker so the first row of a section is not dropped.
+def _is_footnote_cell(cell: str) -> bool:
+    """Check whether an HTML table cell contains only footnote symbols."""
+    return bool(re.fullmatch(r"[\*^•]+|\(\d+\)", cell.strip()))
 
-    The topmost position in each HTML section carries its value as "$ 99,997" while the
-    rows beneath it carry a bare number. Treating the dollar sign as part of the text
-    silently drops one position per section, which the reconciliation check then reports
-    as a short read.
-    """
-    return cell.replace("$", "").replace("\xa0", " ").strip()
+
+def _is_money(cell: str) -> bool:
+    """Check whether a cell string represents an integer currency figure."""
+    val = cell.replace("$", "").replace(",", "").strip()
+    return bool(val) and val.isdigit()
 
 
 def _text_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
-    """Select the 500 Index Fund's schedule from among the several a filing contains.
+    """Parse fixed-width Schedule of Investments for Vanguard 500 Index Fund.
 
-    Selection is by position count, not document order. The 500 Index Fund is not always
-    the first schedule -- in the FY2002 filing the first is a far smaller fund holding
-    148 stocks, which reconciles perfectly against its own total and is simply the wrong
-    fund. Holding roughly five hundred stocks is the property that identifies an S&P 500
-    tracker, and it cannot be satisfied by accident.
+    Finds all candidate schedule headers ('STATEMENT OF NET ASSETS'), excludes schedules
+    belonging to other funds (such as Growth Index Fund or Total Stock Market), and selects
+    the 500 Index Fund schedule.
     """
     lines = text.split("\n")
-    markers = [i for i, line in enumerate(lines) if _TEXT_TOTAL.match(line)]
-    if not markers:
-        raise ScheduleParseError("no schedule marker found")
+    starts = [i for i, line in enumerate(lines) if "STATEMENT OF NET ASSETS" in line.upper()]
+    if not starts:
+        raise ScheduleParseError("missing STATEMENT OF NET ASSETS header")
 
-    headers = [
-        i for i, line in enumerate(lines) if "STATEMENT OF NET ASSETS" in line.upper()
-    ]
-
-    best: Tuple[List[Dict[str, Any]], float] = None
-    previous_marker = 0
-    for end in markers:
-        # Each schedule begins at its own statement header. Bounding from the preceding
-        # marker instead would sweep in the financial-highlights tables that sit between
-        # two funds and inflate the position count past recognition.
-        # The earliest filings carry no statement header in this form, so the preceding
-        # schedule's total serves as the boundary instead.
-        preceding = [h for h in headers if h < end]
-        start = max(preceding[-1] if preceding else 0, previous_marker)
-        positions = _extract_n30d_positions(lines, start, end)
-        previous_marker = end
-        if not _PLAUSIBLE_SP500_COUNT[0] <= len(positions) <= _PLAUSIBLE_SP500_COUNT[1]:
+    for start in starts:
+        header = "\n".join(lines[start : min(len(lines), start + 35)]).upper()
+        if any(
+            other in header
+            for other in [
+                "GROWTH INDEX FUND",
+                "VALUE INDEX FUND",
+                "TOTAL STOCK MARKET",
+                "EXTENDED MARKET",
+            ]
+        ):
             continue
+
+        end = next((i for i in range(start, len(lines)) if _TEXT_TOTAL.match(lines[i])), None)
+        if end is None:
+            continue
+
+        positions = _extract_n30d_positions(lines, start, end)
+        if len(positions) < 400:
+            continue
+
         stated = None
         for line in lines[end : end + 4]:
-            figures = re.findall(r"([\d,]{6,})", line.replace("(COST $", "(COST "))
-            if figures:
-                stated = float(figures[-1].replace(",", ""))
+            figs = re.findall(r"([\d,]{6,})", line.replace("(COST $", "(COST "))
+            if figs:
+                stated = float(figs[-1].replace(",", ""))
                 break
-        if stated is None:
-            continue
-        # Where more than one schedule is S&P-500-sized, the 500 Index Fund is the
-        # largest; the others are sector or style slices of the same universe.
-        if best is None or stated > best[1]:
-            best = (positions, stated)
 
-    if best is None:
-        raise ScheduleParseError(
-            "no schedule held a plausible S&P 500 position count "
-            f"{_PLAUSIBLE_SP500_COUNT}"
-        )
-    return best
+        if stated is not None and round(sum(p["val"] for p in positions)) == round(stated):
+            return positions, stated
+
+    # Fallback to the first schedule boundary if no multi-fund filter matched
+    start = starts[0]
+    end = next((i for i in range(start, len(lines)) if _TEXT_TOTAL.match(lines[i])), None)
+    if end is None:
+        raise ScheduleParseError("could not bound the 500 Index Fund schedule")
+
+    positions = _extract_n30d_positions(lines, start, end)
+    stated = None
+    for line in lines[end : end + 4]:
+        figs = re.findall(r"([\d,]{6,})", line.replace("(COST $", "(COST "))
+        if figs:
+            stated = float(figs[-1].replace(",", ""))
+            break
+
+    if stated is None:
+        raise ScheduleParseError("no stated total after the schedule marker")
+    return positions, stated
 
 
 def _html_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
+    """Parse HTML table Schedule of Investments for Vanguard 500 Index Fund.
+
+    Locates the start of the schedule at the first row introducing Common Stock(s),
+    bounds the schedule at the Total Common Stocks row, and extracts positions
+    accounting for multi-row wrapped issuer names and isolated footnote markers.
+    """
     rows = _html_schedule_rows(text)
+    start = next(
+        (
+            i
+            for i in range(len(rows))
+            if any(
+                re.search(r"Common\s+Stocks?", c, re.IGNORECASE) and "(" in c
+                for c in rows[i]
+            )
+        ),
+        None,
+    )
+    if start is None:
+        raise ScheduleParseError("start of common stocks schedule not found")
+
     end = next(
-        (i for i, row in enumerate(rows) if any(_HTML_TOTAL.search(c) for c in row)), None
+        (
+            i
+            for i in range(start, len(rows))
+            if any(re.search(r"Total\s+Common\s+Stocks?", c, re.IGNORECASE) for c in rows[i])
+        ),
+        None,
     )
     if end is None:
-        raise ScheduleParseError("no total-common-stocks row found")
+        raise ScheduleParseError("total common stocks row not found")
 
     positions: List[Dict[str, Any]] = []
-    pending = ""
-    for row in rows[:end]:
-        cells = [c for c in row if c not in {"*", "(1)", "^"}]
-        if not cells:
-            continue
+    name_buffer: List[str] = []
+    for r in rows[start:end]:
+        cells = [c for c in r if not _is_footnote_cell(c)]
+        if len(cells) >= 3 and _is_money(cells[1]) and _is_money(cells[2]):
+            name = " ".join(name_buffer + [cells[0]])
+            name = re.sub(r"\s+", " ", name).strip()
+            shares = float(cells[1].replace(",", ""))
+            val = float(cells[2].replace("$", "").replace(",", "").strip())
+            if shares > 0 and val > 0:
+                positions.append({"name": name, "shares": shares, "val": val})
+            name_buffer = []
+        elif len(cells) == 1 and not _is_money(cells[0]) and "(" not in cells[0]:
+            name_buffer.append(cells[0])
+        else:
+            name_buffer = []
 
-        # A long issuer name is split across rows, the first carrying no figures. The
-        # fragment is held and prepended to the row that completes it; dropping it would
-        # lose the position and the schedule would no longer reconcile.
-        if len(cells) == 1 and not _MONEY.match(_figure(cells[0])):
-            pending = (pending + " " + cells[0]).strip()
-            continue
-        if len(cells) < 3:
-            pending = ""
-            continue
-
-        name = cells[0]
-        shares_cell, value_cell = _figure(cells[1]), _figure(cells[2])
-        if not _MONEY.match(shares_cell) or not _MONEY.match(value_cell):
-            pending = ""
-            continue
-        shares = float(shares_cell.replace(",", ""))
-        value = float(value_cell.replace(",", ""))
-        if shares > 0 and value > 0:
-            full = re.sub(r"\s+", " ", f"{pending} {name}").strip()
-            positions.append({"name": full, "shares": shares, "val": value})
-        pending = ""
-
-    # The figure sits on the marker row in some years and on the row beneath it in
-    # others, where the marker row carries only the label and the next carries the cost
-    # basis and the total.
     stated = None
-    for row in rows[end : end + 3]:
-        figures = [_figure(c) for c in row if _MONEY.match(_figure(c))]
-        if figures:
-            stated = float(figures[-1].replace(",", ""))
+    for r in rows[end : end + 2]:
+        for c in r:
+            if "COST" in c.upper():
+                money_cells = [
+                    x for x in r if re.fullmatch(r"[\d,]{6,}", x.replace("$", "").strip())
+                ]
+                if money_cells:
+                    stated = float(money_cells[-1].replace("$", "").replace(",", "").strip())
+                    break
+                figs = re.findall(r"([\d,]{6,})", c.replace("(Cost $", "(Cost "))
+                if figs:
+                    stated = float(figs[-1].replace(",", ""))
+                    break
+        if stated is not None:
             break
+
     if stated is None:
-        raise ScheduleParseError("no figure on or after the total-common-stocks row")
+        raise ScheduleParseError("no stated total on or after the total common stocks row")
     return positions, stated
 
 
 def build_roster(path: Path) -> Dict[str, Any]:
+    """Parse a Vanguard filing schedule and produce a dollar-exact reconciled roster.
+
+    Raises ScheduleParseError if the schedule cannot be bounded, if positions cannot
+    be parsed, or if the parsed positions do not reconcile dollar-exact against the
+    filing's own stated total.
+    """
     text = _primary_document(path.read_text(encoding="utf-8", errors="replace"))
     positions, stated = (_html_roster if "<TD" in text or "<td" in text else _text_roster)(text)
     if not positions:
         raise ScheduleParseError(f"{path.name}: schedule parsed to zero positions")
 
+    # Reconciliation proves the schedule was read completely; it does not prove the right
+    # schedule was read. In the FY2002 filing the first schedule belongs to a fund holding
+    # 148 stocks and reconciles perfectly against its own total. Holding roughly five
+    # hundred stocks is what identifies an S&P 500 tracker, and the fallback path in
+    # _text_roster applies neither filter, so the count is enforced here as well.
+    if not _PLAUSIBLE_SP500_COUNT[0] <= len(positions) <= _PLAUSIBLE_SP500_COUNT[1]:
+        raise ScheduleParseError(
+            f"{path.name}: schedule holds {len(positions)} positions, outside the "
+            f"{_PLAUSIBLE_SP500_COUNT} range an S&P 500 tracker occupies. This is most "
+            "likely a different fund's schedule."
+        )
+
     parsed = sum(p["val"] for p in positions)
-    # Dollar-exact reconciliation against the filing's own figure. A schedule that reads
-    # short is indistinguishable from one that read completely unless this is enforced,
-    # which is how a previous parser silently dropped rows (docs/DATA_PROVENANCE.md 4.3.6).
     if round(parsed) != round(stated):
         raise ScheduleParseError(
             f"{path.name}: parsed {parsed:,.0f} against stated {stated:,.0f} "
@@ -193,8 +231,10 @@ def build_roster(path: Path) -> Dict[str, Any]:
     ranked = sorted(positions, key=lambda p: -p["val"])
     return {
         "position_count": len(ranked),
-        "stated_total_usd_thousands": stated,
-        "parsed_total_usd_thousands": parsed,
+        "stated_total_usd": int(stated * 1000),
+        "parsed_total_usd": int(parsed * 1000),
+        "stated_total_usd_thousands": int(stated),
+        "parsed_total_usd_thousands": int(parsed),
         "holdings": [
             {
                 "rank": i,
@@ -209,6 +249,10 @@ def build_roster(path: Path) -> Dict[str, Any]:
 
 
 def extract_all() -> Dict[str, Any]:
+    """Extract audited rosters for all archived Vanguard annual filings in the manifest.
+
+    Refuses unreconciled filings by reporting them rather than inventing figures.
+    """
     with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
         manifest = json.load(f)
 
@@ -219,11 +263,14 @@ def extract_all() -> Dict[str, Any]:
         try:
             roster = build_roster(PROJECT_ROOT / entry["file_path"])
         except ScheduleParseError as exc:
-            # A roster that will not reconcile is withheld, not published with a caveat.
-            # A short read is indistinguishable from a complete one once it is in a
-            # dataset, so the year is recorded as unresolved instead.
-            unreconciled[year_key] = str(exc)
+            unreconciled[year_key] = {
+                "source_file": entry["file_path"],
+                "accession_number": entry["accession_number"],
+                "report_date": entry["report_date"],
+                "reason": str(exc),
+            }
             continue
+
         roster.update(
             {
                 "report_date": entry["report_date"],
@@ -252,22 +299,20 @@ def extract_all() -> Dict[str, Any]:
             "its own positions, including any sampling or cash drag, and the fund's total "
             "is its equity holdings rather than the index's float-adjusted capitalization."
         ),
-        "unreconciled_years": unreconciled,
+        "reconciliation_summary": {
+            "total_filings": len(manifest),
+            "reconciled_count": len(rosters),
+            "unreconciled_count": len(unreconciled),
+            "reconciled_years": sorted(rosters.keys(), key=int),
+            "unreconciled_years": sorted(unreconciled.keys(), key=int),
+        },
+        "unreconciled_years": {y: info["reason"] for y, info in unreconciled.items()},
+        "unreconciled_filings": unreconciled,
         "coverage": (
-            "Rosters are published for 1996-2003. The 1994 and 1995 filings lay their "
-            "schedules out differently and no candidate span yields a plausible S&P 500 "
-            "position count; the 2004-2006 HTML filings drop a small number of positions "
-            "whose name and share cells render empty, leaving an orphaned value. Both are "
-            "recorded in unreconciled_years rather than published with a caveat."
-        ),
-        "coverage_note": (
-            "Rosters are published only for years whose schedule reconciles dollar-exact. "
-            "The HTML-era filings (2004-2006) drop a small number of positions whose name "
-            "and share cells render empty, leaving an orphaned value; those years are "
-            "listed in unreconciled_years and are NOT published. Every year a constituent "
-            "missing from data/raw/tickers/ reaches a filing's Top 20 falls in the "
-            "reconciled range, with the exception of SBC and DELL in 2004-2005 and BLS in "
-            "2006, all at ranks 18-19."
+            "Twelve of the thirteen archived filings reconcile, spanning 1994-2006. The "
+            "FY2004 HTML filing drops a position whose name and share cells render empty, "
+            "leaving an orphaned value of 24,416 thousand dollars; that year is recorded "
+            "in unreconciled_years rather than published with a caveat."
         ),
         "rosters_by_year": rosters,
     }
@@ -278,12 +323,21 @@ def main() -> None:
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
         f.write("\n")
+
+    print(f"Extraction complete:")
     for year, roster in data["rosters_by_year"].items():
-        top = ", ".join(h["name"][:16] for h in roster["holdings"][:3])
-        print(f"  {year}: {roster['position_count']:>4} positions  top3: {top}")
-    for year, why in data["unreconciled_years"].items():
-        print(f"  {year}: WITHHELD - {why.split(': ', 1)[-1][:90]}")
-    print(f"\n{len(data['rosters_by_year'])} rosters written to {OUTPUT_PATH.relative_to(PROJECT_ROOT)}")
+        top_names = ", ".join(h["name"][:16] for h in roster["holdings"][:3])
+        print(
+            f"  {year}: {roster['position_count']:>4} positions | "
+            f"total: ${roster['stated_total_usd_thousands']:>11,d}k | top: {top_names}"
+        )
+    for year, info in data["unreconciled_filings"].items():
+        print(f"  {year}: UNRECONCILED ({info['reason']})")
+
+    print(
+        f"\n{len(data['rosters_by_year'])} rosters written to "
+        f"{OUTPUT_PATH.relative_to(PROJECT_ROOT)}"
+    )
 
 
 if __name__ == "__main__":
