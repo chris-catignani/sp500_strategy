@@ -50,18 +50,25 @@ background tasks, including a baseline test run."* The work survives in the work
 recover with `agy --continue` telling it the suite result and asking only for the report
 and commit.
 
-**Code-writing tasks died where a research task succeeded.** Under issue #55, three
-consecutive attempts at a roster-extraction task ended silently — no output, no files, no
-commit — while a research brief that only fetched URLs and wrote one JSON file succeeded
-under the same model, settings and permissions. The third attempt explicitly forbade
-`python3 -c` and inline quoting and still died, so **the cause was not established**. The
-work was brought back in-house rather than spend further turns on it.
+**A finished turn can report nothing and still have done the work.** Under issue #55,
+three roster-extraction attempts appeared to die silently: no terminal output, no report
+file, and `pgrep` showing no process. All three were judged failures and the work was
+brought back in-house. They were still running. Their edits landed in the working tree
+afterwards — a rewritten extractor that covered 12 years where the hand-written one
+covered 8, strengthened tests, and a scratch file that a `git add -A` then swept into a
+merged PR.
 
-What this is worth: quoting remains the documented prime suspect, and a brief should still
-tell the agent to write a script to a file and run it as `python3 file.py` with no
-arguments. But do not assume that instruction is sufficient. Budget a fixed number of
-attempts for a code-writing delegation and take the work back when they are spent, rather
-than diagnosing an opaque failure one turn at a time.
+Two lessons, and the second is the expensive one:
+
+- **Do not conclude a turn produced nothing from an empty log.** Check the working tree
+  with `git status` before concluding, and again before staging anything. A background
+  agent writes files long after its output stream goes quiet.
+- **Never stage with `git add -A` while an agent may be running.** Stage by name. A
+  scratch file reached `main` this way and needed a follow-up commit to remove.
+
+Output arriving late is worth waiting for: the delegated extractor was better than the
+hand-written replacement and was adopted after its stated totals were each checked against
+the filing they claim to come from.
 
 **Files outside the workspace may be unreadable.** Keep briefs and reports inside the repo
 (`.superpowers/` is gitignored) rather than in a system scratch directory.
