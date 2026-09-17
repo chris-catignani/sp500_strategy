@@ -1268,12 +1268,39 @@ class TestVanguardArchiveCoverage(unittest.TestCase):
         with open(cls.MANIFEST, "r", encoding="utf-8") as f:
             cls.manifest = json.load(f)
 
+    SEMIANNUAL_MANIFEST = FILINGS_DIR / "vanguard_semiannual_filings_manifest.json"
+
     def test_every_archived_vanguard_filing_is_claimed_by_the_manifest(self):
-        """No archived filing may sit unclaimed, and no entry may name a missing file."""
+        """No archived filing may sit unclaimed, and no entry may name a missing file.
+
+        Two manifests now cover this archive: the December-31 annual reports (#55) and the
+        June-30 semi-annual reports added for quarterly coverage (#63). A filing claimed by
+        neither is the failure this guards against, so they are checked as one set.
+        """
+        with open(self.SEMIANNUAL_MANIFEST, "r", encoding="utf-8") as f:
+            semiannual = json.load(f)
+
         on_disk = sorted(path.name for path in self.FILINGS_DIR.glob("VG500_*.txt"))
-        claimed = sorted(Path(entry["file_path"]).name for entry in self.manifest.values())
+        claimed = sorted(
+            Path(entry["file_path"]).name
+            for entry in list(self.manifest.values()) + list(semiannual.values())
+        )
         self.assertEqual(claimed, on_disk)
         self.assertEqual(len(self.manifest), 13)
+        self.assertEqual(len(semiannual), 13)
+
+    def test_every_semiannual_filing_states_a_june_30_period(self):
+        """A December-31 annual filed under the same form must not sit in a Q2 slot.
+
+        FY2003 files as N-CSR under both periods, so the form cannot tell them apart and
+        the SEC header is the only thing that can.
+        """
+        with open(self.SEMIANNUAL_MANIFEST, "r", encoding="utf-8") as f:
+            semiannual = json.load(f)
+        for year, entry in semiannual.items():
+            with self.subTest(year=year):
+                self.assertEqual(entry["report_date"], f"{year}-06-30")
+                self.assertIs(entry["audited"], False)
 
     def test_every_filing_states_a_december_31_period(self):
         """The SEC header, not the filename, decides what a filing is.

@@ -306,10 +306,22 @@ class TestDerivedConstituentSeries(unittest.TestCase):
                 self.assertEqual(self.dividends.get(ticker, {}), {})
 
     def test_derived_series_are_absent_from_the_quarterly_datasets(self):
-        """Only December 31 observations are derived, so no quarterly series exists.
+        """Quarterly coverage is incomplete, so these constituents are withheld (#63).
 
-        This test records that as an intended limitation rather than an oversight: the
-        quarterly path cannot select these constituents, and the annual path can.
+        The reason changed with #63 and is worth stating precisely, because the earlier
+        one is no longer true. Q2 and Q3 observations DO now exist, in
+        data/raw/ground_truth/derived_quarterly_constituent_series.json, derived from the
+        Vanguard June-30 semi-annual and SPY September-30 annual filings. What is missing
+        is Q1: no archived source prices these constituents at March 31.
+
+        A partial series cannot be published. engine/backtest.py values every open position
+        at every quarter end before selection runs, so a constituent bought at Q4 is still
+        held at the following Q1 and must be priced there. Refusing to select it does not
+        help; it is already held. So build_datasets_from_raw.py merges a quarterly series
+        only where every observed year carries all four quarters, which today admits none
+        of them.
+
+        This test therefore asserts the withholding, not the absence of the data.
         """
         with open(ROOT / "data" / "sp500_quarterly_prices.json", "r", encoding="utf-8") as f:
             quarterly = json.load(f)

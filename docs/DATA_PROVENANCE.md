@@ -466,6 +466,71 @@ Both were in claims already checked by hand, and both were about **comparing aga
 
 The same correction showed that Dell's action, recorded as a substance-only match, is verbatim after all. The hand-check that produced that note was comparing encoding, not prose.
 
+#### 4.3.14 Quarterly Coverage for the Derived Constituents (issue #63)
+
+The constituents priced from the audited December-31 rosters (4.3.12) had a Q4 observation
+and nothing else, so they could not be drifted or priced at a quarter end and were dropped
+from the quarterly universe. That left the quarterly path carrying a survivorship bias the
+annual path no longer has.
+
+##### What each quarter can be sourced from, and at what grade
+
+A filer's fiscal year end decides which of its two yearly reports falls on a given date. An
+annual report carries a Report of Independent Accountants; a semi-annual does not.
+
+| Quarter | Source | Filer FYE | Archived | Grade |
+|---|---|---|---|---|
+| Q1 (Mar 31) | Prudential / Dryden (CIK 887991), SEI Index Funds (CIK 766589) | 0930 | **no** | unaudited |
+| Q2 (Jun 30) | Vanguard 500 Index Fund semi-annual | 1231 | yes (#63) | **unaudited** |
+| Q3 (Sep 30) | SPDR S&P 500 Trust annual | 0930 | yes (4.3.6) | **audited** |
+| Q4 (Dec 31) | Vanguard 500 Index Fund annual | 1231 | yes (4.3.9) | **audited** |
+
+The March-31 sources were established by an exhaustive census of EDGAR: 5,174 filers that
+filed a shareholder report in QTR2 or QTR3 of any year 1994-2006, every one of their
+submissions records read, no name filtering. 1,195 file at a March-31 period and 260 of
+those are audited grade; the only index fund among the 260 tracks natural gas utilities.
+Prudential's schedule at `19940331` holds 502 positions and SEI's at `19980331` holds 509,
+both confirmed by reading the filings. No audited March-31 S&P 500 roster was found among
+filers whose names identify them, and the question remains open for the 260 audited filers
+with generic names — `NATIONS FUND TRUST` (CIK 769100) is audited, files at March 31, and
+states in its own words that it runs a fund which *"seeks to match the performance of the
+S&P 500"*, but the document carrying that fund's schedule has not been located.
+
+##### Q2 and Q3 are derived; neither is published to the engine
+
+`data/raw/ground_truth/derived_quarterly_constituent_series.json` holds **232 observations
+across all 19 constituents** — 160 unaudited Q2 and 72 audited Q3 — each stamped with an
+`audited` flag per observation rather than per dataset, so a consumer reading one price can
+tell which grade it holds.
+
+**They are withheld from `data/sp500_quarterly_prices.json` all the same**, and the reason
+is the finding that matters here. `engine/backtest.py` values every open position at every
+quarter end *before* selection runs. A constituent bought at Q4 is still held at the
+following Q1 and must be priced there. Declining to select it does not help, because it is
+already held — so partial coverage is not a weaker version of full coverage, it is a run
+that raises `KeyError` part way through. `scripts/build_datasets_from_raw.py` therefore
+merges a quarterly series only where every observed year carries all four quarters, which
+today admits none of the 19.
+
+Publishing Q2 and Q3 anyway would have required inventing a Q1 price by carry-forward or
+interpolation. That is an estimate, and an estimate presented beside audited filing-derived
+prices is precisely what this document exists to prevent.
+
+##### Two parser results worth recording
+
+- **FY2005 Q2 is refused, not approximated.** Its first parseable schedule holds 453
+  positions — inside the range an S&P 500 tracker occupies — and reconciles dollar-exact
+  against its own stated total of $10.3bn. But the 500 Index Fund held $103.9bn that day.
+  Reconciliation proves a schedule was read completely, not that the right schedule was
+  read. `extract_vanguard_semiannual_rosters.py` additionally requires the roster to be the
+  largest `Total Common Stocks` figure in its filing, and refuses FY2005 on that basis. Q2
+  coverage is therefore 12 of 13 years.
+- **The HTML schedule heading is matched from the start of its cell.** Footnote blocks in
+  the later filings run to several hundred characters and mention common stock in passing
+  with parentheses nearby, so an unanchored search selected the footnotes and bounded the
+  schedule around the net-assets summary. Anchoring changed the parse of exactly one filing
+  — the one that was broken — and left every audited annual roster byte-identical.
+
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
 - **Observed Historical Quarterly Benchmark Levels (MSCI World)**: Linear interpolation between annual year-end anchors was eliminated and replaced with observed historical quarterly index closes from `data/raw/benchmarks/MSCIWORLD.json`. Intra-year quarterly returns are scaled to match official annual Q4 anchors while preserving the observed quarterly trajectory—faithfully reflecting real intra-year market shocks (such as the Q1 2020 COVID crash or Q3 2008 Lehman collapse).

@@ -136,14 +136,17 @@ def _html_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
     accounting for multi-row wrapped issuer names and isolated footnote markers.
     """
     rows = _html_schedule_rows(text)
+    # The heading is matched from the start of its cell, not anywhere inside it. Footnote
+    # blocks in the later filings run to several hundred characters and mention common
+    # stock in passing with parentheses nearby, so an unanchored search selects the
+    # footnotes and bounds the schedule around the net-assets summary instead of the
+    # holdings. Anchoring also excludes the "Total Common Stocks" footer, which is the end
+    # marker rather than the start.
     start = next(
         (
             i
             for i in range(len(rows))
-            if any(
-                re.search(r"Common\s+Stocks?", c, re.IGNORECASE) and "(" in c
-                for c in rows[i]
-            )
+            if any(re.match(r"\s*Common\s+Stocks?\s*\(", c, re.IGNORECASE) for c in rows[i])
         ),
         None,
     )

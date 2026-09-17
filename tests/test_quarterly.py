@@ -523,6 +523,35 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         self.assertIn("FULL", q1_tickers)
         self.assertIn("FULL", q2_tickers)
 
+    def test_every_quarterly_candidate_can_be_priced_by_the_engine(self) -> None:
+        """No candidate may appear at a quarter the engine cannot price it at.
+
+        This is the invariant that makes partial quarterly coverage unsafe (#63). The
+        backtester values every open position at every quarter end, so an unpriceable
+        candidate is not merely unselectable - it raises KeyError mid-run if it was ever
+        bought. Guarding the published datasets is cheaper than discovering it in a
+        simulation.
+        """
+        import json
+        from pathlib import Path
+
+        root = Path(__file__).resolve().parent.parent
+        loader = DataLoader()
+        with open(root / "data" / "sp500_quarterly_constituents.json", "r", encoding="utf-8") as f:
+            quarterly = json.load(f)
+
+        unpriceable = []
+        for key, candidates in quarterly.items():
+            year, quarter = int(key[:4]), int(key[-1])
+            for entry in candidates:
+                if entry["ticker"].startswith("^"):
+                    continue
+                try:
+                    loader.get_quarterly_price(entry["ticker"], year, quarter)
+                except KeyError:
+                    unpriceable.append((entry["ticker"], key))
+        self.assertEqual(unpriceable, [])
+
 
 if __name__ == "__main__":
     unittest.main()
