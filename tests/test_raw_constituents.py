@@ -1884,5 +1884,75 @@ class TestSplitRecordProvenance(unittest.TestCase):
         self.assertGreaterEqual(compared, 5, "corroboration degenerated to nothing")
 
 
+class TestTerminalActions(unittest.TestCase):
+    """What a holder received when a constituent stopped trading (#56 input)."""
+
+    PATH = ROOT / "data" / "raw" / "corporate_actions" / "terminal_actions.json"
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.PATH, "r", encoding="utf-8") as f:
+            cls.data = json.load(f)
+        cls.actions = cls.data["actions_by_ticker"]
+
+    def test_every_action_cites_a_filing_and_was_checked_against_it(self):
+        """A terminal value decides what a holding is worth when it stops trading.
+
+        An exchange ratio recalled rather than read would silently misprice the exit, and
+        nothing downstream would flag it, so each entry records both its source and that
+        the source was actually consulted.
+        """
+        for ticker, action in self.actions.items():
+            with self.subTest(ticker=ticker):
+                self.assertTrue(action["accession_number"])
+                self.assertTrue(action["cik"])
+                self.assertTrue(action["quoted_sentence"].strip())
+                self.assertEqual(action["verification"], "confirmed_at_source")
+
+    def test_consideration_matches_the_figures_recorded(self):
+        """A cash deal needs a cash figure, a stock deal a ratio, a wipeout neither."""
+        for ticker, action in self.actions.items():
+            kind = action["consideration_type"]
+            with self.subTest(ticker=ticker, kind=kind):
+                if kind == "cash":
+                    self.assertIsNotNone(action["cash_per_share"])
+                    self.assertIsNone(action["stock_exchange_ratio"])
+                elif kind == "stock":
+                    self.assertIsNotNone(action["stock_exchange_ratio"])
+                    self.assertIsNone(action["cash_per_share"])
+                elif kind == "cash_and_stock":
+                    self.assertIsNotNone(action["cash_per_share"])
+                    self.assertIsNotNone(action["stock_exchange_ratio"])
+                else:
+                    self.assertEqual(kind, "zero")
+                    self.assertIsNone(action["cash_per_share"])
+                    self.assertIsNone(action["stock_exchange_ratio"])
+
+    def test_royal_dutch_uses_the_new_york_listed_share_line(self):
+        """The same filing offers different consideration per share line.
+
+        Royal Dutch bearer and Hague registered shares received two A Shares each, while
+        the New York registered share received one A ADR. The S&P 500 constituent is the
+        NYSE-listed line, so 1.0 is correct and 2.0 would double this holding's exit.
+        """
+        action = self.actions["RD"]
+        self.assertEqual(action["stock_exchange_ratio"], 1.0)
+        self.assertIn("NEW YORK REGISTERED", action["note"].upper())
+
+    def test_every_constituent_that_left_the_universe_has_an_action(self):
+        """A constituent that stops trading without a terminal value cannot be exited."""
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "derived_constituent_series.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            derived = set(json.load(f)["series_by_ticker"])
+        # Constituents still trading under their own name need no terminal action.
+        still_listed = {"DD", "SBC", "GM", "MOT", "VIA", "AOL", "SUNW", "COP", "SLB", "GILD"}
+        for ticker in sorted(derived - still_listed):
+            with self.subTest(ticker=ticker):
+                self.assertIn(ticker, self.actions)
+
+
 if __name__ == "__main__":
     unittest.main()
