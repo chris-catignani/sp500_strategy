@@ -1932,6 +1932,67 @@ class TestSplitRecordProvenance(unittest.TestCase):
                 if record["splits"]:
                     self.assertTrue(record["quoted_sentence"].strip())
 
+    def test_t_corp_1999_split_is_quoted_from_its_own_filing(self):
+        """Two splits stated in two filings, so the evidence sits on the split.
+
+        The three-for-two of April 1999 was missing entirely until #76. A record-level
+        accession cannot stand behind both claims: the FY2002 report states the reverse
+        split and is the record-level quotation, and only the FY2001 report states the
+        three-for-two, so that one carries its own accession and sentence.
+        """
+        record = self.records["T_CORP"]
+        splits_by_date = {split["effective_date"]: split for split in record["splits"]}
+        self.assertEqual(set(splits_by_date), {"1999-04-15", "2002-11-18"})
+        self.assertEqual(splits_by_date["1999-04-15"]["ratio"], 1.5)
+        self.assertEqual(splits_by_date["2002-11-18"]["ratio"], 0.2)
+
+        three_for_two = splits_by_date["1999-04-15"]
+        self.assertTrue(three_for_two["quoted_sentence"].strip())
+        self.assertNotEqual(three_for_two["accession_number"], record["accession_number"])
+
+    def test_t_corp_adjusted_prices_match_the_closes_att_itself_reported(self):
+        """The check that found the missing split, pinned so it cannot come back.
+
+        A fund schedule gives an implied price; the registrant's own Form 10-K gives the
+        quarter-end close for the same date. Agreement between them tests the split
+        factor, because the factor is the only thing standing between the two. With the
+        1999 three-for-two missing the factor was 0.2 rather than 0.3, and every
+        comparison below would be out by fifty percent.
+
+        Closes are read from Note 20, "QUARTERLY INFORMATION (UNAUDITED)", of AT&T Corp's
+        FY1995 Form 10-K, accession 0000005907-96-000010. The filing reports all eight
+        quarters of 1994 and 1995; the two Q3s are omitted here only because the derived
+        quarterly series has no September observation before 1997 (4.3.14), so there is
+        nothing to compare them against.
+
+        Three of the six agree to the cent. The rest differ by up to 1.9%: the fund values
+        at its own business day and the registrant quotes the composite tape close, which
+        are not always the same session. 1994-Q2 is the widest at 1.874% and is recorded
+        rather than tuned away.
+        """
+        # Wide enough to admit the session mismatch above, and still orders of magnitude
+        # tighter than the 50% error a wrong split factor produces.
+        session_mismatch_tolerance = 0.03
+        filed_as_traded = {
+            "1994-Q1": 51.25,
+            "1994-Q2": 53.375,
+            "1994-Q4": 50.25,
+            "1995-Q1": 51.75,
+            "1995-Q2": 53.00,
+            "1995-Q4": 64.75,
+        }
+        factor = 1.5 * 0.2
+
+        with open(ROOT / "data" / "sp500_quarterly_prices.json", "r", encoding="utf-8") as f:
+            series = json.load(f)["T_CORP"]
+
+        for period, as_traded in filed_as_traded.items():
+            with self.subTest(period=period):
+                expected = as_traded / factor
+                self.assertLess(
+                    abs(series[period] / expected - 1.0), session_mismatch_tolerance
+                )
+
     def test_the_vendor_sourced_split_is_corroborated_independently(self):
         """Royal Dutch is the one record not quoted from a filing.
 

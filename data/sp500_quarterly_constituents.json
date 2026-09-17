@@ -3051,6 +3051,14 @@
       "quarter": 2
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0136,
+      "trailing_1y_return": 0.4655,
+      "year": 1999,
+      "quarter": 2
+    },
+    {
       "ticker": "PFE",
       "name": "Pfizer Inc.",
       "market_cap_weight": 0.0127,
@@ -3095,14 +3103,6 @@
       "name": "SBC",
       "market_cap_weight": 0.0102,
       "trailing_1y_return": 0.45,
-      "year": 1999,
-      "quarter": 2
-    },
-    {
-      "ticker": "T_CORP",
-      "name": "T_CORP",
-      "market_cap_weight": 0.009,
-      "trailing_1y_return": -0.023,
       "year": 1999,
       "quarter": 2
     },
@@ -3245,6 +3245,14 @@
       "quarter": 3
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0113,
+      "trailing_1y_return": 0.1166,
+      "year": 1999,
+      "quarter": 3
+    },
+    {
       "ticker": "SBC",
       "name": "SBC",
       "market_cap_weight": 0.0096,
@@ -3265,14 +3273,6 @@
       "name": "Altria Group Inc.",
       "market_cap_weight": 0.008,
       "trailing_1y_return": -0.2218,
-      "year": 1999,
-      "quarter": 3
-    },
-    {
-      "ticker": "T_CORP",
-      "name": "T_CORP",
-      "market_cap_weight": 0.0075,
-      "trailing_1y_return": -0.2556,
       "year": 1999,
       "quarter": 3
     }
@@ -3378,7 +3378,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.013169,
-      "trailing_1y_return": -0.3256,
+      "trailing_1y_return": 0.0116,
       "year": 1999,
       "quarter": 4
     },
@@ -3516,7 +3516,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.0143,
-      "trailing_1y_return": -0.2952,
+      "trailing_1y_return": 0.0572,
       "year": 2000,
       "quarter": 1
     },

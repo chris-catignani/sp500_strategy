@@ -16,8 +16,8 @@
         "report_date": "1994-12-31",
         "accession_number": "0000893220-95-000088",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1994_N-30D_0000893220-95-000088.txt",
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 251.2494,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 167.4996,
         "split_source_accession": "0000950123-03-003510"
       },
       "1995": {
@@ -29,8 +29,8 @@
         "report_date": "1995-12-31",
         "accession_number": "0000893220-96-000339",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1995_N-30D_0000893220-96-000339.txt",
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 323.7504,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 215.8336,
         "split_source_accession": "0000950123-03-003510"
       },
       "1996": {
@@ -42,8 +42,8 @@
         "report_date": "1996-12-31",
         "accession_number": "0000893220-97-000517",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1996_N-30D_0000893220-97-000517.txt",
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 217.5002,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 145.0002,
         "split_source_accession": "0000950123-03-003510"
       },
       "1997": {
@@ -55,8 +55,8 @@
         "report_date": "1997-12-31",
         "accession_number": "0000893220-98-000471",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1997_N-30D_0000893220-98-000471.txt",
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 306.2499,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 204.1666,
         "split_source_accession": "0000950123-03-003510"
       },
       "1998": {
@@ -68,8 +68,8 @@
         "report_date": "1998-12-31",
         "accession_number": "0000893220-99-000267",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1998_N-30D_0000893220-99-000267.txt",
-        "split_factor": 0.2,
-        "split_adjusted_price_usd": 376.2501,
+        "split_factor": 0.3,
+        "split_adjusted_price_usd": 250.8334,
         "split_source_accession": "0000950123-03-003510"
       },
       "1999": {

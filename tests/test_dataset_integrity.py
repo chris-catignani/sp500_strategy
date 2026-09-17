@@ -161,14 +161,18 @@ class TestDatasetIntegrity(unittest.TestCase):
         self.assertEqual(t_corp_spinoffs["LU"]["year"], 1996)
         self.assertEqual(t_corp_spinoffs["LU"]["quarter"], 3)
         # Converted into final share terms: the as-traded 14.87 of spinoffs.json over
-        # T_CORP's 0.2 split factor. The compiled dataset is what the engine reads, so
-        # it must carry the converted value, not the raw one.
-        self.assertEqual(t_corp_spinoffs["LU"]["distribution_per_share"], 74.35)
+        # T_CORP's split factor, which is 1.5 * 0.2 = 0.3 -- the three-for-two of April
+        # 1999 and the one-for-five reverse of November 2002, both after the event. The
+        # compiled dataset is what the engine reads, so it must carry the converted value,
+        # not the raw one. These constants were 74.35 and 10.50 while the 1999 split was
+        # missing from splits.json (#76); a 1996 return is unaffected, because scaling the
+        # parent price and both distributions by the same factor cancels.
+        self.assertEqual(t_corp_spinoffs["LU"]["distribution_per_share"], 49.5667)
         self.assertEqual(t_corp_spinoffs["LU"]["basis_retention_ratio"], 0.7201)
 
         self.assertEqual(t_corp_spinoffs["NCR"]["year"], 1996)
         self.assertEqual(t_corp_spinoffs["NCR"]["quarter"], 4)
-        self.assertEqual(t_corp_spinoffs["NCR"]["distribution_per_share"], 10.50)
+        self.assertEqual(t_corp_spinoffs["NCR"]["distribution_per_share"], 7.0)
         self.assertEqual(t_corp_spinoffs["NCR"]["basis_retention_ratio"], 0.9523)
 
         # Verify 2022 Warner Bros. Discovery spinoff present in compiled data for T (AT&T Inc.)
@@ -186,19 +190,22 @@ class TestDatasetIntegrity(unittest.TestCase):
         with open(self.prices_path, "r", encoding="utf-8") as f:
             prices = json.load(f)
         self.assertIn("T_CORP", prices)
-        self.assertAlmostEqual(prices["T_CORP"]["1994"], 251.2494, places=4)
-        self.assertAlmostEqual(prices["T_CORP"]["1995"], 323.7504, places=4)
-        # 1996 is the filed 217.5002 less the separately credited NCR entitlement: the
+        # Final share terms is as-traded over 0.3 (the April 1999 three-for-two and the
+        # November 2002 one-for-five reverse, both after these dates). 1994 reads 167.4996
+        # where the as-traded close was 50.25.
+        self.assertAlmostEqual(prices["T_CORP"]["1994"], 167.4996, places=4)
+        self.assertAlmostEqual(prices["T_CORP"]["1995"], 215.8336, places=4)
+        # 1996 is the filed 145.0002 less the separately credited NCR entitlement: the
         # distribution went ex on the filing date, so the filed value carries it.
-        self.assertAlmostEqual(prices["T_CORP"]["1996"], 207.0002, places=4)
-        self.assertAlmostEqual(prices["T_CORP"]["1997"], 306.2499, places=4)
+        self.assertAlmostEqual(prices["T_CORP"]["1996"], 138.0002, places=4)
+        self.assertAlmostEqual(prices["T_CORP"]["1997"], 204.1666, places=4)
         # Derived series have no dividend records (filings report holdings, not distributions)
         self.assertEqual(divs.get("T_CORP", {}), {})
 
     def test_att_distribution_endpoints_conserve_quoted_wealth(self):
         """Parent plus credited child must equal the filed package quote.
 
-        The 1996-12-31 Schedule of Investments values AT&T Corp at 217.5002 in final
+        The 1996-12-31 Schedule of Investments values AT&T Corp at 145.0002 in final
         share terms, cum-NCR. The model splits that one number into two: a parent price
         and a separately credited distribution. Neither may be changed without the other,
         or the endpoint gains or loses wealth that the filing does not record.
@@ -210,14 +217,14 @@ class TestDatasetIntegrity(unittest.TestCase):
 
         ncr, = [ev for ev in spinoffs["T_CORP"] if ev["spinco_ticker"] == "NCR"]
         parent = prices["T_CORP"]["1996"]
-        self.assertAlmostEqual(parent + ncr["distribution_per_share"], 217.5002, places=4)
+        self.assertAlmostEqual(parent + ncr["distribution_per_share"], 145.0002, places=4)
 
         # Lucent went ex on 1996-09-30, a quarter before the filing date, so the
         # year-end quote is already clear of it and it must NOT be added back.
         lucent, = [ev for ev in spinoffs["T_CORP"] if ev["spinco_ticker"] == "LU"]
         self.assertNotAlmostEqual(
             parent + ncr["distribution_per_share"] + lucent["distribution_per_share"],
-            217.5002,
+            145.0002,
             places=4,
         )
 

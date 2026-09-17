@@ -106,6 +106,24 @@ def _verify_quote_and_figures(
         result.check(f"figure {text}", found, "")
 
 
+def _verify_cited_filing(
+    result: Result, cik: str, accession: str, quote: str, figures: List[Any]
+) -> Result:
+    """Fetch the cited filing and re-check it, reporting a failed fetch rather than raising.
+
+    Every claim in this script is "the document at this accession says this", so a claim
+    that cannot be fetched is unsupported rather than fatal -- one unreachable filing must
+    not stop the other sixty-eight from being checked.
+    """
+    try:
+        document = _fetch(cik, accession)
+    except Exception as exc:  # noqa: BLE001 - reported, not raised
+        result.check("fetch", False, type(exc).__name__)
+        return result
+    _verify_quote_and_figures(result, document, quote, figures)
+    return result
+
+
 def verify_splits(verbose: bool) -> List[Result]:
     with open(SPLITS_PATH, "r", encoding="utf-8") as f:
         records = json.load(f)["splits_by_ticker"]
@@ -122,15 +140,27 @@ def verify_splits(verbose: bool) -> List[Result]:
             results.append(result)
             continue
 
-        try:
-            document = _fetch(record["cik"], record["accession_number"])
-        except Exception as exc:  # noqa: BLE001 - reported, not raised
-            result.check("fetch", False, type(exc).__name__)
-            results.append(result)
-            continue
+        results.append(
+            _verify_cited_filing(
+                result, record["cik"], record["accession_number"],
+                record.get("quoted_sentence", ""), [],
+            )
+        )
 
-        _verify_quote_and_figures(result, document, record.get("quoted_sentence", ""), [])
-        results.append(result)
+        # A registrant whose splits were stated in different filings carries a source on
+        # the split itself. T_CORP is the case: the 1999 three-for-two is quoted from the
+        # FY2001 report and the 2002 reverse split from FY2002, so one record-level
+        # accession cannot stand behind both claims.
+        for split in record["splits"]:
+            if not split.get("quoted_sentence"):
+                continue
+            split_result = Result("splits", f"{ticker} {split['effective_date']}")
+            results.append(
+                _verify_cited_filing(
+                    split_result, record["cik"], split["accession_number"],
+                    split["quoted_sentence"], [],
+                )
+            )
     return results
 
 
@@ -141,20 +171,15 @@ def verify_terminal_actions(verbose: bool) -> List[Result]:
     results = []
     for ticker, action in sorted(actions.items()):
         result = Result("terminal_actions", ticker)
-        try:
-            document = _fetch(action["cik"], action["accession_number"])
-        except Exception as exc:  # noqa: BLE001
-            result.check("fetch", False, type(exc).__name__)
-            results.append(result)
-            continue
-
-        _verify_quote_and_figures(
-            result,
-            document,
-            action.get("quoted_sentence", ""),
-            [action.get("cash_per_share"), action.get("stock_exchange_ratio")],
+        results.append(
+            _verify_cited_filing(
+                result,
+                action["cik"],
+                action["accession_number"],
+                action.get("quoted_sentence", ""),
+                [action.get("cash_per_share"), action.get("stock_exchange_ratio")],
+            )
         )
-        results.append(result)
     return results
 
 
@@ -269,15 +294,15 @@ def main() -> int:
         for result in DATASETS[name](args.verbose):
             if result.skipped:
                 skipped += 1
-                print(f"  {result.subject:8} SKIP  {result.skipped}")
+                print(f"  {result.subject:17} SKIP  {result.skipped}")
                 continue
             checked += 1
             if result.ok:
                 labels = ", ".join(label for label, _, _ in result.checks)
-                print(f"  {result.subject:8} ok    {labels}")
+                print(f"  {result.subject:17} ok    {labels}")
             else:
                 failures += 1
-                print(f"  {result.subject:8} FAIL")
+                print(f"  {result.subject:17} FAIL")
                 for label, passed, detail in result.checks:
                     if not passed:
                         print(f"           - {label} not found in the filing {detail}")

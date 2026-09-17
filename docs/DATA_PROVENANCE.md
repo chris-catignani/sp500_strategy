@@ -340,7 +340,7 @@ Agreement to under half a cent across five securities, with residuals attributab
 ##### Split records (`data/raw/corporate_actions/splits.json`)
 Implied prices are as-traded, so a series spanning a split is discontinuous until adjusted. Split records for the twelve registrants whose prices are derived here are catalogued with the filing each was read in, following the citation discipline of `spinoffs.json`. Each entry carries the CIK, accession number, form type and the **verbatim sentence** stating the split.
 
-- **Scope**: only registrants with no usable vendor series. `RD` (via `SHEL.json`) and `SBC` (via `T.json`) are absent by design — those series already carry Yahoo's adjustment (§4.1.1).
+- **Scope**: every registrant priced from the rosters, which is all of them. `RD` and `SBC` are included even though Yahoo carries a successor series for each (`SHEL` and `T`): neither ticker has its own file in `data/raw/tickers/`, so under the one-price-source rule (§4.3.12) both are derived from filings and both need a split record. An earlier revision of this bullet said they were absent by design, describing an arrangement that rule replaced.
 - **Basis**: each series is adjusted to the share terms of its **final observation**, not to 2024-12-31 (§4.1). The published dataset states plainly that the adjusted figures are therefore *not* directly comparable to `data/raw/tickers/`.
 - **`GTE` has no splits, and that is a finding, not a gap.** Its FY1999 Form 10-K contains no stock split for 1994–2000; the only "two-for-one" language in the document describes a pension service credit. The observed price series shows no halving across those years, corroborating the absence.
 
@@ -364,11 +364,53 @@ The one vendor-sourced record is corroborated independently rather than taken on
 
 Six years agree to the cent. The remaining two, 1994 and 1999, differ by about 0.2% because the fund values at its own year-end business day while the vendor's December close is the month's last trade, which are not always the same session. A wrong ratio would be out by a factor of four, so the check is decisive despite the tolerance.
 
-##### A record that is deliberately incomplete
-`T_CORP` (the pre-2005 AT&T Corp.) carries its 2002 one-for-five reverse split, but the same filing records the **AT&T Wireless split-off of 2001** and the **AT&T Broadband distribution to Comcast in 2002**. Those are distributions, not splits, and are not modelled in `spinoffs.json`. The note on the record says so: this registrant's series **understates its return across 2001–2002** until they are added. Recorded rather than silently carried, because the series otherwise looks complete.
+##### A record that was incomplete, and the split that was missing from it (issue #76)
+`T_CORP` (the pre-2005 AT&T Corp.) is the one registrant here whose splits are stated in
+**two different filings**, and until #76 the record carried only one of them.
+
+It carries the **one-for-five reverse split of 2002-11-18**, quoted from the FY2002 report.
+It did **not** carry AT&T's **three-for-two split of 1999-04-15**, which the FY2001 report
+(accession `0000950123-02-003272`) states plainly: *"The number of shares of AT&T common
+stock outstanding and per share data have been adjusted to reflect the three-for-two stock
+split paid on April 15, 1999."* The FY1999 report says the same thing in an exhibit.
+
+The consequence was not a gap but a **wrong number**. Every pre-April-1999 `T_CORP` price
+read 1.5x too high, and the quarterly series showed a decline that never happened:
+
+| Period | As-traded | Published before #76 | Reading |
+|---|---:|---:|---|
+| 1999-Q1 (Mar 31, pre-split) | \$79.81 | \$399.07 | — |
+| 1999-Q2 (Jun 30, post-split) | \$55.81 | \$279.06 | **−30.1%**, where the real move is **+4.9%** |
+
+**The guard that should have caught it could not.** The cross-filer check below compares
+SPY's September 30 against Vanguard's December 31, and both sides of every pair fall on the
+same side of April 1999, so a split in between is invisible to it. The interior quarters
+that would expose it — March 31 and June 30 — only came into existence with #63 (§4.3.14).
+The ratio heuristic that suggests itself here does **not** work as a general guard: swept
+across all nineteen derived series at a 1% tolerance it returns eight matches that are
+ordinary dot-com-era moves and still misses this one, whose ratio is 1.43 rather than 1.50
+because the stock genuinely moved as well.
+
+What did work is the check now pinned by
+`test_t_corp_adjusted_prices_match_the_closes_att_itself_reported`: **a fund schedule gives
+an implied price, and the registrant's own 10-K gives a quarter-end close for the same
+date**, so the split factor is the only thing standing between them. Against Note 20 of
+AT&T's FY1995 report (`0000005907-96-000010`), three of six comparisons agree to the cent
+and the widest is 1.874%; under the old factor every one would be out by fifty percent.
+Extending that check to the other eighteen registrants is issue #84.
+
+**No published figure moved.** `T_CORP` is only ever selected before April 1999, and a total
+return is scale-invariant — the 1996 reconciliation at §4.5.4 scales on both sides and still
+reads −9.85%. The data was wrong; the results were not. That is luck, not design.
+
+**Still incomplete for total return.** The same filings record the **AT&T Wireless split-off
+of 2001** and the **AT&T Broadband distribution to Comcast in 2002**. Those are
+distributions, not splits, and are not modelled in `spinoffs.json`, so this registrant's
+series **understates its return across 2001–2002** until they are added. Recorded rather
+than silently carried, because the series otherwise looks complete.
 
 ##### Validation of the adjustment against a second filer
-SPY reports September 30 and Vanguard December 31. Expressed in the same share terms, their ratio is one quarter's price move; a split missing from the records would instead appear as a ratio near 2.0 or 0.5, because one side would remain in pre-split terms. Across **73 comparisons spanning 1995–2006, 71 fall inside a normal quarterly range**. The two that do not are both Q4 2000 and are genuine:
+SPY reports September 30 and Vanguard December 31. Expressed in the same share terms, their ratio is one quarter's price move; a split missing from the records would instead appear as a ratio near 2.0 or 0.5, because one side would remain in pre-split terms. **This check has a blind spot**, which is how `T_CORP`'s 1999 split survived it: a split effective between January and September falls outside every pair it forms. Across **73 comparisons spanning 1995–2006, 71 fall inside a normal quarterly range**. The two that do not are both Q4 2000 and are genuine:
 
 | Security | SPY 09-30 | Vanguard 12-31 | Move |
 |---|---:|---:|---:|
@@ -410,7 +452,7 @@ At **2000-12-31** the filing places three constituents inside the Top 20 that th
 
 This is the survivorship gap evidenced at a December 31 date rather than inferred from a September snapshot. The same filing places **Lucent (`LU`) at rank #60**, already collapsed from its #7 standing in SPY's September 1999 filing — so Lucent's contribution to the bias runs through the 1997–1999 year-ends, not 2000.
 
-The published dataset therefore covers **twelve December-31 rosters spanning 1994–2006**.
+The published dataset therefore covers **thirteen December-31 rosters spanning 1994–2006**, one for each archived filing.
 
 **These rosters are the fund's holdings, not the index's published constituent weights.** A full-replication fund tracks the index closely, but its weights reflect its own positions and its total is its equity holdings rather than the index's float-adjusted capitalization. They are a far stronger basis than an unsourced estimate; they are not the index itself.
 
@@ -450,11 +492,12 @@ Every sourced figure in this repository records where it came from: an accession
 It fetches each cited filing from SEC EDGAR and re-confirms that the quoted sentence is present and that each recorded figure appears in the document. Run it when a figure is questioned, before relying on a dataset in new work, or after editing one:
 
 ```
-python3 scripts/verify_provenance.py            # splits, terminal actions, rosters
-python3 scripts/verify_provenance.py splits     # one dataset
+python3 scripts/verify_provenance.py             # splits, terminal actions, rosters, q1 rosters
+python3 scripts/verify_provenance.py splits      # one dataset
+python3 scripts/verify_provenance.py q1_rosters  # the Q1/Q3 filer grades (4.3.14)
 ```
 
-Current state: **31 claims re-checked, 0 failed**, with two skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM`, recorded as `none_found`. Both are corroborated offline by the test suite instead.
+Current state: **70 claims re-checked, 0 failed**, with two skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM`, recorded as `none_found`. Both are corroborated offline by the test suite instead.
 
 **It is deliberately not part of the test suite.** It needs the network and reaches a third-party service, so it cannot gate a commit. The suite asserts the offline invariants — that quotations are non-empty, that figures agree across datasets, that cross-filer prices reconcile — and this checks the one thing they cannot: that the filing still says what we recorded it saying. A test does exercise the roster path, which reads archived documents, so the verifier cannot rot unnoticed.
 
@@ -801,9 +844,9 @@ AT&T Corp distributed Lucent on 1996-09-30 and NCR on 1996-12-31. The model cred
 
 Lucent needs no such subtraction. It went ex a full quarter before the filing date, so the year-end quote is already clear of it. `test_att_distribution_endpoints_conserve_quoted_wealth` asserts both halves: that the NCR entitlement restores the filed quote exactly, and that adding Lucent back does not.
 
-**Units.** `spinoffs.json` records each distribution as quoted on its ex-date, which is what a raw source file should hold. The engine computes `shares_held × distribution_per_share`, and `shares_held` derives from a price series expressed in final share terms, so the builder converts each distribution by the same factor it applies to prices. AT&T Corp's **1-for-5 reverse split of 2002-11-18** (10-K, CIK `0000005907`, accession `0000950123-03-003510`) gives a factor of 0.2 for its 1996 events: Lucent \$14.87 → **\$74.35**, NCR \$2.10 → **\$10.50**, against a year-end parent price of **\$207.0002**. Every other event in the catalog has no split after it, so the conversion is a no-op for them.
+**Units.** `spinoffs.json` records each distribution as quoted on its ex-date, which is what a raw source file should hold. The engine computes `shares_held × distribution_per_share`, and `shares_held` derives from a price series expressed in final share terms, so the builder converts each distribution by the same factor it applies to prices. AT&T Corp has **two** splits after its 1996 events — the **three-for-two of 1999-04-15** (10-K, accession `0000950123-02-003272`) and the **1-for-5 reverse split of 2002-11-18** (10-K, accession `0000950123-03-003510`), both under CIK `0000005907` — giving a combined factor of 0.3: Lucent \$14.87 → **\$49.5667**, NCR \$2.10 → **\$7.00**, against a year-end parent price of **\$138.0002**. Every other event in the catalog has no split after it, so the conversion is a no-op for them.
 
-This mattered only once the splice was retired. The constructed series was in as-traded Ma Bell units, so both sides already agreed; moving to the derived series, which is in post-reverse-split terms, put them five-for-one apart.
+This mattered only once the splice was retired. The constructed series was in as-traded Ma Bell units, so both sides already agreed; moving to the derived series, which is in post-split terms, put them ten-for-three apart — five-for-one from the 2002 reverse split and three-for-two from 1999.
 
 ##### The reconciliation cross-checks against the retired construction
 AT&T Corp's 1996 total return, computed two independent ways:
@@ -811,7 +854,7 @@ AT&T Corp's 1996 total return, computed two independent ways:
 | Construction | Arithmetic | 1996 total return |
 |---|---|---|
 | Retired splice (quote-sourced) | `(41.27 − 64.75 + 16.97) / 64.75` | **−10.05%** |
-| Derived series (filing-sourced) | `(207.0002 − 323.7504 + 84.85) / 323.7504` | **−9.85%** |
+| Derived series (filing-sourced) | `(138.0002 − 215.8336 + 56.5667) / 215.8336` | **−9.85%** |
 
 The 20bp gap is almost entirely the one-tick quote difference between the two sources: `0.125 / 64.75 = 0.19%`. Two constructions built from different evidence, in different share units, agreeing to within a rounding residual — which is what justifies retiring the older one rather than merely preferring it.
 
