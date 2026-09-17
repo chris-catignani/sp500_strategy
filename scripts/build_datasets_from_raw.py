@@ -87,6 +87,31 @@ NON_US_NAMES = {
 
 NAMES = {**SP500_NAMES, **NON_US_NAMES}
 
+# Constituents with no vendor price series, whose year-end prices are derived from
+# Vanguard Index Trust filings (issue #55). Kept out of NAMES deliberately: the loop over
+# NAMES requires a file in data/raw/tickers/ and raises when one is absent, which is the
+# correct behaviour for a vendor-sourced ticker and the wrong behaviour for these.
+DERIVED_NAMES = {
+    "LU": "Lucent Technologies, Inc.",
+    "EMC": "EMC Corp.",
+    "AOL": "America Online, Inc. / AOL Time Warner, Inc.",
+    "SUNW": "Sun Microsystems, Inc.",
+    "MOB": "Mobil Corp.",
+    "NT": "Nortel Networks Corp.",
+    "MCIC": "MCI WorldCom, Inc.",
+    "BLS": "BellSouth Corp.",
+    "DELL": "Dell Computer Corp. / Dell Inc.",
+    "GTE": "GTE Corp.",
+    "VIA": "Viacom Inc. (Class B)",
+    "DD": "E.I. du Pont de Nemours and Co.",
+}
+
+# Viacom listed two classes at different prices. Class B is carried because it is the
+# larger holding in every filing examined; routing through one class follows the
+# dual-class execution convention established for Alphabet in #38 and documented in
+# docs/DATA_PROVENANCE.md 4.3.8.
+DERIVED_SOURCE_KEYS = {"VIA": "VIA.B"}
+
 EFFECTIVE_INCLUSION_DATES = {
     "TSLA": "2020-12-21",
     "GOOGL": "2006-03-31",
@@ -589,6 +614,46 @@ def main():
 
     print(f"Processed prices and dividends for {len(NAMES)} tickers ({len(SP500_NAMES)} SP500, {len(NON_US_NAMES)} Non-US).")
 
+    # Constituents with no vendor price series (issue #55). Their year-end prices are
+    # derived from Vanguard Index Trust Schedules of Investments as value / shares and
+    # split-adjusted from filing-cited records, so they are merged from a second input
+    # rather than read from data/raw/tickers/. The T_CORP_HISTORICAL splice above is the
+    # existing precedent for a conditional second source.
+    derived_path = RAW_DIR / "ground_truth" / "vanguard_implied_prices.json"
+    derived_merged = 0
+    if derived_path.exists():
+        with open(derived_path, "r", encoding="utf-8") as f:
+            derived = json.load(f)["prices_by_ticker"]
+
+        for ticker in sorted(DERIVED_NAMES):
+            observations = derived.get(DERIVED_SOURCE_KEYS.get(ticker, ticker), {})
+            # Only issuers whose split record was established from a filing carry an
+            # adjusted price; without one the series is as-traded and a split inside the
+            # holding period would register as a price collapse that never happened.
+            series = {
+                year: obs["split_adjusted_price_usd"]
+                for year, obs in observations.items()
+                if "split_adjusted_price_usd" in obs
+            }
+            if not series:
+                continue
+            if ticker in all_prices_data:
+                raise ValueError(
+                    f"{ticker}: derived prices would overwrite a vendor series from "
+                    "data/raw/tickers/. A constituent must have exactly one price source."
+                )
+            all_prices_data[ticker] = dict(sorted(series.items(), key=lambda kv: int(kv[0])))
+            # No dividend history is derived for these issuers. Schedules of Investments
+            # report holdings, not distributions, so an empty series is the honest value;
+            # a zero-filled one would understate total return without saying so.
+            all_dividends_data.setdefault(ticker, {})
+            derived_merged += 1
+
+        print(
+            f"Merged {derived_merged} derived constituent series from "
+            f"{derived_path.relative_to(REPO_ROOT)}"
+        )
+
     # Load raw spinoff distributions for total return calculations
     all_quarterly_spinoffs: Dict[str, Dict[str, float]] = {}
     all_annual_spinoffs: Dict[str, Dict[int, float]] = {}
@@ -696,14 +761,15 @@ def main():
     BENCHMARK_PRICE_KEYS = [
         "^GSPC", "^SP500TR", "^MSCIWORLD_PR", "^MSCIWORLD_TR", "FBGRX", "FBGRX_TR", "^NDX", "^NDXT"
     ]
+    constituent_keys = sorted(set(SP500_NAMES) | set(DERIVED_NAMES))
     sp500_prices = {
         k: all_prices_data[k]
-        for k in BENCHMARK_PRICE_KEYS + sorted(SP500_NAMES.keys())
+        for k in BENCHMARK_PRICE_KEYS + constituent_keys
         if k in all_prices_data
     }
     sp500_dividends = {
         k: all_dividends_data[k]
-        for k in sorted(SP500_NAMES.keys())
+        for k in constituent_keys
         if k in all_dividends_data
     }
     sp500_quarterly_prices = {

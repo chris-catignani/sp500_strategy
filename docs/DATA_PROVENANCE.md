@@ -354,6 +354,16 @@ SPY reports September 30 and Vanguard December 31. Expressed in the same share t
 
 Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**, independently corroborating the fall. Both are the dot-com crash rather than an adjustment defect, and the test bound is set to admit them.
 
+##### Consumption by the dataset builder
+`scripts/build_datasets_from_raw.py` merges these series into `data/sp500_prices.json` from a second input, alongside the vendor series it reads from `data/raw/tickers/`. The `T_CORP_HISTORICAL` splice (§4.5.3) is the existing precedent for a conditional second source.
+
+- **A constituent has exactly one price source.** The merge raises rather than overwrite a vendor series, and a test asserts no derived ticker also has a file in `data/raw/tickers/`. The two are adjusted to different bases — Yahoo to the present, a delisted series to its own final trading date — so silently preferring one would produce a series that is internally inconsistent without saying so.
+- **Only split-adjusted issuers are merged.** An issuer whose split record could not be established from a filing is excluded rather than carried as-traded, because a split inside the holding period would otherwise register as a price collapse that never happened.
+- **No dividends are derived.** A Schedule of Investments reports holdings, not distributions. The dividend series for these issuers is **empty, not zero**: total return is understated for them, and the dataset records the figure as unknown rather than nil.
+- **Annual only.** These are December 31 observations, so no quarterly series exists and the quarterly path cannot select these constituents. Vanguard also files a June 30 semi-annual report, which would support a second observation per year, but that is not archived here.
+
+**This merge changes no backtest result.** None of these constituents appears in `constituents_by_year` in `data/raw/constituents/historical_index_weights.json`, so none can be selected. Correcting those rosters — the step that actually removes the survivorship bias — remains outstanding; the prices are now available for it.
+
 **Implied prices are as-traded.** They are not split-adjusted, and interpreting them without each registrant's split record inverts the reading: Lucent (`LU`) 1997→1999 reads as a 20% decline as-traded, where the split-adjusted move is a **219% rise** across its April 1998 and April 1999 two-for-one splits (both stated in Lucent's own Form 10-K405, accession `0000950117-01-501896`). Derivation of split-adjusted series from this archive is tracked in #55.
 
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
