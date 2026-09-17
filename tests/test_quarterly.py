@@ -386,14 +386,38 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             self.assertGreaterEqual(q.cash, 0.0)
 
     def test_quarterly_1996_spinoff_entitlement_and_asymmetry(self):
-        """Verify T_CORP is absent from 1996 quarterly universe and quarterly spinoff proceeds are 0.0 for all N."""
-        # T_CORP is priced from December-31 filings only, so it has no quarterly series
-        # and this branch drops it from the quarterly universe entirely.
-        # This is a consequence of missing quarterly coverage, tracked in issue #63, not the intended end state.
-        for q in (1, 2, 3, 4):
+        """T_CORP reaches the 1996 quarterly universe at Q4, and still wins no slot.
+
+        This test asserted the opposite until #63 sourced Q1: T_CORP was priced from
+        December-31 filings only, so it had no quarterly series at all and was dropped
+        from the quarterly universe outright. Its docstring recorded that as a
+        consequence of missing coverage rather than the intended end state, so it is
+        rewritten against the coverage rather than repaired.
+
+        Coverage begins at 1996-Q4, not 1996-Q1, and the reason is a source: a roster
+        year must be priceable through all four quarters of the following year, and
+        1996-Q3 has no September-30 filing behind it because SPY's archive begins at
+        19970930. So roster year 1995 is not admitted and Q1-Q3 of 1996 do not carry it.
+
+        Spinoff proceeds stay 0.0 for every N, but for a stronger reason than before.
+        T_CORP is no longer absent from the universe -- it is present and ranked 11th,
+        below the Top 10 cutoff, so it is never bought and never becomes entitled to the
+        1996 Lucent and NCR distributions. The assertion now distinguishes "not selected"
+        from "not present", which the previous version could not.
+        """
+        for q in (1, 2, 3):
             univ = self.simulator.data_loader.load_quarterly_universe(1996, q)
-            tickers = {s.ticker for s in univ}
-            self.assertNotIn("T_CORP", tickers)
+            self.assertNotIn("T_CORP", {s.ticker for s in univ})
+
+        q4 = self.simulator.data_loader.load_quarterly_universe(1996, 4)
+        q4_tickers = [s.ticker for s in q4]
+        self.assertIn("T_CORP", q4_tickers)
+        self.assertGreater(
+            q4_tickers.index("T_CORP") + 1,
+            10,
+            "T_CORP ranking inside the Top 10 would make the spinoff assertions below "
+            "vacuous rather than meaningful",
+        )
 
         for n in (3, 5, 10):
             res = self.simulator.run_simulation(

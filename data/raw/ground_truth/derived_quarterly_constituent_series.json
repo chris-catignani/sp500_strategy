@@ -16,7 +16,7 @@
       "1996-Q1"
     ],
     "published_filer": "SEI Index Funds (audited); Prudential is unaudited",
-    "issuers_compared": 26,
+    "issuers_compared": 28,
     "max_relative_difference": 0.001252,
     "worst_pair": {
       "period": "1995-Q1",
@@ -122,6 +122,14 @@
         "prudential_price_usd": 52.875,
         "difference_usd": 0.0662,
         "relative_difference": 0.001252
+      },
+      {
+        "period": "1995-Q1",
+        "ticker": "VZ",
+        "sei_price_usd": 52.7565,
+        "prudential_price_usd": 52.75,
+        "difference_usd": 0.0065,
+        "relative_difference": 0.000124
       },
       {
         "period": "1996-Q1",
@@ -234,6 +242,14 @@
         "prudential_price_usd": 35.75,
         "difference_usd": -0.0053,
         "relative_difference": 0.000149
+      },
+      {
+        "period": "1996-Q1",
+        "ticker": "VZ",
+        "sei_price_usd": 61.7472,
+        "prudential_price_usd": 61.75,
+        "difference_usd": -0.0028,
+        "relative_difference": 4.5e-05
       }
     ]
   },
@@ -395,6 +411,20 @@
         "split_adjusted_price_usd": 175.3124,
         "split_source_accession": "0000950123-03-003510"
       },
+      "1997-Q3": {
+        "price_usd": 44.31,
+        "matched_name": "AT & T Corp",
+        "rank": 16,
+        "shares": 897412.0,
+        "value_usd_thousands": 39766.569,
+        "report_date": "1997-09-30",
+        "accession_number": "0000950135-97-004820",
+        "source_file": "data/raw/ground_truth/sec_filings/SPY_1997_N-30D_0000950135-97-004820.txt",
+        "audited": true,
+        "split_factor": 0.2,
+        "split_adjusted_price_usd": 221.5625,
+        "split_source_accession": "0000950123-03-003510"
+      },
       "1997-Q4": {
         "price_usd": 61.25,
         "matched_name": "AT&T Corp",
@@ -435,6 +465,20 @@
         "audited": false,
         "split_factor": 0.2,
         "split_adjusted_price_usd": 285.6251,
+        "split_source_accession": "0000950123-03-003510"
+      },
+      "1998-Q3": {
+        "price_usd": 58.44,
+        "matched_name": "AT & T Corp",
+        "rank": 11,
+        "shares": 1794103.0,
+        "value_usd_thousands": 104842.894,
+        "report_date": "1998-09-30",
+        "accession_number": "0000950135-98-006321",
+        "source_file": "data/raw/ground_truth/sec_filings/SPY_1998_N-30D_0000950135-98-006321.txt",
+        "audited": true,
+        "split_factor": 0.2,
+        "split_adjusted_price_usd": 292.1875,
         "split_source_accession": "0000950123-03-003510"
       },
       "1998-Q4": {
@@ -729,6 +773,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 20.2999,
+        "split_source_accession": "0000950123-03-003510"
+      },
+      "2004-Q2": {
+        "price_usd": 14.63,
+        "matched_name": "AT&amp;T Corp",
+        "rank": 212,
+        "shares": 7378274,
+        "value_usd_thousands": 107944,
+        "report_date": "2004-06-30",
+        "accession_number": "0000932471-04-000761",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2004_Q2_N-CSRS_0000932471-04-000761.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 14.63,
         "split_source_accession": "0000950123-03-003510"
       },
       "2004-Q3": {
@@ -2429,6 +2487,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 45.89,
+        "split_source_accession": "0001036050-98-000429"
+      },
+      "2004-Q2": {
+        "price_usd": 44.42,
+        "matched_name": "E.I. du Pont de Nemours &amp; Co",
+        "rank": 54,
+        "shares": 9295984,
+        "value_usd_thousands": 412928,
+        "report_date": "2004-06-30",
+        "accession_number": "0000932471-04-000761",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2004_Q2_N-CSRS_0000932471-04-000761.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 44.42,
         "split_source_accession": "0001036050-98-000429"
       },
       "2004-Q3": {
@@ -6649,6 +6721,20 @@
         "split_adjusted_price_usd": 20.1875,
         "split_source_accession": "0000732717-99-000007"
       },
+      "1995-Q1": {
+        "price_usd": 42.13,
+        "matched_name": "Southwestern Bell",
+        "rank": 30,
+        "shares": 68390,
+        "value_usd_thousands": 2881,
+        "report_date": "1995-03-31",
+        "accession_number": "0000950109-95-002026",
+        "source_file": "data/raw/ground_truth/sec_filings/SEI_1995_Q1_N-30D_0000950109-95-002026.txt",
+        "audited": true,
+        "split_factor": 2.0,
+        "split_adjusted_price_usd": 21.063,
+        "split_source_accession": "0000732717-99-000007"
+      },
       "1995-Q2": {
         "price_usd": 47.63,
         "matched_name": "SBC Communications Inc",
@@ -9613,6 +9699,20 @@
         "split_adjusted_price_usd": 47.8333,
         "split_source_accession": "0000912057-01-505916"
       },
+      "1999-Q1": {
+        "price_usd": 88.56,
+        "matched_name": "MCI WorldCom*",
+        "rank": 12,
+        "shares": 389307,
+        "value_usd_thousands": 34478,
+        "report_date": "1999-03-31",
+        "accession_number": "0000935069-99-000097",
+        "source_file": "data/raw/ground_truth/sec_filings/SEI_1999_Q1_N-30D_0000935069-99-000097.txt",
+        "audited": true,
+        "split_factor": 1.5,
+        "split_adjusted_price_usd": 59.0417,
+        "split_source_accession": "0000912057-01-505916"
+      },
       "1999-Q2": {
         "price_usd": 86.06,
         "matched_name": "MCI WorldCom, Inc",
@@ -9653,6 +9753,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 53.0625,
+        "split_source_accession": "0000912057-01-505916"
+      },
+      "2000-Q1": {
+        "price_usd": 45.31,
+        "matched_name": "MCI Worldcom*",
+        "rank": 24,
+        "shares": 670210,
+        "value_usd_thousands": 30369,
+        "report_date": "2000-03-31",
+        "accession_number": "0000935069-00-000275",
+        "source_file": "data/raw/ground_truth/sec_filings/SEI_2000_Q1_N-30D_0000935069-00-000275.txt",
+        "audited": true,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 45.3127,
         "split_source_accession": "0000912057-01-505916"
       }
     },
