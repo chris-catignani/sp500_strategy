@@ -1,24 +1,25 @@
-"""Derive audited March 31 (Q1) S&P 500 rosters from SEI Index Funds schedules.
+"""Derive unaudited September 30 (Q3) S&P 500 rosters from SEI Index Funds semi-annual schedules.
 
 Zero external dependencies - Python 3 standard library only.
-Follows scripts/extract_vanguard_semiannual_rosters.py and scripts/extract_vanguard_rosters.py.
+Follows scripts/extract_sei_q1_rosters.py and scripts/extract_vanguard_semiannual_rosters.py.
 """
 
 import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.extract_ground_truth_from_sec import ScheduleParseError
+from scripts.extract_sei_q1_rosters import _find_sei_bounds
 from scripts.extract_vanguard_rosters import _PLAUSIBLE_SP500_COUNT, _clean_name
 
 FILINGS_DIR = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
-MANIFEST_PATH = FILINGS_DIR / "sei_q1_filings_manifest.json"
-OUTPUT_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sei_q1_rosters.json"
+MANIFEST_PATH = FILINGS_DIR / "sei_q3_filings_manifest.json"
+OUTPUT_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sei_q3_rosters.json"
 
 SEI_ROW = re.compile(
     r"^\s*(?P<name>[A-Za-z0-9&.,'\"()/\- *!+]+?)\s{1,}(?P<shares>\d[\d,]*)\s+\$?\s*(?P<value>\d[\d,]*)\s*$"
@@ -26,64 +27,6 @@ SEI_ROW = re.compile(
 COLUMN_HEADER = re.compile(
     r"^\s*(?:Description\s+)?(?:Shares|SHARES|AMOUNT).*(?:Value|VALUE|Market|MARKET)", re.I
 )
-
-
-def _find_sei_bounds(lines: List[str]) -> Tuple[int, int]:
-    """Locate the exact bounds of the S&P 500 common stock schedule in an SEI filing."""
-    sp_headers = []
-    for idx, l in enumerate(lines):
-        u = l.upper()
-        if "S&P 500 INDEX" in u and ("PORTFOLIO" in u or "FUND" in u):
-            window = "\n".join(lines[max(0, idx - 10) : min(len(lines), idx + 10)]).upper()
-            if not any(
-                term in window
-                for term in [
-                    "STATEMENT OF NET ASSETS",
-                    "STATEMENTS OF NET ASSETS",
-                    "SCHEDULE OF INVESTMENTS",
-                ]
-            ):
-                continue
-            # Structural test: real schedule heading is followed within a few lines by
-            # column headers (Shares, Value/Market) and a Common Stocks section header.
-            ahead = lines[idx : min(len(lines), idx + 50)]
-            ahead_text = "\n".join(ahead).upper()
-            has_shares = "SHARES" in ahead_text or "AMOUNT" in ahead_text
-            has_value = "VALUE" in ahead_text or "MARKET" in ahead_text
-            has_common = any(
-                re.match(r"^\s*COMMON\s+STOCKS?(?:\s*[-–—]|\s*$)", line, re.I)
-                for line in ahead
-            )
-            if has_shares and has_value and has_common:
-                sp_headers.append(idx)
-
-    if not sp_headers:
-        raise ScheduleParseError("could not locate S&P 500 Index schedule header")
-    sp_start = sp_headers[0]
-
-    cmn_starts = [
-        i
-        for i in range(sp_start, min(len(lines), sp_start + 100))
-        if "COMMON STOCK" in lines[i].upper()
-    ]
-    if not cmn_starts:
-        raise ScheduleParseError(
-            f"could not locate Common Stocks header after line {sp_start}"
-        )
-    start = cmn_starts[0]
-
-    tot_ends = [
-        i
-        for i in range(start, min(len(lines), start + 1200))
-        if "TOTAL COMMON STOCK" in lines[i].upper()
-    ]
-    if not tot_ends:
-        raise ScheduleParseError(
-            f"could not locate Total Common Stocks footer after line {start}"
-        )
-    end = tot_ends[0]
-
-    return start, end
 
 
 def parse_sei_filing(path: Path) -> Dict[str, Any]:
@@ -137,7 +80,12 @@ def parse_sei_filing(path: Path) -> Dict[str, Any]:
         if "<CAPTION>" in upper or "<S>" in upper or "<C>" in upper:
             name_buffer = []
             continue
-        if "ANNUAL REPORT / MARCH 31," in upper or "MARCH 31," in upper:
+        if (
+            "ANNUAL REPORT / MARCH 31," in upper
+            or "MARCH 31," in upper
+            or "SEPTEMBER 30," in upper
+            or "SEMI-ANNUAL REPORT" in upper
+        ):
             name_buffer = []
             continue
         if COLUMN_HEADER.match(l):
@@ -203,11 +151,6 @@ def parse_sei_filing(path: Path) -> Dict[str, Any]:
                 "shares": int(p["shares"]),
                 "value_usd_thousands": int(p["val"]),
                 "weight": round(p["val"] / parsed, 6),
-                # SEI prints value in whole thousands and leaves the column EMPTY for a
-                # position worth less than $500 -- "JWP* 6,100" at 1995-Q1, a holding in
-                # a company then in bankruptcy. Zero is what the column says, but value
-                # divided by shares would be a $0.00 price, which is an artefact rather
-                # than a quotation. Flagged so a consumer skips it instead of pricing it.
                 **({"no_value_printed": True} if p["val"] <= 0 else {}),
             }
             for i, p in enumerate(ranked, 1)
@@ -222,38 +165,42 @@ def extract_all() -> Dict[str, Any]:
     rosters: Dict[str, Any] = {}
     refused: Dict[str, str] = {}
 
-    for year in sorted(manifest, key=int):
-        entry = manifest[year]
+    for key in sorted(manifest):
+        entry = manifest[key]
+        year = entry["fiscal_year"]
         path = PROJECT_ROOT / entry["file_path"]
         try:
             roster = parse_sei_filing(path)
         except ScheduleParseError as exc:
-            refused[year] = str(exc)
+            refused[key] = str(exc)
             continue
 
         roster.update(
             {
-                "period": f"{year}-Q1",
+                "period": f"{year}-Q3",
                 "report_date": entry["report_date"],
-                "audited": True,
+                "audited": False,
                 "form": entry["form"],
                 "accession_number": entry["accession_number"],
                 "source_file": entry["file_path"],
-                "identification": "Schedule bounded by S&P 500 Index Portfolio/Fund header and Total Common Stocks footer under Statement of Net Assets / Schedule of Investments, audited by Report of Independent Accountants.",
+                "identification": (
+                    "Schedule bounded by S&P 500 Index Portfolio/Fund header and Total Common Stocks "
+                    "footer under Statement of Net Assets / Schedule of Investments (Unaudited), "
+                    "distinguished from Bond Index Portfolio by S&P 500 heading and Common Stocks column layout."
+                ),
             }
         )
-        rosters[f"{year}-Q1"] = roster
+        rosters[f"{year}-Q3"] = roster
 
     return {
         "description": (
-            "March 31 (Q1) rosters of the S&P 500, derived by ranking SEI Index Funds "
+            "September 30 (Q3) rosters of the S&P 500, derived by ranking SEI Index Funds "
             "S&P 500 Index Portfolio Schedule of Investments by position market value."
         ),
         "source_entity": "SEI Index Funds, S&P 500 Index Portfolio (CIK 0000766589)",
         "grade": (
-            "AUDITED. The Report of Independent Accountants covers the statements of net "
-            "assets of the S&P 500 Index Portfolio as of March 31, with securities confirmed "
-            "by correspondence with the custodian and brokers. Every entry is stamped audited: true."
+            "UNAUDITED. These are semi-annual reports and carry no Report of Independent "
+            "Accountants, unlike the March-31 annual rosters in sei_q1_rosters.json. Every entry is stamped audited: false."
         ),
         "validation": (
             "Every roster reconciles dollar-exact to its filing's stated total, holds a "
@@ -261,7 +208,7 @@ def extract_all() -> Dict[str, Any]:
             "the S&P 500 fund's schedule. Filings failing any check are refused and recorded."
         ),
         "coverage": (
-            f"{len(rosters)} of {len(manifest)} archived SEI Q1 filings produce a roster, "
+            f"{len(rosters)} of 12 archived SEI Q3 periods produce a roster, "
             "spanning 1995-2006."
         ),
         "refused_filings": refused,
@@ -280,7 +227,7 @@ def main() -> None:
             f"  {period}: {roster['position_count']:4d} positions | "
             f"total: ${roster['stated_total_usd_thousands']:>11,}k | top: {top}"
         )
-    print(f"\n{len(data['rosters_by_period'])} SEI rosters written to {OUTPUT_PATH.relative_to(PROJECT_ROOT)}")
+    print(f"\n{len(data['rosters_by_period'])} SEI Q3 rosters written to {OUTPUT_PATH.relative_to(PROJECT_ROOT)}")
     for year, reason in data["refused_filings"].items():
         print(f"REFUSED {year}: {reason}")
 

@@ -44,6 +44,7 @@ from scripts.extract_ground_truth_from_sec import (
 
 ROSTERS_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_semiannual_rosters.json"
 SEI_Q1_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sei_q1_rosters.json"
+SEI_Q3_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "sei_q3_rosters.json"
 PRUDENTIAL_Q1_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "prudential_q1_rosters.json"
 ANNUAL_ROSTERS_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_audited_rosters.json"
 MAP_PATH = PROJECT_ROOT / "data" / "raw" / "constituents" / "issuer_ticker_map.json"
@@ -141,58 +142,70 @@ def _q4_rosters() -> Dict[str, Dict[str, Any]]:
     return out
 
 
-def _cross_filer_check(issuer_map: Dict[str, str]) -> Dict[str, Any]:
-    """Price the same issuer on the same date from two independent filers.
+def _sei_q3_rosters() -> Dict[str, Dict[str, Any]]:
+    """September-30 schedules from SEI's semi-annual report.
 
-    Q1 is the only quarter with two filers, so it is the only quarter that can be checked
-    this way -- a stronger check than Q2 or Q4 currently carries, where a parse error and
-    a true price move look alike. Ten of Prudential's thirteen filings were refused by its
-    extractor, so the overlap is 1995 and 1996 rather than the eleven years both filers
-    cover on paper. The refusals are recorded in prudential_q1_rosters.json.
+    SEI's fiscal year ends March 31, so its September report is the SEMI-ANNUAL and is
+    UNAUDITED -- the opposite grade to the March-31 filings this same trust supplies Q1
+    from, and not a contradiction: one filer, two reports, one of which an accountant
+    opines on. Read from the filings rather than from a form type: none carries a Report
+    of Independent Accountants, and each marks its statement of net assets (UNAUDITED) on
+    the heading itself.
 
-    Agreement is not expected to be exact. SEI rounds value to whole thousands against a
-    fund roughly a tenth of Prudential's size, so its implied price is the coarser of the
-    two; the residual is that rounding, not a disagreement about the price.
+    What SEI uniquely supplies is 1995-Q3 and 1996-Q3, which precede SPY's archive. Those
+    two quarters were the reason five constituents could never be priced through a roster
+    year: a roster year needs all four quarters of the FOLLOWING year, so roster 1994
+    needed 1995-Q3 and roster 1995 needed 1996-Q3.
     """
-    if not (SEI_Q1_PATH.exists() and PRUDENTIAL_Q1_PATH.exists()):
+    if not SEI_Q3_PATH.exists():
         return {}
-    with open(SEI_Q1_PATH, "r", encoding="utf-8") as f:
-        sei = json.load(f)["rosters_by_period"]
-    with open(PRUDENTIAL_Q1_PATH, "r", encoding="utf-8") as f:
-        pru = json.load(f)["rosters_by_period"]
+    with open(SEI_Q3_PATH, "r", encoding="utf-8") as f:
+        return dict(json.load(f)["rosters_by_period"])
+
+
+def _compare_filers(
+    rosters_a: Dict[str, Any],
+    rosters_b: Dict[str, Any],
+    key_a: str,
+    key_b: str,
+    issuer_map: Dict[str, str],
+    published: str,
+    note: str,
+) -> Dict[str, Any]:
+    """Price the same issuer on the same date from two independent filings."""
 
     def priced(roster: Dict[str, Any]) -> Dict[str, float]:
         out: Dict[str, float] = {}
         for h in roster["holdings"]:
+            if h.get("no_value_printed") or h["shares"] <= 0:
+                continue
             ticker = issuer_map.get(normalise(h["name"]))
-            if ticker and h["shares"] > 0:
+            if ticker:
                 out[ticker] = h["value_usd_thousands"] * 1000.0 / h["shares"]
         return out
 
-    periods = sorted(set(sei) & set(pru))
+    periods = sorted(set(rosters_a) & set(rosters_b))
     comparisons = []
     for period in periods:
-        a, b = priced(sei[period]), priced(pru[period])
+        a, b = priced(rosters_a[period]), priced(rosters_b[period])
         for ticker in sorted(set(a) & set(b)):
+            if b[ticker] <= 0:
+                continue
             comparisons.append(
                 {
                     "period": period,
                     "ticker": ticker,
-                    "sei_price_usd": round(a[ticker], 4),
-                    "prudential_price_usd": round(b[ticker], 4),
+                    f"{key_a}_price_usd": round(a[ticker], 4),
+                    f"{key_b}_price_usd": round(b[ticker], 4),
                     "difference_usd": round(a[ticker] - b[ticker], 4),
                     "relative_difference": round(abs(a[ticker] - b[ticker]) / b[ticker], 6),
                 }
             )
     worst = max(comparisons, key=lambda c: c["relative_difference"], default=None)
     return {
-        "description": (
-            "Independent price agreement between the two March-31 filers on the periods "
-            "where both produced a roster. SEI is the published source; Prudential is the "
-            "check."
-        ),
+        "note": note,
         "overlapping_periods": periods,
-        "published_filer": "SEI Index Funds (audited); Prudential is unaudited",
+        "published_source": published,
         "issuers_compared": len(comparisons),
         "max_relative_difference": worst["relative_difference"] if worst else None,
         "worst_pair": worst,
@@ -200,10 +213,64 @@ def _cross_filer_check(issuer_map: Dict[str, str]) -> Dict[str, Any]:
     }
 
 
+def _cross_filer_check(issuer_map: Dict[str, str]) -> Dict[str, Any]:
+    """Every quarter that two independent filers can both price, checked.
+
+    Two filers pricing the same issuer on the same date is a stronger check than
+    reconciliation, which proves a schedule was read completely and not that the RIGHT
+    schedule was read. Q1 and Q3 each have two filers; Q2 and Q4 have one, and there a
+    parse error and a true price move still look alike.
+
+    Agreement is not expected to be exact anywhere. Value is reported in whole thousands,
+    so the implied price is coarser for a smaller fund: SEI's S&P 500 Index Portfolio is a
+    fraction of SPY's size, and the residual is that rounding rather than a disagreement
+    about the price.
+    """
+    checks: Dict[str, Any] = {}
+
+    if SEI_Q1_PATH.exists() and PRUDENTIAL_Q1_PATH.exists():
+        with open(SEI_Q1_PATH, "r", encoding="utf-8") as f:
+            sei_q1 = json.load(f)["rosters_by_period"]
+        with open(PRUDENTIAL_Q1_PATH, "r", encoding="utf-8") as f:
+            pru = json.load(f)["rosters_by_period"]
+        checks["Q1"] = _compare_filers(
+            sei_q1, pru, "sei", "prudential", issuer_map,
+            "SEI Index Funds (audited)",
+            (
+                "Ten of Prudential's thirteen filings are refused by its extractor, so the "
+                "overlap is two years rather than the eleven both filers cover on paper. "
+                "The refusals are recorded in prudential_q1_rosters.json."
+            ),
+        )
+
+    sei_q3 = _sei_q3_rosters()
+    if sei_q3:
+        checks["Q3"] = _compare_filers(
+            _q3_rosters(), sei_q3, "spy", "sei", issuer_map,
+            "SPDR S&P 500 Trust (audited)",
+            (
+                "SPY is the published source because September 30 is its fiscal year end "
+                "from 1997, making its September report the annual one; SEI's is the "
+                "semi-annual and unaudited. SEI uniquely supplies 1995-Q3 and 1996-Q3, "
+                "which precede SPY's archive and so are checked by nothing."
+            ),
+        )
+
+    return checks
+
+
 def derive() -> Dict[str, Any]:
     with open(ROSTERS_PATH, "r", encoding="utf-8") as f:
         rosters = json.load(f)["rosters_by_period"]
-    rosters = {**rosters, **_q3_rosters(), **_q1_rosters(), **_q4_rosters()}
+    # Order matters where two filers cover one period: the LAST one wins. SPY is loaded
+    # after SEI's September schedules because SPY is audited at that date and SEI is not.
+    rosters = {
+        **rosters,
+        **_sei_q3_rosters(),
+        **_q3_rosters(),
+        **_q1_rosters(),
+        **_q4_rosters(),
+    }
     with open(MAP_PATH, "r", encoding="utf-8") as f:
         issuer_map = {normalise(k): v for k, v in json.load(f)["map"].items()}
     with open(SPLITS_PATH, "r", encoding="utf-8") as f:

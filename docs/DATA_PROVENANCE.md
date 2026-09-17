@@ -484,6 +484,7 @@ annual report carries a Report of Independent Accountants; a semi-annual does no
 | Q1 (Mar 31) | Prudential / Dryden (CIK 887991) | 1994 only | unaudited |
 | Q2 (Jun 30) | Vanguard 500 Index Fund semi-annual | 1994-2004, 2006 | unaudited |
 | Q3 (Sep 30) | SPDR S&P 500 Trust annual | 1997-2009 | **audited** |
+| Q3 (Sep 30) | SEI Index Funds semi-annual | 1995-1996 | unaudited |
 | Q4 (Dec 31) | Vanguard 500 Index Fund annual | 1994-2006 | **audited** |
 
 **SEI's March-31 schedule is audited.** Its Report of Independent Accountants states: *"We
@@ -577,11 +578,65 @@ survived in `value_usd`, so the fix was a float division rather than a re-parse,
 reconciliation guard had passed because it ran on the pre-truncation values. A guard that
 checks a different number from the one published is not checking the published number.
 
+##### One filer, two grades: SEI also supplies Q3
+
+The Q3 gap before 1997 was recorded here as a property of September. It was a property of
+**SPY**: that trust's fiscal year was calendar-based until 1997, so its pre-1997 reports
+carry a December-31 period, not September. Reading "September 30 is SPY's fiscal year end
+from 1997" as "no September-30 S&P 500 schedule exists before 1997" is the same substitution
+this section has now made three times — one filer's arrangement taken for the world's.
+
+**SEI files a September-30 report every year from 1995 to 2006.** Its fiscal year ends March
+31, so September is its **semi-annual** and is therefore **UNAUDITED** — the opposite grade
+to the March-31 filings the same trust supplies Q1 from. That is not a contradiction: a
+filer is not audited, a *report* is. `scripts/verify_provenance.py q1_rosters` now checks
+both of this trust's series against the documents, asserting an auditor's report present in
+one and absent in the other, so the distinction cannot quietly collapse into a per-CIK
+assumption.
+
+SPY remains the published Q3 source wherever it reaches, because at that date its report is
+the annual one. SEI's contribution is **1995-Q3 and 1996-Q3**, which precede SPY's archive,
+and an independent second opinion everywhere else.
+
+##### The first roster year is consumed twice, and 1994-Q3 does not exist
+
+Adding 1995-Q3 and 1996-Q3 should have admitted `AN`, `GM` and `MOT`, whose roster year is
+1994. It did not, and the eligibility test caught why before the data shipped.
+
+`build_quarterly_constituents` takes its candidate list from the PRIOR year's roster, which
+has no prior for the first year and falls back to the current one. So roster year 1994 is
+consumed at **1994-Q1 through Q4** as well as 1995-Q1 through Q3. A constituent admitted
+there can be bought at 1994-Q1 and must therefore be priceable at 1994-Q3 — and 1994-Q3 has
+no source in any filer: SPY's archive had not begun, SEI's September series starts in 1995,
+and `19940930` carries only an `NSAR-A`, a statistical form rather than a shareholder
+report.
+
+So a constituent whose only roster year is 1994 cannot enter however well 1995 is covered.
+That is a source limitation stated plainly rather than an eligibility rule relaxed to admit
+a constituent it cannot price.
+
+##### Q3 is now the best-checked quarter in the repository
+
+Two filers price September 30 independently for nine overlapping years, 1997 through 2006:
+**132 issuer-price pairs agreeing to a median of 0.0027%**, worst case 0.029% — Lucent at
+2002-Q3, by which time it traded under a dollar and a fraction of a cent is a large relative
+figure. For comparison, Q1's two-filer overlap yields 28 pairs, and Q2 and Q4 have no second
+filer at all.
+
+##### A dormant code path went live
+
+Carrying `T_CORP` back to 1996-Q1, where it ranks 4th, means the quarterly path now holds
+AT&T Corp across its 1996 distributions for the first time. `spinoffs.json` records Lucent
+at ex-date `1996-09-30` and NCR at `1996-12-31`, and the credits appear in exactly those
+quarters — Q3 and Q4 — for Top 5 and Top 10, and not at all for Top 3, which does not hold a
+constituent ranked 4th. The entitlement logic and the unit conversion described at 4.5 were
+correct; they had simply never been reachable from the quarterly path before.
+
 ##### What is still missing, and why it is not patched
 
 | Gap | Cause |
 |---|---|
-| Q3 before 1997 | SPY's September-30 archive begins at `19970930`. No source. |
+| **Q3 1994** | SPY's archive begins at `19970930`, and SEI's September series begins in 1995 -- `19940930` carries only an `NSAR-A`, a statistical form and not a shareholder report. No source. |
 | **Q1 2004** | SEI's schedule is corrupt **as filed**: the Microsoft value reads `0,600`, short by exactly the 40,000k the reconciliation misses. EDGAR's own bytes are byte-identical to the archived copy. Prudential's 2004 is the HTML era its extractor refuses. |
 | Q2 2005 | The FY2005 semi-annual is refused for cause (see below). |
 | Anything after 2006 | Only Q3 exists; the other three filers stop. |
@@ -618,21 +673,33 @@ constituent has.
 
 ##### What this bought
 
-`data/raw/ground_truth/derived_quarterly_constituent_series.json` holds **697 observations
-across all 19 constituents** — 175 Q1, 174 Q2, 165 Q3, 183 Q4 — each stamped with an
+`data/raw/ground_truth/derived_quarterly_constituent_series.json` holds **724 observations
+across all 19 constituents** — 175 Q1, 174 Q2, 192 Q3, 183 Q4 — each stamped with an
 `audited` flag per observation rather than per dataset, so a consumer reading one price can
 tell which grade it holds.
 
-**Eleven of the nineteen now appear in the quarterly universe**, spanning 1996-Q4 to
-2003-Q3: `AOL DD EMC LU MCIC MOB NT RD SBC TYC T_CORP`. The other nine are eligible by price but sit in the
-base roster only for years the two source holes block.
+**Thirteen of the nineteen now appear in the quarterly universe**, spanning 1995-Q4 to
+2003-Q3: `AOL BLS DD EMC GTE LU MCIC MOB NT RD SBC TYC T_CORP`. The other six are eligible by
+price but sit in the candidate roster only for years a source hole blocks: `AN`, `GM` and
+`MOT` appear in no roster year but 1994, which needs the unsourceable 1994-Q3; `DELL`'s
+roster years are 2003 and 2004, which need the corrupt 2004-Q1 and the refused 2005-Q2;
+and `SUNW` and `VIA` reach no candidate roster in any year, so no amount of pricing
+admits them.
 
-The measured effect is confined to one figure in the whole scenario matrix: **S&P 500 30y Top
-10 (Quarterly) falls from 13.48% to 13.03% CAGR**, cumulative return from 2823.99% to
-2534.73%, and max drawdown deepens from -57.32% to -61.20%. Nothing else moves, because the
-constituents admitted all sit in 1996-2003, outside the 10y and 20y windows. The result got
-worse, which is the point: the strategy was being flattered by the absence of AT&T Corp,
-Lucent, Nortel and Royal Dutch from the quarterly universe.
+The measured effect is confined to the 30-year S&P 500 quarterly strategies, which are the
+only ones whose window reaches these years:
+
+| Strategy | Before #63 | Now |
+|---|---|---|
+| S&P 500 30y Top 3 (Quarterly) | 13.79% | **13.60%** |
+| S&P 500 30y Top 5 (Quarterly) | 12.94% | **12.66%** |
+| S&P 500 30y Top 10 (Quarterly) | 13.48% | **12.80%** |
+
+Nothing else moves: every constituent admitted sits between 1995 and 2003, outside the 10y
+and 20y windows, and the annual path is untouched. **Every figure moved down**, which is the
+point. The strategy was being flattered by the absence of AT&T Corp, Mobil, GTE, BellSouth,
+Royal Dutch, Lucent and Nortel — constituents missing from the quarterly universe precisely
+because they were acquired or declined, which is survivorship bias in its plainest form.
 
 ##### Issuer identity across two more filers
 

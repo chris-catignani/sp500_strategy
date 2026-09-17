@@ -386,39 +386,33 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             self.assertGreaterEqual(q.cash, 0.0)
 
     def test_quarterly_1996_spinoff_entitlement_and_asymmetry(self):
-        """T_CORP reaches the 1996 quarterly universe at Q4, and still wins no slot.
+        """AT&T Corp's 1996 distributions reach the quarterly path, and only some Ns.
 
-        This test asserted the opposite until #63 sourced Q1: T_CORP was priced from
-        December-31 filings only, so it had no quarterly series at all and was dropped
-        from the quarterly universe outright. Its docstring recorded that as a
-        consequence of missing coverage rather than the intended end state, so it is
-        rewritten against the coverage rather than repaired.
+        This test has now asserted three different things, which is worth recording. It
+        began by asserting T_CORP was ABSENT from the 1996 quarterly universe, because it
+        was priced from December-31 filings only and had no quarterly series at all. #79
+        gave it one, and it entered at 1996-Q4 ranked 11th -- present but below every
+        cutoff, so the distributions still went uncredited. #63's September-30 source then
+        carried it back to 1996-Q1, where it ranks 4th.
 
-        Coverage begins at 1996-Q4, not 1996-Q1, and the reason is a source: a roster
-        year must be priceable through all four quarters of the following year, and
-        1996-Q3 has no September-30 filing behind it because SPY's archive begins at
-        19970930. So roster year 1995 is not admitted and Q1-Q3 of 1996 do not carry it.
+        So the entitlement is live for the first time. AT&T Corp distributed Lucent on
+        1996-09-30 and NCR on 1996-12-31, and those are Q3 and Q4 events: a holder is
+        entitled only if it held then, which is what makes this a test of entitlement
+        rather than of arithmetic.
 
-        Spinoff proceeds stay 0.0 for every N, but for a stronger reason than before.
-        T_CORP is no longer absent from the universe -- it is present and ranked 11th,
-        below the Top 10 cutoff, so it is never bought and never becomes entitled to the
-        1996 Lucent and NCR distributions. The assertion now distinguishes "not selected"
-        from "not present", which the previous version could not.
+        The asymmetry the name promises is now real. Top 3 excludes T_CORP at rank 4 and
+        receives nothing; Top 5 and Top 10 hold it and are credited. A distribution
+        reaching Top 3 would mean the selector had bought a constituent it did not rank
+        highly enough to hold.
         """
-        for q in (1, 2, 3):
+        for q in (1, 2, 3, 4):
             univ = self.simulator.data_loader.load_quarterly_universe(1996, q)
-            self.assertNotIn("T_CORP", {s.ticker for s in univ})
+            self.assertIn("T_CORP", {s.ticker for s in univ})
 
-        q4 = self.simulator.data_loader.load_quarterly_universe(1996, 4)
-        q4_tickers = [s.ticker for s in q4]
-        self.assertIn("T_CORP", q4_tickers)
-        self.assertGreater(
-            q4_tickers.index("T_CORP") + 1,
-            10,
-            "T_CORP ranking inside the Top 10 would make the spinoff assertions below "
-            "vacuous rather than meaningful",
-        )
+        q1_ranked = [s.ticker for s in self.simulator.data_loader.load_quarterly_universe(1996, 1)]
+        self.assertEqual(q1_ranked.index("T_CORP") + 1, 4)
 
+        proceeds = {}
         for n in (3, 5, 10):
             res = self.simulator.run_simulation(
                 start_year=1995,
@@ -431,8 +425,34 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             )
             q_96 = [entry for entry in res.quarterly_history if entry.year == 1996]
             self.assertEqual(len(q_96), 4)
-            for entry in q_96:
-                self.assertEqual(entry.spinoff_proceeds, 0.0)
+            proceeds[n] = [entry.spinoff_proceeds for entry in q_96]
+
+        # Ranked 4th, so Top 3 never holds it and is entitled to nothing.
+        self.assertEqual(proceeds[3], [0.0, 0.0, 0.0, 0.0])
+
+        for n in (5, 10):
+            with self.subTest(n=n):
+                # No distribution has an ex-date in Q1 or Q2, so nothing is credited there
+                # however long the position has been held.
+                self.assertEqual(proceeds[n][0], 0.0)
+                self.assertEqual(proceeds[n][1], 0.0)
+                # Lucent, ex-date 1996-09-30.
+                self.assertGreater(proceeds[n][2], 0.0)
+
+        # Cash cannot go negative when a distribution lands mid-quarter.
+        for n in (3, 5, 10):
+            res = self.simulator.run_simulation(
+                start_year=1995,
+                end_year=1996,
+                n=n,
+                rebalance_frequency="quarterly",
+                is_after_tax=True,
+                tax_rate=0.30,
+                initial_capital=100000.0,
+            )
+            for entry in res.quarterly_history:
+                with self.subTest(n=n, period=f"{entry.year}-Q{entry.quarter}"):
+                    self.assertGreaterEqual(entry.cash, 0.0)
 
     def test_audit_quarterly_expansion_execution(self) -> None:
         """Verify audit script functions run cleanly and detect midyear promotions."""

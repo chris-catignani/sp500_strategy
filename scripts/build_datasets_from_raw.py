@@ -908,6 +908,7 @@ def main():
         for series in all_quarterly_prices_data.values()
         for key in series
     }
+    first_year = min(YEAR_CONSTITUENTS, key=int)
     for year, tickers in YEAR_CONSTITUENTS.items():
         weights = HISTORICAL_INDEX_WEIGHTS[year]
         # A roster year is consumed at two places: it re-anchors ITS OWN Q4, and it is the
@@ -921,6 +922,14 @@ def main():
         # so a constituent held across several years is priced at every quarter in
         # between, and the last roster it appears in covers the quarter it is sold at.
         required = {f"{year}-Q4"} | {f"{int(year) + 1}-Q{q}" for q in (1, 2, 3, 4)}
+        # The earliest roster year is consumed twice over. build_quarterly_constituents
+        # falls back to the CURRENT year's roster when there is no prior one (line 401),
+        # so the first year supplies its own Q1-Q3 as well as its Q4. A constituent
+        # admitted there can be bought at Q1 and must therefore be priceable at Q2 and Q3
+        # of that same year -- which is why 1994-Q3, with no September-30 filing behind it
+        # in any filer, keeps a 1994-only constituent out however well 1995 is covered.
+        if year == first_year:
+            required |= {f"{year}-Q{q}" for q in (1, 2, 3)}
         required &= horizon
         kept = [
             (ticker, weight)
