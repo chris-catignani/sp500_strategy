@@ -1,7 +1,7 @@
 # Delegating implementation to subagents
 
 How to hand implementation work to an Antigravity subagent in this repo. Written from
-running issues #36, #48, #55 and #73 this way.
+running issues #36, #48, #55, #73 and #76 this way.
 
 ## The split
 
@@ -12,7 +12,8 @@ running issues #36, #48, #55 and #73 this way.
 - **Keep**: investigation, premise-checking, and final verification of any figure that
   ships. Subagents execute specs literally without questioning them, and they confabulate
   numbers — one invented a dollar total and wrote it into `DATA_PROVENANCE.md` formatted
-  to look sourced.
+  to look sourced. They also mis-read them in ways that survive a spot-check; see the
+  verification rule below, which is the part of this document most worth reading.
 
 Across #36 the subagents implemented 15 filings' worth of extraction correctly and caught
 two real defects in review, but found none of the six discoveries that made the work
@@ -73,6 +74,54 @@ before it ships. Grep the filing; do not trust the prose.
 
 Do **not** re-verify code behaviour a reviewer already traced to `file:line` — that is the
 duplication worth cutting, not the number-checking.
+
+### Spot-checking does not scale, and does not catch the real failure mode
+
+Under #76 an agent extracted dividends from 168 filings and returned a clean status line.
+About **a third of the published numbers were wrong**. AT&T's FY1994 report states
+`Dividends declared .33 .33 .33 .33`; the output had Q1 through Q3 right at `0.33` and Q4 at
+`327.0`. Seventy-five dividend values exceeded \$5 a quarter and sixty-two high/low pairs
+were inverted.
+
+Note what that is and is not. It was **not** invention — every figure came out of the right
+document, and carried the right accession. It was a real number read from the **wrong cell**,
+published under a field name asserting what it was. That is worse than an obvious fabrication,
+because nothing about it looks wrong: the citation checks out, and the first three values you
+spot-check are correct.
+
+So the controller's check cannot be attentional. It has to be **mechanical**:
+
+- **Gate every extracted figure against a second figure the same document states**, and
+  withhold whatever fails. For dividends that is the annual per-share total against the sum
+  of four quarters; for rosters it is the filing's own stated total (`DATA_PROVENANCE.md`
+  4.3.10). Then apply the rule that section already sets — *reconcile, or withhold the
+  year* — rather than publishing with a caveat.
+- **Add structural rejects that need no second source**: a high below its low, a close
+  outside its own band, a per-share dividend worth a quarter of the share price. Each is
+  impossible rather than merely unlikely, and each caught real damage here.
+- **Ask for the range, not a sample.** Min, max and count per field finds this in one look.
+  The 335-row output had a 32% failure rate that any bounds check would have surfaced
+  immediately.
+
+Applying the gate cut 335 published quarters to 64. **Take the smaller number.** Lower
+coverage that can be trusted beats broader coverage that cannot, and the withheld rows stay
+visible as withheld rather than disappearing.
+
+### A clean summary next to bad ratios is itself a signal
+
+That same return read `CONCERNS: none` beside a 49% refusal rate and twelve of twenty-seven
+reconciliations failing. The agent was not hiding anything; it had no sense of which numbers
+were surprising. So **ask for concerns explicitly** — "say what looks wrong to you, even if
+you could not fix it" — and read an unqualified all-clear alongside poor ratios as a prompt
+to go look yourself.
+
+### Check what the agent's code depends on
+
+The same task shipped a script and seven tests that read their input from a path under
+`.superpowers/`, which is **gitignored**. Everything passed locally, because the controller
+had the file; on a fresh clone and in CI every test in the class would have errored in
+`setUpClass`. A brief lives in `.superpowers/`; anything the repo runs must not. Before
+committing a subagent's work, check that nothing it added reads from an ignored path.
 
 ## Why not the CLI
 
