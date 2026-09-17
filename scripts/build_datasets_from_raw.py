@@ -235,6 +235,29 @@ MSCIWORLD_TR_LEVELS = {
 }
 
 
+with open(RAW_DIR / "corporate_actions" / "splits.json", "r", encoding="utf-8") as f:
+    SPLITS_BY_TICKER = json.load(f)["splits_by_ticker"]
+
+
+def spinoff_split_factor(ticker: str, ex_date: str) -> float:
+    """Divisor converting a value quoted at ex_date into final share terms.
+
+    The same convention scripts/derive_constituent_series.py applies to prices: every
+    split effective after the quote compounds into the factor. A ticker with no filed
+    split record returns 1.0, which is correct for the vendor-priced constituents --
+    their series arrives already adjusted and their distributions are quoted on the
+    same basis.
+    """
+    record = SPLITS_BY_TICKER.get(ticker)
+    if not record:
+        return 1.0
+    factor = 1.0
+    for split in record["splits"]:
+        if split["effective_date"] > ex_date:
+            factor *= split["ratio"]
+    return factor
+
+
 def load_raw_chart(file_path: Path) -> dict:
     """Load and return chart result from a raw JSON file."""
     with open(file_path, "r", encoding="utf-8") as f:
@@ -662,7 +685,20 @@ def main():
             f"{derived_path.relative_to(REPO_ROOT)}"
         )
 
-    # Load raw spinoff distributions for total return calculations
+    # Load raw spinoff distributions for total return calculations.
+    #
+    # spinoffs.json records each distribution as it was quoted on its ex-date, which is
+    # the right thing for a raw source file to hold. The engine, though, computes
+    # shares_held * distribution_per_share, and shares_held follows from a price series
+    # expressed in final share terms (4.3.12). A distribution and the price it is
+    # credited against must therefore share units, so each event is converted here by
+    # the same factor that adjusts prices.
+    #
+    # This is a no-op for every event in the catalog except AT&T Corp's two 1996
+    # distributions: splits.json carries records only for constituents priced from
+    # filings, and of those only T_CORP has a split after one of its own distributions
+    # -- the 1-for-5 reverse split of 2002-11-18, which puts its 1996 events five-for-one
+    # out of step with its 1996 price.
     all_quarterly_spinoffs: Dict[str, Dict[str, float]] = {}
     all_annual_spinoffs: Dict[str, Dict[int, float]] = {}
     spinoffs_raw = RAW_DIR / "corporate_actions" / "spinoffs.json"
@@ -676,10 +712,36 @@ def main():
             for ev in events:
                 y = int(ev["year"])
                 q = int(ev["quarter"])
-                d = float(ev["distribution_per_share"])
+                factor = spinoff_split_factor(t, ev["ex_date"])
+                d = round(float(ev["distribution_per_share"]) / factor, 4)
+                # The compiled dataset the engine reads must carry the converted value,
+                # not the as-traded one the raw file holds.
+                ev["distribution_per_share"] = d
                 q_key = f"{y}-Q{q}"
                 all_quarterly_spinoffs[t][q_key] = all_quarterly_spinoffs[t].get(q_key, 0.0) + d
                 all_annual_spinoffs[t][y] = all_annual_spinoffs[t].get(y, 0.0) + d
+
+    # The 1996-12-31 Schedule of Investments values AT&T Corp cum-NCR. The distribution
+    # went ex that same day, and the contemporaneous quote in
+    # att_1996_endpoint_valuations.json -- 43.375 against the filing's 43.50, one tick
+    # apart -- states explicitly that it carries the entitlement. Were the filed price
+    # ex-NCR, the cum value would be 45.60, a 2.20 gap between two same-day valuations of
+    # one security. The model credits the NCR shares separately, so the parent's year-end
+    # value must exclude them or the same wealth is counted twice.
+    #
+    # Lucent needs no such subtraction: it went ex on 1996-09-30, a quarter before the
+    # filing date, so the 12-31 quote is already clear of it.
+    ncr_events = [
+        ev for ev in spinoffs_data.get("T_CORP", [])
+        if ev["ex_date"] == "1996-12-31" and ev["spinco_ticker"] == "NCR"
+    ]
+    if ncr_events:
+        ncr_event, = ncr_events
+        cum_price = all_prices_data["T_CORP"]["1996"]
+        parent_price = round(cum_price - ncr_event["distribution_per_share"], 4)
+        if parent_price <= 0:
+            raise ValueError("AT&T Corp post-distribution value must be positive")
+        all_prices_data["T_CORP"]["1996"] = parent_price
 
     # 3. Build S&P 500 constituents
     sp500_constituents: Dict[str, List[dict]] = {}
@@ -817,11 +879,11 @@ def main():
         if k in all_quarterly_dividends_data
     }
 
-    # 7. Compile spinoff distributions from raw corporate actions
-    spinoffs_raw = RAW_DIR / "corporate_actions" / "spinoffs.json"
-    if spinoffs_raw.exists():
-        with open(spinoffs_raw, "r", encoding="utf-8") as f:
-            spinoffs_data = json.load(f)
+    # 7. Compile spinoff distributions from raw corporate actions.
+    # Written from the in-memory catalog, whose distributions have been converted into
+    # final share terms above. Re-reading the raw file here would ship the as-traded
+    # values to the engine and silently undo that conversion.
+    if spinoffs_data:
         with open(DATA_DIR / "spinoff_distributions.json", "w", encoding="utf-8") as f:
             json.dump(spinoffs_data, f, indent=2)
         print(f"Compiled spinoff distributions to {DATA_DIR / 'spinoff_distributions.json'}")

@@ -463,38 +463,57 @@ To provide an unassailable benchmark without third-party subscriptions:
 3. The synthetic annual dividend yield is spread evenly across quarters ($y_t / 4$).
 This methodology faithfully reflects discrete quarterly market drawdowns (e.g., Q3 2008 Lehman, Q1 2020 COVID) while strictly guaranteeing exact adherence to audited annual benchmark targets.
 
-### 4.5 Security Decoupling: AT&T Corp ("Ma Bell") vs. SBC Communications (1993–1998)
+### 4.5 Issuer Identity: AT&T Corp ("Ma Bell") vs. SBC Communications
 
-#### 4.5.1 The Telecommunications Merger & Retrospective Ticker Collision
-In modern market datasets, historical equity series are frequently retroactively reassigned following corporate mergers and acquisitions. A prominent instance occurs with ticker **`T`**:
-- In November 2005, **SBC Communications Inc.** (formerly Southwestern Bell Corporation, one of the seven Regional Bell Operating Companies created by the 1984 DOJ breakup of AT&T) acquired its former parent corporation, **AT&T Corp** ("Ma Bell"), for \$16 billion.
-- Following the merger, SBC Communications rebranded the consolidated enterprise as **AT&T Inc.** and adopted the legacy single-letter ticker symbol **`T`** on the New York Stock Exchange.
-- Modern automated APIs (including Yahoo Finance `/v8/finance/chart/T`) link the pre-2005 ticker history of `T` to the financial statements, stock splits, and dividend distributions of the surviving legal entity (**SBC Communications**), rather than the original AT&T Corp.
+#### 4.5.1 The Retrospective Ticker Collision
+The ticker `T` has denoted two different companies:
+- **AT&T Corp** ("Ma Bell") held it until 2005, when **SBC Communications Inc.** — itself one of the seven Regional Bell Operating Companies created by the 1984 DOJ breakup of AT&T — acquired its own former parent for \$16 billion.
+- SBC renamed the combined enterprise **AT&T Inc.** and took the legacy single-letter symbol.
+- Vendor APIs (including Yahoo Finance `/v8/finance/chart/T`) back-fill `T` with the price history of the **surviving registrant, SBC**, not of AT&T Corp. A 1994 quote returned for `T` is SBC's.
 
-#### 4.5.2 Point-in-Time Impact on S&P 500 Constituent Selection
-From 1994 through 1998, the authentic mega-cap constituent ranking in the S&P 500 Top 10 was the original **AT&T Corp** ("Ma Bell"), not SBC Communications:
-- Relying on SBC Communications' historical series artificially distorts constituent price returns, capitalization weights, and dividend cash flows for the telecom holding.
-- To resolve this collision, the repository decouples the two corporate entities.
+#### 4.5.2 How this was resolved before, and why that is no longer the answer
+When no primary source distinguished the two issuers, the repository **constructed** one. `data/raw/tickers/T_CORP_HISTORICAL.json` held a hand-assembled Ma Bell series, and `scripts/build_datasets_from_raw.py` stripped `T`'s pre-1999 vendor data and spliced the constructed series in its place.
 
-#### 4.5.3 Verified Decoupled Series (`T_CORP_HISTORICAL.json`)
-The authentic historical market record for original AT&T Corp is isolated in `data/raw/tickers/T_CORP_HISTORICAL.json`:
-- **Cash Dividends**: Verified split-adjusted distributions of **\$0.33 per quarter (\$1.32 per year)** across 1994–1998, reflecting Ma Bell's consistent quarterly \$0.33 payout.
-- **Prices & Baseline Closes**: Verified historical month-end closes from 1993 through 1998, including 1993-Q1..Q3 baseline closes (\$52.50, \$54.00, and \$56.25) to prevent artificial capitalization drift spikes in early 1994.
-- **Automated Splicing**: In `scripts/build_datasets_from_raw.py`, pre-1999 SBC data for `T` is purged, and the verified `T_CORP_HISTORICAL` record is spliced into the constituent series for 1993–1998. Data from 1999 onward transitions smoothly into the consolidated modern AT&T series.
-- **The purged slice is SBC's authentic series and is recoverable.** The pre-1999 data discarded
-  by the splice above is not spurious — `T.json` carries `firstTradeDate` 1983-11-21, the
-  continuing Southwestern Bell / SBC registrant that took the `T` ticker on acquiring AT&T Corp
-  in 2005. It reconciles to SBC's audited fund-schedule prices on a known constant (§4.1.1:
-  1.324 from the 2022 WBD spinoff, × 2 before the March 1998 split). Correct for the AT&T Corp
-  collision, it is the primary source for `SBC` as a distinct historical constituent, which is
-  why `SBC` requires no external data acquisition under #55.
+That was the correct response to the evidence then available. It is now superseded. The audited December-31 rosters (§4.3.10) list **`AT&T Corp` and `SBC Communications` as separate issuers in the same filing, in the same years**, and `data/raw/constituents/issuer_ticker_map.json` resolves them to `T_CORP` and `SBC`. The collision is settled by evidence rather than by construction, so the splice was retired (#73).
 
-#### 4.5.4 AT&T Corporate Timeline & 1998–2006 Top 12 Absence
-A rigorous audit of `historical_index_weights.json` reveals that ticker **`T` was NOT in the S&P 500 Top 12 from 1998 through 2006**:
-- Following the 1996 Lucent Technologies spinoff and 1996 NCR spinoff, legacy AT&T Corp shrank rapidly in market capitalization and dropped completely out of Top 10/12 consideration by year-end 1998.
-- During 1994–1997, the legacy series comes from `T_CORP_HISTORICAL.json`, with the explicit 1996 endpoint reconciliation below. Other legacy observations remain subject to the source-validation work in issue #25.
-- Transitioning to modern SBC Communications data in 1999 therefore had **zero effect** on portfolio constituent selection or performance during the 1998–2006 window.
-- When `T` re-entered the Top 12 roster in 2007, SBC Communications had already completed its \$16 billion acquisition of AT&T Corp (November 2005) and adopted the consolidated **AT&T Inc.** identity, ensuring complete continuity with modern corporate reality.
+**The estimates the splice rested on were wrong about AT&T.** The estimated roster ranked AT&T **4th in 1996**; the Vanguard 500 Index Fund's 1996-12-31 filing ranks it **11th**. Four tests asserted a market history the filing contradicts and were rewritten against the filing rather than repaired.
+
+#### 4.5.3 What each ticker now means
+| Ticker | Issuer | Roster years | Price source |
+|---|---|---|---|
+| `T_CORP` | AT&T Corp (Ma Bell), acquired 2005 | 1994–1999 (ranks 2, 2, 11, 11, 12, 13) | derived from filings (§4.3.12) |
+| `SBC` | SBC Communications Inc. | 1997–2002 (ranks 20, 19, 12, 12, 14, 17) | derived from filings (§4.3.12) |
+| `T` | AT&T Inc. — the same registrant as `SBC`, renamed | 2005 onward | vendor |
+
+`T`'s vendor series is **left intact across its whole span**, pre-2005 included. SBC did not become a new company in 2005; it changed its name. The series is continuous because the registrant is, and truncating it would assert a discontinuity that did not occur. `T` simply never appears in a roster before 2005, which is what keeps the identities separate — asserted by `test_att_sbc_identity_separation`.
+
+`T_CORP_HISTORICAL.json` remains on disk, no longer consumed. It is the record of the superseded workaround.
+
+**A cost worth stating plainly.** The constructed series carried Ma Bell's verified \$0.33 quarterly dividend (\$1.32/year). `T_CORP` is now a derived constituent, and per §4.3.9 no dividends are derived from a Schedule of Investments. AT&T Corp's dividend income is therefore **no longer credited at all** — recorded as unknown rather than nil, but absent from total return either way. It sat at rank 2 in 1994–95, so this is the largest instance yet of that documented limitation.
+
+#### 4.5.4 The 1996 endpoint reconciliation
+AT&T Corp distributed Lucent on 1996-09-30 and NCR on 1996-12-31. The model credits child shares at distribution-date endpoints, so any parent quote that still carries an entitlement would count the same wealth twice.
+
+**The filed 1996 value is cum-NCR.** The Schedule of Investments values AT&T Corp at **\$43.50** as-traded at 1996-12-31. The contemporaneous quote in `data/raw/corporate_actions/att_1996_endpoint_valuations.json` is **\$43.375** and states explicitly that it carries the NCR entitlement. The two are one tick apart. Were the filed price ex-NCR, the cum value would be \$45.60 — a \$2.20 gap between two same-day valuations of one security, which no reading supports. The parent-only value is therefore \$43.50 − \$2.10 = **\$41.40** as-traded.
+
+Lucent needs no such subtraction. It went ex a full quarter before the filing date, so the year-end quote is already clear of it. `test_att_distribution_endpoints_conserve_quoted_wealth` asserts both halves: that the NCR entitlement restores the filed quote exactly, and that adding Lucent back does not.
+
+**Units.** `spinoffs.json` records each distribution as quoted on its ex-date, which is what a raw source file should hold. The engine computes `shares_held × distribution_per_share`, and `shares_held` derives from a price series expressed in final share terms, so the builder converts each distribution by the same factor it applies to prices. AT&T Corp's **1-for-5 reverse split of 2002-11-18** (10-K, CIK `0000005907`, accession `0000950123-03-003510`) gives a factor of 0.2 for its 1996 events: Lucent \$14.87 → **\$74.35**, NCR \$2.10 → **\$10.50**, against a year-end parent price of **\$207.0002**. Every other event in the catalog has no split after it, so the conversion is a no-op for them.
+
+This mattered only once the splice was retired. The constructed series was in as-traded Ma Bell units, so both sides already agreed; moving to the derived series, which is in post-reverse-split terms, put them five-for-one apart.
+
+##### The reconciliation cross-checks against the retired construction
+AT&T Corp's 1996 total return, computed two independent ways:
+
+| Construction | Arithmetic | 1996 total return |
+|---|---|---|
+| Retired splice (quote-sourced) | `(41.27 − 64.75 + 16.97) / 64.75` | **−10.05%** |
+| Derived series (filing-sourced) | `(207.0002 − 323.7504 + 84.85) / 323.7504` | **−9.85%** |
+
+The 20bp gap is almost entirely the one-tick quote difference between the two sources: `0.125 / 64.75 = 0.19%`. Two constructions built from different evidence, in different share units, agreeing to within a rounding residual — which is what justifies retiring the older one rather than merely preferring it.
+
+#### 4.5.5 AT&T Corp's decline and the 1998–2006 absence
+After the 1996 Lucent and NCR distributions, AT&T Corp shrank rapidly. The audited rosters record it falling from rank 2 (1995) to 11 (1996) and out of the Top 20 entirely after 1999. Ticker `T` re-enters the rosters in 2005, by which point it denotes AT&T Inc., ensuring continuity with modern corporate reality.
 
 ---
 

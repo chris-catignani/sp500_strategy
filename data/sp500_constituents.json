@@ -358,7 +358,7 @@
       "ticker": "T_CORP",
       "name": "AT&T Corp. (pre-2005 Ma Bell)",
       "market_cap_weight": 0.012467,
-      "trailing_1y_return": -0.2758,
+      "trailing_1y_return": -0.0985,
       "year": 1996
     },
     {
@@ -500,7 +500,7 @@
       "ticker": "T_CORP",
       "name": "AT&T Corp. (pre-2005 Ma Bell)",
       "market_cap_weight": 0.013172,
-      "trailing_1y_return": 0.408,
+      "trailing_1y_return": 0.4795,
       "year": 1997
     },
     {

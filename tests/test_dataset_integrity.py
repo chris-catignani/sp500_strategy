@@ -160,17 +160,16 @@ class TestDatasetIntegrity(unittest.TestCase):
         self.assertIn("NCR", t_corp_spinoffs)
         self.assertEqual(t_corp_spinoffs["LU"]["year"], 1996)
         self.assertEqual(t_corp_spinoffs["LU"]["quarter"], 3)
-        # 1996 magnitude pending the NCR units resolution (#73)
-        self.assertGreater(t_corp_spinoffs["LU"]["distribution_per_share"], 0.0)
-        self.assertGreater(t_corp_spinoffs["LU"]["basis_retention_ratio"], 0.0)
-        self.assertLess(t_corp_spinoffs["LU"]["basis_retention_ratio"], 1.0)
+        # Converted into final share terms: the as-traded 14.87 of spinoffs.json over
+        # T_CORP's 0.2 split factor. The compiled dataset is what the engine reads, so
+        # it must carry the converted value, not the raw one.
+        self.assertEqual(t_corp_spinoffs["LU"]["distribution_per_share"], 74.35)
+        self.assertEqual(t_corp_spinoffs["LU"]["basis_retention_ratio"], 0.7201)
 
         self.assertEqual(t_corp_spinoffs["NCR"]["year"], 1996)
         self.assertEqual(t_corp_spinoffs["NCR"]["quarter"], 4)
-        # 1996 magnitude pending the NCR units resolution (#73)
-        self.assertGreater(t_corp_spinoffs["NCR"]["distribution_per_share"], 0.0)
-        self.assertGreater(t_corp_spinoffs["NCR"]["basis_retention_ratio"], 0.0)
-        self.assertLess(t_corp_spinoffs["NCR"]["basis_retention_ratio"], 1.0)
+        self.assertEqual(t_corp_spinoffs["NCR"]["distribution_per_share"], 10.50)
+        self.assertEqual(t_corp_spinoffs["NCR"]["basis_retention_ratio"], 0.9523)
 
         # Verify 2022 Warner Bros. Discovery spinoff present in compiled data for T (AT&T Inc.)
         t_spinoffs = {ev["spinco_ticker"]: ev for ev in data["T"]}
@@ -189,12 +188,38 @@ class TestDatasetIntegrity(unittest.TestCase):
         self.assertIn("T_CORP", prices)
         self.assertAlmostEqual(prices["T_CORP"]["1994"], 251.2494, places=4)
         self.assertAlmostEqual(prices["T_CORP"]["1995"], 323.7504, places=4)
-        # 1996 magnitude pending the NCR units resolution (#73)
-        self.assertIn("1996", prices["T_CORP"])
-        self.assertGreater(prices["T_CORP"]["1996"], 0.0)
+        # 1996 is the filed 217.5002 less the separately credited NCR entitlement: the
+        # distribution went ex on the filing date, so the filed value carries it.
+        self.assertAlmostEqual(prices["T_CORP"]["1996"], 207.0002, places=4)
         self.assertAlmostEqual(prices["T_CORP"]["1997"], 306.2499, places=4)
         # Derived series have no dividend records (filings report holdings, not distributions)
         self.assertEqual(divs.get("T_CORP", {}), {})
+
+    def test_att_distribution_endpoints_conserve_quoted_wealth(self):
+        """Parent plus credited child must equal the filed package quote.
+
+        The 1996-12-31 Schedule of Investments values AT&T Corp at 217.5002 in final
+        share terms, cum-NCR. The model splits that one number into two: a parent price
+        and a separately credited distribution. Neither may be changed without the other,
+        or the endpoint gains or loses wealth that the filing does not record.
+        """
+        with open(self.prices_path, "r", encoding="utf-8") as f:
+            prices = json.load(f)
+        with open(self.data_dir / "spinoff_distributions.json", "r", encoding="utf-8") as f:
+            spinoffs = json.load(f)
+
+        ncr, = [ev for ev in spinoffs["T_CORP"] if ev["spinco_ticker"] == "NCR"]
+        parent = prices["T_CORP"]["1996"]
+        self.assertAlmostEqual(parent + ncr["distribution_per_share"], 217.5002, places=4)
+
+        # Lucent went ex on 1996-09-30, a quarter before the filing date, so the
+        # year-end quote is already clear of it and it must NOT be added back.
+        lucent, = [ev for ev in spinoffs["T_CORP"] if ev["spinco_ticker"] == "LU"]
+        self.assertNotAlmostEqual(
+            parent + ncr["distribution_per_share"] + lucent["distribution_per_share"],
+            217.5002,
+            places=4,
+        )
 
     def test_att_sbc_identity_separation(self):
         """Lock in identity separation across annual constituent rosters.

@@ -276,24 +276,21 @@ class TestDataLoader(unittest.TestCase):
         self.assertAlmostEqual(q_dist, 21.90, places=2)
         self.assertAlmostEqual(q_ratio, 0.6910, places=4)
 
-        # AT&T Corp 1996 multi-event spinoff queries
+        # AT&T Corp 1996 multi-event spinoff queries. Distributions are expressed in
+        # final share terms, so the as-traded 14.87 and 2.10 of spinoffs.json arrive
+        # here divided by T_CORP's 0.2 split factor (the 1-for-5 reverse split of
+        # 2002-11-18). Basis retention ratios are unitless and carry across unchanged.
         t_corp_dist_annual, t_corp_ratio_annual = self.loader.get_spinoff_distribution("T_CORP", 1996)
-        # 1996 magnitude pending the NCR units resolution (#73)
-        self.assertGreater(t_corp_dist_annual, 0.0)
-        self.assertGreater(t_corp_ratio_annual, 0.0)
-        self.assertLess(t_corp_ratio_annual, 1.0)
+        self.assertAlmostEqual(t_corp_dist_annual, 84.85, places=2)
+        self.assertAlmostEqual(t_corp_ratio_annual, 0.7201 * 0.9523, places=6)
 
         t_corp_q3_dist, t_corp_q3_ratio = self.loader.get_quarterly_spinoff_distribution("T_CORP", 1996, 3)
-        # 1996 magnitude pending the NCR units resolution (#73)
-        self.assertGreater(t_corp_q3_dist, 0.0)
-        self.assertGreater(t_corp_q3_ratio, 0.0)
-        self.assertLess(t_corp_q3_ratio, 1.0)
+        self.assertAlmostEqual(t_corp_q3_dist, 74.35, places=2)
+        self.assertAlmostEqual(t_corp_q3_ratio, 0.7201, places=4)
 
         t_corp_q4_dist, t_corp_q4_ratio = self.loader.get_quarterly_spinoff_distribution("T_CORP", 1996, 4)
-        # 1996 magnitude pending the NCR units resolution (#73)
-        self.assertGreater(t_corp_q4_dist, 0.0)
-        self.assertGreater(t_corp_q4_ratio, 0.0)
-        self.assertLess(t_corp_q4_ratio, 1.0)
+        self.assertAlmostEqual(t_corp_q4_dist, 10.50, places=2)
+        self.assertAlmostEqual(t_corp_q4_ratio, 0.9523, places=4)
 
         t_corp_q1_dist, t_corp_q1_ratio = self.loader.get_quarterly_spinoff_distribution("T_CORP", 1996, 1)
         self.assertEqual(t_corp_q1_dist, 0.0)

@@ -499,8 +499,11 @@ class TestPortfolioSimulator(unittest.TestCase):
         self.assertNotIn("T_CORP", entry_96.holdings)
         self.assertNotIn("T", entry_96.holdings)
 
-        # 1996 magnitude pending the NCR units resolution (#73)
-        self.assertGreater(entry_96.spinoff_proceeds, 0.0)
+        # Proceeds are the pre-rebalance shares times both 1996 distributions, in final
+        # share terms: Lucent 74.35 plus NCR 10.50. Holding T_CORP into 1996 from the
+        # audited 1995 roster collects both before the rank-11 exit.
+        expected_proceeds = initial_t_corp_shares * (74.35 + 10.50)
+        self.assertAlmostEqual(entry_96.spinoff_proceeds, expected_proceeds, places=2)
 
         # Spinoff proceeds untaxed as dividends
         self.assertAlmostEqual(
