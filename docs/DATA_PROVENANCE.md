@@ -478,9 +478,10 @@ annual path no longer has.
 A filer's fiscal year end decides which of its two yearly reports falls on a given date. An
 annual report carries a Report of Independent Accountants; a semi-annual does not.
 
-| Quarter | Source | Filer FYE | Archived | Grade |
+| Quarter | Source | Fiscal year end (per the filing) | Archived | Grade |
 |---|---|---|---|---|
-| Q1 (Mar 31) | Prudential / Dryden (CIK 887991), SEI Index Funds (CIK 766589) | 0930 | **no** | unaudited |
+| Q1 (Mar 31) | SEI Index Funds (CIK 766589), 1995-2006 | **0331** | **no** | **audited** |
+| Q1 (Mar 31) | Prudential / Dryden (CIK 887991), 1994 only | 0930 | **no** | unaudited |
 | Q2 (Jun 30) | Vanguard 500 Index Fund semi-annual | 1231 | yes (#63) | **unaudited** |
 | Q3 (Sep 30) | SPDR S&P 500 Trust annual | 0930 | yes (4.3.6) | **audited** |
 | Q4 (Dec 31) | Vanguard 500 Index Fund annual | 1231 | yes (4.3.9) | **audited** |
@@ -490,11 +491,33 @@ filed a shareholder report in QTR2 or QTR3 of any year 1994-2006, every one of t
 submissions records read, no name filtering. 1,195 file at a March-31 period and 260 of
 those are audited grade; the only index fund among the 260 tracks natural gas utilities.
 Prudential's schedule at `19940331` holds 502 positions and SEI's at `19980331` holds 509,
-both confirmed by reading the filings. No audited March-31 S&P 500 roster was found among
-filers whose names identify them, and the question remains open for the 260 audited filers
-with generic names — `NATIONS FUND TRUST` (CIK 769100) is audited, files at March 31, and
-states in its own words that it runs a fund which *"seeks to match the performance of the
-S&P 500"*, but the document carrying that fund's schedule has not been located.
+both confirmed by reading the filings.
+
+**SEI's March-31 schedule is audited.** Its Report of Independent Accountants states: *"We
+have audited the accompanying statements of net assets of the S&P 500 Index and Bond Index
+Portfolios of SEI Index Funds (the 'Trust') as of March 31, 1998 ... Our procedures included
+confirmation of securities owned as of March 31, 1998, by correspondence with the custodian
+and broker."* The Statement of Net Assets is the schedule the roster is read from.
+Confirmed at `19960331` and `20030331` as well.
+
+This contradicts the submissions API, which reports `fiscalYearEnd` `0930` for CIK 766589.
+**The field is wrong for this trust**, and the filing's own prose ("fiscal year ended March
+31, 1998") agrees with the auditor rather than with the API. Prudential's filings, by
+contrast, carry no auditor's report at all and mark the schedule `MARCH 31, 1994
+(UNAUDITED)`, so Prudential is genuinely unaudited and is needed only for 1994.
+
+##### The grade census is computed from an unreliable field
+
+The count of filers at a March-31 period (1,195) is read from `reportDate` and is sound. The
+split into 260 audited and 935 unaudited is computed from `fiscalYearEnd` and **is not**:
+SEI sits on the wrong side of it. Establishing any filer's grade means opening its filing.
+
+The practical consequence is that no negative claim about audited March-31 rosters is
+supported by this census. One was found by accident, in a filer the census had classified as
+unaudited. `NATIONS FUND TRUST` (CIK 769100) remains an open lead on the same question — it
+files at March 31 and states in its own words that it runs a fund which *"seeks to match the
+performance of the S&P 500"* — but the document carrying that fund's schedule has not been
+located.
 
 ##### Q2 and Q3 are derived; neither is published to the engine
 
