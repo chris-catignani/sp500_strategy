@@ -1319,5 +1319,94 @@ class TestVanguardArchiveCoverage(unittest.TestCase):
             self.assertIn("/36405/", entry["sec_url"])
 
 
+class TestVanguardImpliedPrices(unittest.TestCase):
+    """Implied December-31 prices derived from Vanguard filings (issue #55)."""
+
+    PATH = ROOT / "data" / "raw" / "ground_truth" / "vanguard_implied_prices.json"
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.PATH, "r", encoding="utf-8") as f:
+            cls.data = json.load(f)
+        cls.prices = cls.data["prices_by_ticker"]
+
+    def test_agrees_with_spy_filings_on_the_one_shared_date(self):
+        """Two unrelated filers must report the same price for the same date.
+
+        SPY's fiscal year ended December 31 through 1996, so its FY1995 annual report and
+        Vanguard's cover the same date. This is the only independent check available on
+        the implied-price method, and it is asserted rather than merely documented so a
+        future change to the extraction path cannot quietly break it.
+
+        Expected values are read from SPY's archived filing at test time, not hardcoded.
+        """
+        from scripts.extract_ground_truth_from_sec import parse_n30d_filing
+
+        spy = parse_n30d_filing(
+            ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
+            / "SPY_1995_N-30D_0000912057-96-003840.txt"
+        )
+        by_name = {h["name"]: h for h in spy["holdings"]}
+
+        shared = {
+            "MOB": "Mobil Corp",
+            "GTE": "GTE Corp",
+            "BLS": "BellSouth Corp",
+            "RD": "Royal Dutch Petroleum",
+            "SBC": "SBC Communications",
+        }
+        checked = 0
+        for ticker, stem in shared.items():
+            match = next((h for name, h in by_name.items() if name.startswith(stem)), None)
+            if match is None or not match.get("shares"):
+                continue
+            spy_price = match["val"] / match["shares"]
+            vanguard_price = self.prices[ticker]["1995"]["price_usd"]
+            with self.subTest(ticker=ticker):
+                # Published schedules round share counts, so the two filers agree to
+                # within a cent rather than exactly.
+                self.assertAlmostEqual(vanguard_price, spy_price, delta=0.01)
+            checked += 1
+        self.assertGreaterEqual(checked, 4, "cross-filer check degenerated to nothing")
+
+    def test_every_price_is_corroborated_by_a_majority_of_schedules(self):
+        """Each filing holds several funds owning the same security; most must agree."""
+        for ticker, years in self.prices.items():
+            for year, obs in years.items():
+                agree, total = (int(x) for x in obs["corroborating_agreement"].split("/"))
+                with self.subTest(ticker=ticker, year=year):
+                    self.assertGreater(agree * 2, total)
+
+    def test_prices_are_labelled_as_unadjusted(self):
+        """These are as-traded prices.
+
+        Reading them as a return series without each registrant's split record inverts the
+        result: Lucent 1997->1999 reads as a decline as-traded where the split-adjusted
+        move is a rise. The label is what stops a downstream consumer treating them as
+        comparable to the split-adjusted series in data/raw/tickers/.
+        """
+        self.assertEqual(self.data["adjustment_status"], "as_traded_unadjusted")
+
+    def test_every_observation_cites_the_filing_it_came_from(self):
+        """A derived figure without its source is indistinguishable from an estimate."""
+        archived = {
+            p.name for p in (ROOT / "data" / "raw" / "ground_truth" / "sec_filings").glob("VG500_*.txt")
+        }
+        for ticker, years in self.prices.items():
+            for year, obs in years.items():
+                with self.subTest(ticker=ticker, year=year):
+                    self.assertIn(Path(obs["source_file"]).name, archived)
+                    self.assertTrue(obs["accession_number"])
+                    self.assertEqual(obs["report_date"], f"{year}-12-31")
+
+    def test_securities_that_ceased_to_exist_are_recorded_as_events(self):
+        """An absent price must be explained, so omission is not mistaken for a gap."""
+        notes = " ".join(self.data["corporate_action_notes"])
+        self.assertNotIn("1999", self.prices.get("MOB", {}))
+        self.assertIn("MOB 1999", notes)
+        self.assertNotIn("2005", self.prices.get("SBC", {}))
+        self.assertIn("SBC 2005", notes)
+
+
 if __name__ == "__main__":
     unittest.main()
