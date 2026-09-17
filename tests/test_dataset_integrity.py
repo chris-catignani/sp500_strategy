@@ -1,6 +1,11 @@
 import json
+import sys
 import unittest
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 class TestDatasetIntegrity(unittest.TestCase):
@@ -217,6 +222,61 @@ class TestDatasetIntegrity(unittest.TestCase):
             code = f.read()
         compiled = compile(code, str(build_script), "exec")
         self.assertIsNotNone(compiled)
+
+
+class TestDerivedConstituentSeries(unittest.TestCase):
+    """Constituents whose prices are derived from filings rather than a vendor (#55)."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.build_datasets_from_raw import DERIVED_NAMES, SP500_NAMES
+        cls.derived = DERIVED_NAMES
+        cls.vendor = SP500_NAMES
+        with open(ROOT / "data" / "sp500_prices.json", "r", encoding="utf-8") as f:
+            cls.prices = json.load(f)
+        with open(ROOT / "data" / "sp500_dividends.json", "r", encoding="utf-8") as f:
+            cls.dividends = json.load(f)
+
+    def test_each_derived_constituent_reaches_the_built_dataset(self):
+        for ticker in self.derived:
+            with self.subTest(ticker=ticker):
+                self.assertIn(ticker, self.prices)
+                self.assertTrue(self.prices[ticker])
+
+    def test_a_constituent_has_exactly_one_price_source(self):
+        """Vendor and derived series must never both claim a ticker.
+
+        They are adjusted to different bases - Yahoo adjusts to the present, a delisted
+        series to its own final trading date - so silently preferring one would produce a
+        series that is internally inconsistent without saying so.
+        """
+        for ticker in self.derived:
+            with self.subTest(ticker=ticker):
+                self.assertNotIn(ticker, self.vendor)
+                self.assertFalse((ROOT / "data" / "raw" / "tickers" / f"{ticker}.json").exists())
+
+    def test_derived_constituents_carry_no_fabricated_dividends(self):
+        """A Schedule of Investments reports holdings, not distributions.
+
+        An empty dividend series is the honest value. Zero-filling it would understate
+        total return for these issuers without recording that the figure is unknown
+        rather than nil.
+        """
+        for ticker in self.derived:
+            with self.subTest(ticker=ticker):
+                self.assertEqual(self.dividends.get(ticker, {}), {})
+
+    def test_derived_series_are_absent_from_the_quarterly_datasets(self):
+        """Only December 31 observations are derived, so no quarterly series exists.
+
+        This test records that as an intended limitation rather than an oversight: the
+        quarterly path cannot select these constituents, and the annual path can.
+        """
+        with open(ROOT / "data" / "sp500_quarterly_prices.json", "r", encoding="utf-8") as f:
+            quarterly = json.load(f)
+        for ticker in self.derived:
+            with self.subTest(ticker=ticker):
+                self.assertNotIn(ticker, quarterly)
 
 
 if __name__ == "__main__":
