@@ -228,13 +228,10 @@ def _html_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
             name_buffer = []
             continue
 
-        merged = (
-            _NAME_WITH_SHARES.match(cells[0])
-            if len(cells) == 2 and _is_money(cells[1])
-            else None
-        )
-        if merged is not None:
-            cells = [merged.group(1), merged.group(2), cells[1]]
+        if len(cells) == 2 and _is_money(cells[1]):
+            merged = _NAME_WITH_SHARES.match(cells[0])
+            if merged is not None:
+                cells = [merged.group(1), merged.group(2), cells[1]]
 
         if len(cells) >= 3 and _is_money(cells[1]) and _is_money(cells[2]):
             name = " ".join(name_buffer + [cells[0]])
@@ -386,11 +383,16 @@ def extract_all() -> Dict[str, Any]:
         },
         "unreconciled_years": {y: info["reason"] for y, info in unreconciled.items()},
         "unreconciled_filings": unreconciled,
+        # Deliberately qualitative. This field used to state the counts in prose, and
+        # went stale twice: once when the FY2004 orphaned-holding case was solved, and
+        # again when the archive grew past 1994-2006. reconciliation_summary above
+        # computes the exact figures at write time, so restating them here only relocates
+        # the maintenance chore to the next archive change.
         "coverage": (
-            "Twelve of the thirteen archived filings reconcile, spanning 1994-2006. The "
-            "FY2004 HTML filing drops a position whose name and share cells render empty, "
-            "leaving an orphaned value of 24,416 thousand dollars; that year is recorded "
-            "in unreconciled_years rather than published with a caveat."
+            "One roster per archived filing. A filing whose schedule will not reconcile "
+            "dollar-exact to the total stated on its own face is refused rather than "
+            "published with a caveat, and appears in unreconciled_filings with the "
+            "reason; see reconciliation_summary for the counts and the span."
         ),
         "rosters_by_year": rosters,
     }

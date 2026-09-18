@@ -325,19 +325,24 @@ class TestRawConstituents(unittest.TestCase):
             raw = json.load(f)
         raw_weights = raw["weights_by_year"]
         raw_constituents = raw["constituents_by_year"]
-        for year, (ratio, _accession) in ALPHABET_CONSOLIDATION_RATIO.items():
+        for year, (anchor, ratio, _accession) in ALPHABET_CONSOLIDATION_RATIO.items():
             published = raw_weights[year][raw_constituents[year].index("GOOGL")]
+            # Both factors are stated: the anchor is the factsheet weight as published
+            # before #45, the ratio is read from the filing. Checking the product against
+            # the committed figure can fail, which dividing that figure by the ratio and
+            # comparing it to itself cannot -- an assertion that cannot fail is not
+            # evidence (4.3.20).
             self.assertAlmostEqual(
-                published / ratio,
-                float(row_anchor := round(published / ratio, 4)),
+                published,
+                round(anchor * ratio, 4),
                 places=4,
-                msg=f"{year}: published weight is not the Class A anchor times the ratio",
+                msg=f"{year}: published weight is not the Class A anchor times the filed ratio",
             )
             # Doubling roughly is the whole point: a consolidation that did not move the
             # weight by close to the class ratio would mean the anchor was misclassified.
             self.assertGreater(ratio, 1.9, year)
             self.assertLess(ratio, 2.1, year)
-            self.assertGreater(published, row_anchor, year)
+            self.assertGreater(published, anchor, year)
 
     def test_provenance_table_never_claims_unsourced_consolidation(self):
         """No GOOGL row may present a consolidation the table does not cite a filing for."""

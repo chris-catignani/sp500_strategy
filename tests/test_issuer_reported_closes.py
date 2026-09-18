@@ -17,8 +17,10 @@ Two checks, in increasing strength:
 """
 
 import json
+import re
 import sys
 import unittest
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -367,32 +369,28 @@ class TestAlphabetConsolidationEffect(unittest.TestCase):
     Two claims are pinned here, and neither is a cell value:
 
     1. Wherever a filing reports two classes, the dataset's weight is their sum.
-    2. Consolidation puts Alphabet in Top N books it was otherwise excluded from, and
-       every affected S&P 500 cell moves down. The direction is the point: Alphabet
-       displaces a name that did better over these spans, so correcting the weight
-       *lowers* the published figures rather than flattering them.
+    2. Consolidation puts Alphabet in Top N books it was otherwise excluded from, and at
+       Top 3 -- the depth it enters in every corrected year -- the figures move *down*.
+       The direction is the point: there Alphabet displaces a name that did better over
+       these spans, so correcting the weight lowers the published figures rather than
+       flattering them. At Top 5 and Top 10 the sign is mixed and nothing is asserted;
+       see `test_consolidating_alphabet_lowers_the_top_3_book`.
     """
 
     ROSTER_YEARS = ("2014", "2015", "2016", "2017", "2018", "2019")
 
     @classmethod
     def setUpClass(cls):
-        import json as _json
-        import re as _re
-        from pathlib import Path as _Path
-
-        root = _Path(__file__).resolve().parent.parent
-        raw = root / "data" / "raw"
+        raw = ROOT / "data" / "raw"
         with open(raw / "ground_truth" / "vanguard_audited_rosters.json", encoding="utf-8") as f:
-            cls.rosters = _json.load(f)["rosters_by_year"]
+            cls.rosters = json.load(f)["rosters_by_year"]
         with open(raw / "constituents" / "issuer_ticker_map.json", encoding="utf-8") as f:
             cls.issuer_map = {
-                _re.sub(r"^[#*^\s]+", "", k).strip().rstrip(".").strip(): v
-                for k, v in _json.load(f)["map"].items()
+                re.sub(r"^[#*^\s]+", "", k).strip().rstrip(".").strip(): v
+                for k, v in json.load(f)["map"].items()
             }
-        with open(root / "data" / "sp500_constituents.json", encoding="utf-8") as f:
-            cls.constituents = _json.load(f)
-        cls._re = _re
+        with open(ROOT / "data" / "sp500_constituents.json", encoding="utf-8") as f:
+            cls.constituents = json.load(f)
 
     def _roster_lines(self, year):
         """Every mapped (ticker, weight) line in a year's roster, duplicates kept."""
@@ -400,11 +398,25 @@ class TestAlphabetConsolidationEffect(unittest.TestCase):
         for holding in self.rosters[year]["holdings"]:
             if holding.get("unidentified"):
                 continue
-            name = self._re.sub(r"^[#*^\s]+", "", holding["name"]).strip().rstrip(".").strip()
+            name = re.sub(r"^[#*^\s]+", "", holding["name"]).strip().rstrip(".").strip()
             ticker = self.issuer_map.get(name)
             if ticker is not None:
                 out.append((ticker, holding["weight"]))
         return out
+
+    def _first_class_only_lines(self, year):
+        """The same roster under the pre-#45 rule: first occurrence wins, the rest drop.
+
+        This reconstructs what the dataset builder used to do, and is the comparison every
+        claim in this class is made against.
+        """
+        kept, seen = [], set()
+        for ticker, weight in self._roster_lines(year):
+            if ticker in seen:
+                continue
+            seen.add(ticker)
+            kept.append((ticker, weight))
+        return kept
 
     def test_a_dual_class_issuer_holds_one_slot_at_the_sum_of_its_classes(self):
         """The consolidation rule of 4.3.8, checked against the filing it reads from."""
@@ -414,7 +426,7 @@ class TestAlphabetConsolidationEffect(unittest.TestCase):
             summed = {}
             for ticker, weight in lines:
                 summed[ticker] = summed.get(ticker, 0.0) + weight
-            duplicated = {t for t, _ in lines if sum(1 for u, _ in lines if u == t) > 1}
+            duplicated = {t for t, count in Counter(t for t, _ in lines).items() if count > 1}
             self.assertIn(
                 "GOOGL", duplicated, f"{year}: the filing should report two Alphabet classes"
             )
@@ -436,21 +448,16 @@ class TestAlphabetConsolidationEffect(unittest.TestCase):
                 largest = max(w for t, w in lines if t == ticker)
                 self.assertGreater(rows[0]["market_cap_weight"] / largest, 1.9, year)
                 checked += 1
-        self.assertEqual(checked, len(self.ROSTER_YEARS))
+        # Every year contributed at least its Alphabet check. Counting duplicated tickers
+        # against the year count would break the day a second dual-class issuer reaches a
+        # Top 20, and would report that as an Alphabet failure.
+        self.assertGreaterEqual(checked, len(self.ROSTER_YEARS))
 
     def test_consolidation_moves_alphabet_into_books_it_was_excluded_from(self):
         """The selection change #45 predicted, measured on the built rosters."""
         moved = 0
         for year in self.ROSTER_YEARS:
-            lines = self._roster_lines(year)
-            # Reconstruct the pre-#45 rule: first occurrence wins, the other class is
-            # dropped. This is the comparison the claim above is made against.
-            unconsolidated, seen = [], set()
-            for ticker, weight in lines:
-                if ticker in seen:
-                    continue
-                seen.add(ticker)
-                unconsolidated.append((ticker, weight))
+            unconsolidated = self._first_class_only_lines(year)
             old_rank = [t for t, _ in unconsolidated[:20]].index("GOOGL") + 1
             new_rank = [r["ticker"] for r in self.constituents[year]].index("GOOGL") + 1
             self.assertLess(
@@ -490,16 +497,9 @@ class TestAlphabetConsolidationEffect(unittest.TestCase):
         single_class = DataLoader()
 
         for year in self.ROSTER_YEARS:
-            keep, seen = [], set()
-            for ticker, weight in self._roster_lines(year):
-                if ticker in seen:
-                    continue
-                seen.add(ticker)
-                keep.append((ticker, weight))
-
             known = {r["ticker"]: r for r in single_class._raw_constituents[year]}
             rebuilt = []
-            for ticker, weight in keep:
+            for ticker, weight in self._first_class_only_lines(year):
                 try:
                     single_class.get_price(ticker, int(year))
                 except (KeyError, ValueError):

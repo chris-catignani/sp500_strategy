@@ -255,7 +255,7 @@ def _apply_audited_rosters():
         # sum of them (4.3.8). Taking the larger line and dropping the other -- which is
         # what this loop used to do -- halves the issuer and drops it in the ranking: it
         # put Alphabet at rank 20 in 2014 on its Class A weight alone, when consolidated
-        # it ranks 8th. That is the same understatement issue #45 was opened about,
+        # it ranks 4th. That is the same understatement issue #45 was opened about,
         # arriving through the dataset builder instead of through the committed anchors.
         consolidated = {}
         for holding in roster["holdings"]:

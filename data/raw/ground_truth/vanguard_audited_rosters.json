@@ -33,7 +33,7 @@
   },
   "unreconciled_years": {},
   "unreconciled_filings": {},
-  "coverage": "Twelve of the thirteen archived filings reconcile, spanning 1994-2006. The FY2004 HTML filing drops a position whose name and share cells render empty, leaving an orphaned value of 24,416 thousand dollars; that year is recorded in unreconciled_years rather than published with a caveat.",
+  "coverage": "One roster per archived filing. A filing whose schedule will not reconcile dollar-exact to the total stated on its own face is refused rather than published with a caveat, and appears in unreconciled_filings with the reason; see reconciliation_summary for the counts and the span.",
   "rosters_by_year": {
     "1994": {
       "position_count": 502,
