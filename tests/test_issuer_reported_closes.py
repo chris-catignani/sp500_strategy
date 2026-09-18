@@ -62,9 +62,26 @@ class TestIssuerReportedCloses(unittest.TestCase):
                 derived = series.get(period)
                 if high is None or low is None or derived is None:
                     continue
+                if quarter.get("price_basis_restatement"):
+                    # The filing restated these prices for a spin-off or split-off, which
+                    # splits.json does not model, so the two sides are not on one basis
+                    # and the comparison would be meaningless. AT&T's FY2001 report is
+                    # the case; its dividends are unaffected and still used.
+                    continue
                 year, label = period.split("-")
-                factor = split_factor(self.splits.get(ticker), year + QUARTER_END[label])
-                yield ticker, period, quarter, derived * factor
+                # A figure is stated in the share terms current at its FILING, which is
+                # not always the quarter's own as-traded basis: a filing published after
+                # a split restates the quarters before it. Lucent's fiscal tables do
+                # exactly this. Both readings are admitted and the closer one is taken;
+                # neither can absorb a wrong split ratio, which moves the price by half
+                # or double.
+                yield (
+                    ticker,
+                    period,
+                    quarter,
+                    derived * split_factor(self.splits.get(ticker), year + QUARTER_END[label]),
+                    derived * split_factor(self.splits.get(ticker), quarter["filing_date"]),
+                )
 
     def test_every_derived_price_lies_inside_its_registrants_reported_range(self):
         """The structural check: a close outside its own quarter's high/low is impossible.
@@ -75,24 +92,19 @@ class TestIssuerReportedCloses(unittest.TestCase):
         range is wide enough to absorb.
         """
         checked = 0
-        for ticker, period, quarter, as_traded in self._comparable():
+        for ticker, period, quarter, as_quarter, as_filed in self._comparable():
+            low, high = quarter["low"], quarter["high"]
             with self.subTest(ticker=ticker, period=period):
-                self.assertGreaterEqual(
-                    as_traded,
-                    quarter["low"],
-                    f"{ticker} {period}: derived {as_traded:.4f} below the low "
-                    f"{quarter['low']} reported in {quarter['accession_number']}",
-                )
-                self.assertLessEqual(
-                    as_traded,
-                    quarter["high"],
-                    f"{ticker} {period}: derived {as_traded:.4f} above the high "
-                    f"{quarter['high']} reported in {quarter['accession_number']}",
+                self.assertTrue(
+                    low <= as_quarter <= high or low <= as_filed <= high,
+                    f"{ticker} {period}: derived reads {as_quarter:.4f} in the quarter's "
+                    f"own terms and {as_filed:.4f} in the filing's, neither inside the "
+                    f"[{low}, {high}] range reported in {quarter['accession_number']}",
                 )
             checked += 1
         # Pinned as a floor, not an equality: sourcing more filings should raise this
         # number without failing the test, which is the point of 4.3.15's coverage note.
-        self.assertGreaterEqual(checked, 55, "issuer-reported bands lost coverage")
+        self.assertGreaterEqual(checked, 93, "issuer-reported bands lost coverage")
 
     def test_derived_prices_match_the_closes_the_registrants_themselves_reported(self):
         """The tighter check, where a registrant reported the quarter-end close itself.
@@ -106,22 +118,23 @@ class TestIssuerReportedCloses(unittest.TestCase):
         session_mismatch_tolerance = 0.03
         checked = 0
         tight = 0
-        for ticker, period, quarter, as_traded in self._comparable():
+        for ticker, period, quarter, as_quarter, as_filed in self._comparable():
             close = quarter.get("quarter_end_close")
             if close is None:
                 continue
+            gap = min(abs(as_quarter / close - 1.0), abs(as_filed / close - 1.0))
             with self.subTest(ticker=ticker, period=period):
                 self.assertLess(
-                    abs(as_traded / close - 1.0),
+                    gap,
                     session_mismatch_tolerance,
-                    f"{ticker} {period}: derived {as_traded:.4f} against reported close "
-                    f"{close} in {quarter['accession_number']}",
+                    f"{ticker} {period}: derived {as_quarter:.4f}/{as_filed:.4f} against "
+                    f"reported close {close} in {quarter['accession_number']}",
                 )
             checked += 1
-            if abs(as_traded / close - 1.0) < 0.005:
+            if gap < 0.005:
                 tight += 1
-        self.assertGreaterEqual(checked, 15, "issuer-reported closes lost coverage")
-        self.assertGreaterEqual(tight, 13, "close agreement degraded")
+        self.assertGreaterEqual(checked, 42, "issuer-reported closes lost coverage")
+        self.assertGreaterEqual(tight, 38, "close agreement degraded")
 
     def test_gte_carries_no_split_and_its_own_closes_say_so(self):
         """GTE's split record is `none_found`, and this is what makes that a finding.
@@ -135,11 +148,11 @@ class TestIssuerReportedCloses(unittest.TestCase):
         record = self.splits.get("GTE", {})
         self.assertEqual(record.get("splits"), [], "GTE gained a split record")
         compared = 0
-        for ticker, period, quarter, as_traded in self._comparable():
+        for ticker, period, quarter, as_quarter, _ in self._comparable():
             if ticker != "GTE" or quarter.get("quarter_end_close") is None:
                 continue
             with self.subTest(period=period):
-                self.assertLess(abs(as_traded / quarter["quarter_end_close"] - 1.0), 0.02)
+                self.assertLess(abs(as_quarter / quarter["quarter_end_close"] - 1.0), 0.02)
             compared += 1
         self.assertEqual(compared, 12)
 
@@ -153,12 +166,12 @@ class TestIssuerReportedCloses(unittest.TestCase):
         and 40-F and were never expected to be reachable (#84). This asserts the shortfall
         rather than leaving it implicit, so recovering a registrant is a visible change.
         """
-        reachable = {t for t, _, _, _ in self._comparable()}
-        self.assertEqual(reachable, {"AN", "BLS", "DD", "GTE", "T_CORP"})
+        reachable = {t for t, _, _, _, _ in self._comparable()}
+        self.assertEqual(reachable, {"AN", "BLS", "DD", "GTE", "LU", "T_CORP"})
         unreachable = set(self.tables) - reachable
         self.assertIn("RD", unreachable)
         self.assertIn("NT", unreachable)
-        self.assertEqual(len(unreachable), 14)
+        self.assertEqual(len(unreachable), 13)
 
 
 if __name__ == "__main__":
@@ -247,3 +260,97 @@ class TestDerivedDividendEffect(unittest.TestCase):
         self.assertLess(widest, 0.10)
         # And it is not nil: the series reaches constituents that are actually held.
         self.assertGreater(widest, 0.01)
+
+
+class TestSplitCompleteness(unittest.TestCase):
+    """Two filings reporting one quarter disagree by exactly the corporate action between.
+
+    This is the check #84 actually needed, and the band check above is not it. A band is
+    compared at its own date, where the recorded factor divides out of the derived price
+    and multiplies back in -- so a split MISSING from `splits.json` cancels and the band
+    still passes. BellSouth's missing 1995 two-for-one passed its 1994 and 1996 bands for
+    exactly that reason (docs/DATA_PROVENANCE.md 4.3.20).
+
+    Comparing one period across two filings has no such blind spot. The later filing
+    restates the period for every corporate action since the earlier one, so the ratio
+    between them IS the product of those actions, and it can be tested against the record
+    without a second source.
+
+    The discriminator against a mis-read cell is that a corporate action rescales **every**
+    per-share figure by the same factor. A wrong-cell read disagrees with itself across
+    fields; a split does not. So a pair counts only where at least two of dividend, high,
+    low and close agree on the ratio to within 1%.
+    """
+
+    FIELDS = ("dividend_declared_per_share", "high", "low", "quarter_end_close")
+
+    @classmethod
+    def setUpClass(cls):
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "issuer_dividend_tables.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            cls.tables = json.load(f)["tickers"]
+        with open(
+            ROOT / "data" / "raw" / "corporate_actions" / "splits.json", "r", encoding="utf-8"
+        ) as f:
+            cls.splits = json.load(f)["splits_by_ticker"]
+
+    @staticmethod
+    def _expected(records, ticker, earlier, later):
+        ratio = 1.0
+        for split in (records.get(ticker) or {}).get("splits", []):
+            if earlier < split["effective_date"] <= later:
+                ratio *= split["ratio"]
+        return ratio
+
+    def _pairs(self):
+        """Self-consistent cross-filing views of one period: (ticker, period, a, b, ratio)."""
+        for ticker, body in sorted(self.tables.items()):
+            for period, views in sorted((body.get("observations_by_filing") or {}).items()):
+                for index in range(len(views) - 1):
+                    a, b = views[index], views[index + 1]
+                    if a["filing_date"] == b["filing_date"]:
+                        continue
+                    ratios = [a[f] / b[f] for f in self.FIELDS if a.get(f) and b.get(f)]
+                    if len(ratios) < 2 or max(ratios) / min(ratios) - 1 > 0.01:
+                        continue
+                    yield ticker, period, a, b, sum(ratios) / len(ratios)
+
+    def test_every_cross_filing_disagreement_is_explained_by_a_recorded_split(self):
+        """The split record is complete for every registrant this dataset reaches."""
+        checked = 0
+        for ticker, period, a, b, observed in self._pairs():
+            checked += 1
+            expected = self._expected(self.splits, ticker, a["filing_date"], b["filing_date"])
+            with self.subTest(ticker=ticker, period=period):
+                self.assertLess(
+                    abs(observed / expected - 1.0),
+                    0.02,
+                    f"{ticker} {period}: filings {a['filing_date']} and {b['filing_date']} "
+                    f"disagree by {observed:.4f}, but splits.json records {expected:.4f} "
+                    f"between them. A corporate action is missing or wrong.",
+                )
+        # A floor, not an equality: more sourcing should raise this.
+        self.assertGreaterEqual(checked, 150, "cross-filing coverage regressed")
+
+    def test_the_check_fires_when_a_known_split_is_removed(self):
+        """A test that cannot fail proves nothing, so this removes a split and checks it.
+
+        BellSouth's 1995 two-for-one is the one this check found. Dropping it from the
+        record must make the 1993 and 1994 quarters disagree at a ratio of two.
+        """
+        control = json.loads(json.dumps(self.splits))
+        control["BLS"]["splits"] = [
+            s for s in control["BLS"]["splits"] if s["effective_date"] != "1995-11-08"
+        ]
+        fired = [
+            (ticker, period, observed)
+            for ticker, period, a, b, observed in self._pairs()
+            if abs(observed / self._expected(control, ticker, a["filing_date"], b["filing_date"]) - 1.0) > 0.02
+        ]
+        self.assertTrue(fired, "removing a real split did not trip the check")
+        self.assertTrue(all(t == "BLS" for t, _, _ in fired))
+        for _, _, observed in fired:
+            self.assertAlmostEqual(observed, 2.0, delta=0.01)

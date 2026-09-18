@@ -940,7 +940,7 @@ Its FY1999 Form 10-K405 (`0000950123-99-011082`) states `Dividends per common sh
 reconciles to the annual line exactly. What defeated the extractor is not absence but
 **fiscal alignment**: Lucent's year ends September 30, so its quarterly columns are not
 calendar quarters and cannot be read into a calendar series without an explicit mapping.
-That mapping is the remaining work for `LU`, not sourcing.
+That mapping is now implemented and checked against Lucent's own closes (4.3.19).
 
 **112 of 168 filings were refused, and that is mostly a finding rather than a failure.**
 Sixty-eight refusals read "Item 5 / financial statements incorporated by reference to annual
@@ -1213,9 +1213,9 @@ Two checks, pinned in `tests/test_issuer_reported_closes.py`:
 - **Band** — the derived price, expressed back in as-traded terms, must lie inside the
   registrant's own reported high/low for that quarter. Outside is *impossible* rather than
   unlikely, which is the structural reject `docs/SUBAGENTS.md` argues for: it needs no
-  second source. **55 quarters across `AN`, `BLS`, `DD`, `GTE` and `T_CORP`; none fails.**
+  second source. **93 quarters across `AN`, `BLS`, `DD`, `GTE`, `LU` and `T_CORP`; none fails.**
 - **Close** — where the registrant also reported the quarter-end close, the figures are
-  compared directly. **15 comparisons; 13 agree within 0.5% and 10 within 0.02%.** The
+  compared directly. **42 comparisons; 38 agree within 0.5%.** The
   widest is `T_CORP` 1994-Q2 at 1.874%, already recorded at 4.3.9: the fund values at its
   own business day while the registrant quotes the composite tape close.
 
@@ -1229,7 +1229,7 @@ two-for-one would put every one of the twelve out by half.
 
 ##### Coverage, and why it stops where it does
 
-Five registrants of nineteen. The shortfall is the refusal rate of 4.3.15 rather than a
+Six registrants of nineteen. The shortfall is the refusal rate of 4.3.15 rather than a
 limit of the method: the check needs an issuer-reported band, and for fourteen registrants
 no such table was recovered, mostly because a 1990s 10-K incorporates Item 5 by reference to
 a shareholder report filed separately. `RD` and `NT` file 20-F and 40-F and were never
@@ -1239,6 +1239,20 @@ registrants, so recovering one is a visible change rather than a silent improvem
 `MCIC`'s truncated split quotation — #84's other listed item — was resolved under #76 and is
 recorded at the end of 4.3.15; `splits.json` carries the complete sentence and the confirmed
 1999-12-30 distribution date.
+
+##### What this check cannot do, and what replaced it for that
+
+**A band cannot detect a split missing from `splits.json`.** The derived price is the filed
+price divided by the recorded factor, and the comparison multiplies the same factor back in,
+so an incomplete record cancels from both sides and the band still passes. BellSouth's
+missing 1995 two-for-one passed its 1994 and 1996 bands for exactly this reason. The
+`T_CORP` test at 4.3.9 does not share the weakness only because it pins `1.5 x 0.2` as a
+literal rather than reading it from the record.
+
+So the band check earns its keep on a narrower claim than #84 assumed: it confirms that the
+figure was read from the right row of the right table for the right period. That is the
+failure mode 4.3.15 exists to catch, and it is worth checking. **Split completeness needs a
+different comparison, and has one at 4.3.20.**
 
 #### 4.3.18 Wiring the Sourced Dividends Into the Datasets (issue #76)
 
@@ -1254,8 +1268,8 @@ it into `sp500_dividends.json` and `sp500_quarterly_dividends.json`.
 | `vendor` | `RD` and `SBC`, via `SHEL` and `T` | vendor — the grade every row in `sp500_dividends.json` already carries |
 | `sourced_zero` | `AOL`, `DELL`, `EMC`, `MCIC`, `SUNW` | filing-quoted, date-bounded |
 
-**Twelve of the nineteen now carry a series.** Seven remain unknown: `GM`, `LU`, `MOB`,
-`MOT`, `NT`, `TYC` and `VIA`. None is zero-filled.
+**Thirteen of the nineteen now carry a series.** Six remain unknown: `GM`, `MOB`, `MOT`,
+`NT`, `TYC` and `VIA`. None is zero-filled.
 
 ##### The basis conversion, confirmed by AT&T rather than assumed
 
@@ -1296,6 +1310,10 @@ to +0.056pp**. The `world` universe holds none of these constituents and cannot 
 | Top 3 | 13.7223 → **13.7665** (+0.044) | 13.5955 → **13.6016** (+0.006) |
 | Top 5 | 12.9566 → **13.0065** (+0.050) | 12.6572 → **12.6680** (+0.011) |
 | Top 10 | 12.1189 → **12.1749** (+0.056) | 12.7970 → **12.8356** (+0.039) |
+
+*These are the figures as this change measured them. Sourcing Lucent and correcting
+BellSouth's split (4.3.19, 4.3.20) has since raised the market-cap cells by a further
+0.0003-0.0006pp and moved the momentum cells materially; the claim below is unaffected.*
 
 Regenerate with `python3 run_backtest.py --compare-frequencies`. The **claim** these figures
 carry — that the effect is positive at every depth and under 0.1pp — is what
@@ -1345,9 +1363,105 @@ thirteen, including every registrant whose quarters 4.3.15 published except `T_C
 never held at all. So the 64-quarter dataset touches exactly one constituent that can move a
 published figure, and `AOL` and `MCIC` are sourced zeros that move nothing by construction.
 
-Two of the six are not yet wired. `LU` needs the fiscal-to-calendar mapping described in
-4.3.15 and holds 5 of the 23 Top-10 ticker-quarters; `VIA` is never selected, so its 2003–05
-dividends would move nothing and are left to a later pass.
+`LU` is now wired through the fiscal mapping of 4.3.19. `VIA` remains unwired: it is never
+selected, so its 2003–05 dividends would move nothing.
+
+#### 4.3.19 Reading a Registrant Whose Fiscal Year Is Not the Calendar Year (issue #76)
+
+#76 recorded `LU` as the one constituent whose dividends were unrecoverable. That was wrong,
+and the way it was wrong is worth keeping: **Lucent's figures were always in its filings, in
+columns the extractor was reading as something they are not.** Lucent's year ends September
+30, so its "FIRST SECOND THIRD FOURTH" columns are fiscal quarters, and its first one covers
+October to December of the *preceding* calendar year.
+
+`extract_fiscal_quarters_from_text` reads these tables and maps them. Three properties make
+it safe to trust:
+
+- **The year end is read, not assumed.** The mapping keys off the table's own caption --
+  `Year Ended September 30, 1999` -- rather than off the filing date, so a registrant that
+  changes its fiscal year cannot be silently mis-mapped.
+- **An unalignable year is refused.** Dell's year ends January 31; no calendar quarter
+  corresponds to any of its fiscal quarters, so `fiscal_quarter_to_calendar` returns nothing
+  rather than a wrong answer. Only a year end on a calendar quarter boundary is mapped.
+- **The gate is the fiscal year's own total.** The four quarterly figures must sum to the
+  total stated in the same row, which is the rule 4.3.15 already applies. The calendar-year
+  gate is explicitly *not* applied to these rows: Lucent's calendar 1999 and fiscal 1999
+  overlap by three quarters, and their sums agreeing is a coincidence of a repeating payout
+  rather than a reconciliation.
+
+##### The mapping is checked against Lucent's own closes
+
+The fiscal table reports quarter-end closes as well as dividends, so the mapping is testable
+rather than merely argued. Under it, two of the four FY1999 quarters reproduce the derived
+price **to the cent**; under the naive reading -- fiscal `Qn` as calendar `Qn` -- the same
+comparisons are out by −3.8%, +15.3% and +24.9%.
+
+| FY1999 column | Mapped to | Filed close | Derived | Delta |
+|---|---|---:|---:|---:|
+| Third | 1999-Q2 | \$67.4375 | \$67.4375 | 0.000% |
+| Fourth | 1999-Q3 | \$64.8750 | \$64.8750 | 0.000% |
+
+The other two quarters agree to 0.06% once expressed in the filing's own share terms: the
+FY1999 report post-dates Lucent's April 1999 two-for-one and restates the quarters before it.
+
+##### Two filings, one fiscal year, and a decisive cross-check
+
+The FY1998 report and the FY1999 report both state fiscal 1998. Filed on opposite sides of
+the April 1999 split, they disagree by exactly two on **every** figure -- dividends `0.075`
+against `0.0375`, high `108.50` against `54.25`, close `69.25` against `34.625`. That is the
+split record confirming itself, and it is the same comparison generalised at 4.3.20.
+
+`LU` contributes 20 quarters spanning 1996–2000 and is the sixth registrant to reach the
+price check of 4.3.17.
+
+#### 4.3.20 A Second Missing Split, and the Check That Finds Them (issue #84)
+
+`BLS` was missing a **two-for-one stock split of 1995-11-08**, stated plainly in BellSouth's
+own FY1995 Form 10-K (`0000912057-96-003316`):
+
+> In September 1995, BellSouth's Board of Directors approved a two-for-one stock split
+> effected in the form of a stock dividend, whereby each shareholder of record as of
+> October 11, 1995 received on November 8, 1995 one additional share of common stock for
+> each share owned as of the record date.
+
+Every `BLS` price before that date read twice too high relative to the rest of its series.
+The correction moves BellSouth's 1995 total return from **−20% to +61%**, which is not a
+rounding matter: a momentum book now buys `BLS` in 1995, 1995-Q4 and 1996-Q2, where the
+uncorrected series made it a loser no momentum selector would touch.
+
+##### It was found in the dividend column, because the price check is blind to it
+
+The bands of 4.3.17 pass `BLS` in both 1994 and 1996, and always would have: each band is
+compared at its own date, where the recorded factor divides out of the derived price and
+multiplies back in. What gave it away was the **dividend**: BellSouth reports `$.69` a
+quarter for 1992–94 and `$.36` for 1996. No dividend cut explains a halving, and
+`0.69 / 2 = 0.345 → 0.36` is an ordinary increase.
+
+##### The generalised check: one quarter, two filings
+
+A later filing restates a period for every corporate action since the earlier one, so **the
+ratio between two filings' views of one quarter IS the product of those actions**. That is
+checkable against `splits.json` with no second source, and it has no blind spot where the
+band check has one. The extractor therefore keeps **every** filing's view of a period
+(`observations_by_filing`) rather than the first.
+
+The discriminator against a mis-read cell is that a corporate action rescales *every*
+per-share figure by the same factor, while a wrong-cell read disagrees with itself. A pair
+counts only where at least two of dividend, high, low and close agree on the ratio to within
+1%. BellSouth's 1994-Q1 is the archetype:
+
+| Field | FY1994 report | FY1995 report | Ratio |
+|---|---:|---:|---:|
+| Dividends declared | \$0.69 | \$0.345 | 2.000 |
+| High | \$61.500 | \$30.750 | 2.000 |
+| Low | \$53.000 | \$26.500 | 2.000 |
+
+Three fields, one factor, and nothing in the record to explain it.
+
+**Applied across all nineteen registrants: 160 self-consistent cross-filing pairs, and with
+the 1995 split recorded, zero unexplained.** `tests/test_split_completeness` pins both that
+result and a negative control -- removing the 1995 record must make the check fire at a
+ratio of two -- because a check that cannot fail is not evidence.
 
 ## 5. Major Corporate Actions & Adjustments Log
 

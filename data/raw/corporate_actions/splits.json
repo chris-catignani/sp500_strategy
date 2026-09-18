@@ -64,11 +64,19 @@
       "quoted_sentence": "The market price and dividend information listed below has been adjusted for the two-for-one stock split effective in December 1998.",
       "splits": [
         {
+          "effective_date": "1995-11-08",
+          "ratio": 2.0,
+          "accession_number": "0000912057-96-003316",
+          "form": "10-K",
+          "quoted_sentence": "In September 1995, BellSouth's Board of Directors approved a two-for-one stock split effected in the form of a stock dividend, whereby each shareholder of record as of October 11, 1995 received on November 8, 1995 one additional share of common stock for each share owned as of the record date."
+        },
+        {
           "effective_date": "1998-12-31",
           "ratio": 2.0
         }
       ],
-      "note": "December effective date sits at a year boundary; validated against the observed series."
+      "note": "Two splits from two filings, so the 1995 record carries its own accession and sentence while the 1998 split is the one the record-level quotation states. The 1995 two-for-one was MISSING until issue #84: without it every price before 1995-11-08 read twice too high relative to the rest of the series. The price bands of 4.3.17 cannot catch this class of defect on their own -- each band is compared at its own date, where the recorded factor cancels out of both sides -- so it was found in the DIVIDEND column instead: BellSouth reports $.69 a quarter for 1992-94 and $.36 for 1996, a halving no dividend cut explains. The effective date is the distribution date, following the SBC and MCIC precedent; the record date was October 11, 1995.",
+      "source_type": "filing_quoted"
     },
     "COP": {
       "company": "ConocoPhillips",

@@ -4,7 +4,7 @@
   "generated_by": "scripts/derive_issuer_dividend_series.py",
   "metadata": {
     "pinned_reads_refused": [],
-    "quarters_from_issuer_tables": 64,
+    "quarters_from_issuer_tables": 120,
     "quarters_from_pinned_reads": 12,
     "quarters_from_vendor": 58,
     "sourced_zero_tickers": [
@@ -20,6 +20,7 @@
       "BLS",
       "DD",
       "GTE",
+      "LU",
       "RD",
       "SBC",
       "T_CORP"
@@ -28,6 +29,18 @@
   "series_by_ticker": {
     "AN": {
       "annual": {
+        "1995": {
+          "dividend_per_share": 1.2,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "1996": {
+          "dividend_per_share": 1.3,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
         "1997": {
           "dividend_per_share": 1.4,
           "grade": "filing_quoted",
@@ -37,6 +50,86 @@
       },
       "notes": [],
       "quarterly": {
+        "1995-Q1": {
+          "accession_number": "0000093397-96-000002",
+          "as_filed": 0.6,
+          "audited": false,
+          "dividend_per_share": 0.3,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1996-03-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1995-Q2": {
+          "accession_number": "0000093397-96-000002",
+          "as_filed": 0.6,
+          "audited": false,
+          "dividend_per_share": 0.3,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1996-03-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1995-Q3": {
+          "accession_number": "0000093397-96-000002",
+          "as_filed": 0.6,
+          "audited": false,
+          "dividend_per_share": 0.3,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1996-03-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1995-Q4": {
+          "accession_number": "0000093397-96-000002",
+          "as_filed": 0.6,
+          "audited": false,
+          "dividend_per_share": 0.3,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1996-03-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1996-Q1": {
+          "accession_number": "0000093397-97-000001",
+          "as_filed": 0.65,
+          "audited": false,
+          "dividend_per_share": 0.325,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1997-03-21",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1996-Q2": {
+          "accession_number": "0000093397-97-000001",
+          "as_filed": 0.65,
+          "audited": false,
+          "dividend_per_share": 0.325,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1997-03-21",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1996-Q3": {
+          "accession_number": "0000093397-97-000001",
+          "as_filed": 0.65,
+          "audited": false,
+          "dividend_per_share": 0.325,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1997-03-21",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1996-Q4": {
+          "accession_number": "0000093397-97-000001",
+          "as_filed": 0.65,
+          "audited": false,
+          "dividend_per_share": 0.325,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1997-03-21",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
         "1997-Q1": {
           "accession_number": "0000093397-98-000003",
           "as_filed": 0.7,
@@ -109,6 +202,24 @@
     },
     "BLS": {
       "annual": {
+        "1992": {
+          "dividend_per_share": 0.69,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "1993": {
+          "dividend_per_share": 0.69,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "1994": {
+          "dividend_per_share": 0.69,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
         "1996": {
           "dividend_per_share": 0.72,
           "grade": "filing_quoted",
@@ -124,6 +235,126 @@
       },
       "notes": [],
       "quarterly": {
+        "1992-Q1": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1992-Q2": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1992-Q3": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1992-Q4": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1993-Q1": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1993-Q2": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1993-Q3": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1993-Q4": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1994-Q1": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1994-Q2": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1994-Q3": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1994-Q4": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed": 0.69,
+          "audited": false,
+          "dividend_per_share": 0.1725,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1995-03-08",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
         "1996-Q1": {
           "accession_number": "0000912057-97-007016",
           "as_filed": 0.36,
@@ -743,6 +974,244 @@
           "dividend_per_share": 0.47,
           "filing_basis_factor": 1.0,
           "filing_date": "2000-03-30",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        }
+      },
+      "sourced_zero": null
+    },
+    "LU": {
+      "annual": {
+        "1996": {
+          "dividend_per_share": 0.05625,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "1997": {
+          "dividend_per_share": 0.075,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "1998": {
+          "dividend_per_share": 0.08,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "1999": {
+          "dividend_per_share": 0.08,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "2000": {
+          "dividend_per_share": 0.06,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        }
+      },
+      "notes": [],
+      "quarterly": {
+        "1996-Q1": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed": 0.0,
+          "audited": false,
+          "dividend_per_share": 0.0,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1997-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1996-Q2": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed": 0.075,
+          "audited": false,
+          "dividend_per_share": 0.01875,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1997-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1996-Q3": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed": 0.075,
+          "audited": false,
+          "dividend_per_share": 0.01875,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1997-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1996-Q4": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed": 0.075,
+          "audited": false,
+          "dividend_per_share": 0.01875,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1997-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1997-Q1": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed": 0.0,
+          "audited": false,
+          "dividend_per_share": 0.0,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1997-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1997-Q2": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed": 0.075,
+          "audited": false,
+          "dividend_per_share": 0.01875,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1997-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1997-Q3": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed": 0.075,
+          "audited": false,
+          "dividend_per_share": 0.01875,
+          "filing_basis_factor": 4.0,
+          "filing_date": "1997-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1997-Q4": {
+          "accession_number": "0000950123-98-010816",
+          "as_filed": 0.075,
+          "audited": false,
+          "dividend_per_share": 0.0375,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1998-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1998-Q1": {
+          "accession_number": "0000950123-98-010816",
+          "as_filed": 0.0,
+          "audited": false,
+          "dividend_per_share": 0.0,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1998-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1998-Q2": {
+          "accession_number": "0000950123-98-010816",
+          "as_filed": 0.04,
+          "audited": false,
+          "dividend_per_share": 0.02,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1998-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1998-Q3": {
+          "accession_number": "0000950123-98-010816",
+          "as_filed": 0.04,
+          "audited": false,
+          "dividend_per_share": 0.02,
+          "filing_basis_factor": 2.0,
+          "filing_date": "1998-12-22",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1998-Q4": {
+          "accession_number": "0000950123-99-011082",
+          "as_filed": 0.04,
+          "audited": false,
+          "dividend_per_share": 0.04,
+          "filing_basis_factor": 1.0,
+          "filing_date": "1999-12-21",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1999-Q1": {
+          "accession_number": "0000950123-99-011082",
+          "as_filed": 0.0,
+          "audited": false,
+          "dividend_per_share": 0.0,
+          "filing_basis_factor": 1.0,
+          "filing_date": "1999-12-21",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1999-Q2": {
+          "accession_number": "0000950123-99-011082",
+          "as_filed": 0.02,
+          "audited": false,
+          "dividend_per_share": 0.02,
+          "filing_basis_factor": 1.0,
+          "filing_date": "1999-12-21",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1999-Q3": {
+          "accession_number": "0000950123-99-011082",
+          "as_filed": 0.02,
+          "audited": false,
+          "dividend_per_share": 0.02,
+          "filing_basis_factor": 1.0,
+          "filing_date": "1999-12-21",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1999-Q4": {
+          "accession_number": "0000950123-00-011855",
+          "as_filed": 0.04,
+          "audited": false,
+          "dividend_per_share": 0.04,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2000-12-27",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2000-Q1": {
+          "accession_number": "0000950123-00-011855",
+          "as_filed": 0.0,
+          "audited": false,
+          "dividend_per_share": 0.0,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2000-12-27",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2000-Q2": {
+          "accession_number": "0000950123-00-011855",
+          "as_filed": 0.02,
+          "audited": false,
+          "dividend_per_share": 0.02,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2000-12-27",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2000-Q3": {
+          "accession_number": "0000950123-00-011855",
+          "as_filed": 0.02,
+          "audited": false,
+          "dividend_per_share": 0.02,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2000-12-27",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2000-Q4": {
+          "accession_number": "0000950117-01-501896",
+          "as_filed": 0.02,
+          "audited": false,
+          "dividend_per_share": 0.02,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2001-12-28",
           "grade": "filing_quoted",
           "route": "issuer_table"
         }
@@ -1410,8 +1879,32 @@
           "grade": "filing_quoted",
           "route": "issuer_pinned"
         },
+        "1999": {
+          "dividend_per_share": 4.4,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "2000": {
+          "dividend_per_share": 3.4875,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "2001": {
+          "dividend_per_share": 0.75,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
         "2003": {
           "dividend_per_share": 0.85,
+          "grade": "filing_quoted",
+          "quarters_summed": 4,
+          "route": "issuer_table"
+        },
+        "2004": {
+          "dividend_per_share": 0.95,
           "grade": "filing_quoted",
           "quarters_summed": 4,
           "route": "issuer_table"
@@ -1643,6 +2136,126 @@
           "quoted_line": "Dividends declared .33 .33 .33 .33",
           "route": "issuer_pinned"
         },
+        "1999-Q1": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed": 0.22,
+          "audited": false,
+          "dividend_per_share": 1.1,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2001-04-02",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1999-Q2": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed": 0.22,
+          "audited": false,
+          "dividend_per_share": 1.1,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2001-04-02",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1999-Q3": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed": 0.22,
+          "audited": false,
+          "dividend_per_share": 1.1,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2001-04-02",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "1999-Q4": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed": 0.22,
+          "audited": false,
+          "dividend_per_share": 1.1,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2001-04-02",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2000-Q1": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed": 0.22,
+          "audited": false,
+          "dividend_per_share": 1.1,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2001-04-02",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2000-Q2": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed": 0.22,
+          "audited": false,
+          "dividend_per_share": 1.1,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2001-04-02",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2000-Q3": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed": 0.22,
+          "audited": false,
+          "dividend_per_share": 1.1,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2001-04-02",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2000-Q4": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed": 0.0375,
+          "audited": false,
+          "dividend_per_share": 0.1875,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2001-04-02",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2001-Q1": {
+          "accession_number": "0000950123-02-003272",
+          "as_filed": 0.0375,
+          "audited": false,
+          "dividend_per_share": 0.1875,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2002-04-01",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2001-Q2": {
+          "accession_number": "0000950123-02-003272",
+          "as_filed": 0.0375,
+          "audited": false,
+          "dividend_per_share": 0.1875,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2002-04-01",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2001-Q3": {
+          "accession_number": "0000950123-02-003272",
+          "as_filed": 0.0375,
+          "audited": false,
+          "dividend_per_share": 0.1875,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2002-04-01",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2001-Q4": {
+          "accession_number": "0000950123-02-003272",
+          "as_filed": 0.0375,
+          "audited": false,
+          "dividend_per_share": 0.1875,
+          "filing_basis_factor": 0.2,
+          "filing_date": "2002-04-01",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
         "2003-Q1": {
           "accession_number": "0000950123-04-003304",
           "as_filed": 0.1875,
@@ -1680,6 +2293,46 @@
           "dividend_per_share": 0.2375,
           "filing_basis_factor": 1.0,
           "filing_date": "2004-03-15",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2004-Q1": {
+          "accession_number": "0000950123-05-002878",
+          "as_filed": 0.2375,
+          "audited": false,
+          "dividend_per_share": 0.2375,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2005-03-10",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2004-Q2": {
+          "accession_number": "0000950123-05-002878",
+          "as_filed": 0.2375,
+          "audited": false,
+          "dividend_per_share": 0.2375,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2005-03-10",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2004-Q3": {
+          "accession_number": "0000950123-05-002878",
+          "as_filed": 0.2375,
+          "audited": false,
+          "dividend_per_share": 0.2375,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2005-03-10",
+          "grade": "filing_quoted",
+          "route": "issuer_table"
+        },
+        "2004-Q4": {
+          "accession_number": "0000950123-05-002878",
+          "as_filed": 0.2375,
+          "audited": false,
+          "dividend_per_share": 0.2375,
+          "filing_basis_factor": 1.0,
+          "filing_date": "2005-03-10",
           "grade": "filing_quoted",
           "route": "issuer_table"
         }
