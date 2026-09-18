@@ -404,7 +404,7 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2014,3,MSFT,Microsoft Corporation,0.0250,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
 2014,4,BRK.B,Berkshire Hathaway Inc.,0.0230,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
 2014,5,JNJ,Johnson & Johnson,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
-2014,6,GOOGL,Alphabet Inc.,0.0200,Official Factsheet Anchor (Share-Class Composition Unverified),W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014; UNVERIFIED - Alphabet Class A/C composition of this weight is undetermined and it may understate the consolidated issuer weight; see docs/DATA_PROVENANCE.md 4.3.8
+2014,6,GOOGL,Alphabet Inc.,0.0200,"Official Factsheet Anchor (Consolidated Class A + C, Share-Class Basis Sourced)",W_factsheet,0.0130,,,"S&P Dow Jones Indices Year-End Factsheet 2014; share-class basis established against Vanguard Index Trust Form N-CSR (Accession 0000932471-15-005659, Period 2014-12-31), 500 Index Fund Schedule of Investments, which reports Alphabet Class A and Class C as separate positions. The anchor already covers both classes and is unchanged; see docs/DATA_PROVENANCE.md 4.3.21"
 2014,7,WFC,Wells Fargo & Company,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
 2014,8,JPM,JPMorgan Chase & Co.,0.0170,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
 2014,9,PG,Procter & Gamble Co.,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2014
@@ -421,13 +421,13 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2014,20,C,Citigroup Inc.,0.0099,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0130,,,UNVERIFIED - no point-in-time filing archived for 2014 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2015,1,AAPL,Apple Inc.,0.0350,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
 2015,2,MSFT,Microsoft Corporation,0.0280,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
-2015,3,XOM,Exxon Mobil Corporation,0.0220,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
-2015,4,AMZN,Amazon.com Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
-2015,5,META,Meta Platforms Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
-2015,6,BRK.B,Berkshire Hathaway Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
-2015,7,JNJ,Johnson & Johnson,0.0160,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
-2015,8,GE,General Electric Company,0.0150,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
-2015,9,GOOGL,Alphabet Inc.,0.0140,Official Factsheet Anchor (Share-Class Composition Unverified),W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015; UNVERIFIED - Alphabet Class A/C composition of this weight is undetermined and it may understate the consolidated issuer weight; see docs/DATA_PROVENANCE.md 4.3.8
+2015,3,GOOGL,Alphabet Inc.,0.0279,"Official Factsheet Anchor x Filed Consolidation Ratio (Class A Anchor, Class A + C Weight)",W_factsheet_ClassA * (V_ClassA + V_ClassC) / V_ClassA,0.0110,,,"S&P Dow Jones Indices Year-End Factsheet 2015 (Class A only) x 1.99487, the (Class A + Class C) / Class A market-value ratio stated in Vanguard Index Trust Form N-CSR (Accession 0000932471-16-012795, Period 2015-12-31), 500 Index Fund Schedule of Investments; see docs/DATA_PROVENANCE.md 4.3.21"
+2015,4,XOM,Exxon Mobil Corporation,0.0220,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,5,AMZN,Amazon.com Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,6,META,Meta Platforms Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,7,BRK.B,Berkshire Hathaway Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,8,JNJ,Johnson & Johnson,0.0160,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
+2015,9,GE,General Electric Company,0.0150,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
 2015,10,JPM,JPMorgan Chase & Co.,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
 2015,11,WFC,Wells Fargo & Company,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
 2015,12,PG,Procter & Gamble Co.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2015
@@ -440,14 +440,14 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2015,19,DIS,The Walt Disney Company,0.0097,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2015,20,CVX,Chevron Corporation,0.0095,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2015 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2016,1,AAPL,Apple Inc.,0.0340,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,2,MSFT,Microsoft Corporation,0.0270,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,3,AMZN,Amazon.com Inc.,0.0200,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,4,XOM,Exxon Mobil Corporation,0.0190,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,5,META,Meta Platforms Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,6,BRK.B,Berkshire Hathaway Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,7,JNJ,Johnson & Johnson,0.0160,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,8,JPM,JPMorgan Chase & Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
-2016,9,GOOGL,Alphabet Inc.,0.0140,Official Factsheet Anchor (Share-Class Composition Unverified),W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016; UNVERIFIED - Alphabet Class A/C composition of this weight is undetermined and it may understate the consolidated issuer weight; see docs/DATA_PROVENANCE.md 4.3.8
+2016,2,GOOGL,Alphabet Inc.,0.0277,"Official Factsheet Anchor x Filed Consolidation Ratio (Class A Anchor, Class A + C Weight)",W_factsheet_ClassA * (V_ClassA + V_ClassC) / V_ClassA,0.0110,,,"S&P Dow Jones Indices Year-End Factsheet 2016 (Class A only) x 1.97619, the (Class A + Class C) / Class A market-value ratio stated in Vanguard Index Trust Form N-CSR (Accession 0000932471-17-003352, Period 2016-12-31), 500 Index Fund Schedule of Investments; see docs/DATA_PROVENANCE.md 4.3.21"
+2016,3,MSFT,Microsoft Corporation,0.0270,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,4,AMZN,Amazon.com Inc.,0.0200,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,5,XOM,Exxon Mobil Corporation,0.0190,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,6,META,Meta Platforms Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,7,BRK.B,Berkshire Hathaway Inc.,0.0170,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,8,JNJ,Johnson & Johnson,0.0160,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
+2016,9,JPM,JPMorgan Chase & Co.,0.0150,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
 2016,10,GE,General Electric Company,0.0130,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
 2016,11,WFC,Wells Fargo & Company,0.0120,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
 2016,12,T,AT&T Inc.,0.0110,Official Factsheet Anchor,W_factsheet,0.0110,,,S&P Dow Jones Indices Year-End Factsheet 2016
@@ -460,13 +460,13 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2016,19,V,Visa Inc.,0.0088,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2016,20,KO,The Coca-Cola Company,0.0085,Unverified Estimate (No Primary Source),"N/A - estimated, not derived",0.0110,,,UNVERIFIED - no point-in-time filing archived for 2016 ranks #13-#20; see docs/DATA_PROVENANCE.md 4.3.5
 2017,1,AAPL,Apple Inc.,0.0370,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
-2017,2,MSFT,Microsoft Corporation,0.0310,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
-2017,3,AMZN,Amazon.com Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
-2017,4,META,Meta Platforms Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
-2017,5,BRK.B,Berkshire Hathaway Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
-2017,6,JNJ,Johnson & Johnson,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
-2017,7,JPM,JPMorgan Chase & Co.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
-2017,8,GOOGL,Alphabet Inc.,0.0170,Official Factsheet Anchor (Share-Class Composition Unverified),W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017; UNVERIFIED - Alphabet Class A/C composition of this weight is undetermined and it may understate the consolidated issuer weight; see docs/DATA_PROVENANCE.md 4.3.8
+2017,2,GOOGL,Alphabet Inc.,0.0341,"Official Factsheet Anchor x Filed Consolidation Ratio (Class A Anchor, Class A + C Weight)",W_factsheet_ClassA * (V_ClassA + V_ClassC) / V_ClassA,0.0130,,,"S&P Dow Jones Indices Year-End Factsheet 2017 (Class A only) x 2.00603, the (Class A + Class C) / Class A market-value ratio stated in Vanguard Index Trust Form N-CSR (Accession 0000932471-18-005288, Period 2017-12-31), 500 Index Fund Schedule of Investments; see docs/DATA_PROVENANCE.md 4.3.21"
+2017,3,MSFT,Microsoft Corporation,0.0310,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,4,AMZN,Amazon.com Inc.,0.0260,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,5,META,Meta Platforms Inc.,0.0220,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,6,BRK.B,Berkshire Hathaway Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,7,JNJ,Johnson & Johnson,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
+2017,8,JPM,JPMorgan Chase & Co.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
 2017,9,XOM,Exxon Mobil Corporation,0.0160,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
 2017,10,BAC,Bank of America Corporation,0.0150,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
 2017,11,V,Visa Inc.,0.0140,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2017
@@ -482,7 +482,7 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2018,1,MSFT,Microsoft Corporation,0.0410,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
 2018,2,AAPL,Apple Inc.,0.0380,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
 2018,3,AMZN,Amazon.com Inc.,0.0360,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
-2018,4,GOOGL,Alphabet Inc.,0.0320,Official Factsheet Anchor (Share-Class Composition Unverified),W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018; UNVERIFIED - Alphabet Class A/C composition of this weight is undetermined and it may understate the consolidated issuer weight; see docs/DATA_PROVENANCE.md 4.3.8
+2018,4,GOOGL,Alphabet Inc.,0.0320,"Official Factsheet Anchor (Consolidated Class A + C, Share-Class Basis Sourced)",W_factsheet,0.0130,,,"S&P Dow Jones Indices Year-End Factsheet 2018; share-class basis established against Vanguard Index Trust Form N-CSR (Accession 0001104659-19-011820, Period 2018-12-31), 500 Index Fund Schedule of Investments, which reports Alphabet Class A and Class C as separate positions. The anchor already covers both classes and is unchanged; see docs/DATA_PROVENANCE.md 4.3.21"
 2018,5,BRK.B,Berkshire Hathaway Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
 2018,6,JNJ,Johnson & Johnson,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
 2018,7,META,Meta Platforms Inc.,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2018
@@ -503,7 +503,7 @@ year,rank,ticker,company_name,weight,methodology,formula,rank_12_anchor_weight,u
 2019,2,MSFT,Microsoft Corporation,0.0460,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
 2019,3,AMZN,Amazon.com Inc.,0.0320,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
 2019,4,META,Meta Platforms Inc.,0.0280,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
-2019,5,GOOGL,Alphabet Inc.,0.0270,Official Factsheet Anchor (Share-Class Composition Unverified),W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019; UNVERIFIED - Alphabet Class A/C composition of this weight is undetermined and it may understate the consolidated issuer weight; see docs/DATA_PROVENANCE.md 4.3.8
+2019,5,GOOGL,Alphabet Inc.,0.0270,"Official Factsheet Anchor (Consolidated Class A + C, Share-Class Basis Sourced)",W_factsheet,0.0130,,,"S&P Dow Jones Indices Year-End Factsheet 2019; share-class basis established against Vanguard Index Trust Form N-CSR (Accession 0001104659-20-027799, Period 2019-12-31), 500 Index Fund Schedule of Investments, which reports Alphabet Class A and Class C as separate positions. The anchor already covers both classes and is unchanged; see docs/DATA_PROVENANCE.md 4.3.21"
 2019,6,BRK.B,Berkshire Hathaway Inc.,0.0210,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
 2019,7,JPM,JPMorgan Chase & Co.,0.0190,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019
 2019,8,JNJ,Johnson & Johnson,0.0180,Official Factsheet Anchor,W_factsheet,0.0130,,,S&P Dow Jones Indices Year-End Factsheet 2019

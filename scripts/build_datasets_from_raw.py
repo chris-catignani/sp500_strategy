@@ -250,24 +250,28 @@ def _apply_audited_rosters():
     replaced = {}
     for year_key, roster in rosters.items():
         year = int(year_key)
-        tickers, weights = [], []
+
+        # A dual-class issuer is filed as two positions, and its enterprise weight is the
+        # sum of them (4.3.8). Taking the larger line and dropping the other -- which is
+        # what this loop used to do -- halves the issuer and drops it in the ranking: it
+        # put Alphabet at rank 20 in 2014 on its Class A weight alone, when consolidated
+        # it ranks 8th. That is the same understatement issue #45 was opened about,
+        # arriving through the dataset builder instead of through the committed anchors.
+        consolidated = {}
         for holding in roster["holdings"]:
             if holding.get("unidentified"):
                 continue
             name = re.sub(r"^[#*^\s]+", "", holding["name"]).strip().rstrip(".").strip()
             ticker = issuer_map.get(name)
-            # A dual-class issuer appears twice; the first occurrence is the larger line
-            # and the convention is to route through one class (4.3.8).
-            if ticker is None or ticker in tickers:
+            if ticker is None:
                 continue
-            tickers.append(ticker)
-            weights.append(holding["weight"])
-            if len(tickers) == 20:
-                break
-        if len(tickers) == 20:
-            YEAR_CONSTITUENTS[year] = tickers
-            HISTORICAL_INDEX_WEIGHTS[year] = weights
-            replaced[year] = tickers
+            consolidated[ticker] = consolidated.get(ticker, 0.0) + holding["weight"]
+
+        ranked = sorted(consolidated.items(), key=lambda kv: -kv[1])[:20]
+        if len(ranked) == 20:
+            YEAR_CONSTITUENTS[year] = [t for t, _ in ranked]
+            HISTORICAL_INDEX_WEIGHTS[year] = [round(w, 6) for _, w in ranked]
+            replaced[year] = YEAR_CONSTITUENTS[year]
     return replaced
 
 

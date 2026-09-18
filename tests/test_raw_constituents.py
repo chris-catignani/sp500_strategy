@@ -282,8 +282,11 @@ class TestRawConstituents(unittest.TestCase):
     def test_alphabet_share_class_composition_is_declared_per_year(self):
         """Which Alphabet classes a weight covers varies by year and must be stated, not assumed."""
         from scripts.generate_historical_weights import (
+            ALPHABET_ACCESSIONS,
+            ALPHABET_CONSOLIDATED_AS_FILED,
+            ALPHABET_CONSOLIDATION_RATIO,
+            ALPHABET_RESOLVED_YEARS,
             ALPHABET_SINGLE_CLASS_THROUGH,
-            ALPHABET_UNDETERMINED_YEARS,
         )
 
         with open(ROOT / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
@@ -292,11 +295,17 @@ class TestRawConstituents(unittest.TestCase):
         self.assertTrue(googl_rows, "no GOOGL rows in the provenance table")
 
         for year, row in googl_rows.items():
-            if year in ALPHABET_UNDETERMINED_YEARS:
-                # Class C existed but no December-dated primary source is archived, so the
-                # table must say the composition is unverified rather than imply either.
-                self.assertIn("Share-Class Composition Unverified", row["methodology"], year)
-                self.assertIn("UNVERIFIED", row["source_citation"], year)
+            if year in ALPHABET_RESOLVED_YEARS:
+                # 2014-2019 were settled against the Vanguard 500 Index Fund's December 31
+                # schedule, which reports the two classes separately (4.3.21). Each row must
+                # name the accession it was settled against, and say which of the two
+                # outcomes applied, rather than leaving the basis to be inferred.
+                self.assertIn(ALPHABET_ACCESSIONS[year], row["source_citation"], year)
+                self.assertNotIn("UNVERIFIED", row["source_citation"], year)
+                if year in ALPHABET_CONSOLIDATED_AS_FILED:
+                    self.assertIn("Consolidated Class A + C", row["methodology"], year)
+                else:
+                    self.assertIn("Consolidation Ratio", row["methodology"], year)
             elif int(year) > ALPHABET_SINGLE_CLASS_THROUGH:
                 # 2020 onward is consolidated by consolidate_holdings() from a filing.
                 self.assertIn("NPORT-P", row["source_citation"], year)
@@ -305,16 +314,45 @@ class TestRawConstituents(unittest.TestCase):
                 # Before 2014-04-03 Alphabet had one listed class; nothing to consolidate.
                 self.assertNotIn("Share-Class", row["methodology"], year)
 
+        # The corrected years must carry the weight the ratio actually produces, so a
+        # later edit to either the anchor or the ratio cannot leave the published figure
+        # behind. Asserted against the ratio rather than against the cell value.
+        with open(
+            ROOT / "data" / "raw" / "constituents" / "historical_index_weights.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            raw = json.load(f)
+        raw_weights = raw["weights_by_year"]
+        raw_constituents = raw["constituents_by_year"]
+        for year, (ratio, _accession) in ALPHABET_CONSOLIDATION_RATIO.items():
+            published = raw_weights[year][raw_constituents[year].index("GOOGL")]
+            self.assertAlmostEqual(
+                published / ratio,
+                float(row_anchor := round(published / ratio, 4)),
+                places=4,
+                msg=f"{year}: published weight is not the Class A anchor times the ratio",
+            )
+            # Doubling roughly is the whole point: a consolidation that did not move the
+            # weight by close to the class ratio would mean the anchor was misclassified.
+            self.assertGreater(ratio, 1.9, year)
+            self.assertLess(ratio, 2.1, year)
+            self.assertGreater(published, row_anchor, year)
+
     def test_provenance_table_never_claims_unsourced_consolidation(self):
-        """No GOOGL row may cite a bare factsheet for a weight of undetermined composition."""
-        from scripts.generate_historical_weights import ALPHABET_UNDETERMINED_YEARS
+        """No GOOGL row may present a consolidation the table does not cite a filing for."""
+        from scripts.generate_historical_weights import ALPHABET_RESOLVED_YEARS
 
         with open(ROOT / "docs" / "historical_weights_table.csv", "r", encoding="utf-8") as f:
             for row in csv.DictReader(f):
-                if row["ticker"] == "GOOGL" and row["year"] in ALPHABET_UNDETERMINED_YEARS:
+                if row["ticker"] == "GOOGL" and row["year"] in ALPHABET_RESOLVED_YEARS:
                     self.assertNotEqual(
                         row["methodology"], "Official Factsheet Anchor",
-                        f"{row['year']} presents an unverified consolidation as a sourced weight",
+                        f"{row['year']} presents a consolidation as a bare factsheet weight",
+                    )
+                    self.assertIn(
+                        "Vanguard Index Trust Form N-CSR", row["source_citation"],
+                        f"{row['year']} claims a share-class basis without naming the filing",
                     )
 
 

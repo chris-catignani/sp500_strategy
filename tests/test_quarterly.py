@@ -671,7 +671,18 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         ]
         self.assertEqual(len(oos), 15)
         oos_acc = sum(r["accuracy_pct"] for r in oos) / len(oos)
-        self.assertLess(oos_acc, 96.5)
+        # The upper bound exists to show this metric is not circular: the five Q4 periods
+        # above score exactly 100% because the candidate lists are parsed from those very
+        # filings, and an out-of-sample figure that crept up to meet them would mean the
+        # exclusion had stopped working. It is a bound with headroom, not a pinned value.
+        #
+        # It moved from 96.5 to 98.0 under #45. Consolidating Alphabet's two share classes
+        # into one issuer weight (4.3.8) changed the 2019 year-end roster, and the 2020
+        # quarters drift from it, so the agreement with SPY's own NPORT-P holdings rose
+        # rather than fell. That direction is worth noting: the correction predicts the
+        # filings better than the roster it replaced, which is weak independent support
+        # for it. The gap to 100% is what the assertion protects.
+        self.assertLess(oos_acc, 98.0)
         self.assertGreater(oos_acc, 90.0)
 
     def test_quarterly_constituent_excluded_when_quarter_end_price_missing(self) -> None:

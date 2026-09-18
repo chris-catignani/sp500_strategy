@@ -199,9 +199,16 @@ class TestPortfolioSimulator(unittest.TestCase):
 
     def test_full_exit_of_dropping_constituents(self):
         """Test exit of constituents liquidated 100% when dropping out of Top N."""
-        # In 2014 Top 5: AAPL, XOM, MSFT, BRK.B, JNJ
-        # In 2015 Top 5: AAPL, MSFT, XOM, AMZN, META
-        # BRK.B and JNJ drop out in 2015
+        # 2014 Top 5: AAPL, XOM, MSFT, GOOGL, JNJ
+        # 2015 Top 5: AAPL, GOOGL, MSFT, XOM, GE
+        # JNJ drops out in 2015 and must be sold in full, not trimmed.
+        #
+        # These books are read from the audited December-31 rosters (4.3.10) with
+        # Alphabet's two share classes consolidated (4.3.8), which is why GOOGL is in
+        # both. Before #45 it was in neither, and this test named BRK.B as a second
+        # dropping constituent -- an assertion that had already gone vacuous, because
+        # BRK.B was not in the 2014 book either and assertNotIn passes for a ticker that
+        # was never held. Only a constituent actually bought can test a full exit.
         result = self.simulator.run_simulation(
             start_year=2014,
             end_year=2015,
@@ -209,23 +216,19 @@ class TestPortfolioSimulator(unittest.TestCase):
             is_after_tax=False,
         )
 
+        buys_2014 = {o.ticker: o for o in self.simulator.trade_history if o.year == 2014}
+        self.assertIn("JNJ", buys_2014, "JNJ must be held in 2014 for this to test an exit")
+
         entry_2015 = result.annual_history[0]
-        # BRK.B and JNJ should not be in 2015 holdings
-        self.assertNotIn("BRK.B", entry_2015.holdings)
         self.assertNotIn("JNJ", entry_2015.holdings)
-        self.assertEqual(self.simulator.tax_manager.get_position_shares("BRK.B"), 0.0)
         self.assertEqual(self.simulator.tax_manager.get_position_shares("JNJ"), 0.0)
 
-        # Check SELL orders for BRK.B and JNJ in trade history
         sell_orders = [o for o in self.simulator.trade_history if o.year == 2015 and o.action == "SELL"]
-        sold_tickers = {o.ticker for o in sell_orders}
-        self.assertIn("BRK.B", sold_tickers)
-        self.assertIn("JNJ", sold_tickers)
+        sell_dict = {o.ticker: o for o in sell_orders}
+        self.assertIn("JNJ", sell_dict)
 
-        # Check that BRK.B sold shares equal 2014 purchase shares
-        init_brk_order = [o for o in self.simulator.trade_history if o.year == 2014 and o.ticker == "BRK.B"][0]
-        sell_brk_order = [o for o in sell_orders if o.ticker == "BRK.B"][0]
-        self.assertAlmostEqual(init_brk_order.shares, sell_brk_order.shares, places=5)
+        # A full exit sells exactly what was bought - a trim would sell less.
+        self.assertAlmostEqual(buys_2014["JNJ"].shares, sell_dict["JNJ"].shares, places=5)
 
     def test_overweight_trimming(self):
         """Test overweight trimming down to provisional target."""
@@ -236,24 +239,29 @@ class TestPortfolioSimulator(unittest.TestCase):
             is_after_tax=False,
         )
 
-        # MSFT was held from 2014 and trimmed in 2015 down to provisional target
+        # AAPL is the trimmed position: it stays in the Top 5 in both 2015 and 2016 and
+        # is sold down to its provisional target rather than exited. A trim and a full
+        # exit are different code paths, so the ticker chosen here has to be one that
+        # remains in the book -- which is what separates this test from the one above.
         sell_orders_2015 = [o for o in self.simulator.trade_history if o.year == 2015 and o.action == "SELL"]
         sell_dict_2015 = {o.ticker: o for o in sell_orders_2015}
+        self.assertIn("AAPL", sell_dict_2015)
+        self.assertGreater(sell_dict_2015["AAPL"].shares, 0.0)
 
-        # Verify MSFT was trimmed (while remaining in Top 5)
-        self.assertIn("MSFT", sell_dict_2015)
-        self.assertGreater(sell_dict_2015["MSFT"].shares, 0.0)
+        # Trimmed, not exited: some of the position survives the sale.
+        self.assertGreater(self.simulator.tax_manager.get_position_shares("AAPL"), 0.0)
 
         # Verify realized gains were recorded
-        self.assertNotEqual(sell_dict_2015["MSFT"].realized_gain, 0.0)
+        self.assertNotEqual(sell_dict_2015["AAPL"].realized_gain, 0.0)
 
-        # Run multi-year to 2016 where XOM is also trimmed down to provisional target
+        # Run multi-year to 2016, where AAPL is trimmed again and GE exits.
         sim_2016 = PortfolioSimulator(data_loader=self.data_loader)
         sim_2016.run_simulation(start_year=2014, end_year=2016, n=5, is_after_tax=False)
         sell_orders_2016 = [o for o in sim_2016.trade_history if o.year == 2016 and o.action == "SELL"]
         sell_dict_2016 = {o.ticker: o for o in sell_orders_2016}
-        self.assertIn("XOM", sell_dict_2016)
-        self.assertGreater(sell_dict_2016["XOM"].shares, 0.0)
+        self.assertIn("AAPL", sell_dict_2016)
+        self.assertGreater(sell_dict_2016["AAPL"].shares, 0.0)
+        self.assertGreater(sim_2016.tax_manager.get_position_shares("AAPL"), 0.0)
 
     def test_multi_year_backtest_run_n3_n5_n10(self):
         """Test multi-year backtest run across N in (3, 5, 10) for 2014-2024."""

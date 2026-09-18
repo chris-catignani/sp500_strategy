@@ -323,10 +323,10 @@ Consolidation can only be applied where the underlying source reports each share
 | Years | Source | Share-class basis |
 |---|---|---|
 | 1994–2013 | Year-end factsheet anchors | Single class. Alphabet Class C was created 2014-04-03 by stock dividend; before that date Alphabet had one listed class, so there is nothing to consolidate. |
-| 2014–2019 | Year-end factsheet anchors | **Undetermined.** No December-dated primary source for these years is archived in this repository. |
+| 2014–2019 | Year-end factsheet anchors | **Settled (§4.3.21).** The Vanguard 500 Index Fund's December-31 schedules report both classes; 2014, 2018 and 2019 were already consolidated, and 2015–2017 were Class A only and have been corrected by the ratio the filing states. |
 | 2020–2024 | SPY Form NPORT-P (December) | Consolidated, verified — `consolidate_holdings()` sums both CUSIPs. |
 
-The 2014–2019 rows are the open problem. SPY's archived annual reports (fiscal year end September 30) do carry both Alphabet classes, and they show the two classes at comparable size:
+The 2014–2019 rows **were** the open problem, and §4.3.21 closes them against a December-dated filing. What follows is the September evidence that was available before that, kept because it is what made the gap visible: SPY's archived annual reports (fiscal year end September 30) carry both Alphabet classes, and show them at comparable size.
 
 | Schedule date | Class A | Class C | C/A |
 |---|---|---|---|
@@ -339,11 +339,9 @@ The 2014–2019 rows are the open problem. SPY's archived annual reports (fiscal
 
 *(Source: `data/raw/ground_truth/sec_filings/SPY_{2014_Q4,2015,2016,2017,2018,2019}_N-30D_*.txt`, Schedule of Investments. Note that `SPY_2014_Q4_N-30D_0001193125-14-428689.txt` carries `CONFORMED PERIOD OF REPORT: 20130930` in its SEC header, but every Schedule of Investments page in the document body is dated September 30, 2014; the header value is a filing-agent error and the body date governs.)*
 
-A consolidated Alphabet weight should therefore sit close to twice its Class A weight. The committed 2014–2019 figures match neither multiple consistently — 2019 reads 2.70%, against roughly 1.65% for Class A alone and 3.30% consolidated — so their composition cannot be inferred from the numbers themselves, and the September ratios above cannot be projected onto a December anchor without a December source to check them against.
+A consolidated Alphabet weight should therefore sit close to twice its Class A weight. The committed 2014–2019 figures matched neither multiple consistently — 2019 reads 2.70%, against roughly 1.65% for Class A alone and 3.30% consolidated — so their composition could not be inferred from the numbers themselves, and the September ratios above could not be projected onto a December anchor without a December source to check them against.
 
-Rather than assert a consolidation that is not evidenced, these rows are published as unverified: in [`historical_weights_table.csv`](historical_weights_table.csv) their `methodology` reads `Official Factsheet Anchor (Share-Class Composition Unverified)` and their `source_citation` records that the weight may understate the consolidated issuer weight. Closing the gap requires acquiring a December-dated primary source for 2014–2019 and is tracked in issue #45.
-
-The practical consequence is that Alphabet may be under-ranked in those years. If the committed weights are Class A only, a consolidated Alphabet would enter Top 3 and Top 5 books it is currently excluded from, and reported returns for the affected horizons would change. This is a known limitation of the published 1994–2019 results, not a settled result.
+**The December source was reachable, and reading it settled the question per year.** The gap was never that no such source exists; it was that none was held. §4.3.21 records the six Vanguard filings, the evidence separating a Class A anchor from a consolidated one, the three years that were corrected, and what moved as a result. Alphabet *was* under-ranked in 2015–2017, and correcting it moves reported returns at every horizon — downward, because the under-ranking had flattered them.
 
 **3. Execution Convention**
 
@@ -359,7 +357,7 @@ The simulation engine aggregates all registered share classes into a single cons
 #### 4.3.9 Second-Filer December-31 Archive (Vanguard Index Trust, CIK `0000036405`)
 SPY's fiscal year ended September 30 from 1997 onward (§4.3.6), so **no SPY filing anchors a December 31 price for 1997–2019**. That is a property of the filer, not of the regulatory record: other S&P 500 index funds file on a December 31 fiscal year. **Vanguard Index Trust** does, and its Schedule of Investments carries the same shares-and-value columns, so an exact year-end implied close follows from `value / shares` for any constituent it holds.
 
-- **Archive scope**: 13 annual reports, fiscal years 1994–2006 (`VG500_*.txt` in `data/raw/ground_truth/sec_filings/`, catalogued in `vanguard_annual_filings_manifest.json`). Form `N-30D` through FY2002 and Form `N-CSR` from FY2003; fixed-width text through FY2003 and HTML from FY2004, both already handled by the parsers in §4.3.6. The span covers every year a constituent missing from `data/raw/tickers/` is required. FY1993 (`0000893220-94-000129`) exists and is unarchived because nothing requires it.
+- **Archive scope**: 19 annual reports — fiscal years 1994–2006 and 2014–2019 (`VG500_*.txt` in `data/raw/ground_truth/sec_filings/`, catalogued in `vanguard_annual_filings_manifest.json`). Form `N-30D` through FY2002 and Form `N-CSR` from FY2003; fixed-width text through FY2003 and HTML from FY2004, both already handled by the parsers in §4.3.6. The 1994–2006 span covers every year a constituent missing from `data/raw/tickers/` is required; 2014–2019 was added for issue #45, which needed a December-dated source reporting Alphabet's two share classes separately (§4.3.21). FY1993 (`0000893220-94-000129`) and FY2007–FY2013 exist and are unarchived because nothing requires them — the same rule, applied twice.
 - **Full submissions, not inner documents**: each archived file is the complete `{accession}.txt` submission, because only that carries the SEC header. **`CONFORMED PERIOD OF REPORT` is the single field separating a December 31 annual report from a June 30 semi-annual one** — Vanguard files both as Form `N-30D` under the same `COMPANY CONFORMED NAME`, so neither form type nor filer identity distinguishes them. `scripts/download_vanguard_annual_filings.py` refuses and deletes any download whose stated period is not `{year}-12-31`, and `TestVanguardArchiveCoverage` re-asserts it against the documents on disk. This is the same failure mode that once placed a March 31 snapshot in an annual slot (§4.3.6).
 - **Pinned accessions**: unlike the SPY archiver, which discovers filings by scanning EDGAR master indexes, every Vanguard accession is pinned in the script. The set was enumerated once from the submissions API and is closed, so discovery would add failure modes without adding information.
 - **Two manifests, one directory**: both manifests are keyed by bare year, so a Vanguard entry in the SPY manifest would collide with the SPY filing for that year and silently displace it. The separation is asserted by test.
@@ -486,7 +484,7 @@ Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**,
 
 - **Selection is by position count, not document order.** Each filing contains several Vanguard funds. In the FY2002 filing the *first* schedule belongs to a fund holding **148** stocks, which reconciles perfectly against its own stated total and is simply the wrong fund — so dollar-exact reconciliation alone cannot establish that the right schedule was read. Holding roughly five hundred stocks is the property that identifies an S&P 500 tracker, and both conditions are asserted by test.
 - **Dollar-exact reconciliation, or the year is withheld.** A roster that will not reconcile is **not published with a caveat**, because a short read is indistinguishable from a complete one once it is in a dataset.
-- **Coverage is complete: all thirteen archived filings reconcile**, spanning 1994–2006.
+- **Coverage is complete: all nineteen archived filings reconcile**, spanning 1994–2006 and 2014–2019. The six HTML-era filings added for §4.3.21 needed three parser fixes before they would, each of which surfaced as a reconciliation failure rather than as a plausible-looking roster: a holding carrying two footnote markers (`*,^`) left an unmatched cell in place and dropped the position; the FY2018 and FY2019 filings emit the printed page number as its own table row, which resets the sector running sum so that every subtotal after it reads as a position — the reason a schedule comes out at exactly twice its stated total; and FY2014 and FY2016 render some issuer names with the share count inside the same cell, which dropped Bank of America and General Electric. All thirteen previously published rosters are byte-identical after the change, which is what distinguishes a parser fix from a parser change.
 - **One holding is counted but not named.** The FY2004 filing contains a row whose issuer and share cells are blank **in the document as filed**, stating only a market value of \$24,416 thousand. Dropping it leaves the schedule short of the total the filing itself states; naming it would be invention. It is counted at its stated value and flagged `unidentified`, so the year reconciles with nothing made up. At rank #471 of 506 and 0.023% of the fund it cannot reach the Top 20, and a test pins that.
 - **Sector subtotals are told apart arithmetically, not by layout.** A subtotal also renders as a lone figure, and counting one would double-count an entire sector. A subtotal restates what has already been counted, so it equals the running sum of positions since the previous subtotal; an unnamed holding does not. Testing the arithmetic rather than the surrounding markup keeps the rule exact across all three HTML filings.
 - **Fund identification is by name and by size.** A schedule is skipped when its heading names another Vanguard fund (Growth Index, Value Index, Total Stock Market, Extended Market), and the selected schedule must hold a plausible S&P 500 position count. Both filters matter: reconciliation proves a schedule was read completely, not that the right schedule was read.
@@ -502,7 +500,9 @@ At **2000-12-31** the filing places three constituents inside the Top 20 that th
 
 This is the survivorship gap evidenced at a December 31 date rather than inferred from a September snapshot. The same filing places **Lucent (`LU`) at rank #60**, already collapsed from its #7 standing in SPY's September 1999 filing — so Lucent's contribution to the bias runs through the 1997–1999 year-ends, not 2000.
 
-The published dataset therefore covers **thirteen December-31 rosters spanning 1994–2006**, one for each archived filing.
+The published dataset therefore covers **nineteen December-31 rosters, spanning 1994–2006 and 2014–2019**, one for each archived filing.
+
+**A dual-class issuer holds one slot at the sum of its classes.** Alphabet is the only multi-class issuer any of these rosters reports, and only from 2014. The consumer of this dataset sums both lines and re-ranks; taking the larger line and dropping the other halves the issuer and drops it in the ranking, which is the defect §4.3.21 records and fixes.
 
 **These rosters are the fund's holdings, not the index's published constituent weights.** A full-replication fund tracks the index closely, but its weights reflect its own positions and its total is its equity holdings rather than the index's float-adjusted capitalization. They are a far stronger basis than an unsourced estimate; they are not the index itself.
 
@@ -1006,7 +1006,7 @@ So what #56 buys is not a number. It is that the engine can no longer be asked f
 
 ##### The invariant #37 called the most valuable artifact of the work
 
-Every Top-20 position in every audited December-31 roster resolves to a ticker and has a price series for that exact year — **260 positions across the thirteen Vanguard filings, with no unresolved issuer name and no missing series**. The test states the rule as traceability to an identified source, not residence in `data/raw/tickers/`: satisfying it literally against the vendor directory would mean writing filing-derived data there in vendor shape, which is the confusion this document exists to prevent. A second assertion covers the gap report from the other direction — all 14 constituents that reach a filing's Top 20 are now priced.
+Every Top-20 position in every audited December-31 roster resolves to a ticker and has a price series for that exact year — **380 positions across the nineteen Vanguard filings, with no unresolved issuer name and no missing series**. The test states the rule as traceability to an identified source, not residence in `data/raw/tickers/`: satisfying it literally against the vendor directory would mean writing filing-derived data there in vendor shape, which is the confusion this document exists to prevent. A second assertion covers the gap report from the other direction — all 14 constituents that reach a filing's Top 20 are now priced.
 
 ### 4.4 Benchmark Total Return, Synthetic Yield & Observed Quarterly Levels
 - Pre-tax benchmark returns are tracked directly via `^SP500TR` (S&P 500) and `^MSCIWORLD_TR` (MSCI World).
@@ -1462,6 +1462,155 @@ Three fields, one factor, and nothing in the record to explain it.
 the 1995 split recorded, zero unexplained.** `tests/test_split_completeness` pins both that
 result and a negative control -- removing the 1995 record must make the check fire at a
 ratio of two -- because a check that cannot fail is not evidence.
+
+#### 4.3.21 Settling Alphabet's 2014-2019 Share-Class Basis (issue #45)
+
+§4.3.8 recorded the 2014-2019 year-end weights as **Undetermined**: Class C was created
+2014-04-03, an issuer weight from that date must sum both classes, and nothing archived
+here said which classes the committed anchors covered. The reason given was that *"no
+December-dated primary source for these years is archived in this repository."*
+
+That was a statement about what was held, not about what exists. §4.3.9 exists precisely
+because **Vanguard Index Trust files on a December 31 fiscal year** where SPY does not; the
+archive stopped at FY2006 only because no constituent required a later year. Six N-CSR
+filings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile
+dollar-exact, so the question is answered from a filing rather than inferred.
+
+##### What the filings report
+
+The 500 Index Fund lists Alphabet as **two positions with their own share counts and
+values**, which is exactly the separation the question needed. The Class C line is not
+always labelled: FY2015 and FY2016 print it as a bare `Alphabet Inc.` carrying a footnote
+marker, and FY2014 predates the October 2015 renaming and reads `Google Inc.`
+
+| Report date | Class A shares / value (\$000) | Class C shares / value (\$000) | A weight | A + C | (A+C)/A |
+|---|---|---|---:|---:|---:|
+| 2014-12-31 | 3,092,063 / 1,640,834 | 3,089,225 / 1,626,168 | 0.8291% | 1.6508% | 1.99107 |
+| 2015-12-31 | 3,557,003 / 2,767,384 | 3,627,884 / 2,753,129 | 1.2661% | 2.5257% | 1.99487 |
+| 2016-12-31 | 4,328,192 / 3,429,876 | 4,338,297 / 3,348,384 | 1.2178% | 2.4066% | 1.97619 |
+| 2017-12-31 | 5,092,941 / 5,364,904 | 5,157,961 / 5,397,290 | 1.3768% | 2.7619% | 2.00603 |
+| 2018-12-31 | 5,665,331 / 5,920,044 | 5,829,972 / 6,037,577 | 1.4850% | 2.9995% | 2.01987 |
+| 2019-12-31 | 5,954,681 / 7,975,640 | 6,002,846 / 8,025,925 | 1.4925% | 2.9945% | 2.00637 |
+
+*Accessions, in order: `0000932471-15-005659`, `0000932471-16-012795`,
+`0000932471-17-003352`, `0000932471-18-005288`, `0001104659-19-011820`,
+`0001104659-20-027799`. Weights are the fund's, so they carry the §4.3.10 caveat.*
+
+**These figures are checked by a relation no mis-read cell would satisfy.** Class A's
+implied price -- value divided by shares -- comes out at **exactly 20.0000 times** the
+split-adjusted `GOOGL` close in every one of the six years, which is Alphabet's July 2022
+twenty-for-one split seen through a series adjusted to 2024-12-31. Class C sits 0.2-2.5%
+below Class A, the ordinary `GOOG`/`GOOGL` spread. Six filings agreeing to four decimal
+places is not something a wrong cell produces.
+
+##### A verification trap worth recording
+
+Grepping an archived filing for one of these figures returns **nothing**, and the figure is
+still there. The FY2015 filing renders `3,557,003` as `3,55` + `7` + `,003` in three
+adjacent `<FONT>` elements inside one cell, so no substring of the number exists in the
+file. This looks exactly like the confabulation failure `docs/SUBAGENTS.md` warns about --
+a published number absent from the document it cites -- and it invites discarding a correct
+extraction. Verify through the parsed cells, or strip tags first; better, verify through a
+relation the figure must satisfy, as the twenty-times check above does.
+
+##### Which years were Class A only
+
+Each committed anchor is normalised against a single-class control in the same filing. The
+two hypotheses differ by a factor of two, so they separate cleanly: the closest control
+ratio is within 8% in five of six years, and the alternative is 50-110% away.
+
+| Year | Committed | Committed / AAPL | Fund A / AAPL | Fund (A+C) / AAPL | Verdict |
+|---|---:|---:|---:|---:|---|
+| 2014 | 2.00% | 0.5556 | 0.2337 | 0.4653 | Consolidated |
+| 2015 | 1.40% | 0.4000 | 0.3862 | 0.7705 | **Class A only** |
+| 2016 | 1.40% | 0.4118 | 0.3799 | 0.7508 | **Class A only** |
+| 2017 | 1.70% | 0.4595 | 0.3613 | 0.7249 | **Class A only** |
+| 2018 | 3.20% | 0.8421 | 0.4393 | 0.8874 | Consolidated |
+| 2019 | 2.70% | 0.5745 | 0.3255 | 0.6530 | Consolidated |
+
+Run against three controls -- Apple, Microsoft and Johnson & Johnson -- **17 of 18
+comparisons agree**. The one dissent is 2019 against Johnson & Johnson, whose own committed
+weight is that year's worst-anchored control (1.80% against a 1.4354% fund weight); Apple
+and Microsoft agree with each other there to within 2%. This reproduces the split the issue
+body guessed at from the numbers alone, from a source rather than from a pattern.
+
+**The three Class-A-only years are corrected by the ratio the filing itself states**, not
+by substituting the fund weight: `2015` 1.40% x 1.99487 = **2.79%**, `2016` 1.40% x 1.97619
+= **2.77%**, `2017` 1.70% x 2.00603 = **3.41%**. The anchor stays the factsheet's and only
+the class basis comes from the filing, so the corrected row remains comparable to the other
+nineteen rows of its year instead of mixing a fund weight into a factsheet-anchored roster.
+`historical_weights_table.csv` now names the accession on every 2014-2019 `GOOGL` row, and
+no row is marked share-class unverified.
+
+##### The same understatement, arriving through the dataset builder
+
+Archiving the filings exposed a second instance of the defect this issue was opened about.
+`_apply_audited_rosters()` in `scripts/build_datasets_from_raw.py` walked each roster in
+rank order and **skipped a ticker it had already seen**, on the reasoning that an issuer
+routes through one class (§4.3.8). Routing execution through one class is right; *counting*
+one class is not. The effect was to halve Alphabet and drop it in the ranking:
+
+| Year | Rank on one class | Rank consolidated |
+|---:|---:|---:|
+| 2014 | 20 | 4 |
+| 2015 | 11 | 2 |
+| 2016 | 12 | 3 |
+| 2017 | 9 | 3 |
+| 2018 | 7 | 3 |
+| 2019 | 7 | 3 |
+
+This mattered only once 2014-2019 rosters existed -- Alphabet is the only multi-class
+issuer any of the nineteen rosters reports, and the six new years are the only ones that
+contain it -- so the fix changes no year before 2014. The builder now sums every share
+class into the issuer's ticker and re-ranks, which is what `consolidate_holdings()` already
+does for the 2020-2024 NPORT-P years.
+
+**Two claims are asserted rather than described**, by `TestAlphabetConsolidationEffect`:
+that wherever a filing reports two classes the published weight is their sum and the issuer
+holds one slot, and that consolidation lowers the Top 3 book at 10, 20 and 30 years. The
+second is deliberately narrow. At Top 5 and Top 10 the sign is **mixed** -- raising
+Alphabet's rank displaces a different name at each depth, and at Top 5 consolidation
+happens to raise the figures. Asserting "lower everywhere" would pin a coincidence.
+
+##### What moved
+
+Reading 2014-2019 from the audited rosters supersedes the factsheet anchors for those years
+in the engine, exactly as it already did for 1994-2006 (§4.3.10). The committed anchors
+remain the published record in `historical_weights_table.csv`; the engine consumes the
+rosters. Both are now sourced, and they differ because one is an index factsheet and the
+other a fund's holdings.
+
+| Annual, market-cap weighted | Pre-tax CAGR before → after |
+|---|---|
+| 10y Top 3 | 24.49% → **21.68%** (−2.81) |
+| 10y Top 5 | 21.97% → **21.82%** (−0.15) |
+| 10y Top 10 | 19.99% → **19.39%** (−0.60) |
+| 20y Top 3 | 14.44% → **13.14%** (−1.30) |
+| 20y Top 5 | 13.69% → **13.62%** (−0.07) |
+| 20y Top 10 | 13.13% → **12.84%** (−0.29) |
+| 30y Top 3 | 13.77% → **12.90%** (−0.87) |
+| 30y Top 5 | 13.01% → **12.96%** (−0.05) |
+| 30y Top 10 | 12.18% → **11.99%** (−0.19) |
+
+*These are the figures as this change measured them, against the values published at commit
+`f607c04`. Regenerate the right-hand column with `python3 run_backtest.py --no-export`. The
+values are **not** pinned: the standing claims are the two `TestAlphabetConsolidationEffect`
+asserts. Benchmarks and the `world` universe do not move at all, and no max drawdown
+changes, which is the expected blast radius for a change to the S&P 500 roster alone.*
+
+Every cell falls. The previously published figures were flattered by an Alphabet that was
+under-ranked, and correcting it costs return rather than adding it -- the correction
+displaces names that did better over these spans. Most of the movement is the roster
+replacement rather than the consolidation on its own; the two are separated above because
+they are separate corrections that happen to land together.
+
+##### What this does not settle
+
+The rosters are the **fund's holdings, not the index's published weights** (§4.3.10), so a
+2014-2019 weight is now sourced without being the index's own figure. And the 2007-2013
+filings exist on EDGAR and are unarchived, on the same rule as FY1993: nothing requires
+them yet. A future revisit of the weights series across its full span would want them.
+
 
 ## 5. Major Corporate Actions & Adjustments Log
 
