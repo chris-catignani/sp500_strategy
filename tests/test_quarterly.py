@@ -510,6 +510,50 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         # Quarters with no archived filing cannot corroborate anything.
         self.assertEqual(by_key[("2008-Q1", "WMT")], "UNVERIFIED")
 
+    def test_market_cap_selection_is_immune_to_annual_pool_depth(self) -> None:
+        """Pool depth cannot reach a market-cap book of 10 or fewer (issue #41).
+
+        This is the load-bearing claim behind leaving the pool uniform at 20: the
+        expansion cannot cost the shipped default anything, because a market-cap selector
+        ranks by the same weight the roster is ordered by. Asserted rather than measured,
+        so it cannot quietly stop being true.
+        """
+        from scripts.audit_quarterly_expansion import AnnualPoolDepthDataLoader
+
+        full = DataLoader()
+        truncated = AnnualPoolDepthDataLoader()
+
+        for n in (3, 5, 10):
+            selector = MarketCapSelector(n=n)
+            for year in full.get_available_years():
+                deep = truncated.load_universe(year)
+                self.assertLessEqual(len(deep), 12, f"{year}: pool not truncated")
+                self.assertEqual(
+                    [t.ticker for t in selector.select(full.load_universe(year), n=n)],
+                    [t.ticker for t in selector.select(deep, n=n)],
+                    f"{year}: Top {n} market-cap book changed when the pool was truncated",
+                )
+
+    def test_annual_pool_depth_does_move_a_momentum_book(self) -> None:
+        """The truncation is real, so the market-cap invariant above is not vacuous.
+
+        A momentum selector ranks by trailing return, so it can and does reach past rank
+        12 on the annual path -- which is why pool depth is a live question there at all.
+        """
+        from scripts.audit_quarterly_expansion import AnnualPoolDepthDataLoader
+
+        full = DataLoader()
+        truncated = AnnualPoolDepthDataLoader()
+        selector = PerformanceSelector(n=10)
+
+        differing = [
+            year
+            for year in full.get_available_years()
+            if [t.ticker for t in selector.select(full.load_universe(year), n=10)]
+            != [t.ticker for t in selector.select(truncated.load_universe(year), n=10)]
+        ]
+        self.assertGreater(len(differing), 0)
+
     def test_out_of_sample_accuracy_excludes_circular_q4_periods(self) -> None:
         """Q4 2020-2024 match by construction and must be excluded from the honest metric."""
         from scripts.audit_quarterly_expansion import (
