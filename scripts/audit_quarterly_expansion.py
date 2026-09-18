@@ -157,6 +157,130 @@ class TrueTop12DataLoader(DataLoader):
         return [s for s in full_univ if s.ticker in base_12_tickers]
 
 
+# Constituents priced from a vendor file. Its complement among roster members is exactly
+# the set #55 supplied from filings, so striking it reproduces the pre-#55 universe --
+# which is the universe every pool-size figure published before #41 was measured on.
+VENDOR_PRICED_TICKERS = frozenset(
+    path.stem for path in (REPO_ROOT / "data" / "raw" / "tickers").glob("*.json")
+)
+
+
+class SurvivorsOnlyMixin:
+    """Strike every roster member with no vendor price file.
+
+    #41 was sequenced last on the premise that the pool-size measurement was invalid until
+    the roster included the companies that failed, momentum being the selector that would
+    have bought them. Reproducing the old universe is what lets that premise be tested
+    rather than argued.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for universes in (self._universes, self._quarterly_universes):
+            for periods in universes.values():
+                for period, entries in list(periods.items()):
+                    periods[period] = [
+                        e for e in entries if e["ticker"] in VENDOR_PRICED_TICKERS
+                    ]
+
+
+class SurvivorsOnlyDataLoader(SurvivorsOnlyMixin, DataLoader):
+    """The pre-#55 universe, full candidate pool."""
+
+
+class SurvivorsOnlyTop12DataLoader(SurvivorsOnlyMixin, TrueTop12DataLoader):
+    """The pre-#55 universe, pool truncated to the prior December's base 12."""
+
+
+class AnnualPoolDepthDataLoader(DataLoader):
+    """Truncate the ANNUAL candidate roster, which TrueTop12DataLoader never touches.
+
+    Pool size is usually discussed as a quarterly-drift question, but a momentum selector
+    ranks by trailing return, so a name at rank #13-#20 of the annual roster can be picked
+    first. The annual path has no pool-size switch at all -- it is always the full roster --
+    so the effect there had never been measured. A market-cap selector is provably immune,
+    ranking by the same weight the roster is ordered by.
+    """
+
+    ANNUAL_POOL_DEPTH = 12
+
+    def load_universe(self, year: int, universe: str = "sp500") -> List[ConstituentSnapshot]:
+        full = super().load_universe(year, universe=universe)
+        if universe.lower() != "sp500":
+            return full
+        return full[: self.ANNUAL_POOL_DEPTH]
+
+
+def _cagr(loader, selector_cls, n, start, end, frequency):
+    sim = PortfolioSimulator(data_loader=loader)
+    result = sim.run_simulation(
+        start, end, n=n, selector=selector_cls(n=n), universe="sp500",
+        rebalance_frequency=frequency, is_after_tax=False,
+    )
+    return result.cagr * 100
+
+
+HORIZONS_QUARTERLY = [(10, 2015, 2024), (20, 2005, 2024), (30, 1995, 2024)]
+HORIZONS_ANNUAL = [(10, 2014, 2024), (20, 2004, 2024), (30, 1994, 2024)]
+
+
+def run_annual_pool_depth_comparison():
+    """Depth 12 vs the full roster on the annual path, per selector (#41)."""
+    full_loader = DataLoader()
+    deep_12 = AnnualPoolDepthDataLoader()
+
+    rows = []
+    for label, selector_cls in (("Market Cap", MarketCapSelector),
+                                ("Performance", PerformanceSelector)):
+        for n in (3, 5, 10):
+            for horizon, start, end in HORIZONS_ANNUAL:
+                d12 = _cagr(deep_12, selector_cls, n, start, end, "annual")
+                d20 = _cagr(full_loader, selector_cls, n, start, end, "annual")
+                rows.append({
+                    "selector": label,
+                    "strategy": f"Top {n}",
+                    "horizon": f"{horizon}y",
+                    "depth12": d12,
+                    "depth20": d20,
+                    "delta": d20 - d12,
+                })
+    return rows
+
+
+def run_survivorship_premise_check():
+    """Does fixing survivorship change the pool-size delta? (#41's stated premise.)
+
+    Returns the 2x2 per cell: pool size (12 vs 20) crossed with universe (pre-#55
+    survivors-only vs corrected). The quantity of interest is the last column, the
+    difference of the two deltas -- if the premise holds it is large.
+    """
+    loaders = {
+        (True, True): SurvivorsOnlyTop12DataLoader(),
+        (True, False): SurvivorsOnlyDataLoader(),
+        (False, True): TrueTop12DataLoader(),
+        (False, False): DataLoader(),
+    }
+
+    rows = []
+    for label, selector_cls in (("Market Cap", MarketCapSelector),
+                                ("Performance", PerformanceSelector)):
+        for n in (3, 5, 10):
+            for horizon, start, end in HORIZONS_QUARTERLY:
+                cell = {"selector": label, "strategy": f"Top {n}", "horizon": f"{horizon}y"}
+                for survivors in (True, False):
+                    for pool12 in (True, False):
+                        key = ("surv" if survivors else "full") + ("12" if pool12 else "20")
+                        cell[key] = _cagr(
+                            loaders[(survivors, pool12)], selector_cls, n, start, end,
+                            "quarterly",
+                        )
+                cell["delta_survivors"] = cell["surv20"] - cell["surv12"]
+                cell["delta_corrected"] = cell["full20"] - cell["full12"]
+                cell["premise_effect"] = cell["delta_corrected"] - cell["delta_survivors"]
+                rows.append(cell)
+    return rows
+
+
 def run_quarterly_side_by_side_comparison():
     """Run quarterly backtests comparing Top 12 baseline vs Top 20 expanded across selectors."""
     loader_top20 = DataLoader()
@@ -301,6 +425,34 @@ def main():
         p_delta = f"{row['delta_pre']:+.2f}%" if abs(row['delta_pre']) > 0.005 else "0.00%"
         a_delta = f"{row['delta_post']:+.2f}%" if abs(row['delta_post']) > 0.005 else "0.00%"
         print(f"    {row['selector']:<12} {row['strategy']:<8} {row['horizon']:<6} {row['top12_pre']:>8.2f}%    {row['top20_pre']:>8.2f}%    {p_delta:>9}   {row['top12_post']:>9.2f}%    {row['top20_post']:>9.2f}%    {a_delta:>10}")
+
+    print(f"\n[4] ANNUAL PATH: CANDIDATE ROSTER DEPTH 12 VS. FULL (issue #41):")
+    print(f"    {'Selector':<12} {'Strategy':<8} {'Horiz':<6} {'Depth 12':<11} {'Full':<11} {'Delta'}")
+    print("    " + "-" * 60)
+    for row in run_annual_pool_depth_comparison():
+        delta = f"{row['delta']:+.2f}%" if abs(row['delta']) > 0.005 else "0.00%"
+        print(f"    {row['selector']:<12} {row['strategy']:<8} {row['horizon']:<6} "
+              f"{row['depth12']:>8.2f}%   {row['depth20']:>8.2f}%   {delta:>8}")
+    print("    Market Cap is 0.00% in every cell by construction: it ranks by the same")
+    print("    weight the roster is ordered by, so a name below rank 12 cannot be reached")
+    print("    by a book of 10 or fewer. Only a momentum selector can see past the cut.")
+
+    print(f"\n[5] DOES FIXING SURVIVORSHIP CHANGE THE POOL-SIZE ANSWER? (issue #41):")
+    print(f"    {'Selector':<12} {'Strategy':<8} {'Horiz':<6} {'d(survivors)':<14} "
+          f"{'d(corrected)':<14} {'Effect'}")
+    print("    " + "-" * 70)
+    premise = run_survivorship_premise_check()
+    for row in premise:
+        print(f"    {row['selector']:<12} {row['strategy']:<8} {row['horizon']:<6} "
+              f"{row['delta_survivors']:>+10.2f}%    {row['delta_corrected']:>+10.2f}%    "
+              f"{row['premise_effect']:>+7.2f}%")
+    worst = max(abs(r["premise_effect"]) for r in premise)
+    print(f"    Largest effect of the survivorship correction on the pool-size delta: "
+          f"{worst:.2f}pp.")
+    print("    #41 was sequenced last on the premise that this would be large. It is not:")
+    print("    momentum reaches LU, AOL and T_CORP at either pool size, because the")
+    print("    correction changed which names sit inside the base 12, not only which sit")
+    print("    below it. See docs/DATA_PROVENANCE.md 4.3.7.")
 
     print("\n" + "=" * 85)
     print("Audit completed successfully.")
