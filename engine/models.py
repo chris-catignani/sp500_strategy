@@ -63,7 +63,12 @@ class TaxLot:
 class TradeOrder:
     """Rebalancing execution order for buy or sell transactions."""
     ticker: str
-    action: str  # 'BUY' or 'SELL'
+    # 'BUY' or 'SELL' for rebalancing trades; 'TERMINAL' when a constituent stopped
+    # trading and the position was settled for what the holder received, 'EXCHANGE' when
+    # it was converted into an acquirer's shares under IRC Section 368. The last two are
+    # corporate actions rather than discretionary trades, so they are excluded from
+    # turnover (issue #56).
+    action: str
     shares: float
     price: float
     year: int

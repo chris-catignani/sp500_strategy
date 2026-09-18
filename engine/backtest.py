@@ -1,6 +1,6 @@
 """Two-Phase Portfolio Simulation Engine for S&P 500 Top N Strategies."""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from engine.data_loader import DataLoader
 from engine.models import AnnualLedgerEntry, StrategyResult, TradeOrder
@@ -37,6 +37,149 @@ class PortfolioSimulator:
             List of TradeOrder objects.
         """
         return list(self.trade_history)
+
+    def _apply_terminal_actions(
+        self, current_year: int, quarter: Optional[int] = None
+    ) -> Tuple[float, float, List[str]]:
+        """Settle every held constituent whose terminal action falls in this period.
+
+        A constituent that stops trading cannot be carried to the next rebalance and
+        cannot be sold at a market price, because after its effective date there is no
+        market and no price (the dataset withholds any observation dated after it). What
+        the holder received instead is on the record, and this is where the portfolio
+        receives it.
+
+        Three treatments, following what each filing states:
+
+        - **Cash**, and delisting **to zero**: a disposal. Lots deplete FIFO against the
+          stated consideration -- the cash amount, or nothing at all for the two
+          bankruptcies, where the whole basis becomes a realised capital loss and reaches
+          the carryforward.
+        - **Stock**, where the acquirer can be priced in this universe: a Section 368
+          reorganisation. Basis carries forward into new lots and **no gain is realised**.
+          The position's value is carried across the conversion and divided by the
+          acquirer's own price to get the share count, because the two series are adjusted
+          to different bases and the filing's exchange ratio is in as-traded terms on both
+          sides of it; deriving a conversion factor per acquirer would mean publishing a
+          number for BP and Shell that no archived filing supports.
+        - **Stock, where the acquirer cannot be priced**: a disposal at the stock leg's
+          value. Lucent's acquirer chain leaves this universe, as do Tyco's two spincos
+          and the Dell tracking stock EMC holders received, so following the successor is
+          not available at any price. Realising the position is the one treatment that
+          invents nothing; it is recorded as a disposal and not as a reorganisation.
+
+        Cash paid alongside shares in a reorganisation is boot under Section 356 and is
+        recognised there, per lot.
+
+        Args:
+            current_year: Calendar year of the period being processed.
+            quarter: Calendar quarter (1..4), or None for an annual period.
+
+        Returns:
+            Tuple of (cash proceeds credited, realised capital gain, tickers settled). The
+            ticker list is what the caller must react to, not the two figures: a Section
+            368 reorganisation changes the portfolio's holdings while crediting no cash and
+            realising no gain, so a caller watching only the money would miss it.
+
+        Raises:
+            ValueError: If a stock consideration carries no value per share, which means
+                the dataset cannot say what the position was worth and the engine must not
+                guess.
+        """
+        total_proceeds = 0.0
+        total_realized_gain = 0.0
+        settled: List[str] = []
+
+        for ticker in list(self.tax_manager.get_all_positions().keys()):
+            action = self.data_loader.get_terminal_action(ticker, current_year, quarter)
+            if action is None:
+                continue
+
+            shares = self.tax_manager.get_position_shares(ticker)
+            if shares <= 0.0:
+                continue
+
+            consideration = action["consideration_type"]
+            cash_per_share = float(action["cash_per_share"] or 0.0)
+            stock_value_per_share = action["stock_leg_value_per_share"]
+            acquirer = action["acquirer_ticker"]
+            has_stock_leg = consideration in ("stock", "cash_and_stock")
+
+            if has_stock_leg and stock_value_per_share is None:
+                raise ValueError(
+                    f"{ticker}: terminal action at {action['effective_date']} pays stock "
+                    "but the dataset carries no value per share for the stock leg."
+                )
+
+            followable = (
+                has_stock_leg
+                and acquirer is not None
+                and self.data_loader.has_price(acquirer, current_year, quarter)
+            )
+
+            if followable:
+                if cash_per_share > 0.0:
+                    boot_gain = self.tax_manager.recognize_boot(
+                        ticker,
+                        cash_per_share,
+                        stock_value_per_share,
+                        current_year,
+                        quarter,
+                    )
+                    boot_proceeds = shares * cash_per_share
+                    self.cash += boot_proceeds
+                    total_proceeds += boot_proceeds
+                    total_realized_gain += boot_gain
+
+                acquirer_price = (
+                    self.data_loader.get_price(acquirer, current_year)
+                    if quarter is None
+                    else self.data_loader.get_quarterly_price(acquirer, current_year, quarter)
+                )
+                new_shares = (shares * stock_value_per_share) / acquirer_price
+                self.tax_manager.exchange_lots(ticker, acquirer, new_shares / shares)
+                settled.append(ticker)
+                self.trade_history.append(
+                    TradeOrder(
+                        ticker=ticker,
+                        action="EXCHANGE",
+                        shares=shares,
+                        price=stock_value_per_share,
+                        year=current_year,
+                        quarter=quarter,
+                        realized_gain=0.0,
+                    )
+                )
+                continue
+
+            if consideration == "zero":
+                settlement_price = 0.0
+            elif consideration == "cash":
+                settlement_price = cash_per_share
+            else:
+                settlement_price = cash_per_share + float(stock_value_per_share)
+
+            gain, _ = self.tax_manager.sell_shares(
+                ticker, shares, settlement_price, current_year, quarter
+            )
+            proceeds = shares * settlement_price
+            self.cash += proceeds
+            total_proceeds += proceeds
+            total_realized_gain += gain
+            settled.append(ticker)
+            self.trade_history.append(
+                TradeOrder(
+                    ticker=ticker,
+                    action="TERMINAL",
+                    shares=shares,
+                    price=settlement_price,
+                    year=current_year,
+                    quarter=quarter,
+                    realized_gain=gain,
+                )
+            )
+
+        return total_proceeds, total_realized_gain, settled
 
     def run_simulation(
         self,
@@ -175,6 +318,17 @@ class PortfolioSimulator:
                             )
                             q_realized_gain += child_gain
                     year_spinoff_proceeds += q_spinoff_proceeds
+
+                    # A constituent that stopped trading this quarter is settled before
+                    # the portfolio is valued. It has no quarter-end price to be valued
+                    # at, and the position it becomes -- cash, or shares in an acquirer --
+                    # is what the rest of the quarter rebalances.
+                    _, terminal_gain, settled_tickers = self._apply_terminal_actions(
+                        current_year, q
+                    )
+                    q_realized_gain += terminal_gain
+                    if settled_tickers:
+                        positions = self.tax_manager.get_all_positions()
 
                     holdings_value_pretax = sum(
                         shares * self.data_loader.get_quarterly_price(ticker, current_year, q)
@@ -455,6 +609,14 @@ class PortfolioSimulator:
                             ticker, basis_ratio, gross_proceeds=spinoff_cash, current_year=current_year
                         )
                         annual_realized_gain += child_gain
+
+                # Step 1b: Terminal actions. A constituent that stopped trading this year
+                # is settled before the portfolio is valued: it has no year-end price to
+                # be valued at, and what the holder received is what gets rebalanced.
+                _, terminal_gain, settled_tickers = self._apply_terminal_actions(current_year)
+                annual_realized_gain += terminal_gain
+                if settled_tickers:
+                    positions = self.tax_manager.get_all_positions()
 
                 # Step 2: Pre-Tax Valuation
                 holdings_value_pretax = sum(

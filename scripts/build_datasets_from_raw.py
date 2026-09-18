@@ -146,6 +146,70 @@ QUARTER_END_DATES = {
     4: "12-31",
 }
 
+# Index removal is the mirror of inclusion (docs/DATA_PROVENANCE.md 4.3.4). A constituent
+# cannot be selected at a quarter end after it stopped trading any more than it can before
+# it was admitted, so the two filters sit side by side and are applied at the same point.
+#
+# The dates are not restated here. Every one is the effective_date of a terminal action
+# already sourced to a filing in terminal_actions.json and re-checkable with
+# `python3 scripts/verify_provenance.py terminal`, so this reads them rather than copying
+# them: a correction at the source reaches the filter without a second edit, and there is
+# no second list to fall out of step.
+TERMINAL_ACTIONS_PATH = RAW_DIR / "corporate_actions" / "terminal_actions.json"
+TERMINAL_ACTIONS: Dict[str, dict] = {}
+if TERMINAL_ACTIONS_PATH.exists():
+    with open(TERMINAL_ACTIONS_PATH, "r", encoding="utf-8") as f:
+        TERMINAL_ACTIONS = json.load(f)["actions_by_ticker"]
+
+EFFECTIVE_REMOVAL_DATES = {
+    ticker: action["effective_date"] for ticker, action in TERMINAL_ACTIONS.items()
+}
+
+# A fund schedule dated within this many days of an effective date values what the holder
+# received, not a trade in a security that had already stopped trading. The Vanguard 500
+# schedule of 2006-12-31 lists BellSouth two days after its merger closed; nine months
+# after Tyco's separation it lists a continuing company that merely kept the ticker. The
+# window is what separates those two cases mechanically rather than by inspection.
+TERMINAL_OBSERVATION_WINDOW_DAYS = 31
+
+
+def _period_end_date(period: str) -> str:
+    """Return the calendar date a price observation key falls on.
+
+    Accepts either a bare year ("2006") or a quarter key ("2006-Q4").
+    """
+    if "-Q" in period:
+        year, quarter = period.split("-Q")
+        return f"{year}-{QUARTER_END_DATES[int(quarter)]}"
+    return f"{period}-12-31"
+
+
+def _days_between(start_date: str, end_date: str) -> int:
+    """Return end_date - start_date in days; negative when end_date is the earlier one."""
+    fmt = "%Y-%m-%d"
+    return (
+        datetime.datetime.strptime(end_date, fmt) - datetime.datetime.strptime(start_date, fmt)
+    ).days
+
+
+def _partition_post_removal(ticker: str, series: Dict[str, float]):
+    """Split a price series at the ticker's index-removal date.
+
+    Returns (kept, withheld). A price is a statement that the named security traded at
+    that value on that date, so an observation dated after the security stopped trading
+    cannot be published as one whatever it measures -- and the two things it can measure
+    are different enough to matter. Withheld observations are returned rather than dropped
+    so the compiled dataset can record what was removed and why.
+    """
+    removal_date = EFFECTIVE_REMOVAL_DATES.get(ticker)
+    if removal_date is None:
+        return dict(series), {}
+    kept, withheld = {}, {}
+    for period, value in series.items():
+        target = withheld if _period_end_date(period) > removal_date else kept
+        target[period] = value
+    return kept, withheld
+
 # Load historical constituents and factsheet weights directly from raw archives
 with open(RAW_DIR / "constituents" / "historical_index_weights.json", "r", encoding="utf-8") as f:
     raw_sp500 = json.load(f)
@@ -418,6 +482,8 @@ def build_quarterly_constituents(
                 q_end_date = f"{year}-{QUARTER_END_DATES[q]}"
                 if t in EFFECTIVE_INCLUSION_DATES and q_end_date < EFFECTIVE_INCLUSION_DATES[t]:
                     continue
+                if t in EFFECTIVE_REMOVAL_DATES and q_end_date > EFFECTIVE_REMOVAL_DATES[t]:
+                    continue
 
                 t_prices = quarterly_prices.get(t, {})
                 p_base = t_prices.get(f"{year - 1}-Q4")
@@ -657,6 +723,7 @@ def main():
     # pricing directly from fund filings when vendor price files are unavailable.
     derived_path = RAW_DIR / "ground_truth" / "derived_constituent_series.json"
     derived_merged = 0
+    withheld_annual_prices: Dict[str, Dict[str, float]] = {}
     if derived_path.exists():
         with open(derived_path, "r", encoding="utf-8") as f:
             derived = json.load(f)["series_by_ticker"]
@@ -678,6 +745,9 @@ def main():
                     f"{ticker}: derived prices would overwrite a vendor series from "
                     "data/raw/tickers/. A constituent must have exactly one price source."
                 )
+            series, withheld = _partition_post_removal(ticker, series)
+            if withheld:
+                withheld_annual_prices[ticker] = withheld
             all_prices_data[ticker] = dict(sorted(series.items(), key=lambda kv: int(kv[0])))
             # No dividend history is derived for these issuers. Schedules of Investments
             # report holdings, not distributions, so an empty series is the honest value;
@@ -705,6 +775,7 @@ def main():
     derived_q_path = RAW_DIR / "ground_truth" / "derived_quarterly_constituent_series.json"
     derived_q_merged = 0
     incomplete_q_series: Dict[str, List[str]] = {}
+    withheld_quarterly_prices: Dict[str, Dict[str, float]] = {}
     if derived_q_path.exists():
         with open(derived_q_path, "r", encoding="utf-8") as f:
             derived_q = json.load(f)["series_by_ticker"]
@@ -727,6 +798,9 @@ def main():
             # year would discard every sourced year the constituent has.
             if not series:
                 continue
+            series, withheld = _partition_post_removal(ticker, series)
+            if withheld:
+                withheld_quarterly_prices[ticker] = withheld
             incomplete_q_series[ticker] = sorted(
                 year
                 for year in {period[:4] for period in series}
@@ -997,6 +1071,104 @@ def main():
         with open(DATA_DIR / "spinoff_distributions.json", "w", encoding="utf-8") as f:
             json.dump(spinoffs_data, f, indent=2)
         print(f"Compiled spinoff distributions to {DATA_DIR / 'spinoff_distributions.json'}")
+
+    # 7b. Compile terminal actions from raw corporate actions (issue #56).
+    #
+    # The raw file records what a holder of one share received when each constituent
+    # stopped trading. What the engine needs on top of that is a period to act in and, for
+    # a stock conversion, a value per share -- neither of which is a figure any filing
+    # states, so both are derived here and labelled with the basis they were derived on.
+    #
+    # Share terms need no conversion. Every one of these series is adjusted to its own
+    # final observation (4.3.9), and every split on record for these registrants precedes
+    # that observation, so a held share IS an as-traded share on the effective date and the
+    # filing's cash amounts and exchange ratios apply to it directly. The spinoff catalog
+    # needs the conversion above because its distributions predate a later split; a
+    # terminal action, by construction, has nothing after it.
+    compiled_terminal_actions: Dict[str, dict] = {}
+    for ticker, action in sorted(TERMINAL_ACTIONS.items()):
+        effective_date = action["effective_date"]
+        year = int(effective_date[:4])
+        quarter = (int(effective_date[5:7]) - 1) // 3 + 1
+
+        record = {
+            "effective_date": effective_date,
+            "year": year,
+            "quarter": quarter,
+            "consideration_type": action["consideration_type"],
+            "cash_per_share": action.get("cash_per_share"),
+            "stock_exchange_ratio": action.get("stock_exchange_ratio"),
+            "acquirer_ticker": action.get("acquirer_ticker"),
+            "accession_number": action["accession_number"],
+        }
+
+        # A stock conversion has to be marked at some value per share, and no filing states
+        # one: the exchange ratio is in the acquirer's shares, whose series is adjusted to
+        # 2024-12-31 while this one is adjusted to its own final observation. Converting
+        # between the two bases would mean deriving an adjustment factor per acquirer, and
+        # for BP and Shell no such factor exists -- neither appears in any archived
+        # schedule, both being non-US. So the position's VALUE is carried across the
+        # conversion instead, and the only question is what that value was.
+        has_stock_leg = action["consideration_type"] in ("stock", "cash_and_stock")
+
+        for frequency, kept, withheld in (
+            ("annual", all_prices_data.get(ticker, {}), withheld_annual_prices.get(ticker, {})),
+            (
+                "quarterly",
+                all_quarterly_prices_data.get(ticker, {}),
+                withheld_quarterly_prices.get(ticker, {}),
+            ),
+        ):
+            value, basis, source_period = None, None, None
+
+            # Only a stock leg needs a derived value. Where the filing states the
+            # consideration outright -- a cash amount, or nothing at all for the two
+            # bankruptcies -- that figure is the terminal value and is already on the
+            # record above; deriving a second one here would put a number next to it that
+            # looks like what the holder received and is not.
+            if has_stock_leg:
+                # A schedule filed within days of the effective date reports what the
+                # holder received, so it is the terminal value itself rather than an
+                # estimate of it.
+                in_window = sorted(
+                    (period for period in withheld
+                     if _days_between(effective_date, _period_end_date(period))
+                     <= TERMINAL_OBSERVATION_WINDOW_DAYS),
+                    key=_period_end_date,
+                )
+                if in_window:
+                    source_period = in_window[0]
+                    value = withheld[source_period]
+                    basis = "filing_observed"
+                else:
+                    on_or_before = [p for p in kept if _period_end_date(p) <= effective_date]
+                    if on_or_before:
+                        source_period = max(on_or_before, key=_period_end_date)
+                        value = kept[source_period]
+                        basis = "last_observed_price"
+
+            record[frequency] = {
+                "stock_leg_value_per_share": value,
+                "stock_leg_value_basis": basis,
+                "source_period": source_period,
+                "withheld_observations": dict(sorted(withheld.items())),
+            }
+
+        compiled_terminal_actions[ticker] = record
+
+    if compiled_terminal_actions:
+        with open(DATA_DIR / "terminal_actions.json", "w", encoding="utf-8") as f:
+            json.dump(compiled_terminal_actions, f, indent=2)
+        withheld_count = sum(
+            len(rec[freq]["withheld_observations"])
+            for rec in compiled_terminal_actions.values()
+            for freq in ("annual", "quarterly")
+        )
+        print(
+            f"Compiled {len(compiled_terminal_actions)} terminal actions to "
+            f"{DATA_DIR / 'terminal_actions.json'} "
+            f"({withheld_count} post-removal price observations withheld)"
+        )
 
     # 8. Save S&P 500 datasets to data/
     with open(DATA_DIR / "sp500_prices.json", "w", encoding="utf-8") as f:

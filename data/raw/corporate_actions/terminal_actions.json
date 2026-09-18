@@ -1,7 +1,7 @@
 {
-  "description": "What a holder of one share received when each constituent stopped trading independently. Input for terminal-value modelling (#56); not yet consumed by the engine.",
+  "description": "What a holder of one share received when each constituent stopped trading independently. Consumed by the engine through data/terminal_actions.json, which the dataset builder compiles from this file (#56).",
   "verification": "Every entry is re-checkable by scripts/verify_provenance.py, which fetches each cited filing and confirms the quoted sentence and every recorded figure appear in it. All thirteen pass. Run it when a figure is questioned rather than relying on this field.",
-  "not_yet_modelled": "The engine has no acquisition or delisting path. Consuming this is #56, which must also decide the LU case: its acquirer chain leaves this repository's universe, so converting into the acquirer's shares is not possible and the treatment has to be chosen explicitly.",
+  "modelling": "Consumed by engine/backtest.py::_apply_terminal_actions. Cash and zero consideration settle as disposals; stock converts under IRC Section 368 where the acquirer can be priced and settles as a disposal where it cannot, which is the explicit resolution of the LU case -- its acquirer chain leaves this repository's universe, as do Tyco's two spincos and the tracking stock EMC holders received. Cash paid alongside stock is boot under Section 356. The exchange ratios below are NOT applied in share terms: see docs/DATA_PROVENANCE.md 4.3.16 for why, and for the three post-removal price observations enforcing these dates withheld.",
   "actions_by_ticker": {
     "AN": {
       "company_name": "Amoco Corp",
@@ -28,7 +28,7 @@
       "stock_exchange_ratio": 1.325,
       "acquirer_name": "AT&T Inc.",
       "acquirer_ticker": "T",
-      "quoted_sentence": "Pursuant to the terms of the Merger Agreement, each outstanding share of BellSouth common stock, par value $1.00 per share (\u201cBellSouth Common Shares\u201d), was converted into and became exchangeable for 1.325 shares of AT&T common stock, par value $1.00 per share (\u201cAT&T Common Stock\u201d), and cash in lieu of any fractional shares.",
+      "quoted_sentence": "Pursuant to the terms of the Merger Agreement, each outstanding share of BellSouth common stock, par value $1.00 per share (“BellSouth Common Shares”), was converted into and became exchangeable for 1.325 shares of AT&T common stock, par value $1.00 per share (“AT&T Common Stock”), and cash in lieu of any fractional shares.",
       "verification": "confirmed_at_source"
     },
     "DELL": {
@@ -42,7 +42,7 @@
       "stock_exchange_ratio": null,
       "acquirer_name": "Denali Holding Inc.",
       "acquirer_ticker": null,
-      "quoted_sentence": "At the effective time of the Merger (the \u201cEffective Time\u201d), each share of the common stock, par value $0.01 per share, of the Company (the \u201cCommon Stock\u201d) issued and outstanding immediately prior to the Effective Time (other than certain excluded shares and shares held by any of the Company\u2019s stockholders who are entitled to, properly exercise and do not withdraw appraisal rights under Delaware law (\u201cDissenting Shares\u201d)) was converted into the right to receive $13.75 in cash, without interest (the \u201cMerger Consideration\u201d), less any applicable withholding taxes, whereupon all such shares were automatically canceled upon the conversion thereof and ceased to exist. In addition, promptly after the Effective Time, each share of Common Stock held as of the close of business on October 28, 2013 is entitled to receive the $0.13 per share special cash dividend declared by the Company\u2019s board of directors on October 18, 2013.",
+      "quoted_sentence": "At the effective time of the Merger (the “Effective Time”), each share of the common stock, par value $0.01 per share, of the Company (the “Common Stock”) issued and outstanding immediately prior to the Effective Time (other than certain excluded shares and shares held by any of the Company’s stockholders who are entitled to, properly exercise and do not withdraw appraisal rights under Delaware law (“Dissenting Shares”)) was converted into the right to receive $13.75 in cash, without interest (the “Merger Consideration”), less any applicable withholding taxes, whereupon all such shares were automatically canceled upon the conversion thereof and ceased to exist. In addition, promptly after the Effective Time, each share of Common Stock held as of the close of business on October 28, 2013 is entitled to receive the $0.13 per share special cash dividend declared by the Company’s board of directors on October 18, 2013.",
       "verification": "confirmed_at_source",
       "note": "Recorded as a substance-only match when first checked by hand. It is in fact verbatim: the earlier check compared against raw filing source, where markup and entities sit inside the sentence. scripts/verify_provenance.py strips those before comparing and matches it exactly."
     },
@@ -57,7 +57,7 @@
       "stock_exchange_ratio": 0.11146,
       "acquirer_name": "Dell Technologies Inc.",
       "acquirer_ticker": "DVMT",
-      "quoted_sentence": "Pursuant to the terms and conditions of the Merger Agreement, as of the effective time of the Merger (the \u201cEffective Time\u201d), each share of the Company\u2019s common stock outstanding immediately prior to the Effective Time (other than as provided below and any shares of the Company\u2019s common stock owned by stockholders who were entitled to appraisal rights and properly exercised such rights in accordance with Part 13 of the Massachusetts Business Corporation Act (the \u201cDissenting Shares\u201d)) was canceled and converted into the right to receive 0.11146 shares of Dell Technologies\u2019 Class V Common Stock and $24.05 in cash (the \u201cMerger Consideration\u201d).",
+      "quoted_sentence": "Pursuant to the terms and conditions of the Merger Agreement, as of the effective time of the Merger (the “Effective Time”), each share of the Company’s common stock outstanding immediately prior to the Effective Time (other than as provided below and any shares of the Company’s common stock owned by stockholders who were entitled to appraisal rights and properly exercised such rights in accordance with Part 13 of the Massachusetts Business Corporation Act (the “Dissenting Shares”)) was canceled and converted into the right to receive 0.11146 shares of Dell Technologies’ Class V Common Stock and $24.05 in cash (the “Merger Consideration”).",
       "verification": "confirmed_at_source"
     },
     "GTE": {
@@ -85,7 +85,7 @@
       "stock_exchange_ratio": 0.1952,
       "acquirer_name": "Alcatel-Lucent",
       "acquirer_ticker": "ALU",
-      "quoted_sentence": "In connection with the Merger, which was completed on November 30, 2006, Lucent delisted from the New York Stock Exchange its shares of common stock, par value $0.01 per share (the \"Lucent Common Stock\"), each of which was converted in the Merger into the right to receive 0.1952 of an American Depositary Share of Alcatel-Lucent (each, an \"ADS\"), each ADS representing one ordinary share, nominal value \u20ac2.00 per share, of Alcatel-Lucent (the \"Alcatel-Lucent Ordinary Shares\").",
+      "quoted_sentence": "In connection with the Merger, which was completed on November 30, 2006, Lucent delisted from the New York Stock Exchange its shares of common stock, par value $0.01 per share (the \"Lucent Common Stock\"), each of which was converted in the Merger into the right to receive 0.1952 of an American Depositary Share of Alcatel-Lucent (each, an \"ADS\"), each ADS representing one ordinary share, nominal value €2.00 per share, of Alcatel-Lucent (the \"Alcatel-Lucent Ordinary Shares\").",
       "verification": "confirmed_at_source"
     },
     "MCIC": {
@@ -99,7 +99,7 @@
       "stock_exchange_ratio": null,
       "acquirer_name": null,
       "acquirer_ticker": null,
-      "quoted_sentence": "Among other things, the Plan will result in the cancellation of the Company\u2019s outstanding equity securities issued prior to the Commencement Date, and the holders of equity interests in WorldCom, Inc. will receive no distribution under the Plan.",
+      "quoted_sentence": "Among other things, the Plan will result in the cancellation of the Company’s outstanding equity securities issued prior to the Commencement Date, and the holders of equity interests in WorldCom, Inc. will receive no distribution under the Plan.",
       "verification": "confirmed_at_source",
       "note": "Bankruptcy. Common shareholders received nothing, so there is no ratio or cash figure to record."
     },
@@ -143,7 +143,7 @@
       "stock_exchange_ratio": 1.0,
       "acquirer_name": "Royal Dutch Shell plc",
       "acquirer_ticker": "RDS.A",
-      "quoted_sentence": "Under the terms of the Transaction, shareholders will receive respectively: for each Royal Dutch Bearer Share or Royal Dutch Hague Registered Share tendered: 2 \u201cA\u201d Shares; for each Royal Dutch New York Registered Share tendered: 1 \u201cA\u201d ADR",
+      "quoted_sentence": "Under the terms of the Transaction, shareholders will receive respectively: for each Royal Dutch Bearer Share or Royal Dutch Hague Registered Share tendered: 2 “A” Shares; for each Royal Dutch New York Registered Share tendered: 1 “A” ADR",
       "verification": "confirmed_at_source",
       "note": "The filing offers different consideration per share line: 2 A Shares for each Royal Dutch Bearer or Hague Registered Share, but 1 A ADR for each Royal Dutch NEW YORK REGISTERED SHARE. The S&P 500 constituent is the NYSE-listed line, so the ratio is 1.0. Using the European line's 2.0 would double this holding's terminal value."
     },
@@ -187,7 +187,7 @@
       "stock_exchange_ratio": 0.77942,
       "acquirer_name": "AT&T Inc.",
       "acquirer_ticker": "T",
-      "quoted_sentence": "Pursuant to the terms of the Merger Agreement, each outstanding share of the Company\u2019s common stock was exchanged for 0.77942 shares of New AT&T common stock. New AT&T issued approximately 632 million shares to former shareholders of the Company, giving them an approximate 16% stake in New AT&T. In addition, the Company paid a special dividend of $1.30 per share to holders of its common stock immediately prior to the effective time of the Merger.",
+      "quoted_sentence": "Pursuant to the terms of the Merger Agreement, each outstanding share of the Company’s common stock was exchanged for 0.77942 shares of New AT&T common stock. New AT&T issued approximately 632 million shares to former shareholders of the Company, giving them an approximate 16% stake in New AT&T. In addition, the Company paid a special dividend of $1.30 per share to holders of its common stock immediately prior to the effective time of the Merger.",
       "verification": "confirmed_at_source"
     }
   }
