@@ -153,7 +153,7 @@
       "ticker": "T_CORP",
       "name": "AT&T Corp. (pre-2005 Ma Bell)",
       "market_cap_weight": 0.022427,
-      "trailing_1y_return": 0.2886,
+      "trailing_1y_return": 0.3148,
       "year": 1995
     },
     {
@@ -188,7 +188,7 @@
       "ticker": "RD",
       "name": "Royal Dutch Petroleum Co.",
       "market_cap_weight": 0.016461,
-      "trailing_1y_return": 0.3128,
+      "trailing_1y_return": 0.3636,
       "year": 1995
     },
     {
@@ -337,7 +337,7 @@
       "ticker": "RD",
       "name": "Royal Dutch Petroleum Co.",
       "market_cap_weight": 0.016193,
-      "trailing_1y_return": 0.2099,
+      "trailing_1y_return": 0.2509,
       "year": 1996
     },
     {
@@ -358,7 +358,7 @@
       "ticker": "T_CORP",
       "name": "AT&T Corp. (pre-2005 Ma Bell)",
       "market_cap_weight": 0.012467,
-      "trailing_1y_return": -0.0985,
+      "trailing_1y_return": -0.0781,
       "year": 1996
     },
     {
@@ -465,7 +465,7 @@
       "ticker": "RD",
       "name": "Royal Dutch Petroleum Co.",
       "market_cap_weight": 0.015384,
-      "trailing_1y_return": 0.2694,
+      "trailing_1y_return": 0.3038,
       "year": 1997
     },
     {
@@ -500,7 +500,7 @@
       "ticker": "T_CORP",
       "name": "AT&T Corp. (pre-2005 Ma Bell)",
       "market_cap_weight": 0.013172,
-      "trailing_1y_return": 0.4795,
+      "trailing_1y_return": 0.5113,
       "year": 1997
     },
     {
@@ -563,7 +563,7 @@
       "ticker": "SBC",
       "name": "SBC Communications Inc.",
       "market_cap_weight": 0.008889,
-      "trailing_1y_return": 0.4155,
+      "trailing_1y_return": 0.4497,
       "year": 1997
     }
   ],
@@ -698,7 +698,7 @@
       "ticker": "SBC",
       "name": "SBC Communications Inc.",
       "market_cap_weight": 0.010514,
-      "trailing_1y_return": 0.4642,
+      "trailing_1y_return": 0.4893,
       "year": 1998
     },
     {
@@ -791,7 +791,7 @@
       "ticker": "SBC",
       "name": "SBC Communications Inc.",
       "market_cap_weight": 0.013505,
-      "trailing_1y_return": -0.0909,
+      "trailing_1y_return": -0.073,
       "year": 1999
     },
     {
@@ -933,7 +933,7 @@
       "ticker": "SBC",
       "name": "SBC Communications Inc.",
       "market_cap_weight": 0.013775,
-      "trailing_1y_return": -0.0205,
+      "trailing_1y_return": 0.0001,
       "year": 2000
     },
     {
@@ -982,7 +982,7 @@
       "ticker": "RD",
       "name": "Royal Dutch Petroleum Co.",
       "market_cap_weight": 0.011067,
-      "trailing_1y_return": 0.0021,
+      "trailing_1y_return": 0.0249,
       "year": 2000
     },
     {
@@ -1089,7 +1089,7 @@
       "ticker": "SBC",
       "name": "SBC Communications Inc.",
       "market_cap_weight": 0.012584,
-      "trailing_1y_return": -0.1797,
+      "trailing_1y_return": -0.1583,
       "year": 2001
     },
     {
@@ -1124,7 +1124,7 @@
       "ticker": "RD",
       "name": "Royal Dutch Petroleum Co.",
       "market_cap_weight": 0.009949,
-      "trailing_1y_return": -0.1906,
+      "trailing_1y_return": -0.1673,
       "year": 2001
     },
     {
@@ -1252,7 +1252,7 @@
       "ticker": "SBC",
       "name": "SBC Communications Inc.",
       "market_cap_weight": 0.011103,
-      "trailing_1y_return": -0.3079,
+      "trailing_1y_return": -0.2807,
       "year": 2002
     },
     {

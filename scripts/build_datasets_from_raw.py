@@ -749,9 +749,11 @@ def main():
             if withheld:
                 withheld_annual_prices[ticker] = withheld
             all_prices_data[ticker] = dict(sorted(series.items(), key=lambda kv: int(kv[0])))
-            # No dividend history is derived for these issuers. Schedules of Investments
-            # report holdings, not distributions, so an empty series is the honest value;
-            # a zero-filled one would understate total return without saying so.
+            # A Schedule of Investments reports holdings, not distributions, so no
+            # dividend is derivable from the source the price comes from. Where the
+            # issuer's own filings or a verified successor series supply one it is merged
+            # below (#76); where nothing does, the series stays EMPTY rather than
+            # zero-filled, because unknown and nil are different claims.
             all_dividends_data.setdefault(ticker, {})
             derived_merged += 1
 
@@ -828,6 +830,64 @@ def main():
                 "filing for 1994, SEI's 2004 schedule corrupt as filed, no Q2 2005, and "
                 "only Q3 after 2006."
             )
+
+    # Dividends for the derived constituents (#76), from the issuers' own filings and from
+    # the two verified successor series. docs/DATA_PROVENANCE.md 4.3.15 holds the sourcing
+    # and the reconcile-or-withhold gate; the figures arrive here already converted into
+    # the price basis. A SOURCED ZERO -- a registrant that states in its own filing that it
+    # has never paid -- is written as an explicit 0.0 for the years the statement covers,
+    # which is a different and stronger claim than an absent year and is what lets
+    # test_derived_constituents_carry_no_fabricated_dividends tell the two apart.
+    dividend_path = RAW_DIR / "ground_truth" / "derived_dividend_series.json"
+    dividend_tickers, zero_tickers = [], []
+    if dividend_path.exists():
+        with open(dividend_path, "r", encoding="utf-8") as f:
+            derived_dividends = json.load(f)["series_by_ticker"]
+
+        for ticker in sorted(DERIVED_NAMES):
+            record = derived_dividends.get(ticker)
+            if not record:
+                continue
+            priced_years = set(all_prices_data.get(ticker, {}))
+            priced_quarters = set(all_quarterly_prices_data.get(ticker, {}))
+
+            annual = {
+                year: obs["dividend_per_share"]
+                for year, obs in record.get("annual", {}).items()
+                if year in priced_years
+            }
+            quarterly = {
+                period: obs["dividend_per_share"]
+                for period, obs in record.get("quarterly", {}).items()
+                if period in priced_quarters
+            }
+
+            zero = record.get("sourced_zero") or {}
+            if zero and not zero.get("voided"):
+                # The statement bounds the claim: it covers everything up to the filing
+                # that made it and says nothing afterwards. Years past that bound are left
+                # absent, not zeroed.
+                bound = zero["through_filing_date"][:4]
+                annual.update({y: 0.0 for y in priced_years if y <= bound})
+                quarterly.update({q: 0.0 for q in priced_quarters if q[:4] <= bound})
+                zero_tickers.append(ticker)
+
+            if annual:
+                all_dividends_data[ticker] = dict(sorted(annual.items(), key=lambda kv: int(kv[0])))
+            if quarterly:
+                all_quarterly_dividends_data[ticker] = dict(sorted(quarterly.items()))
+            if annual or quarterly:
+                dividend_tickers.append(ticker)
+
+        print(
+            f"Merged dividend series for {len(dividend_tickers)} derived constituents from "
+            f"{dividend_path.relative_to(REPO_ROOT)}"
+        )
+        if zero_tickers:
+            print(f"  sourced zeros (read, not assumed): {', '.join(zero_tickers)}")
+        still_unknown = sorted(set(DERIVED_NAMES) - set(dividend_tickers))
+        if still_unknown:
+            print(f"  dividend series still unknown: {', '.join(still_unknown)}")
 
     # Load raw spinoff distributions for total return calculations.
     #

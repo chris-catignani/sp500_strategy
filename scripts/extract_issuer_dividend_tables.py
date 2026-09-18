@@ -34,8 +34,13 @@ SPLIT_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# A detector, not an extractor. The published quotation is the whole sentence the
+# detector fired on: anchoring the quotation on the pattern itself is what produced the
+# truncated statements this dataset first carried, because a 1990s filing wraps a
+# sentence across lines and abbreviates its own registrant's name mid-subject.
 NEVER_PAID_PATTERN = re.compile(
-    r"([^.\n;]*(?:never\s+(?:declared|paid)|not\s+(?:declared|paid)\s+(?:any\s+)?cash\s+dividends|no\s+cash\s+dividends\s+have\s+been\s+paid)[^.\n;]*)",
+    r"(?:never\s+(?:declared|paid)|not\s+(?:declared|paid)\s+(?:any\s+)?cash\s+dividends"
+    r"|no\s+cash\s+dividends\s+have\s+been\s+paid)",
     re.IGNORECASE,
 )
 
@@ -118,11 +123,146 @@ def extract_split_sentences(text: str, accession: str) -> List[Dict[str, str]]:
     return collected
 
 
-def extract_never_paid(text: str) -> Optional[str]:
-    m = NEVER_PAID_PATTERN.search(text)
-    if m:
-        return " ".join(m.group(0).split()).strip()
-    return None
+# A sentence that begins mid-page carries whatever the page put in front of it: the tail
+# of a price table, a phone number, a dotted leader, a footnote marker. Each of those is a
+# token no English sentence opens with, so the strip is token-based rather than a set of
+# ad-hoc prefixes. This is the same correction docs/DATA_PROVENANCE.md 4.3.13 applied to
+# Nortel's split quotation, where a page number was captured inside the quotation.
+SYMBOLIC_TOKEN = re.compile(r"^[\$\d/.,()\-\u2013\u2014%*:;|_=+\[\]]+$")
+LIST_MARKER = re.compile(r"^\(?[a-z0-9]{1,3}[).]$")
+LABEL_TOKEN = re.compile(r"^[A-Za-z][A-Za-z\-]*:$")
+# All-caps section headings that sit immediately above the statement. Kept as an explicit
+# vocabulary rather than a rule about capitalisation, so that a registrant whose own name
+# is capitalised -- EMC, GTE -- is never mistaken for a heading and stripped.
+HEADING_TOKENS = {"DIVIDEND", "DIVIDENDS", "MARKET", "ITEM", "NOTE", "GENERAL", "COMMON", "STOCK"}
+# Above this, a "sentence" is an artefact of protected abbreviations swallowing an address
+# or a table, not a sentence. Re-split it unprotected and keep the fragment that matched.
+SENTENCE_BUDGET = 400
+
+
+# A token that cannot appear inside one of these statements: a transfer agent's address,
+# a URL, a page number. Its presence marks where the surrounding page ends and the
+# sentence begins. Abbreviations are exempt -- "Viacom Inc." is the subject, not furniture.
+ABBREVIATION_TOKEN = re.compile(
+    r"^(?:Inc|Corp|Co|Ltd|Cos|plc|PLC|Jr|Sr|St|No|Nos|Mr|Mrs|Ms|Dr|[A-Z])\.$"
+)
+
+
+def _is_furniture(token: str) -> bool:
+    # Abbreviations are checked first and always kept: "Inc." is a subject, and a list
+    # marker pattern will happily match it otherwise.
+    if ABBREVIATION_TOKEN.match(token):
+        return False
+    # A trailing comma is prose punctuation, never a table cell. Without this, the date
+    # qualifier in "During 1996 and 1995, the Company has not declared..." reads as
+    # furniture and the statement loses the years it is about.
+    if token.endswith(","):
+        return False
+    if SYMBOLIC_TOKEN.match(token) or LIST_MARKER.match(token) or LABEL_TOKEN.match(token):
+        return True
+    if token.isupper() and token.upper() in HEADING_TOKENS:
+        return True
+    return bool(re.search(r"\d", token)) or "." in token[:-1] or "@" in token
+
+
+def strip_furniture(sentence: str, match_start: int = 0) -> str:
+    """Trim the page furniture a mid-page sentence carries, keeping the subject intact.
+
+    Leading furniture is dropped first. Then, because an address block can sit between the
+    sentence start and the statement itself, the quotation is trimmed forward to the last
+    run of prose that reaches the matched phrase -- never past it, so the subject survives.
+    """
+    tokens = sentence.split()
+    index = 0
+    while index < len(tokens) - 1 and _is_furniture(tokens[index]):
+        index += 1
+    # Index of the first token at or after the matched phrase, in the trimmed list.
+    consumed = 0
+    match_token = 0
+    for position, token in enumerate(tokens):
+        if consumed >= match_start:
+            match_token = position
+            break
+        consumed += len(token) + 1
+        match_token = position
+    start = index
+    for position in range(match_token, index - 1, -1):
+        if _is_furniture(tokens[position]):
+            start = position + 1
+            break
+    trimmed = " ".join(tokens[max(start, index):])
+    # A trim that lands mid-clause ("and 1995, the Company has not declared...") has cut
+    # into the sentence rather than the page around it. Keep the wider text instead: an
+    # extra clause of context is a smaller defect than a quotation that starts nowhere.
+    if trimmed and trimmed[0].islower():
+        return " ".join(tokens[index:])
+    return trimmed
+
+
+# A period after an abbreviation is not a sentence boundary. Splitting on it is what cut
+# "Viacom Inc. has not declared cash dividends..." down to its predicate.
+ABBREVIATION = re.compile(
+    r"\b(Inc|Corp|Co|Ltd|Cos|plc|PLC|Jr|Sr|St|No|Nos|Mr|Mrs|Ms|Dr|vs|etc|Div)\.",
+)
+INITIAL = re.compile(r"\b([A-Z])\.")
+_GUARD = "\x00"
+
+
+def clean_document_text(text: str) -> str:
+    """Markup-stripped, entity-decoded, whitespace-collapsed document text.
+
+    A 1990s fixed-width filing wraps a sentence across lines, so any pattern anchored on
+    a newline truncates it. Collapsing first is what lets a sentence be matched whole.
+    """
+    return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", text)).split())
+
+
+def split_sentences(text: str, protect_initials: bool = True) -> List[str]:
+    """Sentences, with abbreviation periods protected from the boundary split.
+
+    `protect_initials` also guards single capitals, which keeps "U.S.A." intact. That is
+    right for a first pass and wrong for a second: an address block ending in "U.S.A."
+    then swallows the sentence after it, so the over-budget re-split leaves it off and
+    protects only the company suffixes that carry a subject.
+    """
+    guarded = ABBREVIATION.sub(lambda m: m.group(1) + _GUARD, text)
+    if protect_initials:
+        guarded = INITIAL.sub(lambda m: m.group(1) + _GUARD, guarded)
+    return [s.replace(_GUARD, ".") for s in re.split(r"(?<=[.!?])\s+", guarded)]
+
+
+def extract_never_paid(text: str, accession: str = "", form: str = "", filing_date: str = "") -> List[Dict[str, str]]:
+    """Whole never-paid sentences, each carrying the filing it was read in.
+
+    Returns every distinct statement rather than the first: a registrant's wording changes
+    across years, and the filing date is what bounds the claim. A statement filed in 2000
+    says nothing about 2003, so the consumer needs the date, not just the sentence. Viacom
+    is why that matters -- it filed these statements for eight years and then began paying
+    a dividend in 2003 (4.3.15).
+    """
+    collected: List[Dict[str, str]] = []
+    seen = set()
+    for sentence in split_sentences(clean_document_text(text)):
+        if not NEVER_PAID_PATTERN.search(sentence):
+            continue
+        if len(sentence) > SENTENCE_BUDGET:
+            # An address or a table has been swallowed by a protected abbreviation.
+            # Re-split without the protection and keep only the fragment that matched.
+            fragments = [f for f in split_sentences(sentence, protect_initials=False) if NEVER_PAID_PATTERN.search(f)]
+            sentence = fragments[-1] if fragments else sentence
+        normalised = " ".join(sentence.split()).strip()
+        found = NEVER_PAID_PATTERN.search(normalised)
+        sentence = strip_furniture(normalised, found.start() if found else 0)
+        if not (20 < len(sentence) < 400) or sentence in seen:
+            continue
+        seen.add(sentence)
+        collected.append({
+            "accession_number": accession,
+            "form": form,
+            "filing_date": filing_date,
+            "sentence": sentence,
+        })
+    return collected
 
 
 def find_annual_dividends(text: str) -> Dict[int, float]:
@@ -433,7 +573,7 @@ def main():
         cik = cik_map.get(ticker)
         ticker_obj: Dict[str, Any] = {
             "quarters": {},
-            "never_paid_statement": None,
+            "never_paid_statements": [],
             "split_language": [],
             "reconciliation": {},
             "withheld": [],
@@ -465,9 +605,9 @@ def main():
             splits = extract_split_sentences(full_submission, acc)
             ticker_splits.extend(splits)
 
-            np_quote = extract_never_paid(full_submission)
-            if np_quote and not ticker_obj["never_paid_statement"]:
-                ticker_obj["never_paid_statement"] = np_quote
+            np_statements = extract_never_paid(full_submission, acc, form, f_date)
+            ticker_obj["never_paid_statements"].extend(np_statements)
+            np_quote = np_statements[0]["sentence"] if np_statements else None
 
             # Scan all documents in submission (including EX-13)
             sub_docs = re.split(r"<DOCUMENT>", full_submission, flags=re.I)
