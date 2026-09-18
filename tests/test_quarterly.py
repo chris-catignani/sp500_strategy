@@ -554,6 +554,107 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         ]
         self.assertGreater(len(differing), 0)
 
+    # The four tests below assert the CLAIMS docs/DATA_PROVENANCE.md 4.3.7 makes, not the
+    # cell values it prints. Pinning eighteen exact figures would relocate the maintenance
+    # chore rather than remove it: any legitimate data improvement would fail eighteen
+    # assertions and demand eighteen hand edits to the document. A claim breaks only when
+    # something real breaks, which is when the document should be forced open.
+
+    def test_market_cap_is_never_hurt_by_pool_depth(self) -> None:
+        """4.3.7: the expansion cannot cost the shipped default anything, on either path.
+
+        This is what makes "leave the pool at 20" safe. If it ever stops holding, the
+        decision recorded in 4.3.7 has to be reopened, not quietly re-published.
+        """
+        from scripts.audit_quarterly_expansion import (
+            run_annual_pool_depth_comparison,
+            run_survivorship_premise_check,
+        )
+
+        for row in run_annual_pool_depth_comparison():
+            if row["selector"] != "Market Cap":
+                continue
+            # Annual selection ranks by the same weight the roster is ordered by, so a
+            # name below rank 12 is unreachable by a book of 10 or fewer.
+            self.assertAlmostEqual(
+                row["delta"], 0.0, places=9,
+                msg=f"annual {row['strategy']} {row['horizon']} moved with pool depth",
+            )
+
+        for row in run_survivorship_premise_check():
+            if row["selector"] != "Market Cap":
+                continue
+            self.assertGreaterEqual(
+                row["delta_corrected"], -1e-9,
+                f"quarterly {row['strategy']} {row['horizon']}: a wider pool hurt market cap",
+            )
+            if row["strategy"] in ("Top 3", "Top 5"):
+                self.assertAlmostEqual(row["delta_corrected"], 0.0, places=9)
+
+    def test_momentum_top_10_is_hurt_by_pool_depth_on_both_paths(self) -> None:
+        """4.3.7: the one signal consistent across the whole matrix, 6 of 6 cells."""
+        from scripts.audit_quarterly_expansion import (
+            run_annual_pool_depth_comparison,
+            run_survivorship_premise_check,
+        )
+
+        annual = [r["delta"] for r in run_annual_pool_depth_comparison()
+                  if r["selector"] == "Performance" and r["strategy"] == "Top 10"]
+        quarterly = [r["delta_corrected"] for r in run_survivorship_premise_check()
+                     if r["selector"] == "Performance" and r["strategy"] == "Top 10"]
+
+        self.assertEqual(len(annual), 3)
+        self.assertEqual(len(quarterly), 3)
+        for delta in annual + quarterly:
+            self.assertLess(delta, 0.0)
+
+    def test_the_momentum_penalty_flips_sign_with_n_and_frequency(self) -> None:
+        """4.3.7: the reason the pool is uniform rather than selector-dependent.
+
+        If the penalty were consistent, a selector-dependent pool would be the obvious
+        answer and the overfitting argument would not apply. It is the flipping that makes
+        a fitted rule need selector x N x frequency, so the flipping is the claim.
+        """
+        from scripts.audit_quarterly_expansion import (
+            run_annual_pool_depth_comparison,
+            run_survivorship_premise_check,
+        )
+
+        annual = {(r["strategy"], r["horizon"]): r["delta"]
+                  for r in run_annual_pool_depth_comparison() if r["selector"] == "Performance"}
+        quarterly = {(r["strategy"], r["horizon"]): r["delta_corrected"]
+                     for r in run_survivorship_premise_check() if r["selector"] == "Performance"}
+
+        # Top 3 gains from the wider pool where Top 10 loses: the sign turns with N.
+        self.assertGreater(quarterly[("Top 3", "10y")], 0.0)
+        self.assertLess(quarterly[("Top 10", "10y")], 0.0)
+
+        # Top 5 is negative on every quarterly horizon and positive on some annual one:
+        # the sign turns with rebalancing frequency too.
+        self.assertTrue(all(quarterly[("Top 5", h)] < 0.0 for h in ("10y", "20y", "30y")))
+        self.assertTrue(any(annual[("Top 5", h)] > 0.0 for h in ("10y", "20y", "30y")))
+
+    def test_survivorship_correction_does_not_change_the_pool_size_answer(self) -> None:
+        """4.3.7: the premise #41 was sequenced on, which the measurement falsified.
+
+        The threshold carries headroom over the observed maximum so that ordinary data
+        work does not trip it. It is meant to fire if the premise ever becomes true.
+        """
+        from scripts.audit_quarterly_expansion import run_survivorship_premise_check
+
+        rows = run_survivorship_premise_check()
+        self.assertEqual(len(rows), 18)
+        for row in rows:
+            self.assertLess(
+                abs(row["premise_effect"]), 0.5,
+                f"{row['selector']} {row['strategy']} {row['horizon']}: the survivorship "
+                "correction now moves the pool-size delta materially",
+            )
+            # Every one of the 17 constituents #55 supplied is out of the rosters by 2004,
+            # so a run starting in 2005 or 2015 cannot be affected at all.
+            if row["horizon"] in ("10y", "20y"):
+                self.assertAlmostEqual(row["premise_effect"], 0.0, places=9)
+
     def test_out_of_sample_accuracy_excludes_circular_q4_periods(self) -> None:
         """Q4 2020-2024 match by construction and must be excluded from the honest metric."""
         from scripts.audit_quarterly_expansion import (
