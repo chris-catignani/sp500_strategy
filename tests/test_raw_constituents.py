@@ -1286,7 +1286,7 @@ class TestVanguardArchiveCoverage(unittest.TestCase):
             for entry in list(self.manifest.values()) + list(semiannual.values())
         )
         self.assertEqual(claimed, on_disk)
-        self.assertEqual(len(self.manifest), 13)
+        self.assertEqual(len(self.manifest), 19)
         self.assertEqual(len(semiannual), 13)
 
     def test_every_semiannual_filing_states_a_june_30_period(self):
@@ -2126,7 +2126,7 @@ class TestProvenanceVerifier(unittest.TestCase):
         from scripts.verify_provenance import verify_rosters
 
         results = verify_rosters(verbose=False)
-        self.assertEqual(len(results), 13)
+        self.assertEqual(len(results), 19)
         for result in results:
             with self.subTest(year=result.subject):
                 self.assertTrue(result.ok, f"{result.subject}: {result.checks}")

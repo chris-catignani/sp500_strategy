@@ -52,15 +52,43 @@ def _clean_name(name: str) -> str:
     return cleaned or name.strip()
 
 
+# A footnote cell carries one marker or several comma-joined ones. The later filings
+# attach two markers to a single holding -- "*,^" for a non-income-producing security
+# that is also on loan -- and an unanchored single-marker pattern leaves that cell in
+# place, which shifts every subsequent cell and drops the position entirely.
+_FOOTNOTE_MARKER = r"(?:[\*^•]+|\(\d+\))"
+_FOOTNOTE_CELL = re.compile(rf"{_FOOTNOTE_MARKER}(?:\s*,\s*{_FOOTNOTE_MARKER})*")
+
+# A name cell that swallowed its own share count: the filing renders the issuer and the
+# share figure in one table cell rather than two, so the row carries two cells instead of
+# three. Bank of America in FY2014 and General Electric in FY2014 and FY2016 are filed
+# this way, and each is a Top 20 position, so dropping them is not a rounding matter.
+_NAME_WITH_SHARES = re.compile(r"^(.*?[A-Za-z.)])\s+([\d,]{4,})$")
+
+
 def _is_footnote_cell(cell: str) -> bool:
     """Check whether an HTML table cell contains only footnote symbols."""
-    return bool(re.fullmatch(r"[\*^•]+|\(\d+\)", cell.strip()))
+    return bool(_FOOTNOTE_CELL.fullmatch(cell.strip()))
 
 
 def _is_money(cell: str) -> bool:
     """Check whether a cell string represents an integer currency figure."""
     val = cell.replace("$", "").replace(",", "").strip()
     return bool(val) and val.isdigit()
+
+
+def _is_separated_money(cell: str) -> bool:
+    """Check whether a cell is a currency figure written with thousands separators.
+
+    Every dollar figure on the face of these schedules carries a separator, because the
+    smallest position in a five-hundred-stock fund still runs to millions. A lone cell
+    holding a bare one- or two-digit integer is therefore page furniture, not money: the
+    FY2018 and FY2019 filings emit the printed page number as its own table row. Counting
+    one as a holding barely moves the total, but it resets the sector running sum, and
+    every subtotal after it is then read as a position -- which is how a schedule comes
+    out at twice the total its own filing states.
+    """
+    return _is_money(cell) and "," in cell
 
 
 def _text_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
@@ -176,7 +204,7 @@ def _html_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
         # sector's percentage in parentheses. Anything else is a real holding whose
         # identity the document simply does not state, and it must still be counted or
         # the schedule will not reconcile.
-        if len(cells) == 1 and _is_money(cells[0]):
+        if len(cells) == 1 and _is_separated_money(cells[0]):
             figure = float(cells[0].replace("$", "").replace(",", "").strip())
             # A subtotal restates what has already been counted, so it equals the running
             # sum of positions since the previous subtotal. An orphaned holding does not.
@@ -199,6 +227,14 @@ def _html_roster(text: str) -> Tuple[List[Dict[str, Any]], float]:
                     running += figure
             name_buffer = []
             continue
+
+        merged = (
+            _NAME_WITH_SHARES.match(cells[0])
+            if len(cells) == 2 and _is_money(cells[1])
+            else None
+        )
+        if merged is not None:
+            cells = [merged.group(1), merged.group(2), cells[1]]
 
         if len(cells) >= 3 and _is_money(cells[1]) and _is_money(cells[2]):
             name = " ".join(name_buffer + [cells[0]])

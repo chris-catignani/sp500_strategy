@@ -117,5 +117,59 @@
     "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-07-000538.txt",
     "file_path": "data/raw/ground_truth/sec_filings/VG500_2006_N-CSR_0000932471-07-000538.txt",
     "file_size_bytes": 11677447
+  },
+  "2014": {
+    "fiscal_year": 2014,
+    "form": "N-CSR",
+    "accession_number": "0000932471-15-005659",
+    "report_date": "2014-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-15-005659.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2014_N-CSR_0000932471-15-005659.txt",
+    "file_size_bytes": 11597610
+  },
+  "2015": {
+    "fiscal_year": 2015,
+    "form": "N-CSR",
+    "accession_number": "0000932471-16-012795",
+    "report_date": "2015-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-16-012795.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2015_N-CSR_0000932471-16-012795.txt",
+    "file_size_bytes": 12012525
+  },
+  "2016": {
+    "fiscal_year": 2016,
+    "form": "N-CSR",
+    "accession_number": "0000932471-17-003352",
+    "report_date": "2016-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-17-003352.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2016_N-CSR_0000932471-17-003352.txt",
+    "file_size_bytes": 8730698
+  },
+  "2017": {
+    "fiscal_year": 2017,
+    "form": "N-CSR",
+    "accession_number": "0000932471-18-005288",
+    "report_date": "2017-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0000932471-18-005288.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2017_N-CSR_0000932471-18-005288.txt",
+    "file_size_bytes": 8742403
+  },
+  "2018": {
+    "fiscal_year": 2018,
+    "form": "N-CSR",
+    "accession_number": "0001104659-19-011820",
+    "report_date": "2018-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0001104659-19-011820.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2018_N-CSR_0001104659-19-011820.txt",
+    "file_size_bytes": 18192635
+  },
+  "2019": {
+    "fiscal_year": 2019,
+    "form": "N-CSR",
+    "accession_number": "0001104659-20-027799",
+    "report_date": "2019-12-31",
+    "sec_url": "https://www.sec.gov/Archives/edgar/data/36405/0001104659-20-027799.txt",
+    "file_path": "data/raw/ground_truth/sec_filings/VG500_2019_N-CSR_0001104659-20-027799.txt",
+    "file_size_bytes": 18028858
   }
 }

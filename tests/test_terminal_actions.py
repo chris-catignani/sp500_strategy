@@ -743,10 +743,10 @@ class TestTopTwentyUniverseInvariant(unittest.TestCase):
                 )
                 checked += 1
 
-        # Thirteen audited rosters, twenty positions each. Asserted exactly rather than
+        # Nineteen audited rosters, twenty positions each. Asserted exactly rather than
         # loosely, so that adding a roster fails here and the figure quoted in
         # docs/DATA_PROVENANCE.md 4.3.16 is revisited with it.
-        self.assertEqual(checked, 260)
+        self.assertEqual(checked, 380)
 
     def test_every_gap_constituent_reaching_a_top_20_is_now_priced(self):
         """The survivorship gap #37 opened with, measured against the compiled dataset."""
