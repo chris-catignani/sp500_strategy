@@ -199,8 +199,21 @@ class TestDatasetIntegrity(unittest.TestCase):
         # distribution went ex on the filing date, so the filed value carries it.
         self.assertAlmostEqual(prices["T_CORP"]["1996"], 138.0002, places=4)
         self.assertAlmostEqual(prices["T_CORP"]["1997"], 204.1666, places=4)
-        # Derived series have no dividend records (filings report holdings, not distributions)
-        self.assertEqual(divs.get("T_CORP", {}), {})
+        # A dividend series now exists for these years, read from AT&T's own filings
+        # (#76). It is in the same basis as the prices above, and AT&T states the
+        # converted figure itself: $0.33 a quarter, filed when the factor is 1.5 x 0.2,
+        # is $4.40 a year -- which is exactly what its FY2002 report restates 1996-1999
+        # to after the same two splits. The conversion is checked, not assumed.
+        self.assertAlmostEqual(divs["T_CORP"]["1994"], 4.40, places=4)
+        self.assertAlmostEqual(divs["T_CORP"]["1995"], 4.40, places=4)
+        self.assertAlmostEqual(divs["T_CORP"]["1996"], 4.40, places=4)
+        self.assertAlmostEqual(divs["T_CORP"]["1997"], 4.40, places=4)
+        # A sanity bound that holds whatever the sourcing: Ma Bell's yield sits in the
+        # low single digits, not the double digits a basis error would produce.
+        for year in ("1994", "1995", "1996", "1997"):
+            yield_pct = 100.0 * divs["T_CORP"][year] / prices["T_CORP"][year]
+            self.assertLess(yield_pct, 5.0)
+            self.assertGreater(yield_pct, 1.0)
 
     def test_att_distribution_endpoints_conserve_quoted_wealth(self):
         """Parent plus credited child must equal the filed package quote.
@@ -302,15 +315,120 @@ class TestDerivedConstituentSeries(unittest.TestCase):
                 self.assertFalse((ROOT / "data" / "raw" / "tickers" / f"{ticker}.json").exists())
 
     def test_derived_constituents_carry_no_fabricated_dividends(self):
-        """A Schedule of Investments reports holdings, not distributions.
+        """Three claims live in this series, and they must stay distinguishable (#76).
 
-        An empty dividend series is the honest value. Zero-filling it would understate
-        total return for these issuers without recording that the figure is unknown
-        rather than nil.
+        A Schedule of Investments reports holdings, not distributions, so no dividend is
+        derivable from the source these prices come from. Where the issuer's own filings
+        or a verified successor series supply one, it is published. Where a registrant
+        states in its own filing that it has never paid, the zero is **read**, and an
+        explicit 0.0 records that. Where nothing is sourced, the year stays **absent**.
+
+        Zero-filling an unknown is the failure this guards: it understates total return
+        while looking like a measurement. So every figure that reaches the built dataset
+        must appear in `derived_dividend_series.json`, and every explicit zero must be
+        backed by a statement in that dataset rather than by an assumption here.
         """
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "derived_dividend_series.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            sourced = json.load(f)["series_by_ticker"]
+
         for ticker in self.derived:
             with self.subTest(ticker=ticker):
-                self.assertEqual(self.dividends.get(ticker, {}), {})
+                published = self.dividends.get(ticker, {})
+                record = sourced.get(ticker, {})
+                zero = record.get("sourced_zero") or {}
+                has_read_zero = bool(zero) and not zero.get("voided")
+
+                if not published:
+                    # An absent series is still the honest value for a registrant nothing
+                    # reached. It must not be the value for one that was sourced.
+                    self.assertFalse(
+                        record.get("annual") or has_read_zero,
+                        f"{ticker} has a sourced dividend series that did not reach the dataset",
+                    )
+                    continue
+
+                for year, amount in published.items():
+                    if amount:
+                        self.assertIn(
+                            year,
+                            record.get("annual", {}),
+                            f"{ticker} {year}: dividend published with no sourced figure behind it",
+                        )
+                        self.assertAlmostEqual(
+                            amount, record["annual"][year]["dividend_per_share"], places=6
+                        )
+                    else:
+                        self.assertTrue(
+                            has_read_zero,
+                            f"{ticker} {year}: zero-filled without a never-paid statement",
+                        )
+                        self.assertLessEqual(
+                            year,
+                            zero["through_filing_date"][:4],
+                            f"{ticker} {year}: zero extends past the statement that backs it",
+                        )
+
+    def test_a_sourced_zero_is_a_read_zero(self):
+        """Every explicit zero traces to a sentence in a filing, with its accession.
+
+        This is the distinction the previous test could not make while the series was
+        uniformly empty. A sourced zero is a stronger claim than an absent year, and it
+        earns that only by carrying the statement it was read in -- which is why the
+        statements are stored per filing rather than once per ticker (4.3.15).
+        """
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "derived_dividend_series.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            sourced = json.load(f)["series_by_ticker"]
+
+        zeros = 0
+        for ticker, record in sorted(sourced.items()):
+            zero = record.get("sourced_zero") or {}
+            if not zero or zero.get("voided"):
+                continue
+            with self.subTest(ticker=ticker):
+                self.assertTrue(zero["statements"], f"{ticker}: sourced zero with no statement")
+                for statement in zero["statements"]:
+                    self.assertTrue(statement["accession_number"])
+                    self.assertTrue(statement["filing_date"])
+                    # The quotation must be a sentence, not the fragment a line-anchored
+                    # pattern leaves behind. That defect shipped once already (4.3.15).
+                    self.assertTrue(
+                        statement["sentence"].endswith("."),
+                        f"{ticker}: statement is truncated: {statement['sentence']!r}",
+                    )
+                    self.assertGreater(len(statement["sentence"].split()), 6)
+            zeros += 1
+        self.assertGreaterEqual(zeros, 5, "sourced zeros lost coverage")
+
+    def test_a_never_paid_statement_is_not_extended_past_a_contradicting_filing(self):
+        """Viacom filed never-paid statements for eight years, then began paying.
+
+        `"Viacom Inc.'s Board of Directors declared a quarterly cash dividend of $.06 per
+        share on its common stock during the third and fourth quarters of 2003"` --
+        accession 0001047469-04-007840. A ticker-level sourced zero carries no date, so
+        reading one as a standing claim would zero-fill years the registrant actually
+        paid. VIA's zero is therefore void, and it must reach the dataset as unknown.
+        """
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "derived_dividend_series.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            sourced = json.load(f)["series_by_ticker"]
+
+        zero = sourced["VIA"]["sourced_zero"]
+        self.assertTrue(zero["voided"])
+        contradiction = zero["contradicted_by_a_later_filing"]
+        self.assertEqual(contradiction["first_paid_period"], "2003-Q3")
+        self.assertEqual(contradiction["accession_number"], "0001047469-04-007840")
+        self.assertEqual(self.dividends.get("VIA", {}), {})
 
     def test_derived_series_reach_the_quarterly_datasets(self):
         """Quarterly coverage now exists for these constituents (#63).

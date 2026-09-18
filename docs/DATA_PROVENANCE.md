@@ -245,6 +245,8 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
 | 30y quarterly | Top 3 | 13.79% | 13.60% | −0.19pp |
 | 30y quarterly | Top 5 | 12.94% | 12.66% | −0.28pp |
 | 30y quarterly | Top 10 | 13.48% | 12.80% | −0.68pp |
+
+*The "after" column is the state when this correction was measured. Sourcing the derived constituents' dividends has since raised every one of these figures by 0.006-0.056pp (§4.3.18); the correction's magnitude is unaffected, and the dividend effect is roughly a twentieth of it.*
 | 10y and 20y | all | — | — | 0.00pp |
 
   Pre-tax CAGR, market-cap selector. **The 10-year and 20-year horizons do not move at all**, and not because the effect is small there. No roster after 2004 names one of the 17, and the only one that reaches 2004 is Dell at rank **#19** — outside any Top 10 — so a run starting in 2004 or 2014 cannot select one. The bias is a 30-year phenomenon exactly.
@@ -294,7 +296,7 @@ Against that, `MarketCapSelector` — the shipped default, and the basis of ever
 
 So the pool stays at 20 for both selectors, and the asymmetry is recorded here instead of being tuned away. Anyone running `--strategy performance` at Top 5 or Top 10 should read the table above as a known, measured cost of the shared pool, not as an unexamined default. `python3 scripts/audit_quarterly_expansion.py` prints every figure in this section, including the premise check.
 
-  - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results independently of any pool-size effect. `Top_3_MarketCap` fell from 26.88% to 24.49% (10y), 16.39% to 15.29% (20y) and 15.16% to 14.43% (30y). The cause is year-end 2023: the prior data ranked NVIDIA #3 at 3.4%, while the filing shows NVIDIA at 3.06% behind Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run. **Those "after" figures were current when measured and have since moved again**: the same three horizons now read 24.49%, 14.44% and 13.72%, the 20y and 30y having fallen as #55 and #56 added the constituents that failed (§4.3.6) and #85 and #86 corrected `T_CORP`'s split and the issuer dividends. The 2023 NVIDIA finding is unaffected; only the levels it was quoted against have changed.
+  - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results independently of any pool-size effect. `Top_3_MarketCap` fell from 26.88% to 24.49% (10y), 16.39% to 15.29% (20y) and 15.16% to 14.43% (30y). The cause is year-end 2023: the prior data ranked NVIDIA #3 at 3.4%, while the filing shows NVIDIA at 3.06% behind Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run. **Those "after" figures were current when measured and have since moved again**: the same three horizons now read 24.49%, 14.44% and 13.77%, the 20y and 30y having fallen as #55 and #56 added the constituents that failed (§4.3.6) and #85 and #86 corrected `T_CORP`'s split and the issuer dividends, then risen slightly as #76 wired those dividends into the datasets (§4.3.18). The 2023 NVIDIA finding is unaffected; only the levels it was quoted against have changed.
 - **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.06%, Alphabet A 2.07%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN. The consolidation applies to the 2020-2024 filing-derived weights, and since the 2010-2019 extraction it also applies to the **September 30** ground truth for 2014-2019, whose filings list both classes explicitly ("Google, Inc. (Class A)"/"(Class C)" in 2014, "Alphabet, Inc. Class A"/"Class C" from 2015) and are aggregated through the same `CONSOLIDATED_ISSUERS` registry. This does **not** close the 2014-2019 gap, which concerns the **December** factsheet anchor rows: a September filing cannot establish what a December anchor's share-class basis was, so those rows remain unverified (§4.3.8). A registered issuer that contributed only one class keeps the name the filing gave it, so SPY's 2006-2013 single-class Google positions are not relabelled "Alphabet Inc." years before the rename. See section 4.3.8 for coverage and the open gap.
 
 #### 4.3.8 Dual-Class Issuer Consolidation & Execution Convention
@@ -787,6 +789,8 @@ only ones whose window reaches these years:
 | S&P 500 30y Top 5 (Quarterly) | 12.94% | **12.66%** |
 | S&P 500 30y Top 10 (Quarterly) | 13.48% | **12.80%** |
 
+*As above, these are the figures as measured. §4.3.18 raises the three quarterly levels to 13.60%, 12.67% and 12.84%.*
+
 Nothing else moves: every constituent admitted sits between 1995 and 2003, outside the 10y
 and 20y windows, and the annual path is untouched. **Every figure moved down**, which is the
 point. The strategy was being flattered by the absence of AT&T Corp, Mobil, GTE, BellSouth,
@@ -893,6 +897,34 @@ the derived series' basis. BellSouth is why: it reports 1996 at \$0.36 a quarter
 filing and at \$0.18 in filings after its December 1998 two-for-one. Both are correct in
 their own basis. Conversion is the consumer's job and needs `splits.json`.
 
+##### A quotation that was truncated, and a zero that was not a zero (issue #84)
+
+The never-paid statements this dataset first published were **unusable as sourced claims**,
+and in one case were wrong. Both defects are fixed here.
+
+- **Truncated, and uncheckable.** `extract_never_paid` matched against the raw submission
+  with a pattern bounded by `\n`, so every quotation was cut at the line break a 1990s
+  fixed-width filing puts mid-sentence: `"...any cash dividends on its"`. Worse, the loop
+  discarded the accession, so `verify_provenance.py` had nothing to re-read. A quotation
+  with no citation is the thing 4.3.13 exists to prevent. The extractor now strips markup,
+  splits sentences with abbreviation protection -- *Viacom Inc.* is a subject, not a
+  sentence boundary -- trims page furniture token by token, and records **every** statement
+  with its accession, form and filing date. The 64 published quarters, the reconciliations
+  and the withheld years all regenerate **byte-identical**; only the statements change.
+- **A ticker-level zero carries no date, and Viacom needed one.** `VIA` filed never-paid
+  statements for eight consecutive years and then **began paying**: *"Viacom Inc.'s Board of
+  Directors declared a quarterly cash dividend of \$.06 per share on its common stock during
+  the third and fourth quarters of 2003"* (`0001047469-04-007840`), continuing at \$.06
+  through 2004 and \$.07 in 2005. Read as a standing claim, the field would have zero-filled
+  years the registrant actually paid. A sourced zero is therefore **bounded by the filing
+  date of the statement and void if a later filing reports a payment**, and `VIA`'s is
+  recorded as void. `SUNW` shows the milder form of the same problem: its statement appears
+  in the FY1995 and FY2000 filings and in none of the seven later ones, so its zero stops
+  at 2000 and the years after it are unknown rather than nil.
+
+The lesson generalises past this dataset. A *sourced zero* is a claim about a **span**, not
+about a ticker, and the span is what the filing date gives it.
+
 ##### What it covers, and what it does not
 
 Quarters are published for five issuers: `AN`, `BLS`, `DD`, `GTE` and `T_CORP`. Of the six
@@ -901,7 +933,14 @@ constituents that ever reach a Top-10 slot in either path, this dataset resolves
 and `MCIC`, which carry a **`never_paid_statement`** quoted from their own filings -- a
 *sourced zero*, which is a different and stronger claim than an empty series, and not a
 zero-fill, because the zero is read. `RD` and `SBC` are absent and were always the vendor
-route. **`LU` is absent outright** and is the one real gap among constituents that matter.
+route. **`LU` is absent from this dataset**, which #76 read as the one real gap among
+constituents that matter. That reading is wrong: Lucent's filings carry the figures plainly.
+Its FY1999 Form 10-K405 (`0000950123-99-011082`) states `Dividends per common share(3) 0.08
+0.0775 0.0563 0.0375 0.0375` and a quarterly row `$ 0.04 $ 0.00 $ 0.02 $ 0.02 $ 0.08` that
+reconciles to the annual line exactly. What defeated the extractor is not absence but
+**fiscal alignment**: Lucent's year ends September 30, so its quarterly columns are not
+calendar quarters and cannot be read into a calendar series without an explicit mapping.
+That mapping is the remaining work for `LU`, not sourcing.
 
 **112 of 168 filings were refused, and that is mostly a finding rather than a failure.**
 Sixty-eight refusals read "Item 5 / financial statements incorporated by reference to annual
@@ -1160,6 +1199,155 @@ Because quarterly rebalancing dynamically drifts constituent market-cap weights 
 - **Top 3 Quarterly**: Exits `T` at 1996-Q1 $\implies$ receives neither distribution.
 
 ---
+
+#### 4.3.17 Checking Derived Prices Against the Registrants' Own Closes (issue #84)
+
+A fund Schedule of Investments gives an implied price; the registrant's own Form 10-K gives
+the high, low and quarter-end close for the same date. **The split factor is the only thing
+standing between them**, so disagreement localises to the factor. That is how `T_CORP`'s
+missing three-for-two of 1999-04-15 was found (4.3.9), and 4.3.15's document pull makes the
+check repeatable for every registrant whose Item 5 table survived.
+
+Two checks, pinned in `tests/test_issuer_reported_closes.py`:
+
+- **Band** — the derived price, expressed back in as-traded terms, must lie inside the
+  registrant's own reported high/low for that quarter. Outside is *impossible* rather than
+  unlikely, which is the structural reject `docs/SUBAGENTS.md` argues for: it needs no
+  second source. **55 quarters across `AN`, `BLS`, `DD`, `GTE` and `T_CORP`; none fails.**
+- **Close** — where the registrant also reported the quarter-end close, the figures are
+  compared directly. **15 comparisons; 13 agree within 0.5% and 10 within 0.02%.** The
+  widest is `T_CORP` 1994-Q2 at 1.874%, already recorded at 4.3.9: the fund values at its
+  own business day while the registrant quotes the composite tape close.
+
+##### `GTE`'s absent split record stops being an argument from absence
+
+4.3.9 records `GTE` as `none_found` on two grounds, both negative: its FY1999 Form 10-K
+contains no split language for 1994–2000, and the price series shows no halving. `GTE`'s own
+reported closes make the case **positively** — across twelve quarters of 1996–1999 the
+derived price reproduces the filed close at a factor of **exactly one**. A missing
+two-for-one would put every one of the twelve out by half.
+
+##### Coverage, and why it stops where it does
+
+Five registrants of nineteen. The shortfall is the refusal rate of 4.3.15 rather than a
+limit of the method: the check needs an issuer-reported band, and for fourteen registrants
+no such table was recovered, mostly because a 1990s 10-K incorporates Item 5 by reference to
+a shareholder report filed separately. `RD` and `NT` file 20-F and 40-F and were never
+expected to be reachable. The shortfall is **asserted by test**, naming the five reachable
+registrants, so recovering one is a visible change rather than a silent improvement.
+
+`MCIC`'s truncated split quotation — #84's other listed item — was resolved under #76 and is
+recorded at the end of 4.3.15; `splits.json` carries the complete sentence and the confirmed
+1999-12-30 distribution date.
+
+#### 4.3.18 Wiring the Sourced Dividends Into the Datasets (issue #76)
+
+4.3.15 established the sources and stated plainly that nothing consumed them. This is the
+consumption. `scripts/derive_issuer_dividend_series.py` assembles
+`data/raw/ground_truth/derived_dividend_series.json`, and `build_datasets_from_raw.py` merges
+it into `sp500_dividends.json` and `sp500_quarterly_dividends.json`.
+
+| Route | Applies to | Grade |
+|---|---|---|
+| `issuer_table` | quarters already through 4.3.15's reconcile-or-withhold gate | filing-quoted, unaudited |
+| `issuer_pinned` | a year the extractor withheld through a **year-alignment fault in its annual reader**, re-read and re-reconciled here | filing-quoted, unaudited |
+| `vendor` | `RD` and `SBC`, via `SHEL` and `T` | vendor — the grade every row in `sp500_dividends.json` already carries |
+| `sourced_zero` | `AOL`, `DELL`, `EMC`, `MCIC`, `SUNW` | filing-quoted, date-bounded |
+
+**Twelve of the nineteen now carry a series.** Seven remain unknown: `GM`, `LU`, `MOB`,
+`MOT`, `NT`, `TYC` and `VIA`. None is zero-filled.
+
+##### The basis conversion, confirmed by AT&T rather than assumed
+
+A dividend is stated in the share terms current at its **filing's** date; the price series is
+in the terms of the registrant's **final observation** (§4.1). So
+
+```
+dividend_in_price_basis = dividend_as_filed / split_factor(filing_date)
+```
+
+AT&T states the converted figure itself. `$0.33` a quarter in 1994, filed in 1995 when the
+factor is `1.5 × 0.2 = 0.3`, converts to `$4.40` a year — and AT&T's FY2002 report restates
+1996–1999 as exactly `4.40` after those same two splits. The arithmetic chain is consistent
+across five filings: `1.32` → `0.88` after the 1999 three-for-two → `4.40` after the 2002
+one-for-five reverse. Asserted by `test_att_decoupled_series_1994_1997`.
+
+**The vendor route takes no conversion, and this was checked rather than assumed.** #76's
+thread records scaling SBC's dividends by its 1.324 price factor and getting `$1.658` where
+SBC paid `$1.2475`. SBC's own filings settle it: `Dividends declared per common share $ 0.895
+$ 0.86 $ 0.825 $ 0.79` against vendor sums of `0.887 / 0.851 / 0.816 / 0.781` — the same
+basis, about 1% low on declared-versus-ex-date timing, and nowhere near a factor of 1.324.
+
+##### The vendor series is bounded by the registrant, not by the successor
+
+`SHEL` and `T` keep trading and keep paying long after Royal Dutch and SBC stop being
+priceable here. Each series is therefore cut to the span of the registrant's own price
+series — `RD` 1994–2001, `SBC` 1994–2004 — because a dividend recorded for a year this
+repository cannot price would read as Royal Dutch having paid it.
+
+##### What it moves
+
+**Twelve of the 72 scenarios move, all of them 30-year S&P 500, all upward**, by **+0.006pp
+to +0.056pp**. The `world` universe holds none of these constituents and cannot move; the
+10-year and 20-year horizons start after the affected span.
+
+| 30y, market-cap weighted | Annual before → after | Quarterly before → after |
+|---|---|---|
+| Top 3 | 13.7223 → **13.7665** (+0.044) | 13.5955 → **13.6016** (+0.006) |
+| Top 5 | 12.9566 → **13.0065** (+0.050) | 12.6572 → **12.6680** (+0.011) |
+| Top 10 | 12.1189 → **12.1749** (+0.056) | 12.7970 → **12.8356** (+0.039) |
+
+Regenerate with `python3 run_backtest.py --compare-frequencies`. The **claim** these figures
+carry — that the effect is positive at every depth and under 0.1pp — is what
+`TestDerivedDividendEffect` asserts, by running the book twice against the same loader with
+the derived constituents' dividends removed. The values themselves are not pinned.
+
+This closes the confounding #76 raised. #63 attributed a decline of −0.19/−0.28/−0.68pp to
+survivorship; the missing dividends account for at most 0.056pp of that, so the attribution
+was imprecise rather than wrong, and the corrected figures are no longer a lower bound for
+the constituents that could be sourced.
+
+##### The selection effect, which #76 flagged as unmeasured
+
+#76's first comment was explicit about what its sweeps did *not* cover:
+
+> **Income only.** Dividends were injected into the dividend series, so under market-cap
+> weighting the selected holdings are identical. A real dividend series could shift
+> selection under `PerformanceSelector`; that is not measured here.
+
+It shifts it. `trailing_1y_return` in `sp500_constituents.json` is a **total** return, so
+sourcing a dividend changes the momentum ranking as well as the income. Measured across the
+same 144-cell matrix with `PerformanceSelector`:
+
+| 30y S&P 500, momentum | Before → after | Delta |
+|---|---|---|
+| Top 10, market-cap weighted, quarterly | 10.3479 → 10.1686 | **−0.179** |
+| Top 10, equal weighted, quarterly | 9.8080 → 9.6840 | **−0.124** |
+| Top 10, equal weighted, annual | 10.5377 → 10.6200 | +0.082 |
+| Top 10, market-cap weighted, annual | 10.8934 → 10.9457 | +0.052 |
+
+**Two things are worth reading off this.** The momentum effect is *larger* than the income
+effect and **changes sign with frequency**, where the income effect is positive everywhere
+by construction. And it is a selection change, not an income change: a dividend-paying
+mega-cap now ranks above a non-payer it previously tied, which is a different book, not the
+same book with more cash. Six cells move, all of them Top 5 or Top 10 and all 30-year.
+
+This does not affect the shipped default, which is `MarketCapSelector`. It does mean the
+bound `TestDerivedDividendEffect` asserts -- positive at every depth, under 0.1pp -- is a
+claim about the **market-cap path only**, and the test says so.
+
+##### Why the effect is small, and why the weight tables overstate it
+
+Roster weight share is not time in the portfolio. Only **six** of the nineteen derived
+constituents are ever selected in any of the 72 scenarios — `RD`, `LU`, `T_CORP`, `AOL`,
+`MCIC` and `SBC` — across 29 distinct periods in total, all inside 1995–2001. The other
+thirteen, including every registrant whose quarters 4.3.15 published except `T_CORP`, are
+never held at all. So the 64-quarter dataset touches exactly one constituent that can move a
+published figure, and `AOL` and `MCIC` are sourced zeros that move nothing by construction.
+
+Two of the six are not yet wired. `LU` needs the fiscal-to-calendar mapping described in
+4.3.15 and holds 5 of the 23 Top-10 ticker-quarters; `VIA` is never selected, so its 2003–05
+dividends would move nothing and are left to a later pass.
 
 ## 5. Major Corporate Actions & Adjustments Log
 
