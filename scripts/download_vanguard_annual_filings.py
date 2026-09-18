@@ -54,6 +54,15 @@ ANNUAL_FILINGS = [
     (2004, "N-CSR", "0000932471-05-000480"),
     (2005, "N-CSR", "0000932471-06-000510"),
     (2006, "N-CSR", "0000932471-07-000538"),
+    # 2014-2019 were added for issue #45, which needs a December-dated source reporting
+    # Alphabet's two share classes separately. The span between 2006 and 2014 exists on
+    # EDGAR and is not archived because nothing requires it, on the same rule as FY1993.
+    (2014, "N-CSR", "0000932471-15-005659"),
+    (2015, "N-CSR", "0000932471-16-012795"),
+    (2016, "N-CSR", "0000932471-17-003352"),
+    (2017, "N-CSR", "0000932471-18-005288"),
+    (2018, "N-CSR", "0001104659-19-011820"),
+    (2019, "N-CSR", "0001104659-20-027799"),
 ]
 
 # Amendments are recorded, not archived. Both differ from their parent only in the

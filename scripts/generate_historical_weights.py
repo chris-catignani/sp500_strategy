@@ -140,16 +140,52 @@ for yr in constituents_by_year:
 # consolidate_holdings(), which sums CUSIPs 02079K305 and 02079K107 - verified
 # consolidated against a December-dated primary source.
 #
-# 2014-2019 weights are hand-entered year-end factsheet anchors, and no December-dated
-# primary source for those years is archived in this repository. The archived SPY annual
-# reports (fiscal year end September 30) put Class C at 96-102% of Class A, so a
-# consolidated weight should be close to twice the Class A weight - but the committed
-# figures match neither multiple consistently (2019 reads 2.70%, against roughly 1.65%
-# for Class A alone and 3.30% consolidated). Their composition is therefore UNDETERMINED
-# and is published as such rather than asserted either way. See docs/DATA_PROVENANCE.md
-# section 4.3.8 and issue #45.
+# 2014-2019 weights are hand-entered year-end factsheet anchors. Which share classes each
+# one covered was undetermined until the Vanguard 500 Index Fund's December 31 Schedule of
+# Investments was read for those years (docs/DATA_PROVENANCE.md 4.3.9, 4.3.10). That
+# schedule reports Alphabet's two classes as separate positions, so it settles the
+# question per year: normalised against a single-class control in the same filing, each
+# committed weight sits beside either the Class A figure or the consolidated one, and the
+# two differ by a factor of two. See 4.3.21 for the evidence table.
+#
+# Three years were Class A only and are corrected by the (A + C) / A ratio the filing
+# itself states. The ratio is what the filing supplies; the anchor stays the factsheet's,
+# so the corrected weight remains on the same basis as the other nineteen rows of its year
+# rather than mixing a fund weight into a factsheet-anchored roster.
 ALPHABET_SINGLE_CLASS_THROUGH = 2013
-ALPHABET_UNDETERMINED_YEARS = frozenset(str(y) for y in range(2014, 2020))
+
+# Years whose committed anchor already covered both classes; nothing was changed.
+ALPHABET_CONSOLIDATED_AS_FILED = frozenset({"2014", "2018", "2019"})
+
+# Years whose committed anchor covered Class A only: the factsheet weight as it was
+# published before #45, the (Class A + Class C) / Class A ratio read from that year's
+# filing, and the accession it was read in.
+#
+# The anchor is recorded rather than back-solved from the corrected weight. Without it
+# the only check available is that the published figure divided by the ratio equals
+# itself, which is true of any number -- an assertion that cannot fail is not evidence
+# (4.3.20). With it, the published weight is the product of two stated figures and a
+# drift in either one fails.
+ALPHABET_CONSOLIDATION_RATIO = {
+    "2015": (0.0140, 1.99487, "0000932471-16-012795"),
+    "2016": (0.0140, 1.97619, "0000932471-17-003352"),
+    "2017": (0.0170, 2.00603, "0000932471-18-005288"),
+}
+ALPHABET_RESOLVED_YEARS = ALPHABET_CONSOLIDATED_AS_FILED | frozenset(
+    ALPHABET_CONSOLIDATION_RATIO
+)
+ALPHABET_ACCESSIONS = {
+    "2014": "0000932471-15-005659",
+    "2018": "0001104659-19-011820",
+    "2019": "0001104659-20-027799",
+    **{y: acc for y, (_, _ratio, acc) in ALPHABET_CONSOLIDATION_RATIO.items()},
+}
+
+
+def alphabet_consolidated_weight(year: str) -> float:
+    """The corrected weight for a Class-A-only year: the anchor times the filed ratio."""
+    anchor, ratio, _accession = ALPHABET_CONSOLIDATION_RATIO[year]
+    return round(anchor * ratio, 4)
 
 
 def build_provenance_csv():
@@ -194,15 +230,35 @@ def build_provenance_csv():
                     underlying_val = ""
                     anchor_val = ""
                     source_cit = f"S&P Dow Jones Indices Year-End Factsheet {year}"
-                    if ticker == "GOOGL" and year in ALPHABET_UNDETERMINED_YEARS:
-                        # The weight is sourced; which Alphabet share classes it covers is not.
-                        methodology = "Official Factsheet Anchor (Share-Class Composition Unverified)"
-                        source_cit = (
-                            f"S&P Dow Jones Indices Year-End Factsheet {year}; UNVERIFIED - "
-                            "Alphabet Class A/C composition of this weight is undetermined "
-                            "and it may understate the consolidated issuer weight; see "
-                            "docs/DATA_PROVENANCE.md 4.3.8"
-                        )
+                    if ticker == "GOOGL" and year in ALPHABET_RESOLVED_YEARS:
+                        if year in ALPHABET_CONSOLIDATED_AS_FILED:
+                            accession = ALPHABET_ACCESSIONS[year]
+                            methodology = (
+                                "Official Factsheet Anchor (Consolidated Class A + C, "
+                                "Share-Class Basis Sourced)"
+                            )
+                            source_cit = (
+                                f"S&P Dow Jones Indices Year-End Factsheet {year}; share-class "
+                                f"basis established against Vanguard Index Trust Form N-CSR "
+                                f"(Accession {accession}, Period {year}-12-31), 500 Index Fund "
+                                "Schedule of Investments, which reports Alphabet Class A and "
+                                "Class C as separate positions. The anchor already covers both "
+                                "classes and is unchanged; see docs/DATA_PROVENANCE.md 4.3.21"
+                            )
+                        else:
+                            anchor, ratio, accession = ALPHABET_CONSOLIDATION_RATIO[year]
+                            methodology = (
+                                "Official Factsheet Anchor x Filed Consolidation Ratio "
+                                "(Class A Anchor, Class A + C Weight)"
+                            )
+                            formula = "W_factsheet_ClassA * (V_ClassA + V_ClassC) / V_ClassA"
+                            source_cit = (
+                                f"S&P Dow Jones Indices Year-End Factsheet {year} (Class A only, "
+                                f"{anchor:.4f}) x {ratio:.5f}, the (Class A + Class C) / Class A market-value "
+                                "ratio stated in Vanguard Index Trust Form N-CSR (Accession "
+                                f"{accession}, Period {year}-12-31), 500 Index Fund Schedule of "
+                                "Investments; see docs/DATA_PROVENANCE.md 4.3.21"
+                            )
                 else:
                     # These weights are ESTIMATES, not derived quantities. No primary
                     # source in this repository reports a market capitalization for

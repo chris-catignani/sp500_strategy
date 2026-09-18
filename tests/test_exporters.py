@@ -3,6 +3,7 @@
 import csv
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -512,9 +513,20 @@ class TestExporters(unittest.TestCase):
         """Verify RECALCULATE_STRATEGY uses dynamic SCENARIO_DATA without stale hardcoded constants."""
         code = self.default_apps_script
 
-        # Verify stale constants from Issue #27 are absent
-        self.assertNotIn("0.1495", code)
-        self.assertNotIn("0.0970", code)
+        # Verify stale constants from Issue #27 are absent from the script's logic.
+        #
+        # The search has to exclude the embedded SCENARIO_DATA array. That array is
+        # thousands of computed figures, and one of them will eventually print the same
+        # digits as a constant being guarded against purely by coincidence -- which is
+        # what happened under #45, where a legitimate CAGR came out at 0.1495. Searching
+        # the whole file cannot tell a datum from a hardcoded constant, so it reports a
+        # data change as a regression. The logic is where a stale constant would do harm.
+        logic = re.sub(
+            r"var SCENARIO_DATA = \[.*?\];", "var SCENARIO_DATA = [];", code, flags=re.DOTALL
+        )
+        self.assertNotIn("SCENARIO_DATA = [[", logic, "the embedded data was not excised")
+        self.assertNotIn("0.1495", logic)
+        self.assertNotIn("0.0970", logic)
 
         # Verify signature and documentation
         self.assertIn("function RECALCULATE_STRATEGY(taxRate, optStrategy, optHorizon, optWeighting, optUniverse, optFrequency, optMetric)", code)
@@ -528,13 +540,17 @@ class TestExporters(unittest.TestCase):
             // datasets rather than the behaviour of the function, and goes stale every
             // time the underlying data legitimately changes -- which is the exact
             // failure this test exists to catch.
-            function EXPECTED(rateLabel) {
-                var mIdx = SCENARIO_HEADERS.indexOf('PostLiqCAGR');
-                var key = '30y_S&P 500_Top 5_Market Cap_Annual_' + rateLabel;
+            function ROW_METRIC(key, metric) {
+                var mIdx = SCENARIO_HEADERS.indexOf(metric);
                 for (var i = 0; i < SCENARIO_DATA.length; i++) {
                     if (SCENARIO_DATA[i][0] === key) { return SCENARIO_DATA[i][mIdx]; }
                 }
                 return null;
+            }
+            function EXPECTED(rateLabel) {
+                return ROW_METRIC(
+                    '30y_S&P 500_Top 5_Market Cap_Annual_' + rateLabel, 'PostLiqCAGR'
+                );
             }
 
             var results = {
@@ -550,6 +566,7 @@ class TestExporters(unittest.TestCase):
                 cagr37: RECALCULATE_STRATEGY('37.0%'),
                 cagr25Interp: RECALCULATE_STRATEGY(0.25),
                 customDim: RECALCULATE_STRATEGY(0.30, 'Top 3', '10y', 'Equal Weight', 'S&P 500', 'Annual', 'PreTaxCAGR'),
+                expectedCustomDim: ROW_METRIC('10y_S&P 500_Top 3_Equal Weight_Annual_30.0%', 'PreTaxCAGR'),
                 spxBench: RECALCULATE_STRATEGY(0.30, 'Benchmark'),
                 spxByName: RECALCULATE_STRATEGY(0.30, 'sp500'),
                 worldBench: RECALCULATE_STRATEGY(0.30, 'Benchmark', '30y', 'Market Cap', 'All World'),
@@ -595,8 +612,14 @@ class TestExporters(unittest.TestCase):
             expected_25 = data["expected20"] + 0.5 * (data["expected30"] - data["expected20"])
             self.assertAlmostEqual(data["cagr25Interp"], expected_25, places=6)
 
-            # Custom dimension lookup
-            self.assertAlmostEqual(data["customDim"], 0.247871, places=5)
+            # Custom dimension lookup. Read back from SCENARIO_DATA for the same reason
+            # the tier expectations are: pinning the figure here asserts the state of the
+            # datasets, and #45 moved every S&P 500 strategy cell when Alphabet's share
+            # classes were consolidated. What this line tests is that a non-default
+            # combination of dimensions resolves to its own row, not to the default one.
+            self.assertIsNotNone(data["expectedCustomDim"], "no SCENARIO_DATA row for the custom dimensions")
+            self.assertAlmostEqual(data["customDim"], data["expectedCustomDim"], places=6)
+            self.assertNotAlmostEqual(data["customDim"], data["expected30"], places=6)
 
             # Benchmark lookups
             self.assertAlmostEqual(data["spxBench"], 0.092550, places=5)

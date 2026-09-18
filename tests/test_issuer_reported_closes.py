@@ -17,8 +17,10 @@ Two checks, in increasing strength:
 """
 
 import json
+import re
 import sys
 import unittest
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -354,3 +356,179 @@ class TestSplitCompleteness(unittest.TestCase):
         self.assertTrue(all(t == "BLS" for t, _, _ in fired))
         for _, _, observed in fired:
             self.assertAlmostEqual(observed, 2.0, delta=0.01)
+
+
+class TestAlphabetConsolidationEffect(unittest.TestCase):
+    """Alphabet's two share classes are one issuer, and one issuer holds one slot (#45).
+
+    The audited December-31 rosters (4.3.10) file Alphabet as two positions from 2014
+    onward. `_apply_audited_rosters` used to take the larger line and drop the other,
+    which halves the issuer and drops it in the ranking -- Alphabet came out at rank 20
+    in 2014 on its Class A weight alone, against rank 4 consolidated.
+
+    Two claims are pinned here, and neither is a cell value:
+
+    1. Wherever a filing reports two classes, the dataset's weight is their sum.
+    2. Consolidation puts Alphabet in Top N books it was otherwise excluded from, and at
+       Top 3 -- the depth it enters in every corrected year -- the figures move *down*.
+       The direction is the point: there Alphabet displaces a name that did better over
+       these spans, so correcting the weight lowers the published figures rather than
+       flattering them. At Top 5 and Top 10 the sign is mixed and nothing is asserted;
+       see `test_consolidating_alphabet_lowers_the_top_3_book`.
+    """
+
+    ROSTER_YEARS = ("2014", "2015", "2016", "2017", "2018", "2019")
+
+    @classmethod
+    def setUpClass(cls):
+        raw = ROOT / "data" / "raw"
+        with open(raw / "ground_truth" / "vanguard_audited_rosters.json", encoding="utf-8") as f:
+            cls.rosters = json.load(f)["rosters_by_year"]
+        with open(raw / "constituents" / "issuer_ticker_map.json", encoding="utf-8") as f:
+            cls.issuer_map = {
+                re.sub(r"^[#*^\s]+", "", k).strip().rstrip(".").strip(): v
+                for k, v in json.load(f)["map"].items()
+            }
+        with open(ROOT / "data" / "sp500_constituents.json", encoding="utf-8") as f:
+            cls.constituents = json.load(f)
+
+    def _roster_lines(self, year):
+        """Every mapped (ticker, weight) line in a year's roster, duplicates kept."""
+        out = []
+        for holding in self.rosters[year]["holdings"]:
+            if holding.get("unidentified"):
+                continue
+            name = re.sub(r"^[#*^\s]+", "", holding["name"]).strip().rstrip(".").strip()
+            ticker = self.issuer_map.get(name)
+            if ticker is not None:
+                out.append((ticker, holding["weight"]))
+        return out
+
+    def _first_class_only_lines(self, year):
+        """The same roster under the pre-#45 rule: first occurrence wins, the rest drop.
+
+        This reconstructs what the dataset builder used to do, and is the comparison every
+        claim in this class is made against.
+        """
+        kept, seen = [], set()
+        for ticker, weight in self._roster_lines(year):
+            if ticker in seen:
+                continue
+            seen.add(ticker)
+            kept.append((ticker, weight))
+        return kept
+
+    def test_a_dual_class_issuer_holds_one_slot_at_the_sum_of_its_classes(self):
+        """The consolidation rule of 4.3.8, checked against the filing it reads from."""
+        checked = 0
+        for year in self.ROSTER_YEARS:
+            lines = self._roster_lines(year)
+            summed = {}
+            for ticker, weight in lines:
+                summed[ticker] = summed.get(ticker, 0.0) + weight
+            duplicated = {t for t, count in Counter(t for t, _ in lines).items() if count > 1}
+            self.assertIn(
+                "GOOGL", duplicated, f"{year}: the filing should report two Alphabet classes"
+            )
+
+            published = self.constituents[year]
+            for ticker in duplicated:
+                rows = [r for r in published if r["ticker"] == ticker]
+                if not rows:
+                    continue
+                self.assertEqual(
+                    len(rows), 1, f"{year}: {ticker} occupies two slots in one book"
+                )
+                self.assertAlmostEqual(
+                    rows[0]["market_cap_weight"], summed[ticker], places=5,
+                    msg=f"{year}: {ticker} is not the sum of its share classes",
+                )
+                # A consolidation that did not roughly double the line would mean the
+                # second class was dropped rather than added.
+                largest = max(w for t, w in lines if t == ticker)
+                self.assertGreater(rows[0]["market_cap_weight"] / largest, 1.9, year)
+                checked += 1
+        # Every year contributed at least its Alphabet check. Counting duplicated tickers
+        # against the year count would break the day a second dual-class issuer reaches a
+        # Top 20, and would report that as an Alphabet failure.
+        self.assertGreaterEqual(checked, len(self.ROSTER_YEARS))
+
+    def test_consolidation_moves_alphabet_into_books_it_was_excluded_from(self):
+        """The selection change #45 predicted, measured on the built rosters."""
+        moved = 0
+        for year in self.ROSTER_YEARS:
+            unconsolidated = self._first_class_only_lines(year)
+            old_rank = [t for t, _ in unconsolidated[:20]].index("GOOGL") + 1
+            new_rank = [r["ticker"] for r in self.constituents[year]].index("GOOGL") + 1
+            self.assertLess(
+                new_rank, old_rank,
+                f"{year}: consolidation must raise Alphabet's rank, not lower it",
+            )
+            if old_rank > 5 >= new_rank or old_rank > 3 >= new_rank:
+                moved += 1
+        # Not every year crosses a Top N boundary, but most do, and that is the whole
+        # impact this issue was opened about.
+        self.assertGreaterEqual(moved, 4)
+
+    def test_consolidating_alphabet_lowers_the_top_3_book(self):
+        """Top 3 is where Alphabet's entry is decisive, and it is decisive downward.
+
+        This compares like with like: the same audited rosters read twice, once under the
+        rule that dropped the second share class and once under the rule that sums it.
+
+        **The claim is deliberately narrow.** At Top 5 and Top 10 the sign is mixed --
+        raising Alphabet's rank displaces a different name at each depth, and at Top 5
+        consolidation happens to *raise* the figures. Asserting "lowers everywhere" would
+        pin a coincidence. Top 3 is the book Alphabet enters in every corrected year, so
+        it is the one where the effect is structural rather than incidental.
+
+        The before/after table in 4.3.21 measures something else again -- the rosters
+        against the factsheet anchors they replaced -- and is published as a record of
+        this change rather than as a standing invariant.
+
+        **Market-cap path only**, as with `TestDerivedDividendEffect`.
+        """
+        from engine.backtest import PortfolioSimulator
+        from engine.data_loader import DataLoader
+        from engine.metrics import calculate_cagr
+        from engine.selector import resolve_selector
+
+        consolidated = DataLoader()
+        single_class = DataLoader()
+
+        for year in self.ROSTER_YEARS:
+            known = {r["ticker"]: r for r in single_class._raw_constituents[year]}
+            rebuilt = []
+            for ticker, weight in self._first_class_only_lines(year):
+                try:
+                    single_class.get_price(ticker, int(year))
+                except (KeyError, ValueError):
+                    continue
+                row = dict(known.get(ticker, {"ticker": ticker, "name": ticker,
+                                              "trailing_1y_return": 0.0, "year": int(year)}))
+                row["market_cap_weight"] = weight
+                rebuilt.append(row)
+                if len(rebuilt) == 20:
+                    break
+            self.assertEqual(len(rebuilt), 20, f"{year}: single-class roster is short")
+            rebuilt.sort(key=lambda r: -r["market_cap_weight"])
+            single_class._raw_constituents[year] = rebuilt
+
+        def cagr(simulator, start_year, end_year):
+            result = simulator.run_simulation(
+                start_year, end_year, n=3,
+                selector=resolve_selector("market_cap", n=3, weight_by="market_cap"),
+                is_after_tax=False, initial_capital=10000.0,
+                universe="sp500", rebalance_frequency="annual",
+            )
+            return calculate_cagr(10000.0, result.final_equity, end_year - start_year) * 100.0
+
+        for start_year, end_year in ((2014, 2024), (2004, 2024), (1994, 2024)):
+            with self.subTest(horizon=end_year - start_year):
+                before = cagr(PortfolioSimulator(single_class), start_year, end_year)
+                after = cagr(PortfolioSimulator(consolidated), start_year, end_year)
+                self.assertLess(
+                    after, before,
+                    "consolidating Alphabet is expected to lower the Top 3 book; if it no "
+                    "longer does, the reading in 4.3.21 is stale",
+                )
