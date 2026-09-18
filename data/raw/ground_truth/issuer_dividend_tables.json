@@ -1,15 +1,15 @@
 {
   "metadata": {
-    "closes_published": 20,
-    "quarters_published": 64,
-    "refusals_recovered_ex13": 11,
+    "closes_published": 52,
+    "quarters_published": 120,
+    "refusals_recovered_ex13": 14,
     "source": "SEC EDGAR Form 10-K / 20-F filings",
     "structural_rejects": 27,
     "total_filings_fetched": 168,
-    "total_filings_refused": 112,
+    "total_filings_refused": 107,
     "total_split_sentences": 517,
-    "years_reconciled": 16,
-    "years_withheld": 55
+    "years_reconciled": 30,
+    "years_withheld": 48
   },
   "refusals": [
     {
@@ -249,41 +249,6 @@
       "form": "10-K",
       "reason": "No quarterly dividend or price table present in filing text",
       "ticker": "GTE"
-    },
-    {
-      "accession_number": "0000950123-97-010554",
-      "filing_date": "1997-12-22",
-      "form": "10-K405",
-      "reason": "No quarterly dividend or price table present in filing text",
-      "ticker": "LU"
-    },
-    {
-      "accession_number": "0000950123-98-010816",
-      "filing_date": "1998-12-22",
-      "form": "10-K",
-      "reason": "No quarterly dividend or price table present in filing text",
-      "ticker": "LU"
-    },
-    {
-      "accession_number": "0000950123-99-011082",
-      "filing_date": "1999-12-21",
-      "form": "10-K405",
-      "reason": "No quarterly dividend or price table present in filing text",
-      "ticker": "LU"
-    },
-    {
-      "accession_number": "0000950123-00-011855",
-      "filing_date": "2000-12-27",
-      "form": "10-K",
-      "reason": "No quarterly dividend or price table present in filing text",
-      "ticker": "LU"
-    },
-    {
-      "accession_number": "0000950117-01-501896",
-      "filing_date": "2001-12-28",
-      "form": "10-K405",
-      "reason": "No quarterly dividend or price table present in filing text",
-      "ticker": "LU"
     },
     {
       "accession_number": "0000950117-02-003045",
@@ -1126,7 +1091,301 @@
   "tickers": {
     "AN": {
       "never_paid_statements": [],
+      "observations_by_filing": {
+        "1994-Q2": [
+          {
+            "accession_number": "0000093397-95-000004",
+            "dividend_declared_per_share": 558.0,
+            "filing_date": "1995-03-24",
+            "high": 8.0,
+            "low": 35.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-96-000002",
+            "dividend_declared_per_share": 0.55,
+            "filing_date": "1996-03-22",
+            "high": 60.0,
+            "low": 51.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q4": [
+          {
+            "accession_number": "0000093397-95-000004",
+            "dividend_declared_per_share": 669.0,
+            "filing_date": "1995-03-24",
+            "high": 7.0,
+            "low": 782.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-96-000002",
+            "dividend_declared_per_share": 0.55,
+            "filing_date": "1996-03-22",
+            "high": 64.125,
+            "low": 57.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q1": [
+          {
+            "accession_number": "0000093397-96-000002",
+            "dividend_declared_per_share": 0.6,
+            "filing_date": "1996-03-22",
+            "high": 64.25,
+            "low": 56.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-97-000001",
+            "dividend_declared_per_share": 0.6,
+            "filing_date": "1997-03-21",
+            "high": 64.25,
+            "low": 56.375,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q2": [
+          {
+            "accession_number": "0000093397-96-000002",
+            "dividend_declared_per_share": 0.6,
+            "filing_date": "1996-03-22",
+            "high": 69.75,
+            "low": 61.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-97-000001",
+            "dividend_declared_per_share": 0.6,
+            "filing_date": "1997-03-21",
+            "high": 69.75,
+            "low": 61.375,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q3": [
+          {
+            "accession_number": "0000093397-96-000002",
+            "dividend_declared_per_share": 0.6,
+            "filing_date": "1996-03-22",
+            "high": 69.25,
+            "low": 62.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-97-000001",
+            "dividend_declared_per_share": 0.6,
+            "filing_date": "1997-03-21",
+            "high": 69.25,
+            "low": 62.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q4": [
+          {
+            "accession_number": "0000093397-96-000002",
+            "dividend_declared_per_share": 0.6,
+            "filing_date": "1996-03-22",
+            "high": 72.625,
+            "low": 63.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-97-000001",
+            "dividend_declared_per_share": 0.6,
+            "filing_date": "1997-03-21",
+            "high": 72.625,
+            "low": 63.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q1": [
+          {
+            "accession_number": "0000093397-97-000001",
+            "dividend_declared_per_share": 0.65,
+            "filing_date": "1997-03-21",
+            "high": 74.125,
+            "low": 67.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-98-000003",
+            "dividend_declared_per_share": 0.65,
+            "filing_date": "1998-03-20",
+            "high": 74.125,
+            "low": 67.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q2": [
+          {
+            "accession_number": "0000093397-97-000001",
+            "dividend_declared_per_share": 0.65,
+            "filing_date": "1997-03-21",
+            "high": 75.125,
+            "low": 69.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-98-000003",
+            "dividend_declared_per_share": 0.65,
+            "filing_date": "1998-03-20",
+            "high": 75.125,
+            "low": 69.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q3": [
+          {
+            "accession_number": "0000093397-97-000001",
+            "dividend_declared_per_share": 0.65,
+            "filing_date": "1997-03-21",
+            "high": 72.625,
+            "low": 65.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-98-000003",
+            "dividend_declared_per_share": 0.65,
+            "filing_date": "1998-03-20",
+            "high": 72.625,
+            "low": 65.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q4": [
+          {
+            "accession_number": "0000093397-97-000001",
+            "dividend_declared_per_share": 0.65,
+            "filing_date": "1997-03-21",
+            "high": 83.5,
+            "low": 70.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000093397-98-000003",
+            "dividend_declared_per_share": 0.65,
+            "filing_date": "1998-03-20",
+            "high": 83.5,
+            "low": 70.25,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {
+        "1995-Q1": {
+          "accession_number": "0000093397-96-000002",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Item 5.   Market for the Registrant's Common Stock and Related",
+          "dividend_declared_per_share": 0.6,
+          "filing_date": "1996-03-22",
+          "form": "10-K",
+          "high": 64.25,
+          "low": 56.375,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "Item 5.   Market for the Registrant's Common Stock and Related"
+        },
+        "1995-Q2": {
+          "accession_number": "0000093397-96-000002",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Item 5.   Market for the Registrant's Common Stock and Related",
+          "dividend_declared_per_share": 0.6,
+          "filing_date": "1996-03-22",
+          "form": "10-K",
+          "high": 69.75,
+          "low": 61.375,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "Item 5.   Market for the Registrant's Common Stock and Related"
+        },
+        "1995-Q3": {
+          "accession_number": "0000093397-96-000002",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Item 5.   Market for the Registrant's Common Stock and Related",
+          "dividend_declared_per_share": 0.6,
+          "filing_date": "1996-03-22",
+          "form": "10-K",
+          "high": 69.25,
+          "low": 62.5,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "Item 5.   Market for the Registrant's Common Stock and Related"
+        },
+        "1995-Q4": {
+          "accession_number": "0000093397-96-000002",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Item 5.   Market for the Registrant's Common Stock and Related",
+          "dividend_declared_per_share": 0.6,
+          "filing_date": "1996-03-22",
+          "form": "10-K",
+          "high": 72.625,
+          "low": 63.125,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "Item 5.   Market for the Registrant's Common Stock and Related"
+        },
+        "1996-Q1": {
+          "accession_number": "0000093397-97-000001",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Item 5.   Market for the Registrant's Common Stock and Related",
+          "dividend_declared_per_share": 0.65,
+          "filing_date": "1997-03-21",
+          "form": "10-K405",
+          "high": 74.125,
+          "low": 67.5,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "Item 5.   Market for the Registrant's Common Stock and Related"
+        },
+        "1996-Q2": {
+          "accession_number": "0000093397-97-000001",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Item 5.   Market for the Registrant's Common Stock and Related",
+          "dividend_declared_per_share": 0.65,
+          "filing_date": "1997-03-21",
+          "form": "10-K405",
+          "high": 75.125,
+          "low": 69.5,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "Item 5.   Market for the Registrant's Common Stock and Related"
+        },
+        "1996-Q3": {
+          "accession_number": "0000093397-97-000001",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Item 5.   Market for the Registrant's Common Stock and Related",
+          "dividend_declared_per_share": 0.65,
+          "filing_date": "1997-03-21",
+          "form": "10-K405",
+          "high": 72.625,
+          "low": 65.0,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "Item 5.   Market for the Registrant's Common Stock and Related"
+        },
+        "1996-Q4": {
+          "accession_number": "0000093397-97-000001",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Item 5.   Market for the Registrant's Common Stock and Related",
+          "dividend_declared_per_share": 0.65,
+          "filing_date": "1997-03-21",
+          "form": "10-K405",
+          "high": 83.5,
+          "low": 70.25,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "Item 5.   Market for the Registrant's Common Stock and Related"
+        },
         "1997-Q1": {
           "accession_number": "0000093397-98-000003",
           "as_filed_basis_note": "",
@@ -1137,6 +1396,7 @@
           "form": "10-K405",
           "high": 91.625,
           "low": 80.25,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Item 5.  Market for the Registrant's Common Stock and Related"
         },
@@ -1150,6 +1410,7 @@
           "form": "10-K405",
           "high": 91.875,
           "low": 79.25,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Item 5.  Market for the Registrant's Common Stock and Related"
         },
@@ -1163,6 +1424,7 @@
           "form": "10-K405",
           "high": 99.0,
           "low": 87.0,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Item 5.  Market for the Registrant's Common Stock and Related"
         },
@@ -1176,11 +1438,22 @@
           "form": "10-K405",
           "high": 98.375,
           "low": 81.8125,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Item 5.  Market for the Registrant's Common Stock and Related"
         }
       },
       "reconciliation": {
+        "1995": {
+          "annual_dividend_declared_per_share": 2.4,
+          "quarterly_sum": 2.4,
+          "reconciled": true
+        },
+        "1996": {
+          "annual_dividend_declared_per_share": 2.6,
+          "quarterly_sum": 2.6,
+          "reconciled": true
+        },
         "1997": {
           "annual_dividend_declared_per_share": 2.8,
           "quarterly_sum": 2.8,
@@ -1255,20 +1528,6 @@
           ],
           "reason": "Structural validation failure: high 8.0 < low 35.0",
           "year": 1994
-        },
-        {
-          "accession_number": "0000093397-96-000002",
-          "annual_dividend_declared_per_share": 1.0,
-          "quarterly_sum": 2.4,
-          "reason": "Reconciliation mismatch: quarterly_sum 2.4 != annual 1.0",
-          "year": 1995
-        },
-        {
-          "accession_number": "0000093397-97-000001",
-          "annual_dividend_declared_per_share": 1.0,
-          "quarterly_sum": 2.6,
-          "reason": "Reconciliation mismatch: quarterly_sum 2.6 != annual 1.0",
-          "year": 1996
         }
       ]
     },
@@ -1287,6 +1546,80 @@
           "sentence": "The Company has never declared, nor has it paid, any cash dividends on its Common Stock."
         }
       ],
+      "observations_by_filing": {
+        "1998-Q3": [
+          {
+            "accession_number": "0000883780-99-000063",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-08-13",
+            "high": 35.13,
+            "low": 17.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000883780-00-000098",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-09-22",
+            "high": 17.57,
+            "low": 8.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q4": [
+          {
+            "accession_number": "0000883780-99-000063",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-08-13",
+            "high": 80.0,
+            "low": 20.66,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000883780-00-000098",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-09-22",
+            "high": 40.0,
+            "low": 10.33,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q1": [
+          {
+            "accession_number": "0000883780-99-000063",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-08-13",
+            "high": 153.75,
+            "low": 67.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000883780-00-000098",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-09-22",
+            "high": 76.88,
+            "low": 33.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q2": [
+          {
+            "accession_number": "0000883780-99-000063",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-08-13",
+            "high": 175.0,
+            "low": 89.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000883780-00-000098",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-09-22",
+            "high": 87.5,
+            "low": 44.75,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -1348,7 +1681,633 @@
     },
     "BLS": {
       "never_paid_statements": [],
+      "observations_by_filing": {
+        "1993-Q1": [
+          {
+            "accession_number": "0000912057-95-001219",
+            "dividend_declared_per_share": 0.69,
+            "filing_date": "1995-03-08",
+            "high": 57.5,
+            "low": 50.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 28.75,
+            "low": 25.25,
+            "quarter_end_close": null
+          }
+        ],
+        "1993-Q2": [
+          {
+            "accession_number": "0000912057-95-001219",
+            "dividend_declared_per_share": 0.69,
+            "filing_date": "1995-03-08",
+            "high": 57.0,
+            "low": 50.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 28.5,
+            "low": 25.375,
+            "quarter_end_close": null
+          }
+        ],
+        "1993-Q3": [
+          {
+            "accession_number": "0000912057-95-001219",
+            "dividend_declared_per_share": 0.69,
+            "filing_date": "1995-03-08",
+            "high": 62.875,
+            "low": 54.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 31.5,
+            "low": 27.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1993-Q4": [
+          {
+            "accession_number": "0000912057-95-001219",
+            "dividend_declared_per_share": 0.69,
+            "filing_date": "1995-03-08",
+            "high": 63.875,
+            "low": 54.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 32.0,
+            "low": 27.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q1": [
+          {
+            "accession_number": "0000912057-95-001219",
+            "dividend_declared_per_share": 0.69,
+            "filing_date": "1995-03-08",
+            "high": 61.5,
+            "low": 53.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 30.75,
+            "low": 26.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1997-02-27",
+            "high": 30.75,
+            "low": 26.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q2": [
+          {
+            "accession_number": "0000912057-95-001219",
+            "dividend_declared_per_share": 0.69,
+            "filing_date": "1995-03-08",
+            "high": 63.5,
+            "low": 55.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 31.75,
+            "low": 27.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1997-02-27",
+            "high": 31.75,
+            "low": 27.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q3": [
+          {
+            "accession_number": "0000912057-95-001219",
+            "dividend_declared_per_share": 0.69,
+            "filing_date": "1995-03-08",
+            "high": 63.5,
+            "low": 54.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 31.75,
+            "low": 27.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1997-02-27",
+            "high": 31.75,
+            "low": 27.375,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q4": [
+          {
+            "accession_number": "0000912057-95-001219",
+            "dividend_declared_per_share": 0.69,
+            "filing_date": "1995-03-08",
+            "high": 56.125,
+            "low": 50.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 28.125,
+            "low": 25.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1997-02-27",
+            "high": 28.125,
+            "low": 25.25,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q1": [
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 30.375,
+            "low": 26.875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1997-02-27",
+            "high": 30.375,
+            "low": 26.875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1998-02-26",
+            "high": 30.375,
+            "low": 26.875,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q2": [
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1996-02-29",
+            "high": 32.25,
+            "low": 29.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1997-02-27",
+            "high": 32.25,
+            "low": 29.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.345,
+            "filing_date": "1998-02-26",
+            "high": 32.25,
+            "low": 29.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q3": [
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1996-02-29",
+            "high": 36.875,
+            "low": 31.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1997-02-27",
+            "high": 36.875,
+            "low": 31.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 36.875,
+            "low": 31.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q4": [
+          {
+            "accession_number": "0000912057-96-003316",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1996-02-29",
+            "high": 43.875,
+            "low": 36.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1997-02-27",
+            "high": 43.875,
+            "low": 36.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 43.875,
+            "low": 36.375,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q1": [
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1997-02-27",
+            "high": 45.875,
+            "low": 36.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 45.875,
+            "low": 36.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-99-007204",
+            "dividend_declared_per_share": 0.18,
+            "filing_date": "1999-02-25",
+            "high": 22.9375,
+            "low": 18.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q2": [
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1997-02-27",
+            "high": 42.375,
+            "low": 35.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 42.375,
+            "low": 35.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-99-007204",
+            "dividend_declared_per_share": 0.18,
+            "filing_date": "1999-02-25",
+            "high": 21.1875,
+            "low": 17.625,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q3": [
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1997-02-27",
+            "high": 43.375,
+            "low": 35.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 43.375,
+            "low": 35.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-99-007204",
+            "dividend_declared_per_share": 0.18,
+            "filing_date": "1999-02-25",
+            "high": 21.6875,
+            "low": 17.625,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q4": [
+          {
+            "accession_number": "0000912057-97-007016",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1997-02-27",
+            "high": 44.0,
+            "low": 36.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 44.0,
+            "low": 36.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-99-007204",
+            "dividend_declared_per_share": 0.18,
+            "filing_date": "1999-02-25",
+            "high": 22.0,
+            "low": 18.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q1": [
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 47.625,
+            "low": 38.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-99-007204",
+            "dividend_declared_per_share": 0.18,
+            "filing_date": "1999-02-25",
+            "high": 23.8125,
+            "low": 19.0625,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q2": [
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 48.625,
+            "low": 39.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-99-007204",
+            "dividend_declared_per_share": 0.18,
+            "filing_date": "1999-02-25",
+            "high": 24.3125,
+            "low": 19.6875,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q3": [
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 49.0,
+            "low": 43.3125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-99-007204",
+            "dividend_declared_per_share": 0.18,
+            "filing_date": "1999-02-25",
+            "high": 24.5,
+            "low": 21.6562,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q4": [
+          {
+            "accession_number": "0001047469-98-007653",
+            "dividend_declared_per_share": 0.36,
+            "filing_date": "1998-02-26",
+            "high": 58.125,
+            "low": 45.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-99-007204",
+            "dividend_declared_per_share": 0.18,
+            "filing_date": "1999-02-25",
+            "high": 29.0625,
+            "low": 22.625,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {
+        "1992-Q1": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 52.625,
+          "low": 43.625,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1992-Q2": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 50.375,
+          "low": 43.375,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1992-Q3": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 55.5,
+          "low": 49.25,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1992-Q4": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 53.875,
+          "low": 46.75,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1993-Q1": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 57.5,
+          "low": 50.375,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1993-Q2": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 57.0,
+          "low": 50.625,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1993-Q3": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 62.875,
+          "low": 54.125,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1993-Q4": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 63.875,
+          "low": 54.125,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1994-Q1": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 61.5,
+          "low": 53.0,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1994-Q2": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 63.5,
+          "low": 55.5,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1994-Q3": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 63.5,
+          "low": 54.625,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
+        "1994-Q4": {
+          "accession_number": "0000912057-95-001219",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "ITEM 5.  MARKET FOR REGISTRANT'S COMMON",
+          "dividend_declared_per_share": 0.69,
+          "filing_date": "1995-03-08",
+          "form": "10-K",
+          "high": 56.125,
+          "low": 50.5,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "The  principal market for trading in BellSouth  common stock is the New York"
+        },
         "1996-Q1": {
           "accession_number": "0000912057-97-007016",
           "as_filed_basis_note": "listed below has been adjusted for the two-for-one stock split effective in",
@@ -1359,6 +2318,7 @@
           "form": "10-K",
           "high": 45.875,
           "low": 36.0,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in  BellSouth common stock is the New  York"
         },
@@ -1372,6 +2332,7 @@
           "form": "10-K",
           "high": 42.375,
           "low": 35.25,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in  BellSouth common stock is the New  York"
         },
@@ -1385,6 +2346,7 @@
           "form": "10-K",
           "high": 43.375,
           "low": 35.25,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in  BellSouth common stock is the New  York"
         },
@@ -1398,6 +2360,7 @@
           "form": "10-K",
           "high": 44.0,
           "low": 36.25,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in  BellSouth common stock is the New  York"
         },
@@ -1411,6 +2374,7 @@
           "form": "10-K405",
           "high": 47.625,
           "low": 38.125,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in BellSouth Common Stock is the New York"
         },
@@ -1424,6 +2388,7 @@
           "form": "10-K405",
           "high": 48.625,
           "low": 39.375,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in BellSouth Common Stock is the New York"
         },
@@ -1437,6 +2402,7 @@
           "form": "10-K405",
           "high": 49.0,
           "low": 43.3125,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in BellSouth Common Stock is the New York"
         },
@@ -1450,11 +2416,27 @@
           "form": "10-K405",
           "high": 58.125,
           "low": 45.25,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in BellSouth Common Stock is the New York"
         }
       },
       "reconciliation": {
+        "1992": {
+          "annual_dividend_declared_per_share": 2.76,
+          "quarterly_sum": 2.76,
+          "reconciled": true
+        },
+        "1993": {
+          "annual_dividend_declared_per_share": 2.76,
+          "quarterly_sum": 2.76,
+          "reconciled": true
+        },
+        "1994": {
+          "annual_dividend_declared_per_share": 2.76,
+          "quarterly_sum": 2.76,
+          "reconciled": true
+        },
         "1996": {
           "annual_dividend_declared_per_share": 1.44,
           "quarterly_sum": 1.44,
@@ -1618,27 +2600,6 @@
       ],
       "withheld": [
         {
-          "accession_number": "0000912057-95-001219",
-          "annual_dividend_declared_per_share": 3.3,
-          "quarterly_sum": 2.76,
-          "reason": "Reconciliation mismatch: quarterly_sum 2.76 != annual 3.3",
-          "year": 1992
-        },
-        {
-          "accession_number": "0000912057-95-001219",
-          "annual_dividend_declared_per_share": 1.77,
-          "quarterly_sum": 2.76,
-          "reason": "Reconciliation mismatch: quarterly_sum 2.76 != annual 1.77",
-          "year": 1993
-        },
-        {
-          "accession_number": "0000912057-95-001219",
-          "annual_dividend_declared_per_share": 4.35,
-          "quarterly_sum": 2.76,
-          "reason": "Reconciliation mismatch: quarterly_sum 2.76 != annual 4.35",
-          "year": 1994
-        },
-        {
           "accession_number": "0000912057-96-003316",
           "annual_dividend_declared_per_share": 3.0,
           "quarterly_sum": 1.41,
@@ -1656,6 +2617,656 @@
     },
     "DD": {
       "never_paid_statements": [],
+      "observations_by_filing": {
+        "1994-Q1": [
+          {
+            "accession_number": "0000950109-95-000823",
+            "dividend_declared_per_share": 0.44,
+            "filing_date": "1995-03-21",
+            "high": 59.875,
+            "low": 48.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950109-96-001642",
+            "dividend_declared_per_share": 0.44,
+            "filing_date": "1996-03-20",
+            "high": 59.875,
+            "low": 48.25,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q2": [
+          {
+            "accession_number": "0000950109-95-000823",
+            "dividend_declared_per_share": 0.44,
+            "filing_date": "1995-03-21",
+            "high": 62.375,
+            "low": 51.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950109-96-001642",
+            "dividend_declared_per_share": 0.44,
+            "filing_date": "1996-03-20",
+            "high": 62.375,
+            "low": 51.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q3": [
+          {
+            "accession_number": "0000950109-95-000823",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1995-03-21",
+            "high": 61.375,
+            "low": 56.875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950109-96-001642",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1996-03-20",
+            "high": 61.375,
+            "low": 56.875,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q4": [
+          {
+            "accession_number": "0000950109-95-000823",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1995-03-21",
+            "high": 60.5,
+            "low": 50.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950109-96-001642",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1996-03-20",
+            "high": 60.5,
+            "low": 50.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q1": [
+          {
+            "accession_number": "0000950109-96-001642",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1996-03-20",
+            "high": 61.75,
+            "low": 52.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950109-97-002379",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1997-03-24",
+            "high": 61.75,
+            "low": 52.625,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q2": [
+          {
+            "accession_number": "0000950109-96-001642",
+            "dividend_declared_per_share": 0.52,
+            "filing_date": "1996-03-20",
+            "high": 69.375,
+            "low": 60.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950109-97-002379",
+            "dividend_declared_per_share": 0.52,
+            "filing_date": "1997-03-24",
+            "high": 69.375,
+            "low": 60.25,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q3": [
+          {
+            "accession_number": "0000950109-96-001642",
+            "dividend_declared_per_share": 0.52,
+            "filing_date": "1996-03-20",
+            "high": 73.0,
+            "low": 63.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950109-97-002379",
+            "dividend_declared_per_share": 0.52,
+            "filing_date": "1997-03-24",
+            "high": 73.0,
+            "low": 63.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q4": [
+          {
+            "accession_number": "0000950109-96-001642",
+            "dividend_declared_per_share": 0.52,
+            "filing_date": "1996-03-20",
+            "high": 70.25,
+            "low": 60.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950109-97-002379",
+            "dividend_declared_per_share": 0.52,
+            "filing_date": "1997-03-24",
+            "high": 70.25,
+            "low": 60.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q1": [
+          {
+            "accession_number": "0000950109-97-002379",
+            "dividend_declared_per_share": 0.52,
+            "filing_date": "1997-03-24",
+            "high": 84.375,
+            "low": 69.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-98-000429",
+            "dividend_declared_per_share": 2.0,
+            "filing_date": "1998-03-23",
+            "high": 42.1875,
+            "low": 34.8125,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q2": [
+          {
+            "accession_number": "0000950109-97-002379",
+            "dividend_declared_per_share": 0.57,
+            "filing_date": "1997-03-24",
+            "high": 84.875,
+            "low": 76.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-98-000429",
+            "dividend_declared_per_share": 0.26,
+            "filing_date": "1998-03-23",
+            "high": 42.4375,
+            "low": 38.375,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q3": [
+          {
+            "accession_number": "0000950109-97-002379",
+            "dividend_declared_per_share": 0.57,
+            "filing_date": "1997-03-24",
+            "high": 89.875,
+            "low": 72.875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-98-000429",
+            "dividend_declared_per_share": 0.285,
+            "filing_date": "1998-03-23",
+            "high": 44.9375,
+            "low": 36.4375,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q4": [
+          {
+            "accession_number": "0000950109-97-002379",
+            "dividend_declared_per_share": 0.57,
+            "filing_date": "1997-03-24",
+            "high": 99.375,
+            "low": 87.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-98-000429",
+            "dividend_declared_per_share": 0.285,
+            "filing_date": "1998-03-23",
+            "high": 49.6875,
+            "low": 43.875,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q1": [
+          {
+            "accession_number": "0001036050-98-000429",
+            "dividend_declared_per_share": 2.0,
+            "filing_date": "1998-03-23",
+            "high": 57.625,
+            "low": 46.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-99-000528",
+            "dividend_declared_per_share": 0.285,
+            "filing_date": "1999-03-19",
+            "high": 57.625,
+            "low": 46.375,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q2": [
+          {
+            "accession_number": "0001036050-98-000429",
+            "dividend_declared_per_share": 0.285,
+            "filing_date": "1998-03-23",
+            "high": 62.875,
+            "low": 49.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-99-000528",
+            "dividend_declared_per_share": 0.315,
+            "filing_date": "1999-03-19",
+            "high": 62.875,
+            "low": 49.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q3": [
+          {
+            "accession_number": "0001036050-98-000429",
+            "dividend_declared_per_share": 0.315,
+            "filing_date": "1998-03-23",
+            "high": 69.75,
+            "low": 60.6875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-99-000528",
+            "dividend_declared_per_share": 0.315,
+            "filing_date": "1999-03-19",
+            "high": 69.75,
+            "low": 60.6875,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q4": [
+          {
+            "accession_number": "0001036050-98-000429",
+            "dividend_declared_per_share": 0.315,
+            "filing_date": "1998-03-23",
+            "high": 64.9375,
+            "low": 50.1875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-99-000528",
+            "dividend_declared_per_share": 0.315,
+            "filing_date": "1999-03-19",
+            "high": 64.9375,
+            "low": 50.1875,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q1": [
+          {
+            "accession_number": "0001036050-99-000528",
+            "dividend_declared_per_share": 0.315,
+            "filing_date": "1999-03-19",
+            "high": 70.4375,
+            "low": 52.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-00-000373",
+            "dividend_declared_per_share": 0.315,
+            "filing_date": "2000-03-17",
+            "high": 70.4375,
+            "low": 52.625,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q2": [
+          {
+            "accession_number": "0001036050-99-000528",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "1999-03-19",
+            "high": 84.4375,
+            "low": 67.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-00-000373",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2000-03-17",
+            "high": 84.4375,
+            "low": 67.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q3": [
+          {
+            "accession_number": "0001036050-99-000528",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "1999-03-19",
+            "high": 79.5,
+            "low": 52.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-00-000373",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2000-03-17",
+            "high": 79.5,
+            "low": 52.25,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q4": [
+          {
+            "accession_number": "0001036050-99-000528",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "1999-03-19",
+            "high": 66.5,
+            "low": 51.6875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-00-000373",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2000-03-17",
+            "high": 66.5,
+            "low": 51.6875,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q1": [
+          {
+            "accession_number": "0001036050-00-000373",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2000-03-17",
+            "high": 60.125,
+            "low": 50.0625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-01-000424",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2001-03-21",
+            "high": 60.125,
+            "low": 50.0625,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q2": [
+          {
+            "accession_number": "0001036050-00-000373",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2000-03-17",
+            "high": 75.1875,
+            "low": 57.1875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-01-000424",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2001-03-21",
+            "high": 75.1875,
+            "low": 57.1875,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q3": [
+          {
+            "accession_number": "0001036050-00-000373",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2000-03-17",
+            "high": 75.0625,
+            "low": 58.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-01-000424",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2001-03-21",
+            "high": 75.0625,
+            "low": 58.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q4": [
+          {
+            "accession_number": "0001036050-00-000373",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2000-03-17",
+            "high": 69.4375,
+            "low": 58.0625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001036050-01-000424",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2001-03-21",
+            "high": 69.4375,
+            "low": 58.0625,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q1": [
+          {
+            "accession_number": "0001036050-01-000424",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2001-03-21",
+            "high": 74.0,
+            "low": 45.0625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000893220-02-000287",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2002-03-21",
+            "high": 74.0,
+            "low": 45.06,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q2": [
+          {
+            "accession_number": "0001036050-01-000424",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2001-03-21",
+            "high": 63.625,
+            "low": 43.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000893220-02-000287",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2002-03-21",
+            "high": 63.63,
+            "low": 43.13,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q3": [
+          {
+            "accession_number": "0001036050-01-000424",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2001-03-21",
+            "high": 50.6875,
+            "low": 38.1875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000893220-02-000287",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2002-03-21",
+            "high": 50.69,
+            "low": 38.19,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q4": [
+          {
+            "accession_number": "0001036050-01-000424",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2001-03-21",
+            "high": 49.875,
+            "low": 39.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000893220-02-000287",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2002-03-21",
+            "high": 49.88,
+            "low": 39.63,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q1": [
+          {
+            "accession_number": "0000893220-02-000287",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2002-03-21",
+            "high": 49.56,
+            "low": 39.86,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000930413-03-000634",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2003-02-28",
+            "high": 49.56,
+            "low": 39.86,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q2": [
+          {
+            "accession_number": "0000893220-02-000287",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2002-03-21",
+            "high": 49.88,
+            "low": 40.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000930413-03-000634",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2003-02-28",
+            "high": 49.88,
+            "low": 40.0,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q3": [
+          {
+            "accession_number": "0000893220-02-000287",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2002-03-21",
+            "high": 48.93,
+            "low": 32.64,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000930413-03-000634",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2003-02-28",
+            "high": 48.93,
+            "low": 32.64,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q4": [
+          {
+            "accession_number": "0000893220-02-000287",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2002-03-21",
+            "high": 45.75,
+            "low": 36.28,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000930413-03-000634",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2003-02-28",
+            "high": 45.75,
+            "low": 36.28,
+            "quarter_end_close": null
+          }
+        ],
+        "2002-Q1": [
+          {
+            "accession_number": "0000930413-03-000634",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2003-02-28",
+            "high": 49.8,
+            "low": 39.79,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000930413-04-000799",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2004-03-03",
+            "high": 49.8,
+            "low": 39.79,
+            "quarter_end_close": null
+          }
+        ],
+        "2002-Q2": [
+          {
+            "accession_number": "0000930413-03-000634",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2003-02-28",
+            "high": 48.4,
+            "low": 41.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000930413-04-000799",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2004-03-03",
+            "high": 48.4,
+            "low": 41.75,
+            "quarter_end_close": null
+          }
+        ],
+        "2002-Q3": [
+          {
+            "accession_number": "0000930413-03-000634",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2003-02-28",
+            "high": 45.75,
+            "low": 35.02,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000930413-04-000799",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2004-03-03",
+            "high": 45.75,
+            "low": 35.02,
+            "quarter_end_close": null
+          }
+        ],
+        "2002-Q4": [
+          {
+            "accession_number": "0000930413-03-000634",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2003-02-28",
+            "high": 45.3,
+            "low": 36.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000930413-04-000799",
+            "dividend_declared_per_share": 0.35,
+            "filing_date": "2004-03-03",
+            "high": 45.3,
+            "low": 36.0,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {
         "1998-Q1": {
           "accession_number": "0001036050-99-000528",
@@ -1667,6 +3278,7 @@
           "form": "10-K405",
           "high": 70.4375,
           "low": 52.625,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Quarterly Financial Data"
         },
@@ -1680,6 +3292,7 @@
           "form": "10-K405",
           "high": 84.4375,
           "low": 67.125,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Quarterly Financial Data"
         },
@@ -1693,6 +3306,7 @@
           "form": "10-K405",
           "high": 79.5,
           "low": 52.25,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Quarterly Financial Data"
         },
@@ -1706,6 +3320,7 @@
           "form": "10-K405",
           "high": 66.5,
           "low": 51.6875,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Quarterly Financial Data"
         },
@@ -1719,6 +3334,7 @@
           "form": "10-K",
           "high": 60.125,
           "low": 50.0625,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY FINANCIAL DATA"
         },
@@ -1732,6 +3348,7 @@
           "form": "10-K",
           "high": 75.1875,
           "low": 57.1875,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY FINANCIAL DATA"
         },
@@ -1745,6 +3362,7 @@
           "form": "10-K",
           "high": 75.0625,
           "low": 58.0,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY FINANCIAL DATA"
         },
@@ -1758,6 +3376,7 @@
           "form": "10-K",
           "high": 69.4375,
           "low": 58.0625,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY FINANCIAL DATA"
         },
@@ -1771,6 +3390,7 @@
           "form": "10-K",
           "high": 74.0,
           "low": 45.0625,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY FINANCIAL DATA"
         },
@@ -1784,6 +3404,7 @@
           "form": "10-K",
           "high": 63.625,
           "low": 43.125,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY FINANCIAL DATA"
         },
@@ -1797,6 +3418,7 @@
           "form": "10-K",
           "high": 50.6875,
           "low": 38.1875,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY FINANCIAL DATA"
         },
@@ -1810,6 +3432,7 @@
           "form": "10-K",
           "high": 49.875,
           "low": 39.625,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY FINANCIAL DATA"
         },
@@ -1823,6 +3446,7 @@
           "form": "10-K",
           "high": 49.56,
           "low": 39.86,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Quarterly Financial Data"
         },
@@ -1836,6 +3460,7 @@
           "form": "10-K",
           "high": 49.88,
           "low": 40.0,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Quarterly Financial Data"
         },
@@ -1849,6 +3474,7 @@
           "form": "10-K",
           "high": 48.93,
           "low": 32.64,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Quarterly Financial Data"
         },
@@ -1862,6 +3488,7 @@
           "form": "10-K",
           "high": 45.75,
           "low": 36.28,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "Quarterly Financial Data"
         },
@@ -1875,6 +3502,7 @@
           "form": "10-K",
           "high": 49.8,
           "low": 39.79,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The company's common stock is listed on the New York Stock Exchange, Inc."
         },
@@ -1888,6 +3516,7 @@
           "form": "10-K",
           "high": 48.4,
           "low": 41.75,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The company's common stock is listed on the New York Stock Exchange, Inc."
         },
@@ -1901,6 +3530,7 @@
           "form": "10-K",
           "high": 45.75,
           "low": 35.02,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The company's common stock is listed on the New York Stock Exchange, Inc."
         },
@@ -1914,6 +3544,7 @@
           "form": "10-K",
           "high": 45.3,
           "low": 36.0,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The company's common stock is listed on the New York Stock Exchange, Inc."
         },
@@ -1927,6 +3558,7 @@
           "form": "10-K",
           "high": 45.0,
           "low": 34.71,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The company's common stock is listed on the New York Stock Exchange, Inc."
         },
@@ -1940,6 +3572,7 @@
           "form": "10-K",
           "high": 44.88,
           "low": 38.56,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The company's common stock is listed on the New York Stock Exchange, Inc."
         },
@@ -1953,6 +3586,7 @@
           "form": "10-K",
           "high": 45.55,
           "low": 39.55,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The company's common stock is listed on the New York Stock Exchange, Inc."
         },
@@ -1966,6 +3600,7 @@
           "form": "10-K",
           "high": 46.0,
           "low": 38.6,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The company's common stock is listed on the New York Stock Exchange, Inc."
         }
@@ -2136,6 +3771,152 @@
           "sentence": "The dividend yield of zero is based on the fact that Dell has never paid cash dividends and has no present intention to pay cash dividends."
         }
       ],
+      "observations_by_filing": {
+        "1997-Q1": [
+          {
+            "accession_number": "0000950134-97-002688",
+            "dividend_declared_per_share": null,
+            "filing_date": "1997-04-07",
+            "high": 90.375,
+            "low": 232.0625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950134-98-003218",
+            "dividend_declared_per_share": null,
+            "filing_date": "1998-04-14",
+            "high": 18.0938,
+            "low": 9.4531,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q2": [
+          {
+            "accession_number": "0000950134-97-002688",
+            "dividend_declared_per_share": null,
+            "filing_date": "1997-04-07",
+            "high": 55.375,
+            "low": 16.3125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950134-98-003218",
+            "dividend_declared_per_share": null,
+            "filing_date": "1998-04-14",
+            "high": 11.0938,
+            "low": 6.5156,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q3": [
+          {
+            "accession_number": "0000950134-97-002688",
+            "dividend_declared_per_share": null,
+            "filing_date": "1997-04-07",
+            "high": 35.625,
+            "low": 12.6875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950134-98-003218",
+            "dividend_declared_per_share": null,
+            "filing_date": "1998-04-14",
+            "high": 7.1562,
+            "low": 5.0469,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q4": [
+          {
+            "accession_number": "0000950134-97-002688",
+            "dividend_declared_per_share": null,
+            "filing_date": "1997-04-07",
+            "high": 29.125,
+            "low": 32.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950134-98-003218",
+            "dividend_declared_per_share": null,
+            "filing_date": "1998-04-14",
+            "high": 5.8438,
+            "low": 3.3125,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q1": [
+          {
+            "accession_number": "0000950134-98-003218",
+            "dividend_declared_per_share": null,
+            "filing_date": "1998-04-14",
+            "high": 50.5312,
+            "low": 35.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950134-99-003281",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-04-27",
+            "high": 12.63,
+            "low": 8.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q2": [
+          {
+            "accession_number": "0000950134-98-003218",
+            "dividend_declared_per_share": null,
+            "filing_date": "1998-04-14",
+            "high": 51.9375,
+            "low": 36.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950134-99-003281",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-04-27",
+            "high": 12.98,
+            "low": 9.13,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q3": [
+          {
+            "accession_number": "0000950134-98-003218",
+            "dividend_declared_per_share": null,
+            "filing_date": "1998-04-14",
+            "high": 43.375,
+            "low": 22.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950134-99-003281",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-04-27",
+            "high": 10.84,
+            "low": 5.53,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q4": [
+          {
+            "accession_number": "0000950134-98-003218",
+            "dividend_declared_per_share": null,
+            "filing_date": "1998-04-14",
+            "high": 23.0,
+            "low": 14.9688,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950134-99-003281",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-04-27",
+            "high": 5.75,
+            "low": 3.74,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -2348,6 +4129,7 @@
           "sentence": "We have never paid cash dividends on our common stock."
         }
       ],
+      "observations_by_filing": {},
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -2532,6 +4314,728 @@
     },
     "GM": {
       "never_paid_statements": [],
+      "observations_by_filing": {
+        "1994-Q1": [
+          {
+            "accession_number": "0000950124-95-000665",
+            "dividend_declared_per_share": 86.8,
+            "filing_date": "1995-03-13",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-96-001482",
+            "dividend_declared_per_share": 86.8,
+            "filing_date": "1996-04-01",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q2": [
+          {
+            "accession_number": "0000950124-95-000665",
+            "dividend_declared_per_share": 89.7,
+            "filing_date": "1995-03-13",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-96-001482",
+            "dividend_declared_per_share": 89.7,
+            "filing_date": "1996-04-01",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q3": [
+          {
+            "accession_number": "0000950124-95-000665",
+            "dividend_declared_per_share": 72.1,
+            "filing_date": "1995-03-13",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-96-001482",
+            "dividend_declared_per_share": 72.1,
+            "filing_date": "1996-04-01",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q4": [
+          {
+            "accession_number": "0000950124-95-000665",
+            "dividend_declared_per_share": 72.1,
+            "filing_date": "1995-03-13",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-96-001482",
+            "dividend_declared_per_share": 72.1,
+            "filing_date": "1996-04-01",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q1": [
+          {
+            "accession_number": "0000950124-96-001482",
+            "dividend_declared_per_share": 72.0,
+            "filing_date": "1996-04-01",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-97-001646",
+            "dividend_declared_per_share": 72.0,
+            "filing_date": "1997-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q2": [
+          {
+            "accession_number": "0000950124-96-001482",
+            "dividend_declared_per_share": 199.5,
+            "filing_date": "1996-04-01",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-97-001646",
+            "dividend_declared_per_share": 199.0,
+            "filing_date": "1997-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q3": [
+          {
+            "accession_number": "0000950124-96-001482",
+            "dividend_declared_per_share": 4.0,
+            "filing_date": "1996-04-01",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-97-001646",
+            "dividend_declared_per_share": 4.0,
+            "filing_date": "1997-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q4": [
+          {
+            "accession_number": "0000950124-96-001482",
+            "dividend_declared_per_share": 41.4,
+            "filing_date": "1996-04-01",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-97-001646",
+            "dividend_declared_per_share": 42.0,
+            "filing_date": "1997-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q1": [
+          {
+            "accession_number": "0000950124-97-001646",
+            "dividend_declared_per_share": 20.0,
+            "filing_date": "1997-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-98-001456",
+            "dividend_declared_per_share": 20.0,
+            "filing_date": "1998-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q2": [
+          {
+            "accession_number": "0000950124-97-001646",
+            "dividend_declared_per_share": 20.0,
+            "filing_date": "1997-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-98-001456",
+            "dividend_declared_per_share": 20.0,
+            "filing_date": "1998-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q3": [
+          {
+            "accession_number": "0000950124-97-001646",
+            "dividend_declared_per_share": 21.0,
+            "filing_date": "1997-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-98-001456",
+            "dividend_declared_per_share": 21.0,
+            "filing_date": "1998-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q4": [
+          {
+            "accession_number": "0000950124-97-001646",
+            "dividend_declared_per_share": 20.0,
+            "filing_date": "1997-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950124-98-001456",
+            "dividend_declared_per_share": 20.0,
+            "filing_date": "1998-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q1": [
+          {
+            "accession_number": "0000950124-98-001456",
+            "dividend_declared_per_share": 20.0,
+            "filing_date": "1998-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-99-000021",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "1999-03-10",
+            "high": 63.75,
+            "low": 55.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q2": [
+          {
+            "accession_number": "0000950124-98-001456",
+            "dividend_declared_per_share": 20.0,
+            "filing_date": "1998-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-99-000021",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "1999-03-10",
+            "high": 59.88,
+            "low": 55.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q3": [
+          {
+            "accession_number": "0000950124-98-001456",
+            "dividend_declared_per_share": 16.0,
+            "filing_date": "1998-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-99-000021",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "1999-03-10",
+            "high": 69.75,
+            "low": 53.88,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q4": [
+          {
+            "accession_number": "0000950124-98-001456",
+            "dividend_declared_per_share": 16.0,
+            "filing_date": "1998-03-20",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-99-000021",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "1999-03-10",
+            "high": 72.44,
+            "low": 58.31,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q1": [
+          {
+            "accession_number": "0000040730-99-000021",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "1999-03-10",
+            "high": 74.25,
+            "low": 55.06,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-00-000042",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-13",
+            "high": 74.25,
+            "low": 55.06,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q2": [
+          {
+            "accession_number": "0000040730-99-000021",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "1999-03-10",
+            "high": 76.69,
+            "low": 66.13,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-00-000042",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-13",
+            "high": 76.69,
+            "low": 66.13,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q3": [
+          {
+            "accession_number": "0000040730-99-000021",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "1999-03-10",
+            "high": 74.75,
+            "low": 54.44,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-00-000042",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-13",
+            "high": 74.75,
+            "low": 54.44,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q4": [
+          {
+            "accession_number": "0000040730-99-000021",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "1999-03-10",
+            "high": 74.94,
+            "low": 47.06,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-00-000042",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-13",
+            "high": 74.94,
+            "low": 47.06,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q1": [
+          {
+            "accession_number": "0000040730-00-000042",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-13",
+            "high": 93.88,
+            "low": 69.19,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-01-500040",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "2001-03-07",
+            "high": 93.88,
+            "low": 69.19,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q2": [
+          {
+            "accession_number": "0000040730-00-000042",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-13",
+            "high": 94.88,
+            "low": 61.06,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-01-500040",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "2001-03-07",
+            "high": 94.88,
+            "low": 61.06,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q3": [
+          {
+            "accession_number": "0000040730-00-000042",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-13",
+            "high": 72.44,
+            "low": 59.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-01-500040",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2001-03-07",
+            "high": 72.44,
+            "low": 59.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q4": [
+          {
+            "accession_number": "0000040730-00-000042",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-13",
+            "high": 79.06,
+            "low": 60.69,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-01-500040",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2001-03-07",
+            "high": 79.06,
+            "low": 60.69,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q1": [
+          {
+            "accession_number": "0000040730-01-500040",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "2001-03-07",
+            "high": 88.13,
+            "low": 70.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-02-000026",
+            "dividend_declared_per_share": null,
+            "filing_date": "2002-03-12",
+            "high": 88.13,
+            "low": 70.75,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q2": [
+          {
+            "accession_number": "0000040730-01-500040",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "2001-03-07",
+            "high": 94.63,
+            "low": 57.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-02-000026",
+            "dividend_declared_per_share": null,
+            "filing_date": "2002-03-12",
+            "high": 94.63,
+            "low": 57.25,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q3": [
+          {
+            "accession_number": "0000040730-01-500040",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2001-03-07",
+            "high": 76.63,
+            "low": 56.94,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-02-000026",
+            "dividend_declared_per_share": null,
+            "filing_date": "2002-03-12",
+            "high": 76.63,
+            "low": 56.94,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q4": [
+          {
+            "accession_number": "0000040730-01-500040",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2001-03-07",
+            "high": 68.25,
+            "low": 48.44,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-02-000026",
+            "dividend_declared_per_share": null,
+            "filing_date": "2002-03-12",
+            "high": 68.25,
+            "low": 48.44,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q1": [
+          {
+            "accession_number": "0000040730-02-000026",
+            "dividend_declared_per_share": null,
+            "filing_date": "2002-03-12",
+            "high": 59.48,
+            "low": 50.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-03-000054",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "2003-03-13",
+            "high": 59.48,
+            "low": 50.25,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q2": [
+          {
+            "accession_number": "0000040730-02-000026",
+            "dividend_declared_per_share": null,
+            "filing_date": "2002-03-12",
+            "high": 64.89,
+            "low": 50.2,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-03-000054",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "2003-03-13",
+            "high": 64.89,
+            "low": 50.2,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q3": [
+          {
+            "accession_number": "0000040730-02-000026",
+            "dividend_declared_per_share": null,
+            "filing_date": "2002-03-12",
+            "high": 67.8,
+            "low": 39.17,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-03-000054",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2003-03-13",
+            "high": 67.8,
+            "low": 39.17,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q4": [
+          {
+            "accession_number": "0000040730-02-000026",
+            "dividend_declared_per_share": null,
+            "filing_date": "2002-03-12",
+            "high": 53.22,
+            "low": 40.52,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-03-000054",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2003-03-13",
+            "high": 53.22,
+            "low": 40.52,
+            "quarter_end_close": null
+          }
+        ],
+        "2002-Q1": [
+          {
+            "accession_number": "0000040730-03-000054",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "2003-03-13",
+            "high": 62.01,
+            "low": 47.92,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-04-000048",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "2004-03-11",
+            "high": 62.01,
+            "low": 47.92,
+            "quarter_end_close": null
+          }
+        ],
+        "2002-Q2": [
+          {
+            "accession_number": "0000040730-03-000054",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "2003-03-13",
+            "high": 68.17,
+            "low": 50.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-04-000048",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "2004-03-11",
+            "high": 68.17,
+            "low": 50.0,
+            "quarter_end_close": null
+          }
+        ],
+        "2002-Q3": [
+          {
+            "accession_number": "0000040730-03-000054",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2003-03-13",
+            "high": 54.08,
+            "low": 38.11,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-04-000048",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2004-03-11",
+            "high": 54.08,
+            "low": 38.11,
+            "quarter_end_close": null
+          }
+        ],
+        "2002-Q4": [
+          {
+            "accession_number": "0000040730-03-000054",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2003-03-13",
+            "high": 41.5,
+            "low": 30.8,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-04-000048",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2004-03-11",
+            "high": 41.5,
+            "low": 30.8,
+            "quarter_end_close": null
+          }
+        ],
+        "2003-Q1": [
+          {
+            "accession_number": "0000040730-04-000048",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "2004-03-11",
+            "high": 41.12,
+            "low": 29.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-05-000050",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "2005-03-16",
+            "high": 41.12,
+            "low": 29.75,
+            "quarter_end_close": null
+          }
+        ],
+        "2003-Q2": [
+          {
+            "accession_number": "0000040730-04-000048",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "2004-03-11",
+            "high": 39.5,
+            "low": 32.84,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-05-000050",
+            "dividend_declared_per_share": 0.6667,
+            "filing_date": "2005-03-16",
+            "high": 39.5,
+            "low": 32.84,
+            "quarter_end_close": null
+          }
+        ],
+        "2003-Q3": [
+          {
+            "accession_number": "0000040730-04-000048",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2004-03-11",
+            "high": 43.23,
+            "low": 35.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-05-000050",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2005-03-16",
+            "high": 43.23,
+            "low": 35.0,
+            "quarter_end_close": null
+          }
+        ],
+        "2003-Q4": [
+          {
+            "accession_number": "0000040730-04-000048",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2004-03-11",
+            "high": 54.39,
+            "low": 40.04,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000040730-05-000050",
+            "dividend_declared_per_share": 0.5,
+            "filing_date": "2005-03-16",
+            "high": 54.39,
+            "low": 40.04,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -2783,23 +5287,23 @@
       "withheld": [
         {
           "accession_number": "0000950124-95-000665",
-          "annual_dividend_declared_per_share": 2.13,
+          "annual_dividend_declared_per_share": 0.8,
           "quarterly_sum": 356.8,
-          "reason": "Reconciliation mismatch: quarterly_sum 356.8 != annual 2.13",
+          "reason": "Reconciliation mismatch: quarterly_sum 356.8 != annual 0.8",
           "year": 1993
         },
         {
           "accession_number": "0000950124-95-000665",
-          "annual_dividend_declared_per_share": 5.15,
+          "annual_dividend_declared_per_share": 0.8,
           "quarterly_sum": 320.7,
-          "reason": "Reconciliation mismatch: quarterly_sum 320.7 != annual 5.15",
+          "reason": "Reconciliation mismatch: quarterly_sum 320.7 != annual 0.8",
           "year": 1994
         },
         {
           "accession_number": "0000950124-96-001482",
-          "annual_dividend_declared_per_share": 7.21,
+          "annual_dividend_declared_per_share": 1.1,
           "quarterly_sum": 316.9,
-          "reason": "Reconciliation mismatch: quarterly_sum 316.9 != annual 7.21",
+          "reason": "Reconciliation mismatch: quarterly_sum 316.9 != annual 1.1",
           "year": 1995
         },
         {
@@ -2875,6 +5379,152 @@
     },
     "GTE": {
       "never_paid_statements": [],
+      "observations_by_filing": {
+        "1997-Q1": [
+          {
+            "accession_number": "0000950123-98-002421",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1998-03-10",
+            "high": 49.38,
+            "low": 43.13,
+            "quarter_end_close": 46.63
+          },
+          {
+            "accession_number": "0000950134-99-002432",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1999-03-31",
+            "high": 49.38,
+            "low": 43.13,
+            "quarter_end_close": 46.63
+          }
+        ],
+        "1997-Q2": [
+          {
+            "accession_number": "0000950123-98-002421",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1998-03-10",
+            "high": 47.5,
+            "low": 41.13,
+            "quarter_end_close": 43.88
+          },
+          {
+            "accession_number": "0000950134-99-002432",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1999-03-31",
+            "high": 47.5,
+            "low": 41.13,
+            "quarter_end_close": 43.88
+          }
+        ],
+        "1997-Q3": [
+          {
+            "accession_number": "0000950123-98-002421",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1998-03-10",
+            "high": 48.38,
+            "low": 42.88,
+            "quarter_end_close": 45.38
+          },
+          {
+            "accession_number": "0000950134-99-002432",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1999-03-31",
+            "high": 48.38,
+            "low": 42.88,
+            "quarter_end_close": 45.38
+          }
+        ],
+        "1997-Q4": [
+          {
+            "accession_number": "0000950123-98-002421",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1998-03-10",
+            "high": 52.25,
+            "low": 40.5,
+            "quarter_end_close": 52.25
+          },
+          {
+            "accession_number": "0000950134-99-002432",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1999-03-31",
+            "high": 52.25,
+            "low": 40.5,
+            "quarter_end_close": 52.25
+          }
+        ],
+        "1998-Q1": [
+          {
+            "accession_number": "0000950134-99-002432",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1999-03-31",
+            "high": 60.5,
+            "low": 47.94,
+            "quarter_end_close": 59.88
+          },
+          {
+            "accession_number": "0000950134-00-002776",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "2000-03-30",
+            "high": 60.5,
+            "low": 47.94,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q2": [
+          {
+            "accession_number": "0000950134-99-002432",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1999-03-31",
+            "high": 64.38,
+            "low": 55.25,
+            "quarter_end_close": 55.63
+          },
+          {
+            "accession_number": "0000950134-00-002776",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "2000-03-30",
+            "high": 64.38,
+            "low": 55.25,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q3": [
+          {
+            "accession_number": "0000950134-99-002432",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1999-03-31",
+            "high": 58.69,
+            "low": 46.75,
+            "quarter_end_close": 55.0
+          },
+          {
+            "accession_number": "0000950134-00-002776",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "2000-03-30",
+            "high": 58.69,
+            "low": 46.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q4": [
+          {
+            "accession_number": "0000950134-99-002432",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "1999-03-31",
+            "high": 71.81,
+            "low": 53.94,
+            "quarter_end_close": 65.0
+          },
+          {
+            "accession_number": "0000950134-00-002776",
+            "dividend_declared_per_share": 0.47,
+            "filing_date": "2000-03-30",
+            "high": 71.81,
+            "low": 53.94,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {
         "1996-Q1": {
           "accession_number": "0000950123-98-002421",
@@ -2886,6 +5536,7 @@
           "form": "10-K405",
           "high": 49.25,
           "low": 40.5,
+          "price_basis_restatement": "",
           "quarter_end_close": 43.38,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -2899,6 +5550,7 @@
           "form": "10-K405",
           "high": 45.63,
           "low": 40.88,
+          "price_basis_restatement": "",
           "quarter_end_close": 44.75,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -2912,6 +5564,7 @@
           "form": "10-K405",
           "high": 45.0,
           "low": 37.75,
+          "price_basis_restatement": "",
           "quarter_end_close": 38.5,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -2925,6 +5578,7 @@
           "form": "10-K405",
           "high": 46.5,
           "low": 38.25,
+          "price_basis_restatement": "",
           "quarter_end_close": 45.38,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -2938,6 +5592,7 @@
           "form": "10-K405",
           "high": 49.38,
           "low": 43.13,
+          "price_basis_restatement": "",
           "quarter_end_close": 46.63,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -2951,6 +5606,7 @@
           "form": "10-K405",
           "high": 47.5,
           "low": 41.13,
+          "price_basis_restatement": "",
           "quarter_end_close": 43.88,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -2964,6 +5620,7 @@
           "form": "10-K405",
           "high": 48.38,
           "low": 42.88,
+          "price_basis_restatement": "",
           "quarter_end_close": 45.38,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -2977,6 +5634,7 @@
           "form": "10-K405",
           "high": 52.25,
           "low": 40.5,
+          "price_basis_restatement": "",
           "quarter_end_close": 52.25,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -2990,6 +5648,7 @@
           "form": "10-K405",
           "high": 60.5,
           "low": 47.94,
+          "price_basis_restatement": "",
           "quarter_end_close": 59.88,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -3003,6 +5662,7 @@
           "form": "10-K405",
           "high": 64.38,
           "low": 55.25,
+          "price_basis_restatement": "",
           "quarter_end_close": 55.63,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -3016,6 +5676,7 @@
           "form": "10-K405",
           "high": 58.69,
           "low": 46.75,
+          "price_basis_restatement": "",
           "quarter_end_close": 55.0,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -3029,6 +5690,7 @@
           "form": "10-K405",
           "high": 71.81,
           "low": 53.94,
+          "price_basis_restatement": "",
           "quarter_end_close": 65.0,
           "table_caption": "QUARTERLY FINANCIAL DATA (UNAUDITED)"
         },
@@ -3042,6 +5704,7 @@
           "form": "10-K405",
           "high": 69.75,
           "low": 57.0,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in the common stock of GTE Corporation is the"
         },
@@ -3055,6 +5718,7 @@
           "form": "10-K405",
           "high": 76.13,
           "low": 59.5,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in the common stock of GTE Corporation is the"
         },
@@ -3068,6 +5732,7 @@
           "form": "10-K405",
           "high": 78.5,
           "low": 68.13,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in the common stock of GTE Corporation is the"
         },
@@ -3081,6 +5746,7 @@
           "form": "10-K405",
           "high": 78.13,
           "low": 67.31,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "The principal market for trading in the common stock of GTE Corporation is the"
         }
@@ -3169,8 +5835,650 @@
     },
     "LU": {
       "never_paid_statements": [],
-      "quarters": {},
-      "reconciliation": {},
+      "observations_by_filing": {
+        "1996-Q4": [
+          {
+            "accession_number": "0000950123-97-010554",
+            "dividend_declared_per_share": 0.075,
+            "filing_date": "1997-12-22",
+            "high": 53.125,
+            "low": 42.125,
+            "quarter_end_close": 46.25
+          },
+          {
+            "accession_number": "0000950123-98-010816",
+            "dividend_declared_per_share": 0.0375,
+            "filing_date": "1998-12-22",
+            "high": 26.5625,
+            "low": 21.0625,
+            "quarter_end_close": 23.125
+          }
+        ],
+        "1997-Q1": [
+          {
+            "accession_number": "0000950123-97-010554",
+            "dividend_declared_per_share": 0.0,
+            "filing_date": "1997-12-22",
+            "high": 60.625,
+            "low": 44.75,
+            "quarter_end_close": 52.5
+          },
+          {
+            "accession_number": "0000950123-98-010816",
+            "dividend_declared_per_share": 0.0,
+            "filing_date": "1998-12-22",
+            "high": 30.3125,
+            "low": 22.375,
+            "quarter_end_close": 26.25
+          }
+        ],
+        "1997-Q2": [
+          {
+            "accession_number": "0000950123-97-010554",
+            "dividend_declared_per_share": 0.075,
+            "filing_date": "1997-12-22",
+            "high": 74.1875,
+            "low": 49.875,
+            "quarter_end_close": 72.0625
+          },
+          {
+            "accession_number": "0000950123-98-010816",
+            "dividend_declared_per_share": 0.0375,
+            "filing_date": "1998-12-22",
+            "high": 37.0938,
+            "low": 24.9375,
+            "quarter_end_close": 36.0312
+          }
+        ],
+        "1997-Q3": [
+          {
+            "accession_number": "0000950123-97-010554",
+            "dividend_declared_per_share": 0.075,
+            "filing_date": "1997-12-22",
+            "high": 90.75,
+            "low": 72.1875,
+            "quarter_end_close": 81.375
+          },
+          {
+            "accession_number": "0000950123-98-010816",
+            "dividend_declared_per_share": 0.0375,
+            "filing_date": "1998-12-22",
+            "high": 45.375,
+            "low": 36.0938,
+            "quarter_end_close": 40.6875
+          }
+        ],
+        "1997-Q4": [
+          {
+            "accession_number": "0000950123-98-010816",
+            "dividend_declared_per_share": 0.075,
+            "filing_date": "1998-12-22",
+            "high": 45.0938,
+            "low": 36.1875,
+            "quarter_end_close": 39.9375
+          },
+          {
+            "accession_number": "0000950123-99-011082",
+            "dividend_declared_per_share": 0.0375,
+            "filing_date": "1999-12-21",
+            "high": 22.5469,
+            "low": 18.0938,
+            "quarter_end_close": 19.9688
+          }
+        ],
+        "1998-Q1": [
+          {
+            "accession_number": "0000950123-98-010816",
+            "dividend_declared_per_share": 0.0,
+            "filing_date": "1998-12-22",
+            "high": 64.125,
+            "low": 36.7188,
+            "quarter_end_close": 63.9375
+          },
+          {
+            "accession_number": "0000950123-99-011082",
+            "dividend_declared_per_share": 0.0,
+            "filing_date": "1999-12-21",
+            "high": 32.0625,
+            "low": 18.3594,
+            "quarter_end_close": 31.9688
+          }
+        ],
+        "1998-Q2": [
+          {
+            "accession_number": "0000950123-98-010816",
+            "dividend_declared_per_share": 0.04,
+            "filing_date": "1998-12-22",
+            "high": 83.6875,
+            "low": 64.0,
+            "quarter_end_close": 83.1875
+          },
+          {
+            "accession_number": "0000950123-99-011082",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "1999-12-21",
+            "high": 41.8438,
+            "low": 32.0,
+            "quarter_end_close": 41.5938
+          }
+        ],
+        "1998-Q3": [
+          {
+            "accession_number": "0000950123-98-010816",
+            "dividend_declared_per_share": 0.04,
+            "filing_date": "1998-12-22",
+            "high": 108.5,
+            "low": 68.375,
+            "quarter_end_close": 69.25
+          },
+          {
+            "accession_number": "0000950123-99-011082",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "1999-12-21",
+            "high": 54.25,
+            "low": 34.1875,
+            "quarter_end_close": 34.625
+          }
+        ],
+        "1998-Q4": [
+          {
+            "accession_number": "0000950123-99-011082",
+            "dividend_declared_per_share": 0.04,
+            "filing_date": "1999-12-21",
+            "high": 56.9375,
+            "low": 26.7188,
+            "quarter_end_close": 54.9688
+          },
+          {
+            "accession_number": "0000950123-00-011855",
+            "dividend_declared_per_share": 0.04,
+            "filing_date": "2000-12-27",
+            "high": 56.9375,
+            "low": 26.7188,
+            "quarter_end_close": 54.9688
+          }
+        ],
+        "1999-Q1": [
+          {
+            "accession_number": "0000950123-99-011082",
+            "dividend_declared_per_share": 0.0,
+            "filing_date": "1999-12-21",
+            "high": 60.0,
+            "low": 47.0,
+            "quarter_end_close": 54.0
+          },
+          {
+            "accession_number": "0000950123-00-011855",
+            "dividend_declared_per_share": 0.0,
+            "filing_date": "2000-12-27",
+            "high": 60.0,
+            "low": 47.0,
+            "quarter_end_close": 54.0
+          }
+        ],
+        "1999-Q2": [
+          {
+            "accession_number": "0000950123-99-011082",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "1999-12-21",
+            "high": 68.6875,
+            "low": 51.875,
+            "quarter_end_close": 67.4375
+          },
+          {
+            "accession_number": "0000950123-00-011855",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "2000-12-27",
+            "high": 68.6875,
+            "low": 51.875,
+            "quarter_end_close": 67.4375
+          }
+        ],
+        "1999-Q3": [
+          {
+            "accession_number": "0000950123-99-011082",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "1999-12-21",
+            "high": 79.75,
+            "low": 60.0,
+            "quarter_end_close": 64.875
+          },
+          {
+            "accession_number": "0000950123-00-011855",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "2000-12-27",
+            "high": 79.75,
+            "low": 60.0,
+            "quarter_end_close": 64.875
+          }
+        ],
+        "1999-Q4": [
+          {
+            "accession_number": "0000950123-00-011855",
+            "dividend_declared_per_share": 0.04,
+            "filing_date": "2000-12-27",
+            "high": 84.1875,
+            "low": 55.0625,
+            "quarter_end_close": 75.0
+          },
+          {
+            "accession_number": "0000950117-01-501896",
+            "dividend_declared_per_share": 0.04,
+            "filing_date": "2001-12-28",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q1": [
+          {
+            "accession_number": "0000950123-00-011855",
+            "dividend_declared_per_share": 0.0,
+            "filing_date": "2000-12-27",
+            "high": 77.5,
+            "low": 49.8125,
+            "quarter_end_close": 62.0
+          },
+          {
+            "accession_number": "0000950117-01-501896",
+            "dividend_declared_per_share": 0.0,
+            "filing_date": "2001-12-28",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q2": [
+          {
+            "accession_number": "0000950123-00-011855",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "2000-12-27",
+            "high": 65.9375,
+            "low": 51.0625,
+            "quarter_end_close": 58.75
+          },
+          {
+            "accession_number": "0000950117-01-501896",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "2001-12-28",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "2000-Q3": [
+          {
+            "accession_number": "0000950123-00-011855",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "2000-12-27",
+            "high": 67.1875,
+            "low": 28.0625,
+            "quarter_end_close": 30.5
+          },
+          {
+            "accession_number": "0000950117-01-501896",
+            "dividend_declared_per_share": 0.02,
+            "filing_date": "2001-12-28",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ]
+      },
+      "quarters": {
+        "1996-Q1": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1996",
+          "dividend_declared_per_share": 0.0,
+          "filing_date": "1997-12-22",
+          "fiscal_origin": "FY1996 Q2 (year ended September 30)",
+          "form": "10-K405",
+          "high": null,
+          "low": null,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE>"
+        },
+        "1996-Q2": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1996",
+          "dividend_declared_per_share": 0.075,
+          "filing_date": "1997-12-22",
+          "fiscal_origin": "FY1996 Q3 (year ended September 30)",
+          "form": "10-K405",
+          "high": null,
+          "low": null,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE>"
+        },
+        "1996-Q3": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1996",
+          "dividend_declared_per_share": 0.075,
+          "filing_date": "1997-12-22",
+          "fiscal_origin": "FY1996 Q4 (year ended September 30)",
+          "form": "10-K405",
+          "high": null,
+          "low": null,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE>"
+        },
+        "1996-Q4": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1997",
+          "dividend_declared_per_share": 0.075,
+          "filing_date": "1997-12-22",
+          "fiscal_origin": "FY1997 Q1 (year ended September 30)",
+          "form": "10-K405",
+          "high": 53.125,
+          "low": 42.125,
+          "price_basis_restatement": "",
+          "quarter_end_close": 46.25,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE>"
+        },
+        "1997-Q1": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1997",
+          "dividend_declared_per_share": 0.0,
+          "filing_date": "1997-12-22",
+          "fiscal_origin": "FY1997 Q2 (year ended September 30)",
+          "form": "10-K405",
+          "high": 60.625,
+          "low": 44.75,
+          "price_basis_restatement": "",
+          "quarter_end_close": 52.5,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE>"
+        },
+        "1997-Q2": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1997",
+          "dividend_declared_per_share": 0.075,
+          "filing_date": "1997-12-22",
+          "fiscal_origin": "FY1997 Q3 (year ended September 30)",
+          "form": "10-K405",
+          "high": 74.1875,
+          "low": 49.875,
+          "price_basis_restatement": "",
+          "quarter_end_close": 72.0625,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE>"
+        },
+        "1997-Q3": {
+          "accession_number": "0000950123-97-010554",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1997",
+          "dividend_declared_per_share": 0.075,
+          "filing_date": "1997-12-22",
+          "fiscal_origin": "FY1997 Q4 (year ended September 30)",
+          "form": "10-K405",
+          "high": 90.75,
+          "low": 72.1875,
+          "price_basis_restatement": "",
+          "quarter_end_close": 81.375,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE>"
+        },
+        "1997-Q4": {
+          "accession_number": "0000950123-98-010816",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1998",
+          "dividend_declared_per_share": 0.075,
+          "filing_date": "1998-12-22",
+          "fiscal_origin": "FY1998 Q1 (year ended September 30)",
+          "form": "10-K",
+          "high": 45.0938,
+          "low": 36.1875,
+          "price_basis_restatement": "",
+          "quarter_end_close": 39.9375,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "1998-Q1": {
+          "accession_number": "0000950123-98-010816",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1998",
+          "dividend_declared_per_share": 0.0,
+          "filing_date": "1998-12-22",
+          "fiscal_origin": "FY1998 Q2 (year ended September 30)",
+          "form": "10-K",
+          "high": 64.125,
+          "low": 36.7188,
+          "price_basis_restatement": "",
+          "quarter_end_close": 63.9375,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "1998-Q2": {
+          "accession_number": "0000950123-98-010816",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1998",
+          "dividend_declared_per_share": 0.04,
+          "filing_date": "1998-12-22",
+          "fiscal_origin": "FY1998 Q3 (year ended September 30)",
+          "form": "10-K",
+          "high": 83.6875,
+          "low": 64.0,
+          "price_basis_restatement": "",
+          "quarter_end_close": 83.1875,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "1998-Q3": {
+          "accession_number": "0000950123-98-010816",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1998",
+          "dividend_declared_per_share": 0.04,
+          "filing_date": "1998-12-22",
+          "fiscal_origin": "FY1998 Q4 (year ended September 30)",
+          "form": "10-K",
+          "high": 108.5,
+          "low": 68.375,
+          "price_basis_restatement": "",
+          "quarter_end_close": 69.25,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "1998-Q4": {
+          "accession_number": "0000950123-99-011082",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1999",
+          "dividend_declared_per_share": 0.04,
+          "filing_date": "1999-12-21",
+          "fiscal_origin": "FY1999 Q1 (year ended September 30)",
+          "form": "10-K405",
+          "high": 56.9375,
+          "low": 26.7188,
+          "price_basis_restatement": "",
+          "quarter_end_close": 54.9688,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "1999-Q1": {
+          "accession_number": "0000950123-99-011082",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1999",
+          "dividend_declared_per_share": 0.0,
+          "filing_date": "1999-12-21",
+          "fiscal_origin": "FY1999 Q2 (year ended September 30)",
+          "form": "10-K405",
+          "high": 60.0,
+          "low": 47.0,
+          "price_basis_restatement": "",
+          "quarter_end_close": 54.0,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "1999-Q2": {
+          "accession_number": "0000950123-99-011082",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1999",
+          "dividend_declared_per_share": 0.02,
+          "filing_date": "1999-12-21",
+          "fiscal_origin": "FY1999 Q3 (year ended September 30)",
+          "form": "10-K405",
+          "high": 68.6875,
+          "low": 51.875,
+          "price_basis_restatement": "",
+          "quarter_end_close": 67.4375,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "1999-Q3": {
+          "accession_number": "0000950123-99-011082",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 1999",
+          "dividend_declared_per_share": 0.02,
+          "filing_date": "1999-12-21",
+          "fiscal_origin": "FY1999 Q4 (year ended September 30)",
+          "form": "10-K405",
+          "high": 79.75,
+          "low": 60.0,
+          "price_basis_restatement": "",
+          "quarter_end_close": 64.875,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "1999-Q4": {
+          "accession_number": "0000950123-00-011855",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 2000",
+          "dividend_declared_per_share": 0.04,
+          "filing_date": "2000-12-27",
+          "fiscal_origin": "FY2000 Q1 (year ended September 30)",
+          "form": "10-K",
+          "high": 84.1875,
+          "low": 55.0625,
+          "price_basis_restatement": "",
+          "quarter_end_close": 75.0,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "2000-Q1": {
+          "accession_number": "0000950123-00-011855",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 2000",
+          "dividend_declared_per_share": 0.0,
+          "filing_date": "2000-12-27",
+          "fiscal_origin": "FY2000 Q2 (year ended September 30)",
+          "form": "10-K",
+          "high": 77.5,
+          "low": 49.8125,
+          "price_basis_restatement": "",
+          "quarter_end_close": 62.0,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "2000-Q2": {
+          "accession_number": "0000950123-00-011855",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 2000",
+          "dividend_declared_per_share": 0.02,
+          "filing_date": "2000-12-27",
+          "fiscal_origin": "FY2000 Q3 (year ended September 30)",
+          "form": "10-K",
+          "high": 65.9375,
+          "low": 51.0625,
+          "price_basis_restatement": "",
+          "quarter_end_close": 58.75,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "2000-Q3": {
+          "accession_number": "0000950123-00-011855",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended September 30, 2000",
+          "dividend_declared_per_share": 0.02,
+          "filing_date": "2000-12-27",
+          "fiscal_origin": "FY2000 Q4 (year ended September 30)",
+          "form": "10-K",
+          "high": 67.1875,
+          "low": 28.0625,
+          "price_basis_restatement": "",
+          "quarter_end_close": 30.5,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <TABLE> <CAPTION>"
+        },
+        "2000-Q4": {
+          "accession_number": "0000950117-01-501896",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "Year Ended SEPTEMBER 30, 2001",
+          "dividend_declared_per_share": 0.02,
+          "filing_date": "2001-12-28",
+          "fiscal_origin": "FY2001 Q1 (year ended SEPTEMBER 30)",
+          "form": "10-K405",
+          "high": null,
+          "low": null,
+          "price_basis_restatement": "",
+          "quarter_end_close": null,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED) <Table> <Caption>"
+        }
+      },
+      "reconciliation": {
+        "1996": {
+          "fiscal_origins": [
+            "FY1996 Q2 (year ended September 30)",
+            "FY1996 Q3 (year ended September 30)",
+            "FY1996 Q4 (year ended September 30)",
+            "FY1997 Q1 (year ended September 30)"
+          ],
+          "gate": "fiscal-year row sum against the total stated in the same row",
+          "reconciled": true
+        },
+        "1997": {
+          "fiscal_origins": [
+            "FY1997 Q2 (year ended September 30)",
+            "FY1997 Q3 (year ended September 30)",
+            "FY1997 Q4 (year ended September 30)",
+            "FY1998 Q1 (year ended September 30)"
+          ],
+          "gate": "fiscal-year row sum against the total stated in the same row",
+          "reconciled": true
+        },
+        "1998": {
+          "fiscal_origins": [
+            "FY1998 Q2 (year ended September 30)",
+            "FY1998 Q3 (year ended September 30)",
+            "FY1998 Q4 (year ended September 30)",
+            "FY1999 Q1 (year ended September 30)"
+          ],
+          "gate": "fiscal-year row sum against the total stated in the same row",
+          "reconciled": true
+        },
+        "1999": {
+          "fiscal_origins": [
+            "FY1999 Q2 (year ended September 30)",
+            "FY1999 Q3 (year ended September 30)",
+            "FY1999 Q4 (year ended September 30)",
+            "FY2000 Q1 (year ended September 30)"
+          ],
+          "gate": "fiscal-year row sum against the total stated in the same row",
+          "reconciled": true
+        },
+        "2000": {
+          "fiscal_origins": [
+            "FY2000 Q2 (year ended September 30)",
+            "FY2000 Q3 (year ended September 30)",
+            "FY2000 Q4 (year ended September 30)",
+            "FY2001 Q1 (year ended SEPTEMBER 30)"
+          ],
+          "gate": "fiscal-year row sum against the total stated in the same row",
+          "reconciled": true
+        }
+      },
       "split_language": [
         {
           "accession_number": "0000950123-97-010554",
@@ -3289,7 +6597,24 @@
           "sentence": "(iii) In the event of any change in outstanding Shares by reason of any stock dividend or stock split, recapitalization, merger, consolidation, combination or exchange of shares or other similar corporate change, the Board shall make such adjustments, if any, that it deems appropriate in the number of Share equivalents then credited to Participants\u2019 Deferred Share Equivalent Accounts."
         }
       ],
-      "withheld": []
+      "withheld": [
+        {
+          "quarters": [
+            "1995-Q4"
+          ],
+          "reason": "Incomplete quarters (found 1 of 4)",
+          "year": 1995
+        },
+        {
+          "quarters": [
+            "2001-Q1",
+            "2001-Q2",
+            "2001-Q3"
+          ],
+          "reason": "Incomplete quarters (found 3 of 4)",
+          "year": 2001
+        }
+      ]
     },
     "MCIC": {
       "never_paid_statements": [
@@ -3318,6 +6643,152 @@
           "sentence": "WorldCom has never paid cash dividends on our common stock."
         }
       ],
+      "observations_by_filing": {
+        "1998-Q1": [
+          {
+            "accession_number": "0000950134-99-002242",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-03-30",
+            "high": 44.88,
+            "low": 28.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000931763-00-000735",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-30",
+            "high": 29.92,
+            "low": 18.67,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q2": [
+          {
+            "accession_number": "0000950134-99-002242",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-03-30",
+            "high": 48.44,
+            "low": 41.63,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000931763-00-000735",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-30",
+            "high": 32.29,
+            "low": 27.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q3": [
+          {
+            "accession_number": "0000950134-99-002242",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-03-30",
+            "high": 57.88,
+            "low": 40.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000931763-00-000735",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-30",
+            "high": 38.59,
+            "low": 26.67,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q4": [
+          {
+            "accession_number": "0000950134-99-002242",
+            "dividend_declared_per_share": null,
+            "filing_date": "1999-03-30",
+            "high": 75.75,
+            "low": 39.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000931763-00-000735",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-30",
+            "high": 50.5,
+            "low": 26.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q1": [
+          {
+            "accession_number": "0000931763-00-000735",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-30",
+            "high": 62.83,
+            "low": 46.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-01-505916",
+            "dividend_declared_per_share": null,
+            "filing_date": "2001-03-30",
+            "high": 62.83,
+            "low": 46.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q2": [
+          {
+            "accession_number": "0000931763-00-000735",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-30",
+            "high": 64.5,
+            "low": 53.54,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-01-505916",
+            "dividend_declared_per_share": null,
+            "filing_date": "2001-03-30",
+            "high": 64.5,
+            "low": 53.54,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q3": [
+          {
+            "accession_number": "0000931763-00-000735",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-30",
+            "high": 60.92,
+            "low": 47.92,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-01-505916",
+            "dividend_declared_per_share": null,
+            "filing_date": "2001-03-30",
+            "high": 60.92,
+            "low": 47.92,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q4": [
+          {
+            "accession_number": "0000931763-00-000735",
+            "dividend_declared_per_share": null,
+            "filing_date": "2000-03-30",
+            "high": 61.33,
+            "low": 44.04,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000912057-01-505916",
+            "dividend_declared_per_share": null,
+            "filing_date": "2001-03-30",
+            "high": 61.33,
+            "low": 44.04,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -3383,6 +6854,80 @@
     },
     "MOB": {
       "never_paid_statements": [],
+      "observations_by_filing": {
+        "1997-Q1": [
+          {
+            "accession_number": "0000928385-98-000503",
+            "dividend_declared_per_share": 1.0,
+            "filing_date": "1998-03-19",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000928385-99-001036",
+            "dividend_declared_per_share": 0.53,
+            "filing_date": "1999-03-31",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q2": [
+          {
+            "accession_number": "0000928385-98-000503",
+            "dividend_declared_per_share": 0.53,
+            "filing_date": "1998-03-19",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000928385-99-001036",
+            "dividend_declared_per_share": 0.53,
+            "filing_date": "1999-03-31",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q3": [
+          {
+            "accession_number": "0000928385-98-000503",
+            "dividend_declared_per_share": 0.53,
+            "filing_date": "1998-03-19",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000928385-99-001036",
+            "dividend_declared_per_share": 0.53,
+            "filing_date": "1999-03-31",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q4": [
+          {
+            "accession_number": "0000928385-98-000503",
+            "dividend_declared_per_share": 0.53,
+            "filing_date": "1998-03-19",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000928385-99-001036",
+            "dividend_declared_per_share": 0.53,
+            "filing_date": "1999-03-31",
+            "high": null,
+            "low": null,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -3472,6 +7017,7 @@
     },
     "MOT": {
       "never_paid_statements": [],
+      "observations_by_filing": {},
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -3556,6 +7102,7 @@
     },
     "NT": {
       "never_paid_statements": [],
+      "observations_by_filing": {},
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -3672,6 +7219,7 @@
     },
     "RD": {
       "never_paid_statements": [],
+      "observations_by_filing": {},
       "quarters": {},
       "reconciliation": {},
       "split_language": [],
@@ -3679,6 +7227,7 @@
     },
     "SBC": {
       "never_paid_statements": [],
+      "observations_by_filing": {},
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -3876,6 +7425,7 @@
           "sentence": "Sun has never declared cash dividends and presently intends to continue this policy."
         }
       ],
+      "observations_by_filing": {},
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -3964,6 +7514,7 @@
     },
     "TYC": {
       "never_paid_statements": [],
+      "observations_by_filing": {},
       "quarters": {},
       "reconciliation": {},
       "split_language": [
@@ -4209,6 +7760,188 @@
     },
     "T_CORP": {
       "never_paid_statements": [],
+      "observations_by_filing": {
+        "2000-Q1": [
+          {
+            "accession_number": "0000005907-01-000012",
+            "dividend_declared_per_share": 0.22,
+            "filing_date": "2001-04-02",
+            "high": 61.0,
+            "low": 44.31,
+            "quarter_end_close": 56.25
+          },
+          {
+            "accession_number": "0000950123-02-003272",
+            "dividend_declared_per_share": 0.22,
+            "filing_date": "2002-04-01",
+            "high": 47.37,
+            "low": 34.41,
+            "quarter_end_close": 43.73
+          }
+        ],
+        "2000-Q2": [
+          {
+            "accession_number": "0000005907-01-000012",
+            "dividend_declared_per_share": 0.22,
+            "filing_date": "2001-04-02",
+            "high": 58.81,
+            "low": 31.25,
+            "quarter_end_close": 31.63
+          },
+          {
+            "accession_number": "0000950123-02-003272",
+            "dividend_declared_per_share": 0.22,
+            "filing_date": "2002-04-01",
+            "high": 45.67,
+            "low": 24.27,
+            "quarter_end_close": 24.71
+          }
+        ],
+        "2000-Q3": [
+          {
+            "accession_number": "0000005907-01-000012",
+            "dividend_declared_per_share": 0.22,
+            "filing_date": "2001-04-02",
+            "high": 35.19,
+            "low": 27.25,
+            "quarter_end_close": 29.38
+          },
+          {
+            "accession_number": "0000950123-02-003272",
+            "dividend_declared_per_share": 0.22,
+            "filing_date": "2002-04-01",
+            "high": 27.33,
+            "low": 21.16,
+            "quarter_end_close": 22.52
+          }
+        ],
+        "2000-Q4": [
+          {
+            "accession_number": "0000005907-01-000012",
+            "dividend_declared_per_share": 0.0375,
+            "filing_date": "2001-04-02",
+            "high": 30.0,
+            "low": 16.5,
+            "quarter_end_close": 17.25
+          },
+          {
+            "accession_number": "0000950123-02-003272",
+            "dividend_declared_per_share": 0.0375,
+            "filing_date": "2002-04-01",
+            "high": 23.3,
+            "low": 12.81,
+            "quarter_end_close": 13.4
+          }
+        ],
+        "2001-Q3": [
+          {
+            "accession_number": "0000950123-02-003272",
+            "dividend_declared_per_share": 0.0375,
+            "filing_date": "2002-04-01",
+            "high": 21.46,
+            "low": 16.5,
+            "quarter_end_close": 19.3
+          },
+          {
+            "accession_number": "0000950123-04-003304",
+            "dividend_declared_per_share": null,
+            "filing_date": "2004-03-15",
+            "high": 33.0,
+            "low": 0.04,
+            "quarter_end_close": null
+          }
+        ],
+        "2001-Q4": [
+          {
+            "accession_number": "0000950123-02-003272",
+            "dividend_declared_per_share": 0.0375,
+            "filing_date": "2002-04-01",
+            "high": 20.0,
+            "low": 14.75,
+            "quarter_end_close": 18.14
+          },
+          {
+            "accession_number": "0000950123-04-003304",
+            "dividend_declared_per_share": null,
+            "filing_date": "2004-03-15",
+            "high": 1.0,
+            "low": 0.01,
+            "quarter_end_close": null
+          }
+        ],
+        "2003-Q1": [
+          {
+            "accession_number": "0000950123-04-003304",
+            "dividend_declared_per_share": 0.1875,
+            "filing_date": "2004-03-15",
+            "high": 27.89,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950123-05-002878",
+            "dividend_declared_per_share": 0.1875,
+            "filing_date": "2005-03-10",
+            "high": 27.89,
+            "low": 15.75,
+            "quarter_end_close": 16.2
+          }
+        ],
+        "2003-Q2": [
+          {
+            "accession_number": "0000950123-04-003304",
+            "dividend_declared_per_share": 0.1875,
+            "filing_date": "2004-03-15",
+            "high": 21.84,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950123-05-002878",
+            "dividend_declared_per_share": 0.1875,
+            "filing_date": "2005-03-10",
+            "high": 21.84,
+            "low": 13.45,
+            "quarter_end_close": 19.25
+          }
+        ],
+        "2003-Q3": [
+          {
+            "accession_number": "0000950123-04-003304",
+            "dividend_declared_per_share": 0.2375,
+            "filing_date": "2004-03-15",
+            "high": 23.18,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950123-05-002878",
+            "dividend_declared_per_share": 0.2375,
+            "filing_date": "2005-03-10",
+            "high": 23.18,
+            "low": 18.8,
+            "quarter_end_close": 21.55
+          }
+        ],
+        "2003-Q4": [
+          {
+            "accession_number": "0000950123-04-003304",
+            "dividend_declared_per_share": 0.2375,
+            "filing_date": "2004-03-15",
+            "high": 21.95,
+            "low": null,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950123-05-002878",
+            "dividend_declared_per_share": 0.2375,
+            "filing_date": "2005-03-10",
+            "high": 21.95,
+            "low": 18.31,
+            "quarter_end_close": 20.3
+          }
+        ]
+      },
       "quarters": {
         "1993-Q1": {
           "accession_number": "0000005907-95-000026",
@@ -4220,6 +7953,7 @@
           "form": "10-K",
           "high": 59.125,
           "low": 50.125,
+          "price_basis_restatement": "",
           "quarter_end_close": 56.75,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4233,6 +7967,7 @@
           "form": "10-K",
           "high": 63.875,
           "low": 53.75,
+          "price_basis_restatement": "",
           "quarter_end_close": 63.0,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4246,6 +7981,7 @@
           "form": "10-K",
           "high": 65.0,
           "low": 57.375,
+          "price_basis_restatement": "",
           "quarter_end_close": 58.875,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4259,6 +7995,7 @@
           "form": "10-K",
           "high": 61.375,
           "low": 52.0,
+          "price_basis_restatement": "",
           "quarter_end_close": 52.5,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4272,6 +8009,7 @@
           "form": "10-K",
           "high": 57.125,
           "low": 50.625,
+          "price_basis_restatement": "",
           "quarter_end_close": 51.25,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4285,6 +8023,7 @@
           "form": "10-K",
           "high": 57.125,
           "low": 49.5,
+          "price_basis_restatement": "",
           "quarter_end_close": 53.375,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4298,6 +8037,7 @@
           "form": "10-K",
           "high": 55.875,
           "low": 52.5,
+          "price_basis_restatement": "",
           "quarter_end_close": 54.0,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4311,7 +8051,176 @@
           "form": "10-K",
           "high": 55.25,
           "low": 47.25,
+          "price_basis_restatement": "",
           "quarter_end_close": 50.25,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "1999-Q1": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed_basis_note": "Amounts have been restated to reflect the June 2000 two-for-one split",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.22,
+          "filing_date": "2001-04-02",
+          "form": "10-K405",
+          "high": 64.08,
+          "low": 50.58,
+          "price_basis_restatement": "",
+          "quarter_end_close": 53.2,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "1999-Q2": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed_basis_note": "Amounts have been restated to reflect the June 2000 two-for-one split",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.22,
+          "filing_date": "2001-04-02",
+          "form": "10-K405",
+          "high": 63.0,
+          "low": 50.06,
+          "price_basis_restatement": "",
+          "quarter_end_close": 55.81,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "1999-Q3": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed_basis_note": "Amounts have been restated to reflect the June 2000 two-for-one split",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.22,
+          "filing_date": "2001-04-02",
+          "form": "10-K405",
+          "high": 59.0,
+          "low": 41.81,
+          "price_basis_restatement": "",
+          "quarter_end_close": 43.5,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "1999-Q4": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed_basis_note": "Amounts have been restated to reflect the June 2000 two-for-one split",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.22,
+          "filing_date": "2001-04-02",
+          "form": "10-K405",
+          "high": 61.0,
+          "low": 41.5,
+          "price_basis_restatement": "",
+          "quarter_end_close": 50.81,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2000-Q1": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed_basis_note": "Amounts have been restated to reflect the June 2000 two-for-one split",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.22,
+          "filing_date": "2001-04-02",
+          "form": "10-K405",
+          "high": 61.0,
+          "low": 44.31,
+          "price_basis_restatement": "",
+          "quarter_end_close": 56.25,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2000-Q2": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed_basis_note": "Amounts have been restated to reflect the June 2000 two-for-one split",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.22,
+          "filing_date": "2001-04-02",
+          "form": "10-K405",
+          "high": 58.81,
+          "low": 31.25,
+          "price_basis_restatement": "",
+          "quarter_end_close": 31.63,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2000-Q3": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed_basis_note": "Amounts have been restated to reflect the June 2000 two-for-one split",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.22,
+          "filing_date": "2001-04-02",
+          "form": "10-K405",
+          "high": 35.19,
+          "low": 27.25,
+          "price_basis_restatement": "",
+          "quarter_end_close": 29.38,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2000-Q4": {
+          "accession_number": "0000005907-01-000012",
+          "as_filed_basis_note": "Amounts have been restated to reflect the June 2000 two-for-one split",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.0375,
+          "filing_date": "2001-04-02",
+          "form": "10-K405",
+          "high": 30.0,
+          "low": 16.5,
+          "price_basis_restatement": "",
+          "quarter_end_close": 17.25,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2001-Q1": {
+          "accession_number": "0000950123-02-003272",
+          "as_filed_basis_note": "Common Stock prices have been restated to reflect the split-off of AT&T",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.0375,
+          "filing_date": "2002-04-01",
+          "form": "10-K",
+          "high": 19.53,
+          "low": 13.4,
+          "price_basis_restatement": "Common Stock prices have been restated to reflect the split-off of AT&T",
+          "quarter_end_close": 16.54,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2001-Q2": {
+          "accession_number": "0000950123-02-003272",
+          "as_filed_basis_note": "Common Stock prices have been restated to reflect the split-off of AT&T",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.0375,
+          "filing_date": "2002-04-01",
+          "form": "10-K",
+          "high": 18.07,
+          "low": 15.39,
+          "price_basis_restatement": "Common Stock prices have been restated to reflect the split-off of AT&T",
+          "quarter_end_close": 17.09,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2001-Q3": {
+          "accession_number": "0000950123-02-003272",
+          "as_filed_basis_note": "Common Stock prices have been restated to reflect the split-off of AT&T",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.0375,
+          "filing_date": "2002-04-01",
+          "form": "10-K",
+          "high": 21.46,
+          "low": 16.5,
+          "price_basis_restatement": "Common Stock prices have been restated to reflect the split-off of AT&T",
+          "quarter_end_close": 19.3,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2001-Q4": {
+          "accession_number": "0000950123-02-003272",
+          "as_filed_basis_note": "Common Stock prices have been restated to reflect the split-off of AT&T",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.0375,
+          "filing_date": "2002-04-01",
+          "form": "10-K",
+          "high": 20.0,
+          "low": 14.75,
+          "price_basis_restatement": "Common Stock prices have been restated to reflect the split-off of AT&T",
+          "quarter_end_close": 18.14,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
         "2003-Q1": {
@@ -4324,6 +8233,7 @@
           "form": "10-K",
           "high": 27.89,
           "low": null,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4337,6 +8247,7 @@
           "form": "10-K",
           "high": 21.84,
           "low": null,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4350,6 +8261,7 @@
           "form": "10-K",
           "high": 23.18,
           "low": null,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         },
@@ -4363,7 +8275,64 @@
           "form": "10-K",
           "high": 21.95,
           "low": null,
+          "price_basis_restatement": "",
           "quarter_end_close": null,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2004-Q1": {
+          "accession_number": "0000950123-05-002878",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.2375,
+          "filing_date": "2005-03-10",
+          "form": "10-K",
+          "high": 22.1,
+          "low": 18.7,
+          "price_basis_restatement": "",
+          "quarter_end_close": 19.57,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2004-Q2": {
+          "accession_number": "0000950123-05-002878",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.2375,
+          "filing_date": "2005-03-10",
+          "form": "10-K",
+          "high": 19.75,
+          "low": 14.25,
+          "price_basis_restatement": "",
+          "quarter_end_close": 14.63,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2004-Q3": {
+          "accession_number": "0000950123-05-002878",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.2375,
+          "filing_date": "2005-03-10",
+          "form": "10-K",
+          "high": 15.85,
+          "low": 13.59,
+          "price_basis_restatement": "",
+          "quarter_end_close": 14.32,
+          "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
+        },
+        "2004-Q4": {
+          "accession_number": "0000950123-05-002878",
+          "as_filed_basis_note": "",
+          "audited": false,
+          "basis_evidence": "QUARTERLY INFORMATION (UNAUDITED)",
+          "dividend_declared_per_share": 0.2375,
+          "filing_date": "2005-03-10",
+          "form": "10-K",
+          "high": 19.87,
+          "low": 14.25,
+          "price_basis_restatement": "",
+          "quarter_end_close": 19.06,
           "table_caption": "QUARTERLY INFORMATION (UNAUDITED)"
         }
       },
@@ -4378,9 +8347,29 @@
           "quarterly_sum": 1.32,
           "reconciled": true
         },
+        "1999": {
+          "annual_dividend_declared_per_share": 0.88,
+          "quarterly_sum": 0.88,
+          "reconciled": true
+        },
+        "2000": {
+          "annual_dividend_declared_per_share": 0.6975,
+          "quarterly_sum": 0.6975,
+          "reconciled": true
+        },
+        "2001": {
+          "annual_dividend_declared_per_share": 0.15,
+          "quarterly_sum": 0.15,
+          "reconciled": true
+        },
         "2003": {
           "annual_dividend_declared_per_share": 0.85,
           "quarterly_sum": 0.85,
+          "reconciled": true
+        },
+        "2004": {
+          "annual_dividend_declared_per_share": 0.95,
+          "quarterly_sum": 0.95,
           "reconciled": true
         }
       },
@@ -4656,27 +8645,6 @@
       ],
       "withheld": [
         {
-          "accession_number": "0000005907-01-000012",
-          "annual_dividend_declared_per_share": 1.74,
-          "quarterly_sum": 0.88,
-          "reason": "Reconciliation mismatch: quarterly_sum 0.88 != annual 1.74",
-          "year": 1999
-        },
-        {
-          "accession_number": "0000005907-01-000012",
-          "annual_dividend_declared_per_share": 0.88,
-          "quarterly_sum": 0.6975,
-          "reason": "Reconciliation mismatch: quarterly_sum 0.6975 != annual 0.88",
-          "year": 2000
-        },
-        {
-          "accession_number": "0000950123-02-003272",
-          "annual_dividend_declared_per_share": 1.33,
-          "quarterly_sum": 0.15,
-          "reason": "Reconciliation mismatch: quarterly_sum 0.15 != annual 1.33",
-          "year": 2001
-        },
-        {
           "quarters": [
             "2002-Q1",
             "2002-Q2",
@@ -4685,13 +8653,6 @@
           ],
           "reason": "Structural validation failure: both dividend and close are null",
           "year": 2002
-        },
-        {
-          "accession_number": "0000950123-05-002878",
-          "annual_dividend_declared_per_share": 8.14,
-          "quarterly_sum": 0.95,
-          "reason": "Reconciliation mismatch: quarterly_sum 0.95 != annual 8.14",
-          "year": 2004
         }
       ]
     },
@@ -4860,6 +8821,440 @@
           "sentence": "The Company has not declared any cash dividends on its common stock for any of the periods presented and has no present intention of so doing."
         }
       ],
+      "observations_by_filing": {
+        "1994-Q1": [
+          {
+            "accession_number": "0000950112-95-000860",
+            "dividend_declared_per_share": 45.0,
+            "filing_date": "1995-03-31",
+            "high": 49.75,
+            "low": 28.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950112-96-001003",
+            "dividend_declared_per_share": 45.0,
+            "filing_date": "1996-04-01",
+            "high": 49.75,
+            "low": 28.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q2": [
+          {
+            "accession_number": "0000950112-95-000860",
+            "dividend_declared_per_share": 32.5,
+            "filing_date": "1995-03-31",
+            "high": 34.25,
+            "low": 24.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950112-96-001003",
+            "dividend_declared_per_share": 32.5,
+            "filing_date": "1996-04-01",
+            "high": 34.25,
+            "low": 24.5,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q3": [
+          {
+            "accession_number": "0000950112-95-000860",
+            "dividend_declared_per_share": 39.75,
+            "filing_date": "1995-03-31",
+            "high": 41.75,
+            "low": 33.875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950112-96-001003",
+            "dividend_declared_per_share": 39.75,
+            "filing_date": "1996-04-01",
+            "high": 41.75,
+            "low": 33.875,
+            "quarter_end_close": null
+          }
+        ],
+        "1994-Q4": [
+          {
+            "accession_number": "0000950112-95-000860",
+            "dividend_declared_per_share": 41.0,
+            "filing_date": "1995-03-31",
+            "high": 42.125,
+            "low": 38.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950112-96-001003",
+            "dividend_declared_per_share": 41.0,
+            "filing_date": "1996-04-01",
+            "high": 42.125,
+            "low": 38.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q1": [
+          {
+            "accession_number": "0000950112-96-001003",
+            "dividend_declared_per_share": 47.375,
+            "filing_date": "1996-04-01",
+            "high": 48.25,
+            "low": 41.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001005477-97-000969",
+            "dividend_declared_per_share": 47.375,
+            "filing_date": "1997-03-31",
+            "high": 48.25,
+            "low": 41.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q2": [
+          {
+            "accession_number": "0000950112-96-001003",
+            "dividend_declared_per_share": 48.625,
+            "filing_date": "1996-04-01",
+            "high": 49.5,
+            "low": 41.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001005477-97-000969",
+            "dividend_declared_per_share": 48.625,
+            "filing_date": "1997-03-31",
+            "high": 49.5,
+            "low": 41.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q3": [
+          {
+            "accession_number": "0000950112-96-001003",
+            "dividend_declared_per_share": 54.25,
+            "filing_date": "1996-04-01",
+            "high": 54.125,
+            "low": 44.75,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001005477-97-000969",
+            "dividend_declared_per_share": 54.25,
+            "filing_date": "1997-03-31",
+            "high": 54.125,
+            "low": 44.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1995-Q4": [
+          {
+            "accession_number": "0000950112-96-001003",
+            "dividend_declared_per_share": 50.75,
+            "filing_date": "1996-04-01",
+            "high": 50.625,
+            "low": 44.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001005477-97-000969",
+            "dividend_declared_per_share": 50.75,
+            "filing_date": "1997-03-31",
+            "high": 50.625,
+            "low": 44.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q1": [
+          {
+            "accession_number": "0001005477-97-000969",
+            "dividend_declared_per_share": 47.625,
+            "filing_date": "1997-03-31",
+            "high": 46.75,
+            "low": 36.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-013110",
+            "dividend_declared_per_share": 47.625,
+            "filing_date": "1998-03-31",
+            "high": 46.75,
+            "low": 36.625,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q2": [
+          {
+            "accession_number": "0001005477-97-000969",
+            "dividend_declared_per_share": 44.375,
+            "filing_date": "1997-03-31",
+            "high": 43.375,
+            "low": 36.375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-013110",
+            "dividend_declared_per_share": 44.375,
+            "filing_date": "1998-03-31",
+            "high": 43.375,
+            "low": 36.375,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q3": [
+          {
+            "accession_number": "0001005477-97-000969",
+            "dividend_declared_per_share": 39.0,
+            "filing_date": "1997-03-31",
+            "high": 38.375,
+            "low": 29.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-013110",
+            "dividend_declared_per_share": 39.0,
+            "filing_date": "1998-03-31",
+            "high": 38.375,
+            "low": 29.625,
+            "quarter_end_close": null
+          }
+        ],
+        "1996-Q4": [
+          {
+            "accession_number": "0001005477-97-000969",
+            "dividend_declared_per_share": 38.75,
+            "filing_date": "1997-03-31",
+            "high": 38.25,
+            "low": 30.875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001047469-98-013110",
+            "dividend_declared_per_share": 38.75,
+            "filing_date": "1998-03-31",
+            "high": 38.25,
+            "low": 30.875,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q1": [
+          {
+            "accession_number": "0001047469-98-013110",
+            "dividend_declared_per_share": 37.875,
+            "filing_date": "1998-03-31",
+            "high": 37.125,
+            "low": 32.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001005477-99-001528",
+            "dividend_declared_per_share": 18.9375,
+            "filing_date": "1999-03-31",
+            "high": 18.5625,
+            "low": 16.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q2": [
+          {
+            "accession_number": "0001047469-98-013110",
+            "dividend_declared_per_share": 36.0,
+            "filing_date": "1998-03-31",
+            "high": 35.4375,
+            "low": 25.25,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001005477-99-001528",
+            "dividend_declared_per_share": 18.0,
+            "filing_date": "1999-03-31",
+            "high": 17.7188,
+            "low": 12.625,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q3": [
+          {
+            "accession_number": "0001047469-98-013110",
+            "dividend_declared_per_share": 35.125,
+            "filing_date": "1998-03-31",
+            "high": 34.75,
+            "low": 27.5,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001005477-99-001528",
+            "dividend_declared_per_share": 17.5625,
+            "filing_date": "1999-03-31",
+            "high": 17.375,
+            "low": 13.75,
+            "quarter_end_close": null
+          }
+        ],
+        "1997-Q4": [
+          {
+            "accession_number": "0001047469-98-013110",
+            "dividend_declared_per_share": 42.25,
+            "filing_date": "1998-03-31",
+            "high": 41.75,
+            "low": 26.0,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0001005477-99-001528",
+            "dividend_declared_per_share": 21.125,
+            "filing_date": "1999-03-31",
+            "high": 20.875,
+            "low": 13.0,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q1": [
+          {
+            "accession_number": "0001005477-99-001528",
+            "dividend_declared_per_share": 27.5312,
+            "filing_date": "1999-03-31",
+            "high": 27.125,
+            "low": 19.9375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950130-00-001551",
+            "dividend_declared_per_share": 27.5312,
+            "filing_date": "2000-03-24",
+            "high": 27.125,
+            "low": 19.9375,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q2": [
+          {
+            "accession_number": "0001005477-99-001528",
+            "dividend_declared_per_share": 30.625,
+            "filing_date": "1999-03-31",
+            "high": 30.5,
+            "low": 26.125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950130-00-001551",
+            "dividend_declared_per_share": 30.625,
+            "filing_date": "2000-03-24",
+            "high": 30.5,
+            "low": 26.125,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q3": [
+          {
+            "accession_number": "0001005477-99-001528",
+            "dividend_declared_per_share": 35.0,
+            "filing_date": "1999-03-31",
+            "high": 34.6875,
+            "low": 24.625,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950130-00-001551",
+            "dividend_declared_per_share": 35.0,
+            "filing_date": "2000-03-24",
+            "high": 34.6875,
+            "low": 24.625,
+            "quarter_end_close": null
+          }
+        ],
+        "1998-Q4": [
+          {
+            "accession_number": "0001005477-99-001528",
+            "dividend_declared_per_share": 37.125,
+            "filing_date": "1999-03-31",
+            "high": 36.9062,
+            "low": 25.4375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950130-00-001551",
+            "dividend_declared_per_share": 37.125,
+            "filing_date": "2000-03-24",
+            "high": 36.9062,
+            "low": 25.4375,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q1": [
+          {
+            "accession_number": "0000950130-00-001551",
+            "dividend_declared_per_share": 45.9375,
+            "filing_date": "2000-03-24",
+            "high": 45.5,
+            "low": 35.3125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950130-01-500372",
+            "dividend_declared_per_share": 45.94,
+            "filing_date": "2001-03-28",
+            "high": 45.5,
+            "low": 35.31,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q2": [
+          {
+            "accession_number": "0000950130-00-001551",
+            "dividend_declared_per_share": 49.1875,
+            "filing_date": "2000-03-24",
+            "high": 48.75,
+            "low": 36.6875,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950130-01-500372",
+            "dividend_declared_per_share": 49.19,
+            "filing_date": "2001-03-28",
+            "high": 48.75,
+            "low": 36.69,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q3": [
+          {
+            "accession_number": "0000950130-00-001551",
+            "dividend_declared_per_share": 48.75,
+            "filing_date": "2000-03-24",
+            "high": 49.625,
+            "low": 38.4375,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950130-01-500372",
+            "dividend_declared_per_share": 48.75,
+            "filing_date": "2001-03-28",
+            "high": 49.63,
+            "low": 38.44,
+            "quarter_end_close": null
+          }
+        ],
+        "1999-Q4": [
+          {
+            "accession_number": "0000950130-00-001551",
+            "dividend_declared_per_share": 60.4375,
+            "filing_date": "2000-03-24",
+            "high": 60.4375,
+            "low": 40.3125,
+            "quarter_end_close": null
+          },
+          {
+            "accession_number": "0000950130-01-500372",
+            "dividend_declared_per_share": 60.44,
+            "filing_date": "2001-03-28",
+            "high": 60.44,
+            "low": 40.31,
+            "quarter_end_close": null
+          }
+        ]
+      },
       "quarters": {},
       "reconciliation": {},
       "split_language": [

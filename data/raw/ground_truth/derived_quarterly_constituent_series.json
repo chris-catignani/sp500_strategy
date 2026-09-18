@@ -4528,8 +4528,8 @@
         "accession_number": "0000887991-94-000003",
         "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_1994_Q1_N-30D_0000887991-94-000003.txt",
         "audited": false,
-        "split_factor": 2.0,
-        "split_adjusted_price_usd": 28.875,
+        "split_factor": 4.0,
+        "split_adjusted_price_usd": 14.4375,
         "split_source_accession": "0001047469-99-007204"
       },
       "1994-Q2": {
@@ -4542,8 +4542,8 @@
         "accession_number": "0000893220-94-000389",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1994_Q2_N-30D_0000893220-94-000389.txt",
         "audited": false,
-        "split_factor": 2.0,
-        "split_adjusted_price_usd": 30.8751,
+        "split_factor": 4.0,
+        "split_adjusted_price_usd": 15.4376,
         "split_source_accession": "0001047469-99-007204"
       },
       "1994-Q4": {
@@ -4556,8 +4556,8 @@
         "accession_number": "0000893220-95-000088",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1994_N-30D_0000893220-95-000088.txt",
         "audited": true,
-        "split_factor": 2.0,
-        "split_adjusted_price_usd": 27.0625,
+        "split_factor": 4.0,
+        "split_adjusted_price_usd": 13.5312,
         "split_source_accession": "0001047469-99-007204"
       },
       "1995-Q1": {
@@ -4570,8 +4570,8 @@
         "accession_number": "0000950109-95-002026",
         "source_file": "data/raw/ground_truth/sec_filings/SEI_1995_Q1_N-30D_0000950109-95-002026.txt",
         "audited": true,
-        "split_factor": 2.0,
-        "split_adjusted_price_usd": 29.7469,
+        "split_factor": 4.0,
+        "split_adjusted_price_usd": 14.8734,
         "split_source_accession": "0001047469-99-007204"
       },
       "1995-Q2": {
@@ -4584,8 +4584,8 @@
         "accession_number": "0000893220-95-000545",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1995_Q2_N-30D_0000893220-95-000545.txt",
         "audited": false,
-        "split_factor": 2.0,
-        "split_adjusted_price_usd": 31.7501,
+        "split_factor": 4.0,
+        "split_adjusted_price_usd": 15.8751,
         "split_source_accession": "0001047469-99-007204"
       },
       "1995-Q4": {

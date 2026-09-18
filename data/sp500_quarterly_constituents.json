@@ -826,7 +826,7 @@
       "ticker": "BLS",
       "name": "BLS",
       "market_cap_weight": 0.009403,
-      "trailing_1y_return": -0.1963,
+      "trailing_1y_return": 0.6074,
       "year": 1995,
       "quarter": 4
     },
@@ -1004,7 +1004,7 @@
       "ticker": "BLS",
       "name": "BLS",
       "market_cap_weight": 0.0076,
-      "trailing_1y_return": -0.372,
+      "trailing_1y_return": 0.256,
       "year": 1996,
       "quarter": 1
     }
@@ -1166,7 +1166,7 @@
       "ticker": "BLS",
       "name": "BLS",
       "market_cap_weight": 0.0084,
-      "trailing_1y_return": -0.3213,
+      "trailing_1y_return": 0.3573,
       "year": 1996,
       "quarter": 2
     }
@@ -2714,7 +2714,7 @@
       "ticker": "LU",
       "name": "LU",
       "market_cap_weight": 0.014492,
-      "trailing_1y_return": 1.7543,
+      "trailing_1y_return": 1.7583,
       "year": 1998,
       "quarter": 4
     },
@@ -2892,7 +2892,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.0138,
-      "trailing_1y_return": 0.2162,
+      "trailing_1y_return": 0.2212,
       "year": 1999,
       "quarter": 1
     },
@@ -2900,7 +2900,7 @@
       "ticker": "LU",
       "name": "LU",
       "market_cap_weight": 0.0136,
-      "trailing_1y_return": 0.6852,
+      "trailing_1y_return": 0.6877,
       "year": 1999,
       "quarter": 1
     },
@@ -3014,7 +3014,7 @@
       "ticker": "LU",
       "name": "LU",
       "market_cap_weight": 0.0159,
-      "trailing_1y_return": 0.6213,
+      "trailing_1y_return": 0.6233,
       "year": 1999,
       "quarter": 2
     },
@@ -3054,7 +3054,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.0136,
-      "trailing_1y_return": 0.4655,
+      "trailing_1y_return": 0.4771,
       "year": 1999,
       "quarter": 2
     },
@@ -3176,7 +3176,7 @@
       "ticker": "LU",
       "name": "LU",
       "market_cap_weight": 0.0164,
-      "trailing_1y_return": 0.8787,
+      "trailing_1y_return": 0.8811,
       "year": 1999,
       "quarter": 3
     },
@@ -3248,7 +3248,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.0113,
-      "trailing_1y_return": 0.1166,
+      "trailing_1y_return": 0.1335,
       "year": 1999,
       "quarter": 3
     },
@@ -3330,7 +3330,7 @@
       "ticker": "LU",
       "name": "LU",
       "market_cap_weight": 0.019034,
-      "trailing_1y_return": 0.3602,
+      "trailing_1y_return": 0.3617,
       "year": 1999,
       "quarter": 4
     },
@@ -3378,7 +3378,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.013169,
-      "trailing_1y_return": 0.0116,
+      "trailing_1y_return": 0.0292,
       "year": 1999,
       "quarter": 4
     },
@@ -3508,7 +3508,7 @@
       "ticker": "LU",
       "name": "LU",
       "market_cap_weight": 0.0152,
-      "trailing_1y_return": 0.1276,
+      "trailing_1y_return": 0.1291,
       "year": 2000,
       "quarter": 1
     },
@@ -3516,7 +3516,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.0143,
-      "trailing_1y_return": 0.0572,
+      "trailing_1y_return": 0.0737,
       "year": 2000,
       "quarter": 1
     },
@@ -3662,7 +3662,7 @@
       "ticker": "LU",
       "name": "LU",
       "market_cap_weight": 0.0152,
-      "trailing_1y_return": -0.1214,
+      "trailing_1y_return": -0.1202,
       "year": 2000,
       "quarter": 2
     },
@@ -3726,7 +3726,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.0083,
-      "trailing_1y_return": -0.4334,
+      "trailing_1y_return": -0.4176,
       "year": 2000,
       "quarter": 2
     },
@@ -3872,7 +3872,7 @@
       "ticker": "LU",
       "name": "LU",
       "market_cap_weight": 0.008,
-      "trailing_1y_return": -0.5289,
+      "trailing_1y_return": -0.5277,
       "year": 2000,
       "quarter": 3
     },
@@ -3880,7 +3880,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.0078,
-      "trailing_1y_return": -0.3247,
+      "trailing_1y_return": -0.3045,
       "year": 2000,
       "quarter": 3
     },

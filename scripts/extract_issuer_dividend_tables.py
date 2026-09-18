@@ -286,9 +286,19 @@ def find_annual_dividends(text: str) -> Dict[int, float]:
                 cand_lines.append(l.strip() + " " + lines[idx + 1].strip())
 
             for line_to_check in cand_lines:
-                if years and re.search(r"dividends?\s+(?:declared\s+)?(?:per\s+)?(?:common\s+)?share", line_to_check, re.I):
-                    m_lbl = re.search(r"(?:per\s+)?(?:common\s+)?share", line_to_check, re.I)
-                    rem = line_to_check[m_lbl.end():] if m_lbl else line_to_check
+                # Anchor on the DIVIDEND label, not on the first "share" in the line.
+                # cand_lines joins a row with the one after it, so a line reading
+                # "Earnings per diluted share ... / Dividends declared per share ..."
+                # sliced after the earlier "share" and published EPS as dividends per
+                # share -- the right table, the wrong row. AT&T's FY2000 report put
+                # 1.74 (1999 diluted EPS) under the dividend field that way.
+                m_lbl = re.search(
+                    r"dividends?\s+(?:declared\s+)?(?:per\s+)?(?:common\s+)?share",
+                    line_to_check,
+                    re.I,
+                )
+                if years and m_lbl:
+                    rem = line_to_check[m_lbl.end():]
                     nums = extract_numbers_from_line(rem)
                     if len(nums) == len(years):
                         for y, val in zip(years, nums):
@@ -305,6 +315,110 @@ def find_annual_dividends(text: str) -> Dict[int, float]:
                                     annuals[y] = val
     return annuals
 
+
+
+MONTH_NAMES = {
+    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+    "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
+}
+
+# A row carrying four fiscal quarters and the year's total.
+FISCAL_ROWS = {
+    "dividend_declared_per_share": re.compile(r"^\s*Dividends?\s+(?:declared\s+)?per\s+(?:common\s+)?share\b", re.I),
+    "high": re.compile(r"^\s*High\b", re.I),
+    "low": re.compile(r"^\s*Low\b", re.I),
+    "quarter_end_close": re.compile(r"^\s*Quarter-?\s?end\s+close\b", re.I),
+}
+
+
+def fiscal_quarter_to_calendar(fiscal_year: int, fiscal_end_month: int, quarter: int) -> Optional[str]:
+    """Calendar period key for fiscal quarter `quarter` of a year ending `fiscal_end_month`.
+
+    Lucent's year ends September 30, so its first fiscal quarter is October to December of
+    the PRECEDING calendar year. Reading its columns as calendar quarters shifts every
+    figure by one quarter; the mapping is checked against the registrant's own reported
+    closes rather than assumed (docs/DATA_PROVENANCE.md 4.3.19).
+
+    Returns None when fiscal quarters cannot align to calendar quarters at all -- a year
+    ending January 31, as Dell's does, has no calendar quarter to map onto, and a wrong
+    answer is worse than no answer.
+    """
+    if fiscal_end_month % 3 != 0:
+        return None
+    end_month = fiscal_end_month - 12 + 3 * quarter
+    year = fiscal_year
+    if end_month <= 0:
+        end_month += 12
+        year -= 1
+    return f"{year}-Q{end_month // 3}"
+
+
+def extract_fiscal_quarters_from_text(text: str, acc: str, f_date: str, form: str) -> Dict[str, Dict[str, Any]]:
+    """Quarterly rows from a registrant whose fiscal year does not end in December.
+
+    Only fires on a table that states its own year end -- "Year Ended September 30, 1999"
+    -- so the mapping is read from the document rather than assumed from the filing date.
+    A December year end is left to the calendar path; this exists for the others.
+
+    Gated like every other figure here: the four quarterly dividends must sum to the
+    total the same row states, or the year is skipped entirely.
+    """
+    quarters: Dict[str, Dict[str, Any]] = {}
+    for anchor in re.finditer(r"QUARTERLY\s+INFORMATION|QUARTERLY\s+DATA|QUARTERLY\s+FINANCIAL", text, re.I):
+        chunk = text[anchor.start():anchor.start() + 16000]
+        if not re.search(r"FISCAL\s+YEAR\s+QUARTERS|FIRST\s+SECOND\s+THIRD\s+FOURTH", chunk, re.I):
+            if not re.search(r"FIRST\s+.{0,12}SECOND", chunk, re.I):
+                continue
+        caption = " ".join(chunk[:80].split())
+        audited = "unaudited" not in chunk[:300].lower()
+
+        blocks = list(re.finditer(
+            r"Year\s+Ended\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),?\s+(\d{4})",
+            chunk, re.I))
+        for index, block in enumerate(blocks):
+            month = MONTH_NAMES[block.group(1).lower()]
+            fiscal_year = int(block.group(3))
+            if month == 12:
+                continue  # a calendar filer; the calendar path owns it
+            body = chunk[block.end(): blocks[index + 1].start() if index + 1 < len(blocks) else len(chunk)]
+
+            values: Dict[str, List[float]] = {}
+            for line in body.splitlines():
+                for field, pattern in FISCAL_ROWS.items():
+                    if field in values or not pattern.match(line):
+                        continue
+                    nums = extract_numbers_from_line(line)
+                    if len(nums) >= 4:
+                        values[field] = nums
+            dividends = values.get("dividend_declared_per_share")
+            if not dividends or len(dividends) < 5:
+                continue
+            # Reconcile or withhold: four quarters against the stated total.
+            if abs(sum(dividends[:4]) - dividends[4]) > 0.005:
+                continue
+            for quarter in (1, 2, 3, 4):
+                period = fiscal_quarter_to_calendar(fiscal_year, month, quarter)
+                if period is None or period in quarters:
+                    continue
+                row = {
+                    "dividend_declared_per_share": dividends[quarter - 1],
+                    "high": None, "low": None, "quarter_end_close": None,
+                    "accession_number": acc,
+                    "form": form,
+                    "filing_date": f_date,
+                    "audited": audited,
+                    "table_caption": caption,
+                    "basis_evidence": f"Year Ended {block.group(1)} {block.group(2)}, {fiscal_year}",
+                    "as_filed_basis_note": "",
+                    "price_basis_restatement": "",
+                    "fiscal_origin": f"FY{fiscal_year} Q{quarter} (year ended {block.group(1)} {block.group(2)})",
+                }
+                for field in ("high", "low", "quarter_end_close"):
+                    series = values.get(field)
+                    if series and len(series) >= 4:
+                        row[field] = series[quarter - 1]
+                quarters[period] = row
+    return quarters
 
 
 def extract_raw_quarters_from_text(text: str, acc: str, f_date: str, form: str) -> Dict[str, Dict[str, Any]]:
@@ -334,9 +448,24 @@ def extract_raw_quarters_from_text(text: str, acc: str, f_date: str, form: str) 
 
     for chunk, sec_type, audited in chunks:
         basis_note = ""
-        m_bn = re.search(r"([^.\n;]*(?:reflects|adjusted\s+for|restated\s+for|giving\s+effect\s+to)[^.\n;]*(?:stock\s+split|split)[^.\n;]*)", chunk, re.I)
+        m_bn = re.search(r"([^.\n;]*(?:reflects?|adjusted|restated|giving\s+effect)[^.\n;]*(?:stock\s+split|split)[^.\n;]*)", chunk, re.I)
         if m_bn:
             basis_note = " ".join(m_bn.group(0).split()).strip()
+
+        # A restatement for a SPIN-OFF or SPLIT-OFF is a different animal from one for a
+        # stock split: splits.json models the split, so a split-restated price still
+        # reconciles through the recorded factor, while a spun-off price does not and
+        # cannot be compared against the derived series at all. AT&T's FY2001 report is
+        # the case -- "Stock prices for 1996-2000 have been restated to reflect the
+        # split-off of AT&T Wireless Group" -- and its 2001 prices sit about 1.3x below
+        # the as-traded series because of it. Flagged so the price check can exclude the
+        # row while still using its dividend, which no split-off restates.
+        m_so = re.search(
+            r"([^.\n;]*(?:restated|adjusted|reflects?)[^.\n;]*(?:split-?\s?off|spin-?\s?off)[^.\n;]*)",
+            chunk,
+            re.I,
+        )
+        price_basis_restatement = " ".join(m_so.group(0).split()).strip() if m_so else ""
 
         lines = [l.strip() for l in chunk[:500].splitlines() if l.strip()]
         caption = "Quarterly Information"
@@ -379,6 +508,7 @@ def extract_raw_quarters_from_text(text: str, acc: str, f_date: str, form: str) 
                             "filing_date": f_date,
                             "table_caption": caption,
                             "as_filed_basis_note": basis_note,
+                            "price_basis_restatement": price_basis_restatement,
                             "audited": audited,
                             "basis_evidence": basis_evidence,
                         }
@@ -395,6 +525,7 @@ def extract_raw_quarters_from_text(text: str, acc: str, f_date: str, form: str) 
                             "filing_date": f_date,
                             "table_caption": caption,
                             "as_filed_basis_note": basis_note,
+                            "price_basis_restatement": price_basis_restatement,
                             "audited": audited,
                             "basis_evidence": basis_evidence,
                         }
@@ -411,6 +542,7 @@ def extract_raw_quarters_from_text(text: str, acc: str, f_date: str, form: str) 
                             "filing_date": f_date,
                             "table_caption": caption,
                             "as_filed_basis_note": basis_note,
+                            "price_basis_restatement": price_basis_restatement,
                             "audited": audited,
                             "basis_evidence": basis_evidence,
                         }
@@ -439,6 +571,7 @@ def extract_raw_quarters_from_text(text: str, acc: str, f_date: str, form: str) 
                                 "filing_date": f_date,
                                 "table_caption": caption,
                                 "as_filed_basis_note": basis_note,
+                            "price_basis_restatement": price_basis_restatement,
                                 "audited": audited,
                                 "basis_evidence": basis_evidence,
                             }
@@ -455,6 +588,7 @@ def extract_raw_quarters_from_text(text: str, acc: str, f_date: str, form: str) 
                                 "filing_date": f_date,
                                 "table_caption": caption,
                                 "as_filed_basis_note": basis_note,
+                            "price_basis_restatement": price_basis_restatement,
                                 "audited": audited,
                                 "basis_evidence": basis_evidence,
                             }
@@ -518,6 +652,7 @@ def extract_raw_quarters_from_text(text: str, acc: str, f_date: str, form: str) 
                                 "filing_date": f_date,
                                 "table_caption": caption,
                                 "as_filed_basis_note": basis_note,
+                            "price_basis_restatement": price_basis_restatement,
                                 "audited": audited,
                                 "basis_evidence": basis_evidence,
                             }
@@ -574,11 +709,13 @@ def main():
         ticker_obj: Dict[str, Any] = {
             "quarters": {},
             "never_paid_statements": [],
+            "observations_by_filing": {},
             "split_language": [],
             "reconciliation": {},
             "withheld": [],
         }
 
+        ticker_observations: Dict[str, List[Dict[str, Any]]] = {}
         annual_divs_found: Dict[int, float] = {}
         annual_divs_by_acc: Dict[str, Dict[int, float]] = {}
         ticker_splits: List[Dict[str, str]] = []
@@ -629,6 +766,15 @@ def main():
 
                 # Raw quarters
                 doc_q = extract_raw_quarters_from_text(doc_text, acc, f_date, form)
+                # A registrant whose fiscal year does not end in December states its
+                # quarters in fiscal columns, which the calendar path above reads as
+                # calendar quarters or not at all. Lucent is the case that matters: its
+                # year ends September 30, and #76 recorded it as having no recoverable
+                # table when in fact it has one that needed mapping. The fiscal path only
+                # fills periods the calendar path did not, so it can add but never
+                # overwrite.
+                for period, row in extract_fiscal_quarters_from_text(doc_text, acc, f_date, form).items():
+                    doc_q.setdefault(period, row)
                 if doc_q:
                     if is_ex13:
                         found_in_ex13 = True
@@ -641,6 +787,22 @@ def main():
                             raw_quarters_by_year[yr] = {}
                         if q_k not in raw_quarters_by_year[yr]:
                             raw_quarters_by_year[yr][q_k] = q_v
+                        # Keep EVERY filing's view of a period, not just the first. Two
+                        # filings reporting the same quarter on opposite sides of a split
+                        # disagree by exactly the split ratio, which makes split
+                        # completeness checkable without a second source. Publishing only
+                        # the first view discards that evidence -- and it is the evidence
+                        # that found BellSouth's missing 1995 two-for-one (4.3.20).
+                        seen = ticker_observations.setdefault(q_k, [])
+                        if not any(o["accession_number"] == acc for o in seen):
+                            seen.append({
+                                "accession_number": acc,
+                                "filing_date": f_date,
+                                "dividend_declared_per_share": q_v.get("dividend_declared_per_share"),
+                                "high": q_v.get("high"),
+                                "low": q_v.get("low"),
+                                "quarter_end_close": q_v.get("quarter_end_close"),
+                            })
 
             if not found_in_primary and found_in_ex13:
                 refusals_recovered_ex13 += 1
@@ -724,6 +886,23 @@ def main():
                 all_withheld_list.append((ticker, withheld_entry))
                 continue
 
+            # A fiscal-year registrant's quarters were already gated against the total
+            # its OWN fiscal-year row states (extract_fiscal_quarters_from_text). Gating
+            # them a second time against a calendar-year annual figure compares two
+            # different years: Lucent's calendar 1999 and its fiscal 1999 overlap by three
+            # quarters, and the sums agreeing is a coincidence of a repeating payout, not
+            # a reconciliation. Publish these on the gate that actually applies to them.
+            if all(q_dict[k].get("fiscal_origin") for k in q_keys):
+                years_reconciled += 1
+                ticker_obj["reconciliation"][str(yr)] = {
+                    "reconciled": True,
+                    "gate": "fiscal-year row sum against the total stated in the same row",
+                    "fiscal_origins": [q_dict[k]["fiscal_origin"] for k in q_keys],
+                }
+                for k in q_keys:
+                    ticker_obj["quarters"][k] = q_dict[k]
+                continue
+
             # All 4 quarters present: compute sum
             div_sum = round(sum(q_dict[k]["dividend_declared_per_share"] for k in q_keys if q_dict[k].get("dividend_declared_per_share") is not None), 4)
             q_acc = q_dict[q_keys[0]]["accession_number"]
@@ -767,6 +946,14 @@ def main():
                 for k in q_keys:
                     ticker_obj["quarters"][k] = q_dict[k]
 
+        # Only periods more than one filing reports are worth publishing here: a single
+        # view proves nothing, while two views on opposite sides of a corporate action
+        # disagree by exactly its ratio.
+        ticker_obj["observations_by_filing"] = {
+            period: sorted(views, key=lambda v: v["filing_date"])
+            for period, views in sorted(ticker_observations.items())
+            if len(views) > 1
+        }
         output_data[ticker] = ticker_obj
 
     # Summary metrics

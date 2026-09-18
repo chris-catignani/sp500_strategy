@@ -994,8 +994,8 @@
         "report_date": "1994-12-31",
         "accession_number": "0000893220-95-000088",
         "source_file": "data/raw/ground_truth/sec_filings/VG500_1994_N-30D_0000893220-95-000088.txt",
-        "split_factor": 2.0,
-        "split_adjusted_price_usd": 27.0625,
+        "split_factor": 4.0,
+        "split_adjusted_price_usd": 13.5312,
         "split_source_accession": "0001047469-99-007204"
       },
       "1995": {
