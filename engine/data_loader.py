@@ -28,6 +28,7 @@ class DataLoader:
         quarterly_prices_path: Optional[Union[str, Path]] = None,
         quarterly_dividends_path: Optional[Union[str, Path]] = None,
         spinoffs_path: Optional[Union[str, Path]] = None,
+        terminal_actions_path: Optional[Union[str, Path]] = None,
     ) -> None:
         """Initialize DataLoader with dataset paths.
 
@@ -43,6 +44,8 @@ class DataLoader:
             quarterly_dividends_path: Optional path to quarterly dividends dataset.
             spinoffs_path: Optional path to spinoff distributions dataset.
                 Defaults to data/spinoff_distributions.json relative to project root.
+            terminal_actions_path: Optional path to the terminal actions dataset.
+                Defaults to data/terminal_actions.json relative to project root.
         """
         project_root = Path(__file__).resolve().parent.parent
 
@@ -80,6 +83,11 @@ class DataLoader:
             spinoffs_path = project_root / "data" / "spinoff_distributions.json"
         else:
             spinoffs_path = Path(spinoffs_path)
+
+        if terminal_actions_path is None:
+            terminal_actions_path = project_root / "data" / "terminal_actions.json"
+        else:
+            terminal_actions_path = Path(terminal_actions_path)
 
         if not constituents_path.exists():
             raise FileNotFoundError(
@@ -180,6 +188,14 @@ class DataLoader:
         if spinoffs_path.exists():
             with open(spinoffs_path, "r", encoding="utf-8") as f:
                 self.spinoffs = json.load(f)
+
+        # Terminal actions dataset (issue #56): what a holder received when a
+        # constituent stopped trading. Absent the file the engine simply has no terminal
+        # events, which is the behaviour every dataset built before #56 relies on.
+        self.terminal_actions: Dict[str, dict] = {}
+        if terminal_actions_path.exists():
+            with open(terminal_actions_path, "r", encoding="utf-8") as f:
+                self.terminal_actions = json.load(f)
 
         # Parse available years
         self._available_years: List[int] = sorted(
@@ -508,6 +524,51 @@ class DataLoader:
         for e in events:
             total_ratio *= float(e["basis_retention_ratio"])
         return (total_dist, total_ratio)
+
+    def get_terminal_action(
+        self, ticker: str, year: int, quarter: Optional[int] = None
+    ) -> Optional[dict]:
+        """Return the terminal action for ticker falling inside a rebalancing period.
+
+        A terminal action is the point at which a constituent stopped trading and its
+        holders received cash, shares in an acquirer, or nothing. It belongs to exactly one
+        period: the year it took effect when rebalancing annually, and the quarter it took
+        effect when rebalancing quarterly.
+
+        Args:
+            ticker: Equity symbol.
+            year: Four-digit calendar year of the period being processed.
+            quarter: Calendar quarter (1..4), or None for an annual period.
+
+        Returns:
+            The action record, with the frequency-specific block hoisted to the top level,
+            or None if this ticker has no terminal action in this period.
+        """
+        action = self.terminal_actions.get(ticker)
+        if action is None or int(action["year"]) != int(year):
+            return None
+
+        frequency = "annual" if quarter is None else "quarterly"
+        if quarter is not None and int(action["quarter"]) != int(quarter):
+            return None
+
+        return {**action, **action[frequency]}
+
+    def has_price(self, ticker: str, year: int, quarter: Optional[int] = None) -> bool:
+        """Report whether this loader can price a ticker in a given period.
+
+        Used to decide whether an acquirer can actually be held. A reorganisation into a
+        successor this universe cannot price is not implementable as a conversion, and the
+        engine has to know which case it is before it acts rather than after.
+        """
+        try:
+            if quarter is None:
+                self.get_price(ticker, year)
+            else:
+                self.get_quarterly_price(ticker, year, quarter)
+        except (KeyError, ValueError):
+            return False
+        return True
 
     def load_quarterly_universe(
         self, year: int, quarter: int, universe: str = "sp500"

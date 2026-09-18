@@ -165,6 +165,113 @@ class FIFOTaxLotManager:
 
         return 0.0
 
+    def exchange_lots(
+        self,
+        ticker: str,
+        new_ticker: str,
+        share_multiplier: float,
+    ) -> float:
+        """Move every open lot of ticker into new_ticker under IRC Section 368.
+
+        A statutory reorganisation is not a disposal: the holder's basis carries forward
+        into the shares received and no gain or loss is realised. Each lot keeps its total
+        cost basis and its purchase date, and only the share count changes, so a lot bought
+        before the reorganisation still depletes before one bought after it.
+
+            new_shares = old_shares * share_multiplier
+            new_basis_per_share = old_basis_per_share / share_multiplier
+
+        Args:
+            ticker: Symbol being converted away.
+            new_ticker: Symbol received in the reorganisation.
+            share_multiplier: Shares received per share surrendered, expressed in the
+                share terms of each series (so not necessarily the filing's exchange
+                ratio, which is in as-traded terms on both sides).
+
+        Returns:
+            Total shares of new_ticker created.
+
+        Raises:
+            ValueError: If share_multiplier is not positive.
+        """
+        if share_multiplier <= 0.0:
+            raise ValueError(f"share_multiplier must be positive, got {share_multiplier}")
+        if ticker == new_ticker:
+            raise ValueError(f"Cannot exchange '{ticker}' into itself")
+
+        shares_created = 0.0
+        for lot in self.lots.get(ticker, []):
+            if lot.shares <= EPSILON:
+                continue
+            lot.ticker = new_ticker
+            lot.shares *= share_multiplier
+            lot.purchase_price /= share_multiplier
+            shares_created += lot.shares
+            self.lots[new_ticker].append(lot)
+
+        if ticker in self.lots:
+            del self.lots[ticker]
+
+        # Where the portfolio already held the acquirer, the arriving lots are older than
+        # some of the lots already queued and appending them would put them behind. FIFO
+        # is an ordering by purchase date, not by arrival, and a reorganisation does not
+        # give the surrendered shares a new one. Python's sort is stable, so lots bought
+        # in the same period keep the order they were bought in.
+        self.lots[new_ticker].sort(key=lambda l: (l.purchase_year, l.purchase_quarter or 0))
+
+        return shares_created
+
+    def recognize_boot(
+        self,
+        ticker: str,
+        cash_per_share: float,
+        stock_value_per_share: float,
+        current_year: int,
+        current_quarter: Optional[int] = None,
+    ) -> float:
+        """Recognise gain on the cash leg of a reorganisation under IRC Section 356.
+
+        Where a reorganisation pays cash alongside shares, the cash is "boot": gain is
+        recognised up to the cash received, but never more than the gain actually realised,
+        and a loss is not recognised at all. Basis in the shares received is reduced by the
+        cash and increased by the gain recognised:
+
+            realized   = shares * (cash_per_share + stock_value_per_share) - basis
+            recognized = min(max(realized, 0), shares * cash_per_share)
+            new_basis  = basis - shares * cash_per_share + recognized
+
+        Applied per lot, so a lot standing at a loss recognises nothing while a lot
+        standing at a gain recognises its own, rather than the two netting first.
+
+        Args:
+            ticker: Symbol being converted away.
+            cash_per_share: Cash consideration per share surrendered.
+            stock_value_per_share: Value per share surrendered of the stock leg.
+            current_year: Calendar year of the reorganisation.
+            current_quarter: Optional calendar quarter.
+
+        Returns:
+            Total gain recognised, already accumulated into the annual realised pool.
+        """
+        self._check_calendar_year_rollover(current_year)
+
+        if cash_per_share < 0.0:
+            raise ValueError(f"cash_per_share must be non-negative, got {cash_per_share}")
+
+        total_recognized = 0.0
+        for lot in self.lots.get(ticker, []):
+            if lot.shares <= EPSILON:
+                continue
+            basis = lot.shares * lot.purchase_price
+            cash = lot.shares * cash_per_share
+            realized = lot.shares * (cash_per_share + stock_value_per_share) - basis
+            recognized = min(max(realized, 0.0), cash)
+            total_recognized += recognized
+            lot.purchase_price = (basis - cash + recognized) / lot.shares
+
+        self.current_annual_realized_gain += total_recognized
+        return total_recognized
+
     def sell_shares(
         self,
         ticker: str,
