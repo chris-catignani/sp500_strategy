@@ -556,5 +556,59 @@ class TestRotExposureIsDeclared(unittest.TestCase):
         )
 
 
+class TestRegenerationAudit(unittest.TestCase):
+    """Regeneration-command audit on markdown tables and sections (issue #91)."""
+
+    def test_markdown_table_detection_finds_contiguous_tables(self):
+        from scripts.audit_doc_figures import find_markdown_tables
+        text = (
+            "Some introduction\n\n"
+            "| Header 1 | Header 2 |\n"
+            "|---|---|\n"
+            "| Val 1 | Val 2 |\n\n"
+            "Middle prose\n\n"
+            "| Col A | Col B |\n"
+            "|---|---|\n"
+            "| 1 | 2 |\n"
+        )
+        tables = find_markdown_tables(text)
+        self.assertEqual(len(tables), 2)
+        self.assertEqual(tables[0]["start_line"], 3)
+        self.assertEqual(tables[0]["end_line"], 5)
+        self.assertEqual(tables[1]["start_line"], 9)
+        self.assertEqual(tables[1]["end_line"], 11)
+
+    def test_markdown_table_detection_ignores_non_table_lines(self):
+        from scripts.audit_doc_figures import find_markdown_tables
+        text = "No tables here\nJust lines\n- bullet point\n"
+        tables = find_markdown_tables(text)
+        self.assertEqual(tables, [])
+
+    def test_command_detection_finds_inline_command(self):
+        from scripts.audit_doc_figures import find_section_commands
+        text = "Regenerate this with `python3 scripts/audit_quarterly_expansion.py` easily."
+        commands = find_section_commands(text)
+        self.assertEqual(commands, ["python3 scripts/audit_quarterly_expansion.py"])
+
+    def test_command_detection_finds_fenced_command(self):
+        from scripts.audit_doc_figures import find_section_commands
+        text = (
+            "Run the following:\n"
+            "```bash\n"
+            "python3 run_backtest.py --compare-frequencies\n"
+            "python3 -m unittest discover tests\n"
+            "```\n"
+        )
+        commands = find_section_commands(text)
+        self.assertIn("python3 run_backtest.py --compare-frequencies", commands)
+        self.assertIn("python3 -m unittest discover tests", commands)
+
+    def test_command_detection_ignores_unrelated_code(self):
+        from scripts.audit_doc_figures import find_section_commands
+        text = "Run `git status` or `echo hello` or `python3 other_script.py`."
+        commands = find_section_commands(text)
+        self.assertEqual(commands, [])
+
+
 if __name__ == "__main__":
     unittest.main()

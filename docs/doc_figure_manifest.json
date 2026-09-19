@@ -1063,171 +1063,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.9",
-      "figure": "$112.00",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Vanguard-implied close for Mobil Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$112.00",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "SPY-implied close for Mobil Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$0.0002",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Residual delta between Vanguard and SPY implied closes for Mobil Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$44.00",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Vanguard-implied close for GTE Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$44.00",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "SPY-implied close for GTE Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$0.0000",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Residual delta between Vanguard and SPY implied closes for GTE Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$43.50",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Vanguard-implied close for BellSouth Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$43.50",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "SPY-implied close for BellSouth Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$0.0001",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Residual delta between Vanguard and SPY implied closes for BellSouth Corp.",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$141.13",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Vanguard-implied close for Royal Dutch Petroleum",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$141.13",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "SPY-implied close for Royal Dutch Petroleum",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$0.0048",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Residual delta between Vanguard and SPY implied closes for Royal Dutch Petroleum",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$57.50",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Vanguard-implied close for SBC Communications",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$57.50",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "SPY-implied close for SBC Communications",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$0.0001",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Residual delta between Vanguard and SPY implied closes for SBC Communications",
-      "evidence_quote": "Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
       "figure": "186 December-31 implied prices across 18 securities",
       "occurrence": 1,
       "verdict": "derivation",
@@ -1429,10 +1264,11 @@
       "figure": "$79.81",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
+      "guard": "tests/test_raw_constituents.py::TestSplitRecordProvenance::test_the_1999_split_artifact_is_exactly_what_4_3_9_publishes",
       "note": "As-traded implied price for T_CORP at 1999-Q1",
       "evidence_quote": "Every pre-April-1999 `T_CORP` price\nread 1.5x too high, and the quarterly series showed a decline that never happened:",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1440,10 +1276,11 @@
       "figure": "$399.07",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
+      "guard": "tests/test_raw_constituents.py::TestSplitRecordProvenance::test_the_1999_split_artifact_is_exactly_what_4_3_9_publishes",
       "note": "Pre-#76 erroneous published price for T_CORP at 1999-Q1 under missing split",
       "evidence_quote": "Every pre-April-1999 `T_CORP` price\nread 1.5x too high, and the quarterly series showed a decline that never happened:",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1451,10 +1288,11 @@
       "figure": "$55.81",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
+      "guard": "tests/test_raw_constituents.py::TestSplitRecordProvenance::test_the_1999_split_artifact_is_exactly_what_4_3_9_publishes",
       "note": "As-traded implied price for T_CORP at 1999-Q2",
       "evidence_quote": "Every pre-April-1999 `T_CORP` price\nread 1.5x too high, and the quarterly series showed a decline that never happened:",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1462,10 +1300,11 @@
       "figure": "$279.06",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
+      "guard": "tests/test_raw_constituents.py::TestSplitRecordProvenance::test_the_1999_split_artifact_is_exactly_what_4_3_9_publishes",
       "note": "Pre-#76 erroneous published price for T_CORP at 1999-Q2 under missing split",
       "evidence_quote": "Every pre-April-1999 `T_CORP` price\nread 1.5x too high, and the quarterly series showed a decline that never happened:",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1473,10 +1312,11 @@
       "figure": "−30.1%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
+      "guard": "tests/test_raw_constituents.py::TestSplitRecordProvenance::test_the_1999_split_artifact_is_exactly_what_4_3_9_publishes",
       "note": "Apparent price decline caused by unadjusted April 1999 split artifact",
       "evidence_quote": "**−30.1%**, where the real move is **+4.9%**",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1484,10 +1324,11 @@
       "figure": "+4.9%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
+      "guard": "tests/test_raw_constituents.py::TestSplitRecordProvenance::test_the_1999_split_artifact_is_exactly_what_4_3_9_publishes",
       "note": "Actual split-adjusted price move for T_CORP across 1999-Q1 to 1999-Q2",
       "evidence_quote": "**−30.1%**, where the real move is **+4.9%**",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3717,10 +3558,11 @@
       "figure": "0.8291%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2014 Class A weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Class A weight at each December-31 audited roster. Pinned to the roster's own stored per-class weight field by the guard, which carries this published literal. Class A is identified by name: in 2017-2019 the Class C line is the larger of the two (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3728,10 +3570,11 @@
       "figure": "1.6508%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2014 combined Alphabet weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Combined Alphabet weight the engine consumes. Pinned to the sum of the roster's stored per-class weight fields, which is the published convention -- summing the raw values and rounding afterwards moves 2014, 2017 and 2018 by 0.0001 (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3739,10 +3582,11 @@
       "figure": "1.2661%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2015 Class A weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Class A weight at each December-31 audited roster. Pinned to the roster's own stored per-class weight field by the guard, which carries this published literal. Class A is identified by name: in 2017-2019 the Class C line is the larger of the two (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3750,10 +3594,11 @@
       "figure": "2.5257%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2015 combined Alphabet weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Combined Alphabet weight the engine consumes. Pinned to the sum of the roster's stored per-class weight fields, which is the published convention -- summing the raw values and rounding afterwards moves 2014, 2017 and 2018 by 0.0001 (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3761,10 +3606,11 @@
       "figure": "1.2178%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2016 Class A weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Class A weight at each December-31 audited roster. Pinned to the roster's own stored per-class weight field by the guard, which carries this published literal. Class A is identified by name: in 2017-2019 the Class C line is the larger of the two (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3772,10 +3618,11 @@
       "figure": "2.4066%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2016 combined Alphabet weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Combined Alphabet weight the engine consumes. Pinned to the sum of the roster's stored per-class weight fields, which is the published convention -- summing the raw values and rounding afterwards moves 2014, 2017 and 2018 by 0.0001 (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3783,10 +3630,11 @@
       "figure": "1.3768%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2017 Class A weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Class A weight at each December-31 audited roster. Pinned to the roster's own stored per-class weight field by the guard, which carries this published literal. Class A is identified by name: in 2017-2019 the Class C line is the larger of the two (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3794,10 +3642,11 @@
       "figure": "2.7619%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2017 combined Alphabet weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Combined Alphabet weight the engine consumes. Pinned to the sum of the roster's stored per-class weight fields, which is the published convention -- summing the raw values and rounding afterwards moves 2014, 2017 and 2018 by 0.0001 (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3805,10 +3654,11 @@
       "figure": "1.4850%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2018 Class A weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Class A weight at each December-31 audited roster. Pinned to the roster's own stored per-class weight field by the guard, which carries this published literal. Class A is identified by name: in 2017-2019 the Class C line is the larger of the two (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3816,10 +3666,11 @@
       "figure": "2.9995%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2018 combined Alphabet weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Combined Alphabet weight the engine consumes. Pinned to the sum of the roster's stored per-class weight fields, which is the published convention -- summing the raw values and rounding afterwards moves 2014, 2017 and 2018 by 0.0001 (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3827,10 +3678,11 @@
       "figure": "1.4925%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2019 Class A weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Class A weight at each December-31 audited roster. Pinned to the roster's own stored per-class weight field by the guard, which carries this published literal. Class A is identified by name: in 2017-2019 the Class C line is the larger of the two (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3838,10 +3690,11 @@
       "figure": "2.9945%",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2019 combined Alphabet weight in Vanguard 500 Index Fund",
+      "guard": "tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry",
+      "note": "Combined Alphabet weight the engine consumes. Pinned to the sum of the roster's stored per-class weight fields, which is the published convention -- summing the raw values and rounding afterwards moves 2014, 2017 and 2018 by 0.0001 (#91).",
       "evidence_quote": "Six N-CSR\nfilings covering 2014-2019 are now archived, and their 500 Index Fund schedules reconcile\ndollar-exact, so the question is answered from a filing rather than inferred.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3863,37 +3716,6 @@
       "guard": null,
       "note": "Observed spread between Class C and Class A implied prices; previously mis-tokenised as `-2.5%`",
       "evidence_quote": "Class C sits 0.2-2.5%\nbelow Class A, the ordinary `GOOG`/`GOOGL` spread.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "8%",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Control ratio distance bound justifying share-class classification decision",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "five of six",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Our count of years in which the ratio agrees within 8%",
-      "evidence_quote": "ratio is within 8% in five of six years, and the alternative is 50-110% away.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "50-110%",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Separation bound against the alternative hypothesis; previously mis-tokenised as `-110%`",
       "rot_exposed": true
     },
     {
@@ -3961,48 +3783,6 @@
       "note": "Committed factsheet anchor for Alphabet (2.70%)",
       "evidence_quote": "Each committed anchor is normalised against a single-class control in the same filing.",
       "source_ref": "data/raw/constituents/historical_index_weights.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "17 of 18",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Agreement ratio across control comparisons justifying share-class classification decision",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "1.80%",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "Committed 2019 factsheet anchor for Johnson & Johnson control",
-      "evidence_quote": "worst-anchored control (1.80% against a 1.4354% fund weight)",
-      "source_ref": "data/raw/constituents/historical_index_weights.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "1.4354%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Derived 2019 Johnson & Johnson fund weight in Vanguard 500 Index Fund",
-      "evidence_quote": "worst-anchored control (1.80% against a 1.4354% fund weight)",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "2%",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Agreement tolerance between Apple and Microsoft controls justifying classification",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",

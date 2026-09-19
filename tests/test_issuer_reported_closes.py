@@ -418,6 +418,56 @@ class TestAlphabetConsolidationEffect(unittest.TestCase):
             kept.append((ticker, weight))
         return kept
 
+    def test_4_3_21_publishes_the_weights_the_audited_rosters_actually_carry(self):
+        """The twelve weights §4.3.21 prints, pinned to the roster they are read from.
+
+        `test_a_dual_class_issuer_holds_one_slot_at_the_sum_of_its_classes` asserts the
+        *dataset* is internally consistent -- a published weight equals the sum of the
+        filing's two classes. It never mentions the numbers §4.3.21 prints, so nothing tied
+        the document to the data. Under #91 that was found by the guard-verification harness
+        flagging all twelve as having no overlap with their own guard, and it is the
+        difference between a `claim` guard and a `value` one.
+
+        Two conventions matter and were established by measurement, not assumption:
+
+        - The combined weight is the sum of the roster's stored per-class `weight` fields,
+          which are already rounded. Summing the raw values and rounding afterwards moves
+          2014, 2017 and 2018 by 0.0001.
+        - Class A is identified by name, never by size. In 2017, 2018 and 2019 the Class C
+          line is the larger of the two.
+        """
+        published = {
+            "2014": (0.8291, 1.6508),
+            "2015": (1.2661, 2.5257),
+            "2016": (1.2178, 2.4066),
+            "2017": (1.3768, 2.7619),
+            "2018": (1.4850, 2.9995),
+            "2019": (1.4925, 2.9945),
+        }
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "vanguard_audited_rosters.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            rosters = json.load(f)["rosters_by_year"]
+
+        for year, (want_a, want_combined) in published.items():
+            with self.subTest(year=year):
+                holdings = rosters[year]["holdings"]
+                classes = [
+                    h for h in holdings
+                    if "Alphabet" in h["name"] or "Google" in h["name"]
+                ]
+                self.assertEqual(len(classes), 2, "the filing must report both classes")
+
+                class_a = [h for h in classes if "Class A" in h["name"]]
+                self.assertEqual(len(class_a), 1, "Class A is named, not inferred from size")
+
+                self.assertAlmostEqual(class_a[0]["weight"] * 100.0, want_a, places=4)
+                self.assertAlmostEqual(
+                    sum(h["weight"] for h in classes) * 100.0, want_combined, places=4
+                )
+
     def test_a_dual_class_issuer_holds_one_slot_at_the_sum_of_its_classes(self):
         """The consolidation rule of 4.3.8, checked against the filing it reads from."""
         checked = 0

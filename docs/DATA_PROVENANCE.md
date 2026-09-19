@@ -357,15 +357,7 @@ SPY's fiscal year ended September 30 from 1997 onward (§4.3.6), so **no SPY fil
 ##### Independent cross-filer validation (1995-12-31)
 SPY's fiscal year ended December 31 through 1996, so its FY1995 annual report covers **the same date** as Vanguard's. Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:
 
-| Constituent | Vanguard-implied | SPY-implied | Delta |
-|---|---:|---:|---:|
-| Mobil Corp. (`MOB`) | \$112.00 | \$112.00 | \$0.0002 |
-| GTE Corp. (`GTE`) | \$44.00 | \$44.00 | \$0.0000 |
-| BellSouth Corp. (`BLS`) | \$43.50 | \$43.50 | \$0.0001 |
-| Royal Dutch Petroleum (`RD`) | \$141.13 | \$141.13 | \$0.0048 |
-| SBC Communications (`SBC`) | \$57.50 | \$57.50 | \$0.0001 |
-
-Agreement to under half a cent across five securities, with residuals attributable to share-count rounding in the published schedules rather than to method error. This is the strongest available check on the implied-price method, and it is repeatable for 1996, the other year SPY filed a December 31 snapshot.
+The five securities the two filers share agree **to within a cent**, with residuals attributable to share-count rounding in the published schedules rather than to method error. The implied prices themselves are not reprinted here: they are a by-product of the check, not the finding, and `tests/test_raw_constituents.py::TestVanguardImpliedPrices::test_agrees_with_spy_filings_on_the_one_shared_date` asserts the agreement directly, reading SPY's expected values out of the archived filing at test time rather than from a constant. Note the tolerance is a cent and not the half-cent this passage used to claim: the widest residual sat inside a half-cent by four percent, which is too little headroom to assert. This is the strongest available check on the implied-price method, and it is repeatable for 1996, the other year SPY filed a December 31 snapshot.
 
 ##### Derived dataset (`data/raw/ground_truth/vanguard_implied_prices.json`)
 `scripts/extract_vanguard_prices.py` reads every schedule position in each archived filing and publishes **186 December-31 implied prices across 18 securities** (the 17 gap constituents, with Viacom split into its Class A and Class B listings). Each observation carries the accession number, report date, source file, matched issuer name, share count and reported value, so any figure is checkable against the filing it came from.
@@ -1487,22 +1479,24 @@ relation the figure must satisfy, as the twenty-times check above does.
 ##### Which years were Class A only
 
 Each committed anchor is normalised against a single-class control in the same filing. The
-two hypotheses differ by a factor of two, so they separate cleanly: the closest control
-ratio is within 8% in five of six years, and the alternative is 50-110% away.
+two hypotheses differ by a factor of two, so they separate cleanly, and run against three
+controls -- Apple, Microsoft and Johnson & Johnson -- the comparisons agree on every year but
+one. The dissent is 2019 against Johnson & Johnson, whose own committed weight is that year's
+worst-anchored control; Apple and Microsoft agree with each other there.
 
-| Year | Committed | Committed / AAPL | Fund A / AAPL | Fund (A+C) / AAPL | Verdict |
-|---|---:|---:|---:|---:|---|
-| 2014 | 2.00% | 0.5556 | 0.2337 | 0.4653 | Consolidated |
-| 2015 | 1.40% | 0.4000 | 0.3862 | 0.7705 | **Class A only** |
-| 2016 | 1.40% | 0.4118 | 0.3799 | 0.7508 | **Class A only** |
-| 2017 | 1.70% | 0.4595 | 0.3613 | 0.7249 | **Class A only** |
-| 2018 | 3.20% | 0.8421 | 0.4393 | 0.8874 | Consolidated |
-| 2019 | 2.70% | 0.5745 | 0.3255 | 0.6530 | Consolidated |
+| Year | Committed | Verdict |
+|---|---:|---|
+| 2014 | 2.00% | Consolidated |
+| 2015 | 1.40% | **Class A only** |
+| 2016 | 1.40% | **Class A only** |
+| 2017 | 1.70% | **Class A only** |
+| 2018 | 3.20% | Consolidated |
+| 2019 | 2.70% | Consolidated |
 
-Run against three controls -- Apple, Microsoft and Johnson & Johnson -- **17 of 18
-comparisons agree**. The one dissent is 2019 against Johnson & Johnson, whose own committed
-weight is that year's worst-anchored control (1.80% against a 1.4354% fund weight); Apple
-and Microsoft agree with each other there to within 2%. This reproduces the split the issue
+The control ratios behind that verdict column are **not published here.** They are the
+working, not the finding, and nothing pins them; the finding is the verdict, and
+`tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_alphabet_share_class_composition_is_declared_per_year`
+asserts which years are ratio-corrected. This reproduces the split the issue
 body guessed at from the numbers alone, from a source rather than from a pattern.
 
 **The three Class-A-only years are corrected by the ratio the filing itself states**, not

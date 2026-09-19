@@ -366,6 +366,181 @@ def _source_refs():
         print(f"  §{section:<8} {figure:<24} {ref}")
 
 
+def find_markdown_tables(text):
+    """Find contiguous markdown tables in text, returning 1-indexed line ranges."""
+    lines = text.split("\n")
+    tables = []
+    in_table = False
+    table_start = 0
+    table_lines = []
+
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+        is_tbl = stripped.startswith("|") and stripped.endswith("|")
+        if is_tbl:
+            if not in_table:
+                in_table = True
+                table_start = i
+                table_lines = [line]
+            else:
+                table_lines.append(line)
+        else:
+            if in_table:
+                in_table = False
+                if len(table_lines) >= 2:
+                    tables.append({
+                        "start_line": table_start,
+                        "end_line": i - 1,
+                        "lines": table_lines,
+                    })
+                table_lines = []
+
+    if in_table and len(table_lines) >= 2:
+        tables.append({
+            "start_line": table_start,
+            "end_line": len(lines),
+            "lines": table_lines,
+        })
+
+    return tables
+
+
+def find_section_commands(section_text):
+    """Find fenced or inline python3 commands in a section.
+
+    Looks for `python3 scripts/...`, `python3 run_backtest.py`, or `python3 -m ...`.
+    Returns distinct command strings quoted verbatim.
+    """
+    commands = []
+
+    # 1. Inline code spans: `python3 ...`
+    for m in re.finditer(
+        r"`(python3\s+(?:scripts/[^`\n]+|run_backtest\.py[^`\n]*|-m\s+[^`\n]+))`",
+        section_text,
+    ):
+        cmd = m.group(1).strip()
+        if cmd not in commands:
+            commands.append(cmd)
+
+    # 2. Fenced code blocks: ```... python3 ... ```
+    for m in re.finditer(r"```[a-zA-Z0-9_-]*\n(.*?)```", section_text, re.DOTALL):
+        fenced = m.group(1)
+        for raw_line in fenced.split("\n"):
+            line = raw_line.strip()
+            # Strip trailing comments if any for clean matching, or keep verbatim
+            cmd_part = line.split("#")[0].strip()
+            if re.match(r"^python3\s+(?:scripts/\S+|run_backtest\.py\b|-m\s+\S+)", cmd_part):
+                if cmd_part not in commands:
+                    commands.append(cmd_part)
+
+    return commands
+
+
+def audit_table_regeneration(doc_relative_path="docs/DATA_PROVENANCE.md", manifest=None, repo_root=REPO_ROOT):
+    """Audit markdown tables for regeneration commands and rot exposure."""
+    doc_path = repo_root / doc_relative_path
+    text = doc_path.read_text(encoding="utf-8")
+    lines = text.split("\n")
+    raw_lines = lines
+    masked_lines = mask(text).split("\n")
+
+    if manifest is None:
+        manifest = load_manifest()
+
+    manifest_map = {}
+    for e in manifest.get("entries", []):
+        if e.get("document") == doc_relative_path:
+            key = (e["section"], e["figure"], e["occurrence"])
+            manifest_map[key] = e
+
+    line_figures = {}
+    counts = {}
+    section = "preamble"
+    for i, (raw, masked_line) in enumerate(zip(raw_lines, masked_lines), 1):
+        hm = _HEADING.match(raw)
+        if hm:
+            section = hm.group(1) or hm.group(2)
+        for match in _FIGURE.finditer(masked_line):
+            fig = _normalise(match.group(0))
+            if not any(char.isdigit() for char in fig) and not _SPELLED_COUNT.search(fig):
+                continue
+            counts[(section, fig)] = counts.get((section, fig), 0) + 1
+            occ = counts[(section, fig)]
+            entry = manifest_map.get((section, fig, occ))
+            line_figures.setdefault(i, []).append((fig, entry))
+
+    # Section texts
+    section_texts = {}
+    sec_lines = []
+    current_sec = "preamble"
+    line_sections = {}
+    for i, raw in enumerate(raw_lines, 1):
+        hm = _HEADING.match(raw)
+        if hm:
+            section_texts[current_sec] = "\n".join(sec_lines)
+            current_sec = hm.group(1) or hm.group(2)
+            sec_lines = [raw]
+        else:
+            sec_lines.append(raw)
+        line_sections[i] = current_sec
+    section_texts[current_sec] = "\n".join(sec_lines)
+
+    tables = find_markdown_tables(text)
+    computed_tables = []
+
+    for tbl in tables:
+        start_line = tbl["start_line"]
+        end_line = tbl["end_line"]
+        sec = line_sections.get(start_line, "preamble")
+
+        rot_cells = 0
+        for lno in range(start_line, end_line + 1):
+            for fig, entry in line_figures.get(lno, []):
+                if entry and entry.get("rot_exposed") is True:
+                    rot_cells += 1
+
+        if rot_cells == 0:
+            continue
+
+        cmds = find_section_commands(section_texts.get(sec, ""))
+        computed_tables.append({
+            "section": sec,
+            "start_line": start_line,
+            "end_line": end_line,
+            "rot_exposed_cells": rot_cells,
+            "commands": cmds,
+        })
+
+    with_command = sum(1 for t in computed_tables if t["commands"])
+    without_command = sum(1 for t in computed_tables if not t["commands"])
+
+    return {
+        "tables": computed_tables,
+        "with_command": with_command,
+        "without_command": without_command,
+    }
+
+
+def _regeneration():
+    """Print the regeneration-command audit for tables in docs/DATA_PROVENANCE.md."""
+    res = audit_table_regeneration("docs/DATA_PROVENANCE.md")
+    print("=== Regeneration-Command Audit for docs/DATA_PROVENANCE.md ===\n")
+    for t in res["tables"]:
+        sec = t["section"]
+        start = t["start_line"]
+        end = t["end_line"]
+        cells = t["rot_exposed_cells"]
+        cmds = t["commands"]
+        if cmds:
+            cmd_str = ", ".join(f"`{c}`" for c in cmds)
+            status = f"WITH command: {cmd_str}"
+        else:
+            status = "WITHOUT command"
+        print(f"§{sec:<8} lines {start:4d}-{end:4d} ({cells:2d} rot cells) -> {status}")
+
+    print(f"\nCensus: tables of computed figures with_command={res['with_command']} without_command={res['without_command']}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--emit-skeleton", action="store_true",
@@ -374,6 +549,8 @@ def main():
                         help="list candidates missing from the manifest")
     parser.add_argument("--source-refs", action="store_true",
                         help="census the source_ref forms and list every gap marker")
+    parser.add_argument("--regeneration", action="store_true",
+                        help="audit markdown tables for regeneration commands")
     args = parser.parse_args()
 
     if args.emit_skeleton:
@@ -382,6 +559,8 @@ def main():
         _unclassified()
     elif args.source_refs:
         _source_refs()
+    elif args.regeneration:
+        _regeneration()
     else:
         _tally()
 
