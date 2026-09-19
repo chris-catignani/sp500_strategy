@@ -706,6 +706,46 @@ class TestRegenerationAudit(unittest.TestCase):
 class TestDocFigureMatchers(unittest.TestCase):
     """Unit tests for the doc_figures provenance matchers (issue #105)."""
 
+    def test_crowding_is_near_zero_where_a_value_sits_alone(self):
+        """A ratio among a handful of others: a hit there means what it appears to."""
+        from scripts.verify_provenance import crowding
+
+        leaves = [0.7201, 0.9523, 0.8165, 0.6686, 0.3040]
+        self.assertLess(crowding(leaves, 0.7201, 4), 0.01)
+
+    def test_crowding_saturates_where_every_neighbouring_slot_is_occupied(self):
+        """The 4.3.10 case: a hit that was guaranteed before the figure was known.
+
+        A file holding every hundredth between 1.00 and 2.00 matches ANY two-decimal
+        figure in that range, so `match_numeric` returning True proves nothing at all.
+        """
+        from scripts.verify_provenance import crowding
+
+        leaves = [1.00 + i / 100.0 for i in range(101)]
+        # Not exactly 1.0: the +/-10% window does not land on the 0.01 grid, so one
+        # boundary slot goes uncounted. Saturation is the claim, not the cell value.
+        self.assertGreater(crowding(leaves, 1.38, 2), 0.95)
+
+    def test_a_saturated_hit_is_scored_weak_and_a_lone_one_is_not(self):
+        """The threshold is what keeps a coincidence out of the confirmed column."""
+        from scripts.verify_provenance import (
+            WEAK_HIT_CROWDING, match_numeric, score_numeric_hit)
+
+        crowded = [1.00 + i / 100.0 for i in range(101)]
+        lone = [0.7201, 0.9523, 0.8165]
+
+        self.assertTrue(match_numeric(crowded, [(1.38, 2)]))
+        self.assertGreaterEqual(score_numeric_hit(crowded, [(1.38, 2)]), WEAK_HIT_CROWDING)
+
+        self.assertTrue(match_numeric(lone, [(0.7201, 4)]))
+        self.assertLess(score_numeric_hit(lone, [(0.7201, 4)]), WEAK_HIT_CROWDING)
+
+    def test_crowding_is_zero_when_nothing_is_near(self):
+        """An unmatched target scores nothing, so a miss is never dressed as a weak hit."""
+        from scripts.verify_provenance import score_numeric_hit
+
+        self.assertEqual(score_numeric_hit([0.7201, 0.9523], [(42.0, 2)]), 0.0)
+
     def test_text_matcher_finds_figure_across_stripped_markup(self):
         from scripts.verify_provenance import generate_figure_variants, match_text
         raw_html = "<p>Total shares: <b>23,671,726</b> held</p>"

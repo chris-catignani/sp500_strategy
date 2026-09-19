@@ -17,10 +17,28 @@ cannot be a precondition for committing; the suite asserts the offline invariant
 reconcile). This checks the one thing those cannot: that the filing still says what we
 recorded it saying.
 
+`doc_figures` does the same for every `sourced` figure in `docs/doc_figure_manifest.json`,
+using the `source_ref` that PR #100 put on each one. `tests/test_doc_figures.py` already
+checks that those pointers RESOLVE; this checks the stronger thing they were added for --
+whether the figure is in the document it names.
+
+WHAT A HIT MEANS, AND WHAT IT DOES NOT. It means the figure's spelling was found in the
+cited document. It does not mean the document says it *as that figure*: a percentage
+matched against a dataset holding thousands of share counts may simply have collided with
+one. Every numeric hit therefore carries a crowding score, and one that a made-up figure
+would also have earned is reported as `weak` rather than counted as confirmed. 4.3.10 has
+three of those, all at 100%. Read `weak` alongside `miss`, not alongside `hit`.
+
+This script REPORTS; it does not gate. Misses and weak hits are expected on the day it
+runs, and several are provenance defects rather than matcher gaps -- a figure this
+repository computed FROM the cited document rather than read in it. Deciding which is
+which is a judgement call and is deliberately left to a reader.
+
 Usage:
     python3 scripts/verify_provenance.py              # every dataset
     python3 scripts/verify_provenance.py splits       # one dataset
     python3 scripts/verify_provenance.py q2_rosters   # Vanguard semi-annual rosters
+    python3 scripts/verify_provenance.py doc_figures  # published figures, offline
     python3 scripts/verify_provenance.py --verbose    # show each filing's matched text
 """
 
@@ -467,6 +485,49 @@ def match_numeric(leaves: List[float], targets: List[Tuple[float, int]]) -> bool
     return False
 
 
+# A hit in a large dataset can be pure coincidence, so a bare boolean overstates it.
+# `data/raw/ground_truth/vanguard_audited_rosters.json` holds 38,633 numeric leaves --
+# share counts and market values across hundreds of positions and many years -- and a
+# percentage drawn at random lands on one of them about a quarter of the time. Three
+# figures in 4.3.10 "match" that file by colliding with four to six of those leaves,
+# which is not evidence of anything.
+#
+# So every numeric hit is scored by how crowded the target's own neighbourhood is: the
+# share of the representable values around it that some leaf already occupies. At 100%
+# a hit was guaranteed before the figure was known and carries no information; against
+# `spinoffs.json`, where the ratios sit almost alone, crowding is a tenth of a percent
+# and a hit means what it appears to mean.
+#
+# THIS DOES NOT DECIDE ANYTHING. It ranks hits for the reader, exactly as the
+# `unarchived:` marker makes a gap visible rather than closing it.
+WEAK_HIT_CROWDING = 0.25
+
+
+def crowding(leaves: List[float], target: float, precision: int) -> float:
+    """Share of the slots near `target` that some leaf already occupies.
+
+    A window of +/-10% is scanned at the figure's own printed precision. The result is
+    the probability that a figure invented near this one would "match" regardless of
+    whether the document says it, so it reads directly as the hit's false-positive rate.
+    """
+    step = 10.0 ** -precision
+    span = max(abs(target) * 0.1, step * 10)
+    low, high = target - span, target + span
+    occupied = {round(leaf, precision) for leaf in leaves if low <= leaf <= high}
+    slots = max(1, int(round((high - low) / step)))
+    return min(1.0, len(occupied) / slots)
+
+
+def score_numeric_hit(leaves: List[float], targets: List[Tuple[float, int]]) -> float:
+    """Worst-case crowding across the targets that actually matched."""
+    scores = [
+        crowding(leaves, value, precision)
+        for value, precision in targets
+        if any(round(leaf, precision) == round(value, precision) for leaf in leaves)
+    ]
+    return max(scores) if scores else 0.0
+
+
 _ACCESSION_MAP: Optional[Dict[str, Path]] = None
 _NORMALIZED_TEXT_CACHE: Dict[Path, str] = {}
 _JSON_LEAVES_CACHE: Dict[Path, List[float]] = {}
@@ -554,7 +615,15 @@ def verify_doc_figures(verbose: bool) -> List[Result]:
                     leaves = _get_cached_json_leaves(path)
                     matched = match_numeric(leaves, numeric_targets)
                     result.check("present in dataset", matched, f"{figure} in {source_ref}")
-                    result.outcome = "hit" if matched else "miss"
+                    if matched:
+                        result.crowding = score_numeric_hit(leaves, numeric_targets)
+                        # A hit nothing could have failed is reported as its own outcome,
+                        # so the adjudication pass is not told the figure was confirmed.
+                        result.outcome = (
+                            "weak" if result.crowding >= WEAK_HIT_CROWDING else "hit"
+                        )
+                    else:
+                        result.outcome = "miss"
                 else:
                     body = _get_cached_normalized_text(path)
                     matched = match_text(body, text_variants)
@@ -572,6 +641,7 @@ def verify_doc_figures(verbose: bool) -> List[Result]:
 
 def _report_doc_figures(results: List[Result], verbose: bool) -> Tuple[int, int, int, int]:
     hits = [r for r in results if getattr(r, "outcome", None) == "hit"]
+    weak = [r for r in results if getattr(r, "outcome", None) == "weak"]
     misses = [r for r in results if getattr(r, "outcome", None) == "miss"]
     unarchived = [r for r in results if getattr(r, "outcome", None) == "skipped-unarchived"]
     unresolved = [r for r in results if getattr(r, "outcome", None) == "unresolved"]
@@ -592,12 +662,21 @@ def _report_doc_figures(results: List[Result], verbose: bool) -> Tuple[int, int,
         for r in misses:
             print(f"  §{r.section:<8} {r.figure:<24} {r.form:<10} {r.source_ref:<42} variants: {r.variants}")
 
+    if weak:
+        print(f"\nWeak hits ({len(weak)}) -- matched, but the neighbourhood is so crowded")
+        print("that a figure invented near this one would have matched too:")
+        for r in sorted(weak, key=lambda r: -r.crowding):
+            print(f"  §{r.section:<8} {r.figure:<24} {r.crowding:6.1%} crowded   {r.source_ref}")
+
     if unresolved:
         print(f"\nUnresolved ({len(unresolved)}):")
         for r in unresolved:
             print(f"  §{r.section:<8} {r.figure:<24} {r.form:<10} {r.source_ref}")
 
-    print(f"\nCensus: hit={len(hits)} miss={len(misses)} unarchived={len(unarchived)} unresolved={len(unresolved)}")
+    print(
+        f"\nCensus: hit={len(hits)} weak={len(weak)} miss={len(misses)} "
+        f"unarchived={len(unarchived)} unresolved={len(unresolved)}"
+    )
 
     return len(hits), len(misses), len(unarchived), len(unresolved)
 
