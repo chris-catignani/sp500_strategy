@@ -1213,14 +1213,6 @@
       "quarter": 3
     },
     {
-      "ticker": "T_CORP",
-      "name": "T_CORP",
-      "market_cap_weight": 0.0162,
-      "trailing_1y_return": null,
-      "year": 1996,
-      "quarter": 3
-    },
-    {
       "ticker": "INTC",
       "name": "Intel Corporation",
       "market_cap_weight": 0.0153,
@@ -1273,6 +1265,14 @@
       "name": "Walmart Inc.",
       "market_cap_weight": 0.0119,
       "trailing_1y_return": 0.0763,
+      "year": 1996,
+      "quarter": 3
+    },
+    {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0116,
+      "trailing_1y_return": null,
       "year": 1996,
       "quarter": 3
     },
@@ -1418,7 +1418,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.012467,
-      "trailing_1y_return": -0.0457,
+      "trailing_1y_return": -0.0781,
       "year": 1996,
       "quarter": 4
     },
@@ -1601,18 +1601,18 @@
       "quarter": 1
     },
     {
-      "ticker": "BMY",
-      "name": "Bristol-Myers Squibb Company",
+      "ticker": "T_CORP",
+      "name": "T_CORP",
       "market_cap_weight": 0.0102,
-      "trailing_1y_return": 0.4137,
+      "trailing_1y_return": -0.1341,
       "year": 1997,
       "quarter": 1
     },
     {
-      "ticker": "T_CORP",
-      "name": "T_CORP",
-      "market_cap_weight": 0.0097,
-      "trailing_1y_return": -0.1341,
+      "ticker": "BMY",
+      "name": "Bristol-Myers Squibb Company",
+      "market_cap_weight": 0.0102,
+      "trailing_1y_return": 0.4137,
       "year": 1997,
       "quarter": 1
     },
@@ -1797,7 +1797,7 @@
     {
       "ticker": "T_CORP",
       "name": "T_CORP",
-      "market_cap_weight": 0.0084,
+      "market_cap_weight": 0.0088,
       "trailing_1y_return": -0.1395,
       "year": 1997,
       "quarter": 2
@@ -1933,6 +1933,14 @@
       "quarter": 3
     },
     {
+      "ticker": "T_CORP",
+      "name": "T_CORP",
+      "market_cap_weight": 0.0104,
+      "trailing_1y_return": 0.277,
+      "year": 1997,
+      "quarter": 3
+    },
+    {
       "ticker": "AIG",
       "name": "American International Group Inc.",
       "market_cap_weight": 0.0101,
@@ -1945,14 +1953,6 @@
       "name": "Citigroup Inc.",
       "market_cap_weight": 0.0101,
       "trailing_1y_return": 0.8694,
-      "year": 1997,
-      "quarter": 3
-    },
-    {
-      "ticker": "T_CORP",
-      "name": "T_CORP",
-      "market_cap_weight": 0.0099,
-      "trailing_1y_return": -0.0865,
       "year": 1997,
       "quarter": 3
     },
@@ -2066,7 +2066,7 @@
       "ticker": "T_CORP",
       "name": "T_CORP",
       "market_cap_weight": 0.013172,
-      "trailing_1y_return": 0.4384,
+      "trailing_1y_return": 0.5113,
       "year": 1997,
       "quarter": 4
     },

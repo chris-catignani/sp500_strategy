@@ -13,6 +13,7 @@ class TestDatasetIntegrity(unittest.TestCase):
         self.data_dir = Path(__file__).resolve().parent.parent / "data"
         self.dividends_path = self.data_dir / "sp500_dividends.json"
         self.prices_path = self.data_dir / "sp500_prices.json"
+        self.quarterly_prices_path = self.data_dir / "sp500_quarterly_prices.json"
 
     def test_dividends_dataset_exists_and_valid(self):
         self.assertTrue(self.dividends_path.exists(), "sp500_dividends.json missing")
@@ -240,6 +241,100 @@ class TestDatasetIntegrity(unittest.TestCase):
             145.0002,
             places=4,
         )
+
+    def test_the_quarterly_endpoints_conserve_quoted_wealth_too(self):
+        """The same conservation, on the series the quarterly path actually reads.
+
+        This is the check that was missing (#108). The test above reads
+        `sp500_prices.json` only, so the annual reconciliation was guarded and the
+        quarterly one -- which did not exist -- was not. Both 1996 endpoints are filed
+        values dated on a distribution's ex-date, so both carry an entitlement the engine
+        credits separately:
+
+            1996-Q3   the SEI September-30 schedule, cum-Lucent at 174.1663
+            1996-Q4   the Vanguard December-31 schedule, cum-NCR at 145.0002
+
+        `engine/data_loader.py` prefers the quarterly file over the annual fallback, so a
+        parent left cum-entitlement here is what the quarterly simulation values.
+        """
+        with open(self.quarterly_prices_path, "r", encoding="utf-8") as f:
+            quarterly = json.load(f)
+        with open(self.data_dir / "spinoff_distributions.json", "r", encoding="utf-8") as f:
+            spinoffs = json.load(f)
+
+        events = {ev["spinco_ticker"]: ev for ev in spinoffs["T_CORP"]}
+        series = quarterly["T_CORP"]
+
+        # Lucent went ex on 1996-09-30, which IS the Q3 observation date.
+        self.assertAlmostEqual(
+            series["1996-Q3"] + events["LU"]["distribution_per_share"], 174.1663, places=4
+        )
+        # NCR went ex on 1996-12-31, which IS the Q4 observation date.
+        self.assertAlmostEqual(
+            series["1996-Q4"] + events["NCR"]["distribution_per_share"], 145.0002, places=4
+        )
+
+        # Each endpoint restores its OWN child and no other: deducting Lucent twice, or
+        # deducting it again at Q4 where the quote is already a quarter clear of it,
+        # would destroy wealth the filings do record.
+        self.assertNotAlmostEqual(
+            series["1996-Q4"]
+            + events["NCR"]["distribution_per_share"]
+            + events["LU"]["distribution_per_share"],
+            145.0002,
+            places=4,
+        )
+
+        # Q4's parent-only value is the year-end one, because the annual observation and
+        # the Q4 observation are the same filing read at the same date.
+        with open(self.prices_path, "r", encoding="utf-8") as f:
+            annual = json.load(f)
+        self.assertAlmostEqual(series["1996-Q4"], annual["T_CORP"]["1996"], places=4)
+
+    def test_no_endpoint_is_left_carrying_an_entitlement(self):
+        """The general rule, not the two instances of it.
+
+        A distribution whose ex-date falls on an endpoint's own observation date is
+        carried by that observation, and the engine credits it separately there. Every
+        such pair must have been reconciled, for every filing-priced constituent -- not
+        only the two this issue happened to find.
+        """
+        quarter_end = {1: "03-31", 2: "06-30", 3: "09-30", 4: "12-31"}
+        with open(self.data_dir / "spinoff_distributions.json", "r", encoding="utf-8") as f:
+            spinoffs = json.load(f)
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "derived_quarterly_constituent_series.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            filed_quarterly = json.load(f)["series_by_ticker"]
+        with open(self.quarterly_prices_path, "r", encoding="utf-8") as f:
+            quarterly = json.load(f)
+
+        checked = 0
+        for ticker, events in spinoffs.items():
+            filed = filed_quarterly.get(ticker)
+            if filed is None:
+                # Vendor-priced: the series arrives already adjusted for the
+                # distribution, so there is nothing here to deduct.
+                continue
+            for event in events:
+                year, quarter = int(event["year"]), int(event["quarter"])
+                if event["ex_date"] != f"{year}-{quarter_end[quarter]}":
+                    continue
+                period = f"{year}-Q{quarter}"
+                observation = filed.get(period)
+                if observation is None or period not in quarterly.get(ticker, {}):
+                    continue
+                with self.subTest(ticker=ticker, period=period):
+                    self.assertAlmostEqual(
+                        quarterly[ticker][period] + event["distribution_per_share"],
+                        observation["split_adjusted_price_usd"],
+                        places=3,
+                        msg=f"{ticker} {period} does not restore the filed value",
+                    )
+                checked += 1
+        self.assertEqual(checked, 2, "expected exactly AT&T Corp's two 1996 endpoints")
 
     def test_att_sbc_identity_separation(self):
         """Lock in identity separation across annual constituent rosters.

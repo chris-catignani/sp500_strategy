@@ -413,11 +413,17 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
         # had Top 3 exiting at Q1; both were wrong about the mechanism while landing on the
         # right entitlements, so nothing failed (#104). Pinned as exact values because the
         # section's whole argument is which book each rank falls inside.
+        #
+        # Q3 is 13 rather than 6 because of #108. The drift weight is a price ratio, and
+        # the Q3 price used to carry the Lucent entitlement, which credited AT&T Corp with
+        # market cap that had legally moved to Lucent. Deducting it drops the parent 28%
+        # and the rank with it. The audited December roster is the check: it anchors AT&T
+        # at 11, which a drifted 13 reaches and a drifted 6 does not.
         ranks = {}
         for q in (1, 2, 3, 4):
             ranked = [s.ticker for s in self.simulator.data_loader.load_quarterly_universe(1996, q)]
             ranks[q] = ranked.index("T_CORP") + 1
-        self.assertEqual(ranks, {1: 4, 2: 4, 3: 6, 4: 11})
+        self.assertEqual(ranks, {1: 4, 2: 4, 3: 13, 4: 11})
 
         proceeds = {}
         holdings_by_n = {}
@@ -450,10 +456,16 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
                 # Lucent, ex-date 1996-09-30.
                 self.assertGreater(proceeds[n][2], 0.0)
 
-        # The asymmetry itself: Top 5 exits at the Q3 rebalance on slipping to rank 6 and
-        # so is entitled to nothing from NCR, while Top 10 still holds and is credited.
+        # NCR reaches no quarterly book at all. At rank 13 after the Q3 reconciliation
+        # (#108) AT&T Corp is outside every cutoff, so Top 5 and Top 10 both exit at the
+        # Q3 rebalance having taken Lucent, and neither holds into the NCR ex-date. The
+        # asymmetry this test is named for is now between the ANNUAL path, which holds
+        # across the calendar year and takes both, and every quarterly book, which takes
+        # at most Lucent.
         self.assertEqual(proceeds[5][3], 0.0)
-        self.assertGreater(proceeds[10][3], 0.0)
+        self.assertEqual(proceeds[10][3], 0.0)
+        for n in (5, 10):
+            self.assertNotIn("T_CORP", holdings_by_n[n][3].holdings)
 
         # Cash cannot go negative when a distribution lands mid-quarter.
         for n in (3, 5, 10):

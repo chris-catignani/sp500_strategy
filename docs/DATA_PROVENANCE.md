@@ -1026,7 +1026,22 @@ AT&T Corp distributed Lucent on 1996-09-30 and NCR on 1996-12-31. The model cred
 
 **The filed 1996 value is cum-NCR.** The Schedule of Investments values AT&T Corp at **\$43.50** as-traded at 1996-12-31. The contemporaneous quote in `data/raw/corporate_actions/att_1996_endpoint_valuations.json` is **\$43.375** and states explicitly that it carries the NCR entitlement. The two are one tick apart. Were the filed price ex-NCR, the cum value would be higher than any same-day observation supports — a gap between two same-day valuations of one security that no reading supports. The parent-only value is therefore \$43.50 − \$2.10 = **\$41.40** as-traded.
 
-Lucent needs no such subtraction. It went ex a full quarter before the filing date, so the year-end quote is already clear of it. `test_att_distribution_endpoints_conserve_quoted_wealth` asserts both halves: that the NCR entitlement restores the filed quote exactly, and that adding Lucent back does not.
+Lucent needs no such subtraction **from the year-end value**. It went ex a full quarter before the December filing date, so that quote is already clear of it. `test_att_distribution_endpoints_conserve_quoted_wealth` asserts both halves: that the NCR entitlement restores the filed quote exactly, and that adding Lucent back does not.
+
+##### The same argument at the quarter ends (issue #108)
+
+The rule is about the **date**, not the ticker: an endpoint carries an entitlement exactly when the child went ex on that endpoint's own observation date. Both 1996 quarter-end observations meet that test, and both are reconciled:
+
+| Endpoint | Filed, final share terms | Credited child | Parent-only | As-traded |
+| :--- | ---: | ---: | ---: | ---: |
+| 1996-Q3 | 174.1663 | 49.5667 (`LU`) | 124.5996 | 37.3799 |
+| 1996-Q4 | 145.0002 | 7.0000 (`NCR`) | 138.0002 | 41.4001 |
+
+Q4 and the annual value are the same filing read at the same date, so they agree by construction. **Q3 is cum-Lucent on the fund's own evidence.** The quarter's source is SEI's September-30 1996 schedule, which values AT&T Corp at 11,636,000 / 222,699 = 52.2499 and holds 9,000 Lucent shares — against a distribution entitlement of 222,699 × 0.324084 = 72,171. The fund had not booked the distribution, so its parent value still carries it.
+
+The deducted amount is not a choice. To conserve the quoted wealth it must equal exactly what the engine credits, which is why the table's middle column is the compiled distribution rather than the as-traded figure §4.6.4 quotes.
+
+This moved a roster, not only a valuation. The drift weight is a price ratio, so deducting the entitlement moves the Q3 parent by the whole of it — the table above is the magnitude — and AT&T Corp falls from rank 6 to 13, out of every quarterly book. §4.6.6 records what that does to the 1996 entitlements.
 
 **Units.** `spinoffs.json` records each distribution as quoted on its ex-date, which is what a raw source file should hold. The engine computes `shares_held × distribution_per_share`, and `shares_held` derives from a price series expressed in final share terms, so the builder converts each distribution by the same factor it applies to prices. AT&T Corp has **two** splits after its 1996 events — the **three-for-two of 1999-04-15** (10-K, accession `0000950123-02-003272`) and the **1-for-5 reverse split of 2002-11-18** (10-K, accession `0000950123-03-003510`), both under CIK `0000005907` — giving a combined factor of 0.3, which scales both distributions, against the year-end parent price in the derived series. Every other event in the catalog has no split after it, so the conversion is a no-op for them.
 
@@ -1146,11 +1161,10 @@ it, which is the fact the subtraction turns on.
 `att_1996_endpoint_valuations.json` accordingly holds **evidence, not an input**: it is read
 by no code path, and the builder computes the parent-only value from the derived series and
 `spinoffs.json` alone. Before #104 this section described a compilation step that does not
-exist, and `data/README.md` said the builder applied these corrections; both have been
-corrected to say what the code does. **The reconciliation is applied to the annual year-end
-series only.** The quarterly series carries the filed values unadjusted at both 1996
-endpoints, so the parent is valued cum-entitlement while the child is credited beside it.
-That is a defect rather than a convention, and it is tracked in issue #108.
+exist, and `data/README.md` said the builder applied these corrections; both now say what the
+code does. Under #108 the reconciliation reached the quarterly series as well — until then it
+ran on the annual year-end value alone, so the quarterly path valued the parent
+cum-entitlement at both 1996 endpoints while crediting the child beside it.
 
 These are **derived parent-only valuations**, not observed exchange execution prices: an
 explicit approximation for quarter-end trading immediately after a distribution, not a daily
@@ -1179,23 +1193,26 @@ AT&T Corp's 1996 drift through the audited quarterly rosters:
 | :--- | ---: | :--- | :--- | :--- |
 | 1996-Q1 | 4 | never held | held | held |
 | 1996-Q2 | 4 | — | held | held |
-| 1996-Q3 | 6 | — | Lucent, then exits | Lucent |
-| 1996-Q4 | 11 | — | nothing | NCR, then exits |
+| 1996-Q3 | 13 | — | Lucent, then exits | Lucent, then exits |
+| 1996-Q4 | 11 | — | nothing | nothing |
 
 - **Top 5 Annual**: holds `T_CORP` across the entire 1996 calendar year $\implies$ receives Lucent in Q3 and NCR in Q4.
-- **Top 5 Quarterly**: holds it entering Q3 $\implies$ receives Lucent, then exits at the 1996-Q3 rebalance on slipping to rank 6 $\implies$ receives **nothing from NCR in Q4**.
-- **Top 10 Quarterly**: holds it through Q3 $\implies$ receives both, then exits at the Q4 rebalance at rank 11.
+- **Top 5 and Top 10 Quarterly**: both hold it entering Q3 $\implies$ both receive Lucent, and both exit at the 1996-Q3 rebalance, where the post-distribution parent ranks 13 and falls outside either cutoff $\implies$ **neither receives NCR in Q4**.
 - **Top 3 Quarterly**: **never holds it at all.** At rank 4 it sits one place outside the book, so a Top 3 distribution would mean the selector had bought a constituent it did not rank highly enough to hold.
+
+**The asymmetry is between the frequencies, not between the quarterly books.** An annual book holds across the calendar year and collects both distributions; no quarterly book collects more than Lucent, because the Q3 rebalance falls between the two ex-dates and the distribution itself is what drops the parent out of contention. The rank-13 figure is the mechanism: the drift weight is a price ratio (§4.3), so the parent moves by the whole Lucent entitlement, which §4.5.4 tabulates. §4.3.9's audited December roster anchors AT&T Corp at 11 — a level a drifted 13 reaches and the 6 this section carried before #108 does not.
 
 `test_quarterly_1996_spinoff_entitlement_and_asymmetry` asserts the ranks and every entitlement in the table.
 
 > **An earlier revision of this section was wrong about the mechanism and right about the
 > outcomes**, which is the combination hardest to notice. It put the Q3 rank at #10 and had
-> Top 3 *exiting* at 1996-Q1. Both conclusions still hold — Top 5 does lose NCR, Top 3 does
-> receive nothing — so no test failed and no figure moved, while the reasons given for them
-> were not the reasons the code acts on. A never-bought constituent and an exited one reach
-> the same entitlement by different routes, and only one of them is what happens here.
-> Recorded under #104.
+> Top 3 *exiting* at 1996-Q1. Both conclusions held — Top 5 did lose NCR, Top 3 did receive
+> nothing — so no test failed and no figure moved, while the reasons given for them were not
+> the reasons the code acts on. A never-bought constituent and an exited one reach the same
+> entitlement by different routes, and only one of them is what happens here. Recorded under
+> #104, and corrected again under #108 when the Q3 reconciliation moved the rank that
+> decides it — at which point Top 10 lost NCR as well, and an asymmetry that had been read
+> as holding *between the quarterly books* turned out to hold between the frequencies.
 
 ---
 
