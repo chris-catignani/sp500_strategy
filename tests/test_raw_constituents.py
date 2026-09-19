@@ -2266,10 +2266,6 @@ class TestProvenanceVerifier(unittest.TestCase):
 
     def test_archived_vanguard_semiannual_totals_still_match_their_filings(self):
         """Runs verify_q2_rosters over the archived semi-annual filings on disk."""
-        import sys
-
-        if str(ROOT) not in sys.path:
-            sys.path.insert(0, str(ROOT))
         from scripts.verify_provenance import verify_q2_rosters
 
         results = verify_q2_rosters(verbose=False)
