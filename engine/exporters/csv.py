@@ -14,6 +14,35 @@ from engine.models import StrategyResult, TradeOrder
 from engine.metrics import calculate_cagr, calculate_alpha, calculate_tax_drag
 
 
+# Significant digits kept for every float written to an export.
+#
+# A CAGR carried to seventeen digits is not precision, it is the binary representation
+# showing through, and it makes these files non-reproducible. `calculate_cagr` raises a
+# ratio to a fractional power, and a platform's `pow` is not required to be correctly
+# rounded: macOS and glibc disagree in the last bit, so the same inputs produce CSVs that
+# differ in the fifteenth decimal. That is invisible to a reader and fatal to any check
+# that regenerates a file and compares it, which is what
+# `scripts/regenerate_derived_datasets.py --check` does.
+#
+# Ten significant digits is far more than an audit export needs -- eight decimal places of
+# a rate, fractions of a cent on a dollar figure -- and absorbs a last-bit difference with
+# six orders of magnitude to spare. Values are rounded only on the way out; nothing the
+# engine computes is changed.
+_EXPORT_SIGNIFICANT_DIGITS = 10
+
+
+def _reproducible(value: Any) -> Any:
+    """Round a float to a platform-independent number of significant digits."""
+    if isinstance(value, float):
+        return float(f"{value:.{_EXPORT_SIGNIFICANT_DIGITS}g}")
+    return value
+
+
+def _reproducible_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Apply _reproducible to every value in every row."""
+    return [{k: _reproducible(v) for k, v in row.items()} for row in rows]
+
+
 def _ensure_dir_exists(filepath: str) -> None:
     """Create parent directories for filepath if they do not exist."""
     dirname = os.path.dirname(filepath)
@@ -179,7 +208,7 @@ def export_summary_metrics_csv(
     with open(filepath, mode="w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(_reproducible_rows(rows))
 
     return filepath
 
@@ -257,7 +286,7 @@ def export_annual_breakdown_csv(
     with open(filepath, mode="w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(_reproducible_rows(rows))
 
     return filepath
 
@@ -323,6 +352,6 @@ def export_trade_log_csv(
     with open(filepath, mode="w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(_reproducible_rows(rows))
 
     return filepath
