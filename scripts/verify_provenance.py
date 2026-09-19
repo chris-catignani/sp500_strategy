@@ -35,6 +35,11 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from scripts.audit_doc_figures import ARCHIVE_DIR, classify_source_ref
+
 HEADERS = {"User-Agent": "AcademicResearch sp500strategy@example.com"}
 
 SPLITS_PATH = PROJECT_ROOT / "data" / "raw" / "corporate_actions" / "splits.json"
@@ -43,6 +48,7 @@ ROSTERS_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_audite
 SEMIANNUAL_ROSTERS_PATH = (
     PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_semiannual_rosters.json"
 )
+MANIFEST_PATH = PROJECT_ROOT / "docs" / "doc_figure_manifest.json"
 
 # A quotation is compared on its opening words. Filings are re-flowed by the parser and by
 # EDGAR itself, so requiring the whole sentence to match character for character produces
@@ -318,12 +324,291 @@ def verify_q2_rosters(verbose: bool) -> List[Result]:
     return results
 
 
+def generate_figure_variants(figure: str) -> Tuple[List[str], List[Tuple[float, int]]]:
+    """Generate text variants and numeric targets for the three variant families (issue #105).
+
+    Families:
+      1. Percent <-> ratio: try figure divided by 100 whenever figure carries a %.
+      2. Decimal precision: trailing-zero differences (69.10 vs 69.1) and thousands
+         separators (3,170 vs 3170) in both directions.
+      3. Scale suffix: $3.17B, $103.9bn. Try scaled by 1e3, 1e6, 1e9, and as written.
+    """
+    raw = figure.strip()
+    s = raw.replace(r"\$", "$").replace(r"\%", "%").strip()
+    text_variants = {raw, s}
+
+    if s.startswith("$"):
+        s = s[1:].strip()
+        text_variants.add(s)
+
+    if s.startswith("(") and s.endswith(")"):
+        s = s[1:-1].strip()
+        text_variants.add(s)
+
+    is_percent = s.endswith("%")
+    if is_percent:
+        s = s[:-1].strip()
+        text_variants.add(s)
+
+    scale_suffix = None
+    for suf in ("bn", "BN", "b", "B", "k", "K", "m", "M"):
+        if s.endswith(suf):
+            scale_suffix = suf.lower()
+            s = s[:-len(suf)].strip()
+            text_variants.add(s)
+            break
+
+    num_clean = s.replace(",", "")
+    try:
+        val = float(num_clean)
+    except ValueError:
+        return sorted(v for v in text_variants if v), []
+
+    if "." in s:
+        precision = len(s.split(".")[1])
+    else:
+        precision = 0
+
+    numeric_targets = [(val, precision)]
+
+    if is_percent:
+        ratio_val = val / 100.0
+        ratio_prec = precision + 2
+        numeric_targets.append((ratio_val, ratio_prec))
+        ratio_str = f"{ratio_val:.{ratio_prec}f}"
+        text_variants.add(ratio_str)
+        text_variants.add(ratio_str.rstrip("0").rstrip("."))
+
+    if precision > 0:
+        stripped = s.rstrip("0").rstrip(".")
+        text_variants.add(stripped)
+        text_variants.add(s + "0")
+        if stripped:
+            stripped_num = float(stripped.replace(",", ""))
+            stripped_prec = len(stripped.split(".")[1]) if "." in stripped else 0
+            numeric_targets.append((stripped_num, stripped_prec))
+    else:
+        text_variants.add(s + ".0")
+        text_variants.add(s + ".00")
+
+    if val >= 1000 or val <= -1000:
+        if precision > 0:
+            dec = s.split(".")[1]
+            with_comma = f"{int(val):,}.{dec}"
+        else:
+            with_comma = f"{int(val):,}"
+        text_variants.add(with_comma)
+        text_variants.add(num_clean)
+        if precision > 0:
+            text_variants.add(with_comma.rstrip("0").rstrip("."))
+            text_variants.add(num_clean.rstrip("0").rstrip("."))
+
+    if scale_suffix is not None:
+        for scale in (1e3, 1e6, 1e9):
+            scaled_val = val * scale
+            scaled_prec = max(0, precision - (3 if scale == 1e3 else 6 if scale == 1e6 else 9))
+            numeric_targets.append((scaled_val, scaled_prec))
+            if scaled_prec == 0 or scaled_val.is_integer():
+                ival = int(round(scaled_val))
+                text_variants.add(f"{ival:,}")
+                text_variants.add(f"{ival}")
+            else:
+                text_variants.add(f"{scaled_val:,.{scaled_prec}f}")
+                text_variants.add(f"{scaled_val:.{scaled_prec}f}")
+
+    return sorted(v for v in text_variants if v), numeric_targets
+
+
+def match_text(document_text: str, variants: List[str]) -> bool:
+    """Check whether any variant string is a substring of normalised text."""
+    norm_text = _normalise(document_text)
+    return any(v in norm_text for v in variants if v)
+
+
+def _parse_leaf_as_number(val: Any) -> Optional[float]:
+    if isinstance(val, bool):
+        return None
+    if isinstance(val, (int, float)):
+        return float(val)
+    if isinstance(val, str):
+        try:
+            return float(val.strip().replace(",", ""))
+        except ValueError:
+            return None
+    return None
+
+
+def extract_numeric_leaves(data: Any) -> List[float]:
+    """Recursively collect numeric leaves from parsed JSON structures."""
+    leaves = []
+    stack = [data]
+    while stack:
+        item = stack.pop()
+        if isinstance(item, dict):
+            stack.extend(item.values())
+        elif isinstance(item, list):
+            stack.extend(item)
+        else:
+            n = _parse_leaf_as_number(item)
+            if n is not None:
+                leaves.append(n)
+    return leaves
+
+
+def match_numeric(leaves: List[float], targets: List[Tuple[float, int]]) -> bool:
+    """Check if any JSON leaf matches any target rounded to printed precision."""
+    if not targets:
+        return False
+    for target_val, prec in targets:
+        target_rounded = round(target_val, prec)
+        for leaf in leaves:
+            if round(leaf, prec) == target_rounded:
+                return True
+    return False
+
+
+_ACCESSION_MAP: Optional[Dict[str, Path]] = None
+_NORMALIZED_TEXT_CACHE: Dict[Path, str] = {}
+_JSON_LEAVES_CACHE: Dict[Path, List[float]] = {}
+
+
+def _get_accession_file(accession: str) -> Optional[Path]:
+    global _ACCESSION_MAP
+    if _ACCESSION_MAP is None:
+        _ACCESSION_MAP = {}
+        if ARCHIVE_DIR.exists():
+            for p in ARCHIVE_DIR.iterdir():
+                m = re.search(r"\d{10}-\d{2}-\d{6}", p.name)
+                if m:
+                    _ACCESSION_MAP[m.group(0)] = p
+    return _ACCESSION_MAP.get(accession)
+
+
+def _get_cached_normalized_text(path: Path) -> str:
+    if path not in _NORMALIZED_TEXT_CACHE:
+        _NORMALIZED_TEXT_CACHE[path] = _normalise(
+            path.read_text(encoding="utf-8", errors="replace")
+        )
+    return _NORMALIZED_TEXT_CACHE[path]
+
+
+def _get_cached_json_leaves(path: Path) -> List[float]:
+    if path not in _JSON_LEAVES_CACHE:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        _JSON_LEAVES_CACHE[path] = extract_numeric_leaves(data)
+    return _JSON_LEAVES_CACHE[path]
+
+
+def verify_doc_figures(verbose: bool) -> List[Result]:
+    """Re-check every sourced doc figure against the filing or dataset it cites (#105)."""
+    with open(MANIFEST_PATH, "r", encoding="utf-8") as f:
+        entries = json.load(f)["entries"]
+
+    results = []
+    for entry in entries:
+        if entry.get("verdict") != "sourced":
+            continue
+
+        section = entry.get("section", "")
+        figure = entry.get("figure", "")
+        source_ref = entry.get("source_ref", "")
+        form = classify_source_ref(source_ref)
+        subject = f"§{section} {figure}"
+
+        result = Result("doc_figures", subject)
+        text_variants, numeric_targets = generate_figure_variants(figure)
+
+        result.section = section
+        result.figure = figure
+        result.form = form
+        result.source_ref = source_ref
+        result.variants = text_variants
+
+        if form == "unarchived":
+            result.skipped = source_ref.strip()
+            result.outcome = "skipped-unarchived"
+            results.append(result)
+            continue
+
+        if form == "accession":
+            path = _get_accession_file(source_ref.strip())
+            if not path or not path.exists():
+                result.check("resolve source_ref", False, f"accession file missing on disk: {source_ref}")
+                result.outcome = "unresolved"
+            else:
+                body = _get_cached_normalized_text(path)
+                matched = match_text(body, text_variants)
+                result.check("present in filing", matched, f"{figure} in {source_ref}")
+                result.outcome = "hit" if matched else "miss"
+            results.append(result)
+            continue
+
+        if form == "path":
+            path = PROJECT_ROOT / source_ref.strip()
+            if not path.exists():
+                result.check("resolve source_ref", False, f"path missing on disk: {source_ref}")
+                result.outcome = "unresolved"
+            else:
+                if source_ref.strip().endswith(".json"):
+                    leaves = _get_cached_json_leaves(path)
+                    matched = match_numeric(leaves, numeric_targets)
+                    result.check("present in dataset", matched, f"{figure} in {source_ref}")
+                    result.outcome = "hit" if matched else "miss"
+                else:
+                    body = _get_cached_normalized_text(path)
+                    matched = match_text(body, text_variants)
+                    result.check("present in file", matched, f"{figure} in {source_ref}")
+                    result.outcome = "hit" if matched else "miss"
+            results.append(result)
+            continue
+
+        result.check("resolve source_ref", False, f"unresolved {form}: {source_ref}")
+        result.outcome = "unresolved"
+        results.append(result)
+
+    return results
+
+
+def _report_doc_figures(results: List[Result], verbose: bool) -> Tuple[int, int, int, int]:
+    hits = [r for r in results if getattr(r, "outcome", None) == "hit"]
+    misses = [r for r in results if getattr(r, "outcome", None) == "miss"]
+    unarchived = [r for r in results if getattr(r, "outcome", None) == "skipped-unarchived"]
+    unresolved = [r for r in results if getattr(r, "outcome", None) == "unresolved"]
+
+    if verbose:
+        for r in results:
+            if r.outcome == "hit":
+                print(f"  {r.subject:17} ok    present ({r.source_ref})")
+            elif r.outcome == "skipped-unarchived":
+                print(f"  {r.subject:17} SKIP  {r.skipped}")
+            elif r.outcome == "miss":
+                print(f"  {r.subject:17} MISS  {r.source_ref} tried: {r.variants}")
+            else:
+                print(f"  {r.subject:17} FAIL  {r.source_ref}")
+
+    if misses:
+        print(f"\nMisses ({len(misses)}):")
+        for r in misses:
+            print(f"  §{r.section:<8} {r.figure:<24} {r.form:<10} {r.source_ref:<42} variants: {r.variants}")
+
+    if unresolved:
+        print(f"\nUnresolved ({len(unresolved)}):")
+        for r in unresolved:
+            print(f"  §{r.section:<8} {r.figure:<24} {r.form:<10} {r.source_ref}")
+
+    print(f"\nCensus: hit={len(hits)} miss={len(misses)} unarchived={len(unarchived)} unresolved={len(unresolved)}")
+
+    return len(hits), len(misses), len(unarchived), len(unresolved)
+
+
 DATASETS = {
     "splits": verify_splits,
     "terminal": verify_terminal_actions,
     "rosters": verify_rosters,
     "q1_rosters": verify_q1_rosters,
     "q2_rosters": verify_q2_rosters,
+    "doc_figures": verify_doc_figures,
 }
 
 
@@ -338,7 +623,15 @@ def main() -> int:
 
     for name in selected:
         print(f"\n== {name} ==")
-        for result in DATASETS[name](args.verbose):
+        results = DATASETS[name](args.verbose)
+        if name == "doc_figures":
+            hits, misses, unarch, unres = _report_doc_figures(results, args.verbose)
+            checked += hits + misses + unres
+            skipped += unarch
+            failures += unres
+            continue
+
+        for result in results:
             if result.skipped:
                 skipped += 1
                 print(f"  {result.subject:17} SKIP  {result.skipped}")
