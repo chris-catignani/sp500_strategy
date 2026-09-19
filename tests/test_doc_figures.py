@@ -207,5 +207,70 @@ class TestManifestWellFormedness(unittest.TestCase):
                     self.assertIn(field, entry)
 
 
+class TestSourcedVerdictsAreGrounded(unittest.TestCase):
+    """The gate on classification, which nothing else can re-run to check.
+
+    Every other assertion in this file re-derives its answer: the extractor runs again,
+    the figures are found again. A verdict cannot be re-derived. It is judgment, and a
+    wrong `sourced` verdict is a false provenance claim published under a field name that
+    asserts it is true.
+
+    docs/SUBAGENTS.md records what that failure actually looks like here. Under #76 a
+    third of 335 published figures were wrong, and none of it was invention - every value
+    came from the right document and carried the right accession. They were real numbers
+    read under the wrong label, which is worse than fabrication because the citation
+    checks out and the first three you spot-check are correct. The conclusion drawn there
+    is that the controller's check cannot be attentional; it has to be mechanical.
+
+    So a `sourced` or `derivation` verdict must quote the attributing language it relies
+    on, and the quote must literally appear in the document. The classifier has to find
+    the attribution rather than assume it, and a substring test either passes or does not.
+
+    The obvious alternative - require an accession in the same section - does not work.
+    4.3.5, 4.3.8, 4.6.3, 4.6.4 and 4.3.14 contain no accessions at all, because the
+    accessions live in the datasets rather than in the prose. Measured, not assumed.
+    """
+
+    GROUNDED = ("sourced", "derivation")
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.audit_doc_figures import load_manifest
+        cls.manifest = load_manifest()
+        cls.documents = {}
+
+    def _document(self, relative):
+        if relative not in self.documents:
+            self.documents[relative] = (ROOT / relative).read_text(encoding="utf-8")
+        return self.documents[relative]
+
+    def test_a_grounded_verdict_carries_a_quote(self):
+        missing = [
+            (e["section"], e["figure"]) for e in self.manifest["entries"]
+            if e["verdict"] in self.GROUNDED and not e.get("evidence_quote")
+        ]
+        self.assertEqual(
+            len(missing), 0,
+            f"{len(missing)} sourced/derivation entries carry no evidence_quote; "
+            f"first five: {missing[:5]}",
+        )
+
+    def test_every_quote_appears_in_its_document(self):
+        """A quote that is not in the document is the whole failure mode, caught."""
+        for entry in self.manifest["entries"]:
+            quote = entry.get("evidence_quote")
+            if not quote:
+                continue
+            with self.subTest(section=entry["section"], figure=entry["figure"]):
+                # assertIn would print the whole 1,600-line document on failure, which
+                # buries the one line that matters under 168KB of noise.
+                self.assertTrue(
+                    quote in self._document(entry["document"]),
+                    f"evidence_quote for {entry['figure']!r} in section "
+                    f"{entry['section']} does not appear in {entry['document']}: "
+                    f"{quote!r}",
+                )
+
+
 if __name__ == "__main__":
     unittest.main()
