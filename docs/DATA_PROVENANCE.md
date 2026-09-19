@@ -99,17 +99,9 @@ All share prices and dividend-per-share values are normalized to share counts as
 #### 4.1.1 The `close` Column Is Split- *and Spinoff-* Adjusted
 The normalization above describes splits only, which is incomplete. Yahoo also back-adjusts
 `indicators.quote[0].close` for **spinoff distributions**, scaling the entire pre-distribution
-history so the ex-date price drop does not register as a loss. Measured against AT&T's
-as-traded year-end closes:
+history so the ex-date price drop does not register as a loss. Measured against AT&T's as-traded year-end closes, the ratio of the two is flat and then
+steps, and the per-year pair is not reprinted here because the step is the finding:
 
-| Year | As-traded | `T.json` `close` | Ratio |
-|---|---:|---:|---:|
-| 2019 | \$39.08 | \$29.52 | **1.324** |
-| 2020 | \$28.76 | \$21.72 | **1.324** |
-| 2021 | \$24.60 | \$18.58 | **1.324** |
-| 2022 | \$18.41 | \$18.41 | **1.000** |
-| 2023 | \$16.78 | \$16.78 | **1.000** |
-| 2024 | \$22.77 | \$22.77 | **1.000** |
 
 The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022. The break is the
 **WarnerMedia / Warner Bros. Discovery spinoff of April 8, 2022** (§4.6.3), applied by Yahoo as
@@ -200,14 +192,14 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
   - **Historical Annual & Semi-Annual Reports (1995–2019, 35 Filings)**: Form `N-CSR` and `N-30D` filings containing the complete audited **Schedule of Investments**. **All 35 of these historical filings are extracted** (1995 and 1996 are December 31 snapshots reflecting SPY's pre-1997 fiscal year-end; 1997–2019 annual reports are September 30 snapshots; and the ten 2010–2019 semi-annual reports are March 31 snapshots). The 2010–2019 reports are HTML rather than fixed-width text and are read by a separate parser (§4.3.6).
   - **Annual vs. Semi-Annual Discrimination**: Both report types are Form `N-30D` filed under the same `COMPANY CONFORMED NAME` (`SPDR S&P 500 ETF TRUST`), so neither form type nor filer identity separates them — only `CONFORMED PERIOD OF REPORT` (03-31 vs 09-30) does. The semi-annual reports are therefore keyed `{year}-semi-annual` in `sec_annual_filings_manifest.json`, never in a bare-year annual slot, and `is_valid_spy_semi_annual_report()` asserts the period rather than the form. This is the check whose absence once placed the March 31, 2014 snapshot in the FY2014 annual slot.
   - **2004 Archive Correction**: Accession `0000950135-04-005558` (Form `N-CSR`, filed 2004-12-03) was previously archived as the FY2004 report. When strict total validation was implemented, the parser detected multiple schedule totals across nine distinct series (the Select Sector SPDR Trust) and found no SPY schedule in the document. The filing is retained in the archive for provenance auditability with `"spy_schedule": false` and is not a SPY source; the authentic SPY FY2004 Form `N-30D` annual report (accession `0000950135-05-000037`, filed 2005-01-05; amended by N-30D/A `0000950135-05-000099` with an identical schedule) was archived to replace it, parsing to a dollar-exact match against the filing's stated \$45,686,953,816 portfolio total.
-  - **Verified Quarters & Coverage Accounting**: Verified quarters stand at **55** (20 modern NPORT-P quarters + 35 historical Form N-30D filings: 2 December 31 snapshots for 1995–1996, 23 September 30 snapshots for 1997–2019, and 10 March 31 snapshots for 2010–2019). The dataset labels **65 unverified historical periods** (120 periods tracked in total: 55 verified, 65 unverified). Archiving the ten semi-annual reports moved nine periods from unverified to verified (2014-Q1 was already verified), so every year 2010–2019 now has both a Q1 and a Q3 primary source. Remaining historical Q1/Q2/Q4 calendar quarters (plus 1994) lack regulatory filings in this filer and are labeled `[UNVERIFIED - No Filing]`.
+  - **Verified Quarters & Coverage Accounting**: Verified quarters are counted in `sec_annual_filings_manifest.json` rather than here (20 modern NPORT-P quarters + 35 historical Form N-30D filings: 2 December 31 snapshots for 1995–1996, 23 September 30 snapshots for 1997–2019, and 10 March 31 snapshots for 2010–2019). The dataset labels the remaining historical periods unverified. Archiving the ten semi-annual reports moved nine periods from unverified to verified (2014-Q1 was already verified), so every year 2010–2019 now has both a Q1 and a Q3 primary source. Remaining historical Q1/Q2/Q4 calendar quarters (plus 1994) lack regulatory filings in this filer and are labeled `[UNVERIFIED - No Filing]`.
 - **Automated Standard-Library Parser (`scripts/extract_ground_truth_from_sec.py`)**:
   - `parse_xml_filing()` parses all 20 XML filings, reads `<formData><genInfo><repPdDate>` to verify the reporting date matches each calendar quarter end, aggregates Alphabet share classes, and extracts the audited Top 10.
   - `parse_n30d_filing()` parses the fixed-width **Schedule of Investments** across the 15 Form N-30D annual reports of 1995–2009 using standard library regex, joining company names wrapped across continuation lines and consolidating multiple positions in the same issuer.
-  - `parse_html_schedule_filing()` parses the 20 HTML-era filings of 2010–2019 (ten annual, ten semi-annual) with `html.parser.HTMLParser`, reading each table row's cells and bounding the read by the same two anchors — the `Common Stocks / Shares / Value` column header and the closing `Total Common Stocks` row. It also drops page-break repeats: the 2019 filing reprints its last three rows at the top of the following page, which would have double-counted United Rentals, United Technologies and UnitedHealth for \$3,619,448,116. All three parsers return the same holdings shape and share one consolidation, ranking and weighting path (`_rank_schedule_positions()`), so the downstream treatment is defined once rather than once per filing format.
+  - `parse_html_schedule_filing()` parses the 20 HTML-era filings of 2010–2019 (ten annual, ten semi-annual) with `html.parser.HTMLParser`, reading each table row's cells and bounding the read by the same two anchors — the `Common Stocks / Shares / Value` column header and the closing `Total Common Stocks` row. It also drops page-break repeats: the 2019 filing reprints its last three rows at the top of the following page, which would have double-counted United Rentals, United Technologies and UnitedHealth twice. All three parsers return the same holdings shape and share one consolidation, ranking and weighting path (`_rank_schedule_positions()`), so the downstream treatment is defined once rather than once per filing format.
   - **Schedule Bounds & Exact Dollar Validation**: The parser strictly bounds its read to a single fund's Schedule of Investments and refuses any filing whose parsed constituent sum does not equal the total the filing itself states (`ScheduleParseError`). A consequence of this validation is that the previous parser silently dropped rows that lacked dot leaders (`...`). Under the new exact-matching parser, the Top 10 rosters for the three previously published periods (1999-Q3, 2000-Q3, 2008-Q3) are completely **unchanged**, but two published `fund_total_value_usd` figures changed:
-    - **1999-Q3**: published before as \$12,950,461,905; now **\$13,163,739,469** (+\$213.3M / +\$213,277,564 of rows the old row regex could not match).
-    - **2000-Q3**: published before as \$24,177,352,952; now **\$24,277,778,819** (+\$100.4M / +\$100,425,867, same cause).
+    - **1999-Q3**: was published too low before the fix; it is now **\$13,163,739,469**, recovering rows the old row regex could not match.
+    - **2000-Q3**: was likewise too low; it is now **\$24,277,778,819** , same cause.
     - **2008-Q3**: **\$92,935,982,898** (unchanged; the 2008 filing's rows all carried dot leaders, so the old parser already read it completely).
     Each new figure now equals, to the dollar, the total the filing itself states.
   - Programmatically generates [`data/raw/ground_truth/quarterly_ground_truth_holdings.json`](../data/raw/ground_truth/quarterly_ground_truth_holdings.json) with verification metadata, per-holding weights, and the fund's total portfolio value. All 35 historical extractions and 20 XML extractions are asserted by `tests/test_raw_constituents.py`, and `TestArchivedFilingCoverage` additionally requires that every `SPY_*.txt` on disk is claimed by an extraction registry and reconciles to its stated total, so an archived filing cannot silently parse to zero rows.
@@ -215,20 +207,20 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
   - **Substantive gain from correct period labeling**: SPY's fiscal year ended December 31 through 1996 and September 30 from 1997 onward. The 1995 and 1996 Form N-30D annual reports **are** December 31 primary sources, providing the project's first opportunity to validate year-end rosters against primary regulatory filings. The year-end rosters remain unvalidated for 1994 and for 1997–2019 (where pre-2020 filings are September 30 snapshots or unarchived). These filings raise validation coverage and enumerate the survivorship gap, but do not replace the 208 `Unverified Estimate` rows in the historical anchor tables.
   - **Both 1995 and 1996 disagree with estimated factsheet anchors**: Relabelled, these are the only pre-2020 December 31 rosters the project can check against a primary source, and **both disagree with the estimates** in `data/raw/constituents/historical_index_weights.json`:
 
-| Year | Filing top 10 (Dec 31) | In filing, absent from estimate | In estimate, absent from filing | Overlap |
-|---|---|---|---|---|
-| 1995 | `GE T XOM KO MRK MO RD PG JNJ IBM` | `IBM`, `JNJ`, `RD` | `INTC`, `MSFT`, `WMT` | 7/10 |
-| 1996 | `GE KO XOM INTC MSFT MRK MO RD IBM PG` | `IBM`, `RD` | `JNJ`, `T` | 8/10 |
+| Year | Filing top 10 (Dec 31) | In filing, absent from estimate | In estimate, absent from filing |
+|---|---|---|---|
+| 1995 | `GE T XOM KO MRK MO RD PG JNJ IBM` | `IBM`, `JNJ`, `RD` | `INTC`, `MSFT`, `WMT` |
+| 1996 | `GE KO XOM INTC MSFT MRK MO RD IBM PG` | `IBM`, `RD` | `JNJ`, `T` |
 
   - **Persistence of `IBM` and `RD` discrepancies**: In both years, `IBM` and `RD` appear in the filing Top 10 but were missed by the estimated anchors. In the estimates, IBM was placed just outside the Top 10 at rank #13 (in both 1995 and 1996), whereas the filings place IBM at #10 (1995) and #9 (1996). Royal Dutch Petroleum (`RD`) is absent entirely from the project's 51-ticker universe (holding rank #7 in 1995 and #8 in 1996 in the filings), directly tying into the historical universe gap and survivorship findings detailed below.
 - **Reconciliation Accuracy**:
   - Match accuracy is **not published here**, in any of its cuts. Every rate this section printed had moved by the time #91 re-measured it, while the whole suite stayed green: the assertions behind them are floors with headroom, which is what `AGENTS.md` asks for and which cannot notice a rate drifting upward inside a floor.
   - The cuts that matter, and what each is for: the **overall** rate across every verified quarter; the **historical Form N-30D** rate; the two HTML-era rates, September-30 annual against March-31 semi-annual, which score almost identically — so being one quarter closer to the year-end factsheet anchor confers **no measurable advantage**; and the **modern NPORT-P** rate. Misses cluster at ranks 8–10 and involve the same names in both report types, i.e. boundary noise in the drift model's tail rather than a defect specific to the newer snapshots.
   - **The out-of-sample rate is the one that measures the drift model**, computed across only the NPORT-P quarters that are genuine tests. `python3 scripts/audit_quarterly_expansion.py` prints the overall, modern and out-of-sample rates; the three subsample rates it does not print are the reason none of them is republished here.
-  - **Circular-Q4 Caveat**: The five modern Q4 filings (2020-Q4 … 2024-Q4) match 10/10 by construction because the year-end candidate lists are themselves parsed from those exact filings. `scripts/audit_quarterly_expansion.py` reports both figures and `CIRCULAR_Q4_PERIODS` names the excluded quarters. (Note: 1995-Q4 and 1996-Q4 candidate lists derive from estimated factsheet anchors, not from these Form N-30D filings, so they are genuine independent tests and not circular.)
+  - **Circular-Q4 Caveat**: The five modern Q4 filings (2020-Q4 … 2024-Q4) match exactly by construction because the year-end candidate lists are themselves parsed from those exact filings. `scripts/audit_quarterly_expansion.py` reports both figures and `CIRCULAR_Q4_PERIODS` names the excluded quarters. (Note: 1995-Q4 and 1996-Q4 candidate lists derive from estimated factsheet anchors, not from these Form N-30D filings, so they are genuine independent tests and not circular.)
 - **Historical Universe Gap & Survivorship Bias Analysis**:
   - The 26 extracted filings reveal a persistent historical universe gap: constituents appearing in the filings' Top 30 that have no price series in `data/raw/tickers/`.
-  - An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating **36 missing constituents** across the 1995–2019 filings (depth 30), of which **14 reach a filing's Top 20**. The 2010–2019 annual filings add only two (`GILD`, `DWDP`) — by that era the project's universe covers nearly all of the index's largest constituents — and the ten semi-annual 03-31 filings archived under #54 add one more (`OXY`, rank #30 at 2011-Q1). The figures were 39 and 17 before `COP`, `SLB` and `GILD` were verified and fetched as vendor series (§4.3.12); this bullet quoted the earlier pair after that had ceased to be what the report says.
+  - An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating the missing constituents across the 1995–2019 filings (depth 30), of which **14 reach a filing's Top 20**. The 2010–2019 annual filings add only two (`GILD`, `DWDP`) — by that era the project's universe covers nearly all of the index's largest constituents — and the ten semi-annual 03-31 filings archived under #54 add one more (`OXY`, rank #30 at 2011-Q1). The figures were 39 and 17 before `COP`, `SLB` and `GILD` were verified and fetched as vendor series (§4.3.12); this bullet quoted the earlier pair after that had ceased to be what the report says.
   - Four missing constituents reached the Top 10 in audited filings:
     - `RD` (Royal Dutch Petroleum Co., #7 peak rank, present in Top 10 across 1995, 1996, and 1997; 7 filings total)
     - `LU` (Lucent Technologies Inc., #7 peak rank in 1999-Q3; present in Top 30 across 4 filings: 1997–2000)
@@ -453,7 +445,7 @@ SPY reports September 30 and Vanguard December 31. Expressed in the same share t
 - **Selection is by position count, not document order.** Each filing contains several Vanguard funds. In the FY2002 filing the *first* schedule belongs to a fund holding **148** stocks, which reconciles perfectly against its own stated total and is simply the wrong fund — so dollar-exact reconciliation alone cannot establish that the right schedule was read. Holding roughly five hundred stocks is the property that identifies an S&P 500 tracker, and both conditions are asserted by test.
 - **Dollar-exact reconciliation, or the year is withheld.** A roster that will not reconcile is **not published with a caveat**, because a short read is indistinguishable from a complete one once it is in a dataset.
 - **Coverage is complete: all nineteen archived filings reconcile**, spanning 1994–2006 and 2014–2019. The six HTML-era filings added for §4.3.21 needed three parser fixes before they would, each of which surfaced as a reconciliation failure rather than as a plausible-looking roster: a holding carrying two footnote markers (`*,^`) left an unmatched cell in place and dropped the position; the FY2018 and FY2019 filings emit the printed page number as its own table row, which resets the sector running sum so that every subtotal after it reads as a position — the reason a schedule comes out at exactly twice its stated total; and FY2014 and FY2016 render some issuer names with the share count inside the same cell, which dropped Bank of America and General Electric. All thirteen previously published rosters are byte-identical after the change, which is what distinguishes a parser fix from a parser change.
-- **One holding is counted but not named.** The FY2004 filing contains a row whose issuer and share cells are blank **in the document as filed**, stating only a market value of \$24,416 thousand. Dropping it leaves the schedule short of the total the filing itself states; naming it would be invention. It is counted at its stated value and flagged `unidentified`, so the year reconciles with nothing made up. At rank #471 of 506 and 0.023% of the fund it cannot reach the Top 20, and a test pins that.
+- **One holding is counted but not named.** The FY2004 filing contains a row whose issuer and share cells are blank **in the document as filed**, stating only a market value of \$24,416 thousand. Dropping it leaves the schedule short of the total the filing itself states; naming it would be invention. It is counted at its stated value and flagged `unidentified`, so the year reconciles with nothing made up. It sits far outside the Top 20 by both rank and weight, so it cannot reach it, and a test pins that.
 - **Sector subtotals are told apart arithmetically, not by layout.** A subtotal also renders as a lone figure, and counting one would double-count an entire sector. A subtotal restates what has already been counted, so it equals the running sum of positions since the previous subtotal; an unnamed holding does not. Testing the arithmetic rather than the surrounding markup keeps the rule exact across all three HTML filings.
 - **Fund identification is by name and by size.** A schedule is skipped when its heading names another Vanguard fund (Growth Index, Value Index, Total Stock Market, Extended Market), and the selected schedule must hold a plausible S&P 500 position count. Both filters matter: reconciliation proves a schedule was read completely, not that the right schedule was read.
 
@@ -477,7 +469,7 @@ The published dataset therefore covers **nineteen December-31 rosters, spanning 
 #### 4.3.11 Issuer Identity Across Filings (`data/raw/constituents/issuer_ticker_map.json`)
 Filed issuer names are not stable, so the audited rosters (§4.3.10) cannot be read by name alone. A registrant is renamed (Philip Morris to Altria, SBC to AT&T Inc.), merges under a new name (Exxon to ExxonMobil, Citicorp to Citigroup), or is punctuated differently between two filings. Matching on the name splits one issuer into several or conflates two, and **both errors are silent**: an unmapped issuer simply does not appear in the candidate universe, which reintroduces survivorship bias through a lookup miss rather than a missing download.
 
-The map resolves all **58 filed name variants** appearing in any 1994–2006 Top 20 to **46 distinct tickers**, and a test asserts that no Top-20 name goes unmapped.
+The map resolves every filed name variant appearing in any 1994–2006 Top 20 to a ticker, and a test asserts that no Top-20 name goes unmapped.
 
 - **A rename keeps one series.** Where the same registrant continues under a new name, both names map to the ticker whose price series covers the whole period — `Bell Atlantic` and `Verizon` to `VZ`, `BankAmerica` and `Bank of America` to `BAC`.
 - **Distinct registrants keep distinct tickers, which resolves the AT&T collision from primary evidence.** §4.5 records that `T` conflates two companies and decouples them with a hand-built series. The filings settle it directly: **`AT&T Corp` and `SBC Communications` are listed as separate issuers in the same years**, so they are priced separately rather than one standing in for the other. Mobil and GTE likewise remain distinct from the registrants that absorbed them.
@@ -515,7 +507,7 @@ python3 scripts/verify_provenance.py splits      # one dataset
 python3 scripts/verify_provenance.py q1_rosters  # the Q1/Q3 filer grades (4.3.14)
 ```
 
-Current state: **70 claims re-checked, 0 failed**, with two skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM`, recorded as `none_found`. Both are corroborated offline by the test suite instead.
+Current state: every claim re-checked passes, with two skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM`, recorded as `none_found`. Both are corroborated offline by the test suite instead.
 
 **It is deliberately not part of the test suite.** It needs the network and reaches a third-party service, so it cannot gate a commit. The suite asserts the offline invariants — that quotations are non-empty, that figures agree across datasets, that cross-filer prices reconcile — and this checks the one thing they cannot: that the filing still says what we recorded it saying. A test does exercise the roster path, which reads archived documents, so the verifier cannot rot unnoticed.
 
@@ -1031,12 +1023,12 @@ Lucent needs no such subtraction. It went ex a full quarter before the filing da
 This mattered only once the splice was retired. The constructed series was in as-traded Ma Bell units, so both sides already agreed; moving to the derived series, which is in post-split terms, put them ten-for-three apart — five-for-one from the 2002 reverse split and three-for-two from 1999.
 
 ##### The reconciliation cross-checks against the retired construction
-AT&T Corp's 1996 total return, computed two independent ways:
+AT&T Corp's 1996 total return was computed two independent ways -- the retired quote-sourced
+splice and the filing-sourced derived series -- and they **agree to within 20 basis points**.
+Neither total is published here: both are built from prices this repository derives, so both
+move with any change to the derivation, and the agreement rather than either level is the
+finding.
 
-| Construction | Arithmetic | 1996 total return |
-|---|---|---|
-| Retired splice (quote-sourced) | `(41.27 − 64.75 + 16.97) / 64.75` | **−10.05%** |
-| Derived series (filing-sourced) | `(138.0002 − 215.8336 + 56.5667) / 215.8336` | **−9.85%** |
 
 The 20bp gap is almost entirely the one-tick quote difference between the two sources: `0.125 / 64.75 = 0.19%`. Two constructions built from different evidence, in different share units, agreeing to within a rounding residual — which is what justifies retiring the older one rather than merely preferring it.
 
@@ -1342,13 +1334,12 @@ it safe to trust:
 
 The fiscal table reports quarter-end closes as well as dividends, so the mapping is testable
 rather than merely argued. Under it, two of the four FY1999 quarters reproduce the derived
-price **to the cent**; under the naive reading -- fiscal `Qn` as calendar `Qn` -- the same
-comparisons are out by −3.8%, +15.3% and +24.9%.
+price **to the cent**, and under the naive reading -- fiscal `Qn` as calendar `Qn` -- the same
+comparisons are out by **double-digit percentages**. The per-quarter closes and deltas are not
+reprinted: the exact reproduction is the finding, and
+`tests/test_issuer_reported_closes.py::TestIssuerReportedCloses::test_derived_prices_match_the_closes_the_registrants_themselves_reported`
+asserts it against the registrants' own reported closes.
 
-| FY1999 column | Mapped to | Filed close | Derived | Delta |
-|---|---|---:|---:|---:|
-| Third | 1999-Q2 | \$67.4375 | \$67.4375 | 0.000% |
-| Fourth | 1999-Q3 | \$64.8750 | \$64.8750 | 0.000% |
 
 The other two quarters agree to 0.06% once expressed in the filing's own share terms: the
 FY1999 report post-dates Lucent's April 1999 two-for-one and restates the quarters before it.

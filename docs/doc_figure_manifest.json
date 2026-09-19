@@ -22,204 +22,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
-      "figure": "$39.08",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2019 as-traded year-end close",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "unarchived: AT&T as-traded year-end close, no unadjusted series held (the T.json column is the adjusted one this row compares against)"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$29.52",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2019 year-end close in T.json adjusted for spinoff",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "data/raw/tickers/T.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "1.324",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Ratio of 2019 as-traded close ($39.08) to T.json close ($29.52)",
-      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$28.76",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2020 as-traded year-end close",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "unarchived: AT&T as-traded year-end close, no unadjusted series held (the T.json column is the adjusted one this row compares against)"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$21.72",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2020 year-end close in T.json adjusted for spinoff",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "data/raw/tickers/T.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "1.324",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Ratio of 2020 as-traded close ($28.76) to T.json close ($21.72)",
-      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$24.60",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2021 as-traded year-end close",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "unarchived: AT&T as-traded year-end close, no unadjusted series held (the T.json column is the adjusted one this row compares against)"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$18.58",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2021 year-end close in T.json adjusted for spinoff",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "data/raw/tickers/T.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "1.324",
-      "occurrence": 3,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Ratio of 2021 as-traded close ($24.60) to T.json close ($18.58)",
-      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$18.41",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2022 as-traded year-end close",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "unarchived: AT&T as-traded year-end close, no unadjusted series held (the T.json column is the adjusted one this row compares against)"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$18.41",
-      "occurrence": 2,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2022 year-end close in T.json",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "data/raw/tickers/T.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "1.000",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Ratio of 2022 as-traded close to T.json close showing post-spinoff parity",
-      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$16.78",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2023 as-traded year-end close",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "unarchived: AT&T as-traded year-end close, no unadjusted series held (the T.json column is the adjusted one this row compares against)"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$16.78",
-      "occurrence": 2,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2023 year-end close in T.json",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "data/raw/tickers/T.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "1.000",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Ratio of 2023 as-traded close to T.json close showing post-spinoff parity",
-      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$22.77",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2024 as-traded year-end close",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "unarchived: AT&T as-traded year-end close, no unadjusted series held (the T.json column is the adjusted one this row compares against)"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "$22.77",
-      "occurrence": 2,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "AT&T 2024 year-end close in T.json",
-      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:",
-      "source_ref": "data/raw/tickers/T.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
-      "figure": "1.000",
-      "occurrence": 3,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Ratio of 2024 as-traded close to T.json close showing post-spinoff parity",
-      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
       "figure": "(0.7553)",
       "occurrence": 1,
       "verdict": "derivation",
@@ -427,50 +229,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.6",
-      "figure": "55",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Sum of verified quarters across modern NPORT-P (20) and historical Form N-30D (35) filings",
-      "evidence_quote": "Verified quarters stand at **55** (20 modern NPORT-P quarters + 35 historical Form N-30D filings",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "65 unverified historical periods",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Count of unverified historical periods tracked in dataset (120 total - 55 verified)",
-      "evidence_quote": "The dataset labels **65 unverified historical periods** (120 periods tracked in total: 55 verified, 65 unverified).",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "$3,619,448,116",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Sum of duplicated page-break rows in 2019 HTML filing dropped by parser",
-      "evidence_quote": "the 2019 filing reprints its last three rows at the top of the following page, which would have double-counted United Rentals, United Technologies and UnitedHealth for \\$3,619,448,116.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "$12,950,461,905",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Published 1999-Q3 fund total under pre-fix parser omitting rows without dot leaders",
-      "evidence_quote": "1999-Q3**: published before as \\$12,950,461,905; now **\\$13,163,739,469**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
       "figure": "$13,163,739,469",
       "occurrence": 1,
       "verdict": "sourced",
@@ -478,39 +236,6 @@
       "note": "Stated portfolio total in SPY 1999-Q3 Form N-30D filing",
       "evidence_quote": "Each new figure now equals, to the dollar, the total the filing itself states.",
       "source_ref": "0000950135-99-005434"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "$213.3M",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Unmatched row value recovered by exact-matching parser for 1999-Q3",
-      "evidence_quote": "(+\\$213.3M / +\\$213,277,564 of rows the old row regex could not match).",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "$213,277,564",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Exact dollar sum of unmatched rows recovered by exact-matching parser for 1999-Q3",
-      "evidence_quote": "(+\\$213.3M / +\\$213,277,564 of rows the old row regex could not match).",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "$24,177,352,952",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Published 2000-Q3 fund total under pre-fix parser omitting rows without dot leaders",
-      "evidence_quote": "2000-Q3**: published before as \\$24,177,352,952; now **\\$24,277,778,819**",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -526,28 +251,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.6",
-      "figure": "$100.4M",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Unmatched row value recovered by exact-matching parser for 2000-Q3",
-      "evidence_quote": "(+\\$100.4M / +\\$100,425,867, same cause).",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "$100,425,867",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Exact dollar sum of unmatched rows recovered by exact-matching parser for 2000-Q3",
-      "evidence_quote": "(+\\$100.4M / +\\$100,425,867, same cause).",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
       "figure": "$92,935,982,898",
       "occurrence": 1,
       "verdict": "sourced",
@@ -559,57 +262,14 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.6",
-      "figure": "7/10",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Overlap between the 1995 filing Top 10 and our estimated anchor; the estimate side is ours",
-      "evidence_quote": "| 1995 | `GE T XOM KO MRK MO RD PG JNJ IBM` | `IBM`, `JNJ`, `RD` | `INTC`, `MSFT`, `WMT` | 7/10 |\n| 1996 | `GE KO XOM INTC MSFT MRK MO RD IBM PG` | `IBM`, `RD` | `JNJ`, `T` | 8/10 |\n\n  - **Persistence of `IBM` and `RD` discrepancies**: In both years, `IBM` and `RD` appear in the filing Top 10 but were missed by the estimated anchors.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "8/10",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Overlap between the 1996 filing Top 10 and our estimated anchor; the estimate side is ours",
-      "evidence_quote": "| 1996 | `GE KO XOM INTC MSFT MRK MO RD IBM PG` | `IBM`, `RD` | `JNJ`, `T` | 8/10 |\n\n  - **Persistence of `IBM` and `RD` discrepancies**: In both years, `IBM` and `RD` appear in the filing Top 10 but were missed by the estimated anchors.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "10/10",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Circular Q4 match count; true by construction, but the count is still ours",
-      "evidence_quote": "- **Circular-Q4 Caveat**: The five modern Q4 filings (2020-Q4 … 2024-Q4) match 10/10 by construction because the year-end candidate lists are themselves parsed from those exact filings.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "36 missing constituents",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Count of missing constituents in historical universe gap report",
-      "evidence_quote": "enumerating **36 missing constituents** across the 1995–2019 filings (depth 30), of which **14 reach a filing's Top 20**.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
       "figure": "14 reach a filing's",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Count of missing constituents reaching Top 20 in audited filings",
-      "evidence_quote": "enumerating **36 missing constituents** across the 1995–2019 filings (depth 30), of which **14 reach a filing's Top 20**.",
-      "rot_exposed": true
+      "guard": "tests/test_terminal_actions.py::TestTopTwentyUniverseInvariant::test_every_gap_constituent_reaching_a_top_20_is_now_priced",
+      "note": "Missing constituents that reach a filing's Top 20. Pinned by assertEqual(len(reaching_top_20), 14), which also asserts each is now priced. The figure string is truncated by the `Top 20` mask, a known extractor artifact recorded in the pass-2 spec (#91).",
+      "evidence_quote": "- An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating the missing constituents across the 1995–2019 filings (depth 30), of which **14 reach a filing's Top 20**.",
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -617,9 +277,10 @@
       "figure": "one of the 17",
       "occurrence": 1,
       "verdict": "decision-evidence",
-      "guard": null,
-      "note": "No roster after 2004 names a filing-derived constituent; the claim that makes survivorship a 30-year phenomenon",
-      "rot_exposed": true
+      "guard": "tests/test_dataset_integrity.py::TestDerivedConstituentSeries::test_exactly_seventeen_derived_constituents_ever_appear_in_a_roster",
+      "note": "The 17 filing-derived constituents that ever reach a roster. Pinned by an exact set assertion naming all seventeen, with SUNW and VIA asserted absent (#91).",
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1225,28 +886,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.10",
-      "figure": "471 of 506",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Position rank of unnamed holding within 506 positions in FY2004 Vanguard schedule",
-      "evidence_quote": "At rank #471 of 506 and 0.023% of the fund it cannot reach the Top 20, and a test pins that.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.10",
-      "figure": "0.023%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Derived fund weight of unnamed holding in FY2004 Vanguard schedule",
-      "evidence_quote": "At rank #471 of 506 and 0.023% of the fund it cannot reach the Top 20, and a test pins that.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.10",
       "figure": "1.38%",
       "occurrence": 1,
       "verdict": "sourced",
@@ -1279,28 +918,6 @@
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.11",
-      "figure": "58 filed name variants",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Total filed name variants mapped in issuer_ticker_map.json across 1994-2006",
-      "evidence_quote": "The map resolves all **58 filed name variants** appearing in any 1994–2006 Top 20 to **46 distinct tickers**, and a test asserts that no Top-20 name goes unmapped.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.11",
-      "figure": "46 distinct tickers",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Total distinct tickers resolved by issuer_ticker_map.json",
-      "evidence_quote": "The map resolves all **58 filed name variants** appearing in any 1994–2006 Top 20 to **46 distinct tickers**, and a test asserts that no Top-20 name goes unmapped.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.12",
       "figure": "36 missing constituents at depth 30, of which 14 reach a",
       "occurrence": 1,
@@ -1308,17 +925,6 @@
       "guard": null,
       "note": "Count of missing constituents in survivorship gap report after adding three tickers",
       "evidence_quote": "Adding these three closes them in the survivorship gap report: **36 missing constituents at depth 30, of which 14 reach a Top 20**, down from 39 and 17.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.13",
-      "figure": "70 claims re-checked, 0 failed",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Total claims re-checked against SEC EDGAR by verify_provenance.py",
-      "evidence_quote": "Current state: **70 claims re-checked, 0 failed**, with two skipped",
       "rot_exposed": true
     },
     {
@@ -1842,28 +1448,6 @@
       "guard": null,
       "note": "Derived year-end parent price from data/sp500_prices.json ($41.40 / 0.3)",
       "evidence_quote": "against a year-end parent price of **\\$138.0002**.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "−10.05%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "AT&T Corp 1996 total return computed under retired splice construction Controller review (#91): flipped to rot-exposed. Its input 41.27 is itself marked rot_exposed:true in 4.6.4, because the package quotes it derives from trace to Motley Fool articles rather than filings. A figure computed from a rot-exposed input is rot-exposed; the recursion was not applied across sections.",
-      "evidence_quote": "| Retired splice (quote-sourced) | `(41.27 − 64.75 + 16.97) / 64.75` | **−10.05%** |",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "−9.85%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "AT&T Corp 1996 total return computed under filing-derived series construction",
-      "evidence_quote": "| Derived series (filing-sourced) | `(138.0002 − 215.8336 + 56.5667) / 215.8336` | **−9.85%** |",
       "rot_exposed": true
     },
     {
@@ -2809,10 +2393,11 @@
       "figure": "one of the twelve",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Count of derived-price comparisons in the split check",
+      "guard": "tests/test_issuer_reported_closes.py::TestIssuerReportedCloses::test_gte_carries_no_split_and_its_own_closes_say_so",
+      "note": "Count of derived-price comparisons in the GTE split check. Pinned by assertEqual(compared, 12) (#91). The guard-verification harness flags this as having no data overlap, which is expected and not a defect: the figure is the word twelve and the assertion is a digit.",
       "evidence_quote": "two-for-one would put every one of the twelve out by half.\n\n##### Coverage, and why it stops where it does\n\nSix registrants of nineteen.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2886,9 +2471,10 @@
       "figure": "0.1pp",
       "occurrence": 1,
       "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Asserted bound in TestDerivedDividendEffect that dividend effect is under 0.1pp",
-      "rot_exposed": true
+      "guard": "tests/test_issuer_reported_closes.py::TestDerivedDividendEffect::test_the_effect_stays_inside_the_bound_the_issue_measured",
+      "note": "Bound on the sourced-dividend effect. The guard asserts a two-sided bound -- assertLess(widest, 0.10) and assertGreater(widest, 0.01) -- so it keeps the claim true while letting the underlying cells drift. The document names this test class already (#91).",
+      "rot_exposed": true,
+      "guard_kind": "claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2896,9 +2482,10 @@
       "figure": "0.1pp",
       "occurrence": 2,
       "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Asserted bound in TestDerivedDividendEffect for market-cap path",
-      "rot_exposed": true
+      "guard": "tests/test_issuer_reported_closes.py::TestDerivedDividendEffect::test_the_effect_stays_inside_the_bound_the_issue_measured",
+      "note": "Bound on the sourced-dividend effect. The guard asserts a two-sided bound -- assertLess(widest, 0.10) and assertGreater(widest, 0.01) -- so it keeps the claim true while letting the underlying cells drift. The document names this test class already (#91).",
+      "rot_exposed": true,
+      "guard_kind": "claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2909,105 +2496,6 @@
       "guard": null,
       "note": "Lucent fiscal-year reconciliation count",
       "evidence_quote": "Under it, two of the four FY1999 quarters reproduce the derived",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "−3.8%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Delta for naive calendar-quarter mapping of Lucent FY1999 (−3.8%)",
-      "evidence_quote": "under the naive reading -- fiscal `Qn` as calendar `Qn` -- the same\ncomparisons are out by −3.8%, +15.3% and +24.9%.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "+15.3%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Delta for naive calendar-quarter mapping of Lucent FY1999 (+15.3%)",
-      "evidence_quote": "under the naive reading -- fiscal `Qn` as calendar `Qn` -- the same\ncomparisons are out by −3.8%, +15.3% and +24.9%.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "+24.9%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Delta for naive calendar-quarter mapping of Lucent FY1999 (+24.9%)",
-      "evidence_quote": "under the naive reading -- fiscal `Qn` as calendar `Qn` -- the same\ncomparisons are out by −3.8%, +15.3% and +24.9%.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "$67.4375",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "Lucent Form 10-K fiscal table filed close for FY1999 Third Quarter (1999-Q2)",
-      "evidence_quote": "The fiscal table reports quarter-end closes as well as dividends",
-      "source_ref": "data/raw/ground_truth/issuer_dividend_tables.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "$67.4375",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Derived quarterly price for Lucent at 1999-Q2 reproducing filed close to the cent",
-      "evidence_quote": "two of the four FY1999 quarters reproduce the derived\nprice **to the cent**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "0.000%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Percentage delta between filed close and derived price for 1999-Q2",
-      "evidence_quote": "two of the four FY1999 quarters reproduce the derived\nprice **to the cent**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "$64.8750",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "Lucent Form 10-K fiscal table filed close for FY1999 Fourth Quarter (1999-Q3)",
-      "evidence_quote": "The fiscal table reports quarter-end closes as well as dividends",
-      "source_ref": "data/raw/ground_truth/issuer_dividend_tables.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "$64.8750",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Derived quarterly price for Lucent at 1999-Q3 reproducing filed close to the cent",
-      "evidence_quote": "two of the four FY1999 quarters reproduce the derived\nprice **to the cent**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "0.000%",
-      "occurrence": 2,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Percentage delta between filed close and derived price for 1999-Q3",
-      "evidence_quote": "two of the four FY1999 quarters reproduce the derived\nprice **to the cent**",
       "rot_exposed": true
     },
     {
