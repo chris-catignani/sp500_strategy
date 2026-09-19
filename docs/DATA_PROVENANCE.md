@@ -384,16 +384,8 @@ Every record names its source type, because a ratio is only as good as what stan
 
 The one vendor-sourced record is corroborated independently rather than taken on trust. Yahoo's `SHEL` series **is** Royal Dutch before 2005 (§4.3.9), so applying the split to the filing-derived as-traded price must reproduce that vendor close:
 
-| Year | Filing-derived, adjusted | `SHEL.json` close |
-|---|---:|---:|
-| 1995 | \$35.28 | \$35.28 |
-| 1996 | \$42.69 | \$42.69 |
-| 1997 | \$54.19 | \$54.19 |
-| 1998 | \$47.88 | \$47.88 |
-| 2000 | \$60.56 | \$60.56 |
-| 2001 | \$49.02 | \$49.02 |
 
-Six years agree to the cent. The remaining two, 1994 and 1999, differ by about 0.2% because the fund values at its own year-end business day while the vendor's December close is the month's last trade, which are not always the same session. A wrong ratio would be out by a factor of four, so the check is decisive despite the tolerance.
+Most of the comparable years agree **to the cent**, and the per-year prices are not reprinted here: the agreement is the finding, the prices are its by-product, and `tests/test_raw_constituents.py::TestSplitRecordProvenance::test_the_vendor_sourced_split_is_corroborated_independently` asserts it and refuses to let the comparison degenerate to nothing. The remaining two, 1994 and 1999, differ by about 0.2% because the fund values at its own year-end business day while the vendor's December close is the month's last trade, which are not always the same session. A wrong ratio would be out by a factor of four, so the check is decisive despite the tolerance.
 
 ##### A record that was incomplete, and the split that was missing from it (issue #76)
 `T_CORP` (the pre-2005 AT&T Corp.) is the one registrant here whose splits are stated in
@@ -441,14 +433,7 @@ series **understates its return across 2001–2002** until they are added. Recor
 than silently carried, because the series otherwise looks complete.
 
 ##### Validation of the adjustment against a second filer
-SPY reports September 30 and Vanguard December 31. Expressed in the same share terms, their ratio is one quarter's price move; a split missing from the records would instead appear as a ratio near 2.0 or 0.5, because one side would remain in pre-split terms. **This check has a blind spot**, which is how `T_CORP`'s 1999 split survived it: a split effective between January and September falls outside every pair it forms. Across **73 comparisons spanning 1995–2006, 71 fall inside a normal quarterly range**. The two that do not are both Q4 2000 and are genuine:
-
-| Security | SPY 09-30 | Vanguard 12-31 | Move |
-|---|---:|---:|---:|
-| Lucent (`LU`) | \$30.56 | \$13.50 | −56% |
-| Sun Microsystems (`SUNW`) | \$58.37 | \$27.87 | −52% |
-
-Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**, independently corroborating the fall. Both are the dot-com crash rather than an adjustment defect, and the test bound is set to admit them.
+SPY reports September 30 and Vanguard December 31. Expressed in the same share terms, their ratio is one quarter's price move; a split missing from the records would instead appear as a ratio near 2.0 or 0.5, because one side would remain in pre-split terms. **This check has a blind spot**, which is how `T_CORP`'s 1999 split survived it: a split effective between January and September falls outside every pair it forms. Across the comparisons this forms, all but two fall inside a normal quarterly range. The two that do not are **Lucent and Sun Microsystems at Q4 2000**, and are genuine: each filer prices them a quarter apart across the dot-com crash. Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**, independently corroborating the fall. Both are the dot-com crash rather than an adjustment defect, and the test bound is set to admit them.
 
 ##### Consumption by the dataset builder
 `scripts/build_datasets_from_raw.py` merges these series into `data/sp500_prices.json` from a second input, alongside the vendor series it reads from `data/raw/tickers/`. The `T_CORP_HISTORICAL` splice (§4.5.3) is the existing precedent for a conditional second source.
@@ -460,7 +445,7 @@ Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**,
 
 **This merge changes no backtest result.** None of these constituents appears in `constituents_by_year` in `data/raw/constituents/historical_index_weights.json`, so none can be selected. Correcting those rosters — the step that actually removes the survivorship bias — remains outstanding; the prices are now available for it.
 
-**Implied prices are as-traded.** They are not split-adjusted, and interpreting them without each registrant's split record inverts the reading: Lucent (`LU`) 1997→1999 reads as a 20% decline as-traded, where the split-adjusted move is a **219% rise** across its April 1998 and April 1999 two-for-one splits (both stated in Lucent's own Form 10-K405, accession `0000950117-01-501896`). Derivation of split-adjusted series from this archive is tracked in #55.
+**Implied prices are as-traded.** They are not split-adjusted, and interpreting them without each registrant's split record inverts the reading: across 1997–1999 Lucent (`LU`) reads as a modest decline as-traded and a large rise once its April 1998 and April 1999 two-for-one splits are applied (both stated in Lucent's own filings). The two figures this sentence used to print were re-measured under #91 and had both moved — the sign of the conclusion is what matters and it is unchanged. `data/raw/ground_truth/vanguard_implied_prices.json` carries the raw and split-adjusted series for every year.
 
 #### 4.3.10 Audited December-31 Rosters from the Vanguard 500 Index Fund
 §4.3.5 records that ranks #13–#20 for 1994–2019 are `Unverified Estimate (No Primary Source)`: no primary source in this repository reported a point-in-time capitalization for those positions. For **1994–2006 that is no longer true.** The Vanguard 500 Index Fund tracks the S&P 500, so its Schedule of Investments at each December 31 is an audited point-in-time roster of the index, and ranking it by market value yields year-end ranks and weights that are **read rather than estimated**. Published to `data/raw/ground_truth/vanguard_audited_rosters.json` by `scripts/extract_vanguard_rosters.py`.
