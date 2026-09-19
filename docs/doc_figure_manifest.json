@@ -1,0 +1,4495 @@
+{
+  "description": "Every numeric claim published in docs/, classified. A figure earns its place when the explanation collapses without it. See AGENTS.md and issue #91.",
+  "generated_by": "scripts/audit_doc_figures.py",
+  "verdicts": [
+    "sourced",
+    "derivation",
+    "decision-evidence",
+    "remove",
+    "wrong"
+  ],
+  "entries": [
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1",
+      "figure": "$1.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$39.08",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$29.52",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "1.324",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$28.76",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$21.72",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "1.324",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$24.60",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$18.58",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "1.324",
+      "occurrence": 3,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$18.41",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$18.41",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "1.000",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$16.78",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$16.78",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "1.000",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$22.77",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$22.77",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "1.000",
+      "occurrence": 3,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$21.62",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.1.1",
+      "figure": "$57.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.3",
+      "figure": "$0",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.76%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.76%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.67%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.68%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "50%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.51%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "$3.17B",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.89%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "$3.12B",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.88%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "$3.00B",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.84%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.73%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.69%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "0.76%",
+      "occurrence": 3,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "100 rows",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "312 rows",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.5",
+      "figure": "208 rows",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "56 primary SEC EDGAR regulatory filings",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$45,686,953,816",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "55",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "65 unverified historical periods",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$3,619,448,116",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$12,950,461,905",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$13,163,739,469",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$213.3M",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$213,277,564",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$24,177,352,952",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$24,277,778,819",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$100.4M",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$100,425,867",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "$92,935,982,898",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "55 verified regulatory filing quarters",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "89.8%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "90.4%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "87.0%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "90.4%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "35 historical Form quarters ( – )",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "85.7%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "88.0%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "87.0%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "83.3%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "20 modern Form XML quarters ( – )",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "97.0%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "96.0%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "15 quarters that are genuine tests",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "36 missing constituents",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "14 reach a filing's",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "14.37%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "13.72%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−0.64pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "13.26%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "12.96%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−0.31pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "13.19%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "12.12%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−1.07pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "13.79%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "13.60%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−0.19pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "12.94%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "12.66%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−0.28pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "13.48%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "12.80%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−0.68pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "-0.056pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "0.00pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−32.85% with the full universe against −22.58% without it",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−31.94%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "−25.78%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.6",
+      "figure": "0.64pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "68 company-quarter promotion instances into the",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "24 originate from ranks #13–#20",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "9 CONFIRMED",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "3 CONTRADICTED",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "12 UNVERIFIED",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "+0.24 / +0.70 / +0.57",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "−5.89 / −3.22 / −1.99",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "−4.78 / −2.13 / −0.54",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "−1.64%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "−5.89%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "99%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "0.33pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "0.5pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "−5.89pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "6 of 6",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "+2.92pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "1.31pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "+2.92pp",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "+1.79pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "26.88%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "24.49%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "16.39%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "15.29%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "15.16%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "14.43%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "3.4%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "3.06%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "24.49%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "14.44%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "13.77%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "7.03%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "6.98%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "3.45%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "3.06%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "2.07%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "1.96%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "1.75%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.7",
+      "figure": "3.82%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "1. Capitalization Consolidation",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "2.065%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "1.753%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "3.818%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "3.82%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "7.03%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "6.98%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "3.45%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "2. Coverage, and the – Gap",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$1,714,698,526",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$1,682,324,270",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$1,822,232,272",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$1,773,130,574",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$2,497,461,820",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$2,406,998,965",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$3,264,369,036",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$3,260,913,576",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$4,098,642,554",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$4,174,606,489",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$4,061,358,997",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "$4,090,422,764",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "2.70%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "1.65%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "3.30%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.8",
+      "figure": "3. Execution Convention",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "26 and 7 bytes",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$112.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$112.00",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$0.0002",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$44.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$44.00",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$0.0000",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$43.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$43.50",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$0.0001",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$141.13",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$141.13",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$0.0048",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$57.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$57.50",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$0.0001",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "186 December-31 implied prices across 18 securities",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$500",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$32.32",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$32.60",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "20-F",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$35.28",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$35.28",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$42.69",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$42.69",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$54.19",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$54.19",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$47.88",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$47.88",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$60.56",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$60.56",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$49.02",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$49.02",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "0.2%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$79.81",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$399.07",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$55.81",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$279.06",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "−30.1%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "+4.9%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "1%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "1.874%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "−9.85%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "73 comparisons spanning – , 71 fall inside a normal quarterly range",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$30.56",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$13.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "−56%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$58.37",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$27.87",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "−52%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$12.19",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "$34.63",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "20%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.9",
+      "figure": "219% rise",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.10",
+      "figure": "148",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.10",
+      "figure": "$24,416",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.10",
+      "figure": "471 of 506",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.10",
+      "figure": "0.023%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.10",
+      "figure": "1.38%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.10",
+      "figure": "1.24%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.10",
+      "figure": "1.11%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.11",
+      "figure": "58 filed name variants",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.11",
+      "figure": "46 distinct tickers",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.12",
+      "figure": "36 missing constituents at depth 30, of which 14 reach a",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.13",
+      "figure": "70 claims re-checked, 0 failed",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "32 issuers",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "28 issuer-price pairs agree to a median of 0.0085%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "0.125%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$99.375",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$57.75",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$36.625",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$0.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "132 issuer-price pairs agreeing to a median of 0.0027%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "0.029%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "13.79%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "13.60%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "12.94%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "12.66%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "13.48%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "12.80%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "13.60%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "12.67%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "12.84%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "512 positions",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$1,719,623k",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "502",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$86.19",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$52.12",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$58.38",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$10.3bn",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$103.9bn",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "$5",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "25%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "335 published quarters to 64",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "$0.36",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "$0.18",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "$ 0.04",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "$ 0.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "$ 0.02",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "$ 0.02",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "$ 0.08",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "112 of 168 filings were refused, and that is mostly a finding rather than a failure",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "517 verbatim split sentences",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.15",
+      "figure": "50%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "$13.75",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "$9.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "$0",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "$47.11",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "$35.75",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "$47.37",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "0.6%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "$44.34",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "$35.02",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.16",
+      "figure": "380 positions across the nineteen Vanguard filings, with no unresolved issuer name and no missing series",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.1",
+      "figure": "$16",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.2",
+      "figure": "4th in",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.2",
+      "figure": "11th",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.3",
+      "figure": "$0.33",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.3",
+      "figure": "$1.32",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$43.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$43.375",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$45.60",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$2.20",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$43.50",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$2.10",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$41.40",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "1-for-5 reverse split of",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$14.87",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$49.5667",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$2.10",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$7.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "$138.0002",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "−10.05%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.4",
+      "figure": "−9.85%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.2",
+      "figure": "$0.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "$14.87",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "72.01%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "$2.10",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "95.23%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "$21.90",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "69.10%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "$50.60",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "30.40%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "$5.81",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "76.23%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "$18.67",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "81.65%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "$35.38",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.3",
+      "figure": "66.86%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "72.01%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "27.99%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$45.875",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$45",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$0.324084",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$45.875",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$14.86735",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$14.87",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$38.25",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "95.23%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "4.77%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$33.625",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$33",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$0.0625",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$33.625",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$2.10156",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$2.10",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "69.10%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "30.90%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$31.65",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$0.692024",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$31.65",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$21.902",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$21.90",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "30.40%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "69.60%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$50.60",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$1.0",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$50.60",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$50.60",
+      "occurrence": 3,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "76.23%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "23.77%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$24.01",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$0.241917",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$24.01",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$5.808",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$5.81",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "81.65%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "18.35%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$56.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$56.00",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$18.666",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$18.67",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "66.86%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "33.14%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$141.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$0.25",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$141.50",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$35.375",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$35.38",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$56.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$43.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$6,792.50",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$5,638.75",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$52.25",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$43.375",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$52.25",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$14.87",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$37.38",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$43.375",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$2.10",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$41.27",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$45.875",
+      "occurrence": 3,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.4",
+      "figure": "$33.625",
+      "occurrence": 3,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.6",
+      "figure": "$14.87",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.6",
+      "figure": "$2.10",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.6",
+      "figure": "$16.97",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.6",
+      "figure": "$14.87",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.6.6",
+      "figure": "$0.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.17",
+      "figure": "93 quarters across , , , , and ; none fails",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.17",
+      "figure": "42 comparisons; 38 agree within 0.5%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.17",
+      "figure": "1.874%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "$ 0.895",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "$ 0.86",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "$ 0.825",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "$ 0.79",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "1%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "+0.006pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "+0.056pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "13.7665",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "13.6016",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "13.0065",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "12.6680",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "12.1749",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "12.8356",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "-0.0006pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "0.1pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "−0.68pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "0.056pp",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "−0.179",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "−0.124",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.18",
+      "figure": "0.1pp",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "−3.8%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "+15.3%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "+24.9%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "$67.4375",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "$67.4375",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "0.000%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "$64.8750",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "$64.8750",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "0.000%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.19",
+      "figure": "0.06%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.20",
+      "figure": "−20% to +61%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.20",
+      "figure": "1%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.20",
+      "figure": "$0.69",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.20",
+      "figure": "$0.345",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.20",
+      "figure": "$61.500",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.20",
+      "figure": "$30.750",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.20",
+      "figure": "$53.000",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.20",
+      "figure": "$26.500",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "$000",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "$000",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "0.8291%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.6508%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.2661%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.5257%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.2178%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.4066%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.3768%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.7619%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.4850%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.9995%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.4925%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.9945%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "-2.5%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "8%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "-110%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.00%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.40%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.40%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.70%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "3.20%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.70%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "17 of 18",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.80%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.4354%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.40%",
+      "occurrence": 3,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.79%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.40%",
+      "occurrence": 4,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "2.77%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "1.70%",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "3.41%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "24.49%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "21.68%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "21.97%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "21.82%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "19.99%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "19.39%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "14.44%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "13.14%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "13.69%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "13.62%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "13.13%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "12.84%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "13.77%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "12.90%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "13.01%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "12.96%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "12.18%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.21",
+      "figure": "11.99%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$5.34",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$75.88",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$0.33",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$0.10",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$496.80",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$1,166.00",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$31.40",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "-97.31%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$18.67",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$35.38",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$52.55",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$88.93",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "+69.23%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$0.33",
+      "occurrence": 2,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$1.32",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$14.87",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$45.875",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$2.10",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$33.625",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$5.81",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$21.90",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "5",
+      "figure": "$50.60",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "6",
+      "figure": "1.0%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "6",
+      "figure": "7.5%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "6",
+      "figure": "20%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "6",
+      "figure": "35%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "6",
+      "figure": "100%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "README.md",
+      "section": "preamble",
+      "figure": "$0",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "README.md",
+      "section": "preamble",
+      "figure": "100%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "README.md",
+      "section": "2",
+      "figure": "20%",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    },
+    {
+      "document": "README.md",
+      "section": "3",
+      "figure": "$100,000",
+      "occurrence": 1,
+      "verdict": null,
+      "guard": null,
+      "note": ""
+    }
+  ]
+}

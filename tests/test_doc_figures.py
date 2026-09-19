@@ -128,5 +128,84 @@ class TestExtraction(unittest.TestCase):
         self.assertEqual(len({key_of(e) for e in entries}), 2)
 
 
+class TestManifestCoverage(unittest.TestCase):
+    """The ratchet. A figure added to either document fails the suite until classified."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.audit_doc_figures import extract_all, load_manifest
+        cls.extracted = extract_all()
+        cls.manifest = load_manifest()
+
+    def test_every_extracted_figure_has_a_manifest_entry(self):
+        known = {key_of(entry) for entry in self.manifest["entries"]}
+        missing = [key_of(entry) for entry in self.extracted if key_of(entry) not in known]
+        self.assertEqual(
+            missing, [],
+            "figures published with no verdict; run "
+            "`python3 scripts/audit_doc_figures.py --unclassified`",
+        )
+
+    def test_the_manifest_has_no_orphans(self):
+        """A deleted figure must not leave a stale verdict behind."""
+        live = {key_of(entry) for entry in self.extracted}
+        orphans = [key_of(entry) for entry in self.manifest["entries"]
+                   if key_of(entry) not in live]
+        self.assertEqual(orphans, [], "manifest entries that no longer appear in any document")
+
+    def test_every_entry_is_classified(self):
+        """Reports a count and a sample, never the whole list.
+
+        Asserting the list equals [] dumps a 28KB diff while the manifest is being
+        filled in, which buries the actual worklist. Measured, not guessed.
+        """
+        from scripts.audit_doc_figures import VERDICTS
+        unclassified = [key_of(e) for e in self.manifest["entries"] if e["verdict"] is None]
+        self.assertEqual(
+            len(unclassified), 0,
+            f"{len(unclassified)} entries still carry a null verdict; first five: "
+            f"{unclassified[:5]}",
+        )
+        bad = sorted({e["verdict"] for e in self.manifest["entries"]
+                      if e["verdict"] not in VERDICTS})
+        self.assertEqual(bad, [], f"verdicts outside {VERDICTS}")
+
+
+class TestManifestWellFormedness(unittest.TestCase):
+    """A verdict can rot without the figure changing - a named test can be deleted."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.audit_doc_figures import load_manifest
+        cls.manifest = load_manifest()
+
+    def test_every_named_guard_exists(self):
+        """Checked by reading the file as text, never by importing it.
+
+        Importing a test module would drag the engine into a ratchet that must stay a
+        sub-second text scan.
+        """
+        for entry in self.manifest["entries"]:
+            guard = entry.get("guard")
+            if not guard:
+                continue
+            with self.subTest(guard=guard):
+                relative, _, qualified = guard.partition("::")
+                path = ROOT / relative
+                self.assertTrue(path.exists(), f"{relative} does not exist")
+                method = qualified.rpartition("::")[2]
+                self.assertIn(
+                    f"def {method}(", path.read_text(encoding="utf-8"),
+                    f"{relative} has no {method}",
+                )
+
+    def test_every_entry_carries_the_required_fields(self):
+        for entry in self.manifest["entries"]:
+            with self.subTest(entry=entry.get("figure")):
+                for field in ("document", "section", "figure", "occurrence", "verdict",
+                              "guard", "note"):
+                    self.assertIn(field, entry)
+
+
 if __name__ == "__main__":
     unittest.main()
