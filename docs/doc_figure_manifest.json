@@ -1014,8 +1014,8 @@
       "occurrence": 1,
       "verdict": "sourced",
       "guard": null,
-      "note": "Ma Bell verified quarterly dividend per share",
-      "evidence_quote": "**A cost worth stating plainly.** The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend.",
+      "note": "Ma Bell verified quarterly dividend per share, carried by the retired constructed series",
+      "evidence_quote": "**A cost that was stated plainly, and has since been paid back.** The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend, and retiring the splice lost it.",
       "source_ref": "data/raw/tickers/T_CORP_HISTORICAL.json"
     },
     {
@@ -1738,17 +1738,6 @@
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.6",
-      "figure": "$14.87",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "Lucent spinoff distribution per share received in Q3",
-      "evidence_quote": "- **Proceeds per Share**: $0.324084 \\times \\$45.875 = \\$14.86735 \\approx \\mathbf{\\$14.87}$.\n   - **Basis versus valuation**: The issuer basis allocation is retained independently.",
-      "source_ref": "data/raw/corporate_actions/spinoffs.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.17",
       "figure": "one of the twelve",
       "occurrence": 1,
@@ -2283,8 +2272,8 @@
       "occurrence": 1,
       "verdict": "sourced",
       "guard": null,
-      "note": "Ma Bell verified quarterly dividend per share",
-      "evidence_quote": "**A cost worth stating plainly.** The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend.",
+      "note": "Ma Bell verified quarterly dividend per share, carried by the retired constructed series",
+      "evidence_quote": "**A cost that was stated plainly, and has since been paid back.** The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend, and retiring the splice lost it.",
       "source_ref": "data/raw/tickers/T_CORP_HISTORICAL.json"
     },
     {
@@ -2480,17 +2469,6 @@
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.4",
-      "figure": "$43.50",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "The value SPY's Schedule of Investments states for AT&T Corp at 1996-12-31, cited here because the committed series follows it rather than this section's derived package quote (#91).",
-      "evidence_quote": "**The filed 1996 value is cum-NCR.** The Schedule of Investments values AT&T Corp at **\\$43.50** as-traded at 1996-12-31.",
-      "source_ref": "data/raw/ground_truth/derived_constituent_series.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.12",
       "figure": "14 reach a",
       "occurrence": 1,
@@ -2500,6 +2478,41 @@
       "rot_exposed": true,
       "note": "Missing constituents reaching a filing's Top 20, as 4.3.12 states it. Pinned by assertEqual(len(reaching_top_20), 14), the same guard 4.3.6's occurrence carries. The figure string is truncated by the `Top 20` mask, a known extractor artifact (#91).",
       "evidence_quote": "of which **14 reach a filing's Top 20**"
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.3",
+      "figure": "$1.32",
+      "occurrence": 1,
+      "verdict": "sourced",
+      "guard": null,
+      "note": "AT&T Corp annual dividend per share as filed, in the as-traded terms of the filing",
+      "evidence_quote": "records \\$1.32 a year as filed under accessions `0000005907-96-000010` (FY1995) and `0000005907-98-000013` (FY1996–1997)",
+      "source_ref": "unarchived: AT&T Corp FY1995 Form 10-K 0000005907-96-000010 and FY1997 Form 10-K 0000005907-98-000013, cited not stored (data/raw/ground_truth/issuer_filing_manifest.json); the figure they state is recorded in data/raw/ground_truth/derived_dividend_series.json as `as_filed`"
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.3",
+      "figure": "$1.32",
+      "occurrence": 2,
+      "verdict": "sourced",
+      "guard": null,
+      "note": "The same filed figure, restated as the operand of the basis conversion",
+      "evidence_quote": "converted into final share terms at the same 0.3 the prices carry, which is \\$1.32 / 0.3 = **\\$4.40**",
+      "source_ref": "unarchived: AT&T Corp FY1995 Form 10-K 0000005907-96-000010 and FY1997 Form 10-K 0000005907-98-000013, cited not stored (data/raw/ground_truth/issuer_filing_manifest.json); the figure they state is recorded in data/raw/ground_truth/derived_dividend_series.json as `as_filed`"
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.5.3",
+      "figure": "$4.40",
+      "occurrence": 1,
+      "verdict": "derivation",
+      "guard": "tests/test_dataset_integrity.py::TestDatasetIntegrity::test_att_decoupled_series_1994_1997",
+      "guard_kind": "value",
+      "note": "AT&T Corp annual dividend in final share terms: the filed $1.32 over the 0.3 combined split factor. Carries a value guard as well as the printed operation because the four years are pinned exactly in the dataset.",
+      "evidence_quote": "which is \\$1.32 / 0.3 = **\\$4.40**",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: AT&T Corp Form 10-K accessions 0000005907-96-000010 and 0000005907-98-000013 ($1.32 filed annual dividend per share) and the two filed splits in data/raw/corporate_actions/splits.json -- the three-for-two of 1999-04-15 (FY2001 10-K, 0000950123-02-003272) and the 1-for-5 reverse of 2002-11-18 (FY2002 10-K, 0000950123-03-003510) -- whose product is the 0.3 divisor. Every operand is a filing; nothing in the trace is computed by this pipeline. AT&T's FY2002 report restates 1996-1999 to $4.40 directly, which is the independent check."
     }
   ]
 }

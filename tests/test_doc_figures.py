@@ -339,13 +339,26 @@ class TestManifestWellFormedness(unittest.TestCase):
             if not guard:
                 continue
             with self.subTest(guard=guard):
-                relative, _, qualified = guard.partition("::")
+                # file::Class::method. The class is not decoration: without it a guard
+                # cannot be resolved by anything that walks the tree, and
+                # `scripts/audit_doc_guards.py` -- which reads the named test's BODY to
+                # check it asserts anything -- reports it as missing. #104 shipped one
+                # such guard, real and correct, that this assertion was too lax to catch
+                # while the stricter tool flagged it. The two checks must not disagree.
+                parts = guard.split("::")
+                self.assertEqual(
+                    len(parts), 3,
+                    f"guard must be file::Class::method, got {guard!r}",
+                )
+                relative, class_name, method = parts
                 path = ROOT / relative
                 self.assertTrue(path.exists(), f"{relative} does not exist")
-                method = qualified.rpartition("::")[2]
+                source = path.read_text(encoding="utf-8")
                 self.assertIn(
-                    f"def {method}(", path.read_text(encoding="utf-8"),
-                    f"{relative} has no {method}",
+                    f"class {class_name}(", source, f"{relative} has no {class_name}",
+                )
+                self.assertIn(
+                    f"def {method}(", source, f"{relative} has no {method}",
                 )
 
     def test_every_entry_carries_the_required_fields(self):
@@ -570,7 +583,14 @@ class TestRotExposureIsDeclared(unittest.TestCase):
     trace and prints an operation. It cannot check that the trace is CORRECT. 4.3.6
     publishes `89.8% (494/550)`, which prints an operation and passes every mechanical
     check here -- and is pipeline, because 494 is our own match count. Same surface
-    form as 4.5.4's `(41.27 - 64.75 + 16.97) / 64.75`, opposite rot behaviour.
+    form as 4.6.4's `$0.324084 x $45.875 = $14.86735`, opposite rot behaviour: a Form
+    8937 ratio times a stated close, both immutable, so that one cannot rot.
+
+    This example was itself stale until #104. It cited 4.5.4's
+    `(41.27 - 64.75 + 16.97) / 64.75`, an expression #91 had deleted from the document --
+    so the docstring warning against illustrations that were invented rather than read had
+    acquired one that was read once and never re-read. An example naming a section is a
+    citation, and a citation goes stale like any other figure.
 
     So a passing suite is not evidence that the classification is right. Every
     `rot_exposed: false` verdict is controller-reviewed; this test only makes the

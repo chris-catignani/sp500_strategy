@@ -1975,6 +1975,50 @@ class TestSplitRecordProvenance(unittest.TestCase):
                 if record["splits"]:
                     self.assertTrue(record["quoted_sentence"].strip())
 
+    def test_an_empty_filing_quoted_record_is_not_silently_a_finding(self):
+        """A quoted record with nothing quoted is indistinguishable from an unread one.
+
+        `source_type` defaults to `filing_quoted` when the key is absent, so a record
+        that carries neither a split nor a sentence reads as "we quoted the filing" while
+        saying nothing at all. That is exactly how GTE sat: the prose at 4.3.9 called it
+        `none_found` on the strength of a real search, the record never said so, and the
+        sentence check above skips it because the splits list is empty. The verdict a
+        record makes must be legible from the record.
+
+        A registrant whose filings were searched and yielded nothing says `none_found`
+        and names the filing it searched. Anything else quotes a sentence.
+        """
+        for ticker, record in self.records.items():
+            source = record.get("source_type", "filing_quoted")
+            if source != "filing_quoted":
+                continue
+            with self.subTest(ticker=ticker):
+                self.assertTrue(
+                    record["splits"] and record["quoted_sentence"].strip(),
+                    f"{ticker} is filing_quoted with "
+                    f"{len(record['splits'])} splits and no quoted sentence, which is "
+                    "what an unexamined record looks like. A searched-and-empty "
+                    "registrant is source_type 'none_found'.",
+                )
+
+    def test_a_none_found_record_names_the_filing_it_searched(self):
+        """A negative finding is only as good as the document behind it.
+
+        `none_found` is the marker AGENTS.md argues for: it lets an honest gap through
+        while keeping it visible and countable. It earns that only when it says what was
+        read, otherwise it is indistinguishable from never having looked.
+        """
+        found = 0
+        for ticker, record in self.records.items():
+            if record.get("source_type") != "none_found":
+                continue
+            found += 1
+            with self.subTest(ticker=ticker):
+                self.assertTrue(record["accession_number"])
+                self.assertTrue(record.get("note", "").strip())
+                self.assertEqual(record["splits"], [])
+        self.assertGreaterEqual(found, 2, "none_found records lost their marker")
+
     def test_t_corp_1999_split_is_quoted_from_its_own_filing(self):
         """Two splits stated in two filings, so the evidence sits on the split.
 

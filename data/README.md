@@ -11,7 +11,7 @@ For full details on sources, formulas, corporate actions, and rebuild instructio
   - `benchmarks/`: Raw JSON chart responses for `^GSPC`, `^SP500TR`, `^MSCIWORLD_PR`, `^MSCIWORLD_TR`, `FBGRX`, `URTH`, `^NDX`, `^NDXT`, and `QQQ`.
   - `tickers/`: Raw JSON chart responses for all equity constituents with exact distribution timestamps and amounts for corporate actions.
   - `constituents/`: Point-in-time constituent rankings and historical index weights.
-  - `corporate_actions/att_1996_endpoint_valuations.json`: Cited AT&T package quotes used to derive parent-only September/December 1996 valuations after subtracting separately credited child proceeds. The builder applies these corrections once; the legacy ticker archive is preserved.
+  - `corporate_actions/att_1996_endpoint_valuations.json`: Cited AT&T package quotes for September and December 1996, each carrying the child entitlement that went ex at that date. **Read by no code path.** It corroborates the filed value the builder actually works from -- the two are a tick apart -- and is what establishes that the filed value is cum-distribution. It is not a compilation input; an earlier revision of this line said the builder applied it (#104). See docs/DATA_PROVENANCE.md 4.5.4 and 4.6.4.
 - **Annual Datasets**:
   - `sp500_prices.json` / `world_prices.json`: Split-adjusted year-end closing prices (1993–2024).
   - `sp500_dividends.json` / `world_dividends.json`: Split-adjusted annual cash dividends per share (1994–2024).

@@ -163,9 +163,10 @@
       "cik": "0000040858",
       "accession_number": "0000950134-00-002776",
       "form": "10-K",
+      "source_type": "none_found",
       "quoted_sentence": "",
       "splits": [],
-      "note": "No stock split found in GTE's FY1999 Form 10-K for any year in the 1994-2000 window. The only two-for-one language in that filing describes a pension service credit, not a share split. The observed price series shows no halving across those years, corroborating the absence."
+      "note": "No stock split found in GTE's FY1999 Form 10-K for any year in the 1994-2000 window. The only two-for-one language in that filing describes a pension service credit, not a share split. The observed price series shows no halving across those years, corroborating the absence. Corroborated positively as well as negatively: across twelve quarters of 1996-1999 the derived price reproduces GTE's own filed close at a factor of exactly one, where a missing two-for-one would put every one of them out by half (docs/DATA_PROVENANCE.md 4.3.17). This record carried no source_type until #104, so it defaulted to filing_quoted and read as a quoted record with nothing quoted, while 4.3.9 had described it as none_found all along."
     },
     "LU": {
       "company": "Lucent Technologies, Inc.",

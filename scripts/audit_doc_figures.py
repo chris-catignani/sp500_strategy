@@ -81,7 +81,9 @@ UNARCHIVED_PREFIX = "unarchived:"
 # figure that gains a real source has to lower the number. Not a published figure --
 # this is manifest bookkeeping, and `scripts/audit_doc_figures.py --source-refs` prints
 # the census that produces it.
-UNARCHIVED_SOURCE_REFS = 40  # 46 before #91 deleted 4.1.1's unsourced as-traded column
+UNARCHIVED_SOURCE_REFS = 42  # 46 before #91 deleted 4.1.1's unsourced as-traded column;
+# 42 since #104 sourced 4.5.3's $1.32 to AT&T's own FY1995 and FY1997 10-Ks, which the
+# issuer filing manifest cites and the archive does not hold.
 
 
 _ARCHIVED = None
