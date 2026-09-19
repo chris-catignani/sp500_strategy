@@ -1862,6 +1862,39 @@ class TestDerivedConstituentSeries(unittest.TestCase):
                 compared += 1
         self.assertGreater(compared, 100, "cross-method check degenerated")
 
+    def test_both_readings_apply_the_same_split_record(self):
+        """The two datasets must agree on the cumulative split factor, not just the price.
+
+        Comparing as-traded prices alone cannot see a split record going stale, because the
+        as-traded figure is read off the filing and never moves. The adjustment is the part
+        that changes when a split is discovered, and it changes in whichever dataset was
+        regenerated -- `vanguard_implied_prices.json` sat five commits behind `splits.json`
+        and carried BellSouth's 1994 price adjusted by 2.0 where this series had already
+        applied the 4.0 that BellSouth's recovered 1995 split makes correct. Both files
+        were internally consistent and the price check was green throughout.
+        """
+        legacy_path = ROOT / "data" / "raw" / "ground_truth" / "vanguard_implied_prices.json"
+        with open(legacy_path, "r", encoding="utf-8") as f:
+            legacy = json.load(f)["prices_by_ticker"]
+
+        compared = 0
+        for ticker, years in legacy.items():
+            if ticker == "VIA.A":
+                continue
+            base = ticker.split(".")[0]
+            for year, observation in years.items():
+                derived = self.series.get(base, {}).get(year)
+                if derived is None or "split_factor" not in observation:
+                    continue
+                with self.subTest(ticker=base, year=year):
+                    self.assertEqual(
+                        derived.get("split_factor"),
+                        observation["split_factor"],
+                        f"{base} {year}: the two readings disagree on the split record",
+                    )
+                compared += 1
+        self.assertGreater(compared, 0, "no split-adjusted observation was compared")
+
     def test_a_ticker_never_has_both_a_vendor_and_a_derived_series(self):
         """One constituent, one price source.
 
