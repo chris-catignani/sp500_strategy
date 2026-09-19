@@ -6599,6 +6599,14 @@
       "quarter": 4
     },
     {
+      "ticker": "DELL",
+      "name": "DELL",
+      "market_cap_weight": 0.009275,
+      "trailing_1y_return": 0.2409,
+      "year": 2004,
+      "quarter": 4
+    },
+    {
       "ticker": "KO",
       "name": "The Coca-Cola Company",
       "market_cap_weight": 0.008924,
@@ -6759,6 +6767,14 @@
       "trailing_1y_return": 0.0138,
       "year": 2005,
       "quarter": 1
+    },
+    {
+      "ticker": "DELL",
+      "name": "DELL",
+      "market_cap_weight": 0.0087,
+      "trailing_1y_return": 0.1427,
+      "year": 2005,
+      "quarter": 1
     }
   ],
   "2005-Q2": [
@@ -6903,6 +6919,14 @@
       "name": "The Coca-Cola Company",
       "market_cap_weight": 0.0091,
       "trailing_1y_return": -0.1517,
+      "year": 2005,
+      "quarter": 2
+    },
+    {
+      "ticker": "DELL",
+      "name": "DELL",
+      "market_cap_weight": 0.0088,
+      "trailing_1y_return": 0.103,
       "year": 2005,
       "quarter": 2
     },
@@ -7065,6 +7089,14 @@
       "name": "Verizon Communications Inc.",
       "market_cap_weight": 0.0079,
       "trailing_1y_return": -0.1298,
+      "year": 2005,
+      "quarter": 3
+    },
+    {
+      "ticker": "DELL",
+      "name": "DELL",
+      "market_cap_weight": 0.0074,
+      "trailing_1y_return": -0.0393,
       "year": 2005,
       "quarter": 3
     }

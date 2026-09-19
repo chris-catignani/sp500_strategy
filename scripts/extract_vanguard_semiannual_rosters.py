@@ -11,13 +11,14 @@ consumer cannot mistake a Q2 observation for a Q4 one. See issue #63.
 
 The extra guard: reconciling dollar-exact proves a schedule was read completely, not that
 the right schedule was read - the point extract_vanguard_rosters.build_roster already makes
-about FY2002. The position-count filter is not sufficient on its own here. In the FY2005
-semi-annual the first schedule that parses holds 453 positions, inside the range an S&P 500
-tracker occupies, and reconciles perfectly against its own stated total of $10.3 billion -
-but the 500 Index Fund held $103.9 billion on that date. So the roster is additionally
-required to be the LARGEST 'Total Common Stocks' figure in its filing, which the 500 Index
-Fund is throughout 1994-2006 by a wide margin over every other fund in these documents.
-FY2005 is refused by that check rather than published wrong.
+about FY2002. The position-count filter is not sufficient on its own here. FY2005 showed why
+the guard was needed: when heading cells filed in `th` were dropped, the first schedule that
+parsed held 453 positions, inside the range an S&P 500 tracker occupies, and reconciled
+perfectly against its own stated total of $10.3 billion - while the 500 Index Fund held
+$103.9 billion on that date. The roster is therefore required to be the LARGEST
+'Total Common Stocks' figure in its filing, which the 500 Index Fund is throughout 1994-2006
+by a wide margin over every other fund in these documents. With `th` cells collected, the
+right schedule is selected and published; the guard is retained to prevent any recurrence.
 """
 
 import html

@@ -2106,6 +2106,20 @@
         "split_adjusted_price_usd": 18.7468,
         "split_source_accession": "0000950123-03-003510"
       },
+      "2005-Q2": {
+        "price_usd": 19.04,
+        "matched_name": "AT&T Corp.",
+        "rank": 174,
+        "shares": 7641353,
+        "value_usd_thousands": 145491,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 19.04,
+        "split_source_accession": "0000950123-03-003510"
+      },
       "2005-Q3": {
         "price_usd": 19.8,
         "matched_name": "AT&T Corp",
@@ -3202,6 +3216,20 @@
         "split_adjusted_price_usd": 29.3936,
         "split_source_accession": "0000950124-07-001502"
       },
+      "2005-Q2": {
+        "price_usd": 34.0,
+        "matched_name": "General Motors Corp.",
+        "rank": 136,
+        "shares": 5393179,
+        "value_usd_thousands": 183368,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 34.0,
+        "split_source_accession": "0000950124-07-001502"
+      },
       "2005-Q3": {
         "price_usd": 30.61,
         "matched_name": "General Motors Corp",
@@ -3930,6 +3958,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 51.2415,
+        "split_source_accession": "0001036050-98-000429"
+      },
+      "2005-Q2": {
+        "price_usd": 43.01,
+        "matched_name": "E.I. du Pont de Nemours & Co.",
+        "rank": 63,
+        "shares": 9500210,
+        "value_usd_thousands": 408604,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 43.01,
         "split_source_accession": "0001036050-98-000429"
       },
       "2005-Q3": {
@@ -5324,6 +5366,20 @@
         "split_adjusted_price_usd": 26.2896,
         "split_source_accession": "0001047469-99-007204"
       },
+      "2005-Q2": {
+        "price_usd": 26.57,
+        "matched_name": "BellSouth Corp.",
+        "rank": 52,
+        "shares": 17463409,
+        "value_usd_thousands": 464003,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 26.57,
+        "split_source_accession": "0001047469-99-007204"
+      },
       "2005-Q3": {
         "price_usd": 26.3,
         "matched_name": "BellSouth Corp",
@@ -6024,6 +6080,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 14.9693,
+        "split_source_accession": "0000950131-00-006101"
+      },
+      "2005-Q2": {
+        "price_usd": 18.26,
+        "matched_name": "Motorola, Inc.",
+        "rank": 61,
+        "shares": 23388162,
+        "value_usd_thousands": 427068,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 18.26,
         "split_source_accession": "0000950131-00-006101"
       },
       "2005-Q3": {
@@ -7502,6 +7572,20 @@
         "split_adjusted_price_usd": 33.7996,
         "split_source_accession": "0000912057-00-054429"
       },
+      "2005-Q2": {
+        "price_usd": 29.2,
+        "matched_name": "Tyco International Ltd.",
+        "rank": 38,
+        "shares": 19261475,
+        "value_usd_thousands": 562435,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 29.2,
+        "split_source_accession": "0000912057-00-054429"
+      },
       "2005-Q3": {
         "price_usd": 27.85,
         "matched_name": "Tyco International Ltd",
@@ -8232,6 +8316,20 @@
         "split_adjusted_price_usd": 4.0407,
         "split_source_accession": "0000912057-01-532905"
       },
+      "2005-Q2": {
+        "price_usd": 3.73,
+        "matched_name": "Sun Microsystems, Inc.",
+        "rank": 216,
+        "shares": 32485022,
+        "value_usd_thousands": 121169,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 3.73,
+        "split_source_accession": "0000912057-01-532905"
+      },
       "2005-Q3": {
         "price_usd": 3.92,
         "matched_name": "Sun Microsystems, Inc. *",
@@ -8934,6 +9032,20 @@
         "split_adjusted_price_usd": 23.6909,
         "split_source_accession": "0000732717-99-000007"
       },
+      "2005-Q2": {
+        "price_usd": 23.75,
+        "matched_name": "SBC Communications Inc.",
+        "rank": 24,
+        "shares": 31503629,
+        "value_usd_thousands": 748211,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 23.75,
+        "split_source_accession": "0000732717-99-000007"
+      },
       "2005-Q3": {
         "price_usd": 23.97,
         "matched_name": "SBC Communications, Inc",
@@ -9508,6 +9620,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 34.8288,
+        "split_source_accession": "0000950130-00-001551"
+      },
+      "2005-Q2": {
+        "price_usd": 32.02,
+        "matched_name": "Viacom Inc. Class B",
+        "rank": 49,
+        "shares": 15233937,
+        "value_usd_thousands": 487791,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 32.02,
         "split_source_accession": "0000950130-00-001551"
       },
       "2005-Q3": {
@@ -10226,6 +10352,20 @@
         "split_adjusted_price_usd": 12.3212,
         "split_source_accession": "0000912057-01-007516"
       },
+      "2005-Q2": {
+        "price_usd": 13.71,
+        "matched_name": "EMC Corp.",
+        "rank": 77,
+        "shares": 22916475,
+        "value_usd_thousands": 314185,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 13.71,
+        "split_source_accession": "0000912057-01-007516"
+      },
       "2005-Q3": {
         "price_usd": 12.94,
         "matched_name": "EMC Corp. *",
@@ -10872,6 +11012,20 @@
         "split_adjusted_price_usd": 38.4191,
         "split_source_accession": "0000950134-99-003281"
       },
+      "2005-Q2": {
+        "price_usd": 39.51,
+        "matched_name": "Dell Inc.",
+        "rank": 18,
+        "shares": 23091177,
+        "value_usd_thousands": 912332,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 39.51,
+        "split_source_accession": "0000950134-99-003281"
+      },
       "2005-Q3": {
         "price_usd": 34.2,
         "matched_name": "Dell, Inc. *",
@@ -11488,6 +11642,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 2.7495,
+        "split_source_accession": "0000950117-01-501896"
+      },
+      "2005-Q2": {
+        "price_usd": 2.91,
+        "matched_name": "Lucent Technologies, Inc.",
+        "rank": 213,
+        "shares": 42252739,
+        "value_usd_thousands": 122955,
+        "report_date": "2005-06-30",
+        "accession_number": "0000932471-05-001231",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 2.91,
         "split_source_accession": "0000950117-01-501896"
       },
       "2005-Q3": {

@@ -774,7 +774,7 @@
       "verdict": "sourced",
       "guard": null,
       "note": "Stated schedule total of first parseable fund in Vanguard FY2005 Q2 semi-annual filing",
-      "evidence_quote": "reconciles dollar-exact\n  against its own stated total of $10.3bn.",
+      "evidence_quote": "reconciled dollar-exact against its own stated total of $10.3bn.",
       "source_ref": "0000932471-05-001231"
     },
     {
@@ -785,7 +785,7 @@
       "verdict": "sourced",
       "guard": null,
       "note": "Stated net assets of Vanguard 500 Index Fund on same date",
-      "evidence_quote": "But the 500 Index Fund held $103.9bn that day.",
+      "evidence_quote": "But\n  the 500 Index Fund held $103.9bn that day.",
       "source_ref": "0000932471-05-001231"
     },
     {

@@ -507,9 +507,10 @@ Every sourced figure in this repository records where it came from: an accession
 It fetches each cited filing from SEC EDGAR and re-confirms that the quoted sentence is present and that each recorded figure appears in the document. Run it when a figure is questioned, before relying on a dataset in new work, or after editing one:
 
 ```
-python3 scripts/verify_provenance.py             # splits, terminal actions, rosters, q1 rosters
+python3 scripts/verify_provenance.py             # splits, terminal actions, rosters, q1 rosters, q2 rosters
 python3 scripts/verify_provenance.py splits      # one dataset
 python3 scripts/verify_provenance.py q1_rosters  # the Q1/Q3 filer grades (4.3.14)
+python3 scripts/verify_provenance.py q2_rosters  # Vanguard semi-annual rosters (4.3.14)
 ```
 
 Current state: every claim re-checked passes, with three skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM` and `GTE`, both recorded as `none_found`. All three are corroborated offline by the test suite instead. `GTE` joined them under #104: 4.3.9 had described it as `none_found` since the record was written, but the record itself carried no `source_type`, which defaults to `filing_quoted` — so it read as a quoted record with nothing quoted, and the verifier tried to re-check a sentence that was deliberately empty.
@@ -540,7 +541,7 @@ annual report carries a Report of Independent Accountants; a semi-annual does no
 |---|---|---|---|
 | Q1 (Mar 31) | SEI Index Funds (CIK 766589) | 1995-2003, 2005-2006 | **audited** |
 | Q1 (Mar 31) | Prudential / Dryden (CIK 887991) | 1994, 2004 | unaudited |
-| Q2 (Jun 30) | Vanguard 500 Index Fund semi-annual | 1994-2004, 2006 | unaudited |
+| Q2 (Jun 30) | Vanguard 500 Index Fund semi-annual | 1994-2006 | unaudited |
 | Q3 (Sep 30) | SPDR S&P 500 Trust annual | 1997-2009 | **audited** |
 | Q3 (Sep 30) | SEI Index Funds semi-annual | 1995-1996 | unaudited |
 | Q4 (Dec 31) | Vanguard 500 Index Fund annual | 1994-2006 | **audited** |
@@ -742,7 +743,6 @@ correct; they had simply never been reachable from the quarterly path before.
 | Gap | Cause |
 |---|---|
 | **Q3 1994** | SPY's archive begins at `19970930`, and SEI's September series begins in 1995 -- `19940930` carries only an `NSAR-A`, a statistical form and not a shareholder report. No source. |
-| Q2 2005 | The FY2005 semi-annual is refused for cause (see below). |
 | Anything after 2006 | Only Q3 exists; the other three filers stop. |
 
 **SEI's 2004 schedule stays refused, and 2004-Q1 is sourced anyway.** The two facts are
@@ -792,9 +792,9 @@ nobody re-measures goes stale in place — this one did, and was found two readi
 price but sit in the candidate roster only for years a source hole blocks: `AN`, `GM` and
 `MOT` appear in no roster year but 1994, which needs the unsourceable 1994-Q3; and `SUNW`
 and `VIA` reach no candidate roster in any year, so no amount of pricing admits them.
-`DELL` has since been admitted in part: its roster years are 2003 and 2004, and closing
-2004-Q1 (#83) admitted the first of them, so it now appears from 2003-Q4 to 2004-Q3. Its
-2004 roster year still needs the refused 2005-Q2 (#96) and remains out.
+`DELL` has since been admitted in full: closing 2004-Q1 (#83) admitted its 2003 roster
+year, and closing 2005-Q2 (#96) admitted its 2004 roster year, so it now appears from
+2003-Q4 to 2005-Q3 at weights under a hundredth, far below any Top 10 cut.
 
 The measured effect is confined to the 30-year S&P 500 quarterly strategies, which are the
 only ones whose window reaches these years. The magnitudes are not published here -- §4.3.18
@@ -840,12 +840,15 @@ Implied prices at 1998-03-31 match the values established independently.
 
 ##### Two parser results worth recording
 
-- **FY2005 Q2 is refused, not approximated.** Its first parseable schedule holds 453
-  positions — inside the range an S&P 500 tracker occupies — and reconciles dollar-exact
-  against its own stated total of $10.3bn. But the 500 Index Fund held $103.9bn that day.
-  Reconciliation proves a schedule was read completely, not that the right schedule was
-  read. `extract_vanguard_semiannual_rosters.py` additionally requires the roster to be the
-  largest `Total Common Stocks` figure in its filing, and refuses FY2005 on that basis.
+- **FY2005 Q2 showed why the largest-total guard is needed.** When heading cells filed in `th`
+  were dropped, the first parseable schedule held 453 positions — inside the range an S&P 500
+  tracker occupies — and reconciled dollar-exact against its own stated total of $10.3bn. But
+  the 500 Index Fund held $103.9bn that day. Reconciliation proves a schedule was read
+  completely, not that the right schedule was read. The reason the 500 Index Fund's schedule
+  was never offered to the largest-total guard was that its heading row was filed in `th`,
+  silently moving the schedule boundary to a different fund. With `th` cells collected, the
+  right schedule reaches the guard and passes; the guard stays retained to prevent any
+  recurrence.
 - **The HTML schedule heading is matched from the start of its cell.** Footnote blocks in
   the later filings run to several hundred characters and mention common stock in passing
   with parentheses nearby, so an unanchored search selected the footnotes and bounded the

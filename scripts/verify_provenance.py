@@ -20,6 +20,7 @@ recorded it saying.
 Usage:
     python3 scripts/verify_provenance.py              # every dataset
     python3 scripts/verify_provenance.py splits       # one dataset
+    python3 scripts/verify_provenance.py q2_rosters   # Vanguard semi-annual rosters
     python3 scripts/verify_provenance.py --verbose    # show each filing's matched text
 """
 
@@ -39,6 +40,9 @@ HEADERS = {"User-Agent": "AcademicResearch sp500strategy@example.com"}
 SPLITS_PATH = PROJECT_ROOT / "data" / "raw" / "corporate_actions" / "splits.json"
 TERMINAL_PATH = PROJECT_ROOT / "data" / "raw" / "corporate_actions" / "terminal_actions.json"
 ROSTERS_PATH = PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_audited_rosters.json"
+SEMIANNUAL_ROSTERS_PATH = (
+    PROJECT_ROOT / "data" / "raw" / "ground_truth" / "vanguard_semiannual_rosters.json"
+)
 
 # A quotation is compared on its opening words. Filings are re-flowed by the parser and by
 # EDGAR itself, so requiring the whole sentence to match character for character produces
@@ -272,11 +276,54 @@ def verify_q1_rosters(verbose: bool) -> List[Result]:
     return results
 
 
+def verify_q2_rosters(verbose: bool) -> List[Result]:
+    """Re-read each Vanguard semi-annual roster's total AND its unaudited grade.
+
+    Like verify_rosters and verify_q1_rosters, this reads archived filings from disk
+    and requires no network. A semi-annual report is unaudited and carries no Report
+    of Independent Accountants; this confirms the absence of an auditor's report from
+    the document rather than assuming the grade from the fund.
+    """
+    if not SEMIANNUAL_ROSTERS_PATH.exists():
+        return []
+
+    with open(SEMIANNUAL_ROSTERS_PATH, "r", encoding="utf-8") as f:
+        rosters = json.load(f)["rosters_by_period"]
+
+    results = []
+    for period, roster in sorted(rosters.items()):
+        result = Result("vanguard_semiannual_rosters", period)
+        path = PROJECT_ROOT / roster["source_file"]
+        if not path.exists():
+            result.check("archived filing present", False, str(path))
+            results.append(result)
+            continue
+
+        text = path.read_text(encoding="utf-8", errors="replace")
+        stated = int(roster["stated_total_usd_thousands"])
+        printed = f"{stated:,}"
+        result.check("stated total in filing", printed in text, printed)
+        result.check(
+            "positions reconcile",
+            int(roster["parsed_total_usd_thousands"]) == stated,
+            "",
+        )
+        has_opinion = "REPORT OF INDEPENDENT" in text.upper()
+        result.check(
+            "audit grade matches the filing",
+            (not has_opinion) and (not roster["audited"]),
+            f"auditor's report {'present' if has_opinion else 'absent'}",
+        )
+        results.append(result)
+    return results
+
+
 DATASETS = {
     "splits": verify_splits,
     "terminal": verify_terminal_actions,
     "rosters": verify_rosters,
     "q1_rosters": verify_q1_rosters,
+    "q2_rosters": verify_q2_rosters,
 }
 
 
