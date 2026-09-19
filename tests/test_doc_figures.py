@@ -228,6 +228,30 @@ class TestManifestWellFormedness(unittest.TestCase):
         from scripts.audit_doc_figures import load_manifest
         cls.manifest = load_manifest()
 
+    def test_no_pipeline_figure_is_left_unguarded(self):
+        """The criterion issue #91 was opened to reach, as a test.
+
+        A figure our code produces, published with nothing asserting the claim it
+        evidences, is the whole defect. Pass 1 counted 498 such candidates and classified
+        them; pass 2 removed the ones that had stopped earning their place and guarded the
+        rest. This is what stops the set growing back.
+
+        Adding a computed figure to either document now means one of three things: name a
+        test that asserts its claim, write one, or state the claim qualitatively and point
+        at the command that prints the number. The suite will not let a fourth option
+        through.
+        """
+        unguarded = [
+            (e["section"], e["figure"])
+            for e in self.manifest["entries"]
+            if e.get("rot_exposed") is True and not e.get("guard")
+        ]
+        self.assertEqual(
+            unguarded, [],
+            f"{len(unguarded)} pipeline figures are published with nothing asserting "
+            f"them; first five: {unguarded[:5]}",
+        )
+
     def test_a_guard_declares_which_promise_it_makes(self):
         """`guard_kind` separates "the claim stays true" from "the figure cannot move".
 

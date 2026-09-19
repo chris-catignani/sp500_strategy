@@ -22,17 +22,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
-      "figure": "(0.7553)",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Yahoo's price factor, not a filed ratio; not present in spinoffs.json and 4.1.1 has no archived source",
-      "evidence_quote": "price factor (0.7553) and the IRS basis retention ratio (0.7623 for `T` → `WBD`) are different",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.1.1",
       "figure": "$21.62",
       "occurrence": 1,
       "verdict": "sourced",
@@ -285,16 +274,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
-      "figure": "99%",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Estimated dot-com crash magnitude for Lucent motivating survivorship premise check",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
       "figure": "0.5pp",
       "occurrence": 1,
       "verdict": "decision-evidence",
@@ -320,9 +299,10 @@
       "figure": "two of three",
       "occurrence": 1,
       "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Momentum Top 5 sign split across annual cells; part of the pool-depth decision evidence",
-      "rot_exposed": true
+      "guard": "tests/test_quarterly.py::TestQuarterlyPortfolioSimulator::test_the_momentum_penalty_flips_sign_with_n_and_frequency",
+      "note": "Momentum Top 5 sign split across annual cells. The guard asserts both halves of the claim -- all three quarterly cells negative, at least one annual cell positive -- as signs rather than values, which is what AGENTS.md asks for here (#91). The guard-verification harness flags this as having no data overlap, which is expected: the figure is spelled out and the assertions are on signs.",
+      "rot_exposed": true,
+      "guard_kind": "claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -431,28 +411,6 @@
       "note": "SPY 2023-12-31 Form NPORT-P filing pctVal for Alphabet Class C",
       "evidence_quote": "In the audited 2023-12-31 SPY Form NPORT-P filing",
       "source_ref": "0001752724-24-043296"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.8",
-      "figure": "3.818%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Derived consolidated Alphabet enterprise weight summing Class A (2.065%) and Class C (1.753%)",
-      "evidence_quote": "In the audited 2023-12-31 SPY Form NPORT-P filing",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.8",
-      "figure": "3.82%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Derived consolidated Alphabet enterprise weight rounded to two decimal places",
-      "evidence_quote": "In the audited 2023-12-31 SPY Form NPORT-P filing",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -651,82 +609,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.9",
-      "figure": "26 and 7 bytes",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Header-only byte differences between parent filings and amendments, justifying why amendments are not archived",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "186 December-31 implied prices across 18 securities",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Count of December-31 implied prices extracted from Vanguard filings and published in dataset",
-      "evidence_quote": "`scripts/extract_vanguard_prices.py` reads every schedule position in each archived filing and publishes **186 December-31 implied prices across 18 securities**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$500",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Rounding tolerance the cross-schedule agreement check admits: value is reported in thousands, so a position is known to +/-$500. Considered for a self-checking re-verdict under #91 and rejected -- the passage states the consequence in prose rather than printing an operation with numeric operands, and AGENTS.md is explicit that this does not qualify. The manifest gate caught it.",
-      "evidence_quote": "value is reported in thousands, so ±\\$500 per position",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$32.32",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Dissenting fund implied price for Viacom Class B in Vanguard 2005 filing",
-      "evidence_quote": "One observation (Viacom Class B, 2005) has a single fund valuing a 1,532,521-share position at \\$32.32 where three others — including the two largest — agree exactly at \\$32.60.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "$32.60",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Majority consensus implied price for Viacom Class B in Vanguard 2005 filing",
-      "evidence_quote": "One observation (Viacom Class B, 2005) has a single fund valuing a 1,532,521-share position at \\$32.32 where three others — including the two largest — agree exactly at \\$32.60.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "Eighteen of the twenty",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Census of our own `filing_quoted` grading across the registrants",
-      "evidence_quote": "Eighteen of the twenty registrants.\n- **`none_found`** — the registrant's own filings were searched and no split was found in the window.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "0.2%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Residual percentage difference between fund valuation and vendor close for 1994 and 1999",
-      "evidence_quote": "The remaining two, 1994 and 1999, differ by about 0.2%",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
       "figure": "$79.81",
       "occurrence": 1,
       "verdict": "derivation",
@@ -795,49 +677,6 @@
       "evidence_quote": "**−30.1%**, where the real move is **+4.9%**",
       "rot_exposed": true,
       "guard_kind": "value"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "1%",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Tolerance parameter in ratio heuristic scan justifying rejection of heuristic guard",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "three of six",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Our cross-filer comparison count against AT&T's FY1995 report",
-      "evidence_quote": "AT&T's FY1995 report (`0000005907-96-000010`), three of six comparisons agree to the cent",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "1.874%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Widest delta between AT&T Note 20 filed closes and derived implied prices under corrected split factor",
-      "evidence_quote": "three of six comparisons agree to the cent\nand the widest is 1.874%",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.9",
-      "figure": "−9.85%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "1996 total return demonstrating scale-invariance of total return under missing split",
-      "evidence_quote": "the 1996 reconciliation at §4.5.4 scales on both sides and still\nreads −9.85%.",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -918,49 +757,6 @@
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.12",
-      "figure": "36 missing constituents at depth 30, of which 14 reach a",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Count of missing constituents in survivorship gap report after adding three tickers",
-      "evidence_quote": "Adding these three closes them in the survivorship gap report: **36 missing constituents at depth 30, of which 14 reach a Top 20**, down from 39 and 17.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "32 issuers",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Dropped issuers in Vanguard 2004-Q2, justifying HTML entity unescaping in normalise()",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "$0.00",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Erroneous implied price resulting from integer truncation bug in early parser",
-      "evidence_quote": "rounded six 1994 positions to zero — an implied price of $0.00 wearing\nthe same field name",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "Thirteen of the nineteen",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Our count of derived constituents reaching the quarterly universe",
-      "evidence_quote": "**Thirteen of the nineteen now appear in the quarterly universe**, spanning 1995-Q4 to\n2003-Q3: `AOL BLS DD EMC GTE LU MCIC MOB NT RD SBC TYC T_CORP`.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.14",
       "figure": "$1,719,623k",
       "occurrence": 1,
@@ -991,27 +787,6 @@
       "note": "Stated net assets of Vanguard 500 Index Fund on same date",
       "evidence_quote": "But the 500 Index Fund held $103.9bn that day.",
       "source_ref": "0000932471-05-001231"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.15",
-      "figure": "25%",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Structural check threshold rejecting dividends exceeding 25% of share price",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.15",
-      "figure": "335 published quarters to 64",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Sample size reduction after applying dollar-exact reconciliation gate",
-      "evidence_quote": "cut **335 published quarters to 64**, with 16 years reconciled, 55 withheld and\n27 structural rejects.",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1093,28 +868,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
-      "figure": "112 of 168 filings were refused, and that is mostly a finding rather than a failure",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Refusal count from issuer dividend table extraction",
-      "evidence_quote": "**112 of 168 filings were refused, and that is mostly a finding rather than a failure.**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.15",
-      "figure": "517 verbatim split sentences",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Count of verbatim split sentences extracted across filings",
-      "evidence_quote": "The same pass collected **517 verbatim split sentences**.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.15",
       "figure": "50%",
       "occurrence": 1,
       "verdict": "sourced",
@@ -1150,10 +903,9 @@
       "section": "4.3.16",
       "figure": "$0",
       "occurrence": 1,
-      "verdict": "decision-evidence",
+      "verdict": "not-a-claim",
       "guard": null,
-      "note": "Full position write-off valuation for delisting to zero terminal action",
-      "rot_exposed": true
+      "note": "The write-off value in the terminal-action treatment table: 'Full depletion at $0'. A definitional parameter of the documented convention, not a measurement -- delisting to zero means zero. Re-verdicted `not-a-claim` under #91, alongside the tax-tier labels and formula subscripts pass 1 put in that class."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1184,9 +936,10 @@
       "occurrence": 1,
       "verdict": "derivation",
       "guard": null,
-      "note": "Derived conversion value 1.325 × $35.75 for BellSouth shares",
+      "note": "Conversion value under the filing's own ratio, and the residual against the schedule's terminal value. Re-verdicted self-checking under #91: PR 1's tie-break marked unclear traces rot-exposed, and this trace is not unclear (#91).",
       "evidence_quote": "at the filing's own ratio, 1.325 × \\$35.75 is \\$47.37, so the two readings agree to within 0.6% and the distinction does not change the number.",
-      "rot_exposed": true
+      "rot_exposed": false,
+      "inputs_trace": "The filing's own exchange ratio 1.325 times the filing's own stated price $35.75. Both operands are read from the BellSouth merger filing and the multiplication is printed beside the result; nothing in this repository computes either."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1195,9 +948,10 @@
       "occurrence": 1,
       "verdict": "derivation",
       "guard": null,
-      "note": "Reconciliation discrepancy between filed schedule terminal value and conversion calculation",
+      "note": "Conversion value under the filing's own ratio, and the residual against the schedule's terminal value. Re-verdicted self-checking under #91: PR 1's tie-break marked unclear traces rot-exposed, and this trace is not unclear (#91).",
       "evidence_quote": "at the filing's own ratio, 1.325 × \\$35.75 is \\$47.37, so the two readings agree to within 0.6% and the distinction does not change the number.",
-      "rot_exposed": true
+      "rot_exposed": false,
+      "inputs_trace": "The filing's own exchange ratio 1.325 times the filing's own stated price $35.75. Both operands are read from the BellSouth merger filing and the multiplication is printed beside the result; nothing in this repository computes either."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1224,23 +978,14 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
-      "figure": "one of the thirteen",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "The terminal-action invariant: none appears in a roster in the year of its terminal action",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.16",
       "figure": "380 positions across the nineteen Vanguard filings, with no unresolved issuer name and no missing series",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": null,
-      "note": "Invariant assertion verifying complete price series coverage across all 380 Top 20 positions",
+      "guard": "tests/test_terminal_actions.py::TestTopTwentyUniverseInvariant::test_every_top_20_position_in_an_audited_roster_has_a_price_that_year",
+      "note": "Coverage invariant: every Top-20 position in every audited December-31 roster resolves to a ticker and has a price series for that year. Pinned by assertEqual(checked, 380) (#91).",
       "evidence_quote": "Every Top-20 position in every audited December-31 roster resolves to a ticker and has a price series for that exact year — **380 positions across the nineteen Vanguard filings, with no unresolved issuer name and no missing series**.",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "value"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1264,47 +1009,14 @@
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.2",
-      "figure": "4th in",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Estimated roster ranking of AT&T Corp in 1996",
-      "evidence_quote": "The estimated roster ranked AT&T **4th in 1996**; the Vanguard 500 Index Fund's 1996-12-31 filing ranks it **11th**.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.2",
-      "figure": "11th",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "Vanguard 500 Index Fund 1996-12-31 filing rank for AT&T Corp",
-      "evidence_quote": "The estimated roster ranked AT&T **4th in 1996**; the Vanguard 500 Index Fund's 1996-12-31 filing ranks it **11th**.",
-      "source_ref": "data/raw/ground_truth/vanguard_audited_rosters.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
       "section": "4.5.3",
       "figure": "$0.33",
       "occurrence": 1,
       "verdict": "sourced",
       "guard": null,
       "note": "Ma Bell verified quarterly dividend per share",
-      "evidence_quote": "The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend (\\$1.32/year).",
+      "evidence_quote": "**A cost worth stating plainly.** The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend.",
       "source_ref": "data/raw/tickers/T_CORP_HISTORICAL.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.3",
-      "figure": "$1.32",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Ma Bell annualized dividend per share (4 × $0.33)",
-      "evidence_quote": "The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend (\\$1.32/year).",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1327,28 +1039,6 @@
       "note": "Contemporaneous market quote from att_1996_endpoint_valuations.json carrying NCR entitlement",
       "evidence_quote": "The contemporaneous quote in `data/raw/corporate_actions/att_1996_endpoint_valuations.json` is **\\$43.375** and states explicitly that it carries the NCR entitlement.",
       "source_ref": "data/raw/corporate_actions/att_1996_endpoint_valuations.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "$45.60",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Hypothetical cum-NCR value derived as $43.50 + $2.10 to disprove ex-NCR hypothesis",
-      "evidence_quote": "Were the filed price ex-NCR, the cum value would be \\$45.60",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "$2.20",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Valuation gap between hypothetical cum value and contemporaneous quote",
-      "evidence_quote": "a \\$2.20 gap between two same-day valuations of one security, which no reading supports.",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1394,72 +1084,6 @@
       "note": "AT&T Corp 2002 reverse stock split ratio from Form 10-K accession 0000950123-03-003510",
       "evidence_quote": "1-for-5 reverse split of 2002-11-18** (10-K, accession `0000950123-03-003510`)",
       "source_ref": "data/raw/corporate_actions/splits.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "$14.87",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "Lucent distribution quoted on ex-date from spinoffs.json",
-      "evidence_quote": "`spinoffs.json` records each distribution as quoted on its ex-date",
-      "source_ref": "data/raw/corporate_actions/spinoffs.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "$49.5667",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Lucent distribution adjusted by 0.3 factor ($14.87 / 0.3)",
-      "evidence_quote": "giving a combined factor of 0.3: Lucent \\$14.87 → **\\$49.5667**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "$2.10",
-      "occurrence": 2,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "NCR distribution quoted on ex-date from spinoffs.json",
-      "evidence_quote": "`spinoffs.json` records each distribution as quoted on its ex-date",
-      "source_ref": "data/raw/corporate_actions/spinoffs.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "$7.00",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "NCR distribution adjusted by 0.3 factor ($2.10 / 0.3)",
-      "evidence_quote": "giving a combined factor of 0.3: Lucent \\$14.87 → **\\$49.5667**, NCR \\$2.10 → **\\$7.00**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.5.4",
-      "figure": "$138.0002",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Derived year-end parent price from data/sp500_prices.json ($41.40 / 0.3)",
-      "evidence_quote": "against a year-end parent price of **\\$138.0002**.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.2",
-      "figure": "$0.00",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Statutory zero dividend tax withholding under Section 355 treatment",
-      "evidence_quote": "Qualifying Section 355 reorganizations are not dividends; zero dividend tax is withheld ($0.00 dividend tax drag).",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2120,85 +1744,8 @@
       "verdict": "sourced",
       "guard": null,
       "note": "Lucent spinoff distribution per share received in Q3",
-      "evidence_quote": "receives Lucent (\\$14.87) in Q3 and NCR (\\$2.10) in Q4 (total \\$16.97).",
+      "evidence_quote": "- **Proceeds per Share**: $0.324084 \\times \\$45.875 = \\$14.86735 \\approx \\mathbf{\\$14.87}$.\n   - **Basis versus valuation**: The issuer basis allocation is retained independently.",
       "source_ref": "data/raw/corporate_actions/spinoffs.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.6",
-      "figure": "$2.10",
-      "occurrence": 1,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "NCR spinoff distribution per share received in Q4",
-      "evidence_quote": "receives Lucent (\\$14.87) in Q3 and NCR (\\$2.10) in Q4 (total \\$16.97).",
-      "source_ref": "data/raw/corporate_actions/spinoffs.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.6",
-      "figure": "$16.97",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Combined spinoff distributions ($14.87 + $2.10) received in Top 5 Annual",
-      "evidence_quote": "receives Lucent (\\$14.87) in Q3 and NCR (\\$2.10) in Q4 (total \\$16.97).",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.6",
-      "figure": "$14.87",
-      "occurrence": 2,
-      "verdict": "sourced",
-      "guard": null,
-      "note": "Lucent spinoff distribution per share received in Top 5 Quarterly",
-      "evidence_quote": "receives Lucent (\\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #10 $\\implies$ receives **\\$0.00 from NCR in Q4**.",
-      "source_ref": "data/raw/corporate_actions/spinoffs.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.6",
-      "figure": "$0.00",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "NCR distribution not received in Top 5 Quarterly due to position exit at Q3 rebalance",
-      "evidence_quote": "receives Lucent (\\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #10 $\\implies$ receives **\\$0.00 from NCR in Q4**.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.17",
-      "figure": "93 quarters across , , , , and ; none fails",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Count of quarters passing high/low band test across six registrants",
-      "evidence_quote": "**93 quarters across `AN`, `BLS`, `DD`, `GTE`, `LU` and `T_CORP`; none fails.**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.17",
-      "figure": "42 comparisons; 38 agree within 0.5%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Count of direct close price comparisons agreeing within 0.5%",
-      "evidence_quote": "**42 comparisons; 38 agree within 0.5%.**",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.17",
-      "figure": "1.874%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Discrepancy between fund valuation and composite tape close for T_CORP 1994-Q2",
-      "evidence_quote": "widest is `T_CORP` 1994-Q2 at 1.874%, already recorded at 4.3.9:",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2211,17 +1758,6 @@
       "evidence_quote": "two-for-one would put every one of the twelve out by half.\n\n##### Coverage, and why it stops where it does\n\nSix registrants of nineteen.",
       "rot_exposed": true,
       "guard_kind": "value"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "Thirteen of the nineteen",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Our dividend-series coverage count",
-      "evidence_quote": "**Thirteen of the nineteen now appear in the quarterly universe**, spanning 1995-Q4 to\n2003-Q3: `AOL BLS DD EMC GTE LU MCIC MOB NT RD SBC TYC T_CORP`.",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2270,17 +1806,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
-      "figure": "1%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Timing difference percentage between vendor sums and declared dividends",
-      "evidence_quote": "the same\nbasis, about 1% low on declared-versus-ex-date timing, and nowhere near a factor of 1.324.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
       "figure": "0.1pp",
       "occurrence": 1,
       "verdict": "decision-evidence",
@@ -2299,49 +1824,6 @@
       "note": "Bound on the sourced-dividend effect. The guard asserts a two-sided bound -- assertLess(widest, 0.10) and assertGreater(widest, 0.01) -- so it keeps the claim true while letting the underlying cells drift. The document names this test class already (#91).",
       "rot_exposed": true,
       "guard_kind": "claim"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "two of the four",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Lucent fiscal-year reconciliation count",
-      "evidence_quote": "Under it, two of the four FY1999 quarters reproduce the derived",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.19",
-      "figure": "0.06%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Percentage delta for split-adjusted pre-April 1999 quarters of Lucent FY1999",
-      "evidence_quote": "The other two quarters agree to 0.06% once expressed in the filing's own share terms",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.20",
-      "figure": "−20% to +61%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Shift in BellSouth 1995 total return from correcting missing 2:1 stock split",
-      "evidence_quote": "The correction moves BellSouth's 1995 total return from **−20% to +61%**, which is not a\nrounding matter:",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.20",
-      "figure": "1%",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Tolerance parameter for cross-filing corporate action agreement check",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2574,28 +2056,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.21",
-      "figure": "one of the six",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Our comparison of the split-adjusted GOOGL close across the six years",
-      "evidence_quote": "split-adjusted `GOOGL` close in every one of the six years, which is Alphabet's July 2022\ntwenty-for-one split seen through a series adjusted to 2024-12-31.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "0.2-2.5%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Observed spread between Class C and Class A implied prices; previously mis-tokenised as `-2.5%`",
-      "evidence_quote": "Class C sits 0.2-2.5%\nbelow Class A, the ordinary `GOOG`/`GOOGL` spread.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
       "figure": "2.00%",
       "occurrence": 1,
       "verdict": "sourced",
@@ -2769,7 +2229,7 @@
       "verdict": "sourced",
       "guard": null,
       "note": "AIG 2007 split-adjusted year-end close",
-      "evidence_quote": "2007 split-adjusted close is \\$1,166.00; crashed to \\$31.40 in 2008 (-97.31%).",
+      "evidence_quote": "2007 split-adjusted close is \\$1,166.00; crashed to \\$31.40 in 2008.",
       "source_ref": "data/raw/tickers/AIG.json"
     },
     {
@@ -2780,19 +2240,8 @@
       "verdict": "sourced",
       "guard": null,
       "note": "AIG 2008 split-adjusted year-end close",
-      "evidence_quote": "2007 split-adjusted close is \\$1,166.00; crashed to \\$31.40 in 2008 (-97.31%).",
+      "evidence_quote": "2007 split-adjusted close is \\$1,166.00; crashed to \\$31.40 in 2008.",
       "source_ref": "data/raw/tickers/AIG.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "5",
-      "figure": "-97.31%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "AIG 2007-2008 price decline percentage (($31.40 - $1166.00) / $1166.00)",
-      "evidence_quote": "2007 split-adjusted close is \\$1,166.00; crashed to \\$31.40 in 2008 (-97.31%).",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2835,19 +2284,8 @@
       "verdict": "sourced",
       "guard": null,
       "note": "Ma Bell verified quarterly dividend per share",
-      "evidence_quote": "Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \\$0.33/quarter (\\$1.32/year) dividends.",
+      "evidence_quote": "**A cost worth stating plainly.** The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend.",
       "source_ref": "data/raw/tickers/T_CORP_HISTORICAL.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "5",
-      "figure": "$1.32",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Ma Bell annualized dividend per share (4 × $0.33)",
-      "evidence_quote": "Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \\$0.33/quarter (\\$1.32/year) dividends.",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3050,6 +2488,18 @@
       "note": "The value SPY's Schedule of Investments states for AT&T Corp at 1996-12-31, cited here because the committed series follows it rather than this section's derived package quote (#91).",
       "evidence_quote": "**The filed 1996 value is cum-NCR.** The Schedule of Investments values AT&T Corp at **\\$43.50** as-traded at 1996-12-31.",
       "source_ref": "data/raw/ground_truth/derived_constituent_series.json"
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.12",
+      "figure": "14 reach a",
+      "occurrence": 1,
+      "verdict": "derivation",
+      "guard": "tests/test_terminal_actions.py::TestTopTwentyUniverseInvariant::test_every_gap_constituent_reaching_a_top_20_is_now_priced",
+      "guard_kind": "value",
+      "rot_exposed": true,
+      "note": "Missing constituents reaching a filing's Top 20, as 4.3.12 states it. Pinned by assertEqual(len(reaching_top_20), 14), the same guard 4.3.6's occurrence carries. The figure string is truncated by the `Top 20` mask, a known extractor artifact (#91).",
+      "evidence_quote": "of which **14 reach a filing's Top 20**"
     }
   ]
 }
