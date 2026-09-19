@@ -946,7 +946,7 @@ def main():
     # Until #108 this ran on the ANNUAL series alone, and named NCR explicitly. That left
     # the quarterly series carrying both 1996 entitlements: Q4 the same cum-NCR value, and
     # Q3 the SEI September-30 value, which is cum-Lucent on the same argument -- the fund
-    # holds 9,000 Lucent shares against an entitlement of 222,699 x 0.324084 = 72,171, so
+    # holds 9,000 Lucent shares against an entitlement of 222,699 x 0.324084 = 72,173, so
     # it had not booked the distribution. engine/data_loader.py prefers the quarterly file,
     # so the corrected annual value was never reached on that path.
     #

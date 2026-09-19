@@ -1037,7 +1037,7 @@ The rule is about the **date**, not the ticker: an endpoint carries an entitleme
 | 1996-Q3 | 174.1663 | 49.5667 (`LU`) | 124.5996 | 37.3799 |
 | 1996-Q4 | 145.0002 | 7.0000 (`NCR`) | 138.0002 | 41.4001 |
 
-Q4 and the annual value are the same filing read at the same date, so they agree by construction. **Q3 is cum-Lucent on the fund's own evidence.** The quarter's source is SEI's September-30 1996 schedule, which values AT&T Corp at 11,636,000 / 222,699 = 52.2499 and holds 9,000 Lucent shares — against a distribution entitlement of 222,699 × 0.324084 = 72,171. The fund had not booked the distribution, so its parent value still carries it.
+Q4 and the annual value are the same filing read at the same date, so they agree by construction. **Q3 is cum-Lucent on the fund's own evidence.** The quarter's source is SEI's September-30 1996 schedule, which values AT&T Corp at 11,636,000 / 222,699 = 52.2499 and holds 9,000 Lucent shares — against a distribution entitlement of 222,699 × 0.324084 = 72,173. The fund had not booked the distribution, so its parent value still carries it.
 
 The deducted amount is not a choice. To conserve the quoted wealth it must equal exactly what the engine credits, which is why the table's middle column is the compiled distribution rather than the as-traded figure §4.6.4 quotes.
 

@@ -291,6 +291,45 @@ class TestDatasetIntegrity(unittest.TestCase):
             annual = json.load(f)
         self.assertAlmostEqual(series["1996-Q4"], annual["T_CORP"]["1996"], places=4)
 
+    def test_the_september_filer_had_not_booked_the_lucent_distribution(self):
+        """The claim 4.5.4 rests on, asserted from the filing's own numbers.
+
+        Everything in #108 turns on 1996-Q3 being cum-Lucent, and the reason it is cum is
+        that the fund had not booked the distribution at its valuation date: it holds far
+        fewer Lucent shares than its AT&T position entitles it to. Both counts come from
+        one accession, so this compares a filing against itself.
+
+        It exists because the prose figure went wrong and nothing caught it. 4.5.4 printed
+        `222,699 x 0.324084 = 72,171` where the product is 72,173, with the operation on
+        the page and both operands immutable -- and `test_doc_figures`'s extractor does not
+        match comma-separated integers, so the ratchet never saw a figure to check. A
+        printed operation is only self-checking if something actually performs it.
+        """
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "derived_quarterly_constituent_series.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            series = json.load(f)["series_by_ticker"]
+
+        parent = series["T_CORP"]["1996-Q3"]
+        child = series["LU"]["1996-Q3"]
+
+        # One filing, so the two positions are strictly comparable.
+        self.assertEqual(parent["accession_number"], child["accession_number"])
+        self.assertEqual(parent["report_date"], "1996-09-30")
+        self.assertEqual(child["report_date"], "1996-09-30")
+
+        # The ratio is the one 4.6.4 records for the distribution.
+        entitlement = parent["shares"] * 0.324084
+        self.assertEqual(round(entitlement), 72173)
+
+        # Had the fund booked it, its Lucent holding would be AT LEAST the entitlement.
+        # It holds well under half, so the AT&T value still carries the child. A threshold
+        # with headroom rather than the exact ratio: the claim is that the distribution is
+        # unbooked, not that the gap has a particular size.
+        self.assertLess(child["shares"], entitlement / 2.0)
+
     def test_no_endpoint_is_left_carrying_an_entitlement(self):
         """The general rule, not the two instances of it.
 
