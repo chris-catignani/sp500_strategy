@@ -1287,8 +1287,11 @@ Two checks, pinned in `tests/test_issuer_reported_closes.py`:
   second source. **Across `AN`, `BLS`, `DD`, `GTE`, `LU` and `T_CORP`, none fails.**
 - **Close** — where the registrant also reported the quarter-end close, the figures are
   compared directly. **Nearly every comparison agrees to within half a percent.** The
-  widest is `T_CORP` 1994-Q2, already recorded at 4.3.9: the fund values at its
-  own business day while the registrant quotes the composite tape close.
+  handful that do not are a session mismatch rather than a method error: the fund values
+  at its own business day while the registrant quotes the composite tape close, and the
+  two are not always the same session. Which comparison is widest is not reprinted here
+  -- it moves whenever the set grows, as it did when 4.3.19's fiscal-quarter mapping
+  brought `LU` in. `tests/test_issuer_reported_closes.py` holds the floor.
 
 ##### `GTE`'s absent split record stops being an argument from absence
 
