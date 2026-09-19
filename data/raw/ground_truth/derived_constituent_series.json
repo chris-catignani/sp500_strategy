@@ -1456,6 +1456,71 @@
         "split_factor": 1.0,
         "split_adjusted_price_usd": 41.03,
         "split_source_accession": "0000950130-00-001551"
+      },
+      "2014": {
+        "price_usd": 75.25,
+        "matched_name": "Viacom Inc. Class B",
+        "rank": 164,
+        "shares": 4007268,
+        "value_usd_thousands": 301547,
+        "report_date": "2014-12-31",
+        "accession_number": "0000932471-15-005659",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2014_N-CSR_0000932471-15-005659.txt",
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 75.25,
+        "split_source_accession": "0000950130-00-001551"
+      },
+      "2015": {
+        "price_usd": 41.16,
+        "matched_name": "Viacom Inc. Class B",
+        "rank": 283,
+        "shares": 4238227,
+        "value_usd_thousands": 174445,
+        "report_date": "2015-12-31",
+        "accession_number": "0000932471-16-012795",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2015_N-CSR_0000932471-16-012795.txt",
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 41.1599,
+        "split_source_accession": "0000950130-00-001551"
+      },
+      "2016": {
+        "price_usd": 35.1,
+        "matched_name": "Viacom Inc. Class B",
+        "rank": 343,
+        "shares": 5077954,
+        "value_usd_thousands": 178236,
+        "report_date": "2016-12-31",
+        "accession_number": "0000932471-17-003352",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2016_N-CSR_0000932471-17-003352.txt",
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 35.1,
+        "split_source_accession": "0000950130-00-001551"
+      },
+      "2017": {
+        "price_usd": 30.81,
+        "matched_name": "Viacom Inc. Class B",
+        "rank": 407,
+        "shares": 6031672,
+        "value_usd_thousands": 185836,
+        "report_date": "2017-12-31",
+        "accession_number": "0000932471-18-005288",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2017_N-CSR_0000932471-18-005288.txt",
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 30.81,
+        "split_source_accession": "0000950130-00-001551"
+      },
+      "2018": {
+        "price_usd": 25.7,
+        "matched_name": "Viacom Inc. Class B",
+        "rank": 418,
+        "shares": 6692871,
+        "value_usd_thousands": 172007,
+        "report_date": "2018-12-31",
+        "accession_number": "0001104659-19-011820",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2018_N-CSR_0001104659-19-011820.txt",
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 25.7,
+        "split_source_accession": "0000950130-00-001551"
       }
     },
     "NT": {
@@ -2325,6 +2390,32 @@
         "source_file": "data/raw/ground_truth/sec_filings/VG500_2006_N-CSR_0000932471-07-000538.txt",
         "split_factor": 1.0,
         "split_adjusted_price_usd": 13.2,
+        "split_source_accession": "0000912057-01-007516"
+      },
+      "2014": {
+        "price_usd": 29.74,
+        "matched_name": "EMC Corp.",
+        "rank": 77,
+        "shares": 22073497,
+        "value_usd_thousands": 656466,
+        "report_date": "2014-12-31",
+        "accession_number": "0000932471-15-005659",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2014_N-CSR_0000932471-15-005659.txt",
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 29.74,
+        "split_source_accession": "0000912057-01-007516"
+      },
+      "2015": {
+        "price_usd": 25.68,
+        "matched_name": "EMC Corp.",
+        "rank": 83,
+        "shares": 23671726,
+        "value_usd_thousands": 607890,
+        "report_date": "2015-12-31",
+        "accession_number": "0000932471-16-012795",
+        "source_file": "data/raw/ground_truth/sec_filings/VG500_2015_N-CSR_0000932471-16-012795.txt",
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 25.68,
         "split_source_accession": "0000912057-01-007516"
       }
     },

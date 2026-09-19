@@ -79,9 +79,9 @@
     "acquirer_ticker": "DVMT",
     "accession_number": "0001193125-16-706576",
     "annual": {
-      "stock_leg_value_per_share": 13.2,
+      "stock_leg_value_per_share": 25.68,
       "stock_leg_value_basis": "last_observed_price",
-      "source_period": "2006",
+      "source_period": "2015",
       "withheld_observations": {}
     },
     "quarterly": {
