@@ -272,5 +272,85 @@ class TestSourcedVerdictsAreGrounded(unittest.TestCase):
                 )
 
 
+class TestRotExposureIsDeclared(unittest.TestCase):
+    """Whether a reader can verify a figure without running our code.
+
+    This is the axis that predicts rot, and it cuts across the verdicts. 4.6.4's
+    spinoff proceeds print a Form 8937 ratio times a filed close --
+    `$0.324084 \times \$45.875 = \$14.86735 \approx \mathbf{\$14.87}$` -- so they are
+    computed and cannot rot: a reader confirms them with a calculator and no change to
+    our code can move them. `87.0%` in 4.3.6 is a match rate over our own parsing, and
+    moves whenever the parser or the rosters change. The old sourced/computed binary
+    called both "computed".
+
+    An earlier revision of this docstring cited 4.5.3's `$1.32` as the archetype,
+    "4 x $0.33". The document prints no such operation -- it says
+    `\$0.33 quarterly dividend (\$1.32/year)` -- so the example was invented rather
+    than read. It is recorded here because publishing an unsourced illustration is the
+    same defect this file exists to prevent.
+
+    WHAT THIS TEST CANNOT DO. It checks that a figure claiming to be stable carries a
+    trace and prints an operation. It cannot check that the trace is CORRECT. 4.3.6
+    publishes `89.8% (494/550)`, which prints an operation and passes every mechanical
+    check here -- and is pipeline, because 494 is our own match count. Same surface
+    form as 4.5.4's `(41.27 - 64.75 + 16.97) / 64.75`, opposite rot behaviour.
+
+    So a passing suite is not evidence that the classification is right. Every
+    `rot_exposed: false` verdict is controller-reviewed; this test only makes the
+    reviewable set well-formed.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.audit_doc_figures import load_manifest
+        cls.manifest = load_manifest()
+
+    def _rot_classified(self):
+        from scripts.audit_doc_figures import ROT_CLASSIFIED_VERDICTS
+        return [e for e in self.manifest["entries"]
+                if e["verdict"] in ROT_CLASSIFIED_VERDICTS]
+
+    def test_every_derivation_and_decision_evidence_declares_rot_exposure(self):
+        missing = [key_of(e) for e in self._rot_classified()
+                   if not isinstance(e.get("rot_exposed"), bool)]
+        self.assertEqual(
+            len(missing), 0,
+            f"{len(missing)} entries do not declare rot_exposed; first five: "
+            f"{missing[:5]}",
+        )
+
+    def test_nothing_else_declares_rot_exposure(self):
+        """A `sourced` or `remove` entry has no business carrying this field."""
+        from scripts.audit_doc_figures import ROT_CLASSIFIED_VERDICTS
+        stray = [key_of(e) for e in self.manifest["entries"]
+                 if e["verdict"] not in ROT_CLASSIFIED_VERDICTS
+                 and e.get("rot_exposed") is not None]
+        self.assertEqual(stray, [], "rot_exposed set on a verdict that does not take it")
+
+    def test_a_stable_figure_carries_an_inputs_trace(self):
+        """`rot_exposed: false` asserts the leaves are filings. Say which."""
+        missing = [key_of(e) for e in self._rot_classified()
+                   if e.get("rot_exposed") is False and not e.get("inputs_trace")]
+        self.assertEqual(
+            len(missing), 0,
+            f"{len(missing)} stable entries carry no inputs_trace; first five: "
+            f"{missing[:5]}",
+        )
+
+    def test_a_stable_figure_prints_its_operation(self):
+        """Necessary, not sufficient. See this class's docstring for why."""
+        from scripts.audit_doc_figures import PRINTS_AN_OPERATION
+        silent = [
+            (e["section"], e["figure"]) for e in self._rot_classified()
+            if e.get("rot_exposed") is False
+            and not PRINTS_AN_OPERATION.search(e.get("evidence_quote") or "")
+        ]
+        self.assertEqual(
+            len(silent), 0,
+            f"{len(silent)} entries claim to be self-checking without printing an "
+            f"operation; first five: {silent[:5]}",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
