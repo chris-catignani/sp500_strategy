@@ -1015,21 +1015,21 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
-      "figure": "3.06%",
+      "figure": "3.05%",
       "occurrence": 1,
       "verdict": "decision-evidence",
       "guard": null,
-      "note": "NVIDIA weight at 2023-12-31 justifying Alphabet consolidation ranking impact",
+      "note": "Corrected under #91 from 3.06% to 3.05%. Form NPORT-P accession 0001752724-24-043296 states 3.0548% at 2023-12-31 (CUSIP 67066G104); the published value was rounded the wrong way. Five of the seven weights this sentence quotes matched the filing to the cent. Corrected rather than removed because the figure is read from a filing, which cannot change, so refreshing it relocates no maintenance chore -- the remove-don't-refresh rule governs figures overtaken by a data change, not misquotations of an immutable source.",
       "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
-      "figure": "2.07%",
+      "figure": "2.06%",
       "occurrence": 1,
       "verdict": "decision-evidence",
       "guard": null,
-      "note": "Alphabet Class A weight at 2023-12-31 justifying consolidation",
+      "note": "Corrected under #91 from 2.07% to 2.06%. Form NPORT-P accession 0001752724-24-043296 states 2.0646% at 2023-12-31 (CUSIP 02079K305); the published value was rounded the wrong way. Five of the seven weights this sentence quotes matched the filing to the cent. Corrected rather than removed because the figure is read from a filing, which cannot change, so refreshing it relocates no maintenance chore -- the remove-don't-refresh rule governs figures overtaken by a data change, not misquotations of an immutable source.",
       "rot_exposed": true
     },
     {
