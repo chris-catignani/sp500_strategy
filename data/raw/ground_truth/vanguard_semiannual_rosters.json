@@ -3,10 +3,8 @@
   "source_entity": "Vanguard Index Trust, 500 Index Fund (CIK 0000036405)",
   "grade": "UNAUDITED. These are semi-annual reports and carry no Report of Independent Accountants, unlike the December-31 annual rosters in vanguard_audited_rosters.json. Every entry is stamped audited: false.",
   "validation": "Every roster reconciles dollar-exact to its filing's stated total, holds a position count consistent with an S&P 500 tracker, and is the largest fund schedule in its filing. A filing failing any of the three is refused, not approximated.",
-  "coverage": "12 of 13 archived semi-annual filings produce a roster, spanning 1994-2006.",
-  "refused_filings": {
-    "2005": "VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt: parsed schedule totals 10,269,896k but the filing's largest Total Common Stocks figure is 103,856,009k. The 500 Index Fund is the largest fund in these filings, so this is a different fund's schedule. Refusing to publish it as a Q2 roster."
-  },
+  "coverage": "13 of 13 archived semi-annual filings produce a roster, spanning 1994-2006.",
+  "refused_filings": {},
   "rosters_by_period": {
     "1994-Q2": {
       "position_count": 502,
@@ -39232,6 +39230,3570 @@
       "form": "N-CSRS",
       "accession_number": "0000932471-04-000761",
       "source_file": "data/raw/ground_truth/sec_filings/VG500_2004_Q2_N-CSRS_0000932471-04-000761.txt"
+    },
+    "2005-Q2": {
+      "position_count": 507,
+      "stated_total_usd": 103856009000,
+      "parsed_total_usd": 103856009000,
+      "stated_total_usd_thousands": 103856009,
+      "parsed_total_usd_thousands": 103856009,
+      "holdings": [
+        {
+          "rank": 1,
+          "name": "General Electric Co.",
+          "shares": 101154444,
+          "value_usd_thousands": 3505002,
+          "weight": 0.033749
+        },
+        {
+          "rank": 2,
+          "name": "ExxonMobil Corp.",
+          "shares": 60713480,
+          "value_usd_thousands": 3489204,
+          "weight": 0.033597
+        },
+        {
+          "rank": 3,
+          "name": "Microsoft Corp.",
+          "shares": 95833756,
+          "value_usd_thousands": 2380511,
+          "weight": 0.022921
+        },
+        {
+          "rank": 4,
+          "name": "Citigroup, Inc.",
+          "shares": 49615939,
+          "value_usd_thousands": 2293745,
+          "weight": 0.022086
+        },
+        {
+          "rank": 5,
+          "name": "Pfizer Inc.",
+          "shares": 70914948,
+          "value_usd_thousands": 1955834,
+          "weight": 0.018832
+        },
+        {
+          "rank": 6,
+          "name": "Johnson & Johnson",
+          "shares": 28360294,
+          "value_usd_thousands": 1843419,
+          "weight": 0.01775
+        },
+        {
+          "rank": 7,
+          "name": "Bank of America Corp.",
+          "shares": 38355861,
+          "value_usd_thousands": 1749411,
+          "weight": 0.016845
+        },
+        {
+          "rank": 8,
+          "name": "Wal-Mart Stores, Inc.",
+          "shares": 31908934,
+          "value_usd_thousands": 1538011,
+          "weight": 0.014809
+        },
+        {
+          "rank": 9,
+          "name": "Intel Corp.",
+          "shares": 58875224,
+          "value_usd_thousands": 1534288,
+          "weight": 0.014773
+        },
+        {
+          "rank": 10,
+          "name": "American International Group, Inc.",
+          "shares": 24748966,
+          "value_usd_thousands": 1437915,
+          "weight": 0.013845
+        },
+        {
+          "rank": 11,
+          "name": "Altria Group, Inc.",
+          "shares": 19751750,
+          "value_usd_thousands": 1277148,
+          "weight": 0.012297
+        },
+        {
+          "rank": 12,
+          "name": "The Procter & Gamble Co.",
+          "shares": 23601152,
+          "value_usd_thousands": 1244961,
+          "weight": 0.011987
+        },
+        {
+          "rank": 13,
+          "name": "JPMorgan Chase & Co.",
+          "shares": 33559798,
+          "value_usd_thousands": 1185332,
+          "weight": 0.011413
+        },
+        {
+          "rank": 14,
+          "name": "Cisco Systems, Inc.",
+          "shares": 60951368,
+          "value_usd_thousands": 1164781,
+          "weight": 0.011215
+        },
+        {
+          "rank": 15,
+          "name": "International Business Machines Corp.",
+          "shares": 15387126,
+          "value_usd_thousands": 1141725,
+          "weight": 0.010993
+        },
+        {
+          "rank": 16,
+          "name": "Chevron Corp.",
+          "shares": 20011784,
+          "value_usd_thousands": 1119059,
+          "weight": 0.010775
+        },
+        {
+          "rank": 17,
+          "name": "Wells Fargo & Co.",
+          "shares": 16093023,
+          "value_usd_thousands": 991008,
+          "weight": 0.009542
+        },
+        {
+          "rank": 18,
+          "name": "Dell Inc.",
+          "shares": 23091177,
+          "value_usd_thousands": 912332,
+          "weight": 0.008785
+        },
+        {
+          "rank": 19,
+          "name": "Verizon Communications Inc.",
+          "shares": 26391965,
+          "value_usd_thousands": 911842,
+          "weight": 0.00878
+        },
+        {
+          "rank": 20,
+          "name": "The Coca-Cola Co.",
+          "shares": 21586395,
+          "value_usd_thousands": 901232,
+          "weight": 0.008678
+        },
+        {
+          "rank": 21,
+          "name": "PepsiCo, Inc.",
+          "shares": 15971097,
+          "value_usd_thousands": 861321,
+          "weight": 0.008293
+        },
+        {
+          "rank": 22,
+          "name": "Home Depot, Inc.",
+          "shares": 20470818,
+          "value_usd_thousands": 796315,
+          "weight": 0.007667
+        },
+        {
+          "rank": 23,
+          "name": "ConocoPhillips Co.",
+          "shares": 13279128,
+          "value_usd_thousands": 763417,
+          "weight": 0.007351
+        },
+        {
+          "rank": 24,
+          "name": "SBC Communications Inc.",
+          "shares": 31503629,
+          "value_usd_thousands": 748211,
+          "weight": 0.007204
+        },
+        {
+          "rank": 25,
+          "name": "Time Warner, Inc.",
+          "shares": 44690066,
+          "value_usd_thousands": 746771,
+          "weight": 0.00719
+        },
+        {
+          "rank": 26,
+          "name": "Wachovia Corp.",
+          "shares": 15035241,
+          "value_usd_thousands": 745748,
+          "weight": 0.007181
+        },
+        {
+          "rank": 27,
+          "name": "United Parcel Service, Inc.",
+          "shares": 10623980,
+          "value_usd_thousands": 734754,
+          "weight": 0.007075
+        },
+        {
+          "rank": 28,
+          "name": "Abbott Laboratories",
+          "shares": 14789602,
+          "value_usd_thousands": 724838,
+          "weight": 0.006979
+        },
+        {
+          "rank": 29,
+          "name": "Amgen, Inc.",
+          "shares": 11802455,
+          "value_usd_thousands": 713576,
+          "weight": 0.006871
+        },
+        {
+          "rank": 30,
+          "name": "Hewlett-Packard Co.",
+          "shares": 27528451,
+          "value_usd_thousands": 647194,
+          "weight": 0.006232
+        },
+        {
+          "rank": 31,
+          "name": "Merck & Co., Inc.",
+          "shares": 21012410,
+          "value_usd_thousands": 647182,
+          "weight": 0.006232
+        },
+        {
+          "rank": 32,
+          "name": "UnitedHealth Group Inc.",
+          "shares": 12076026,
+          "value_usd_thousands": 629644,
+          "weight": 0.006063
+        },
+        {
+          "rank": 33,
+          "name": "Eli Lilly & Co.",
+          "shares": 10806883,
+          "value_usd_thousands": 602051,
+          "weight": 0.005797
+        },
+        {
+          "rank": 34,
+          "name": "Medtronic, Inc.",
+          "shares": 11535798,
+          "value_usd_thousands": 597439,
+          "weight": 0.005753
+        },
+        {
+          "rank": 35,
+          "name": "American Express Co.",
+          "shares": 11169774,
+          "value_usd_thousands": 594567,
+          "weight": 0.005725
+        },
+        {
+          "rank": 36,
+          "name": "Comcast Corp. Class A",
+          "shares": 19220453,
+          "value_usd_thousands": 590068,
+          "weight": 0.005682
+        },
+        {
+          "rank": 37,
+          "name": "Wyeth",
+          "shares": 12765785,
+          "value_usd_thousands": 568077,
+          "weight": 0.00547
+        },
+        {
+          "rank": 38,
+          "name": "Tyco International Ltd.",
+          "shares": 19261475,
+          "value_usd_thousands": 562435,
+          "weight": 0.005416
+        },
+        {
+          "rank": 39,
+          "name": "Oracle Corp.",
+          "shares": 42171060,
+          "value_usd_thousands": 556658,
+          "weight": 0.00536
+        },
+        {
+          "rank": 40,
+          "name": "Morgan Stanley",
+          "shares": 10449308,
+          "value_usd_thousands": 548275,
+          "weight": 0.005279
+        },
+        {
+          "rank": 41,
+          "name": "Fannie Mae",
+          "shares": 9231351,
+          "value_usd_thousands": 539111,
+          "weight": 0.005191
+        },
+        {
+          "rank": 42,
+          "name": "3M Co.",
+          "shares": 7339810,
+          "value_usd_thousands": 530668,
+          "weight": 0.00511
+        },
+        {
+          "rank": 43,
+          "name": "The Boeing Co.",
+          "shares": 7881090,
+          "value_usd_thousands": 520152,
+          "weight": 0.005008
+        },
+        {
+          "rank": 44,
+          "name": "QUALCOMM Inc.",
+          "shares": 15580406,
+          "value_usd_thousands": 514309,
+          "weight": 0.004952
+        },
+        {
+          "rank": 45,
+          "name": "U.S. Bancorp",
+          "shares": 17479872,
+          "value_usd_thousands": 510412,
+          "weight": 0.004915
+        },
+        {
+          "rank": 46,
+          "name": "United Technologies Corp.",
+          "shares": 9763047,
+          "value_usd_thousands": 501332,
+          "weight": 0.004827
+        },
+        {
+          "rank": 47,
+          "name": "Merrill Lynch & Co., Inc.",
+          "shares": 9016262,
+          "value_usd_thousands": 495985,
+          "weight": 0.004776
+        },
+        {
+          "rank": 48,
+          "name": "The Walt Disney Co.",
+          "shares": 19469069,
+          "value_usd_thousands": 490231,
+          "weight": 0.00472
+        },
+        {
+          "rank": 49,
+          "name": "Viacom Inc. Class B",
+          "shares": 15233937,
+          "value_usd_thousands": 487791,
+          "weight": 0.004697
+        },
+        {
+          "rank": 50,
+          "name": "Gillette Co.",
+          "shares": 9514768,
+          "value_usd_thousands": 481733,
+          "weight": 0.004638
+        },
+        {
+          "rank": 51,
+          "name": "Bristol-Myers Squibb Co.",
+          "shares": 18638724,
+          "value_usd_thousands": 465595,
+          "weight": 0.004483
+        },
+        {
+          "rank": 52,
+          "name": "BellSouth Corp.",
+          "shares": 17463409,
+          "value_usd_thousands": 464003,
+          "weight": 0.004468
+        },
+        {
+          "rank": 53,
+          "name": "Target Corp.",
+          "shares": 8425112,
+          "value_usd_thousands": 458410,
+          "weight": 0.004414
+        },
+        {
+          "rank": 54,
+          "name": "Walgreen Co.",
+          "shares": 9751124,
+          "value_usd_thousands": 448454,
+          "weight": 0.004318
+        },
+        {
+          "rank": 55,
+          "name": "Texas Instruments, Inc.",
+          "shares": 15852894,
+          "value_usd_thousands": 444991,
+          "weight": 0.004285
+        },
+        {
+          "rank": 56,
+          "name": "The News Corp., Inc.",
+          "shares": 27498856,
+          "value_usd_thousands": 444931,
+          "weight": 0.004284
+        },
+        {
+          "rank": 57,
+          "name": "Yahoo! Inc.",
+          "shares": 12519554,
+          "value_usd_thousands": 433803,
+          "weight": 0.004177
+        },
+        {
+          "rank": 58,
+          "name": "The Goldman Sachs Group, Inc.",
+          "shares": 4214355,
+          "value_usd_thousands": 429948,
+          "weight": 0.00414
+        },
+        {
+          "rank": 59,
+          "name": "Freddie Mac",
+          "shares": 6586648,
+          "value_usd_thousands": 429647,
+          "weight": 0.004137
+        },
+        {
+          "rank": 60,
+          "name": "Lowe's Cos., Inc.",
+          "shares": 7367397,
+          "value_usd_thousands": 428930,
+          "weight": 0.00413
+        },
+        {
+          "rank": 61,
+          "name": "Motorola, Inc.",
+          "shares": 23388162,
+          "value_usd_thousands": 427068,
+          "weight": 0.004112
+        },
+        {
+          "rank": 62,
+          "name": "Schlumberger Ltd.",
+          "shares": 5619191,
+          "value_usd_thousands": 426721,
+          "weight": 0.004109
+        },
+        {
+          "rank": 63,
+          "name": "E.I. du Pont de Nemours & Co.",
+          "shares": 9500210,
+          "value_usd_thousands": 408604,
+          "weight": 0.003934
+        },
+        {
+          "rank": 64,
+          "name": "Dow Chemical Co.",
+          "shares": 9167937,
+          "value_usd_thousands": 408248,
+          "weight": 0.003931
+        },
+        {
+          "rank": 65,
+          "name": "WellPoint Inc.",
+          "shares": 5842848,
+          "value_usd_thousands": 406896,
+          "weight": 0.003918
+        },
+        {
+          "rank": 66,
+          "name": "eBay Inc.",
+          "shares": 11586170,
+          "value_usd_thousands": 382459,
+          "weight": 0.003683
+        },
+        {
+          "rank": 67,
+          "name": "Allstate Corp.",
+          "shares": 6373398,
+          "value_usd_thousands": 380811,
+          "weight": 0.003667
+        },
+        {
+          "rank": 68,
+          "name": "Sprint Corp.",
+          "shares": 14113012,
+          "value_usd_thousands": 354095,
+          "weight": 0.003409
+        },
+        {
+          "rank": 69,
+          "name": "Nextel Communications, Inc.",
+          "shares": 10733351,
+          "value_usd_thousands": 346795,
+          "weight": 0.003339
+        },
+        {
+          "rank": 70,
+          "name": "Washington Mutual, Inc.",
+          "shares": 8366708,
+          "value_usd_thousands": 340441,
+          "weight": 0.003278
+        },
+        {
+          "rank": 71,
+          "name": "Anheuser-Busch Cos., Inc.",
+          "shares": 7404575,
+          "value_usd_thousands": 338759,
+          "weight": 0.003262
+        },
+        {
+          "rank": 72,
+          "name": "McDonald's Corp.",
+          "shares": 12088590,
+          "value_usd_thousands": 335458,
+          "weight": 0.00323
+        },
+        {
+          "rank": 73,
+          "name": "Exelon Corp.",
+          "shares": 6381852,
+          "value_usd_thousands": 327580,
+          "weight": 0.003154
+        },
+        {
+          "rank": 74,
+          "name": "Prudential Financial, Inc.",
+          "shares": 4978585,
+          "value_usd_thousands": 326894,
+          "weight": 0.003148
+        },
+        {
+          "rank": 75,
+          "name": "MBNA Corp.",
+          "shares": 12090367,
+          "value_usd_thousands": 316284,
+          "weight": 0.003045
+        },
+        {
+          "rank": 76,
+          "name": "MetLife, Inc.",
+          "shares": 6994025,
+          "value_usd_thousands": 314311,
+          "weight": 0.003026
+        },
+        {
+          "rank": 77,
+          "name": "EMC Corp.",
+          "shares": 22916475,
+          "value_usd_thousands": 314185,
+          "weight": 0.003025
+        },
+        {
+          "rank": 78,
+          "name": "Caterpillar, Inc.",
+          "shares": 3258922,
+          "value_usd_thousands": 310608,
+          "weight": 0.002991
+        },
+        {
+          "rank": 79,
+          "name": "First Data Corp.",
+          "shares": 7426211,
+          "value_usd_thousands": 298088,
+          "weight": 0.00287
+        },
+        {
+          "rank": 80,
+          "name": "Honeywell International Inc.",
+          "shares": 8135743,
+          "value_usd_thousands": 298012,
+          "weight": 0.002869
+        },
+        {
+          "rank": 81,
+          "name": "Occidental Petroleum Corp.",
+          "shares": 3798339,
+          "value_usd_thousands": 292206,
+          "weight": 0.002814
+        },
+        {
+          "rank": 82,
+          "name": "Apple Computer, Inc.",
+          "shares": 7858307,
+          "value_usd_thousands": 289264,
+          "weight": 0.002785
+        },
+        {
+          "rank": 83,
+          "name": "Kimberly-Clark Corp.",
+          "shares": 4562895,
+          "value_usd_thousands": 285592,
+          "weight": 0.00275
+        },
+        {
+          "rank": 84,
+          "name": "Carnival Corp.",
+          "shares": 5025975,
+          "value_usd_thousands": 274167,
+          "weight": 0.00264
+        },
+        {
+          "rank": 85,
+          "name": "Schering-Plough Corp.",
+          "shares": 14068590,
+          "value_usd_thousands": 268147,
+          "weight": 0.002582
+        },
+        {
+          "rank": 86,
+          "name": "Duke Energy Corp.",
+          "shares": 8838541,
+          "value_usd_thousands": 262770,
+          "weight": 0.00253
+        },
+        {
+          "rank": 87,
+          "name": "Lehman Brothers Holdings, Inc.",
+          "shares": 2638021,
+          "value_usd_thousands": 261903,
+          "weight": 0.002522
+        },
+        {
+          "rank": 88,
+          "name": "St. Paul Travelers Cos., Inc.",
+          "shares": 6426105,
+          "value_usd_thousands": 254024,
+          "weight": 0.002446
+        },
+        {
+          "rank": 89,
+          "name": "Applied Materials, Inc.",
+          "shares": 15679196,
+          "value_usd_thousands": 253689,
+          "weight": 0.002443
+        },
+        {
+          "rank": 90,
+          "name": "Lockheed Martin Corp.",
+          "shares": 3853402,
+          "value_usd_thousands": 249970,
+          "weight": 0.002407
+        },
+        {
+          "rank": 91,
+          "name": "Colgate-Palmolive Co.",
+          "shares": 4989813,
+          "value_usd_thousands": 249042,
+          "weight": 0.002398
+        },
+        {
+          "rank": 92,
+          "name": "Emerson Electric Co.",
+          "shares": 3974244,
+          "value_usd_thousands": 248907,
+          "weight": 0.002397
+        },
+        {
+          "rank": 93,
+          "name": "Southern Co.",
+          "shares": 7098943,
+          "value_usd_thousands": 246120,
+          "weight": 0.00237
+        },
+        {
+          "rank": 94,
+          "name": "Dominion Resources, Inc.",
+          "shares": 3247492,
+          "value_usd_thousands": 238333,
+          "weight": 0.002295
+        },
+        {
+          "rank": 95,
+          "name": "Cardinal Health, Inc.",
+          "shares": 4084479,
+          "value_usd_thousands": 235184,
+          "weight": 0.002265
+        },
+        {
+          "rank": 96,
+          "name": "SunTrust Banks, Inc.",
+          "shares": 3240621,
+          "value_usd_thousands": 234102,
+          "weight": 0.002254
+        },
+        {
+          "rank": 97,
+          "name": "Automatic Data Processing, Inc.",
+          "shares": 5563639,
+          "value_usd_thousands": 233506,
+          "weight": 0.002248
+        },
+        {
+          "rank": 98,
+          "name": "FedEx Corp.",
+          "shares": 2880950,
+          "value_usd_thousands": 233386,
+          "weight": 0.002247
+        },
+        {
+          "rank": 99,
+          "name": "Halliburton Co.",
+          "shares": 4823483,
+          "value_usd_thousands": 230659,
+          "weight": 0.002221
+        },
+        {
+          "rank": 100,
+          "name": "Corning, Inc.",
+          "shares": 13822189,
+          "value_usd_thousands": 229725,
+          "weight": 0.002212
+        },
+        {
+          "rank": 101,
+          "name": "Aetna Inc.",
+          "shares": 2770094,
+          "value_usd_thousands": 229419,
+          "weight": 0.002209
+        },
+        {
+          "rank": 102,
+          "name": "Devon Energy Corp.",
+          "shares": 4518226,
+          "value_usd_thousands": 228984,
+          "weight": 0.002205
+        },
+        {
+          "rank": 103,
+          "name": "HCA Inc.",
+          "shares": 3997253,
+          "value_usd_thousands": 226524,
+          "weight": 0.002181
+        },
+        {
+          "rank": 104,
+          "name": "CVS Corp.",
+          "shares": 7725883,
+          "value_usd_thousands": 224591,
+          "weight": 0.002163
+        },
+        {
+          "rank": 105,
+          "name": "Cendant Corp.",
+          "shares": 10029339,
+          "value_usd_thousands": 224356,
+          "weight": 0.00216
+        },
+        {
+          "rank": 106,
+          "name": "Baxter International, Inc.",
+          "shares": 5920135,
+          "value_usd_thousands": 219637,
+          "weight": 0.002115
+        },
+        {
+          "rank": 107,
+          "name": "Sysco Corp.",
+          "shares": 6037672,
+          "value_usd_thousands": 218503,
+          "weight": 0.002104
+        },
+        {
+          "rank": 108,
+          "name": "Alcoa Inc.",
+          "shares": 8318030,
+          "value_usd_thousands": 217350,
+          "weight": 0.002093
+        },
+        {
+          "rank": 109,
+          "name": "Countrywide Financial Corp.",
+          "shares": 5605090,
+          "value_usd_thousands": 216413,
+          "weight": 0.002084
+        },
+        {
+          "rank": 110,
+          "name": "The Bank of New York Co., Inc.",
+          "shares": 7424209,
+          "value_usd_thousands": 213669,
+          "weight": 0.002057
+        },
+        {
+          "rank": 111,
+          "name": "The Hartford Financial Services Group Inc.",
+          "shares": 2829024,
+          "value_usd_thousands": 211554,
+          "weight": 0.002037
+        },
+        {
+          "rank": 112,
+          "name": "General Dynamics Corp.",
+          "shares": 1911025,
+          "value_usd_thousands": 209334,
+          "weight": 0.002016
+        },
+        {
+          "rank": 113,
+          "name": "Guidant Corp.",
+          "shares": 3099618,
+          "value_usd_thousands": 208604,
+          "weight": 0.002009
+        },
+        {
+          "rank": 114,
+          "name": "BB&T Corp.",
+          "shares": 5210841,
+          "value_usd_thousands": 208277,
+          "weight": 0.002005
+        },
+        {
+          "rank": 115,
+          "name": "Illinois Tool Works, Inc.",
+          "shares": 2603492,
+          "value_usd_thousands": 207446,
+          "weight": 0.001997
+        },
+        {
+          "rank": 116,
+          "name": "AFLAC Inc.",
+          "shares": 4784869,
+          "value_usd_thousands": 207089,
+          "weight": 0.001994
+        },
+        {
+          "rank": 117,
+          "name": "Fifth Third Bancorp",
+          "shares": 4975953,
+          "value_usd_thousands": 205059,
+          "weight": 0.001974
+        },
+        {
+          "rank": 118,
+          "name": "Costco Wholesale Corp.",
+          "shares": 4555723,
+          "value_usd_thousands": 204188,
+          "weight": 0.001966
+        },
+        {
+          "rank": 119,
+          "name": "SLM Corp.",
+          "shares": 4001245,
+          "value_usd_thousands": 203263,
+          "weight": 0.001957
+        },
+        {
+          "rank": 120,
+          "name": "Burlington Resources, Inc.",
+          "shares": 3676573,
+          "value_usd_thousands": 203094,
+          "weight": 0.001956
+        },
+        {
+          "rank": 121,
+          "name": "Apache Corp.",
+          "shares": 3130075,
+          "value_usd_thousands": 202203,
+          "weight": 0.001947
+        },
+        {
+          "rank": 122,
+          "name": "Best Buy Co., Inc.",
+          "shares": 2847356,
+          "value_usd_thousands": 195186,
+          "weight": 0.001879
+        },
+        {
+          "rank": 123,
+          "name": "ALLTEL Corp.",
+          "shares": 3119359,
+          "value_usd_thousands": 194274,
+          "weight": 0.001871
+        },
+        {
+          "rank": 124,
+          "name": "Valero Energy Corp.",
+          "shares": 2448548,
+          "value_usd_thousands": 193705,
+          "weight": 0.001865
+        },
+        {
+          "rank": 125,
+          "name": "National City Corp.",
+          "shares": 5667425,
+          "value_usd_thousands": 193373,
+          "weight": 0.001862
+        },
+        {
+          "rank": 126,
+          "name": "Boston Scientific Corp.",
+          "shares": 7151495,
+          "value_usd_thousands": 193090,
+          "weight": 0.001859
+        },
+        {
+          "rank": 127,
+          "name": "Caremark Rx, Inc.",
+          "shares": 4326398,
+          "value_usd_thousands": 192611,
+          "weight": 0.001855
+        },
+        {
+          "rank": 128,
+          "name": "Capital One Financial Corp.",
+          "shares": 2404479,
+          "value_usd_thousands": 192382,
+          "weight": 0.001852
+        },
+        {
+          "rank": 129,
+          "name": "Starbucks Corp.",
+          "shares": 3717596,
+          "value_usd_thousands": 192051,
+          "weight": 0.001849
+        },
+        {
+          "rank": 130,
+          "name": "TXU Corp.",
+          "shares": 2285887,
+          "value_usd_thousands": 189934,
+          "weight": 0.001829
+        },
+        {
+          "rank": 131,
+          "name": "Gilead Sciences, Inc.",
+          "shares": 4309154,
+          "value_usd_thousands": 189560,
+          "weight": 0.001825
+        },
+        {
+          "rank": 132,
+          "name": "Northrop Grumman Corp.",
+          "shares": 3424682,
+          "value_usd_thousands": 189214,
+          "weight": 0.001822
+        },
+        {
+          "rank": 133,
+          "name": "NIKE, Inc. Class B",
+          "shares": 2178328,
+          "value_usd_thousands": 188643,
+          "weight": 0.001816
+        },
+        {
+          "rank": 134,
+          "name": "Progressive Corp. of Ohio",
+          "shares": 1895941,
+          "value_usd_thousands": 187338,
+          "weight": 0.001804
+        },
+        {
+          "rank": 135,
+          "name": "Anadarko Petroleum Corp.",
+          "shares": 2248017,
+          "value_usd_thousands": 184675,
+          "weight": 0.001778
+        },
+        {
+          "rank": 136,
+          "name": "General Motors Corp.",
+          "shares": 5393179,
+          "value_usd_thousands": 183368,
+          "weight": 0.001766
+        },
+        {
+          "rank": 137,
+          "name": "Ford Motor Co.",
+          "shares": 17552456,
+          "value_usd_thousands": 179737,
+          "weight": 0.001731
+        },
+        {
+          "rank": 138,
+          "name": "Zimmer Holdings, Inc.",
+          "shares": 2355295,
+          "value_usd_thousands": 179403,
+          "weight": 0.001727
+        },
+        {
+          "rank": 139,
+          "name": "Kohl's Corp.",
+          "shares": 3111357,
+          "value_usd_thousands": 173956,
+          "weight": 0.001675
+        },
+        {
+          "rank": 140,
+          "name": "Golden West Financial Corp.",
+          "shares": 2695912,
+          "value_usd_thousands": 173563,
+          "weight": 0.001671
+        },
+        {
+          "rank": 141,
+          "name": "Marathon Oil Corp.",
+          "shares": 3194351,
+          "value_usd_thousands": 170483,
+          "weight": 0.001642
+        },
+        {
+          "rank": 142,
+          "name": "Avon Products, Inc.",
+          "shares": 4501863,
+          "value_usd_thousands": 170396,
+          "weight": 0.001641
+        },
+        {
+          "rank": 143,
+          "name": "Stryker Corp.",
+          "shares": 3575619,
+          "value_usd_thousands": 170056,
+          "weight": 0.001637
+        },
+        {
+          "rank": 144,
+          "name": "Burlington Northern Santa Fe Corp.",
+          "shares": 3591285,
+          "value_usd_thousands": 169078,
+          "weight": 0.001628
+        },
+        {
+          "rank": 145,
+          "name": "Raytheon Co.",
+          "shares": 4313218,
+          "value_usd_thousands": 168733,
+          "weight": 0.001625
+        },
+        {
+          "rank": 146,
+          "name": "Unocal Corp.",
+          "shares": 2592109,
+          "value_usd_thousands": 168617,
+          "weight": 0.001624
+        },
+        {
+          "rank": 147,
+          "name": "Gannett Co., Inc.",
+          "shares": 2368838,
+          "value_usd_thousands": 168495,
+          "weight": 0.001622
+        },
+        {
+          "rank": 148,
+          "name": "Transocean Inc.",
+          "shares": 3110164,
+          "value_usd_thousands": 167856,
+          "weight": 0.001616
+        },
+        {
+          "rank": 149,
+          "name": "Newmont Mining Corp. (Holding Co.)",
+          "shares": 4253041,
+          "value_usd_thousands": 165996,
+          "weight": 0.001598
+        },
+        {
+          "rank": 150,
+          "name": "Electronic Arts Inc.",
+          "shares": 2923301,
+          "value_usd_thousands": 165488,
+          "weight": 0.001593
+        },
+        {
+          "rank": 151,
+          "name": "Baker Hughes, Inc.",
+          "shares": 3231255,
+          "value_usd_thousands": 165311,
+          "weight": 0.001592
+        },
+        {
+          "rank": 152,
+          "name": "General Mills, Inc.",
+          "shares": 3526754,
+          "value_usd_thousands": 165017,
+          "weight": 0.001589
+        },
+        {
+          "rank": 153,
+          "name": "Union Pacific Corp.",
+          "shares": 2508233,
+          "value_usd_thousands": 162534,
+          "weight": 0.001565
+        },
+        {
+          "rank": 154,
+          "name": "Monsanto Co.",
+          "shares": 2558273,
+          "value_usd_thousands": 160839,
+          "weight": 0.001549
+        },
+        {
+          "rank": 155,
+          "name": "The Chubb Corp.",
+          "shares": 1863025,
+          "value_usd_thousands": 159494,
+          "weight": 0.001536
+        },
+        {
+          "rank": 156,
+          "name": "The McGraw-Hill Cos., Inc.",
+          "shares": 3572696,
+          "value_usd_thousands": 158092,
+          "weight": 0.001522
+        },
+        {
+          "rank": 157,
+          "name": "FPL Group, Inc.",
+          "shares": 3738309,
+          "value_usd_thousands": 157233,
+          "weight": 0.001514
+        },
+        {
+          "rank": 158,
+          "name": "Deere & Co.",
+          "shares": 2351026,
+          "value_usd_thousands": 153969,
+          "weight": 0.001483
+        },
+        {
+          "rank": 159,
+          "name": "Waste Management, Inc.",
+          "shares": 5417749,
+          "value_usd_thousands": 153539,
+          "weight": 0.001478
+        },
+        {
+          "rank": 160,
+          "name": "Entergy Corp.",
+          "shares": 2021868,
+          "value_usd_thousands": 152752,
+          "weight": 0.001471
+        },
+        {
+          "rank": 161,
+          "name": "State Street Corp.",
+          "shares": 3156659,
+          "value_usd_thousands": 152309,
+          "weight": 0.001467
+        },
+        {
+          "rank": 162,
+          "name": "Simon Property Group, Inc. REIT",
+          "shares": 2095102,
+          "value_usd_thousands": 151874,
+          "weight": 0.001462
+        },
+        {
+          "rank": 163,
+          "name": "FirstEnergy Corp.",
+          "shares": 3145798,
+          "value_usd_thousands": 151344,
+          "weight": 0.001457
+        },
+        {
+          "rank": 164,
+          "name": "St. Jude Medical, Inc.",
+          "shares": 3455432,
+          "value_usd_thousands": 150691,
+          "weight": 0.001451
+        },
+        {
+          "rank": 165,
+          "name": "Clear Channel Communications, Inc.",
+          "shares": 4863295,
+          "value_usd_thousands": 150422,
+          "weight": 0.001448
+        },
+        {
+          "rank": 166,
+          "name": "Regions Financial Corp.",
+          "shares": 4424508,
+          "value_usd_thousands": 149902,
+          "weight": 0.001443
+        },
+        {
+          "rank": 167,
+          "name": "Staples, Inc.",
+          "shares": 7025502,
+          "value_usd_thousands": 149784,
+          "weight": 0.001442
+        },
+        {
+          "rank": 168,
+          "name": "Sara Lee Corp.",
+          "shares": 7508785,
+          "value_usd_thousands": 148749,
+          "weight": 0.001432
+        },
+        {
+          "rank": 169,
+          "name": "Weyerhaeuser Co.",
+          "shares": 2335657,
+          "value_usd_thousands": 148665,
+          "weight": 0.001431
+        },
+        {
+          "rank": 170,
+          "name": "Kellogg Co.",
+          "shares": 3335355,
+          "value_usd_thousands": 148223,
+          "weight": 0.001427
+        },
+        {
+          "rank": 171,
+          "name": "Symantec Corp.",
+          "shares": 6784391,
+          "value_usd_thousands": 147493,
+          "weight": 0.00142
+        },
+        {
+          "rank": 172,
+          "name": "PNC Financial Services Group",
+          "shares": 2704073,
+          "value_usd_thousands": 147264,
+          "weight": 0.001418
+        },
+        {
+          "rank": 173,
+          "name": "Sears Holdings Corp.",
+          "shares": 975306,
+          "value_usd_thousands": 146169,
+          "weight": 0.001407
+        },
+        {
+          "rank": 174,
+          "name": "AT&T Corp.",
+          "shares": 7641353,
+          "value_usd_thousands": 145491,
+          "weight": 0.001401
+        },
+        {
+          "rank": 175,
+          "name": "Franklin Resources Corp.",
+          "shares": 1889931,
+          "value_usd_thousands": 145487,
+          "weight": 0.001401
+        },
+        {
+          "rank": 176,
+          "name": "Genzyme Corp.- General Division",
+          "shares": 2406056,
+          "value_usd_thousands": 144580,
+          "weight": 0.001392
+        },
+        {
+          "rank": 177,
+          "name": "Yum! Brands, Inc.",
+          "shares": 2763427,
+          "value_usd_thousands": 143919,
+          "weight": 0.001386
+        },
+        {
+          "rank": 178,
+          "name": "Praxair, Inc.",
+          "shares": 3085161,
+          "value_usd_thousands": 143769,
+          "weight": 0.001384
+        },
+        {
+          "rank": 179,
+          "name": "The Gap, Inc.",
+          "shares": 7227248,
+          "value_usd_thousands": 142738,
+          "weight": 0.001374
+        },
+        {
+          "rank": 180,
+          "name": "International Paper Co.",
+          "shares": 4678056,
+          "value_usd_thousands": 141324,
+          "weight": 0.001361
+        },
+        {
+          "rank": 181,
+          "name": "Medco Health Solutions, Inc.",
+          "shares": 2643292,
+          "value_usd_thousands": 141046,
+          "weight": 0.001358
+        },
+        {
+          "rank": 182,
+          "name": "Marsh & McLennan Cos., Inc.",
+          "shares": 5082376,
+          "value_usd_thousands": 140782,
+          "weight": 0.001356
+        },
+        {
+          "rank": 183,
+          "name": "Omnicom Group Inc.",
+          "shares": 1748899,
+          "value_usd_thousands": 139667,
+          "weight": 0.001345
+        },
+        {
+          "rank": 184,
+          "name": "Computer Associates International, Inc.",
+          "shares": 5076056,
+          "value_usd_thousands": 139490,
+          "weight": 0.001343
+        },
+        {
+          "rank": 185,
+          "name": "Public Service Enterprise Group, Inc.",
+          "shares": 2276809,
+          "value_usd_thousands": 138476,
+          "weight": 0.001333
+        },
+        {
+          "rank": 186,
+          "name": "Danaher Corp.",
+          "shares": 2624551,
+          "value_usd_thousands": 137369,
+          "weight": 0.001323
+        },
+        {
+          "rank": 187,
+          "name": "American Electric Power Co., Inc.",
+          "shares": 3662522,
+          "value_usd_thousands": 135037,
+          "weight": 0.0013
+        },
+        {
+          "rank": 188,
+          "name": "Harley-Davidson, Inc.",
+          "shares": 2714946,
+          "value_usd_thousands": 134661,
+          "weight": 0.001297
+        },
+        {
+          "rank": 189,
+          "name": "CIGNA Corp.",
+          "shares": 1248246,
+          "value_usd_thousands": 133600,
+          "weight": 0.001286
+        },
+        {
+          "rank": 190,
+          "name": "Adobe Systems, Inc.",
+          "shares": 4663731,
+          "value_usd_thousands": 133476,
+          "weight": 0.001285
+        },
+        {
+          "rank": 191,
+          "name": "PG&E Corp.",
+          "shares": 3529720,
+          "value_usd_thousands": 132506,
+          "weight": 0.001276
+        },
+        {
+          "rank": 192,
+          "name": "The Kroger Co.",
+          "shares": 6950672,
+          "value_usd_thousands": 132271,
+          "weight": 0.001274
+        },
+        {
+          "rank": 193,
+          "name": "J.C. Penney Co., Inc. (Holding Co.)",
+          "shares": 2511089,
+          "value_usd_thousands": 132033,
+          "weight": 0.001271
+        },
+        {
+          "rank": 194,
+          "name": "Air Products & Chemicals, Inc.",
+          "shares": 2186707,
+          "value_usd_thousands": 131858,
+          "weight": 0.00127
+        },
+        {
+          "rank": 195,
+          "name": "Analog Devices, Inc.",
+          "shares": 3528897,
+          "value_usd_thousands": 131663,
+          "weight": 0.001268
+        },
+        {
+          "rank": 196,
+          "name": "Masco Corp.",
+          "shares": 4136367,
+          "value_usd_thousands": 131371,
+          "weight": 0.001265
+        },
+        {
+          "rank": 197,
+          "name": "EOG Resources, Inc.",
+          "shares": 2281756,
+          "value_usd_thousands": 129604,
+          "weight": 0.001248
+        },
+        {
+          "rank": 198,
+          "name": "Marriott International, Inc. Class A",
+          "shares": 1893027,
+          "value_usd_thousands": 129142,
+          "weight": 0.001243
+        },
+        {
+          "rank": 199,
+          "name": "KeyCorp",
+          "shares": 3888082,
+          "value_usd_thousands": 128890,
+          "weight": 0.001241
+        },
+        {
+          "rank": 200,
+          "name": "The Hershey Co.",
+          "shares": 2073776,
+          "value_usd_thousands": 128782,
+          "weight": 0.00124
+        },
+        {
+          "rank": 201,
+          "name": "Equity Office Properties Trust REIT",
+          "shares": 3886975,
+          "value_usd_thousands": 128659,
+          "weight": 0.001239
+        },
+        {
+          "rank": 202,
+          "name": "Wm. Wrigley Jr. Co.",
+          "shares": 1867612,
+          "value_usd_thousands": 128566,
+          "weight": 0.001238
+        },
+        {
+          "rank": 203,
+          "name": "North Fork Bancorp, Inc.",
+          "shares": 4555004,
+          "value_usd_thousands": 127950,
+          "weight": 0.001232
+        },
+        {
+          "rank": 204,
+          "name": "Archer-Daniels-Midland Co.",
+          "shares": 5949068,
+          "value_usd_thousands": 127191,
+          "weight": 0.001225
+        },
+        {
+          "rank": 205,
+          "name": "Becton, Dickinson & Co.",
+          "shares": 2407655,
+          "value_usd_thousands": 126330,
+          "weight": 0.001216
+        },
+        {
+          "rank": 206,
+          "name": "Forest Laboratories, Inc.",
+          "shares": 3247150,
+          "value_usd_thousands": 126152,
+          "weight": 0.001215
+        },
+        {
+          "rank": 207,
+          "name": "McKesson Corp.",
+          "shares": 2815453,
+          "value_usd_thousands": 126104,
+          "weight": 0.001214
+        },
+        {
+          "rank": 208,
+          "name": "Xerox Corp.",
+          "shares": 9138676,
+          "value_usd_thousands": 126022,
+          "weight": 0.001213
+        },
+        {
+          "rank": 209,
+          "name": "Edison International",
+          "shares": 3107405,
+          "value_usd_thousands": 126005,
+          "weight": 0.001213
+        },
+        {
+          "rank": 210,
+          "name": "Harrah's Entertainment, Inc.",
+          "shares": 1732230,
+          "value_usd_thousands": 124842,
+          "weight": 0.001202
+        },
+        {
+          "rank": 211,
+          "name": "Fortune Brands, Inc.",
+          "shares": 1387127,
+          "value_usd_thousands": 123177,
+          "weight": 0.001186
+        },
+        {
+          "rank": 212,
+          "name": "ACE Ltd.",
+          "shares": 2741606,
+          "value_usd_thousands": 122961,
+          "weight": 0.001184
+        },
+        {
+          "rank": 213,
+          "name": "Lucent Technologies, Inc.",
+          "shares": 42252739,
+          "value_usd_thousands": 122955,
+          "weight": 0.001184
+        },
+        {
+          "rank": 214,
+          "name": "Charles Schwab Corp.",
+          "shares": 10867639,
+          "value_usd_thousands": 122587,
+          "weight": 0.00118
+        },
+        {
+          "rank": 215,
+          "name": "Apollo Group, Inc. Class A",
+          "shares": 1559076,
+          "value_usd_thousands": 121951,
+          "weight": 0.001174
+        },
+        {
+          "rank": 216,
+          "name": "Sun Microsystems, Inc.",
+          "shares": 32485022,
+          "value_usd_thousands": 121169,
+          "weight": 0.001167
+        },
+        {
+          "rank": 217,
+          "name": "Coach, Inc.",
+          "shares": 3596783,
+          "value_usd_thousands": 120744,
+          "weight": 0.001163
+        },
+        {
+          "rank": 218,
+          "name": "Starwood Hotels & Resorts Worldwide, Inc.",
+          "shares": 2061214,
+          "value_usd_thousands": 120725,
+          "weight": 0.001162
+        },
+        {
+          "rank": 219,
+          "name": "Maxim Integrated Products, Inc.",
+          "shares": 3127907,
+          "value_usd_thousands": 119517,
+          "weight": 0.001151
+        },
+        {
+          "rank": 220,
+          "name": "Norfolk Southern Corp.",
+          "shares": 3855700,
+          "value_usd_thousands": 119372,
+          "weight": 0.001149
+        },
+        {
+          "rank": 221,
+          "name": "Federated Department Stores, Inc.",
+          "shares": 1625454,
+          "value_usd_thousands": 119113,
+          "weight": 0.001147
+        },
+        {
+          "rank": 222,
+          "name": "Moody's Corp.",
+          "shares": 2634081,
+          "value_usd_thousands": 118428,
+          "weight": 0.00114
+        },
+        {
+          "rank": 223,
+          "name": "H.J. Heinz Co.",
+          "shares": 3338687,
+          "value_usd_thousands": 118256,
+          "weight": 0.001139
+        },
+        {
+          "rank": 224,
+          "name": "Loews Corp.",
+          "shares": 1522640,
+          "value_usd_thousands": 118005,
+          "weight": 0.001136
+        },
+        {
+          "rank": 225,
+          "name": "Bed Bath & Beyond, Inc.",
+          "shares": 2817663,
+          "value_usd_thousands": 117722,
+          "weight": 0.001134
+        },
+        {
+          "rank": 226,
+          "name": "The Principal Financial Group, Inc.",
+          "shares": 2801838,
+          "value_usd_thousands": 117397,
+          "weight": 0.00113
+        },
+        {
+          "rank": 227,
+          "name": "XTO Energy, Inc.",
+          "shares": 3442408,
+          "value_usd_thousands": 117007,
+          "weight": 0.001127
+        },
+        {
+          "rank": 228,
+          "name": "Mellon Financial Corp.",
+          "shares": 4036263,
+          "value_usd_thousands": 115800,
+          "weight": 0.001115
+        },
+        {
+          "rank": 229,
+          "name": "Ingersoll-Rand Co.",
+          "shares": 1607585,
+          "value_usd_thousands": 114701,
+          "weight": 0.001104
+        },
+        {
+          "rank": 230,
+          "name": "May Department Stores Co.",
+          "shares": 2855882,
+          "value_usd_thousands": 114692,
+          "weight": 0.001104
+        },
+        {
+          "rank": 231,
+          "name": "ConAgra Foods, Inc.",
+          "shares": 4939445,
+          "value_usd_thousands": 114398,
+          "weight": 0.001102
+        },
+        {
+          "rank": 232,
+          "name": "Biogen Idec Inc.",
+          "shares": 3286885,
+          "value_usd_thousands": 113233,
+          "weight": 0.00109
+        },
+        {
+          "rank": 233,
+          "name": "PACCAR, Inc.",
+          "shares": 1658004,
+          "value_usd_thousands": 112744,
+          "weight": 0.001086
+        },
+        {
+          "rank": 234,
+          "name": "Bear Stearns Co., Inc.",
+          "shares": 1084071,
+          "value_usd_thousands": 112678,
+          "weight": 0.001085
+        },
+        {
+          "rank": 235,
+          "name": "Paychex, Inc.",
+          "shares": 3392901,
+          "value_usd_thousands": 110405,
+          "weight": 0.001063
+        },
+        {
+          "rank": 236,
+          "name": "TJX Cos., Inc.",
+          "shares": 4486740,
+          "value_usd_thousands": 109252,
+          "weight": 0.001052
+        },
+        {
+          "rank": 237,
+          "name": "Consolidated Edison Inc.",
+          "shares": 2318543,
+          "value_usd_thousands": 108601,
+          "weight": 0.001046
+        },
+        {
+          "rank": 238,
+          "name": "PPL Corp.",
+          "shares": 1809732,
+          "value_usd_thousands": 107462,
+          "weight": 0.001035
+        },
+        {
+          "rank": 239,
+          "name": "Progress Energy, Inc.",
+          "shares": 2371778,
+          "value_usd_thousands": 107299,
+          "weight": 0.001033
+        },
+        {
+          "rank": 240,
+          "name": "Ameren Corp.",
+          "shares": 1939030,
+          "value_usd_thousands": 107228,
+          "weight": 0.001032
+        },
+        {
+          "rank": 241,
+          "name": "Linear Technology Corp.",
+          "shares": 2919055,
+          "value_usd_thousands": 107100,
+          "weight": 0.001031
+        },
+        {
+          "rank": 242,
+          "name": "Allergan, Inc.",
+          "shares": 1243969,
+          "value_usd_thousands": 106036,
+          "weight": 0.001021
+        },
+        {
+          "rank": 243,
+          "name": "Williams Cos., Inc.",
+          "shares": 5444310,
+          "value_usd_thousands": 103442,
+          "weight": 0.000996
+        },
+        {
+          "rank": 244,
+          "name": "Johnson Controls, Inc.",
+          "shares": 1831502,
+          "value_usd_thousands": 103169,
+          "weight": 0.000993
+        },
+        {
+          "rank": 245,
+          "name": "PPG Industries, Inc.",
+          "shares": 1637161,
+          "value_usd_thousands": 102748,
+          "weight": 0.000989
+        },
+        {
+          "rank": 246,
+          "name": "AES Corp.",
+          "shares": 6229590,
+          "value_usd_thousands": 102041,
+          "weight": 0.000983
+        },
+        {
+          "rank": 247,
+          "name": "Equity Residential REIT",
+          "shares": 2733608,
+          "value_usd_thousands": 100651,
+          "weight": 0.000969
+        },
+        {
+          "rank": 248,
+          "name": "Tribune Co.",
+          "shares": 2843425,
+          "value_usd_thousands": 100032,
+          "weight": 0.000963
+        },
+        {
+          "rank": 249,
+          "name": "Veritas Software Corp.",
+          "shares": 4076410,
+          "value_usd_thousands": 99464,
+          "weight": 0.000958
+        },
+        {
+          "rank": 250,
+          "name": "XL Capital Ltd. Class A",
+          "shares": 1336317,
+          "value_usd_thousands": 99449,
+          "weight": 0.000958
+        },
+        {
+          "rank": 251,
+          "name": "Broadcom Corp.",
+          "shares": 2791153,
+          "value_usd_thousands": 99114,
+          "weight": 0.000954
+        },
+        {
+          "rank": 252,
+          "name": "Network Appliance, Inc.",
+          "shares": 3492089,
+          "value_usd_thousands": 98721,
+          "weight": 0.000951
+        },
+        {
+          "rank": 253,
+          "name": "M & T Bank Corp.",
+          "shares": 932317,
+          "value_usd_thousands": 98042,
+          "weight": 0.000944
+        },
+        {
+          "rank": 254,
+          "name": "Southwest Airlines Co.",
+          "shares": 7035471,
+          "value_usd_thousands": 98004,
+          "weight": 0.000944
+        },
+        {
+          "rank": 255,
+          "name": "Constellation Energy Group, Inc.",
+          "shares": 1693152,
+          "value_usd_thousands": 97678,
+          "weight": 0.000941
+        },
+        {
+          "rank": 256,
+          "name": "Textron, Inc.",
+          "shares": 1286680,
+          "value_usd_thousands": 97595,
+          "weight": 0.00094
+        },
+        {
+          "rank": 257,
+          "name": "SunGard Data Systems, Inc.",
+          "shares": 2768166,
+          "value_usd_thousands": 97356,
+          "weight": 0.000937
+        },
+        {
+          "rank": 258,
+          "name": "Safeway, Inc.",
+          "shares": 4274648,
+          "value_usd_thousands": 96564,
+          "weight": 0.00093
+        },
+        {
+          "rank": 259,
+          "name": "Pitney Bowes, Inc.",
+          "shares": 2194378,
+          "value_usd_thousands": 95565,
+          "weight": 0.00092
+        },
+        {
+          "rank": 260,
+          "name": "Pulte Homes, Inc.",
+          "shares": 1131532,
+          "value_usd_thousands": 95332,
+          "weight": 0.000918
+        },
+        {
+          "rank": 261,
+          "name": "Campbell Soup Co.",
+          "shares": 3096770,
+          "value_usd_thousands": 95288,
+          "weight": 0.000918
+        },
+        {
+          "rank": 262,
+          "name": "Electronic Data Systems Corp.",
+          "shares": 4948761,
+          "value_usd_thousands": 95264,
+          "weight": 0.000917
+        },
+        {
+          "rank": 263,
+          "name": "Agilent Technologies, Inc.",
+          "shares": 4123903,
+          "value_usd_thousands": 94932,
+          "weight": 0.000914
+        },
+        {
+          "rank": 264,
+          "name": "Sempra Energy",
+          "shares": 2281973,
+          "value_usd_thousands": 94268,
+          "weight": 0.000908
+        },
+        {
+          "rank": 265,
+          "name": "Comerica, Inc.",
+          "shares": 1609883,
+          "value_usd_thousands": 93051,
+          "weight": 0.000896
+        },
+        {
+          "rank": 266,
+          "name": "Quest Diagnostics, Inc.",
+          "shares": 1736826,
+          "value_usd_thousands": 92521,
+          "weight": 0.000891
+        },
+        {
+          "rank": 267,
+          "name": "International Game Technology",
+          "shares": 3279467,
+          "value_usd_thousands": 92317,
+          "weight": 0.000889
+        },
+        {
+          "rank": 268,
+          "name": "H & R Block, Inc.",
+          "shares": 1576081,
+          "value_usd_thousands": 91964,
+          "weight": 0.000885
+        },
+        {
+          "rank": 269,
+          "name": "Marshall & Ilsley Corp.",
+          "shares": 2030752,
+          "value_usd_thousands": 90267,
+          "weight": 0.000869
+        },
+        {
+          "rank": 270,
+          "name": "Northern Trust Corp.",
+          "shares": 1940014,
+          "value_usd_thousands": 88445,
+          "weight": 0.000852
+        },
+        {
+          "rank": 271,
+          "name": "CSX Corp.",
+          "shares": 2065386,
+          "value_usd_thousands": 88109,
+          "weight": 0.000848
+        },
+        {
+          "rank": 272,
+          "name": "AmSouth Bancorp",
+          "shares": 3366325,
+          "value_usd_thousands": 87524,
+          "weight": 0.000843
+        },
+        {
+          "rank": 273,
+          "name": "Reynolds American Inc.",
+          "shares": 1110433,
+          "value_usd_thousands": 87502,
+          "weight": 0.000843
+        },
+        {
+          "rank": 274,
+          "name": "Amerada Hess Corp.",
+          "shares": 818758,
+          "value_usd_thousands": 87206,
+          "weight": 0.00084
+        },
+        {
+          "rank": 275,
+          "name": "Hilton Hotels Corp.",
+          "shares": 3641934,
+          "value_usd_thousands": 86860,
+          "weight": 0.000836
+        },
+        {
+          "rank": 276,
+          "name": "L-3 Communications Holdings, Inc.",
+          "shares": 1131760,
+          "value_usd_thousands": 86670,
+          "weight": 0.000835
+        },
+        {
+          "rank": 277,
+          "name": "CIT Group Inc.",
+          "shares": 2007176,
+          "value_usd_thousands": 86248,
+          "weight": 0.00083
+        },
+        {
+          "rank": 278,
+          "name": "Centex Corp.",
+          "shares": 1220008,
+          "value_usd_thousands": 86218,
+          "weight": 0.00083
+        },
+        {
+          "rank": 279,
+          "name": "Kinder Morgan, Inc.",
+          "shares": 1034939,
+          "value_usd_thousands": 86107,
+          "weight": 0.000829
+        },
+        {
+          "rank": 280,
+          "name": "Eaton Corp.",
+          "shares": 1437294,
+          "value_usd_thousands": 86094,
+          "weight": 0.000829
+        },
+        {
+          "rank": 281,
+          "name": "Nabors Industries, Inc.",
+          "shares": 1418652,
+          "value_usd_thousands": 85999,
+          "weight": 0.000828
+        },
+        {
+          "rank": 282,
+          "name": "ITT Industries, Inc.",
+          "shares": 880173,
+          "value_usd_thousands": 85931,
+          "weight": 0.000827
+        },
+        {
+          "rank": 283,
+          "name": "Phelps Dodge Corp.",
+          "shares": 923922,
+          "value_usd_thousands": 85463,
+          "weight": 0.000823
+        },
+        {
+          "rank": 284,
+          "name": "Xilinx, Inc.",
+          "shares": 3345847,
+          "value_usd_thousands": 85319,
+          "weight": 0.000822
+        },
+        {
+          "rank": 285,
+          "name": "Rohm & Haas Co.",
+          "shares": 1840504,
+          "value_usd_thousands": 85289,
+          "weight": 0.000821
+        },
+        {
+          "rank": 286,
+          "name": "Synovus Financial Corp.",
+          "shares": 2967155,
+          "value_usd_thousands": 85068,
+          "weight": 0.000819
+        },
+        {
+          "rank": 287,
+          "name": "Kerr-McGee Corp.",
+          "shares": 1111029,
+          "value_usd_thousands": 84783,
+          "weight": 0.000816
+        },
+        {
+          "rank": 288,
+          "name": "Cinergy Corp.",
+          "shares": 1891500,
+          "value_usd_thousands": 84777,
+          "weight": 0.000816
+        },
+        {
+          "rank": 289,
+          "name": "Biomet, Inc.",
+          "shares": 2402675,
+          "value_usd_thousands": 83229,
+          "weight": 0.000801
+        },
+        {
+          "rank": 290,
+          "name": "KLA-Tencor Corp.",
+          "shares": 1877690,
+          "value_usd_thousands": 82055,
+          "weight": 0.00079
+        },
+        {
+          "rank": 291,
+          "name": "The Clorox Co.",
+          "shares": 1470148,
+          "value_usd_thousands": 81917,
+          "weight": 0.000789
+        },
+        {
+          "rank": 292,
+          "name": "Rockwell Automation, Inc.",
+          "shares": 1665595,
+          "value_usd_thousands": 81131,
+          "weight": 0.000781
+        },
+        {
+          "rank": 293,
+          "name": "BJ Services Co.",
+          "shares": 1544631,
+          "value_usd_thousands": 81062,
+          "weight": 0.000781
+        },
+        {
+          "rank": 294,
+          "name": "Rockwell Collins, Inc.",
+          "shares": 1698172,
+          "value_usd_thousands": 80969,
+          "weight": 0.00078
+        },
+        {
+          "rank": 295,
+          "name": "Intuit, Inc.",
+          "shares": 1768350,
+          "value_usd_thousands": 79770,
+          "weight": 0.000768
+        },
+        {
+          "rank": 296,
+          "name": "Noble Corp.",
+          "shares": 1295625,
+          "value_usd_thousands": 79694,
+          "weight": 0.000767
+        },
+        {
+          "rank": 297,
+          "name": "Nordstrom, Inc.",
+          "shares": 1172122,
+          "value_usd_thousands": 79669,
+          "weight": 0.000767
+        },
+        {
+          "rank": 298,
+          "name": "Georgia Pacific Group",
+          "shares": 2480958,
+          "value_usd_thousands": 78894,
+          "weight": 0.00076
+        },
+        {
+          "rank": 299,
+          "name": "Fiserv, Inc.",
+          "shares": 1824368,
+          "value_usd_thousands": 78357,
+          "weight": 0.000754
+        },
+        {
+          "rank": 300,
+          "name": "Lexmark International, Inc.",
+          "shares": 1208161,
+          "value_usd_thousands": 78325,
+          "weight": 0.000754
+        },
+        {
+          "rank": 301,
+          "name": "National Oilwell Varco",
+          "shares": 1640929,
+          "value_usd_thousands": 78010,
+          "weight": 0.000751
+        },
+        {
+          "rank": 302,
+          "name": "Lincoln National Corp.",
+          "shares": 1656983,
+          "value_usd_thousands": 77746,
+          "weight": 0.000749
+        },
+        {
+          "rank": 303,
+          "name": "Sovereign Bancorp, Inc.",
+          "shares": 3478093,
+          "value_usd_thousands": 77701,
+          "weight": 0.000748
+        },
+        {
+          "rank": 304,
+          "name": "DTE Energy Co.",
+          "shares": 1661194,
+          "value_usd_thousands": 77694,
+          "weight": 0.000748
+        },
+        {
+          "rank": 305,
+          "name": "Limited Brands, Inc.",
+          "shares": 3626990,
+          "value_usd_thousands": 77690,
+          "weight": 0.000748
+        },
+        {
+          "rank": 306,
+          "name": "Computer Sciences Corp.",
+          "shares": 1755812,
+          "value_usd_thousands": 76729,
+          "weight": 0.000739
+        },
+        {
+          "rank": 307,
+          "name": "MBIA, Inc.",
+          "shares": 1291450,
+          "value_usd_thousands": 76596,
+          "weight": 0.000738
+        },
+        {
+          "rank": 308,
+          "name": "Univision Communications Inc.",
+          "shares": 2773118,
+          "value_usd_thousands": 76399,
+          "weight": 0.000736
+        },
+        {
+          "rank": 309,
+          "name": "Aon Corp.",
+          "shares": 3031179,
+          "value_usd_thousands": 75901,
+          "weight": 0.000731
+        },
+        {
+          "rank": 310,
+          "name": "Autodesk, Inc.",
+          "shares": 2180803,
+          "value_usd_thousands": 74954,
+          "weight": 0.000722
+        },
+        {
+          "rank": 311,
+          "name": "Xcel Energy, Inc.",
+          "shares": 3836502,
+          "value_usd_thousands": 74889,
+          "weight": 0.000721
+        },
+        {
+          "rank": 312,
+          "name": "Sunoco, Inc.",
+          "shares": 656463,
+          "value_usd_thousands": 74627,
+          "weight": 0.000719
+        },
+        {
+          "rank": 313,
+          "name": "Fisher Scientific International Inc.",
+          "shares": 1145569,
+          "value_usd_thousands": 74347,
+          "weight": 0.000716
+        },
+        {
+          "rank": 314,
+          "name": "Coca-Cola Enterprises, Inc.",
+          "shares": 3365147,
+          "value_usd_thousands": 74067,
+          "weight": 0.000713
+        },
+        {
+          "rank": 315,
+          "name": "T. Rowe Price Group Inc.",
+          "shares": 1180298,
+          "value_usd_thousands": 73887,
+          "weight": 0.000711
+        },
+        {
+          "rank": 316,
+          "name": "Eastman Kodak Co.",
+          "shares": 2738231,
+          "value_usd_thousands": 73522,
+          "weight": 0.000708
+        },
+        {
+          "rank": 317,
+          "name": "National Semiconductor Corp.",
+          "shares": 3329362,
+          "value_usd_thousands": 73346,
+          "weight": 0.000706
+        },
+        {
+          "rank": 318,
+          "name": "Archstone-Smith Trust REIT",
+          "shares": 1896936,
+          "value_usd_thousands": 73260,
+          "weight": 0.000705
+        },
+        {
+          "rank": 319,
+          "name": "Albertson's, Inc.",
+          "shares": 3512936,
+          "value_usd_thousands": 72648,
+          "weight": 0.0007
+        },
+        {
+          "rank": 320,
+          "name": "Ambac Financial Group, Inc.",
+          "shares": 1033026,
+          "value_usd_thousands": 72064,
+          "weight": 0.000694
+        },
+        {
+          "rank": 321,
+          "name": "UST, Inc.",
+          "shares": 1577220,
+          "value_usd_thousands": 72016,
+          "weight": 0.000693
+        },
+        {
+          "rank": 322,
+          "name": "Mattel, Inc.",
+          "shares": 3925962,
+          "value_usd_thousands": 71845,
+          "weight": 0.000692
+        },
+        {
+          "rank": 323,
+          "name": "ProLogis REIT",
+          "shares": 1780245,
+          "value_usd_thousands": 71637,
+          "weight": 0.00069
+        },
+        {
+          "rank": 324,
+          "name": "American Standard Cos., Inc.",
+          "shares": 1704058,
+          "value_usd_thousands": 71434,
+          "weight": 0.000688
+        },
+        {
+          "rank": 325,
+          "name": "Parker Hannifin Corp.",
+          "shares": 1146269,
+          "value_usd_thousands": 71080,
+          "weight": 0.000684
+        },
+        {
+          "rank": 326,
+          "name": "El Paso Corp.",
+          "shares": 6147413,
+          "value_usd_thousands": 70818,
+          "weight": 0.000682
+        },
+        {
+          "rank": 327,
+          "name": "Express Scripts Inc.",
+          "shares": 1414920,
+          "value_usd_thousands": 70718,
+          "weight": 0.000681
+        },
+        {
+          "rank": 328,
+          "name": "Dover Corp.",
+          "shares": 1943788,
+          "value_usd_thousands": 70715,
+          "weight": 0.000681
+        },
+        {
+          "rank": 329,
+          "name": "Altera Corp.",
+          "shares": 3544403,
+          "value_usd_thousands": 70250,
+          "weight": 0.000676
+        },
+        {
+          "rank": 330,
+          "name": "R.R. Donnelley & Sons Co.",
+          "shares": 2034289,
+          "value_usd_thousands": 70203,
+          "weight": 0.000676
+        },
+        {
+          "rank": 331,
+          "name": "Nucor Corp.",
+          "shares": 1527806,
+          "value_usd_thousands": 69699,
+          "weight": 0.000671
+        },
+        {
+          "rank": 332,
+          "name": "AmerisourceBergen Corp.",
+          "shares": 1005670,
+          "value_usd_thousands": 69542,
+          "weight": 0.00067
+        },
+        {
+          "rank": 333,
+          "name": "Office Depot, Inc.",
+          "shares": 3012319,
+          "value_usd_thousands": 68801,
+          "weight": 0.000662
+        },
+        {
+          "rank": 334,
+          "name": "Black & Decker Corp.",
+          "shares": 763136,
+          "value_usd_thousands": 68568,
+          "weight": 0.00066
+        },
+        {
+          "rank": 335,
+          "name": "Genuine Parts Co.",
+          "shares": 1663268,
+          "value_usd_thousands": 68344,
+          "weight": 0.000658
+        },
+        {
+          "rank": 336,
+          "name": "Ecolab, Inc.",
+          "shares": 2095154,
+          "value_usd_thousands": 67799,
+          "weight": 0.000653
+        },
+        {
+          "rank": 337,
+          "name": "KeySpan Corp.",
+          "shares": 1650083,
+          "value_usd_thousands": 67158,
+          "weight": 0.000647
+        },
+        {
+          "rank": 338,
+          "name": "C.R. Bard, Inc.",
+          "shares": 1002434,
+          "value_usd_thousands": 66672,
+          "weight": 0.000642
+        },
+        {
+          "rank": 339,
+          "name": "SAFECO Corp.",
+          "shares": 1215731,
+          "value_usd_thousands": 66063,
+          "weight": 0.000636
+        },
+        {
+          "rank": 340,
+          "name": "Freescale Semiconductor, Inc. Class B",
+          "shares": 3113163,
+          "value_usd_thousands": 65937,
+          "weight": 0.000635
+        },
+        {
+          "rank": 341,
+          "name": "Jefferson-Pilot Corp.",
+          "shares": 1296754,
+          "value_usd_thousands": 65382,
+          "weight": 0.00063
+        },
+        {
+          "rank": 342,
+          "name": "Advanced Micro Devices, Inc.",
+          "shares": 3766754,
+          "value_usd_thousands": 65316,
+          "weight": 0.000629
+        },
+        {
+          "rank": 343,
+          "name": "Freeport-McMoRan Copper & Gold, Inc. Class B",
+          "shares": 1713684,
+          "value_usd_thousands": 64160,
+          "weight": 0.000618
+        },
+        {
+          "rank": 344,
+          "name": "NiSource, Inc.",
+          "shares": 2592710,
+          "value_usd_thousands": 64118,
+          "weight": 0.000617
+        },
+        {
+          "rank": 345,
+          "name": "Laboratory Corp. of America Holdings",
+          "shares": 1283887,
+          "value_usd_thousands": 64066,
+          "weight": 0.000617
+        },
+        {
+          "rank": 346,
+          "name": "Plum Creek Timber Co. Inc. REIT",
+          "shares": 1754334,
+          "value_usd_thousands": 63682,
+          "weight": 0.000613
+        },
+        {
+          "rank": 347,
+          "name": "Vulcan Materials Co.",
+          "shares": 973914,
+          "value_usd_thousands": 63295,
+          "weight": 0.000609
+        },
+        {
+          "rank": 348,
+          "name": "MedImmune Inc.",
+          "shares": 2363644,
+          "value_usd_thousands": 63157,
+          "weight": 0.000608
+        },
+        {
+          "rank": 349,
+          "name": "Zions Bancorp",
+          "shares": 855143,
+          "value_usd_thousands": 62879,
+          "weight": 0.000605
+        },
+        {
+          "rank": 350,
+          "name": "Cincinnati Financial Corp.",
+          "shares": 1587780,
+          "value_usd_thousands": 62813,
+          "weight": 0.000605
+        },
+        {
+          "rank": 351,
+          "name": "Newell Rubbermaid, Inc.",
+          "shares": 2625646,
+          "value_usd_thousands": 62595,
+          "weight": 0.000603
+        },
+        {
+          "rank": 352,
+          "name": "NCR Corp.",
+          "shares": 1781584,
+          "value_usd_thousands": 62569,
+          "weight": 0.000602
+        },
+        {
+          "rank": 353,
+          "name": "Affiliated Computer Services, Inc. Class A",
+          "shares": 1205918,
+          "value_usd_thousands": 61622,
+          "weight": 0.000593
+        },
+        {
+          "rank": 354,
+          "name": "Health Management Associates Class A",
+          "shares": 2351340,
+          "value_usd_thousands": 61558,
+          "weight": 0.000593
+        },
+        {
+          "rank": 355,
+          "name": "Humana Inc.",
+          "shares": 1543534,
+          "value_usd_thousands": 61340,
+          "weight": 0.000591
+        },
+        {
+          "rank": 356,
+          "name": "KB HOME",
+          "shares": 794813,
+          "value_usd_thousands": 60589,
+          "weight": 0.000583
+        },
+        {
+          "rank": 357,
+          "name": "Micron Technology, Inc.",
+          "shares": 5864346,
+          "value_usd_thousands": 59875,
+          "weight": 0.000577
+        },
+        {
+          "rank": 358,
+          "name": "Qwest Communications International Inc.",
+          "shares": 15953567,
+          "value_usd_thousands": 59188,
+          "weight": 0.00057
+        },
+        {
+          "rank": 359,
+          "name": "Hospira, Inc.",
+          "shares": 1507631,
+          "value_usd_thousands": 58798,
+          "weight": 0.000566
+        },
+        {
+          "rank": 360,
+          "name": "MGIC Investment Corp.",
+          "shares": 900079,
+          "value_usd_thousands": 58703,
+          "weight": 0.000565
+        },
+        {
+          "rank": 361,
+          "name": "Dollar General Corp.",
+          "shares": 2877785,
+          "value_usd_thousands": 58592,
+          "weight": 0.000564
+        },
+        {
+          "rank": 362,
+          "name": "AutoZone Inc.",
+          "shares": 626472,
+          "value_usd_thousands": 57924,
+          "weight": 0.000558
+        },
+        {
+          "rank": 363,
+          "name": "Cooper Industries, Inc. Class A",
+          "shares": 885463,
+          "value_usd_thousands": 56581,
+          "weight": 0.000545
+        },
+        {
+          "rank": 364,
+          "name": "Sherwin-Williams Co.",
+          "shares": 1194573,
+          "value_usd_thousands": 56252,
+          "weight": 0.000542
+        },
+        {
+          "rank": 365,
+          "name": "Toys R Us, Inc.",
+          "shares": 2112506,
+          "value_usd_thousands": 55939,
+          "weight": 0.000539
+        },
+        {
+          "rank": 366,
+          "name": "Cintas Corp.",
+          "shares": 1427853,
+          "value_usd_thousands": 55115,
+          "weight": 0.000531
+        },
+        {
+          "rank": 367,
+          "name": "Tenet Healthcare Corp.",
+          "shares": 4470505,
+          "value_usd_thousands": 54719,
+          "weight": 0.000527
+        },
+        {
+          "rank": 368,
+          "name": "VF Corp.",
+          "shares": 953977,
+          "value_usd_thousands": 54587,
+          "weight": 0.000526
+        },
+        {
+          "rank": 369,
+          "name": "Comcast Corp. Special Class A",
+          "shares": 1814271,
+          "value_usd_thousands": 54337,
+          "weight": 0.000523
+        },
+        {
+          "rank": 370,
+          "name": "Jabil Circuit, Inc.",
+          "shares": 1755859,
+          "value_usd_thousands": 53958,
+          "weight": 0.00052
+        },
+        {
+          "rank": 371,
+          "name": "IMS Health, Inc.",
+          "shares": 2162531,
+          "value_usd_thousands": 53566,
+          "weight": 0.000516
+        },
+        {
+          "rank": 372,
+          "name": "The Pepsi Bottling Group, Inc.",
+          "shares": 1870294,
+          "value_usd_thousands": 53509,
+          "weight": 0.000515
+        },
+        {
+          "rank": 373,
+          "name": "Huntington Bancshares Inc.",
+          "shares": 2215549,
+          "value_usd_thousands": 53483,
+          "weight": 0.000515
+        },
+        {
+          "rank": 374,
+          "name": "Compass Bancshares Inc.",
+          "shares": 1181973,
+          "value_usd_thousands": 53189,
+          "weight": 0.000512
+        },
+        {
+          "rank": 375,
+          "name": "Wendy's International, Inc.",
+          "shares": 1097018,
+          "value_usd_thousands": 52273,
+          "weight": 0.000503
+        },
+        {
+          "rank": 376,
+          "name": "UnumProvident Corp.",
+          "shares": 2841289,
+          "value_usd_thousands": 52052,
+          "weight": 0.000501
+        },
+        {
+          "rank": 377,
+          "name": "Brown-Forman Corp. Class B",
+          "shares": 859969,
+          "value_usd_thousands": 51994,
+          "weight": 0.000501
+        },
+        {
+          "rank": 378,
+          "name": "Torchmark Corp.",
+          "shares": 993826,
+          "value_usd_thousands": 51878,
+          "weight": 0.0005
+        },
+        {
+          "rank": 379,
+          "name": "Avery Dennison Corp.",
+          "shares": 969592,
+          "value_usd_thousands": 51350,
+          "weight": 0.000494
+        },
+        {
+          "rank": 380,
+          "name": "First Horizon National Corp.",
+          "shares": 1183887,
+          "value_usd_thousands": 49960,
+          "weight": 0.000481
+        },
+        {
+          "rank": 381,
+          "name": "MeadWestvaco Corp.",
+          "shares": 1779031,
+          "value_usd_thousands": 49884,
+          "weight": 0.00048
+        },
+        {
+          "rank": 382,
+          "name": "Providian Financial Corp.",
+          "shares": 2808258,
+          "value_usd_thousands": 49510,
+          "weight": 0.000477
+        },
+        {
+          "rank": 383,
+          "name": "Mylan Laboratories, Inc.",
+          "shares": 2569790,
+          "value_usd_thousands": 49443,
+          "weight": 0.000476
+        },
+        {
+          "rank": 384,
+          "name": "Chiron Corp.",
+          "shares": 1413422,
+          "value_usd_thousands": 49314,
+          "weight": 0.000475
+        },
+        {
+          "rank": 385,
+          "name": "E*TRADE Financial Corp.",
+          "shares": 3515315,
+          "value_usd_thousands": 49179,
+          "weight": 0.000474
+        },
+        {
+          "rank": 386,
+          "name": "Interpublic Group of Cos., Inc.",
+          "shares": 4034728,
+          "value_usd_thousands": 49143,
+          "weight": 0.000473
+        },
+        {
+          "rank": 387,
+          "name": "Scientific-Atlanta, Inc.",
+          "shares": 1454454,
+          "value_usd_thousands": 48390,
+          "weight": 0.000466
+        },
+        {
+          "rank": 388,
+          "name": "Leggett & Platt, Inc.",
+          "shares": 1808970,
+          "value_usd_thousands": 48082,
+          "weight": 0.000463
+        },
+        {
+          "rank": 389,
+          "name": "Fluor Corp.",
+          "shares": 826375,
+          "value_usd_thousands": 47591,
+          "weight": 0.000458
+        },
+        {
+          "rank": 390,
+          "name": "Goodrich Corp.",
+          "shares": 1150457,
+          "value_usd_thousands": 47123,
+          "weight": 0.000454
+        },
+        {
+          "rank": 391,
+          "name": "Molson Coors Brewing Co. Class B",
+          "shares": 749066,
+          "value_usd_thousands": 46442,
+          "weight": 0.000447
+        },
+        {
+          "rank": 392,
+          "name": "Ashland, Inc.",
+          "shares": 639914,
+          "value_usd_thousands": 45991,
+          "weight": 0.000443
+        },
+        {
+          "rank": 393,
+          "name": "Darden Restaurants Inc.",
+          "shares": 1390509,
+          "value_usd_thousands": 45859,
+          "weight": 0.000442
+        },
+        {
+          "rank": 394,
+          "name": "Comverse Technology, Inc.",
+          "shares": 1911441,
+          "value_usd_thousands": 45206,
+          "weight": 0.000435
+        },
+        {
+          "rank": 395,
+          "name": "Tiffany & Co.",
+          "shares": 1371266,
+          "value_usd_thousands": 44923,
+          "weight": 0.000433
+        },
+        {
+          "rank": 396,
+          "name": "Whirlpool Corp.",
+          "shares": 638242,
+          "value_usd_thousands": 44747,
+          "weight": 0.000431
+        },
+        {
+          "rank": 397,
+          "name": "Equifax, Inc.",
+          "shares": 1238898,
+          "value_usd_thousands": 44241,
+          "weight": 0.000426
+        },
+        {
+          "rank": 398,
+          "name": "Temple-Inland Inc.",
+          "shares": 1186461,
+          "value_usd_thousands": 44077,
+          "weight": 0.000424
+        },
+        {
+          "rank": 399,
+          "name": "Siebel Systems, Inc.",
+          "shares": 4931180,
+          "value_usd_thousands": 43888,
+          "weight": 0.000423
+        },
+        {
+          "rank": 400,
+          "name": "AutoNation, Inc.",
+          "shares": 2130904,
+          "value_usd_thousands": 43726,
+          "weight": 0.000421
+        },
+        {
+          "rank": 401,
+          "name": "Citizens Communications Co.",
+          "shares": 3250623,
+          "value_usd_thousands": 43688,
+          "weight": 0.000421
+        },
+        {
+          "rank": 402,
+          "name": "W.W. Grainger, Inc.",
+          "shares": 796051,
+          "value_usd_thousands": 43616,
+          "weight": 0.00042
+        },
+        {
+          "rank": 403,
+          "name": "Knight Ridder",
+          "shares": 709961,
+          "value_usd_thousands": 43549,
+          "weight": 0.000419
+        },
+        {
+          "rank": 404,
+          "name": "CenturyTel, Inc.",
+          "shares": 1252913,
+          "value_usd_thousands": 43388,
+          "weight": 0.000418
+        },
+        {
+          "rank": 405,
+          "name": "New York Times Co. Class A",
+          "shares": 1387178,
+          "value_usd_thousands": 43211,
+          "weight": 0.000416
+        },
+        {
+          "rank": 406,
+          "name": "NVIDIA Corp.",
+          "shares": 1612594,
+          "value_usd_thousands": 43089,
+          "weight": 0.000415
+        },
+        {
+          "rank": 407,
+          "name": "Bausch & Lomb, Inc.",
+          "shares": 510478,
+          "value_usd_thousands": 42370,
+          "weight": 0.000408
+        },
+        {
+          "rank": 408,
+          "name": "SuperValu Inc.",
+          "shares": 1298817,
+          "value_usd_thousands": 42354,
+          "weight": 0.000408
+        },
+        {
+          "rank": 409,
+          "name": "Eastman Chemical Co.",
+          "shares": 766885,
+          "value_usd_thousands": 42294,
+          "weight": 0.000407
+        },
+        {
+          "rank": 410,
+          "name": "McCormick & Co., Inc.",
+          "shares": 1289914,
+          "value_usd_thousands": 42154,
+          "weight": 0.000406
+        },
+        {
+          "rank": 411,
+          "name": "Pinnacle West Capital Corp.",
+          "shares": 938722,
+          "value_usd_thousands": 41726,
+          "weight": 0.000402
+        },
+        {
+          "rank": 412,
+          "name": "Molex, Inc.",
+          "shares": 1599750,
+          "value_usd_thousands": 41658,
+          "weight": 0.000401
+        },
+        {
+          "rank": 413,
+          "name": "Waters Corp.",
+          "shares": 1120351,
+          "value_usd_thousands": 41643,
+          "weight": 0.000401
+        },
+        {
+          "rank": 414,
+          "name": "Family Dollar Stores, Inc.",
+          "shares": 1590733,
+          "value_usd_thousands": 41518,
+          "weight": 0.0004
+        },
+        {
+          "rank": 415,
+          "name": "Thermo Electron Corp.",
+          "shares": 1538471,
+          "value_usd_thousands": 41339,
+          "weight": 0.000398
+        },
+        {
+          "rank": 416,
+          "name": "Liz Claiborne, Inc.",
+          "shares": 1033403,
+          "value_usd_thousands": 41088,
+          "weight": 0.000396
+        },
+        {
+          "rank": 417,
+          "name": "American Power Conversion Corp.",
+          "shares": 1730667,
+          "value_usd_thousands": 40826,
+          "weight": 0.000393
+        },
+        {
+          "rank": 418,
+          "name": "Brunswick Corp.",
+          "shares": 926030,
+          "value_usd_thousands": 40116,
+          "weight": 0.000386
+        },
+        {
+          "rank": 419,
+          "name": "Sealed Air Corp.",
+          "shares": 798628,
+          "value_usd_thousands": 39764,
+          "weight": 0.000383
+        },
+        {
+          "rank": 420,
+          "name": "Allegheny Energy, Inc.",
+          "shares": 1551342,
+          "value_usd_thousands": 39125,
+          "weight": 0.000377
+        },
+        {
+          "rank": 421,
+          "name": "Robert Half International, Inc.",
+          "shares": 1521946,
+          "value_usd_thousands": 38003,
+          "weight": 0.000366
+        },
+        {
+          "rank": 422,
+          "name": "Avaya Inc.",
+          "shares": 4550903,
+          "value_usd_thousands": 37864,
+          "weight": 0.000365
+        },
+        {
+          "rank": 423,
+          "name": "BMC Software, Inc.",
+          "shares": 2109016,
+          "value_usd_thousands": 37857,
+          "weight": 0.000365
+        },
+        {
+          "rank": 424,
+          "name": "Ball Corp.",
+          "shares": 1051042,
+          "value_usd_thousands": 37795,
+          "weight": 0.000364
+        },
+        {
+          "rank": 425,
+          "name": "United States Steel Corp.",
+          "shares": 1086864,
+          "value_usd_thousands": 37356,
+          "weight": 0.00036
+        },
+        {
+          "rank": 426,
+          "name": "TECO Energy, Inc.",
+          "shares": 1974751,
+          "value_usd_thousands": 37343,
+          "weight": 0.00036
+        },
+        {
+          "rank": 427,
+          "name": "Tellabs, Inc.",
+          "shares": 4278325,
+          "value_usd_thousands": 37221,
+          "weight": 0.000358
+        },
+        {
+          "rank": 428,
+          "name": "Apartment Investment & Management Co. Class A REIT",
+          "shares": 908746,
+          "value_usd_thousands": 37186,
+          "weight": 0.000358
+        },
+        {
+          "rank": 429,
+          "name": "Applera Corp.-Applied Biosystems Group",
+          "shares": 1883417,
+          "value_usd_thousands": 37047,
+          "weight": 0.000357
+        },
+        {
+          "rank": 430,
+          "name": "Sigma-Aldrich Corp.",
+          "shares": 655375,
+          "value_usd_thousands": 36727,
+          "weight": 0.000354
+        },
+        {
+          "rank": 431,
+          "name": "CenterPoint Energy Inc.",
+          "shares": 2772528,
+          "value_usd_thousands": 36625,
+          "weight": 0.000353
+        },
+        {
+          "rank": 432,
+          "name": "Pall Corp.",
+          "shares": 1186839,
+          "value_usd_thousands": 36032,
+          "weight": 0.000347
+        },
+        {
+          "rank": 433,
+          "name": "Jones Apparel Group, Inc.",
+          "shares": 1151194,
+          "value_usd_thousands": 35733,
+          "weight": 0.000344
+        },
+        {
+          "rank": 434,
+          "name": "Alberto-Culver Co. Class B",
+          "shares": 815706,
+          "value_usd_thousands": 35345,
+          "weight": 0.00034
+        },
+        {
+          "rank": 435,
+          "name": "Solectron Corp.",
+          "shares": 9275604,
+          "value_usd_thousands": 35155,
+          "weight": 0.000338
+        },
+        {
+          "rank": 436,
+          "name": "Citrix Systems, Inc.",
+          "shares": 1613447,
+          "value_usd_thousands": 34947,
+          "weight": 0.000336
+        },
+        {
+          "rank": 437,
+          "name": "RadioShack Corp.",
+          "shares": 1485650,
+          "value_usd_thousands": 34423,
+          "weight": 0.000331
+        },
+        {
+          "rank": 438,
+          "name": "Hasbro, Inc.",
+          "shares": 1599672,
+          "value_usd_thousands": 33257,
+          "weight": 0.00032
+        },
+        {
+          "rank": 439,
+          "name": "Monster Worldwide Inc.",
+          "shares": 1153387,
+          "value_usd_thousands": 33079,
+          "weight": 0.000319
+        },
+        {
+          "rank": 440,
+          "name": "Engelhard Corp.",
+          "shares": 1151149,
+          "value_usd_thousands": 32865,
+          "weight": 0.000316
+        },
+        {
+          "rank": 441,
+          "name": "Manor Care, Inc.",
+          "shares": 824226,
+          "value_usd_thousands": 32747,
+          "weight": 0.000315
+        },
+        {
+          "rank": 442,
+          "name": "The Stanley Works",
+          "shares": 718848,
+          "value_usd_thousands": 32736,
+          "weight": 0.000315
+        },
+        {
+          "rank": 443,
+          "name": "Novellus Systems, Inc.",
+          "shares": 1318030,
+          "value_usd_thousands": 32569,
+          "weight": 0.000314
+        },
+        {
+          "rank": 444,
+          "name": "Janus Capital Group Inc.",
+          "shares": 2165182,
+          "value_usd_thousands": 32564,
+          "weight": 0.000314
+        },
+        {
+          "rank": 445,
+          "name": "Mercury Interactive Corp.",
+          "shares": 826614,
+          "value_usd_thousands": 31709,
+          "weight": 0.000305
+        },
+        {
+          "rank": 446,
+          "name": "Circuit City Stores, Inc.",
+          "shares": 1820928,
+          "value_usd_thousands": 31484,
+          "weight": 0.000303
+        },
+        {
+          "rank": 447,
+          "name": "CMS Energy Corp.",
+          "shares": 2088051,
+          "value_usd_thousands": 31446,
+          "weight": 0.000303
+        },
+        {
+          "rank": 448,
+          "name": "LSI Logic Corp.",
+          "shares": 3701143,
+          "value_usd_thousands": 31423,
+          "weight": 0.000303
+        },
+        {
+          "rank": 449,
+          "name": "Watson Pharmaceuticals, Inc.",
+          "shares": 1051452,
+          "value_usd_thousands": 31081,
+          "weight": 0.000299
+        },
+        {
+          "rank": 450,
+          "name": "Cummins Inc.",
+          "shares": 416056,
+          "value_usd_thousands": 31042,
+          "weight": 0.000299
+        },
+        {
+          "rank": 451,
+          "name": "Pactiv Corp.",
+          "shares": 1424282,
+          "value_usd_thousands": 30736,
+          "weight": 0.000296
+        },
+        {
+          "rank": 452,
+          "name": "Rowan Cos., Inc.",
+          "shares": 1033431,
+          "value_usd_thousands": 30703,
+          "weight": 0.000296
+        },
+        {
+          "rank": 453,
+          "name": "International Flavors & Fragrances, Inc.",
+          "shares": 843361,
+          "value_usd_thousands": 30547,
+          "weight": 0.000294
+        },
+        {
+          "rank": 454,
+          "name": "Sanmina-SCI Corp.",
+          "shares": 5014279,
+          "value_usd_thousands": 27428,
+          "weight": 0.000264
+        },
+        {
+          "rank": 455,
+          "name": "Federated Investors, Inc.",
+          "shares": 905172,
+          "value_usd_thousands": 27164,
+          "weight": 0.000262
+        },
+        {
+          "rank": 456,
+          "name": "Bemis Co., Inc.",
+          "shares": 1022396,
+          "value_usd_thousands": 27134,
+          "weight": 0.000261
+        },
+        {
+          "rank": 457,
+          "name": "Millipore Corp.",
+          "shares": 476611,
+          "value_usd_thousands": 27038,
+          "weight": 0.00026
+        },
+        {
+          "rank": 458,
+          "name": "QLogic Corp.",
+          "shares": 867436,
+          "value_usd_thousands": 26778,
+          "weight": 0.000258
+        },
+        {
+          "rank": 459,
+          "name": "Compuware Corp.",
+          "shares": 3706263,
+          "value_usd_thousands": 26648,
+          "weight": 0.000257
+        },
+        {
+          "rank": 460,
+          "name": "Louisiana-Pacific Corp.",
+          "shares": 1053871,
+          "value_usd_thousands": 25904,
+          "weight": 0.000249
+        },
+        {
+          "rank": 461,
+          "name": "Sabre Holdings Corp.",
+          "shares": 1250406,
+          "value_usd_thousands": 24946,
+          "weight": 0.00024
+        },
+        {
+          "rank": 462,
+          "name": "The Goodyear Tire & Rubber Co.",
+          "shares": 1672788,
+          "value_usd_thousands": 24925,
+          "weight": 0.00024
+        },
+        {
+          "rank": 463,
+          "name": "Delphi Corp.",
+          "shares": 5342282,
+          "value_usd_thousands": 24842,
+          "weight": 0.000239
+        },
+        {
+          "rank": 464,
+          "name": "ADC Telecommunications, Inc.",
+          "shares": 1102690,
+          "value_usd_thousands": 24006,
+          "weight": 0.000231
+        },
+        {
+          "rank": 465,
+          "name": "Dow Jones & Co., Inc.",
+          "shares": 676721,
+          "value_usd_thousands": 23990,
+          "weight": 0.000231
+        },
+        {
+          "rank": 466,
+          "name": "King Pharmaceuticals, Inc.",
+          "shares": 2299614,
+          "value_usd_thousands": 23962,
+          "weight": 0.000231
+        },
+        {
+          "rank": 467,
+          "name": "PerkinElmer, Inc.",
+          "shares": 1232589,
+          "value_usd_thousands": 23296,
+          "weight": 0.000224
+        },
+        {
+          "rank": 468,
+          "name": "Symbol Technologies, Inc.",
+          "shares": 2310188,
+          "value_usd_thousands": 22802,
+          "weight": 0.00022
+        },
+        {
+          "rank": 469,
+          "name": "Novell, Inc.",
+          "shares": 3634083,
+          "value_usd_thousands": 22531,
+          "weight": 0.000217
+        },
+        {
+          "rank": 470,
+          "name": "Ryder System, Inc.",
+          "shares": 613863,
+          "value_usd_thousands": 22467,
+          "weight": 0.000216
+        },
+        {
+          "rank": 471,
+          "name": "Teradyne, Inc.",
+          "shares": 1868719,
+          "value_usd_thousands": 22369,
+          "weight": 0.000215
+        },
+        {
+          "rank": 472,
+          "name": "Reebok International Ltd.",
+          "shares": 532944,
+          "value_usd_thousands": 22293,
+          "weight": 0.000215
+        },
+        {
+          "rank": 473,
+          "name": "Dana Corp.",
+          "shares": 1429754,
+          "value_usd_thousands": 21461,
+          "weight": 0.000207
+        },
+        {
+          "rank": 474,
+          "name": "Meredith Corp.",
+          "shares": 428799,
+          "value_usd_thousands": 21037,
+          "weight": 0.000203
+        },
+        {
+          "rank": 475,
+          "name": "JDS Uniphase Corp.",
+          "shares": 13816333,
+          "value_usd_thousands": 21001,
+          "weight": 0.000202
+        },
+        {
+          "rank": 476,
+          "name": "Allied Waste Industries, Inc.",
+          "shares": 2582102,
+          "value_usd_thousands": 20476,
+          "weight": 0.000197
+        },
+        {
+          "rank": 477,
+          "name": "Unisys Corp.",
+          "shares": 3232806,
+          "value_usd_thousands": 20464,
+          "weight": 0.000197
+        },
+        {
+          "rank": 478,
+          "name": "OfficeMax, Inc.",
+          "shares": 674275,
+          "value_usd_thousands": 20073,
+          "weight": 0.000193
+        },
+        {
+          "rank": 479,
+          "name": "Navistar International Corp.",
+          "shares": 625897,
+          "value_usd_thousands": 20029,
+          "weight": 0.000193
+        },
+        {
+          "rank": 480,
+          "name": "Andrew Corp.",
+          "shares": 1550404,
+          "value_usd_thousands": 19783,
+          "weight": 0.00019
+        },
+        {
+          "rank": 481,
+          "name": "Tektronix, Inc.",
+          "shares": 844323,
+          "value_usd_thousands": 19647,
+          "weight": 0.000189
+        },
+        {
+          "rank": 482,
+          "name": "Convergys Corp.",
+          "shares": 1352951,
+          "value_usd_thousands": 19239,
+          "weight": 0.000185
+        },
+        {
+          "rank": 483,
+          "name": "Snap-On Inc.",
+          "shares": 551215,
+          "value_usd_thousands": 18907,
+          "weight": 0.000182
+        },
+        {
+          "rank": 484,
+          "name": "Allegheny Technologies Inc.",
+          "shares": 856498,
+          "value_usd_thousands": 18894,
+          "weight": 0.000182
+        },
+        {
+          "rank": 485,
+          "name": "Calpine Corp.",
+          "shares": 5133162,
+          "value_usd_thousands": 17453,
+          "weight": 0.000168
+        },
+        {
+          "rank": 486,
+          "name": "NICOR Inc.",
+          "shares": 419743,
+          "value_usd_thousands": 17281,
+          "weight": 0.000166
+        },
+        {
+          "rank": 487,
+          "name": "Parametric Technology Corp.",
+          "shares": 2591783,
+          "value_usd_thousands": 16536,
+          "weight": 0.000159
+        },
+        {
+          "rank": 488,
+          "name": "PMC Sierra Inc.",
+          "shares": 1720950,
+          "value_usd_thousands": 16056,
+          "weight": 0.000155
+        },
+        {
+          "rank": 489,
+          "name": "Dillard's Inc.",
+          "shares": 683435,
+          "value_usd_thousands": 16006,
+          "weight": 0.000154
+        },
+        {
+          "rank": 490,
+          "name": "Peoples Energy Corp.",
+          "shares": 361016,
+          "value_usd_thousands": 15690,
+          "weight": 0.000151
+        },
+        {
+          "rank": 491,
+          "name": "Great Lakes Chemical Corp.",
+          "shares": 492101,
+          "value_usd_thousands": 15486,
+          "weight": 0.000149
+        },
+        {
+          "rank": 492,
+          "name": "Dynegy, Inc.",
+          "shares": 3151573,
+          "value_usd_thousands": 15317,
+          "weight": 0.000147
+        },
+        {
+          "rank": 493,
+          "name": "Hercules, Inc.",
+          "shares": 1077661,
+          "value_usd_thousands": 15249,
+          "weight": 0.000147
+        },
+        {
+          "rank": 494,
+          "name": "Freescale Semiconductor, Inc. Class A",
+          "shares": 719000,
+          "value_usd_thousands": 15106,
+          "weight": 0.000145
+        },
+        {
+          "rank": 495,
+          "name": "Big Lots Inc.",
+          "shares": 1084690,
+          "value_usd_thousands": 14361,
+          "weight": 0.000138
+        },
+        {
+          "rank": 496,
+          "name": "Maytag Corp.",
+          "shares": 757002,
+          "value_usd_thousands": 11855,
+          "weight": 0.000114
+        },
+        {
+          "rank": 497,
+          "name": "CIENA Corp.",
+          "shares": 5500596,
+          "value_usd_thousands": 11496,
+          "weight": 0.000111
+        },
+        {
+          "rank": 498,
+          "name": "Cooper Tire & Rubber Co.",
+          "shares": 608258,
+          "value_usd_thousands": 11295,
+          "weight": 0.000109
+        },
+        {
+          "rank": 499,
+          "name": "Gateway, Inc.",
+          "shares": 2840659,
+          "value_usd_thousands": 9374,
+          "weight": 9e-05
+        },
+        {
+          "rank": 500,
+          "name": "Applied Micro Circuits Corp.",
+          "shares": 2934985,
+          "value_usd_thousands": 7514,
+          "weight": 7.2e-05
+        },
+        {
+          "rank": 501,
+          "name": "Visteon Corp.",
+          "shares": 1227234,
+          "value_usd_thousands": 7400,
+          "weight": 7.1e-05
+        },
+        {
+          "rank": 502,
+          "name": "Delta Air Lines, Inc.",
+          "shares": 1370541,
+          "value_usd_thousands": 5153,
+          "weight": 5e-05
+        },
+        {
+          "rank": 503,
+          "name": "Viacom Inc. Class A",
+          "shares": 143386,
+          "value_usd_thousands": 4620,
+          "weight": 4.4e-05
+        },
+        {
+          "rank": 504,
+          "name": "Constellation Brands, Inc. Class A",
+          "shares": 12684,
+          "value_usd_thousands": 374,
+          "weight": 4e-06
+        },
+        {
+          "rank": 505,
+          "name": "News Corp., Inc., Class B",
+          "shares": 9800,
+          "value_usd_thousands": 165,
+          "weight": 2e-06
+        },
+        {
+          "rank": 506,
+          "name": "Molex, Inc. Class A",
+          "shares": 4051,
+          "value_usd_thousands": 95,
+          "weight": 1e-06
+        },
+        {
+          "rank": 507,
+          "name": "Enterasys Networks, Inc.",
+          "shares": 4706,
+          "value_usd_thousands": 4,
+          "weight": 0.0
+        }
+      ],
+      "period": "2005-Q2",
+      "report_date": "2005-06-30",
+      "audited": false,
+      "form": "N-CSRS",
+      "accession_number": "0000932471-05-001231",
+      "source_file": "data/raw/ground_truth/sec_filings/VG500_2005_Q2_N-CSRS_0000932471-05-001231.txt"
     },
     "2006-Q2": {
       "position_count": 509,

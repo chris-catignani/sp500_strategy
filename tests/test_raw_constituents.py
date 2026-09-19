@@ -2264,6 +2264,20 @@ class TestProvenanceVerifier(unittest.TestCase):
             with self.subTest(year=result.subject):
                 self.assertTrue(result.ok, f"{result.subject}: {result.checks}")
 
+    def test_archived_vanguard_semiannual_totals_still_match_their_filings(self):
+        """Runs verify_q2_rosters over the archived semi-annual filings on disk."""
+        import sys
+
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
+        from scripts.verify_provenance import verify_q2_rosters
+
+        results = verify_q2_rosters(verbose=False)
+        self.assertEqual(len(results), 13)
+        for result in results:
+            with self.subTest(period=result.subject):
+                self.assertTrue(result.ok, f"{result.subject}: {result.checks}")
+
     def test_normalisation_sees_through_filing_markup(self):
         """A quotation must match the prose, not the encoding.
 
@@ -2534,6 +2548,76 @@ class TestPrudentialHtmlSchedules(unittest.TestCase):
         self.assertTrue(
             rows[0].get("no_value_printed"),
             "a row that yields no usable price must say so, as SEI's does",
+        )
+
+
+class TestVanguardSemiannualRosters(unittest.TestCase):
+    """Vanguard 500 Index Fund semi-annual (June 30) rosters and HTML parsing (#96)."""
+
+    SEMIANNUAL_PATH = (
+        ROOT / "data" / "raw" / "ground_truth" / "vanguard_semiannual_rosters.json"
+    )
+
+    def test_every_archived_filing_produces_a_reconciling_roster(self):
+        """Every archived semi-annual filing produces a roster, 2005-Q2 reconciles, and none are refused.
+
+        Asserts the claim that coverage is complete across all archived filings (13 of 13),
+        refused_filings is empty, and 2005-Q2 parses and reconciles dollar-exact.
+        """
+        with open(self.SEMIANNUAL_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        self.assertEqual(data["refused_filings"], {})
+        self.assertIn("13 of 13", data["coverage"])
+
+        rosters = data["rosters_by_period"]
+        self.assertEqual(len(rosters), 13)
+        self.assertIn("2005-Q2", rosters)
+
+        for period, roster in rosters.items():
+            with self.subTest(period=period):
+                self.assertEqual(
+                    roster["parsed_total_usd_thousands"],
+                    roster["stated_total_usd_thousands"],
+                    f"{period} parsed total does not match stated total",
+                )
+                self.assertFalse(
+                    roster["audited"],
+                    f"{period} must be flagged unaudited",
+                )
+
+    def test_html_schedule_rows_collects_th_cells(self):
+        """Table header cells (th) must be collected so heading rows are not lost.
+
+        Some filings (such as Vanguard 2005-Q2) file the schedule's own heading row in
+        <th> tags. Dropping <th> cells silently skips that row and moves the schedule
+        boundary to a later fund.
+        """
+        from scripts.extract_ground_truth_from_sec import _html_schedule_rows
+
+        html_fragment = """
+        <table>
+          <tr>
+            <th align="left"><b>COMMON STOCKS (99.8%)(1)</b></th>
+            <th>Shares</th>
+            <th>Market Value ($000)</th>
+          </tr>
+          <tr>
+            <td>General Electric Co.</td>
+            <td>100,000</td>
+            <td>3,500</td>
+          </tr>
+        </table>
+        """
+        rows = _html_schedule_rows(html_fragment)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(
+            rows[0],
+            ["COMMON STOCKS (99.8%)(1)", "Shares", "Market Value ($000)"],
+        )
+        self.assertEqual(
+            rows[1],
+            ["General Electric Co.", "100,000", "3,500"],
         )
 
 

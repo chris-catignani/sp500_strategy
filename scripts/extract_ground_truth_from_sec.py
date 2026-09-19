@@ -704,7 +704,9 @@ class _HtmlScheduleRowParser(HTMLParser):
 
     The filings nest font and paragraph markup inside every cell and pad the
     layout with empty spacer cells, so cell text is accumulated across child
-    elements and blank cells are dropped.
+    elements and blank cells are dropped. Both `td` and `th` cells are collected;
+    some filings file a schedule's own heading row in `th`, and dropping it
+    silently moves the schedule boundary to a different fund.
     """
 
     def __init__(self) -> None:
@@ -716,11 +718,11 @@ class _HtmlScheduleRowParser(HTMLParser):
     def handle_starttag(self, tag: str, attrs: Any) -> None:
         if tag == "tr":
             self._row = []
-        elif tag == "td":
+        elif tag in ("td", "th"):
             self._cell = []
 
     def handle_endtag(self, tag: str) -> None:
-        if tag == "td" and self._cell is not None:
+        if tag in ("td", "th") and self._cell is not None:
             text = re.sub(r"\s+", " ", "".join(self._cell).replace("\xa0", " ")).strip()
             if self._row is not None and text:
                 self._row.append(text)
