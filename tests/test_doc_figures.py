@@ -703,5 +703,138 @@ class TestRegenerationAudit(unittest.TestCase):
         self.assertEqual(commands, [])
 
 
+class TestDocFigureMatchers(unittest.TestCase):
+    """Unit tests for the doc_figures provenance matchers (issue #105)."""
+
+    def test_crowding_is_near_zero_where_a_value_sits_alone(self):
+        """A ratio among a handful of others: a hit there means what it appears to."""
+        from scripts.verify_provenance import crowding
+
+        leaves = [0.7201, 0.9523, 0.8165, 0.6686, 0.3040]
+        self.assertLess(crowding(leaves, 0.7201, 4), 0.01)
+
+    def test_crowding_saturates_where_every_neighbouring_slot_is_occupied(self):
+        """The 4.3.10 case: a hit that was guaranteed before the figure was known.
+
+        A file holding every hundredth between 1.00 and 2.00 matches ANY two-decimal
+        figure in that range, so `match_numeric` returning True proves nothing at all.
+        """
+        from scripts.verify_provenance import crowding
+
+        leaves = [1.00 + i / 100.0 for i in range(101)]
+        # Not exactly 1.0: the +/-10% window does not land on the 0.01 grid, so one
+        # boundary slot goes uncounted. Saturation is the claim, not the cell value.
+        self.assertGreater(crowding(leaves, 1.38, 2), 0.95)
+
+    def test_a_saturated_hit_is_scored_weak_and_a_lone_one_is_not(self):
+        """The threshold is what keeps a coincidence out of the confirmed column."""
+        from scripts.verify_provenance import (
+            WEAK_HIT_CROWDING, match_numeric, score_numeric_hit)
+
+        crowded = [1.00 + i / 100.0 for i in range(101)]
+        lone = [0.7201, 0.9523, 0.8165]
+
+        self.assertTrue(match_numeric(crowded, [(1.38, 2)]))
+        self.assertGreaterEqual(score_numeric_hit(crowded, [(1.38, 2)]), WEAK_HIT_CROWDING)
+
+        self.assertTrue(match_numeric(lone, [(0.7201, 4)]))
+        self.assertLess(score_numeric_hit(lone, [(0.7201, 4)]), WEAK_HIT_CROWDING)
+
+    def test_crowding_is_zero_when_nothing_is_near(self):
+        """An unmatched target scores nothing, so a miss is never dressed as a weak hit."""
+        from scripts.verify_provenance import score_numeric_hit
+
+        self.assertEqual(score_numeric_hit([0.7201, 0.9523], [(42.0, 2)]), 0.0)
+
+    def test_text_matcher_finds_figure_across_stripped_markup(self):
+        from scripts.verify_provenance import generate_figure_variants, match_text
+        raw_html = "<p>Total shares: <b>23,671,726</b> held</p>"
+        variants, _ = generate_figure_variants("23,671,726")
+        self.assertTrue(match_text(raw_html, variants))
+
+        page_html = "As of December&nbsp;2000 <PAGE> 12 </PAGE> reported."
+        self.assertTrue(match_text(page_html, ["December 2000"]))
+
+    def test_numeric_matcher_matches_precision_and_rejects_nearby(self):
+        from scripts.verify_provenance import generate_figure_variants, match_numeric
+        # 52.55 matches 52.549999237060547 at printed precision 2
+        _, targets_5255 = generate_figure_variants("$52.55")
+        leaves = [52.549999237060547]
+        self.assertTrue(match_numeric(leaves, targets_5255))
+
+        # 52.54 rejects 52.549999237060547
+        _, targets_5254 = generate_figure_variants("52.54")
+        self.assertFalse(match_numeric(leaves, targets_5254))
+
+    def test_percent_to_ratio_finds_ratio(self):
+        from scripts.verify_provenance import generate_figure_variants, match_numeric, match_text
+        text_variants, targets = generate_figure_variants("72.01%")
+        self.assertIn("0.7201", text_variants)
+        self.assertTrue(match_numeric([0.7201], targets))
+        self.assertTrue(match_text("basis retention ratio 0.7201", text_variants))
+
+    def test_scale_suffix_resolves(self):
+        from scripts.verify_provenance import generate_figure_variants, match_numeric, match_text
+        # $3.17B matches scaled 3,170,000 in text or 3170000000 in json
+        text_variants, targets = generate_figure_variants("$3.17B")
+        self.assertIn("3,170,000", text_variants)
+        self.assertIn("3,170", text_variants)
+        self.assertTrue(match_text("Assets of 3,170,000 thousand dollars", text_variants))
+        self.assertTrue(match_numeric([3170000000.0], targets))
+
+        # $103.9bn
+        tv_bn, targets_bn = generate_figure_variants("$103.9bn")
+        self.assertIn("103,900,000", tv_bn)
+        self.assertTrue(match_numeric([103900000000.0], targets_bn))
+
+    def test_absent_figure_is_reported_as_miss(self):
+        from scripts.verify_provenance import generate_figure_variants, match_numeric, match_text
+        text_variants, targets = generate_figure_variants("$999.99")
+        self.assertFalse(match_text("No such number here at 123.45", text_variants))
+        self.assertFalse(match_numeric([123.45, 67.89], targets))
+
+    def test_thousands_separator_and_trailing_zeros(self):
+        from scripts.verify_provenance import generate_figure_variants, match_text
+        # Thousands separator in both directions:
+        # With comma -> tries without comma
+        tv1, _ = generate_figure_variants("3,170")
+        self.assertIn("3170", tv1)
+        self.assertTrue(match_text("count is 3170 items", tv1))
+
+        # Without comma -> tries with comma
+        tv2, _ = generate_figure_variants("3170")
+        self.assertIn("3,170", tv2)
+        self.assertTrue(match_text("count is 3,170 items", tv2))
+
+        # Trailing zero differences in both directions:
+        # 69.10 -> tries 69.1
+        tv3, _ = generate_figure_variants("69.10")
+        self.assertIn("69.1", tv3)
+        self.assertTrue(match_text("value 69.1 observed", tv3))
+
+        # 69.1 -> tries 69.10
+        tv4, _ = generate_figure_variants("69.1")
+        self.assertIn("69.10", tv4)
+        self.assertTrue(match_text("value 69.10 observed", tv4))
+
+    def test_extract_numeric_leaves(self):
+        from scripts.verify_provenance import extract_numeric_leaves
+        data = {
+            "a": 12.34,
+            "b": "56.78",
+            "c": "not-a-number",
+            "d": [1, 2, "3,000", True, None],
+            "e": {"nested": "0.7201"}
+        }
+        leaves = extract_numeric_leaves(data)
+        self.assertIn(12.34, leaves)
+        self.assertIn(56.78, leaves)
+        self.assertIn(1.0, leaves)
+        self.assertIn(2.0, leaves)
+        self.assertIn(3000.0, leaves)
+        self.assertIn(0.7201, leaves)
+        self.assertFalse(any(isinstance(x, bool) for x in leaves))
+
+
 if __name__ == "__main__":
     unittest.main()
