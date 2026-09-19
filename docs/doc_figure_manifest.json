@@ -14,198 +14,218 @@
       "section": "4.1",
       "figure": "$1.00",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Rounding precision threshold convention for base prices under $1.00; specification, not a data claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$39.08",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2019 as-traded year-end close",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$29.52",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2019 year-end close in T.json adjusted for spinoff",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "1.324",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Ratio of 2019 as-traded close ($39.08) to T.json close ($29.52)",
+      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$28.76",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2020 as-traded year-end close",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$21.72",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2020 year-end close in T.json adjusted for spinoff",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "1.324",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Ratio of 2020 as-traded close ($28.76) to T.json close ($21.72)",
+      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$24.60",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2021 as-traded year-end close",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$18.58",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2021 year-end close in T.json adjusted for spinoff",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "1.324",
       "occurrence": 3,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Ratio of 2021 as-traded close ($24.60) to T.json close ($18.58)",
+      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$18.41",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2022 as-traded year-end close",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$18.41",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2022 year-end close in T.json",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "1.000",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Ratio of 2022 as-traded close to T.json close showing post-spinoff parity",
+      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$16.78",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2023 as-traded year-end close",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$16.78",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2023 year-end close in T.json",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "1.000",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Ratio of 2023 as-traded close to T.json close showing post-spinoff parity",
+      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$22.77",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2024 as-traded year-end close",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$22.77",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T 2024 year-end close in T.json",
+      "evidence_quote": "Measured against AT&T's\nas-traded year-end closes:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "1.000",
       "occurrence": 3,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Ratio of 2024 as-traded close to T.json close showing post-spinoff parity",
+      "evidence_quote": "The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$21.62",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "T.json price for December 1995",
+      "evidence_quote": "This is why `T.json` reads \\$21.62 for December 1995 where SBC's audited\n  schedules imply \\$57.50"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.1.1",
       "figure": "$57.50",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "SBC audited schedule implied price for December 1995",
+      "evidence_quote": "This is why `T.json` reads \\$21.62 for December 1995 where SBC's audited\n  schedules imply \\$57.50"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.3",
       "figure": "$0",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Subscript index 0 in mathematical drift formula W_{i, 0}; mathematical notation, not a data claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -895,342 +915,342 @@
       "section": "4.3.7",
       "figure": "68 company-quarter promotion instances into the",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Audit count of mid-year promotions into Top 10 across 1994-2024"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "24 originate from ranks #13–#20",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Promotions originating from expanded ranks #13-#20 locked out under Top 12 restriction"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "9 CONFIRMED",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Audit-confirmed mid-year promotions corroborated by point-in-time filings"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3 CONTRADICTED",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "False-positive promotions contradicted by audited filings"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "12 UNVERIFIED",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Promotions into quarters with no archived filing"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "+0.24 / +0.70 / +0.57",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "MarketCapSelector quarterly Top 10 CAGR deltas (10y/20y/30y) from pool expansion"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "−5.89 / −3.22 / −1.99",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "PerformanceSelector quarterly Top 10 CAGR deltas (10y/20y/30y) showing momentum penalty"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "−4.78 / −2.13 / −0.54",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "PerformanceSelector annual Top 10 CAGR deltas (10y/20y/30y) showing momentum penalty"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "−1.64%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Average momentum penalty across negative quarterly cells under pool expansion"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "−5.89%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Maximum quarterly momentum penalty (Top 10, 10y)"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "99%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Estimated dot-com crash magnitude for Lucent motivating survivorship premise check"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "0.33pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Largest observed survivorship effect on pool-depth comparison deltas"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "0.5pp",
       "occurrence": 1,
-      "verdict": null,
-      "guard": null,
-      "note": ""
+      "verdict": "decision-evidence",
+      "guard": "tests/test_quarterly.py::TestQuarterlyPortfolioSimulator::test_survivorship_correction_does_not_change_the_pool_size_answer",
+      "note": "Asserted bound on survivorship correction effect on pool-depth delta"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "−5.89pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Worst cell delta for momentum in 2015-2024 window"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "6 of 6",
       "occurrence": 1,
-      "verdict": null,
-      "guard": null,
-      "note": ""
+      "verdict": "decision-evidence",
+      "guard": "tests/test_quarterly.py::TestQuarterlyPortfolioSimulator::test_momentum_top_10_is_hurt_by_pool_depth_on_both_paths",
+      "note": "Consistent negative momentum penalty at Top 10 across all 6 cells on both paths"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "+2.92pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Quarterly momentum Top 3 10y gain from wider pool showing sign flip"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "1.31pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Annual momentum Top 3 20y loss from wider pool showing sign flip"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "+2.92pp",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Quarterly momentum Top 3 10y value showing asymmetry"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "+1.79pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Quarterly momentum Top 3 30y value showing asymmetry"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "26.88%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Superseded 10y Top 3 MarketCap CAGR before 2021-2023 weight re-derivation"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "24.49%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Superseded 10y Top 3 MarketCap CAGR after 2021-2023 weight re-derivation"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "16.39%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Superseded 20y Top 3 MarketCap CAGR before weight re-derivation"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "15.29%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Superseded 20y Top 3 MarketCap CAGR after weight re-derivation"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "15.16%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Superseded 30y Top 3 MarketCap CAGR before weight re-derivation"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "14.43%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Superseded 30y Top 3 MarketCap CAGR after weight re-derivation"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3.4%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Superseded prior data weight for NVIDIA ranking #3 at year-end 2023"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3.06%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Filing weight for NVIDIA behind Alphabet at year-end 2023"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "24.49%",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Current measured level after subsequent data improvements; illustrative level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "14.44%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Current measured level after subsequent data improvements; illustrative level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "13.77%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Current measured level after subsequent data improvements; illustrative level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "7.03%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Apple weight at 2023-12-31 justifying Alphabet consolidation ranking impact"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "6.98%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Microsoft weight at 2023-12-31 justifying Alphabet consolidation ranking impact"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3.45%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Amazon weight at 2023-12-31 justifying Alphabet consolidation ranking impact"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3.06%",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "NVIDIA weight at 2023-12-31 justifying Alphabet consolidation ranking impact"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "2.07%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Alphabet Class A weight at 2023-12-31 justifying consolidation"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "1.96%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Meta weight at 2023-12-31 justifying Alphabet consolidation ranking impact"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "1.75%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Alphabet Class C weight at 2023-12-31 justifying consolidation"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3.82%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Consolidated Alphabet weight at 2023-12-31 ranking #3"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2019,99 +2039,110 @@
       "section": "4.3.10",
       "figure": "148",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Vanguard FY2002 filing position count of first schedule belonging to non-S&P fund",
+      "evidence_quote": "In the FY2002 filing the *first* schedule belongs to a fund holding **148** stocks, which reconciles perfectly against its own stated total and is simply the wrong fund"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.10",
       "figure": "$24,416",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Vanguard FY2004 Schedule of Investments stated market value for unnamed holding",
+      "evidence_quote": "The FY2004 filing contains a row whose issuer and share cells are blank **in the document as filed**, stating only a market value of \\$24,416 thousand."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.10",
       "figure": "471 of 506",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Position rank of unnamed holding within 506 positions in FY2004 Vanguard schedule",
+      "evidence_quote": "At rank #471 of 506 and 0.023% of the fund it cannot reach the Top 20, and a test pins that."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.10",
       "figure": "0.023%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Derived fund weight of unnamed holding in FY2004 Vanguard schedule",
+      "evidence_quote": "At rank #471 of 506 and 0.023% of the fund it cannot reach the Top 20, and a test pins that."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.10",
       "figure": "1.38%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "SBC Communications weight at 2000-12-31 in Vanguard 500 Index Fund filing",
+      "evidence_quote": "At **2000-12-31** the filing places three constituents inside the Top 20 that the estimated roster omits entirely:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.10",
       "figure": "1.24%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "EMC Corp. weight at 2000-12-31 in Vanguard 500 Index Fund filing",
+      "evidence_quote": "At **2000-12-31** the filing places three constituents inside the Top 20 that the estimated roster omits entirely:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.10",
       "figure": "1.11%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Royal Dutch Petroleum weight at 2000-12-31 in Vanguard 500 Index Fund filing",
+      "evidence_quote": "At **2000-12-31** the filing places three constituents inside the Top 20 that the estimated roster omits entirely:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.11",
       "figure": "58 filed name variants",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Total filed name variants mapped in issuer_ticker_map.json across 1994-2006",
+      "evidence_quote": "The map resolves all **58 filed name variants** appearing in any 1994–2006 Top 20 to **46 distinct tickers**, and a test asserts that no Top-20 name goes unmapped."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.11",
       "figure": "46 distinct tickers",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Total distinct tickers resolved by issuer_ticker_map.json",
+      "evidence_quote": "The map resolves all **58 filed name variants** appearing in any 1994–2006 Top 20 to **46 distinct tickers**, and a test asserts that no Top-20 name goes unmapped."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.12",
       "figure": "36 missing constituents at depth 30, of which 14 reach a",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Count of missing constituents in survivorship gap report after adding three tickers",
+      "evidence_quote": "Adding these three closes them in the survivorship gap report: **36 missing constituents at depth 30, of which 14 reach a Top 20**, down from 39 and 17."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.13",
       "figure": "70 claims re-checked, 0 failed",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Total claims re-checked against SEC EDGAR by verify_provenance.py",
+      "evidence_quote": "Current state: **70 claims re-checked, 0 failed**, with two skipped"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2368,252 +2399,277 @@
       "section": "4.3.15",
       "figure": "$5",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Illustrative quality threshold of anomalous dividend values in unvalidated first pass"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "25%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Structural check threshold rejecting dividends exceeding 25% of share price"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "335 published quarters to 64",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Sample size reduction after applying dollar-exact reconciliation gate",
+      "evidence_quote": "cut **335 published quarters to 64**, with 16 years reconciled, 55 withheld and\n27 structural rejects."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "$0.36",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "BellSouth 1996 quarterly dividend reported in FY1997 filing",
+      "evidence_quote": "BellSouth is why: it reports 1996 at \\$0.36 a quarter in its FY1997\nfiling and at \\$0.18 in filings after its December 1998 two-for-one."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "$0.18",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "BellSouth 1996 quarterly dividend restated after 1998 2:1 split",
+      "evidence_quote": "BellSouth is why: it reports 1996 at \\$0.36 a quarter in its FY1997\nfiling and at \\$0.18 in filings after its December 1998 two-for-one."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "$ 0.04",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent FY1999 Form 10-K405 quarterly dividend declared",
+      "evidence_quote": "Its FY1999 Form 10-K405 (`0000950123-99-011082`) states `Dividends per common share(3) 0.08\n0.0775 0.0563 0.0375 0.0375` and a quarterly row `$ 0.04 $ 0.00 $ 0.02 $ 0.02 $ 0.08` that\nreconciles to the annual line exactly."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "$ 0.00",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent FY1999 Form 10-K405 quarterly dividend declared",
+      "evidence_quote": "Its FY1999 Form 10-K405 (`0000950123-99-011082`) states `Dividends per common share(3) 0.08\n0.0775 0.0563 0.0375 0.0375` and a quarterly row `$ 0.04 $ 0.00 $ 0.02 $ 0.02 $ 0.08` that\nreconciles to the annual line exactly."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "$ 0.02",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent FY1999 Form 10-K405 quarterly dividend declared",
+      "evidence_quote": "Its FY1999 Form 10-K405 (`0000950123-99-011082`) states `Dividends per common share(3) 0.08\n0.0775 0.0563 0.0375 0.0375` and a quarterly row `$ 0.04 $ 0.00 $ 0.02 $ 0.02 $ 0.08` that\nreconciles to the annual line exactly."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "$ 0.02",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent FY1999 Form 10-K405 quarterly dividend declared",
+      "evidence_quote": "Its FY1999 Form 10-K405 (`0000950123-99-011082`) states `Dividends per common share(3) 0.08\n0.0775 0.0563 0.0375 0.0375` and a quarterly row `$ 0.04 $ 0.00 $ 0.02 $ 0.02 $ 0.08` that\nreconciles to the annual line exactly."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "$ 0.08",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent FY1999 Form 10-K405 quarterly dividend declared",
+      "evidence_quote": "Its FY1999 Form 10-K405 (`0000950123-99-011082`) states `Dividends per common share(3) 0.08\n0.0775 0.0563 0.0375 0.0375` and a quarterly row `$ 0.04 $ 0.00 $ 0.02 $ 0.02 $ 0.08` that\nreconciles to the annual line exactly."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "112 of 168 filings were refused, and that is mostly a finding rather than a failure",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Refusal count from issuer dividend table extraction",
+      "evidence_quote": "**112 of 168 filings were refused, and that is mostly a finding rather than a failure.**"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "517 verbatim split sentences",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Count of verbatim split sentences extracted across filings",
+      "evidence_quote": "The same pass collected **517 verbatim split sentences**."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "50%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "MCIC stock split dividend percentage stated in board authorization",
+      "evidence_quote": "On\nNovember 18, 1999, the Board of Directors authorized a three-for-two stock split in the form\nof a 50% stock dividend which was distributed on December 30, 1999"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "$13.75",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Dell cash buyout price per share in terminal action disposal",
+      "evidence_quote": "Full lot depletion; gain or loss realised against FIFO basis | `DELL` (\\$13.75), `SUNW` (\\$9.50)"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "$9.50",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Sun Microsystems cash buyout price per share in terminal action disposal",
+      "evidence_quote": "Full lot depletion; gain or loss realised against FIFO basis | `DELL` (\\$13.75), `SUNW` (\\$9.50)"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "$0",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Full position write-off valuation for delisting to zero terminal action"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "$47.11",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Vanguard FY2006 Schedule of Investments implied terminal value for BellSouth",
+      "evidence_quote": "- **`BLS` at 2006-12-31 (\\$47.11), annual and 2006-Q4.**"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "$35.75",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AT&T contemporaneous close on merger effective date",
+      "evidence_quote": "at the filing's own ratio, 1.325 × \\$35.75 is \\$47.37, so the two readings agree to within 0.6% and the distinction does not change the number."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "$47.37",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Derived conversion value 1.325 × $35.75 for BellSouth shares",
+      "evidence_quote": "at the filing's own ratio, 1.325 × \\$35.75 is \\$47.37, so the two readings agree to within 0.6% and the distinction does not change the number."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "0.6%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Reconciliation discrepancy between filed schedule terminal value and conversion calculation",
+      "evidence_quote": "at the filing's own ratio, 1.325 × \\$35.75 is \\$47.37, so the two readings agree to within 0.6% and the distinction does not change the number."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "$44.34",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Tyco International post-separation continuing company 2007-Q3 price observation",
+      "evidence_quote": "- **`TYC` at 2007-Q3 (\\$44.34) and 2008-Q3 (\\$35.02).**"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "$35.02",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Tyco International post-separation continuing company 2008-Q3 price observation",
+      "evidence_quote": "- **`TYC` at 2007-Q3 (\\$44.34) and 2008-Q3 (\\$35.02).**"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.16",
       "figure": "380 positions across the nineteen Vanguard filings, with no unresolved issuer name and no missing series",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Invariant assertion verifying complete price series coverage across all 380 Top 20 positions",
+      "evidence_quote": "Every Top-20 position in every audited December-31 roster resolves to a ticker and has a price series for that exact year — **380 positions across the nineteen Vanguard filings, with no unresolved issuer name and no missing series**."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.5.1",
       "figure": "$16",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Transaction value of SBC acquisition of AT&T Corp ($16 billion)",
+      "evidence_quote": "acquired its own former parent for \\$16 billion."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.5.2",
       "figure": "4th in",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Estimated roster ranking of AT&T Corp in 1996",
+      "evidence_quote": "The estimated roster ranked AT&T **4th in 1996**; the Vanguard 500 Index Fund's 1996-12-31 filing ranks it **11th**."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.5.2",
       "figure": "11th",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Vanguard 500 Index Fund 1996-12-31 filing rank for AT&T Corp",
+      "evidence_quote": "The estimated roster ranked AT&T **4th in 1996**; the Vanguard 500 Index Fund's 1996-12-31 filing ranks it **11th**."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.5.3",
       "figure": "$0.33",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Ma Bell verified quarterly dividend per share",
+      "evidence_quote": "The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend (\\$1.32/year)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.5.3",
       "figure": "$1.32",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Ma Bell annualized dividend per share (4 × $0.33)",
+      "evidence_quote": "The constructed series carried Ma Bell's verified \\$0.33 quarterly dividend (\\$1.32/year)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2770,9 +2826,10 @@
       "section": "4.6.2",
       "figure": "$0.00",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Statutory zero dividend tax withholding under Section 355 treatment",
+      "evidence_quote": "Qualifying Section 355 reorganizations are not dividends; zero dividend tax is withheld ($0.00 dividend tax drag)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3556,252 +3613,265 @@
       "section": "4.6.6",
       "figure": "$14.87",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent spinoff distribution per share received in Q3",
+      "evidence_quote": "receives Lucent (\\$14.87) in Q3 and NCR (\\$2.10) in Q4 (total \\$16.97)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.6.6",
       "figure": "$2.10",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "NCR spinoff distribution per share received in Q4",
+      "evidence_quote": "receives Lucent (\\$14.87) in Q3 and NCR (\\$2.10) in Q4 (total \\$16.97)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.6.6",
       "figure": "$16.97",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Combined spinoff distributions ($14.87 + $2.10) received in Top 5 Annual",
+      "evidence_quote": "receives Lucent (\\$14.87) in Q3 and NCR (\\$2.10) in Q4 (total \\$16.97)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.6.6",
       "figure": "$14.87",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent spinoff distribution per share received in Top 5 Quarterly",
+      "evidence_quote": "receives Lucent (\\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #10 $\\implies$ receives **\\$0.00 from NCR in Q4**."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.6.6",
       "figure": "$0.00",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "NCR distribution not received in Top 5 Quarterly due to position exit at Q3 rebalance",
+      "evidence_quote": "receives Lucent (\\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #10 $\\implies$ receives **\\$0.00 from NCR in Q4**."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.17",
       "figure": "93 quarters across , , , , and ; none fails",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Count of quarters passing high/low band test across six registrants",
+      "evidence_quote": "**93 quarters across `AN`, `BLS`, `DD`, `GTE`, `LU` and `T_CORP`; none fails.**"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.17",
       "figure": "42 comparisons; 38 agree within 0.5%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Count of direct close price comparisons agreeing within 0.5%",
+      "evidence_quote": "**42 comparisons; 38 agree within 0.5%.**"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.17",
       "figure": "1.874%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Discrepancy between fund valuation and composite tape close for T_CORP 1994-Q2",
+      "evidence_quote": "widest is `T_CORP` 1994-Q2 at 1.874%, already recorded at 4.3.9:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "$ 0.895",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "SBC Communications declared dividend per share from 10-K filing",
+      "evidence_quote": "Dividends declared per common share $ 0.895\n$ 0.86 $ 0.825 $ 0.79"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "$ 0.86",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "SBC Communications declared dividend per share from 10-K filing",
+      "evidence_quote": "Dividends declared per common share $ 0.895\n$ 0.86 $ 0.825 $ 0.79"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "$ 0.825",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "SBC Communications declared dividend per share from 10-K filing",
+      "evidence_quote": "Dividends declared per common share $ 0.895\n$ 0.86 $ 0.825 $ 0.79"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "$ 0.79",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "SBC Communications declared dividend per share from 10-K filing",
+      "evidence_quote": "Dividends declared per common share $ 0.895\n$ 0.86 $ 0.825 $ 0.79"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "1%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Timing difference percentage between vendor sums and declared dividends",
+      "evidence_quote": "the same\nbasis, about 1% low on declared-versus-ex-date timing, and nowhere near a factor of 1.324."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "+0.006pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream portfolio performance consequence of wiring sourced dividends; unpinned delta"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "+0.056pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream portfolio performance consequence of wiring sourced dividends; unpinned delta"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "13.7665",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream 30y Top 3 annual CAGR after wiring sourced dividends; unpinned level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "13.6016",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream 30y Top 3 quarterly CAGR after wiring sourced dividends; unpinned level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "13.0065",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream 30y Top 5 annual CAGR after wiring sourced dividends; unpinned level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "12.6680",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream 30y Top 5 quarterly CAGR after wiring sourced dividends; unpinned level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "12.1749",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream 30y Top 10 annual CAGR after wiring sourced dividends; unpinned level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "12.8356",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream 30y Top 10 quarterly CAGR after wiring sourced dividends; unpinned level"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "-0.0006pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Subsequent shift in market-cap cells from Lucent and BellSouth corrections; unpinned"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "0.1pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Asserted bound in TestDerivedDividendEffect that dividend effect is under 0.1pp"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "−0.68pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream decline previously attributed to survivorship in #63; illustrative comparison"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "0.056pp",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Maximum portion of #63 decline accounted for by missing dividends; illustrative"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "−0.179",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream momentum selector delta on Top 10 quarterly; unpinned"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "−0.124",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Downstream momentum selector delta on Top 10 equal-weighted quarterly; unpinned"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
       "figure": "0.1pp",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Asserted bound in TestDerivedDividendEffect for market-cap path"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3908,72 +3978,79 @@
       "section": "4.3.20",
       "figure": "−20% to +61%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Shift in BellSouth 1995 total return from correcting missing 2:1 stock split",
+      "evidence_quote": "The correction moves BellSouth's 1995 total return from **−20% to +61%**, which is not a\nrounding matter:"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.20",
       "figure": "1%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "decision-evidence",
       "guard": null,
-      "note": ""
+      "note": "Tolerance parameter for cross-filing corporate action agreement check"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.20",
       "figure": "$0.69",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "BellSouth 1994-Q1 dividends declared in FY1994 report",
+      "evidence_quote": "BellSouth's 1994-Q1 is the archetype:\n\n| Field | FY1994 report | FY1995 report | Ratio |"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.20",
       "figure": "$0.345",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "BellSouth 1994-Q1 dividends declared restated in FY1995 report",
+      "evidence_quote": "BellSouth's 1994-Q1 is the archetype:\n\n| Field | FY1994 report | FY1995 report | Ratio |"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.20",
       "figure": "$61.500",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "BellSouth 1994-Q1 High price in FY1994 report",
+      "evidence_quote": "BellSouth's 1994-Q1 is the archetype:\n\n| Field | FY1994 report | FY1995 report | Ratio |"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.20",
       "figure": "$30.750",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "BellSouth 1994-Q1 High price restated in FY1995 report",
+      "evidence_quote": "BellSouth's 1994-Q1 is the archetype:\n\n| Field | FY1994 report | FY1995 report | Ratio |"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.20",
       "figure": "$53.000",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "BellSouth 1994-Q1 Low price in FY1994 report",
+      "evidence_quote": "BellSouth's 1994-Q1 is the archetype:\n\n| Field | FY1994 report | FY1995 report | Ratio |"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.20",
       "figure": "$26.500",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "BellSouth 1994-Q1 Low price restated in FY1995 report",
+      "evidence_quote": "BellSouth's 1994-Q1 is the archetype:\n\n| Field | FY1994 report | FY1995 report | Ratio |"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -4466,279 +4543,301 @@
       "section": "5",
       "figure": "$5.34",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "UNH 1993 split-adjusted year-end close",
+      "evidence_quote": "Year-end 1993 split-adjusted close is \\$5.34 (nominal unadjusted was \\$75.88)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$75.88",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "UNH 1993 nominal unadjusted close",
+      "evidence_quote": "Year-end 1993 split-adjusted close is \\$5.34 (nominal unadjusted was \\$75.88)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$0.33",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AAPL 1994 split-adjusted year-end close",
+      "evidence_quote": "1994 split-adjusted close is \\$0.33."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$0.10",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "NVDA 1999 split-adjusted year-end close",
+      "evidence_quote": "1999 split-adjusted close is \\$0.10."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$496.80",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Citigroup 2006 split-adjusted year-end close",
+      "evidence_quote": "2006 split-adjusted close is \\$496.80."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$1,166.00",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AIG 2007 split-adjusted year-end close",
+      "evidence_quote": "2007 split-adjusted close is \\$1,166.00; crashed to \\$31.40 in 2008 (-97.31%)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$31.40",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "AIG 2008 split-adjusted year-end close",
+      "evidence_quote": "2007 split-adjusted close is \\$1,166.00; crashed to \\$31.40 in 2008 (-97.31%)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "-97.31%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "AIG 2007-2008 price decline percentage (($31.40 - $1166.00) / $1166.00)",
+      "evidence_quote": "2007 split-adjusted close is \\$1,166.00; crashed to \\$31.40 in 2008 (-97.31%)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$18.67",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "GE HealthCare spinoff cash distribution per share",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credit (\\$18.67 and \\$35.38) and Form 8937 basis retention ratios (0.8165 and 0.6686)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$35.38",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "GE Vernova spinoff cash distribution per share",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credit (\\$18.67 and \\$35.38) and Form 8937 basis retention ratios (0.8165 and 0.6686)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$52.55",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Walmart 2023 split-adjusted year-end close",
+      "evidence_quote": "2023 split-adjusted close is \\$52.55; 2024 close is \\$88.93 (+69.23% return)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$88.93",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Walmart 2024 year-end close",
+      "evidence_quote": "2023 split-adjusted close is \\$52.55; 2024 close is \\$88.93 (+69.23% return)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "+69.23%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Walmart 2023-2024 return percentage (($88.93 - $52.55) / $52.55)",
+      "evidence_quote": "2023 split-adjusted close is \\$52.55; 2024 close is \\$88.93 (+69.23% return)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$0.33",
       "occurrence": 2,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Ma Bell verified quarterly dividend per share",
+      "evidence_quote": "Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \\$0.33/quarter (\\$1.32/year) dividends."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$1.32",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "derivation",
       "guard": null,
-      "note": ""
+      "note": "Ma Bell annualized dividend per share (4 × $0.33)",
+      "evidence_quote": "Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \\$0.33/quarter (\\$1.32/year) dividends."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$14.87",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent Technologies spinoff distribution per share",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credit (\\$14.87/sh; 0.324084 shares at \\$45.875) and Form 8937 basis retention ratio (0.7201)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$45.875",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Lucent Technologies opening market quote on distribution date",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credit (\\$14.87/sh; 0.324084 shares at \\$45.875) and Form 8937 basis retention ratio (0.7201)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$2.10",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "NCR Corporation spinoff distribution per share",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credit (\\$2.10/sh; 0.0625 shares at \\$33.625) and Form 8937 basis retention ratio (0.9523)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$33.625",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "NCR Corporation opening market quote on distribution date",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credit (\\$2.10/sh; 0.0625 shares at \\$33.625) and Form 8937 basis retention ratio (0.9523)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$5.81",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "WarnerMedia spinoff distribution per share",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credit (\\$5.81/sh) and Form 8937 basis retention ratio (0.7623)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$21.90",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Kraft spinoff distribution per share",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credits (\\$21.90 and \\$50.60) and Form 8937 basis retention ratios (0.6910 and 0.3040)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$50.60",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "sourced",
       "guard": null,
-      "note": ""
+      "note": "Philip Morris spinoff distribution per share",
+      "evidence_quote": "Modeled via Section 355 tax-free cash credits (\\$21.90 and \\$50.60) and Form 8937 basis retention ratios (0.6910 and 0.3040)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "6",
       "figure": "1.0%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Illustrative constituent index weight range lower bound; descriptive, not a data claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "6",
       "figure": "7.5%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Illustrative constituent index weight range upper bound; descriptive, not a data claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "6",
       "figure": "20%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Illustrative aggregate Top 12 index weight range lower bound; descriptive, not a data claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "6",
       "figure": "35%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Illustrative aggregate Top 12 index weight range upper bound; descriptive, not a data claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "6",
       "figure": "100%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Qualitative assertion of consistency (100% mathematical consistency); rhetorical adjective, not a data claim"
     },
     {
       "document": "README.md",
       "section": "preamble",
       "figure": "$0",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Parameter value in tax rate tier list ($0% tax tier); definition, not a data claim"
     },
     {
       "document": "README.md",
       "section": "preamble",
       "figure": "100%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Parameter in post-liquidation CAGR definition (sell 100% of holdings); definition, not a data claim"
     },
     {
       "document": "README.md",
       "section": "2",
       "figure": "20%",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Worked example CLI parameter value for 20% tax rate; illustrative example, not a data claim"
     },
     {
       "document": "README.md",
       "section": "3",
       "figure": "$100,000",
       "occurrence": 1,
-      "verdict": null,
+      "verdict": "remove",
       "guard": null,
-      "note": ""
+      "note": "Worked example CLI parameter value for initial capital; illustrative example, not a data claim"
     }
   ]
 }
