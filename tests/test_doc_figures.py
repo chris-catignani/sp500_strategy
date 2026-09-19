@@ -275,11 +275,19 @@ class TestSourcedVerdictsAreGrounded(unittest.TestCase):
 class TestRotExposureIsDeclared(unittest.TestCase):
     """Whether a reader can verify a figure without running our code.
 
-    This is the axis that predicts rot, and it cuts across the verdicts. `$1.32` in
-    4.5.3 is the annualised Ma Bell dividend, 4 x $0.33: computed, and unable to rot,
-    because its inputs are filed and its operation is printed beside it. `87.0%` in
-    4.3.6 is a match rate over our own parsing, and moves whenever the parser or the
-    rosters change. The old sourced/computed binary called both "computed".
+    This is the axis that predicts rot, and it cuts across the verdicts. 4.6.4's
+    spinoff proceeds print a Form 8937 ratio times a filed close --
+    `$0.324084 \times \$45.875 = \$14.86735 \approx \mathbf{\$14.87}$` -- so they are
+    computed and cannot rot: a reader confirms them with a calculator and no change to
+    our code can move them. `87.0%` in 4.3.6 is a match rate over our own parsing, and
+    moves whenever the parser or the rosters change. The old sourced/computed binary
+    called both "computed".
+
+    An earlier revision of this docstring cited 4.5.3's `$1.32` as the archetype,
+    "4 x $0.33". The document prints no such operation -- it says
+    `\$0.33 quarterly dividend (\$1.32/year)` -- so the example was invented rather
+    than read. It is recorded here because publishing an unsourced illustration is the
+    same defect this file exists to prevent.
 
     WHAT THIS TEST CANNOT DO. It checks that a figure claiming to be stable carries a
     trace and prints an operation. It cannot check that the trace is CORRECT. 4.3.6

@@ -47,15 +47,26 @@ ROT_CLASSIFIED_VERDICTS = ("derivation", "decision-evidence")
 # is our own match count, so the figure rots however much arithmetic is shown. No regex
 # decides this; the controller reviews every `rot_exposed: false`.
 #
-# The alternatives are narrow on purpose, and each exclusion was measured against the
-# real manifest:
-#   - An ASCII hyphen counts as subtraction ONLY when spaced. Without that, "2014-2019"
-#     reads as digit-minus-digit and every year range in the document looks like printed
-#     arithmetic.
+# The archetype it must catch is 4.6.4's spinoff proceeds, which print a Form 8937 ratio
+# times a filed close:
+#     $0.324084 \times \$45.875 = \$14.86735 \approx \mathbf{\$14.87}$
+#
+# Every part of this pattern was forced by a real line in the document:
+#   - LaTeX `\times` and `\cdot`, because 4.6.4 writes multiplication that way. An
+#     earlier version matched only unicode and silently blocked thirteen genuinely
+#     self-checking figures, which had to be marked rot-exposed to keep the suite green.
+#   - Escaped `\$`, because the document escapes dollar signs for LaTeX.
+#   - Bold markers between operand and operator, because 4.5.4 writes
+#     `**\$43.50** - **\$2.10** = **\$41.40**`.
+#   - An ASCII hyphen counts as subtraction ONLY with real whitespace either side.
+#     Without that, "2014-2019" reads as digit-minus-digit and every year range in the
+#     document looks like printed arithmetic.
 #   - An en dash is never an operator; it is how this document writes ranges.
-#   - "(" followed by a digit is not an operator either. It matched "(1995-2019)".
-#   - "$" may follow an operator, so "4 x $0.33" is caught.
-PRINTS_AN_OPERATION = re.compile(r"\d\s*[×x*/+−]\s*[\d$]|\d\s+-\s+[\d$]|=\s*[\d$(]")
+PRINTS_AN_OPERATION = re.compile(
+    r"\d[*\s]*(?:[×x*/+−]|\\times|\\cdot)[*\s]*\\?[\d$]"
+    r"|\d[*\s]*\s-\s[*\s]*\\?[\d$]"
+    r"|=[*\s]*\\?[\d$(]"
+)
 
 _MONTH = (r"(?:January|February|March|April|May|June|July|August|September|October"
           r"|November|December)")
