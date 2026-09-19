@@ -35,6 +35,28 @@ VERDICTS = ("sourced", "derivation", "decision-evidence", "remove", "wrong",
 # would tell pass 2 to delete a section heading and corrupt a formula. They stay in the
 # document and need no guard.
 
+# The two verdicts that carry a rot-exposure decision. `sourced` cannot rot because a
+# filing cannot change; `remove` is leaving; `not-a-claim` was never a claim; `wrong` is
+# corrected in place. Only these two need the question asked.
+ROT_CLASSIFIED_VERDICTS = ("derivation", "decision-evidence")
+
+# Does the document print the arithmetic? A figure claiming to be self-checking must show
+# its work, so a reader can confirm it without running anything of ours.
+#
+# NECESSARY, NOT SUFFICIENT. 4.3.6's `89.8% (494/550)` matches this and is pipeline: 494
+# is our own match count, so the figure rots however much arithmetic is shown. No regex
+# decides this; the controller reviews every `rot_exposed: false`.
+#
+# The alternatives are narrow on purpose, and each exclusion was measured against the
+# real manifest:
+#   - An ASCII hyphen counts as subtraction ONLY when spaced. Without that, "2014-2019"
+#     reads as digit-minus-digit and every year range in the document looks like printed
+#     arithmetic.
+#   - An en dash is never an operator; it is how this document writes ranges.
+#   - "(" followed by a digit is not an operator either. It matched "(1995-2019)".
+#   - "$" may follow an operator, so "4 x $0.33" is caught.
+PRINTS_AN_OPERATION = re.compile(r"\d\s*[×x*/+−]\s*[\d$]|\d\s+-\s+[\d$]|=\s*[\d$(]")
+
 _MONTH = (r"(?:January|February|March|April|May|June|July|August|September|October"
           r"|November|December)")
 
