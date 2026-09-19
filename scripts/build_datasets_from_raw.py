@@ -932,27 +932,70 @@ def main():
                 all_quarterly_spinoffs[t][q_key] = all_quarterly_spinoffs[t].get(q_key, 0.0) + d
                 all_annual_spinoffs[t][y] = all_annual_spinoffs[t].get(y, 0.0) + d
 
-    # The 1996-12-31 Schedule of Investments values AT&T Corp cum-NCR. The distribution
-    # went ex that same day, and the contemporaneous quote in
-    # att_1996_endpoint_valuations.json -- 43.375 against the filing's 43.50, one tick
-    # apart -- states explicitly that it carries the entitlement. Were the filed price
-    # ex-NCR, the cum value would be 45.60, a 2.20 gap between two same-day valuations of
-    # one security. The model credits the NCR shares separately, so the parent's year-end
-    # value must exclude them or the same wealth is counted twice.
+    # A filing dated on a distribution's ex-date values the parent BEFORE the child
+    # separated, so that endpoint observation still carries the entitlement. The engine
+    # credits the child separately at the same endpoint, so the parent's value must have
+    # it deducted or the same wealth is counted twice.
     #
-    # Lucent needs no such subtraction: it went ex on 1996-09-30, a quarter before the
-    # filing date, so the 12-31 quote is already clear of it.
-    ncr_events = [
-        ev for ev in spinoffs_data.get("T_CORP", [])
-        if ev["ex_date"] == "1996-12-31" and ev["spinco_ticker"] == "NCR"
-    ]
-    if ncr_events:
-        ncr_event, = ncr_events
-        cum_price = all_prices_data["T_CORP"]["1996"]
-        parent_price = round(cum_price - ncr_event["distribution_per_share"], 4)
-        if parent_price <= 0:
-            raise ValueError("AT&T Corp post-distribution value must be positive")
-        all_prices_data["T_CORP"]["1996"] = parent_price
+    # The 1996-12-31 Schedule of Investments is the case that made this visible: it values
+    # AT&T Corp cum-NCR, and the contemporaneous quote in att_1996_endpoint_valuations.json
+    # -- 43.375 against the filing's 43.50, one tick apart -- states explicitly that it
+    # carries the entitlement. Were the filed price ex-NCR, the cum value would be 45.60, a
+    # 2.20 gap between two same-day valuations of one security.
+    #
+    # Until #108 this ran on the ANNUAL series alone, and named NCR explicitly. That left
+    # the quarterly series carrying both 1996 entitlements: Q4 the same cum-NCR value, and
+    # Q3 the SEI September-30 value, which is cum-Lucent on the same argument -- the fund
+    # holds 9,000 Lucent shares against an entitlement of 222,699 x 0.324084 = 72,171, so
+    # it had not booked the distribution. engine/data_loader.py prefers the quarterly file,
+    # so the corrected annual value was never reached on that path.
+    #
+    # The test is the date, not the ticker: an endpoint carries an entitlement exactly when
+    # the child went ex on the endpoint's own observation date. Lucent needs no deduction
+    # from the ANNUAL series for the same reason -- it went ex a quarter before the
+    # December filing date, so the year-end quote is already clear of it.
+    #
+    # Restricted to constituents priced from filings. A vendor series arrives already
+    # adjusted for the distribution, and deducting there would subtract it twice.
+    #
+    # The deducted amount is not a choice. To conserve the quoted wealth it must equal
+    # exactly what the engine credits, which is the converted figure computed above.
+    quarter_end_suffix = {1: "03-31", 2: "06-30", 3: "09-30", 4: "12-31"}
+
+    def deduct_entitlement(series, key, event, ticker, label):
+        """Replace a cum-distribution endpoint with its parent-only value."""
+        cum_value = series[key]
+        parent_value = round(cum_value - event["distribution_per_share"], 4)
+        if parent_value <= 0:
+            raise ValueError(
+                f"{ticker} {label} post-distribution value must be positive: "
+                f"{cum_value} - {event['distribution_per_share']} = {parent_value}"
+            )
+        series[key] = parent_value
+        return parent_value
+
+    reconciled = 0
+    for ticker in sorted(spinoffs_data):
+        if ticker not in DERIVED_NAMES:
+            continue
+        for event in spinoffs_data[ticker]:
+            year = int(event["year"])
+            quarter = int(event["quarter"])
+            ex_date = event["ex_date"]
+
+            annual_series = all_prices_data.get(ticker, {})
+            if ex_date == f"{year}-12-31" and str(year) in annual_series:
+                deduct_entitlement(annual_series, str(year), event, ticker, str(year))
+                reconciled += 1
+
+            period = f"{year}-Q{quarter}"
+            quarterly_series = all_quarterly_prices_data.get(ticker, {})
+            if ex_date == f"{year}-{quarter_end_suffix[quarter]}" and period in quarterly_series:
+                deduct_entitlement(quarterly_series, period, event, ticker, period)
+                reconciled += 1
+
+    if reconciled:
+        print(f"Reconciled {reconciled} endpoint(s) carrying a distribution entitlement")
 
     # 3. Build S&P 500 constituents
     sp500_constituents: Dict[str, List[dict]] = {}
