@@ -183,18 +183,18 @@ To eliminate lookahead bias and maintain strict point-in-time realism:
 Evaluating candidate constituents for quarters Q1–Q3 from the prior December's point-in-time roster with passive price drift relative to the benchmark index ($W_{i,0} \times \frac{P_{i,q}/P_{i,0}}{P_{\text{index},q}/P_{\text{index},0}}$) is an intentional, principled design decision:
 - **Prior Architecture & Top 12 Limitation**: Previously, candidate pools were restricted to the prior year-end Top 12 constituents. While sufficient for Top 3 and Top 5 strategies, a Top 10 strategy suffered truncation when equities ranked #13–#20 experienced massive intra-year momentum (e.g., Tesla in 2023, Walmart in 2008, Oracle in 2000).
 - **Expanded Top 20 Universe**: The candidate universe is expanded to the **Top 20** largest companies in the S&P 500 at each year-end (1994–2024). Ranks #1–#12 are compiled from official S&P Dow Jones Indices year-end factsheets.
-- **Ranks #13–#20 for 1994–2019 are unverified estimates.** No primary source in this repository reports a point-in-time capitalization for these positions. They are not derived from anything archived here, and the provenance table labels all 208 such rows `Unverified Estimate (No Primary Source)` with no underlying or anchor value. An earlier revision published a `Cap_i` for each row back-solved from the weight it was meant to explain, cited to "SEC Form 10-K & Point-in-Time Capitalization Archives"; that was circular and has been removed. Extracting the 35 historical Form N-30D Schedules of Investments (1995–2019; §4.3.6) provides audited ground truth that bounds intra-year drift and enumerates the survivorship gap. Because SPY's fiscal year ended December 31 through 1996 and September 30 from 1997 onward, the 1995 and 1996 annual reports **are** December 31 primary sources (providing the project's first independent year-end checks against the estimated candidate rosters; §4.3.6), whereas every other pre-2020 annual filing is a September 30 snapshot. Consequently, while 1995 and 1996 have now been checked against primary filings, these historical reports do not replace the 208 December 31 `Unverified Estimate` rows in the anchor tables. **The residual unvalidated window is 2007–2013**, not the 1994 and 1997–2019 this paragraph claimed until issue #91 re-measured it: §4.3.12 has superseded the claim for 1994–2006 since the audited Vanguard rosters landed, and `data/raw/ground_truth/vanguard_audited_rosters.json` now carries a December-31 roster for 2014–2019 as well. The 208 count is unchanged and remains accurate — it counts rows in `docs/historical_weights_table.csv`, which the audited rosters do not rewrite.
+- **Ranks #13–#20 for 1994–2019 are unverified estimates.** No primary source in this repository reports a point-in-time capitalization for these positions. They are not derived from anything archived here, and the provenance table labels all such rows `Unverified Estimate (No Primary Source)` with no underlying or anchor value. An earlier revision published a `Cap_i` for each row back-solved from the weight it was meant to explain, cited to "SEC Form 10-K & Point-in-Time Capitalization Archives"; that was circular and has been removed. Extracting the 35 historical Form N-30D Schedules of Investments (1995–2019; §4.3.6) provides audited ground truth that bounds intra-year drift and enumerates the survivorship gap. Because SPY's fiscal year ended December 31 through 1996 and September 30 from 1997 onward, the 1995 and 1996 annual reports **are** December 31 primary sources (providing the project's first independent year-end checks against the estimated candidate rosters; §4.3.6), whereas every other pre-2020 annual filing is a September 30 snapshot. Consequently, while 1995 and 1996 have now been checked against primary filings, these historical reports do not replace the December 31 `Unverified Estimate` rows in the anchor tables. **The residual unvalidated window is 2007–2013**, not the 1994 and 1997–2019 this paragraph claimed until issue #91 re-measured it: §4.3.12 has superseded the claim for 1994–2006 since the audited Vanguard rosters landed, and `data/raw/ground_truth/vanguard_audited_rosters.json` now carries a December-31 roster for 2014–2019 as well. That count is unchanged and remains accurate — it counts rows in `docs/historical_weights_table.csv`, which the audited rosters do not rewrite.
 - **Programmatic Form NPORT-P XML Derivation (2020–2024)**: For modern periods covered by primary SEC Form NPORT-P XML filings (2020, 2021, 2022, 2023, 2024), Top 20 candidates and exact weights are parsed directly from SPY's December 31 XML filings by [`scripts/generate_historical_weights.py`](../scripts/generate_historical_weights.py) with Alphabet Class A (`02079K305`) & C (`02079K107`) consolidated into `GOOGL`:
   - **2020-12-31**: Adobe Inc. (`ADBE`, #19, 0.76%) and Comcast Corp. (`CMCSA`, #20, 0.76%) enter the Top 20.
-  - **2021-12-31**: Adobe Inc. (`ADBE`, #20, 0.67%) and Broadcom Inc. (`AVGO`, #19, 0.68%) enter the Top 20. Walmart (`WMT`) is heavily float-adjusted due to ~50% Walton family ownership, placing it at rank #40 (0.51% weight in SPY) and outside the Top 20.
+  - **2021-12-31**: Adobe Inc. (`ADBE`, #20, 0.67%) and Broadcom Inc. (`AVGO`, #19, 0.68%) enter the Top 20. Walmart (`WMT`) is heavily float-adjusted due to concentrated Walton family ownership, placing it at rank #40 (0.51% weight in SPY) and outside the Top 20.
   - **2022-12-31**: AbbVie Inc. (`ABBV`, #19, \$3.17B, 0.89%) and Merck & Co. Inc. (`MRK`, #20, \$3.12B, 0.88%) place ahead of Meta Platforms Inc. (`META`, #21, \$3.00B, 0.84%), correctly reflecting Meta's drawdown in 2022.
   - **2023-12-31**: Costco Wholesale Corp. (`COST`, #19, 0.73%) and Merck & Co. Inc. (`MRK`, #20, 0.69%) place in the Top 20.
   - **2024-12-31**: Netflix Inc. (`NFLX`, #20, 0.76%) enters the Top 20, displacing Oracle Corp. (`ORCL`), correctly reflecting Netflix's 2024 run.
-- **Weight Derivation Table**: Every constituent rank, weight, formula, and source citation across all 31 years (620 rows) is exported to [`docs/historical_weights_table.csv`](historical_weights_table.csv), split by evidentiary status: **100 rows** `SEC Form NPORT-P Audited Holdings` (2020–2024, carrying the exact `valUSD` and `total_fund_val` the weight is computed from, and independently reproducible), **312 rows** `Official Factsheet Anchor` (ranks #1–#12), and **208 rows** `Unverified Estimate (No Primary Source)` (ranks #13–#20 outside 2020–2024). Only the 100 audited rows are reproducible from figures published in the table; `tests/test_raw_constituents.py` asserts that each one satisfies `round(valUSD / total_fund_val, 4) == weight`, and that no unverified row publishes a value.
+- **Weight Derivation Table**: Every constituent rank, weight, formula, and source citation across all 31 years (620 rows) is exported to [`docs/historical_weights_table.csv`](historical_weights_table.csv), split by evidentiary status into `SEC Form NPORT-P Audited Holdings` (2020–2024, carrying the exact `valUSD` and `total_fund_val` the weight is computed from, and independently reproducible), `Official Factsheet Anchor` (ranks #1–#12), and `Unverified Estimate (No Primary Source)` (ranks #13–#20 outside 2020–2024). The per-status row counts are in the CSV itself. Only the audited rows are reproducible from figures published in the table; `tests/test_raw_constituents.py` asserts that each one satisfies `round(valUSD / total_fund_val, 4) == weight`, and that no unverified row publishes a value.
 - **Zero Lookahead Guarantee**: Deriving candidates from the prior year-end factsheet ensures no future information from year $t$'s Q4 factsheet leaks into early-year decisions.
 
 #### 4.3.6 Primary Ground-Truth SEC EDGAR Regulatory Archive & Automated Parser
-To eliminate reliance on third-party aggregators and establish regulatory ground truth, **56 primary SEC EDGAR regulatory filings** of the SPDR S&P 500 ETF Trust (`SPY`, CIK `0000884394`) are permanently archived in `data/raw/ground_truth/sec_filings/`:
+To eliminate reliance on third-party aggregators and establish regulatory ground truth, the **primary SEC EDGAR regulatory filings** of the SPDR S&P 500 ETF Trust (`SPY`, CIK `0000884394`) are permanently archived in `data/raw/ground_truth/sec_filings/`:
 - **Coverage Scope (1995–2024)**:
   - **Modern XML Filings (2020-Q1 through 2024-Q4, 20 Quarters)**: Form `NPORT-P` filings containing exact portfolio valuations (`valUSD`) and percentage weights (`pctVal`) for all 505 constituents.
   - **Historical Annual & Semi-Annual Reports (1995–2019, 35 Filings)**: Form `N-CSR` and `N-30D` filings containing the complete audited **Schedule of Investments**. **All 35 of these historical filings are extracted** (1995 and 1996 are December 31 snapshots reflecting SPY's pre-1997 fiscal year-end; 1997–2019 annual reports are September 30 snapshots; and the ten 2010–2019 semi-annual reports are March 31 snapshots). The 2010–2019 reports are HTML rather than fixed-width text and are read by a separate parser (§4.3.6).
@@ -222,9 +222,9 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
 
   - **Persistence of `IBM` and `RD` discrepancies**: In both years, `IBM` and `RD` appear in the filing Top 10 but were missed by the estimated anchors. In the estimates, IBM was placed just outside the Top 10 at rank #13 (in both 1995 and 1996), whereas the filings place IBM at #10 (1995) and #9 (1996). Royal Dutch Petroleum (`RD`) is absent entirely from the project's 51-ticker universe (holding rank #7 in 1995 and #8 in 1996 in the filings), directly tying into the historical universe gap and survivorship findings detailed below.
 - **Reconciliation Accuracy**:
-  - Across all **55 verified regulatory filing quarters** (20 XML + 35 N-30D reports), average Top 10 match accuracy is **89.8%** (494/550). This is down from the 90.4% (416/460) measured over 45 quarters: nothing in the drift model changed, but archiving the ten March 31 semi-annual reports widened the sample by ten quarters that reconcile at **87.0%** (87/100), which is below the 90.4% the earlier sample averaged. The lower headline figure is a broader measurement, not a regression.
-  - Across the **35 historical Form N-30D quarters (1995–2019)**, accuracy is **85.7%** (300/350). Within the HTML era the two report types score almost identically — the ten September 30 annual quarters reach 88.0% (88/100) and the ten March 31 semi-annual quarters 87.0% (87/100) — so being one quarter closer to the year-end factsheet anchor confers no measurable advantage. Both are well above the 1995–2009 fixed-width average of 83.3% (125/150). Misses in the March quarters are concentrated at ranks 8–10 and involve the same names that miss in the September quarters (for example `PG` and `WFC` displaced by `JPM` and `WMT` in 2013), i.e. boundary noise in the drift model's tail rather than a defect specific to the new snapshots.
-  - Across all **20 modern Form NPORT-P XML quarters (2020–2024)**, the headline figure is **97.0%** (194/200).
+  - Across every verified regulatory filing quarter, average Top 10 match accuracy is **89.8%** (494/550). That is lower than the figure published before the ten March 31 semi-annual reports were archived, and the fall is a broader measurement rather than a regression: nothing in the drift model changed, and the ten added quarters reconcile at **87.0%** (87/100), below what the earlier sample averaged.
+  - Across the historical Form N-30D quarters (1995–2019), accuracy is **85.7%** (300/350). Within the HTML era the two report types score almost identically — the ten September 30 annual quarters reach 88.0% (88/100) and the ten March 31 semi-annual quarters 87.0% (87/100) — so being one quarter closer to the year-end factsheet anchor confers no measurable advantage. Both are well above the 1995–2009 fixed-width average. Misses in the March quarters are concentrated at ranks 8–10 and involve the same names that miss in the September quarters (for example `PG` and `WFC` displaced by `JPM` and `WMT` in 2013), i.e. boundary noise in the drift model's tail rather than a defect specific to the new snapshots.
+  - Across the modern Form NPORT-P XML quarters (2020–2024), the headline figure is **97.0%** (194/200).
   - **Out-of-sample: 96.0%** (144/150) across the **15 NPORT-P quarters that are genuine tests**. This is the figure that measures the drift model.
   - **Circular-Q4 Caveat**: The five modern Q4 filings (2020-Q4 … 2024-Q4) match 10/10 by construction because the year-end candidate lists are themselves parsed from those exact filings. `scripts/audit_quarterly_expansion.py` reports both figures and `CIRCULAR_Q4_PERIODS` names the excluded quarters. (Note: 1995-Q4 and 1996-Q4 candidate lists derive from estimated factsheet anchors, not from these Form N-30D filings, so they are genuine independent tests and not circular.)
 - **Historical Universe Gap & Survivorship Bias Analysis**:
@@ -235,24 +235,12 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
     - `LU` (Lucent Technologies Inc., #7 peak rank in 1999-Q3; present in Top 30 across 4 filings: 1997–2000)
     - `EMC` (EMC Corp., #10 peak rank in 2000-Q3)
     - `SBC` (SBC Communications Inc., #10 peak rank in 2001-Q3; present in Top 30 across 10 filings)
-  - **Survivorship, measured (issues #55, #56)**: the gap is now closed for the S&P 500 universe, so the bias it caused is no longer an argument about direction — it is a number. Running the engine against the universe as it stands, and against the same universe with all 17 filing-derived constituents struck from every roster, isolates exactly what they contribute. That second run **is** the pre-#55 universe: those 17 are precisely the roster members with no file in `data/raw/tickers/`. (Two further tickers carry a derived price series without ever reaching a roster — `SUNW` and `VIA` — so the count here is 17 and not the 19 in `DERIVED_NAMES`.)
+  - **Survivorship, measured (issues #55, #56)**: the gap is now closed for the S&P 500 universe, so the bias it caused is no longer an argument about direction. Running the engine against the universe as it stands, and against the same universe with all 17 filing-derived constituents struck from every roster, isolates exactly what they contribute; regenerate both with `python3 run_backtest.py --compare-frequencies`. That second run **is** the pre-#55 universe: those 17 are precisely the roster members with no file in `data/raw/tickers/`. (Two further tickers carry a derived price series without ever reaching a roster — `SUNW` and `VIA` — so the count here is 17 and not the 19 in `DERIVED_NAMES`, which `test_exactly_seventeen_derived_constituents_ever_appear_in_a_roster` asserts.) Including them **lowers** pre-tax CAGR at every 30-year book, on both the annual and the quarterly path: the gap flattered the strategy.
 
-| Horizon | Strategy | Survivors only | Full universe | Delta |
-|---|---|---:|---:|---:|
-| 30y annual | Top 3 | 14.37% | 13.72% | **−0.64pp** |
-| 30y annual | Top 5 | 13.26% | 12.96% | **−0.31pp** |
-| 30y annual | Top 10 | 13.19% | 12.12% | **−1.07pp** |
-| 30y quarterly | Top 3 | 13.79% | 13.60% | −0.19pp |
-| 30y quarterly | Top 5 | 12.94% | 12.66% | −0.28pp |
-| 30y quarterly | Top 10 | 13.48% | 12.80% | −0.68pp |
-
-*The "after" column is the state when this correction was measured. Sourcing the derived constituents' dividends has since raised every one of these figures by 0.006-0.056pp (§4.3.18); the correction's magnitude is unaffected, and the dividend effect is roughly a twentieth of it.*
-| 10y and 20y | all | — | — | 0.00pp |
-
-  Pre-tax CAGR, market-cap selector. **The 10-year and 20-year horizons do not move at all**, and not because the effect is small there. No roster after 2004 names one of the 17, and the only one that reaches 2004 is Dell at rank **#19** — outside any Top 10 — so a run starting in 2004 or 2014 cannot select one. The bias is a 30-year phenomenon exactly.
-  - **1999–2002, called out separately**: the dot-com window is where the omission bit hardest, and only at Top 10. Measured as portfolio value from 1998 year-end to 2002 year-end, the 30-year Top 10 book falls **−32.85% with the full universe against −22.58% without it** (annual), and −31.94% against −25.78% (quarterly). Top 3 and Top 5 are **unchanged across that window to the cent**: Lucent peaked at #7 and cannot reach a book of three or five, which is the same rank arithmetic §4.3.7 measures for the pool-size expansion.
-  - **The direction is not uniform, and the Top 3 figure is the proof**: Top 3 loses 0.64pp over 30 years while its 1999–2002 window does not move at all. Nothing collapsed there. The names it holds are AT&T Corp in 1995 and Royal Dutch in 1995–1997 — stable mega-caps, ranked #2 and #5 — and they cost the strategy by *underperforming the survivors that had been standing in for them*, not by failing. A claim must not outrun its sources: the universe gap was systematic truncation of the pre-2010 era, not distressed-firm attrition, and the measured result reads the same way.
-  - **The All-World universe is not covered by any of this.** Its rosters are built from `WORLD_YEAR_CONSTITUENTS` through `NAMES`, which is `SP500_NAMES | NON_US_NAMES` and by construction cannot name a filing-derived constituent — so none of the 17 appears in a single All-World roster, at any depth, in any year. Striking them changes nothing there because there is nothing to strike. **The All-World universe still carries the survivorship gap #37 closed for the S&P 500 universe**, and the zero delta above must not be read as evidence that it does not.
+  **The 10-year and 20-year horizons do not move at all**, and not because the effect is small there. No roster after 2004 names one of the 17, and the only one that reaches 2004 is Dell at rank **#19** — outside any Top 10 — so a run starting in 2004 or 2014 cannot select one. The bias is a 30-year phenomenon exactly.
+  - **1999–2002, called out separately**: the dot-com window is where the omission bit hardest, and **only at Top 10**. Measured as portfolio value from 1998 year-end to 2002 year-end, the 30-year Top 10 book falls materially further with the full universe than without it, on both the annual and the quarterly path. Top 3 and Top 5 are **unchanged across that window to the cent**: Lucent peaked at #7 and cannot reach a book of three or five, which is the same rank arithmetic §4.3.7 measures for the pool-size expansion. `test_lucent_peaks_at_rank_7_and_cannot_reach_a_top_3_or_top_5_book` asserts the rank that makes that true.
+  - **The direction is not uniform, and Top 3 is the proof**: Top 3 loses ground over 30 years while its 1999–2002 window does not move at all. Nothing collapsed there. The names it holds are AT&T Corp and Royal Dutch — stable mega-caps — and they cost the strategy by *underperforming the survivors that had been standing in for them*, not by failing. A claim must not outrun its sources: the universe gap was systematic truncation of the pre-2010 era, not distressed-firm attrition, and the measured result reads the same way.
+  - **The All-World universe is not covered by any of this.** Its rosters are built from `WORLD_YEAR_CONSTITUENTS` through `NAMES`, which is `SP500_NAMES | NON_US_NAMES` and by construction cannot name a filing-derived constituent — so none of the 17 appears in a single All-World roster, at any depth, in any year. Striking them changes nothing there because there is nothing to strike. **The All-World universe still carries the survivorship gap #37 closed for the S&P 500 universe**, and the fact that striking them changes nothing there must not be read as evidence that it does not.
 
 #### 4.3.7 Empirical Mid-Year Promotion Findings & Selector Sensitivity
 The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/audit_quarterly_expansion.py) detects mid-year promotions, classifies each against the audited filings, and runs the side-by-side strategy comparison.
@@ -296,8 +284,8 @@ Against that, `MarketCapSelector` — the shipped default, and the basis of ever
 
 So the pool stays at 20 for both selectors, and the asymmetry is recorded here instead of being tuned away. Anyone running `--strategy performance` at Top 5 or Top 10 should read the table above as a known, measured cost of the shared pool, not as an unexamined default. `python3 scripts/audit_quarterly_expansion.py` prints every figure in this section, including the premise check.
 
-  - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results independently of any pool-size effect. `Top_3_MarketCap` fell from 26.88% to 24.49% (10y), 16.39% to 15.29% (20y) and 15.16% to 14.43% (30y). The cause is year-end 2023: the prior data ranked NVIDIA #3 at 3.4%, while the filing shows NVIDIA at 3.06% behind Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run. **Those "after" figures were current when measured and have since moved again**: the same three horizons now read 24.49%, 14.44% and 13.77%, the 20y and 30y having fallen as #55 and #56 added the constituents that failed (§4.3.6) and #85 and #86 corrected `T_CORP`'s split and the issuer dividends, then risen slightly as #76 wired those dividends into the datasets (§4.3.18). The 2023 NVIDIA finding is unaffected; only the levels it was quoted against have changed.
-- **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.06%, Alphabet A 2.07%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN. The consolidation applies to the 2020-2024 filing-derived weights, and since the 2010-2019 extraction it also applies to the **September 30** ground truth for 2014-2019, whose filings list both classes explicitly ("Google, Inc. (Class A)"/"(Class C)" in 2014, "Alphabet, Inc. Class A"/"Class C" from 2015) and are aggregated through the same `CONSOLIDATED_ISSUERS` registry. This does **not** close the 2014-2019 gap, which concerns the **December** factsheet anchor rows: a September filing cannot establish what a December anchor's share-class basis was, so those rows remain unverified (§4.3.8). A registered issuer that contributed only one class keeps the name the filing gave it, so SPY's 2006-2013 single-class Google positions are not relabelled "Alphabet Inc." years before the rename. See section 4.3.8 for coverage and the open gap.
+  - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results **downward at Top 3** independently of any pool-size effect. The cause is year-end 2023: the prior data ranked NVIDIA #3, while the filing ranks it behind a consolidated Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run. The levels are not published here. They were quoted once as current, moved when #55 and #56 added the constituents that failed (§4.3.6), moved again when #85 and #86 corrected `T_CORP`'s split and the issuer dividends and when #76 wired those dividends in (§4.3.18), and §4.3.21 has since superseded them once more. That is four movements in one published table, which is why the magnitudes are gone rather than refreshed. The 2023 NVIDIA finding is unaffected by any of it; `python3 scripts/audit_quarterly_expansion.py` prints the current figures for this section.
+- **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN. The consolidation applies to the 2020-2024 filing-derived weights, and since the 2010-2019 extraction it also applies to the **September 30** ground truth for 2014-2019, whose filings list both classes explicitly ("Google, Inc. (Class A)"/"(Class C)" in 2014, "Alphabet, Inc. Class A"/"Class C" from 2015) and are aggregated through the same `CONSOLIDATED_ISSUERS` registry. This does **not** close the 2014-2019 gap, which concerns the **December** factsheet anchor rows: a September filing cannot establish what a December anchor's share-class basis was, so those rows remain unverified (§4.3.8). A registered issuer that contributed only one class keeps the name the filing gave it, so SPY's 2006-2013 single-class Google positions are not relabelled "Alphabet Inc." years before the rename. See section 4.3.8 for coverage and the open gap.
 
 #### 4.3.8 Dual-Class Issuer Consolidation & Execution Convention
 
@@ -339,7 +327,7 @@ The 2014–2019 rows **were** the open problem, and §4.3.21 closes them against
 
 *(Source: `data/raw/ground_truth/sec_filings/SPY_{2014_Q4,2015,2016,2017,2018,2019}_N-30D_*.txt`, Schedule of Investments. Note that `SPY_2014_Q4_N-30D_0001193125-14-428689.txt` carries `CONFORMED PERIOD OF REPORT: 20130930` in its SEC header, but every Schedule of Investments page in the document body is dated September 30, 2014; the header value is a filing-agent error and the body date governs.)*
 
-A consolidated Alphabet weight should therefore sit close to twice its Class A weight. The committed 2014–2019 figures matched neither multiple consistently — 2019 reads 2.70%, against roughly 1.65% for Class A alone and 3.30% consolidated — so their composition could not be inferred from the numbers themselves, and the September ratios above could not be projected onto a December anchor without a December source to check them against.
+A consolidated Alphabet weight should therefore sit close to twice its Class A weight. The committed 2014–2019 figures matched neither multiple consistently — 2019 reads 2.70%, which sits between the Class-A-alone and the consolidated reading rather than at either — so their composition could not be inferred from the numbers themselves, and the September ratios above could not be projected onto a December anchor without a December source to check them against.
 
 **The December source was reachable, and reading it settled the question per year.** The gap was never that no such source exists; it was that none was held. §4.3.21 records the six Vanguard filings, the evidence separating a Class A anchor from a consolidated one, the three years that were corrected, and what moved as a result. Alphabet *was* under-ranked in 2015–2017, and correcting it moves reported returns at every horizon — downward, because the under-ranking had flattered them.
 
@@ -781,18 +769,13 @@ and `SUNW` and `VIA` reach no candidate roster in any year, so no amount of pric
 admits them.
 
 The measured effect is confined to the 30-year S&P 500 quarterly strategies, which are the
-only ones whose window reaches these years:
-
-| Strategy | Before #63 | Now |
-|---|---|---|
-| S&P 500 30y Top 3 (Quarterly) | 13.79% | **13.60%** |
-| S&P 500 30y Top 5 (Quarterly) | 12.94% | **12.66%** |
-| S&P 500 30y Top 10 (Quarterly) | 13.48% | **12.80%** |
-
-*As above, these are the figures as measured. §4.3.18 raises the three quarterly levels to 13.60%, 12.67% and 12.84%.*
+only ones whose window reaches these years. The magnitudes are not published here -- §4.3.18
+raised those same levels again afterwards, which is how a published table acquires a footnote
+saying its figures have moved. Regenerate with
+`python3 run_backtest.py --frequency quarterly --no-export`.
 
 Nothing else moves: every constituent admitted sits between 1995 and 2003, outside the 10y
-and 20y windows, and the annual path is untouched. **Every figure moved down**, which is the
+and 20y windows, and the annual path is untouched. **Every affected figure moved down**, which is the
 point. The strategy was being flattered by the absence of AT&T Corp, Mobil, GTE, BellSouth,
 Royal Dutch, Lucent and Nortel — constituents missing from the quarterly universe precisely
 because they were acquired or declined, which is survivorship bias in its plainest form.
@@ -865,7 +848,7 @@ filings across the 19 issuers** and publishes `data/raw/ground_truth/issuer_divi
 The first extraction pass published 335 quarters and **about a third of them were wrong** --
 not invented, but read from the wrong cell of the right table. AT&T's FY1994 report states
 `Dividends declared .33 .33 .33 .33`; that pass published 1994-Q1 through Q3 as `0.33` and
-**1994-Q4 as `327.0`**. Seventy-five dividend values exceeded \$5 a quarter and sixty-two
+**1994-Q4 as `327.0`**. Seventy-five dividend values were implausibly large for a quarter and sixty-two
 high/low pairs were inverted. **A number read from the wrong cell carries a real accession
 and reads as sourced, which makes it worse than an obvious invention, not better.**
 
@@ -1122,7 +1105,7 @@ Following the engine's immediate-liquidation convention for non-qualifying Spin-
    - **Statutory Basis Allocation**: AT&T retained **72.01%** (`0.7201`), allocating **27.99%** to Lucent (IRS Section 358; [AT&T Official Shareholder Cost Basis Guide](https://investors.att.com/stockholder-services/cost-basis-guide/worksheet/att-corp)).
    - **Market Liquidation Price**: **\$45.875** ($45\frac{7}{8}$), the official NYSE closing price on September 30, 1996.
    - **Proceeds per Share**: $0.324084 \times \$45.875 = \$14.86735 \approx \mathbf{\$14.87}$.
-   - **Basis versus valuation**: The issuer basis allocation is retained independently. The former $38.25 parent-price cross-check was unsupported and is removed; a tax allocation ratio is not evidence of an endpoint execution price.
+   - **Basis versus valuation**: The issuer basis allocation is retained independently. The former parent-price cross-check was unsupported and is removed; a tax allocation ratio is not evidence of an endpoint execution price.
 2. **AT&T / NCR Corporation (`NCR`, 1996-12-31)**:
    - **Distribution Ratio**: 0.0625 shares of NCR common stock per AT&T share (1 share of NCR for each 16 AT&T shares).
    - **Statutory Basis Allocation**: AT&T retained **95.23%** (`0.9523`), allocating **4.77%** to NCR (IRS Section 358; AT&T Shareholder Cost Basis Guide).
@@ -1157,7 +1140,7 @@ Following the engine's immediate-liquidation convention for non-qualifying Spin-
 
 #### 1996 endpoint reconciliation (derived valuations)
 
-The legacy archive's $56.50 Q3 and $43.50 Q4 entries are superseded by
+The legacy archive's Q3 and Q4 entries are superseded by
 `data/raw/corporate_actions/att_1996_endpoint_valuations.json` during dataset compilation.
 Contemporaneous first-person portfolio statements value 130 AT&T shares at
 [$6,792.50 on September 30](https://www.fool.com/archive/foolport/1996/09/30/fool-portfolio-report-monday-september-30-1996.aspx)
@@ -1301,29 +1284,20 @@ repository cannot price would read as Royal Dutch having paid it.
 
 ##### What it moves
 
-**Twelve of the 72 scenarios move, all of them 30-year S&P 500, all upward**, by **+0.006pp
-to +0.056pp**. The `world` universe holds none of these constituents and cannot move; the
-10-year and 20-year horizons start after the affected span.
+Sourcing the dividends moves a **minority of the 72 scenarios**, all of them 30-year S&P 500
+and all **upward**. The `world` universe holds none of these constituents and cannot move, and
+the 10-year and 20-year horizons start after the affected span.
 
-| 30y, market-cap weighted | Annual before → after | Quarterly before → after |
-|---|---|---|
-| Top 3 | 13.7223 → **13.7665** (+0.044) | 13.5955 → **13.6016** (+0.006) |
-| Top 5 | 12.9566 → **13.0065** (+0.050) | 12.6572 → **12.6680** (+0.011) |
-| Top 10 | 12.1189 → **12.1749** (+0.056) | 12.7970 → **12.8356** (+0.039) |
+Regenerate with `python3 run_backtest.py --compare-frequencies`. The **claim** -- that the effect is positive at every depth and under 0.1pp -- is what
+`TestDerivedDividendEffect` asserts, by running the book twice against the same loader with the
+derived constituents' dividends removed. The magnitudes are not published here: Lucent's
+sourcing and BellSouth's split correction (4.3.19, 4.3.20) moved these cells once already, and
+a table that has been overtaken once will be overtaken again.
 
-*These are the figures as this change measured them. Sourcing Lucent and correcting
-BellSouth's split (4.3.19, 4.3.20) has since raised the market-cap cells by a further
-0.0003-0.0006pp and moved the momentum cells materially; the claim below is unaffected.*
-
-Regenerate with `python3 run_backtest.py --compare-frequencies`. The **claim** these figures
-carry — that the effect is positive at every depth and under 0.1pp — is what
-`TestDerivedDividendEffect` asserts, by running the book twice against the same loader with
-the derived constituents' dividends removed. The values themselves are not pinned.
-
-This closes the confounding #76 raised. #63 attributed a decline of −0.19/−0.28/−0.68pp to
-survivorship; the missing dividends account for at most 0.056pp of that, so the attribution
-was imprecise rather than wrong, and the corrected figures are no longer a lower bound for
-the constituents that could be sourced.
+This closes the confounding #76 raised. #63 attributed a 30-year decline to survivorship; the
+missing dividends account for a fraction of it, inside the bound the test asserts, so the
+attribution was imprecise rather than wrong, and the corrected figures are no longer a lower
+bound for the constituents that could be sourced.
 
 ##### The selection effect, which #76 flagged as unmeasured
 
@@ -1337,18 +1311,12 @@ It shifts it. `trailing_1y_return` in `sp500_constituents.json` is a **total** r
 sourcing a dividend changes the momentum ranking as well as the income. Measured across the
 same 144-cell matrix with `PerformanceSelector`:
 
-| 30y S&P 500, momentum | Before → after | Delta |
-|---|---|---|
-| Top 10, market-cap weighted, quarterly | 10.3479 → 10.1686 | **−0.179** |
-| Top 10, equal weighted, quarterly | 9.8080 → 9.6840 | **−0.124** |
-| Top 10, equal weighted, annual | 10.5377 → 10.6200 | +0.082 |
-| Top 10, market-cap weighted, annual | 10.8934 → 10.9457 | +0.052 |
-
-**Two things are worth reading off this.** The momentum effect is *larger* than the income
-effect and **changes sign with frequency**, where the income effect is positive everywhere
-by construction. And it is a selection change, not an income change: a dividend-paying
-mega-cap now ranks above a non-payer it previously tied, which is a different book, not the
-same book with more cash. Six cells move, all of them Top 5 or Top 10 and all 30-year.
+The momentum effect is *larger* than the income effect and **changes sign with frequency**,
+where the income effect is positive everywhere by construction. And it is a selection change,
+not an income change: a dividend-paying mega-cap now ranks above a non-payer it previously
+tied, which is a different book, not the same book with more cash. The cells that move are all
+Top 5 or Top 10 and all 30-year. No magnitude is published here -- print the matrix with
+`python3 run_backtest.py --strategy performance --compare-frequencies`.
 
 This does not affect the shipped default, which is `MarketCapSelector`. It does mean the
 bound `TestDerivedDividendEffect` asserts -- positive at every depth, under 0.1pp -- is a
@@ -1580,29 +1548,21 @@ remain the published record in `historical_weights_table.csv`; the engine consum
 rosters. Both are now sourced, and they differ because one is an index factsheet and the
 other a fund's holdings.
 
-| Annual, market-cap weighted | Pre-tax CAGR before → after |
-|---|---|
-| 10y Top 3 | 24.49% → **21.68%** (−2.81) |
-| 10y Top 5 | 21.97% → **21.82%** (−0.15) |
-| 10y Top 10 | 19.99% → **19.39%** (−0.60) |
-| 20y Top 3 | 14.44% → **13.14%** (−1.30) |
-| 20y Top 5 | 13.69% → **13.62%** (−0.07) |
-| 20y Top 10 | 13.13% → **12.84%** (−0.29) |
-| 30y Top 3 | 13.77% → **12.90%** (−0.87) |
-| 30y Top 5 | 13.01% → **12.96%** (−0.05) |
-| 30y Top 10 | 12.18% → **11.99%** (−0.19) |
+The corrected rosters **lower** the S&P 500 pre-tax CAGR at Top 3 across every horizon, and
+the direction is the point. At Top 3 -- the depth Alphabet enters in every corrected year --
+consolidation displaces a name that did better over these spans, so correcting the weight
+lowers the published figures rather than flattering them. `TestAlphabetConsolidationEffect`
+asserts exactly that, and deliberately asserts nothing about Top 5 and Top 10, where the sign
+is mixed. Most of the movement is the roster replacement rather than the consolidation on its
+own; the two are separate corrections that happen to land together.
 
-*These are the figures as this change measured them, against the values published at commit
-`f607c04`. Regenerate the right-hand column with `python3 run_backtest.py --no-export`. The
-values are **not** pinned: the standing claims are the two `TestAlphabetConsolidationEffect`
-asserts. Benchmarks and the `world` universe do not move at all, and no max drawdown
-changes, which is the expected blast radius for a change to the S&P 500 roster alone.*
+The magnitudes are not published here. They move with any data change, and the table that
+stood in this place had already been overtaken once -- §4.3.7 still quotes its `before` column
+as though it were current. Print the figures with `python3 run_backtest.py --no-export` and
+compare against commit `f607c04`.
 
-Every cell falls. The previously published figures were flattered by an Alphabet that was
-under-ranked, and correcting it costs return rather than adding it -- the correction
-displaces names that did better over these spans. Most of the movement is the roster
-replacement rather than the consolidation on its own; the two are separated above because
-they are separate corrections that happen to land together.
+Benchmarks and the `world` universe do not move at all, and no max drawdown changes, which is
+the expected blast radius for a change to the S&P 500 roster alone.
 
 ##### What this does not settle
 
@@ -1617,13 +1577,13 @@ them yet. A future revisit of the weights series across its full span would want
 | Ticker | Action Date | Corporate Action | Impact & Adjustment |
 | :--- | :--- | :--- | :--- |
 | **UNH** | 1994, 2000, 2003, 2005 | Four 2-for-1 splits | Cumulative 16:1 split factor since 1993. Year-end 1993 split-adjusted close is \$5.34 (nominal unadjusted was \$75.88). |
-| **AAPL** | 2000, 2005, 2014, 2020 | 2:1, 2:1, 7:1, 4:1 splits | Cumulative 56:1 split factor. 1994 split-adjusted close is \$0.33. |
+| **AAPL** | 2000, 2005, 2014, 2020 | 2:1, 2:1, 7:1, 4:1 splits | Cumulative factor is the product of the four splits listed here. Split-adjusted closes are in `data/sp500_prices.json`. |
 | **NVDA** | 2000, 2001, 2006, 2007, 2021, 2024 | 2:1 (x3), 3:2, 4:1, 10:1 splits | Cumulative 480:1 split factor. 1999 split-adjusted close is \$0.10. |
-| **C** | 2011-05-09 | 1-for-10 Reverse Split | Pre-2011 nominal prices scaled up by 10x. 2006 split-adjusted close is \$496.80. |
+| **C** | 2011-05-09 | 1-for-10 Reverse Split | Pre-2011 nominal prices scaled up by 10x. |
 | **AIG** | 2009-07-01 | 1-for-20 Reverse Split | Pre-2009 nominal prices scaled up by 20x. 2007 split-adjusted close is \$1,166.00; crashed to \$31.40 in 2008 (-97.31%). |
 | **GE** | 2021-08-02 | 1-for-8 Reverse Split | Pre-2021 nominal prices scaled up by 8x. |
 | **GE** | 2023, 2024 | Spinoff of GEHC & GEV | Modeled via Section 355 tax-free cash credit (\$18.67 and \$35.38) and Form 8937 basis retention ratios (0.8165 and 0.6686). |
-| **WMT** | 2024-02-26 | 3-for-1 Split | 2023 split-adjusted close is \$52.55; 2024 close is \$88.93 (+69.23% return). |
+| **WMT** | 2024-02-26 | 3-for-1 Split | Pre-2024 prices scaled down by 3x; 2023 split-adjusted close is \$52.55. |
 | **T** | 1993–1998 | Decoupling of AT&T Corp ("Ma Bell") | Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \$0.33/quarter (\$1.32/year) dividends. |
 | **T** | 1996-09-30 | Spinoff of Lucent Technologies (`LU`) | Modeled via Section 355 tax-free cash credit (\$14.87/sh; 0.324084 shares at \$45.875) and Form 8937 basis retention ratio (0.7201). |
 | **T** | 1996-12-31 | Spinoff of NCR Corporation (`NCR`) | Modeled via Section 355 tax-free cash credit (\$2.10/sh; 0.0625 shares at \$33.625) and Form 8937 basis retention ratio (0.9523). |

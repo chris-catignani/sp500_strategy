@@ -141,6 +141,14 @@ PRINTS_AN_OPERATION = re.compile(
 _MONTH = (r"(?:January|February|March|April|May|June|July|August|September|October"
           r"|November|December)")
 
+_SPELLED = (r"(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen"
+            r"|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty"
+            r"|fifty|sixty|seventy|eighty|ninety)(?:-(?:one|two|three|four|five|six|seven"
+            r"|eight|nine))?")
+
+_SPELLED_COUNT = re.compile(
+    rf"\b(?i:{_SPELLED})\s+of\s+(?:the\s+)?\*{{0,2}}(?:\d[\d,]*|(?i:{_SPELLED})\b)")
+
 # Each of these hides a numeral that is not a claim about data. ORDER MATTERS: dates and
 # periods are blanked before bare years, and everything is blanked before figures are
 # matched, so that a bolded date such as **2020-12-31** is emptied of digits and no
@@ -160,7 +168,7 @@ _MASKS = (
     # the index ("**SPDR S&P 500 ETF Trust**") enters the candidate list as a figure.
     re.compile(r"S&P\s?\d+(?:\s?TR)?"),
     re.compile(r"\bTop\s?\d+"),
-    re.compile(r"\bForm\s+\d+[A-Za-z-]*"),
+    re.compile(r"\bForm\s+\*{0,2}\d+[A-Za-z-]*\*{0,2}"),
     re.compile(r"\b(?:IRC\s+)?Section\s+\d+"),
     re.compile(r"\bN-30D\b|\bN-CSRS?\b|\bNPORT-P\b|\bSP500TR\b|\bGSPC\b|\bRule\s+\S+"),
     # Dates and periods, before bare years.
@@ -179,10 +187,14 @@ _MASKS = (
 # the labels. Percentages and dollar amounts inside a bold span are still caught by their
 # own alternatives regardless of where they sit, so nothing numeric is lost.
 _FIGURE = re.compile(
-    r"[−+-]?\d[\d,]*(?:\.\d+)?\s?(?:%|pp\b)"            # percent and pp
+    r"\d[\d,]*(?:\.\d+)?\s?-\s?\d[\d,]*(?:\.\d+)?\s?(?:%|pp\b)"   # range: 50-110%
+    r"|[−+-]?\d[\d,]*(?:\.\d+)?\s?(?:%|pp\b)"            # percent and pp
     r"|\*\*\s*[−+-]?\d[^*\n]*\*\*"                      # bold beginning with a digit
     r"|\\?\$\s?\d[\d,]*(?:\.\d+)?\s?(?:bn|B|m|M|k|K)?"  # dollars, escaped or not
     r"|\b\d[\d,]* of \d[\d,]*\b"                        # "N of M"
+    r"|(?<![\d.:/-])\d{1,4}/\d{1,4}(?![\d.:/-])"                       # N/M ratio
+    rf"|\b(?i:{_SPELLED})\s+of\s+(?:the\s+)?\*{{0,2}}(?:\d[\d,]*|(?i:{_SPELLED})\b)"
+    r"|\((?:[−+-])?\d+\.\d+\)"                    # parenthesised decimal, e.g. (−2.81)
 )
 
 # A heading number counts only if it is dotted ("4.3.7") or followed by a period
@@ -234,7 +246,7 @@ def extract_from_text(text, document):
             section = heading.group(1) or heading.group(2)
         for match in _FIGURE.finditer(masked_line):
             figure = _normalise(match.group(0))
-            if not any(char.isdigit() for char in figure):
+            if not any(char.isdigit() for char in figure) and not _SPELLED_COUNT.search(figure):
                 continue
             counts[(section, figure)] = counts.get((section, figure), 0) + 1
             entries.append({

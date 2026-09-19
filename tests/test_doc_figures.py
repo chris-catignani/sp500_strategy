@@ -73,6 +73,11 @@ class TestMasking(unittest.TestCase):
             with self.subTest(label=label):
                 self.assertEqual(extract_from_text(label, "d.md"), [])
 
+    def test_form_with_markdown_emphasis_is_not_a_figure(self):
+        """Form **20-F** is a form name; the emphasis must not defeat the mask."""
+        entries = extract_from_text("filed on Form **20-F** with the SEC.", "d.md")
+        self.assertEqual(entries, [])
+
 
 class TestExtraction(unittest.TestCase):
     """Over-catching costs a decision; under-catching is the defect #91 exists to fix."""
@@ -126,6 +131,50 @@ class TestExtraction(unittest.TestCase):
         entries = extract_from_text(text, "d.md")
         self.assertEqual([e["occurrence"] for e in entries], [1, 2])
         self.assertEqual(len({key_of(e) for e in entries}), 2)
+
+    def test_n_over_m_ratio_is_caught(self):
+        figures = [e["figure"] for e in extract_from_text("accuracy is 89.8% (494/550)", "d.md")]
+        self.assertIn("494/550", figures)
+
+    def test_spaced_share_count_table_cell_is_not_caught_as_ratio(self):
+        """Four-digit cap and whitespace prohibition prevent share counts looking like ratios."""
+        entries = extract_from_text("| 3,092,063 / 1,640,834 |", "d.md")
+        self.assertEqual(entries, [])
+
+    def test_spelled_count_with_no_digit_is_caught(self):
+        figures = [e["figure"] for e in extract_from_text(
+            "**Thirteen of the nineteen now carry a series.**", "d.md")]
+        self.assertIn("Thirteen of the nineteen", figures)
+
+    def test_spelled_count_against_digit_is_caught(self):
+        figures = [e["figure"] for e in extract_from_text(
+            "Eight of the 46 tickers have no price series", "d.md")]
+        self.assertIn("Eight of the 46", figures)
+
+    def test_range_keeps_its_hyphen(self):
+        figures = [e["figure"] for e in extract_from_text(
+            "raised every one of these figures by 0.006-0.056pp", "d.md")]
+        self.assertEqual(figures, ["0.006-0.056pp"])
+
+    def test_genuine_unicode_minus_negative_is_caught(self):
+        figures = [e["figure"] for e in extract_from_text("−0.68pp", "d.md")]
+        self.assertEqual(figures, ["−0.68pp"])
+
+    def test_parenthesised_delta_is_caught(self):
+        figures = [e["figure"] for e in extract_from_text(
+            "| 10y Top 3 | 24.49% → **21.68%** (−2.81) |", "d.md")]
+        self.assertIn("(−2.81)", figures)
+        self.assertEqual(len(figures), 3)
+
+    def test_dollar_followed_by_billion_does_not_absorb_letter_b(self):
+        """Regression test for re.I trap: $16 billion extracts $16, not $16 b."""
+        figures = [e["figure"] for e in extract_from_text("$16 billion", "d.md")]
+        self.assertEqual(figures, ["$16"])
+
+    def test_large_dollar_followed_by_billion_does_not_absorb_letter_b(self):
+        """Regression test for re.I trap: $100,000 billion extracts $100,000, not $100,000 b."""
+        figures = [e["figure"] for e in extract_from_text("$100,000 billion", "d.md")]
+        self.assertEqual(figures, ["$100,000"])
 
 
 class TestManifestCoverage(unittest.TestCase):
