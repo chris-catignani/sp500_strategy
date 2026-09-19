@@ -228,6 +228,33 @@ class TestManifestWellFormedness(unittest.TestCase):
         from scripts.audit_doc_figures import load_manifest
         cls.manifest = load_manifest()
 
+    def test_a_guard_declares_which_promise_it_makes(self):
+        """`guard_kind` separates "the claim stays true" from "the figure cannot move".
+
+        Measured under #91: every test passed while 4.3.6's headline accuracy drifted from
+        a published 89.8% to 92.9%. Nothing was broken -- the assertions behind it are
+        floors with headroom, which is what AGENTS.md asks for and which cannot notice a
+        cell moving inside the floor. So a guard protects the claim, not the figure, and
+        the manifest has to record which of the two promises it holds.
+        """
+        from scripts.audit_doc_figures import GUARD_KINDS
+
+        bad = [
+            (key_of(e), e.get("guard_kind"))
+            for e in self.manifest["entries"]
+            if e.get("guard") and e.get("guard_kind") not in GUARD_KINDS
+        ]
+        self.assertEqual(bad, [], f"guarded entry without a kind in {GUARD_KINDS}")
+
+    def test_only_a_guarded_entry_declares_a_guard_kind(self):
+        """A kind without a guard is a claim about a test that was never named."""
+        stray = [
+            key_of(e)
+            for e in self.manifest["entries"]
+            if e.get("guard_kind") and not e.get("guard")
+        ]
+        self.assertEqual(stray, [], "guard_kind on an entry with no guard")
+
     def test_every_named_guard_exists(self):
         """Checked by reading the file as text, never by importing it.
 

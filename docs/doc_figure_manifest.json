@@ -910,7 +910,8 @@
       "verdict": "decision-evidence",
       "guard": "tests/test_quarterly.py::TestQuarterlyPortfolioSimulator::test_survivorship_correction_does_not_change_the_pool_size_answer",
       "note": "Asserted bound on survivorship correction effect on pool-depth delta",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -930,7 +931,8 @@
       "verdict": "decision-evidence",
       "guard": "tests/test_quarterly.py::TestQuarterlyPortfolioSimulator::test_momentum_top_10_is_hurt_by_pool_depth_on_both_paths",
       "note": "Consistent negative momentum penalty at Top 10 across all 6 cells on both paths",
-      "rot_exposed": true
+      "rot_exposed": true,
+      "guard_kind": "claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",

@@ -40,6 +40,20 @@ VERDICTS = ("sourced", "derivation", "decision-evidence", "remove", "wrong",
 # corrected in place. Only these two need the question asked.
 ROT_CLASSIFIED_VERDICTS = ("derivation", "decision-evidence")
 
+# What promise a guard makes. Measured under #91: the suite stayed green while 4.3.6's
+# headline accuracy drifted from a published 89.8% to 92.9%, because the assertions behind
+# it are floors with headroom -- which is what AGENTS.md asks for, and which cannot notice a
+# cell moving inside the floor. So "guarded" is not a synonym for "cannot be wrong", and the
+# manifest has to say which of the two promises it holds.
+#
+#   claim -- a sign, a floor, or an invariant. Keeps the CLAIM true. The figure may drift.
+#   value -- an exact equality. Pins the FIGURE.
+#
+# A figure carrying only a `claim` guard is expected to drift and must not be published as a
+# magnitude unless someone will re-measure it.
+GUARD_KINDS = ("claim", "value")
+
+
 # The verdict that asserts a document backs the figure, and therefore owes a pointer to
 # it. `sourced` was the strongest verdict pass 1 assigned and carried the weakest
 # evidence: an `evidence_quote`, which the gate checks is IN the document rather than
