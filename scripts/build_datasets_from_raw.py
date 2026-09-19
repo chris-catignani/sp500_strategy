@@ -904,9 +904,12 @@ def main():
     #
     # This is a no-op for every event in the catalog except AT&T Corp's two 1996
     # distributions: splits.json carries records only for constituents priced from
-    # filings, and of those only T_CORP has a split after one of its own distributions
-    # -- the 1-for-5 reverse split of 2002-11-18, which puts its 1996 events five-for-one
-    # out of step with its 1996 price.
+    # filings, and of those only T_CORP has a split after one of its own distributions.
+    # It has TWO -- the three-for-two of 1999-04-15 and the 1-for-5 reverse of
+    # 2002-11-18 -- compounding to a factor of 0.3, which puts its 1996 events
+    # ten-for-three out of step with its 1996 price. This comment said five-for-one
+    # until #104, describing the record as it stood before #76 recovered the 1999 split;
+    # the code was always right, because it reads the record rather than a constant.
     all_quarterly_spinoffs: Dict[str, Dict[str, float]] = {}
     all_annual_spinoffs: Dict[str, Dict[int, float]] = {}
     spinoffs_raw = RAW_DIR / "corporate_actions" / "spinoffs.json"

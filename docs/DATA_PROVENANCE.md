@@ -512,7 +512,7 @@ python3 scripts/verify_provenance.py splits      # one dataset
 python3 scripts/verify_provenance.py q1_rosters  # the Q1/Q3 filer grades (4.3.14)
 ```
 
-Current state: every claim re-checked passes, with two skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM`, recorded as `none_found`. Both are corroborated offline by the test suite instead.
+Current state: every claim re-checked passes, with three skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM` and `GTE`, both recorded as `none_found`. All three are corroborated offline by the test suite instead. `GTE` joined them under #104: 4.3.9 had described it as `none_found` since the record was written, but the record itself carried no `source_type`, which defaults to `filing_quoted` — so it read as a quoted record with nothing quoted, and the verifier tried to re-check a sentence that was deliberately empty.
 
 **It is deliberately not part of the test suite.** It needs the network and reaches a third-party service, so it cannot gate a commit. The suite asserts the offline invariants — that quotations are non-empty, that figures agree across datasets, that cross-filer prices reconcile — and this checks the one thing they cannot: that the filing still says what we recorded it saying. A test does exercise the roster path, which reads archived documents, so the verifier cannot rot unnoticed.
 
@@ -1015,7 +1015,11 @@ That was the correct response to the evidence then available. It is now supersed
 
 `T_CORP_HISTORICAL.json` remains on disk, no longer consumed. It is the record of the superseded workaround.
 
-**A cost worth stating plainly.** The constructed series carried Ma Bell's verified \$0.33 quarterly dividend. `T_CORP` is now a derived constituent, and per §4.3.9 no dividends are derived from a Schedule of Investments. AT&T Corp's dividend income is therefore **no longer credited at all** — recorded as unknown rather than nil, but absent from total return either way. It sat at rank 2 in 1994–95, so this is the largest instance yet of that documented limitation.
+**A cost that was stated plainly, and has since been paid back.** The constructed series carried Ma Bell's verified \$0.33 quarterly dividend, and retiring the splice lost it. `T_CORP` became a derived constituent, and per §4.3.9 no dividends are derived from a Schedule of Investments, so for a time AT&T Corp's dividend income was not credited at all — recorded as unknown rather than nil, but absent from total return either way. It sat at rank 2 in 1994–95, which made it the largest instance of that documented limitation.
+
+That limitation still holds, and it no longer binds this registrant, because the dividends no longer come from a fund's schedule. #76 read them from **AT&T's own filings**: `data/raw/ground_truth/derived_dividend_series.json` records \$1.32 a year as filed under accessions `0000005907-96-000010` (FY1995) and `0000005907-98-000013` (FY1996–1997), converted into final share terms at the same 0.3 the prices carry, which is \$1.32 / 0.3 = **\$4.40**. AT&T's FY2002 report restates 1996–1999 to exactly that figure after the same two splits, so the conversion is checked rather than assumed. `test_att_decoupled_series_1994_1997` asserts all four years.
+
+The distinction that makes this work is worth keeping in view: §4.3.9's rule is about *fund schedules*, which report a holding's market value and share count and say nothing about what the issuer paid. A registrant's own 10-K does say, and that is a different document reached by a different route. Where no such table survives, the series stays empty and the income stays uncredited — §4.3.15 names the registrants that shortfall still covers.
 
 #### 4.5.4 The 1996 endpoint reconciliation
 AT&T Corp distributed Lucent on 1996-09-30 and NCR on 1996-12-31. The model credits child shares at distribution-date endpoints, so any parent quote that still carries an entitlement would count the same wealth twice.
@@ -1128,20 +1132,30 @@ recognizes it separately. These observations are not post-distribution parent cl
 
 The engine recognizes each child at the distribution-date endpoint, and to conserve wealth
 under that convention a parent-only valuation deducts **only that endpoint's** separately
-credited child proceeds from the package quote -- Lucent must not be deducted again in Q4.
+credited child proceeds -- Lucent must not be deducted again in Q4.
 
-> **This passage does not describe what the code does, and the figures it used to print are
-> gone rather than corrected.** `att_1996_endpoint_valuations.json` is read by no code path;
-> only a comment in `scripts/build_datasets_from_raw.py` mentions it. The committed
-> `T_CORP` 1996 series follows §4.5.4's filed \$43.50 rather than the package quote
-> this section derived, and the annual value follows from that. Reconciling the two sections
-> is filed separately; #91 removes the figures because they are unguardable either way, and
-> records the discrepancy rather than papering over it. These are **derived parent-only valuations**,
-not observed exchange execution prices. This is an explicit approximation for
-quarter-end trading immediately after a distribution, not a daily execution model.
-The underlying source archive is preserved, and rebuilds apply the reconciliation once.
-Legacy prices, dividends and distributions use contemporary legacy AT&T share units;
-they are not mapped onto modern SBC/AT&T share counts.
+**This section and §4.5.4 describe one convention, not two.** They differ only in which
+same-day observation they start from, and the two are a tick apart. §4.5.4 starts from the
+**filed** Schedule of Investments value and subtracts the credited child; the package quotes
+above give the same subtraction from a contemporaneous market quote. The filed value is the
+base, because the whole `T_CORP` series is filing-derived and an endpoint must sit on the
+same footing as the series it belongs to. The package quotes are **corroboration** — they
+are what establishes that the filed value carries the entitlement rather than being clear of
+it, which is the fact the subtraction turns on.
+
+`att_1996_endpoint_valuations.json` accordingly holds **evidence, not an input**: it is read
+by no code path, and the builder computes the parent-only value from the derived series and
+`spinoffs.json` alone. Before #104 this section described a compilation step that does not
+exist, and `data/README.md` said the builder applied these corrections; both have been
+corrected to say what the code does. **The reconciliation is applied to the annual year-end
+series only.** The quarterly series carries the filed values unadjusted at both 1996
+endpoints, so the parent is valued cum-entitlement while the child is credited beside it.
+That is a defect rather than a convention, and it is tracked in issue #108.
+
+These are **derived parent-only valuations**, not observed exchange execution prices: an
+explicit approximation for quarter-end trading immediately after a distribution, not a daily
+execution model. Legacy prices, dividends and distributions use contemporary legacy AT&T
+share units; they are not mapped onto modern SBC/AT&T share counts.
 
 [The transfer-agent historical guide](https://www.shareowneronline.com/FileHttphandler.ashx?filename=Historical&guid=131b40cd-f071-476d-8f86-1e6cd2b1edb5)
 supports Lucent's $45.875 close. NCR's $33.625 when-issued quote is reported in
@@ -1157,12 +1171,31 @@ Modern market data providers (e.g., Yahoo Finance) do not host clean, unadjusted
 Consequently, source data for these legacy transactions cannot be retrieved via raw ticker downloads and must be reconciled using verifiable issuer cost-basis worksheets, SEC filings, and contemporaneous NYSE transaction records.
 
 #### 4.6.6 Rebalancing Entitlement Dynamics: Annual vs. Quarterly
-Because quarterly rebalancing dynamically drifts constituent market-cap weights at quarter-ends, corporate action entitlement depends on whether the security was held at the distribution date:
-- In 1996-Q3, `T` drifted to market cap rank #10.
-- **Top 5 Annual**: Holds `T` across the entire 1996 calendar year $\implies$ receives Lucent in Q3 and NCR in Q4.
-- **Top 5 Quarterly**: Holds `T` entering Q3 $\implies$ receives Lucent (\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #10 $\implies$ receives **nothing from NCR in Q4**.
-- **Top 10 Quarterly**: Holds `T` through all four quarters $\implies$ receives both Lucent and NCR.
-- **Top 3 Quarterly**: Exits `T` at 1996-Q1 $\implies$ receives neither distribution.
+Because quarterly rebalancing dynamically drifts constituent market-cap weights at quarter-ends, corporate action entitlement depends on whether the security was held at the distribution date. The distributing registrant is `T_CORP`, the pre-2005 Ma Bell (§4.5.1) — not `T`, which since #73 denotes the SBC-lineage AT&T Inc. and made neither distribution.
+
+AT&T Corp's 1996 drift through the audited quarterly rosters:
+
+| Quarter | `T_CORP` rank | Top 3 | Top 5 | Top 10 |
+| :--- | ---: | :--- | :--- | :--- |
+| 1996-Q1 | 4 | never held | held | held |
+| 1996-Q2 | 4 | — | held | held |
+| 1996-Q3 | 6 | — | Lucent, then exits | Lucent |
+| 1996-Q4 | 11 | — | nothing | NCR, then exits |
+
+- **Top 5 Annual**: holds `T_CORP` across the entire 1996 calendar year $\implies$ receives Lucent in Q3 and NCR in Q4.
+- **Top 5 Quarterly**: holds it entering Q3 $\implies$ receives Lucent, then exits at the 1996-Q3 rebalance on slipping to rank 6 $\implies$ receives **nothing from NCR in Q4**.
+- **Top 10 Quarterly**: holds it through Q3 $\implies$ receives both, then exits at the Q4 rebalance at rank 11.
+- **Top 3 Quarterly**: **never holds it at all.** At rank 4 it sits one place outside the book, so a Top 3 distribution would mean the selector had bought a constituent it did not rank highly enough to hold.
+
+`test_quarterly_1996_spinoff_entitlement_and_asymmetry` asserts the ranks and every entitlement in the table.
+
+> **An earlier revision of this section was wrong about the mechanism and right about the
+> outcomes**, which is the combination hardest to notice. It put the Q3 rank at #10 and had
+> Top 3 *exiting* at 1996-Q1. Both conclusions still hold — Top 5 does lose NCR, Top 3 does
+> receive nothing — so no test failed and no figure moved, while the reasons given for them
+> were not the reasons the code acts on. A never-bought constituent and an exited one reach
+> the same entitlement by different routes, and only one of them is what happens here.
+> Recorded under #104.
 
 ---
 

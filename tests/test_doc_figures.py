@@ -570,7 +570,14 @@ class TestRotExposureIsDeclared(unittest.TestCase):
     trace and prints an operation. It cannot check that the trace is CORRECT. 4.3.6
     publishes `89.8% (494/550)`, which prints an operation and passes every mechanical
     check here -- and is pipeline, because 494 is our own match count. Same surface
-    form as 4.5.4's `(41.27 - 64.75 + 16.97) / 64.75`, opposite rot behaviour.
+    form as 4.6.4's `$0.324084 x $45.875 = $14.86735`, opposite rot behaviour: a Form
+    8937 ratio times a stated close, both immutable, so that one cannot rot.
+
+    This example was itself stale until #104. It cited 4.5.4's
+    `(41.27 - 64.75 + 16.97) / 64.75`, an expression #91 had deleted from the document --
+    so the docstring warning against illustrations that were invented rather than read had
+    acquired one that was read once and never re-read. An example naming a section is a
+    citation, and a citation goes stale like any other figure.
 
     So a passing suite is not evidence that the classification is right. Every
     `rot_exposed: false` verdict is controller-reviewed; this test only makes the

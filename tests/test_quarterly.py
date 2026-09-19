@@ -409,10 +409,18 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             univ = self.simulator.data_loader.load_quarterly_universe(1996, q)
             self.assertIn("T_CORP", {s.ticker for s in univ})
 
-        q1_ranked = [s.ticker for s in self.simulator.data_loader.load_quarterly_universe(1996, 1)]
-        self.assertEqual(q1_ranked.index("T_CORP") + 1, 4)
+        # The ranks 4.6.6 publishes. An earlier revision of that section put Q3 at #10 and
+        # had Top 3 exiting at Q1; both were wrong about the mechanism while landing on the
+        # right entitlements, so nothing failed (#104). Pinned as exact values because the
+        # section's whole argument is which book each rank falls inside.
+        ranks = {}
+        for q in (1, 2, 3, 4):
+            ranked = [s.ticker for s in self.simulator.data_loader.load_quarterly_universe(1996, q)]
+            ranks[q] = ranked.index("T_CORP") + 1
+        self.assertEqual(ranks, {1: 4, 2: 4, 3: 6, 4: 11})
 
         proceeds = {}
+        holdings_by_n = {}
         for n in (3, 5, 10):
             res = self.simulator.run_simulation(
                 start_year=1995,
@@ -426,9 +434,12 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
             q_96 = [entry for entry in res.quarterly_history if entry.year == 1996]
             self.assertEqual(len(q_96), 4)
             proceeds[n] = [entry.spinoff_proceeds for entry in q_96]
+            holdings_by_n[n] = q_96
 
-        # Ranked 4th, so Top 3 never holds it and is entitled to nothing.
+        # Ranked 4th, so Top 3 NEVER HOLDS IT -- it is not bought and then exited, which is
+        # a different route to the same zero and the one 4.6.6 used to describe.
         self.assertEqual(proceeds[3], [0.0, 0.0, 0.0, 0.0])
+        self.assertTrue(all("T_CORP" not in entry.holdings for entry in holdings_by_n[3]))
 
         for n in (5, 10):
             with self.subTest(n=n):
@@ -438,6 +449,11 @@ class TestQuarterlyPortfolioSimulator(unittest.TestCase):
                 self.assertEqual(proceeds[n][1], 0.0)
                 # Lucent, ex-date 1996-09-30.
                 self.assertGreater(proceeds[n][2], 0.0)
+
+        # The asymmetry itself: Top 5 exits at the Q3 rebalance on slipping to rank 6 and
+        # so is entitled to nothing from NCR, while Top 10 still holds and is credited.
+        self.assertEqual(proceeds[5][3], 0.0)
+        self.assertGreater(proceeds[10][3], 0.0)
 
         # Cash cannot go negative when a distribution lands mid-quarter.
         for n in (3, 5, 10):

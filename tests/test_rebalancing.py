@@ -487,6 +487,16 @@ class TestPortfolioSimulator(unittest.TestCase):
         A Top 5 portfolio entering 1996 holds T_CORP because it was rank 2 in
         the audited 1995 roster, so it still collects the 1996 distributions before
         exiting at the 1996 rebalance (rank 11 in audited 1996 roster).
+
+        EVERY INPUT IS READ FROM THE DATASETS, and #104 is why. This test used to hardcode
+        a 1995 price of 323.7504 and distributions of 74.35 and 10.50, all three of them
+        pre-#76 figures carrying the April 1999 three-for-two that the split record was
+        missing. The price is 1.5x too high, so the share count it implies is 1.5x too
+        low; the distributions are 1.5x too high; and the proceeds are their PRODUCT, so
+        the error cancelled exactly and the assertion passed on two wrong numbers. It read
+        as a guard on the 1996 distribution accounting and was in fact a guard on nothing,
+        because correcting either constant alone would have broken it while correcting the
+        data broke neither. A test may not hold its own copy of a figure the pipeline owns.
         """
         res_96 = self.simulator.run_simulation(
             start_year=1995,
@@ -498,20 +508,39 @@ class TestPortfolioSimulator(unittest.TestCase):
         )
         entry_96 = res_96.annual_history[0]
 
-        # In 1995 audited Top 5, T_CORP had rank 2, weight 0.022427 / 0.108183, and 1995 price 323.7504
-        entry_weight = 0.022427 / (0.026167 + 0.022427 + 0.021649 + 0.020265 + 0.017675)
-        initial_t_corp_shares = (100000.0 * entry_weight) / 323.7504
-        self.assertGreater(initial_t_corp_shares, 0.0)
+        # The entry weight is T_CORP's share of the audited 1995 Top 5, read from the
+        # roster the simulation itself selects from rather than transcribed.
+        universe_95 = self.data_loader.load_universe(1995)
+        top_5_95 = sorted(universe_95, key=lambda s: s.market_cap_weight, reverse=True)[:5]
+        self.assertIn("T_CORP", [s.ticker for s in top_5_95])
+        t_corp_95, = [s for s in top_5_95 if s.ticker == "T_CORP"]
+        entry_weight = t_corp_95.market_cap_weight / sum(s.market_cap_weight for s in top_5_95)
+
+        price_95 = self.data_loader.get_price("T_CORP", 1995)
+        initial_t_corp_shares = (100000.0 * entry_weight) / price_95
+
+        # Pin the entry basis against the engine's own execution, not only through the
+        # product below: a share count that multiplies out to the right proceeds can still
+        # be reached the wrong way, and that is precisely the failure this test had.
+        bought, = [
+            order for order in self.simulator.trade_history
+            if order.ticker == "T_CORP" and order.action == "BUY" and order.year == 1995
+        ]
+        self.assertAlmostEqual(bought.shares, initial_t_corp_shares, places=4)
+        self.assertAlmostEqual(bought.price, price_95, places=4)
 
         # T_CORP exits at the 1996 rebalance (rank 11 in audited 1996 roster)
         self.assertNotIn("T_CORP", entry_96.holdings)
         self.assertNotIn("T", entry_96.holdings)
 
-        # Proceeds are the pre-rebalance shares times both 1996 distributions, in final
-        # share terms: Lucent 74.35 plus NCR 10.50. Holding T_CORP into 1996 from the
-        # audited 1995 roster collects both before the rank-11 exit.
-        expected_proceeds = initial_t_corp_shares * (74.35 + 10.50)
+        # Proceeds are the pre-rebalance shares times both 1996 distributions. Holding
+        # T_CORP into 1996 from the audited 1995 roster collects both before the rank-11
+        # exit, so the year credits Lucent and NCR together and neither may go missing.
+        distribution, _ = self.data_loader.get_spinoff_distribution("T_CORP", 1996)
+        self.assertEqual(len(self.data_loader.spinoffs["T_CORP"]), 2)
+        expected_proceeds = initial_t_corp_shares * distribution
         self.assertAlmostEqual(entry_96.spinoff_proceeds, expected_proceeds, places=2)
+        self.assertGreater(entry_96.spinoff_proceeds, 0.0)
 
         # Spinoff proceeds untaxed as dividends
         self.assertAlmostEqual(

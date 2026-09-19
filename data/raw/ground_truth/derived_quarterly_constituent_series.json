@@ -3,7 +3,7 @@
   "sources": {
     "Q1": "data/raw/ground_truth/sei_q1_rosters.json (1995-2003, 2005-2006) and data/raw/ground_truth/prudential_q1_rosters.json (1994). 2004 has no Q1 from either filer: SEI's schedule is corrupt as filed -- its Microsoft value reads '0,600' in EDGAR's own bytes, short by exactly the 40,000k the reconciliation misses -- and Prudential's 2004 is the HTML era its extractor refuses. Reconstructing the missing digit from the reconciliation gap would be an inferred figure wearing a filing's provenance, so the year is absent instead.",
     "Q2": "data/raw/ground_truth/vanguard_semiannual_rosters.json",
-    "Q3": "SPY September-30 annual filings in data/raw/ground_truth/sec_filings/",
+    "Q3": "SPY September-30 annual filings in data/raw/ground_truth/sec_filings/ for 1997 onward, and the SEI September-30 filings there for 1995 and 1996, which is where 1996-Q3 comes from. An earlier revision of this field named SPY alone (#104).",
     "Q4": "data/raw/ground_truth/vanguard_audited_rosters.json"
   },
   "issuer_resolution": "data/raw/constituents/issuer_ticker_map.json",
