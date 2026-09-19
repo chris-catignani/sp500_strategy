@@ -6,7 +6,8 @@
     "derivation",
     "decision-evidence",
     "remove",
-    "wrong"
+    "wrong",
+    "not-a-claim"
   ],
   "entries": [
     {
@@ -14,7 +15,7 @@
       "section": "4.1",
       "figure": "$1.00",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Rounding precision threshold convention for base prices under $1.00; specification, not a data claim"
     },
@@ -223,7 +224,7 @@
       "section": "4.3.3",
       "figure": "$0",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Subscript index 0 in mathematical drift formula W_{i, 0}; mathematical notation, not a data claim"
     },
@@ -1257,7 +1258,7 @@
       "section": "4.3.8",
       "figure": "1. Capitalization Consolidation",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Structural subheading numeral caught by bold pattern; not a data claim"
     },
@@ -1336,7 +1337,7 @@
       "section": "4.3.8",
       "figure": "2. Coverage, and the – Gap",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Structural subheading numeral caught by bold pattern; not a data claim"
     },
@@ -1493,7 +1494,7 @@
       "section": "4.3.8",
       "figure": "3. Execution Convention",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Structural subheading numeral caught by bold pattern; not a data claim"
     },
@@ -4057,7 +4058,7 @@
       "section": "4.3.21",
       "figure": "$000",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Table header unit denomination; not a data claim"
     },
@@ -4066,7 +4067,7 @@
       "section": "4.3.21",
       "figure": "$000",
       "occurrence": 2,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Table header unit denomination; not a data claim"
     },
@@ -4763,7 +4764,7 @@
       "section": "6",
       "figure": "1.0%",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Illustrative constituent index weight range lower bound; descriptive, not a data claim"
     },
@@ -4772,7 +4773,7 @@
       "section": "6",
       "figure": "7.5%",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Illustrative constituent index weight range upper bound; descriptive, not a data claim"
     },
@@ -4781,7 +4782,7 @@
       "section": "6",
       "figure": "20%",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Illustrative aggregate Top 12 index weight range lower bound; descriptive, not a data claim"
     },
@@ -4790,7 +4791,7 @@
       "section": "6",
       "figure": "35%",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Illustrative aggregate Top 12 index weight range upper bound; descriptive, not a data claim"
     },
@@ -4799,7 +4800,7 @@
       "section": "6",
       "figure": "100%",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Qualitative assertion of consistency (100% mathematical consistency); rhetorical adjective, not a data claim"
     },
@@ -4808,7 +4809,7 @@
       "section": "preamble",
       "figure": "$0",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Parameter value in tax rate tier list ($0% tax tier); definition, not a data claim"
     },
@@ -4817,7 +4818,7 @@
       "section": "preamble",
       "figure": "100%",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Parameter in post-liquidation CAGR definition (sell 100% of holdings); definition, not a data claim"
     },
@@ -4826,7 +4827,7 @@
       "section": "2",
       "figure": "20%",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Worked example CLI parameter value for 20% tax rate; illustrative example, not a data claim"
     },
@@ -4835,7 +4836,7 @@
       "section": "3",
       "figure": "$100,000",
       "occurrence": 1,
-      "verdict": "remove",
+      "verdict": "not-a-claim",
       "guard": null,
       "note": "Worked example CLI parameter value for initial capital; illustrative example, not a data claim"
     }

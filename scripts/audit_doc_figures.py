@@ -25,7 +25,15 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DOCUMENTS = ("docs/DATA_PROVENANCE.md", "README.md")
 MANIFEST_PATH = REPO_ROOT / "docs" / "doc_figure_manifest.json"
 
-VERDICTS = ("sourced", "derivation", "decision-evidence", "remove", "wrong")
+VERDICTS = ("sourced", "derivation", "decision-evidence", "remove", "wrong",
+            "not-a-claim")
+
+# "not-a-claim" was added after classification began, because the other five all assume
+# the candidate IS a claim and several candidates are not. The filter is generous by
+# design, so it catches structural subheading numerals, table header units ($000), the
+# subscript in W_{i,0}, and worked-example CLI parameters. Forcing those into "remove"
+# would tell pass 2 to delete a section heading and corrupt a formula. They stay in the
+# document and need no guard.
 
 _MONTH = (r"(?:January|February|March|April|May|June|July|August|September|October"
           r"|November|December)")
