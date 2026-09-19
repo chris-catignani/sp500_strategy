@@ -2945,10 +2945,9 @@
       "occurrence": 1,
       "verdict": "derivation",
       "guard": null,
-      "note": "AT&T Corp 1996 total return computed under retired splice construction",
+      "note": "AT&T Corp 1996 total return computed under retired splice construction Controller review (#91): flipped to rot-exposed. Its input 41.27 is itself marked rot_exposed:true in 4.6.4, because the package quotes it derives from trace to Motley Fool articles rather than filings. A figure computed from a rot-exposed input is rot-exposed; the recursion was not applied across sections.",
       "evidence_quote": "| Retired splice (quote-sourced) | `(41.27 − 64.75 + 16.97) / 64.75` | **−10.05%** |",
-      "rot_exposed": false,
-      "inputs_trace": "Leaves: AT&T 1996 package valuation ($43.375) minus NCR distribution ($2.10) for 41.27, 1995-12-31 close ($64.75), and Form 8937 spinoff proceeds ($14.87 LU + $2.10 NCR = 16.97)."
+      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
