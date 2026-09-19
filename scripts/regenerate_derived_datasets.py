@@ -18,7 +18,12 @@ accident:
   quarterly twin, so one event carried two stock-leg prices differing by about a factor
   of two (#115).
 
-Running this script and finding a diff under `data/` means a dataset is behind its
+The exports drift the same way and matter more directly: the README tells a reader to paste
+`scripts/google_apps_script.js` into Google Sheets, and that file embeds a snapshot of the
+results rather than fetching them, so a stale copy builds a dashboard from figures the
+engine no longer produces. They are regenerated and checked here too.
+
+Running this script and finding a diff in any generated path means something is behind its
 inputs. `--check` does exactly that and exits non-zero, which is what CI runs.
 
     python3 scripts/regenerate_derived_datasets.py           # regenerate everything
@@ -48,6 +53,17 @@ from typing import List
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
+# Everything generated and committed. The datasets the engine reads, and the exports the
+# README hands to a reader: `scripts/google_apps_script.js` is the file it tells people to
+# paste into Google Sheets, and it embeds a snapshot of the results rather than fetching
+# them, so an engine or data change that is not re-exported ships a dashboard computing
+# figures this repository no longer produces.
+CHECKED_PATHS: List[str] = [
+    "data/",
+    "outputs/",
+    "scripts/google_apps_script.js",
+]
+
 # Dependency order, not alphabetical. Each entry reads what the entries above it publish.
 PIPELINE: List[str] = [
     # Rosters and prices, read from the archived filings.
@@ -67,12 +83,17 @@ PIPELINE: List[str] = [
     "build_datasets_from_raw.py",
 ]
 
+# The exports, which read the compiled datasets and so must run last. This is the one step
+# that is not a script under scripts/, and the only reason to run the backtest WITH exports.
+EXPORT_COMMAND: List[str] = ["run_backtest.py", "--compare-frequencies"]
 
-def _run(script: str) -> float:
+
+def _run(argv: List[str]) -> float:
     """Run one generator, raising SystemExit with its output if it fails."""
     started = time.monotonic()
+    entry = PROJECT_ROOT / ("scripts" if argv[0] != EXPORT_COMMAND[0] else "") / argv[0]
     result = subprocess.run(
-        [sys.executable, str(PROJECT_ROOT / "scripts" / script)],
+        [sys.executable, str(entry), *argv[1:]],
         cwd=PROJECT_ROOT,
         capture_output=True,
         text=True,
@@ -81,14 +102,14 @@ def _run(script: str) -> float:
     if result.returncode != 0:
         sys.stderr.write(result.stdout)
         sys.stderr.write(result.stderr)
-        raise SystemExit(f"{script} failed with exit code {result.returncode}")
+        raise SystemExit(f"{argv[0]} failed with exit code {result.returncode}")
     return elapsed
 
 
 def _modified_datasets() -> List[str]:
-    """Paths under data/ that differ from HEAD, as git reports them."""
+    """Generated paths that differ from HEAD, as git reports them."""
     result = subprocess.run(
-        ["git", "status", "--porcelain", "--", "data/"],
+        ["git", "status", "--porcelain", "--", *CHECKED_PATHS],
         cwd=PROJECT_ROOT,
         capture_output=True,
         text=True,
@@ -103,33 +124,33 @@ def main() -> None:
     parser.add_argument(
         "--check",
         action="store_true",
-        help="fail if regenerating changes any dataset under data/",
+        help="fail if regenerating changes any generated file",
     )
     args = parser.parse_args()
 
     total = 0.0
-    for script in PIPELINE:
-        elapsed = _run(script)
+    for argv in [[script] for script in PIPELINE] + [EXPORT_COMMAND]:
+        elapsed = _run(argv)
         total += elapsed
-        print(f"  {script:<45} {elapsed:5.1f}s")
-    print(f"\n{len(PIPELINE)} generators in {total:.1f}s")
+        print(f"  {' '.join(argv):<45} {elapsed:5.1f}s")
+    print(f"\n{len(PIPELINE) + 1} generators in {total:.1f}s")
 
     if not args.check:
         return
 
     drifted = _modified_datasets()
     if not drifted:
-        print("\nEvery dataset matches what its inputs produce.")
+        print("\nEvery generated file matches what its inputs produce.")
         return
 
-    print(f"\n{len(drifted)} dataset(s) are behind their inputs:")
+    print(f"\n{len(drifted)} generated file(s) are behind their inputs:")
     for path in drifted:
         print(f"  {path}")
     raise SystemExit(
-        "\nRegenerating changed the committed data, so at least one dataset no longer "
-        "matches the filings and records it derives from. Commit the regenerated files "
-        "once you have checked what moved and why -- a value that changes rather than "
-        "appears is a correction, and worth understanding before it ships."
+        "\nRegenerating changed a committed file, so at least one of them no longer "
+        "matches what it is derived from. Commit the regenerated files once you have "
+        "checked what moved and why -- a value that changes rather than appears is a "
+        "correction, and worth understanding before it ships."
     )
 
 
