@@ -271,24 +271,24 @@ reprinted here.
 
 #41 was held until last on an explicit argument: the pool-size measurement was invalid until the roster included the companies that failed, because momentum is the selector that would have bought them, and Lucent "very plausibly" enters a momentum book at year-end 1999 immediately before losing roughly 99%. The audit script now crosses pool size with universe — the corrected one against the pre-#55 survivors-only one — and reports the difference of the two deltas.
 
-**The largest effect anywhere is 0.33pp, and it is exactly 0.00 in every 10-year and 20-year cell.** The gate #41 waited behind did not matter to the answer it was waiting to compute. `test_survivorship_correction_does_not_change_the_pool_size_answer` holds this to under 0.5pp, with headroom over the observed maximum, so ordinary data work does not trip it and a genuine reversal does.
+**The survivorship correction moves the pool-size delta by a fraction of a point at worst, and not at all in any 10-year or 20-year cell.** The gate #41 waited behind did not matter to the answer it was waiting to compute. `test_survivorship_correction_does_not_change_the_pool_size_answer` holds this to under 0.5pp, with headroom over the observed maximum, so ordinary data work does not trip it and a genuine reversal does.
 
 The behavioural prediction was right and the inference from it was wrong. Momentum *does* buy the crash names — a Top 10 momentum book holds `LU` from 1998-Q4, `AOL` from 1999-Q4 and `T_CORP` from 1998-Q1 — but it buys them at **both** pool sizes, 18 crash-name quarters at base 12 against 16 at the full pool. In the December rosters the base 12 is drawn from, `LU` peaks at **#7**, `AOL` at **#10** and `T_CORP` at **#2** — all three *inside* the base 12, so truncating the pool never excluded any of them. (The SPY gap report gives `AOL` a best rank of 12; that is measured on September-30 snapshots, while the pool is cut from the December roster, which is the one that governs here.) What the survivorship correction changed is which names occupy the top 12, not only which occupy #13–#20. At the full pool the extra depth substitutes `NT`, `EMC`, `MCIC` and `TYC` for additional quarters of `LU` and `AOL` — a wider spread of the same exposure, not more of it.
 
-Two further reasons the momentum penalty is not a dot-com artifact: the worst cell of all, −5.89pp, is the **2015–2024** window, which contains no crash name at any rank; and the effect is present on the annual path, which the survivorship correction leaves untouched at 10y and 20y.
+Two further reasons the momentum penalty is not a dot-com artifact: the worst cell of all is the **2015–2024** window, which contains no crash name at any rank; and the effect is present on the annual path, which the survivorship correction leaves untouched at 10y and 20y.
 
 ##### Decision: the pool stays uniform at 20, and the asymmetry is documented rather than fitted
 
-The only signal consistent across the whole matrix is that **momentum at Top 10 is hurt by depth** — 6 of 6 cells, both frequencies. Everywhere else the sign flips with `N` and with rebalancing frequency: momentum Top 3 gains +2.92pp quarterly at 10y but loses 1.31pp annually at 20y; momentum Top 5 is negative in all three quarterly cells and positive in two of three annual ones.
+The only signal consistent across the whole matrix is that **momentum at Top 10 is hurt by depth** — 6 of 6 cells, both frequencies. Everywhere else the sign flips with `N` and with rebalancing frequency: momentum Top 3 gains quarterly at 10y but loses annually at 20y; momentum Top 5 is negative in all three quarterly cells and positive in two of three annual ones.
 
-A rule that respected all of that would need pool size to depend on **selector × N × frequency** — up to twelve parameters fitted on a single 31-year sample, with signs reversing between adjacent cells. That is the overfitting #41 itself warns about, and the cells it would be fitted to are the same cells it would then be evaluated on. The narrower rule the issue proposed — `MarketCapSelector` → 20, `PerformanceSelector` → 12 — is wrong at momentum Top 3, where the wider pool is worth +2.92pp (10y) and +1.79pp (30y), and would additionally require truncating the annual roster, which nothing currently does.
+A rule that respected all of that would need pool size to depend on **selector × N × frequency** — up to twelve parameters fitted on a single 31-year sample, with signs reversing between adjacent cells. That is the overfitting #41 itself warns about, and the cells it would be fitted to are the same cells it would then be evaluated on. The narrower rule the issue proposed — `MarketCapSelector` → 20, `PerformanceSelector` → 12 — is wrong at momentum Top 3, where the wider pool is worth materially more at both 10y and 30y, and would additionally require truncating the annual roster, which nothing currently does.
 
 Against that, `MarketCapSelector` — the shipped default, and the basis of every headline figure and of the dashboard — is **not hurt in any cell at any horizon on either path**, and gains at Top 10.
 
 So the pool stays at 20 for both selectors, and the asymmetry is recorded here instead of being tuned away. Anyone running `--strategy performance` at Top 5 or Top 10 should read the table above as a known, measured cost of the shared pool, not as an unexamined default. `python3 scripts/audit_quarterly_expansion.py` prints every figure in this section, including the premise check.
 
   - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results **downward at Top 3** independently of any pool-size effect. The cause is year-end 2023: the prior data ranked NVIDIA #3, while the filing ranks it behind a consolidated Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run. The levels are not published here. They were quoted once as current, moved when #55 and #56 added the constituents that failed (§4.3.6), moved again when #85 and #86 corrected `T_CORP`'s split and the issuer dividends and when #76 wired those dividends in (§4.3.18), and §4.3.21 has since superseded them once more. That is four movements in one published table, which is why the magnitudes are gone rather than refreshed. The 2023 NVIDIA finding is unaffected by any of it; `python3 scripts/audit_quarterly_expansion.py` prints the current figures for this section.
-- **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN. The consolidation applies to the 2020-2024 filing-derived weights, and since the 2010-2019 extraction it also applies to the **September 30** ground truth for 2014-2019, whose filings list both classes explicitly ("Google, Inc. (Class A)"/"(Class C)" in 2014, "Alphabet, Inc. Class A"/"Class C" from 2015) and are aggregated through the same `CONSOLIDATED_ISSUERS` registry. This does **not** close the 2014-2019 gap, which concerns the **December** factsheet anchor rows: a September filing cannot establish what a December anchor's share-class basis was, so those rows remain unverified (§4.3.8). A registered issuer that contributed only one class keeps the name the filing gave it, so SPY's 2006-2013 single-class Google positions are not relabelled "Alphabet Inc." years before the rename. See section 4.3.8 for coverage and the open gap.
+- **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet outranks NVIDIA and takes **#3**, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN. The consolidation applies to the 2020-2024 filing-derived weights, and since the 2010-2019 extraction it also applies to the **September 30** ground truth for 2014-2019, whose filings list both classes explicitly ("Google, Inc. (Class A)"/"(Class C)" in 2014, "Alphabet, Inc. Class A"/"Class C" from 2015) and are aggregated through the same `CONSOLIDATED_ISSUERS` registry. This does **not** close the 2014-2019 gap, which concerns the **December** factsheet anchor rows: a September filing cannot establish what a December anchor's share-class basis was, so those rows remain unverified (§4.3.8). A registered issuer that contributed only one class keeps the name the filing gave it, so SPY's 2006-2013 single-class Google positions are not relabelled "Alphabet Inc." years before the rename. See section 4.3.8 for coverage and the open gap.
 
 #### 4.3.8 Dual-Class Issuer Consolidation & Execution Convention
 
@@ -625,12 +625,13 @@ thirteen filings are refused by its extractor, so the overlap is **1995 and 1996
 than the eleven years both filers cover on paper; the refusal reasons are recorded in
 `prudential_q1_rosters.json` rather than worked around.
 
-Across those two periods, **28 issuer-price pairs agree to a median of 0.0085%**, worst case
-0.125% (Tyco at 1995-Q1). The residual is rounding, not disagreement: SEI reports value in
-whole thousands against a fund roughly a tenth of Prudential's size, so its implied price is
-the coarser of the two. Prudential's side lands on clean eighths — Royal Dutch $99.375,
-BellSouth $57.75, Allied-Signal $36.625 — which is the check that a 1994-1996 schedule has
-been read correctly.
+Across those two periods the issuer-price pairs agree to well inside a tenth of a percent,
+and the residual is rounding rather than disagreement: SEI reports value in whole thousands
+against a fund roughly a tenth of Prudential's size, so its implied price is the coarser of
+the two. Prudential's side lands on **clean eighths**, which is the check that a 1994-1996
+schedule has been read correctly. The pair count and the residuals are not published here;
+`tests/test_raw_constituents.py::TestQ1Rosters::test_the_two_filers_agree_on_the_periods_they_share`
+asserts the agreement, with a tolerance set where that rounding lives.
 
 **Prudential's exact dollars are the finer figure and were nearly lost.** Its extractor first
 published `value_usd_thousands` as `int(val / 1000)`, which stopped the holdings summing to
@@ -680,9 +681,9 @@ a constituent it cannot price.
 ##### Q3 is now the best-checked quarter in the repository
 
 Two filers price September 30 independently for nine overlapping years, 1997 through 2006:
-**132 issuer-price pairs agreeing to a median of 0.0027%**, worst case 0.029% — Lucent at
+the issuer-price pairs agree far more tightly than Q1's, and the worst case is Lucent at
 2002-Q3, by which time it traded under a dollar and a fraction of a cent is a large relative
-figure. For comparison, Q1's two-filer overlap yields 28 pairs, and Q2 and Q4 have no second
+figure. Q1's two-filer overlap is much smaller, and Q2 and Q4 have no second
 filer at all.
 
 ##### A dormant code path went live
@@ -784,11 +785,11 @@ appear in the same filings as their relatives.
 
 ##### Position counts read from the filings
 
-SEI's `19980331` schedule holds **512 positions**, not the 509 recorded here before. The 512
-rows carry no duplicates and sum dollar-exact to the filing's stated `Total Common Stocks` of
-$1,719,623k; three spurious rows would have broken that reconciliation by their value.
-Prudential's `19940331` holds **502**, as previously recorded. Implied prices at 1998-03-31 —
-GE $86.19, Boeing $52.12, Raytheon Cl B $58.38 — match the values established independently.
+SEI's `19980331` schedule holds more positions than were recorded here before. The rows carry
+no duplicates and sum **dollar-exact** to the filing's stated `Total Common Stocks` of
+$1,719,623k; spurious rows would have broken that reconciliation by their value, which is why
+the reconciliation rather than the count is the check. Prudential's `19940331` is unchanged.
+Implied prices at 1998-03-31 match the values established independently.
 
 ##### Two parser results worth recording
 

@@ -634,16 +634,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
-      "figure": "0.33pp",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Largest observed survivorship effect on pool-depth comparison deltas",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
       "figure": "0.5pp",
       "occurrence": 1,
       "verdict": "decision-evidence",
@@ -651,16 +641,6 @@
       "note": "Asserted bound on survivorship correction effect on pool-depth delta",
       "rot_exposed": true,
       "guard_kind": "claim"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "−5.89pp",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Worst cell delta for momentum in 2015-2024 window",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -676,26 +656,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
-      "figure": "+2.92pp",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Quarterly momentum Top 3 10y gain from wider pool showing sign flip",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "1.31pp",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Annual momentum Top 3 20y loss from wider pool showing sign flip",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
       "figure": "two of three",
       "occurrence": 1,
       "verdict": "decision-evidence",
@@ -706,102 +666,79 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
-      "figure": "+2.92pp",
-      "occurrence": 2,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Quarterly momentum Top 3 10y value showing asymmetry",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "+1.79pp",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Quarterly momentum Top 3 30y value showing asymmetry",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
       "figure": "7.03%",
       "occurrence": 1,
-      "verdict": "decision-evidence",
+      "verdict": "sourced",
+      "note": "Share-class weight at 2023-12-31 as the SPY Form NPORT-P states it. Re-verdicted `sourced` under #91: it is read from a filing and a filing cannot change, so it is not pipeline and cannot rot. Verified against the archived accession -- five of the seven matched to the cent and two were corrected.",
+      "source_ref": "0001752724-24-043296",
       "guard": null,
-      "note": "Apple weight at 2023-12-31 justifying Alphabet consolidation ranking impact",
-      "rot_exposed": true
+      "evidence_quote": "The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "6.98%",
       "occurrence": 1,
-      "verdict": "decision-evidence",
+      "verdict": "sourced",
+      "note": "Share-class weight at 2023-12-31 as the SPY Form NPORT-P states it. Re-verdicted `sourced` under #91: it is read from a filing and a filing cannot change, so it is not pipeline and cannot rot. Verified against the archived accession -- five of the seven matched to the cent and two were corrected.",
+      "source_ref": "0001752724-24-043296",
       "guard": null,
-      "note": "Microsoft weight at 2023-12-31 justifying Alphabet consolidation ranking impact",
-      "rot_exposed": true
+      "evidence_quote": "The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3.45%",
       "occurrence": 1,
-      "verdict": "decision-evidence",
+      "verdict": "sourced",
+      "note": "Share-class weight at 2023-12-31 as the SPY Form NPORT-P states it. Re-verdicted `sourced` under #91: it is read from a filing and a filing cannot change, so it is not pipeline and cannot rot. Verified against the archived accession -- five of the seven matched to the cent and two were corrected.",
+      "source_ref": "0001752724-24-043296",
       "guard": null,
-      "note": "Amazon weight at 2023-12-31 justifying Alphabet consolidation ranking impact",
-      "rot_exposed": true
+      "evidence_quote": "The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3.05%",
       "occurrence": 1,
-      "verdict": "decision-evidence",
+      "verdict": "sourced",
+      "note": "Share-class weight at 2023-12-31 as the SPY Form NPORT-P states it. Re-verdicted `sourced` under #91: it is read from a filing and a filing cannot change, so it is not pipeline and cannot rot. Verified against the archived accession -- five of the seven matched to the cent and two were corrected.",
+      "source_ref": "0001752724-24-043296",
       "guard": null,
-      "note": "Corrected under #91 from 3.06% to 3.05%. Form NPORT-P accession 0001752724-24-043296 states 3.0548% at 2023-12-31 (CUSIP 67066G104); the published value was rounded the wrong way. Five of the seven weights this sentence quotes matched the filing to the cent. Corrected rather than removed because the figure is read from a filing, which cannot change, so refreshing it relocates no maintenance chore -- the remove-don't-refresh rule governs figures overtaken by a data change, not misquotations of an immutable source.",
-      "rot_exposed": true
+      "evidence_quote": "The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "2.06%",
       "occurrence": 1,
-      "verdict": "decision-evidence",
+      "verdict": "sourced",
+      "note": "Share-class weight at 2023-12-31 as the SPY Form NPORT-P states it. Re-verdicted `sourced` under #91: it is read from a filing and a filing cannot change, so it is not pipeline and cannot rot. Verified against the archived accession -- five of the seven matched to the cent and two were corrected.",
+      "source_ref": "0001752724-24-043296",
       "guard": null,
-      "note": "Corrected under #91 from 2.07% to 2.06%. Form NPORT-P accession 0001752724-24-043296 states 2.0646% at 2023-12-31 (CUSIP 02079K305); the published value was rounded the wrong way. Five of the seven weights this sentence quotes matched the filing to the cent. Corrected rather than removed because the figure is read from a filing, which cannot change, so refreshing it relocates no maintenance chore -- the remove-don't-refresh rule governs figures overtaken by a data change, not misquotations of an immutable source.",
-      "rot_exposed": true
+      "evidence_quote": "The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "1.96%",
       "occurrence": 1,
-      "verdict": "decision-evidence",
+      "verdict": "sourced",
+      "note": "Share-class weight at 2023-12-31 as the SPY Form NPORT-P states it. Re-verdicted `sourced` under #91: it is read from a filing and a filing cannot change, so it is not pipeline and cannot rot. Verified against the archived accession -- five of the seven matched to the cent and two were corrected.",
+      "source_ref": "0001752724-24-043296",
       "guard": null,
-      "note": "Meta weight at 2023-12-31 justifying Alphabet consolidation ranking impact",
-      "rot_exposed": true
+      "evidence_quote": "The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "1.75%",
       "occurrence": 1,
-      "verdict": "decision-evidence",
+      "verdict": "sourced",
+      "note": "Share-class weight at 2023-12-31 as the SPY Form NPORT-P states it. Re-verdicted `sourced` under #91: it is read from a filing and a filing cannot change, so it is not pipeline and cannot rot. Verified against the archived accession -- five of the seven matched to the cent and two were corrected.",
+      "source_ref": "0001752724-24-043296",
       "guard": null,
-      "note": "Alphabet Class C weight at 2023-12-31 justifying consolidation",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "3.82%",
-      "occurrence": 1,
-      "verdict": "decision-evidence",
-      "guard": null,
-      "note": "Consolidated Alphabet weight at 2023-12-31 ranking #3",
-      "rot_exposed": true
+      "evidence_quote": "The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1397,89 +1334,12 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.14",
-      "figure": "28 issuer-price pairs agree to a median of 0.0085%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Median cross-filer price agreement between SEI and Prudential for Q1 1995-1996",
-      "evidence_quote": "Across those two periods, **28 issuer-price pairs agree to a median of 0.0085%**, worst case\n0.125%",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "0.125%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Worst-case cross-filer price delta between SEI and Prudential at 1995-Q1 (Tyco)",
-      "evidence_quote": "worst case\n0.125% (Tyco at 1995-Q1).",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "$99.375",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Prudential implied price landing on clean eighths ($99.375)",
-      "evidence_quote": "Prudential's side lands on clean eighths — Royal Dutch $99.375,\nBellSouth $57.75, Allied-Signal $36.625",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "$57.75",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Prudential implied price landing on clean eighths ($57.75)",
-      "evidence_quote": "Prudential's side lands on clean eighths — Royal Dutch $99.375,\nBellSouth $57.75, Allied-Signal $36.625",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "$36.625",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Prudential implied price landing on clean eighths ($36.625)",
-      "evidence_quote": "Prudential's side lands on clean eighths — Royal Dutch $99.375,\nBellSouth $57.75, Allied-Signal $36.625",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
       "figure": "$0.00",
       "occurrence": 1,
       "verdict": "derivation",
       "guard": null,
       "note": "Erroneous implied price resulting from integer truncation bug in early parser",
       "evidence_quote": "rounded six 1994 positions to zero — an implied price of $0.00 wearing\nthe same field name",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "132 issuer-price pairs agreeing to a median of 0.0027%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Cross-filer agreement between SPY and SEI for September 30 across nine overlapping years",
-      "evidence_quote": "Two filers price September 30 independently for nine overlapping years, 1997 through 2006:\n**132 issuer-price pairs agreeing to a median of 0.0027%**, worst case 0.029%",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "0.029%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Worst-case cross-filer price delta between SPY and SEI at 2002-Q3 (Lucent)",
-      "evidence_quote": "worst case 0.029% — Lucent at\n2002-Q3",
       "rot_exposed": true
     },
     {
@@ -1496,68 +1356,13 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.14",
-      "figure": "512 positions",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Position count parsed from SEI 1998-03-31 Schedule of Investments",
-      "evidence_quote": "SEI's `19980331` schedule holds **512 positions**, not the 509 recorded here before.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
       "figure": "$1,719,623k",
       "occurrence": 1,
       "verdict": "sourced",
       "guard": null,
       "note": "Stated Total Common Stocks in SEI 1998-03-31 filing",
-      "evidence_quote": "sum dollar-exact to the filing's stated `Total Common Stocks` of\n$1,719,623k",
+      "evidence_quote": "$1,719,623k; spurious rows would have broken that reconciliation by their value, which is why\nthe reconciliation rather than the count is the check.",
       "source_ref": "0000935069-98-000088"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "502",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Position count parsed from Prudential 1994-03-31 Schedule of Investments",
-      "evidence_quote": "Prudential's `19940331` holds **502**, as previously recorded.",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "$86.19",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Implied price computed from SEI 1998-03-31 schedule ($86.19) matching independent close",
-      "evidence_quote": "Implied prices at 1998-03-31 —\nGE $86.19, Boeing $52.12, Raytheon Cl B $58.38 — match the values established",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "$52.12",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Implied price computed from SEI 1998-03-31 schedule ($52.12) matching independent close",
-      "evidence_quote": "Implied prices at 1998-03-31 —\nGE $86.19, Boeing $52.12, Raytheon Cl B $58.38 — match the values established",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "$58.38",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Implied price computed from SEI 1998-03-31 schedule ($58.38) matching independent close",
-      "evidence_quote": "Implied prices at 1998-03-31 —\nGE $86.19, Boeing $52.12, Raytheon Cl B $58.38 — match the values established",
-      "rot_exposed": true
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
