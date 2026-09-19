@@ -2507,7 +2507,7 @@
       "figure": "$4.40",
       "occurrence": 1,
       "verdict": "derivation",
-      "guard": "tests/test_dataset_integrity.py::test_att_decoupled_series_1994_1997",
+      "guard": "tests/test_dataset_integrity.py::TestDatasetIntegrity::test_att_decoupled_series_1994_1997",
       "guard_kind": "value",
       "note": "AT&T Corp annual dividend in final share terms: the filed $1.32 over the 0.3 combined split factor. Carries a value guard as well as the printed operation because the four years are pinned exactly in the dataset.",
       "evidence_quote": "which is \\$1.32 / 0.3 = **\\$4.40**",

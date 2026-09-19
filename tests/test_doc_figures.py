@@ -339,13 +339,26 @@ class TestManifestWellFormedness(unittest.TestCase):
             if not guard:
                 continue
             with self.subTest(guard=guard):
-                relative, _, qualified = guard.partition("::")
+                # file::Class::method. The class is not decoration: without it a guard
+                # cannot be resolved by anything that walks the tree, and
+                # `scripts/audit_doc_guards.py` -- which reads the named test's BODY to
+                # check it asserts anything -- reports it as missing. #104 shipped one
+                # such guard, real and correct, that this assertion was too lax to catch
+                # while the stricter tool flagged it. The two checks must not disagree.
+                parts = guard.split("::")
+                self.assertEqual(
+                    len(parts), 3,
+                    f"guard must be file::Class::method, got {guard!r}",
+                )
+                relative, class_name, method = parts
                 path = ROOT / relative
                 self.assertTrue(path.exists(), f"{relative} does not exist")
-                method = qualified.rpartition("::")[2]
+                source = path.read_text(encoding="utf-8")
                 self.assertIn(
-                    f"def {method}(", path.read_text(encoding="utf-8"),
-                    f"{relative} has no {method}",
+                    f"class {class_name}(", source, f"{relative} has no {class_name}",
+                )
+                self.assertIn(
+                    f"def {method}(", source, f"{relative} has no {method}",
                 )
 
     def test_every_entry_carries_the_required_fields(self):
