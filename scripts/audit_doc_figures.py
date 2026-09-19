@@ -40,6 +40,76 @@ VERDICTS = ("sourced", "derivation", "decision-evidence", "remove", "wrong",
 # corrected in place. Only these two need the question asked.
 ROT_CLASSIFIED_VERDICTS = ("derivation", "decision-evidence")
 
+# The verdict that asserts a document backs the figure, and therefore owes a pointer to
+# it. `sourced` was the strongest verdict pass 1 assigned and carried the weakest
+# evidence: an `evidence_quote`, which the gate checks is IN the document rather than
+# that it ATTRIBUTES anything, so a quote restating the figure satisfied it. Measured
+# before this changed: 126 accessions are archived under `sec_filings/`, 2 were cited
+# across all 181 `sourced` entries, and neither of those two is on disk.
+SOURCE_REF_VERDICTS = ("sourced",)
+
+# Where the archived filings live. The filename carries the accession, so the directory
+# listing IS the set of resolvable accessions; nothing is parsed or opened.
+ARCHIVE_DIR = REPO_ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
+
+# An SEC accession number, which is the filename's distinguishing part.
+ACCESSION = re.compile(r"^\d{10}-\d{2}-\d{6}$")
+
+# The honest-gap marker. It is the form that carries the weight: a figure read from a
+# document this repository does not hold passes, but says so, and is counted. This is
+# the same move `refused_filings` and the sourced-zero-versus-unknown rule already make
+# -- a gap that is visible and countable beats one that is silently absent.
+UNARCHIVED_PREFIX = "unarchived:"
+
+# How many `sourced` entries resolve only to that marker. Pinned so that a change in
+# either direction is deliberate: a new unarchived figure has to be argued for, and a
+# figure that gains a real source has to lower the number. Not a published figure --
+# this is manifest bookkeeping, and `scripts/audit_doc_figures.py --source-refs` prints
+# the census that produces it.
+UNARCHIVED_SOURCE_REFS = 49
+
+
+_ARCHIVED = None
+
+
+def archived_accessions():
+    """The accessions on disk, read from the filenames of the archived filings.
+
+    The manifests in that directory carry no accession in their name and are skipped by
+    the pattern rather than by an exclusion list. Cached: the ratchet asks this once per
+    `sourced` entry and must stay a sub-second scan.
+    """
+    global _ARCHIVED
+    if _ARCHIVED is None:
+        found = set()
+        for path in ARCHIVE_DIR.iterdir():
+            match = re.search(r"\d{10}-\d{2}-\d{6}", path.name)
+            if match:
+                found.add(match.group(0))
+        _ARCHIVED = found
+    return _ARCHIVED
+
+
+def classify_source_ref(ref):
+    """Which of the three permitted forms a `source_ref` takes, or why it takes none.
+
+    WHAT A RESOLVING REF PROVES. That the pointer is good -- the filing is on disk, or
+    the dataset file exists. NOT that the figure appears in what it points at.
+    `scripts/verify_provenance.py` is what checks the latter, by re-reading the cited
+    document. This field is a findability guarantee and must not be described as more.
+    """
+    if not ref or not isinstance(ref, str) or not ref.strip():
+        return "missing"
+    ref = ref.strip()
+    if ref.startswith(UNARCHIVED_PREFIX):
+        return "unarchived" if ref[len(UNARCHIVED_PREFIX):].strip() else "missing"
+    if ACCESSION.match(ref):
+        return "accession" if ref in archived_accessions() else "unresolved-accession"
+    if "/" in ref:
+        return "path" if (REPO_ROOT / ref).exists() else "unresolved-path"
+    return "unrecognised"
+
+
 # Does the document print the arithmetic? A figure claiming to be self-checking must show
 # its work, so a reader can confirm it without running anything of ours.
 #
@@ -241,18 +311,51 @@ def _unclassified():
                   f"  #{entry['occurrence']}")
 
 
+def _source_refs():
+    """Print the `source_ref` census, and every gap marker in full.
+
+    The point of the marker is that the gap is countable, so the count is printed rather
+    than left to be derived by whoever next wonders. Each marker is listed with its
+    figure, because a list of 54 reasons is the actual worklist for closing them.
+    """
+    counts = {}
+    gaps = []
+    for entry in load_manifest()["entries"]:
+        if entry["verdict"] not in SOURCE_REF_VERDICTS:
+            continue
+        ref = entry.get("source_ref")
+        form = classify_source_ref(ref)
+        counts[form] = counts.get(form, 0) + 1
+        if form == "unarchived":
+            gaps.append((entry["section"], entry["figure"], ref.strip()))
+
+    total = sum(counts.values())
+    print(f"{total} entries carry a verdict in {SOURCE_REF_VERDICTS}")
+    for form, count in sorted(counts.items(), key=lambda kv: -kv[1]):
+        print(f"{count:5d}  {form}")
+    print(f"\n{len(archived_accessions())} accessions are archived under "
+          f"{ARCHIVE_DIR.relative_to(REPO_ROOT)}")
+    print(f"\n{len(gaps)} gap markers:")
+    for section, figure, ref in gaps:
+        print(f"  §{section:<8} {figure:<24} {ref}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--emit-skeleton", action="store_true",
                         help="print an unclassified manifest for every candidate")
     parser.add_argument("--unclassified", action="store_true",
                         help="list candidates missing from the manifest")
+    parser.add_argument("--source-refs", action="store_true",
+                        help="census the source_ref forms and list every gap marker")
     args = parser.parse_args()
 
     if args.emit_skeleton:
         _emit_skeleton()
     elif args.unclassified:
         _unclassified()
+    elif args.source_refs:
+        _source_refs()
     else:
         _tally()
 

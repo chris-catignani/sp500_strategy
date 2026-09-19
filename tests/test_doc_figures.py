@@ -272,6 +272,134 @@ class TestSourcedVerdictsAreGrounded(unittest.TestCase):
                 )
 
 
+class TestSourcedFiguresPointAtSomething(unittest.TestCase):
+    """`sourced` is the strongest verdict in the manifest. It has to point somewhere.
+
+    Pass 1 gave it the weakest evidence of any verdict. `sourced` asserts a filing backs
+    the figure, and all that was required of it was an `evidence_quote` -- which
+    TestSourcedVerdictsAreGrounded checks is IN the document, not that it ATTRIBUTES
+    anything, so a quote restating the figure satisfied the gate. Measured before this
+    changed: 126 accessions are archived under `data/raw/ground_truth/sec_filings/`, 2
+    accessions were cited across all 181 `sourced` entries, and neither of those two was
+    on disk. 179 of 181 verdicts pointed at nothing a reader could find.
+
+    So every `sourced` entry now carries a `source_ref`, in exactly one of three forms:
+    an archived accession, a repo-relative path, or an explicit `unarchived:` marker.
+
+    THE THIRD FORM CARRIES THE WEIGHT. A figure read from a document this repository
+    does not hold still passes -- but it says so, and it is counted. That is the move
+    `refused_filings` and the sourced-zero-versus-unknown rule in AGENTS.md already
+    make: an honest gap that is visible beats one that is silently absent. §4.6.4's
+    `\\$45.875` is the worked example. Verdict `sourced`, quote "official NYSE closing
+    price on September 30, 1996", no accession, no dataset row, and no `LU.json` at all,
+    because §4.6.5 records that the 1996 spinoff series are unavailable from commercial
+    APIs. Written this way in pass 1 it would have been obvious immediately.
+
+    WHAT A RESOLVING REF PROVES, AND WHAT IT DOES NOT. That the pointer is good: the
+    filing is on disk, or the file exists. NOT that the figure appears in the document
+    it names. `scripts/verify_provenance.py` does that, by re-reading the cited filing.
+    This is a findability guarantee and nothing more.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.audit_doc_figures import load_manifest, SOURCE_REF_VERDICTS
+        cls.sourced = [e for e in load_manifest()["entries"]
+                       if e["verdict"] in SOURCE_REF_VERDICTS]
+
+    def test_there_are_sourced_entries_to_check(self):
+        """Guards the rest of this class against silently checking an empty list."""
+        self.assertGreater(len(self.sourced), 100)
+
+    def test_every_sourced_entry_carries_a_source_ref(self):
+        missing = [key_of(e) for e in self.sourced if not (e.get("source_ref") or "").strip()]
+        self.assertEqual(
+            len(missing), 0,
+            f"{len(missing)} sourced entries carry no source_ref; first five: "
+            f"{missing[:5]}",
+        )
+
+    def test_every_source_ref_takes_one_of_the_three_permitted_forms(self):
+        """A ref that resolves to nothing is worse than no ref: it reads as evidence."""
+        from scripts.audit_doc_figures import classify_source_ref
+        bad = [(e["section"], e["figure"], e.get("source_ref"),
+                classify_source_ref(e.get("source_ref")))
+               for e in self.sourced
+               if classify_source_ref(e.get("source_ref"))
+               not in ("accession", "path", "unarchived")]
+        self.assertEqual(
+            len(bad), 0,
+            f"{len(bad)} source_refs are not an archived accession, an existing "
+            f"repo-relative path, or an `unarchived:` marker; first five: {bad[:5]}",
+        )
+
+    def test_an_accession_ref_names_a_filing_on_disk(self):
+        """The whole defect being fixed: the two accessions pass 1 cited were not held.
+
+        Stated separately from the form check so a failure says which rule broke.
+        """
+        from scripts.audit_doc_figures import ACCESSION, archived_accessions
+        held = archived_accessions()
+        absent = [(e["section"], e["figure"], e["source_ref"]) for e in self.sourced
+                  if ACCESSION.match((e.get("source_ref") or "").strip())
+                  and e["source_ref"].strip() not in held]
+        self.assertEqual(absent, [], "accession cited with no filing in the archive")
+
+    def test_a_path_ref_resolves_on_disk(self):
+        absent = [(e["section"], e["figure"], e["source_ref"]) for e in self.sourced
+                  if "/" in (e.get("source_ref") or "")
+                  and not (e.get("source_ref") or "").strip().startswith("unarchived:")
+                  and not (ROOT / e["source_ref"].strip()).exists()]
+        self.assertEqual(absent, [], "source_ref path does not exist")
+
+    def test_nothing_reads_from_an_ignored_path(self):
+        """`.superpowers/` is gitignored. A ref into it passes here and fails on a clone.
+
+        docs/SUBAGENTS.md records this exact failure: a script and seven tests whose
+        input lived under an ignored path, green locally and erroring in `setUpClass`
+        anywhere else.
+        """
+        leaked = [(e["section"], e["figure"], e["source_ref"]) for e in self.sourced
+                  if ".superpowers" in (e.get("source_ref") or "")]
+        self.assertEqual(leaked, [], "source_ref points into a gitignored path")
+
+    def test_the_gap_count_is_published_rather_than_buried(self):
+        """The `unarchived:` total is pinned, so a change either way is deliberate.
+
+        This is manifest bookkeeping, not a published figure: it counts rows in
+        `docs/doc_figure_manifest.json`, which is the artifact this test governs, and
+        `python3 scripts/audit_doc_figures.py --source-refs` prints the census and
+        every marker. Adding a gap has to be argued for; closing one has to lower the
+        number, which is the direction this should move.
+        """
+        from scripts.audit_doc_figures import (
+            classify_source_ref, UNARCHIVED_SOURCE_REFS)
+        gaps = [e for e in self.sourced
+                if classify_source_ref(e.get("source_ref")) == "unarchived"]
+        self.assertEqual(
+            len(gaps), UNARCHIVED_SOURCE_REFS,
+            f"{len(gaps)} sourced figures resolve only to an `unarchived:` marker, "
+            f"against {UNARCHIVED_SOURCE_REFS} recorded in "
+            f"scripts/audit_doc_figures.py; run "
+            f"`python3 scripts/audit_doc_figures.py --source-refs`",
+        )
+
+    def test_a_gap_marker_says_what_is_missing(self):
+        """A bare `unarchived:` is an excuse. The marker has to name the document."""
+        from scripts.audit_doc_figures import UNARCHIVED_PREFIX
+        terse = [(e["section"], e["figure"], e["source_ref"]) for e in self.sourced
+                 if (e.get("source_ref") or "").strip().startswith(UNARCHIVED_PREFIX)
+                 and len(e["source_ref"].strip()[len(UNARCHIVED_PREFIX):].split()) < 3]
+        self.assertEqual(terse, [], "`unarchived:` marker does not say what is missing")
+
+    def test_no_other_verdict_carries_a_source_ref(self):
+        """The field means "this verdict claims a document". Only `sourced` does."""
+        from scripts.audit_doc_figures import load_manifest, SOURCE_REF_VERDICTS
+        stray = [key_of(e) for e in load_manifest()["entries"]
+                 if e["verdict"] not in SOURCE_REF_VERDICTS and e.get("source_ref")]
+        self.assertEqual(stray, [], "source_ref set on a verdict that does not take it")
+
+
 class TestRotExposureIsDeclared(unittest.TestCase):
     """Whether a reader can verify a figure without running our code.
 
