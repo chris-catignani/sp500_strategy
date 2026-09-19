@@ -66,7 +66,7 @@ UNARCHIVED_PREFIX = "unarchived:"
 # figure that gains a real source has to lower the number. Not a published figure --
 # this is manifest bookkeeping, and `scripts/audit_doc_figures.py --source-refs` prints
 # the census that produces it.
-UNARCHIVED_SOURCE_REFS = 49
+UNARCHIVED_SOURCE_REFS = 46
 
 
 _ARCHIVED = None

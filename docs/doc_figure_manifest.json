@@ -4950,11 +4950,10 @@
       "section": "5",
       "figure": "$0.33",
       "occurrence": 1,
-      "verdict": "sourced",
+      "verdict": "wrong",
       "guard": null,
-      "note": "AAPL 1994 split-adjusted year-end close",
-      "evidence_quote": "1994 split-adjusted close is \\$0.33.",
-      "source_ref": "unarchived: no archived series carries this value; data/raw/tickers/AAPL.json reads $0.3482 at 1994-12"
+      "note": "AAPL 1994 split-adjusted year-end close Controller review (#91): re-measured against data/sp500_prices.json and the published value does not match. Marked `wrong`; per AGENTS.md a stale published figure is removed rather than refreshed, which is PR 2. Evidence: no archived series carries this value; data/raw/tickers/AAPL.json reads $0.3482 at 1994-12",
+      "evidence_quote": "1994 split-adjusted close is \\$0.33."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -4972,11 +4971,10 @@
       "section": "5",
       "figure": "$496.80",
       "occurrence": 1,
-      "verdict": "sourced",
+      "verdict": "wrong",
       "guard": null,
-      "note": "Citigroup 2006 split-adjusted year-end close",
-      "evidence_quote": "2006 split-adjusted close is \\$496.80.",
-      "source_ref": "unarchived: no archived series carries this value; data/raw/tickers/C.json reads $557.00 at 2006-12"
+      "note": "Citigroup 2006 split-adjusted year-end close Controller review (#91): re-measured against data/sp500_prices.json and the published value does not match. Marked `wrong`; per AGENTS.md a stale published figure is removed rather than refreshed, which is PR 2. Evidence: no archived series carries this value; data/raw/tickers/C.json reads $557.00 at 2006-12",
+      "evidence_quote": "2006 split-adjusted close is \\$496.80."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -5049,11 +5047,10 @@
       "section": "5",
       "figure": "$88.93",
       "occurrence": 1,
-      "verdict": "sourced",
+      "verdict": "wrong",
       "guard": null,
-      "note": "Walmart 2024 year-end close",
-      "evidence_quote": "2023 split-adjusted close is \\$52.55; 2024 close is \\$88.93 (+69.23% return).",
-      "source_ref": "unarchived: no archived series carries this value; data/raw/tickers/WMT.json reads $90.35 at 2024-12"
+      "note": "Walmart 2024 year-end close Controller review (#91): re-measured against data/sp500_prices.json and the published value does not match. Marked `wrong`; per AGENTS.md a stale published figure is removed rather than refreshed, which is PR 2. Evidence: no archived series carries this value; data/raw/tickers/WMT.json reads $90.35 at 2024-12",
+      "evidence_quote": "2023 split-adjusted close is \\$52.55; 2024 close is \\$88.93 (+69.23% return)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
