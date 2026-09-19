@@ -16,6 +16,7 @@ invocation, and a text scan keeps it under a second.
 """
 
 import argparse
+import collections
 import json
 from pathlib import Path
 import re
@@ -541,6 +542,72 @@ def _regeneration():
     print(f"\nCensus: tables of computed figures with_command={res['with_command']} without_command={res['without_command']}")
 
 
+def reconciliation(manifest, live_counts):
+    """Groups whose occurrence numbering changed, split by whether any occurrence survives.
+
+    Returns (shifted, vanished). `shifted` is the dangerous set: some occurrences remain,
+    so the entries that look orphaned are the highest-numbered ones rather than the ones
+    actually deleted.
+    """
+    held = collections.defaultdict(list)
+    for entry in manifest["entries"]:
+        held[(entry["document"], entry["section"], entry["figure"])].append(entry)
+
+    shifted, vanished = [], []
+    for group, entries in sorted(held.items()):
+        have, want = len(entries), live_counts.get(group, 0)
+        if have <= want:
+            continue
+        (vanished if want == 0 else shifted).append((group, entries, want))
+    return shifted, vanished
+
+
+def _reconcile():
+    """Report where deleting a figure has renumbered its twin, and the orphan reading lies.
+
+    `occurrence` is positional. Delete the FIRST of two identical numerals in a section and
+    the second slides from 2 to 1, so the manifest entry that now looks orphaned is the
+    last one in the group -- not the one that was actually removed. Dropping that entry
+    silently transfers the deleted figure's verdict onto the survivor.
+
+    This bit issue #91 twice: section 5's AT&T `$0.33`, whose twin is the sourced Ma Bell
+    quarterly dividend feeding a derivation, and 4.3.7's `3.06%`, where the survivor is
+    verdict `decision-evidence` and the deleted one was `remove`.
+
+    So this is a report, not a fixer. It names the groups whose count changed and says how
+    many entries need renumbering; which entry to drop is a judgment about what was
+    deleted, and only the person who deleted it knows that.
+    """
+    live = collections.Counter(
+        (e["document"], e["section"], e["figure"]) for e in extract_all()
+    )
+    shifted, vanished = reconciliation(load_manifest(), live)
+
+    print("=== Occurrence Reconciliation ===\n")
+    if shifted:
+        print("Groups where occurrences RENUMBERED -- the apparent orphan is not")
+        print("necessarily the entry that was deleted:\n")
+        for (doc, section, figure), entries, want in shifted:
+            print(f"  \u00a7{section} {figure!r}: {len(entries)} entries, {want} occurrences "
+                  f"in {doc.split('/')[-1]}")
+            for e in entries:
+                print(f"      occ {e['occurrence']}  {e['verdict']}")
+            print(f"      -> drop the {len(entries) - want} you deleted, then renumber the "
+                  f"rest from 1.\n")
+    else:
+        print("No group needs renumbering.\n")
+
+    if vanished:
+        print(f"Groups gone from the documents entirely ({len(vanished)}), where the naive")
+        print("orphan reading is safe:\n")
+        for (doc, section, figure), entries, _ in vanished:
+            verdicts = ", ".join(sorted({e["verdict"] for e in entries}))
+            print(f"  \u00a7{section} {figure!r} x{len(entries)} ({verdicts})")
+
+    print(f"\nCensus: renumbering needed in {len(shifted)} group(s), "
+          f"{len(vanished)} group(s) fully removed.")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--emit-skeleton", action="store_true",
@@ -551,6 +618,8 @@ def main():
                         help="census the source_ref forms and list every gap marker")
     parser.add_argument("--regeneration", action="store_true",
                         help="audit markdown tables for regeneration commands")
+    parser.add_argument("--reconcile", action="store_true",
+                        help="report occurrence renumbering after figures are deleted")
     args = parser.parse_args()
 
     if args.emit_skeleton:
@@ -561,6 +630,8 @@ def main():
         _source_refs()
     elif args.regeneration:
         _regeneration()
+    elif args.reconcile:
+        _reconcile()
     else:
         _tally()
 

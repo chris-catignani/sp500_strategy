@@ -228,6 +228,55 @@ class TestManifestWellFormedness(unittest.TestCase):
         from scripts.audit_doc_figures import load_manifest
         cls.manifest = load_manifest()
 
+    def test_deleting_one_of_two_identical_numerals_is_reported_not_guessed(self):
+        """`occurrence` is positional, so deleting the first of a pair renumbers the second.
+
+        The entry that then looks orphaned is the LAST in the group, not the one deleted.
+        Dropping it transfers the deleted figure's verdict onto the survivor. Issue #91 hit
+        this twice -- section 5's AT&T `$0.33`, whose twin is the sourced Ma Bell dividend,
+        and 4.3.7's `3.06%`, where the survivor is `decision-evidence` and the deleted one
+        was `remove`.
+        """
+        from scripts.audit_doc_figures import reconciliation
+
+        manifest = {"entries": [
+            {"document": "d.md", "section": "5", "figure": "$0.33", "occurrence": 1,
+             "verdict": "wrong"},
+            {"document": "d.md", "section": "5", "figure": "$0.33", "occurrence": 2,
+             "verdict": "sourced"},
+        ]}
+        shifted, vanished = reconciliation(manifest, {("d.md", "5", "$0.33"): 1})
+        self.assertEqual(vanished, [], "one occurrence survives, so nothing vanished")
+        self.assertEqual(len(shifted), 1, "the surviving occurrence must be reported")
+        _, entries, surviving = shifted[0]
+        self.assertEqual(surviving, 1)
+        self.assertEqual(len(entries), 2)
+
+    def test_a_group_with_no_occurrences_left_is_safe_to_read_as_orphaned(self):
+        from scripts.audit_doc_figures import reconciliation
+
+        manifest = {"entries": [
+            {"document": "d.md", "section": "5", "figure": "$9.99", "occurrence": 1,
+             "verdict": "remove"},
+        ]}
+        shifted, vanished = reconciliation(manifest, {})
+        self.assertEqual(shifted, [])
+        self.assertEqual(len(vanished), 1)
+
+    def test_the_committed_manifest_needs_no_renumbering(self):
+        """A ratchet: deleting a figure with a twin and not renumbering fails here."""
+        from scripts.audit_doc_figures import reconciliation, extract_all
+        import collections as _c
+
+        live = _c.Counter(
+            (e["document"], e["section"], e["figure"]) for e in extract_all()
+        )
+        shifted, _ = reconciliation(self.manifest, live)
+        self.assertEqual(
+            [(g[1], g[2]) for g, _e, _w in shifted], [],
+            "occurrence numbering is stale; run audit_doc_figures.py --reconcile",
+        )
+
     def test_no_pipeline_figure_is_left_unguarded(self):
         """The criterion issue #91 was opened to reach, as a test.
 
