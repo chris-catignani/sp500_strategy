@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import tempfile
 import unittest
 import warnings
 
@@ -2386,7 +2387,16 @@ class TestQ1Rosters(unittest.TestCase):
         shared = set(self.sei["rosters_by_period"]) & set(
             self.prudential["rosters_by_period"]
         )
-        self.assertTrue(shared, "the two filers must overlap somewhere to be a check")
+        # A floor with headroom, not a pin. #83 took the overlap from two periods to four
+        # by reading Prudential's HTML era, and the claim worth protecting is that the
+        # later pair is still there -- a regression that refused 2005 or 2006 again would
+        # drop below this while the tolerance below stayed green.
+        self.assertGreaterEqual(
+            len(shared),
+            4,
+            "the two filers overlap at 1995, 1996, 2005 and 2006; fewer means a filing "
+            f"stopped parsing. Overlap is {sorted(shared)}.",
+        )
 
         compared = 0
         for period in sorted(shared):
@@ -2401,7 +2411,7 @@ class TestQ1Rosters(unittest.TestCase):
                         f"{ticker} at {period}: SEI ${a[ticker]:.4f} against "
                         f"Prudential ${b[ticker]:.4f}",
                     )
-        self.assertGreaterEqual(compared, 20)
+        self.assertGreaterEqual(compared, 40)
 
     def test_refusals_are_recorded_with_a_reason(self):
         """A filing that would not parse is refused in the open, never approximated."""
@@ -2409,6 +2419,122 @@ class TestQ1Rosters(unittest.TestCase):
             for key, reason in data.get("refused_filings", {}).items():
                 with self.subTest(filer=label, filing=key):
                     self.assertTrue(reason.strip())
+
+
+class TestPrudentialHtmlSchedules(unittest.TestCase):
+    """Prudential's 2004-2006 schedules are HTML tables, not fixed-width text (#83).
+
+    The reader that handles 1994-1996 searches for an uppercase fixed-width heading and
+    refuses these three with `could not locate STOCK INDEX FUND schedule header`. The
+    refusal was a heading-match failure, not a row-parsing failure: the rows are there,
+    in a regular table, and they reconcile.
+    """
+
+    FILINGS = ROOT / "data" / "raw" / "ground_truth" / "sec_filings"
+    HTML_ERA = {
+        "2004-Q1": "PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "2005-Q1": "PRUDENTIAL_2005_Q1_N-CSRS_0001193125-05-120909.txt",
+        "2006-Q1": "PRUDENTIAL_2006_Q1_N-CSRS_0001193125-06-126134.txt",
+    }
+
+    def test_each_html_era_schedule_reconciles_dollar_exact(self):
+        """The first guard, on the values the parser actually returns.
+
+        Prudential prints exact dollars, so a short read shows up here as a difference of
+        whole dollars rather than of rounding. 2004 and the two later years reach the
+        total by different routes: 2004 prints a `Total common stocks` line, while 2005
+        and 2006 print only `Total long-term investments`, their long-term section being
+        entirely common stock.
+        """
+        from scripts.extract_prudential_q1_rosters import parse_prudential_filing
+        from scripts.extract_vanguard_rosters import _PLAUSIBLE_SP500_COUNT
+
+        for period, filename in sorted(self.HTML_ERA.items()):
+            with self.subTest(period=period):
+                roster = parse_prudential_filing(self.FILINGS / filename)
+                self.assertEqual(
+                    round(roster["parsed_total_usd"]),
+                    round(roster["stated_total_usd"]),
+                    f"{period} does not reconcile to the total on the face of the filing",
+                )
+                self.assertGreaterEqual(
+                    roster["position_count"], _PLAUSIBLE_SP500_COUNT[0]
+                )
+                self.assertLessEqual(roster["position_count"], _PLAUSIBLE_SP500_COUNT[1])
+
+    def test_an_issuer_whose_name_starts_with_a_digit_is_not_dropped(self):
+        """3M is the row that proves a name heuristic can silently shorten a read.
+
+        A description filter requiring a run of letters rejects `3M Co.` -- the name has
+        no three consecutive letters -- and 2004-Q1 then parses 499 positions that fall
+        $14,769,184 short of the stated total, which is exactly 3M's value. The
+        reconciliation guard catches the shortfall but cannot say what caused it, so this
+        asserts the row itself.
+        """
+        from scripts.extract_prudential_q1_rosters import parse_prudential_filing
+
+        roster = parse_prudential_filing(self.FILINGS / self.HTML_ERA["2004-Q1"])
+        rows = [h for h in roster["holdings"] if h["name"].startswith("3M")]
+        self.assertEqual(len(rows), 1, "3M Co. must appear exactly once")
+        self.assertEqual(rows[0]["shares"], 180398)
+        self.assertEqual(rows[0]["value_usd"], 14769184)
+
+    def test_the_long_term_total_is_refused_when_it_covers_more_than_common_stock(self):
+        """The third guard: reconciling proves completeness, not that the right thing
+        was read.
+
+        2005 and 2006 have no `Total common stocks` line, so the reader falls back to
+        `Total long-term investments`. That substitution is only sound while the
+        long-term section holds nothing but common stock. Given a filing where it also
+        holds preferred, the fallback would reconcile a common-stock roster against a
+        total that includes the preferred -- a short read wearing a passing guard. This
+        builds exactly that filing and requires a refusal.
+        """
+        from scripts.extract_ground_truth_from_sec import ScheduleParseError
+        from scripts.extract_prudential_q1_rosters import parse_prudential_filing
+
+        filing = self.FILINGS / self.HTML_ERA["2005-Q1"]
+        text = filing.read_text(encoding="utf-8", errors="replace")
+        # Insert a second asset class under LONG-TERM INVESTMENTS, upstream of the total.
+        anchor = text.upper().find("TOTAL LONG-TERM INVESTMENTS")
+        row_start = text.rfind("<TR", 0, anchor)
+        preferred = (
+            "<TR>\n<TD VALIGN=\"bottom\" COLSPAN=\"4\">"
+            "<FONT FACE=\"ARIAL\" SIZE=\"1\"><B>PREFERRED STOCKS</B></FONT>"
+            "</TD></TR>\n"
+        )
+        doctored = text[:row_start] + preferred + text[row_start:]
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        scratch = Path(tmp.name) / filing.name
+        scratch.write_text(doctored, encoding="utf-8")
+
+        with self.assertRaises(ScheduleParseError) as caught:
+            parse_prudential_filing(scratch)
+        self.assertIn("common stock", str(caught.exception).lower())
+
+    def test_a_fair_valued_zero_is_kept_and_flagged_rather_than_dropped(self):
+        """2005-Q1 prints a value of 0 for Seagate Technology, and means it.
+
+        The row carries (a) non-income producing and (f) fair valued, and the value column
+        reads 0 -- not blank, as SEI's JWP row is, but a fair value the filing states. A
+        reader that requires a positive value drops the row silently: the roster then
+        reports 500 positions where the schedule lists 501, reconciles dollar-exact
+        anyway because the missing row is worth nothing, and loses a fact the filing
+        states. So the row is kept and flagged, which is what stops the derivation
+        dividing by 49,665 shares and publishing $0.00 as a price read off a filing.
+        """
+        from scripts.extract_prudential_q1_rosters import parse_prudential_filing
+
+        roster = parse_prudential_filing(self.FILINGS / self.HTML_ERA["2005-Q1"])
+        rows = [h for h in roster["holdings"] if h["name"].startswith("Seagate")]
+        self.assertEqual(len(rows), 1, "the fair-valued row must survive the read")
+        self.assertEqual(rows[0]["shares"], 49665)
+        self.assertEqual(rows[0]["value_usd"], 0)
+        self.assertTrue(
+            rows[0].get("no_value_printed"),
+            "a row that yields no usable price must say so, as SEI's does",
+        )
 
 
 if __name__ == "__main__":

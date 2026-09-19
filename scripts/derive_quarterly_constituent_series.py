@@ -237,9 +237,10 @@ def _cross_filer_check(issuer_map: Dict[str, str]) -> Dict[str, Any]:
             sei_q1, pru, "sei", "prudential", issuer_map,
             "SEI Index Funds (audited)",
             (
-                "Ten of Prudential's thirteen filings are refused by its extractor, so the "
-                "overlap is two years rather than the eleven both filers cover on paper. "
-                "The refusals are recorded in prudential_q1_rosters.json."
+                "Most of Prudential's thirteen filings are refused by its extractor, so "
+                "the overlap is narrower than the eleven years both filers cover on "
+                "paper. The surviving years are listed in overlapping_periods below and "
+                "the refusals, with their reasons, in prudential_q1_rosters.json."
             ),
         )
 
@@ -327,13 +328,13 @@ def derive() -> Dict[str, Any]:
         "sources": {
             "Q1": (
                 "data/raw/ground_truth/sei_q1_rosters.json (1995-2003, 2005-2006) and "
-                "data/raw/ground_truth/prudential_q1_rosters.json (1994). 2004 has no Q1 "
-                "from either filer: SEI's schedule is corrupt as filed -- its Microsoft "
-                "value reads '0,600' in EDGAR's own bytes, short by exactly the 40,000k "
-                "the reconciliation misses -- and Prudential's 2004 is the HTML era its "
-                "extractor refuses. Reconstructing the missing digit from the "
-                "reconciliation gap would be an inferred figure wearing a filing's "
-                "provenance, so the year is absent instead."
+                "data/raw/ground_truth/prudential_q1_rosters.json (1994, 2004). 2004 is "
+                "the one year SEI cannot supply: its schedule is corrupt as filed -- the "
+                "Microsoft value reads '0,600' in EDGAR's own bytes, short by exactly "
+                "the 40,000k the reconciliation misses. Reconstructing the missing digit "
+                "from the reconciliation gap would be an inferred figure wearing a "
+                "filing's provenance, so that filing stays refused and Prudential's "
+                "HTML-era schedule supplies the quarter instead (#83)."
             ),
             "Q2": "data/raw/ground_truth/vanguard_semiannual_rosters.json",
             "Q3": "SPY September-30 annual filings in data/raw/ground_truth/sec_filings/",
@@ -346,8 +347,9 @@ def derive() -> Dict[str, Any]:
             "(SEI's Report of Independent Accountants covers its March-31 statement of net "
             "assets and confirms the securities with the custodian), Q3 (September 30 is "
             "SPY's fiscal year end from 1997) and Q4 (December 31 is Vanguard's). "
-            "Unaudited: Q2, Vanguard's semi-annual, and Q1 1994 alone, which comes from "
-            "Prudential because SEI's series starts in 1995. Do not read these as one "
+            "Unaudited: Q2, Vanguard's semi-annual, and the two Q1s that come from "
+            "Prudential rather than SEI -- 1994, before SEI's series starts, and 2004, "
+            "where SEI's filing is refused. Do not read these as one "
             "grade. Audit status here was read out of each filing; the submissions API's "
             "fiscalYearEnd reports 0930 for SEI and is wrong for that trust."
         ),

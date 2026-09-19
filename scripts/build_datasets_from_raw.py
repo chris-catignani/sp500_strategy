@@ -831,8 +831,9 @@ def main():
             print(
                 f"  {len(partial)} carry years without all four quarters; those years are "
                 "not eligible for selection. Gaps are sources, not parsing: no September-30 "
-                "filing for 1994, SEI's 2004 schedule corrupt as filed, no Q2 2005, and "
-                "only Q3 after 2006."
+                "filing for 1994, no Q2 2005, and only Q3 after 2006. 2004-Q1 was on this "
+                "list until #83 read Prudential's HTML-era schedule; SEI's 2004 filing is "
+                "still refused as corrupt, which is a separate fact and stays recorded."
             )
 
     # Dividends for the derived constituents (#76), from the issuers' own filings and from

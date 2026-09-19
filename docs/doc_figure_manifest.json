@@ -790,6 +790,18 @@
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
+      "section": "4.3.14",
+      "figure": "$14,769,184",
+      "occurrence": 1,
+      "verdict": "sourced",
+      "guard": "tests/test_raw_constituents.py::TestPrudentialHtmlSchedules::test_an_issuer_whose_name_starts_with_a_digit_is_not_dropped",
+      "guard_kind": "value",
+      "note": "3M Co.'s market value in Prudential's March-31 2004 schedule; the shortfall a name filter that rejects '3M Co.' leaves behind",
+      "evidence_quote": "2004 then\n  parsed 499 positions falling $14,769,184 short -- exactly 3M's value.",
+      "source_ref": "0001193125-04-097446"
+    },
+    {
+      "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.15",
       "figure": "$0.36",
       "occurrence": 1,

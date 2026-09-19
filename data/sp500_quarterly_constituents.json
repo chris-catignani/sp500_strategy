@@ -5957,6 +5957,14 @@
       "trailing_1y_return": 0.3424,
       "year": 2003,
       "quarter": 4
+    },
+    {
+      "ticker": "DELL",
+      "name": "DELL",
+      "market_cap_weight": 0.008454,
+      "trailing_1y_return": 0.27,
+      "year": 2003,
+      "quarter": 4
     }
   ],
   "2004-Q1": [
@@ -6109,6 +6117,14 @@
       "name": "Chevron Corporation",
       "market_cap_weight": 0.009,
       "trailing_1y_return": 0.4023,
+      "year": 2004,
+      "quarter": 1
+    },
+    {
+      "ticker": "DELL",
+      "name": "DELL",
+      "market_cap_weight": 0.0083,
+      "trailing_1y_return": 0.231,
       "year": 2004,
       "quarter": 1
     }
@@ -6265,6 +6281,14 @@
       "trailing_1y_return": 0.171,
       "year": 2004,
       "quarter": 2
+    },
+    {
+      "ticker": "DELL",
+      "name": "DELL",
+      "market_cap_weight": 0.0087,
+      "trailing_1y_return": 0.1208,
+      "year": 2004,
+      "quarter": 2
     }
   ],
   "2004-Q3": [
@@ -6409,6 +6433,14 @@
       "name": "Altria Group Inc.",
       "market_cap_weight": 0.0093,
       "trailing_1y_return": 0.1372,
+      "year": 2004,
+      "quarter": 3
+    },
+    {
+      "ticker": "DELL",
+      "name": "DELL",
+      "market_cap_weight": 0.0088,
+      "trailing_1y_return": 0.0662,
       "year": 2004,
       "quarter": 3
     },

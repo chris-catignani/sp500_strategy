@@ -85,9 +85,9 @@
       "withheld_observations": {}
     },
     "quarterly": {
-      "stock_leg_value_per_share": 17.04,
+      "stock_leg_value_per_share": 25.68,
       "stock_leg_value_basis": "last_observed_price",
-      "source_period": "2009-Q3",
+      "source_period": "2015-Q4",
       "withheld_observations": {}
     }
   },
