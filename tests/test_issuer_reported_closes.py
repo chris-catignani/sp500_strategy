@@ -111,11 +111,18 @@ class TestIssuerReportedCloses(unittest.TestCase):
     def test_derived_prices_match_the_closes_the_registrants_themselves_reported(self):
         """The tighter check, where a registrant reported the quarter-end close itself.
 
-        Fifteen comparisons across GTE and T_CORP. Thirteen agree to within 0.5% and ten
-        to within 0.02%; the fund values at its own business day while the registrant
-        quotes the composite tape close, which are not always the same session. T_CORP
-        1994-Q2 is the widest at 1.874% and is recorded rather than tuned away
-        (docs/DATA_PROVENANCE.md 4.3.9).
+        Nearly every comparison agrees to within half a percent, and most to within a few
+        hundredths. The rest are a session mismatch rather than a method error: the fund
+        values at its own business day while the registrant quotes the composite tape
+        close, and the two are not always the same session. Those are recorded rather
+        than tuned away, which is why the tolerance admits them and is still an order of
+        magnitude tighter than the error a wrong split factor produces
+        (docs/DATA_PROVENANCE.md 4.3.17).
+
+        No count or widest case is named here. Both move when the comparison set grows,
+        as it did when 4.3.19's fiscal-quarter mapping brought LU in -- which is exactly
+        how this docstring went stale: the floors below were raised and the prose was
+        not. The floors are the claim; read them, not this paragraph.
         """
         session_mismatch_tolerance = 0.03
         checked = 0
