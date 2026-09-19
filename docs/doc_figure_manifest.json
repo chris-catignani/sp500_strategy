@@ -2790,7 +2790,8 @@
       "guard": null,
       "note": "Parent-only valuation derived by deducting NCR distribution from filed quote ($43.50 - $2.10)",
       "evidence_quote": "The parent-only value is therefore \\$43.50 − \\$2.10 = **\\$41.40** as-traded.",
-      "rot_exposed": true
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: Vanguard Index Trust FY1996 Schedule of Investments ($43.50 filed as-traded value) and AT&T Form 8937 ($2.10 NCR distribution per share)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3104,8 +3105,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Unrounded proceeds product (0.324084 x $45.875)",
-      "evidence_quote": "0.324084 shares of Lucent common stock per AT&T share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.324084 \\times \\$45.875 = \\$14.86735 \\approx \\mathbf{\\$14.87}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: AT&T Form 8937 / Shareholder Cost Basis Guide (0.324084 Lucent shares/AT&T share) and NYSE official close on September 30, 1996 ($45.875)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3115,8 +3117,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Rounded proceeds per share credit for Lucent spinoff",
-      "evidence_quote": "0.324084 shares of Lucent common stock per AT&T share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.324084 \\times \\$45.875 = \\$14.86735 \\approx \\mathbf{\\$14.87}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: AT&T Form 8937 / Shareholder Cost Basis Guide (0.324084 Lucent shares/AT&T share) and NYSE official close on September 30, 1996 ($45.875)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3195,8 +3198,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Unrounded proceeds product (0.0625 x $33.625)",
-      "evidence_quote": "0.0625 shares of NCR common stock per AT&T share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.0625 \\times \\$33.625 = \\$2.10156 \\approx \\mathbf{\\$2.10}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: AT&T Form 8937 / Shareholder Cost Basis Guide (0.0625 NCR shares/AT&T share) and NCR when-issued quote on December 31, 1996 ($33.625)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3206,8 +3210,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Rounded proceeds per share credit for NCR spinoff",
-      "evidence_quote": "0.0625 shares of NCR common stock per AT&T share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.0625 \\times \\$33.625 = \\$2.10156 \\approx \\mathbf{\\$2.10}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: AT&T Form 8937 / Shareholder Cost Basis Guide (0.0625 NCR shares/AT&T share) and NCR when-issued quote on December 31, 1996 ($33.625)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3267,8 +3272,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Unrounded proceeds product (0.692024 x $31.65)",
-      "evidence_quote": "0.692024 shares of Kraft Foods Inc. per Altria share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.692024 \\times \\$31.65 = \\$21.902 \\approx \\mathbf{\\$21.90}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: Altria IRS Form 8937 (0.692024 Kraft shares/Altria share) and Kraft closing price on March 30, 2007 ($31.65)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3278,8 +3284,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Rounded proceeds per share credit for Kraft spinoff",
-      "evidence_quote": "0.692024 shares of Kraft Foods Inc. per Altria share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.692024 \\times \\$31.65 = \\$21.902 \\approx \\mathbf{\\$21.90}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: Altria IRS Form 8937 (0.692024 Kraft shares/Altria share) and Kraft closing price on March 30, 2007 ($31.65)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3339,8 +3346,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Proceeds product (1.0 x $50.60) for PMI spinoff",
-      "evidence_quote": "1.0 share of PMI common stock per Altria share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $1.0 \\times \\$50.60 = \\mathbf{\\$50.60}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: Altria IRS Form 8937 (1.0 PMI share/Altria share) and PMI closing price on March 28, 2008 ($50.60)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3400,8 +3408,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Unrounded proceeds product (0.241917 x $24.01)",
-      "evidence_quote": "0.241917 shares of Warner Bros. Discovery per AT&T share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.241917 \\times \\$24.01 = \\$5.808 \\approx \\mathbf{\\$5.81}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: AT&T IRS Form 8937 (0.241917 WBD shares/AT&T share) and WBD closing price on April 8, 2022 ($24.01)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3411,8 +3420,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Rounded proceeds per share credit for WBD spinoff",
-      "evidence_quote": "0.241917 shares of Warner Bros. Discovery per AT&T share",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.241917 \\times \\$24.01 = \\$5.808 \\approx \\mathbf{\\$5.81}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: AT&T IRS Form 8937 (0.241917 WBD shares/AT&T share) and WBD closing price on April 8, 2022 ($24.01)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3462,8 +3472,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Unrounded proceeds product (1/3 x $56.00)",
-      "evidence_quote": "1 share of GEHC per 3 GE shares",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $\\frac{1}{3} \\times \\$56.00 = \\$18.666 \\approx \\mathbf{\\$18.67}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: GE IRS Form 8937 (1/3 GEHC share/GE share) and GEHC closing price on January 4, 2023 ($56.00)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3473,8 +3484,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Rounded proceeds per share credit for GEHC spinoff",
-      "evidence_quote": "1 share of GEHC per 3 GE shares",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $\\frac{1}{3} \\times \\$56.00 = \\$18.666 \\approx \\mathbf{\\$18.67}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: GE IRS Form 8937 (1/3 GEHC share/GE share) and GEHC closing price on January 4, 2023 ($56.00)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3534,8 +3546,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Unrounded proceeds product (0.25 x $141.50)",
-      "evidence_quote": "1 share of GEV per 4 GE shares (0.25 shares/GE share)",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.25 \\times \\$141.50 = \\$35.375 \\approx \\mathbf{\\$35.38}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: GE IRS Form 8937 (0.25 GEV shares/GE share) and GEV closing price on April 2, 2024 ($141.50)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3545,8 +3558,9 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Rounded proceeds per share credit for GEV spinoff",
-      "evidence_quote": "1 share of GEV per 4 GE shares (0.25 shares/GE share)",
-      "rot_exposed": true
+      "evidence_quote": "- **Proceeds per Share**: $0.25 \\times \\$141.50 = \\$35.375 \\approx \\mathbf{\\$35.38}$.",
+      "rot_exposed": false,
+      "inputs_trace": "Leaves: GE IRS Form 8937 (0.25 GEV shares/GE share) and GEV closing price on April 2, 2024 ($141.50)."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
