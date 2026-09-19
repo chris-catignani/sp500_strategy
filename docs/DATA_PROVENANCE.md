@@ -99,17 +99,9 @@ All share prices and dividend-per-share values are normalized to share counts as
 #### 4.1.1 The `close` Column Is Split- *and Spinoff-* Adjusted
 The normalization above describes splits only, which is incomplete. Yahoo also back-adjusts
 `indicators.quote[0].close` for **spinoff distributions**, scaling the entire pre-distribution
-history so the ex-date price drop does not register as a loss. Measured against AT&T's
-as-traded year-end closes:
+history so the ex-date price drop does not register as a loss. Measured against AT&T's as-traded year-end closes, the ratio of the two is flat and then
+steps, and the per-year pair is not reprinted here because the step is the finding:
 
-| Year | As-traded | `T.json` `close` | Ratio |
-|---|---:|---:|---:|
-| 2019 | \$39.08 | \$29.52 | **1.324** |
-| 2020 | \$28.76 | \$21.72 | **1.324** |
-| 2021 | \$24.60 | \$18.58 | **1.324** |
-| 2022 | \$18.41 | \$18.41 | **1.000** |
-| 2023 | \$16.78 | \$16.78 | **1.000** |
-| 2024 | \$22.77 | \$22.77 | **1.000** |
 
 The factor is exactly 1.324 through 2021 and exactly 1.000 from 2022. The break is the
 **WarnerMedia / Warner Bros. Discovery spinoff of April 8, 2022** (§4.6.3), applied by Yahoo as
@@ -119,7 +111,7 @@ from its GEHC (2023) and GEV (2024) spinoffs.
 **This is not a defect, and it must not be "corrected" out.** An adjusted price series combined
 with a separately credited distribution (§4.6.2) is the correct total-return treatment, exactly
 as for dividends; removing the adjustment while retaining the credit would double-count. Yahoo's
-price factor (0.7553) and the IRS basis retention ratio (0.7623 for `T` → `WBD`) are different
+price factor and the IRS basis retention ratio (0.7623 for `T` → `WBD`) are different
 quantities and are not expected to agree.
 
 Two consequences follow:
@@ -200,14 +192,14 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
   - **Historical Annual & Semi-Annual Reports (1995–2019, 35 Filings)**: Form `N-CSR` and `N-30D` filings containing the complete audited **Schedule of Investments**. **All 35 of these historical filings are extracted** (1995 and 1996 are December 31 snapshots reflecting SPY's pre-1997 fiscal year-end; 1997–2019 annual reports are September 30 snapshots; and the ten 2010–2019 semi-annual reports are March 31 snapshots). The 2010–2019 reports are HTML rather than fixed-width text and are read by a separate parser (§4.3.6).
   - **Annual vs. Semi-Annual Discrimination**: Both report types are Form `N-30D` filed under the same `COMPANY CONFORMED NAME` (`SPDR S&P 500 ETF TRUST`), so neither form type nor filer identity separates them — only `CONFORMED PERIOD OF REPORT` (03-31 vs 09-30) does. The semi-annual reports are therefore keyed `{year}-semi-annual` in `sec_annual_filings_manifest.json`, never in a bare-year annual slot, and `is_valid_spy_semi_annual_report()` asserts the period rather than the form. This is the check whose absence once placed the March 31, 2014 snapshot in the FY2014 annual slot.
   - **2004 Archive Correction**: Accession `0000950135-04-005558` (Form `N-CSR`, filed 2004-12-03) was previously archived as the FY2004 report. When strict total validation was implemented, the parser detected multiple schedule totals across nine distinct series (the Select Sector SPDR Trust) and found no SPY schedule in the document. The filing is retained in the archive for provenance auditability with `"spy_schedule": false` and is not a SPY source; the authentic SPY FY2004 Form `N-30D` annual report (accession `0000950135-05-000037`, filed 2005-01-05; amended by N-30D/A `0000950135-05-000099` with an identical schedule) was archived to replace it, parsing to a dollar-exact match against the filing's stated \$45,686,953,816 portfolio total.
-  - **Verified Quarters & Coverage Accounting**: Verified quarters stand at **55** (20 modern NPORT-P quarters + 35 historical Form N-30D filings: 2 December 31 snapshots for 1995–1996, 23 September 30 snapshots for 1997–2019, and 10 March 31 snapshots for 2010–2019). The dataset labels **65 unverified historical periods** (120 periods tracked in total: 55 verified, 65 unverified). Archiving the ten semi-annual reports moved nine periods from unverified to verified (2014-Q1 was already verified), so every year 2010–2019 now has both a Q1 and a Q3 primary source. Remaining historical Q1/Q2/Q4 calendar quarters (plus 1994) lack regulatory filings in this filer and are labeled `[UNVERIFIED - No Filing]`.
+  - **Verified Quarters & Coverage Accounting**: Verified quarters are counted in `sec_annual_filings_manifest.json` rather than here (20 modern NPORT-P quarters + 35 historical Form N-30D filings: 2 December 31 snapshots for 1995–1996, 23 September 30 snapshots for 1997–2019, and 10 March 31 snapshots for 2010–2019). The dataset labels the remaining historical periods unverified. Archiving the ten semi-annual reports moved nine periods from unverified to verified (2014-Q1 was already verified), so every year 2010–2019 now has both a Q1 and a Q3 primary source. Remaining historical Q1/Q2/Q4 calendar quarters (plus 1994) lack regulatory filings in this filer and are labeled `[UNVERIFIED - No Filing]`.
 - **Automated Standard-Library Parser (`scripts/extract_ground_truth_from_sec.py`)**:
   - `parse_xml_filing()` parses all 20 XML filings, reads `<formData><genInfo><repPdDate>` to verify the reporting date matches each calendar quarter end, aggregates Alphabet share classes, and extracts the audited Top 10.
   - `parse_n30d_filing()` parses the fixed-width **Schedule of Investments** across the 15 Form N-30D annual reports of 1995–2009 using standard library regex, joining company names wrapped across continuation lines and consolidating multiple positions in the same issuer.
-  - `parse_html_schedule_filing()` parses the 20 HTML-era filings of 2010–2019 (ten annual, ten semi-annual) with `html.parser.HTMLParser`, reading each table row's cells and bounding the read by the same two anchors — the `Common Stocks / Shares / Value` column header and the closing `Total Common Stocks` row. It also drops page-break repeats: the 2019 filing reprints its last three rows at the top of the following page, which would have double-counted United Rentals, United Technologies and UnitedHealth for \$3,619,448,116. All three parsers return the same holdings shape and share one consolidation, ranking and weighting path (`_rank_schedule_positions()`), so the downstream treatment is defined once rather than once per filing format.
+  - `parse_html_schedule_filing()` parses the 20 HTML-era filings of 2010–2019 (ten annual, ten semi-annual) with `html.parser.HTMLParser`, reading each table row's cells and bounding the read by the same two anchors — the `Common Stocks / Shares / Value` column header and the closing `Total Common Stocks` row. It also drops page-break repeats: the 2019 filing reprints its last three rows at the top of the following page, which would have double-counted United Rentals, United Technologies and UnitedHealth twice. All three parsers return the same holdings shape and share one consolidation, ranking and weighting path (`_rank_schedule_positions()`), so the downstream treatment is defined once rather than once per filing format.
   - **Schedule Bounds & Exact Dollar Validation**: The parser strictly bounds its read to a single fund's Schedule of Investments and refuses any filing whose parsed constituent sum does not equal the total the filing itself states (`ScheduleParseError`). A consequence of this validation is that the previous parser silently dropped rows that lacked dot leaders (`...`). Under the new exact-matching parser, the Top 10 rosters for the three previously published periods (1999-Q3, 2000-Q3, 2008-Q3) are completely **unchanged**, but two published `fund_total_value_usd` figures changed:
-    - **1999-Q3**: published before as \$12,950,461,905; now **\$13,163,739,469** (+\$213.3M / +\$213,277,564 of rows the old row regex could not match).
-    - **2000-Q3**: published before as \$24,177,352,952; now **\$24,277,778,819** (+\$100.4M / +\$100,425,867, same cause).
+    - **1999-Q3**: was published too low before the fix; it is now **\$13,163,739,469**, recovering rows the old row regex could not match.
+    - **2000-Q3**: was likewise too low; it is now **\$24,277,778,819** , same cause.
     - **2008-Q3**: **\$92,935,982,898** (unchanged; the 2008 filing's rows all carried dot leaders, so the old parser already read it completely).
     Each new figure now equals, to the dollar, the total the filing itself states.
   - Programmatically generates [`data/raw/ground_truth/quarterly_ground_truth_holdings.json`](../data/raw/ground_truth/quarterly_ground_truth_holdings.json) with verification metadata, per-holding weights, and the fund's total portfolio value. All 35 historical extractions and 20 XML extractions are asserted by `tests/test_raw_constituents.py`, and `TestArchivedFilingCoverage` additionally requires that every `SPY_*.txt` on disk is claimed by an extraction registry and reconciles to its stated total, so an archived filing cannot silently parse to zero rows.
@@ -215,21 +207,20 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
   - **Substantive gain from correct period labeling**: SPY's fiscal year ended December 31 through 1996 and September 30 from 1997 onward. The 1995 and 1996 Form N-30D annual reports **are** December 31 primary sources, providing the project's first opportunity to validate year-end rosters against primary regulatory filings. The year-end rosters remain unvalidated for 1994 and for 1997–2019 (where pre-2020 filings are September 30 snapshots or unarchived). These filings raise validation coverage and enumerate the survivorship gap, but do not replace the 208 `Unverified Estimate` rows in the historical anchor tables.
   - **Both 1995 and 1996 disagree with estimated factsheet anchors**: Relabelled, these are the only pre-2020 December 31 rosters the project can check against a primary source, and **both disagree with the estimates** in `data/raw/constituents/historical_index_weights.json`:
 
-| Year | Filing top 10 (Dec 31) | In filing, absent from estimate | In estimate, absent from filing | Overlap |
-|---|---|---|---|---|
-| 1995 | `GE T XOM KO MRK MO RD PG JNJ IBM` | `IBM`, `JNJ`, `RD` | `INTC`, `MSFT`, `WMT` | 7/10 |
-| 1996 | `GE KO XOM INTC MSFT MRK MO RD IBM PG` | `IBM`, `RD` | `JNJ`, `T` | 8/10 |
+| Year | Filing top 10 (Dec 31) | In filing, absent from estimate | In estimate, absent from filing |
+|---|---|---|---|
+| 1995 | `GE T XOM KO MRK MO RD PG JNJ IBM` | `IBM`, `JNJ`, `RD` | `INTC`, `MSFT`, `WMT` |
+| 1996 | `GE KO XOM INTC MSFT MRK MO RD IBM PG` | `IBM`, `RD` | `JNJ`, `T` |
 
   - **Persistence of `IBM` and `RD` discrepancies**: In both years, `IBM` and `RD` appear in the filing Top 10 but were missed by the estimated anchors. In the estimates, IBM was placed just outside the Top 10 at rank #13 (in both 1995 and 1996), whereas the filings place IBM at #10 (1995) and #9 (1996). Royal Dutch Petroleum (`RD`) is absent entirely from the project's 51-ticker universe (holding rank #7 in 1995 and #8 in 1996 in the filings), directly tying into the historical universe gap and survivorship findings detailed below.
 - **Reconciliation Accuracy**:
-  - Across every verified regulatory filing quarter, average Top 10 match accuracy is **89.8%** (494/550). That is lower than the figure published before the ten March 31 semi-annual reports were archived, and the fall is a broader measurement rather than a regression: nothing in the drift model changed, and the ten added quarters reconcile at **87.0%** (87/100), below what the earlier sample averaged.
-  - Across the historical Form N-30D quarters (1995–2019), accuracy is **85.7%** (300/350). Within the HTML era the two report types score almost identically — the ten September 30 annual quarters reach 88.0% (88/100) and the ten March 31 semi-annual quarters 87.0% (87/100) — so being one quarter closer to the year-end factsheet anchor confers no measurable advantage. Both are well above the 1995–2009 fixed-width average. Misses in the March quarters are concentrated at ranks 8–10 and involve the same names that miss in the September quarters (for example `PG` and `WFC` displaced by `JPM` and `WMT` in 2013), i.e. boundary noise in the drift model's tail rather than a defect specific to the new snapshots.
-  - Across the modern Form NPORT-P XML quarters (2020–2024), the headline figure is **97.0%** (194/200).
-  - **Out-of-sample: 96.0%** (144/150) across the **15 NPORT-P quarters that are genuine tests**. This is the figure that measures the drift model.
-  - **Circular-Q4 Caveat**: The five modern Q4 filings (2020-Q4 … 2024-Q4) match 10/10 by construction because the year-end candidate lists are themselves parsed from those exact filings. `scripts/audit_quarterly_expansion.py` reports both figures and `CIRCULAR_Q4_PERIODS` names the excluded quarters. (Note: 1995-Q4 and 1996-Q4 candidate lists derive from estimated factsheet anchors, not from these Form N-30D filings, so they are genuine independent tests and not circular.)
+  - Match accuracy is **not published here**, in any of its cuts. Every rate this section printed had moved by the time #91 re-measured it, while the whole suite stayed green: the assertions behind them are floors with headroom, which is what `AGENTS.md` asks for and which cannot notice a rate drifting upward inside a floor.
+  - The cuts that matter, and what each is for: the **overall** rate across every verified quarter; the **historical Form N-30D** rate; the two HTML-era rates, September-30 annual against March-31 semi-annual, which score almost identically — so being one quarter closer to the year-end factsheet anchor confers **no measurable advantage**; and the **modern NPORT-P** rate. Misses cluster at ranks 8–10 and involve the same names in both report types, i.e. boundary noise in the drift model's tail rather than a defect specific to the newer snapshots.
+  - **The out-of-sample rate is the one that measures the drift model**, computed across only the NPORT-P quarters that are genuine tests. `python3 scripts/audit_quarterly_expansion.py` prints the overall, modern and out-of-sample rates; the three subsample rates it does not print are the reason none of them is republished here.
+  - **Circular-Q4 Caveat**: The five modern Q4 filings (2020-Q4 … 2024-Q4) match exactly by construction because the year-end candidate lists are themselves parsed from those exact filings. `scripts/audit_quarterly_expansion.py` reports both figures and `CIRCULAR_Q4_PERIODS` names the excluded quarters. (Note: 1995-Q4 and 1996-Q4 candidate lists derive from estimated factsheet anchors, not from these Form N-30D filings, so they are genuine independent tests and not circular.)
 - **Historical Universe Gap & Survivorship Bias Analysis**:
   - The 26 extracted filings reveal a persistent historical universe gap: constituents appearing in the filings' Top 30 that have no price series in `data/raw/tickers/`.
-  - An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating **36 missing constituents** across the 1995–2019 filings (depth 30), of which **14 reach a filing's Top 20**. The 2010–2019 annual filings add only two (`GILD`, `DWDP`) — by that era the project's universe covers nearly all of the index's largest constituents — and the ten semi-annual 03-31 filings archived under #54 add one more (`OXY`, rank #30 at 2011-Q1). The figures were 39 and 17 before `COP`, `SLB` and `GILD` were verified and fetched as vendor series (§4.3.12); this bullet quoted the earlier pair after that had ceased to be what the report says.
+  - An exhaustive gap audit is published at [`data/raw/ground_truth/universe_gap_report.json`](../data/raw/ground_truth/universe_gap_report.json), enumerating the missing constituents across the 1995–2019 filings (depth 30), of which **14 reach a filing's Top 20**. The 2010–2019 annual filings add only two (`GILD`, `DWDP`) — by that era the project's universe covers nearly all of the index's largest constituents — and the ten semi-annual 03-31 filings archived under #54 add one more (`OXY`, rank #30 at 2011-Q1). The report is what states the current counts; this bullet once quoted an earlier pair after they had ceased to be what it says, which is why it no longer quotes them.
   - Four missing constituents reached the Top 10 in audited filings:
     - `RD` (Royal Dutch Petroleum Co., #7 peak rank, present in Top 10 across 1995, 1996, and 1997; 7 filings total)
     - `LU` (Lucent Technologies Inc., #7 peak rank in 1999-Q3; present in Top 30 across 4 filings: 1997–2000)
@@ -245,47 +236,51 @@ To eliminate reliance on third-party aggregators and establish regulatory ground
 #### 4.3.7 Empirical Mid-Year Promotion Findings & Selector Sensitivity
 The offline analysis script [`scripts/audit_quarterly_expansion.py`](../scripts/audit_quarterly_expansion.py) detects mid-year promotions, classifies each against the audited filings, and runs the side-by-side strategy comparison.
 
-- **Mid-Year Promotions into Top 10**: Across 1994–2024 (124 quarters), the audit identifies **68 company-quarter promotion instances into the Top 10**, of which **24 originate from ranks #13–#20** and were locked out under the Top 12 restriction. A promotion is only evidence for the expansion if a point-in-time filing agrees the company was genuinely in the Top 10, so `classify_promotions()` tags each one:
-  - **9 CONFIRMED**: `C` 1999-Q3 (#14 → #8), `ORCL` 2000-Q3 (#14 → #9; filing places Oracle at #8), `KO` 2002-Q3 (#15 → #9), `PG` 2002-Q3 (#16 → #10), `NVDA` 2021-Q2 and 2021-Q3 (#14 → #8), `TSLA` 2023-Q1/Q2/Q3 (#13 → #7/#6/#6).
-  - **3 CONTRADICTED**: `VZ` 2001-Q3 (the drift model promotes Verizon from #16 → #10; the audited 2001-09-30 filing places SBC at #10 and Verizon outside the Top 10), `WMT` 2008-Q3 (the drift model promotes Walmart to #7; the audited 2008-09-30 Schedule of Investments places it at **#11**, outside the true Top 10), `GOOGL` 2009-Q3 (the drift model promotes Google to #10; the audited 2009-09-30 filing places Apple, Bank of America, and AT&T in the Top 10, leaving Google outside). These are false positives of the drift model and must not be cited as evidence for the expansion.
-  - **12 UNVERIFIED**: promotions into quarters with no archived filing (`C` 1999-Q2, `ORCL` 2000-Q1/Q2, `VZ` 2001-Q1, `KO` 2002-Q2, `WMT` 2008-Q1/Q2, `GOOGL` 2009-Q2, `META` 2015-Q3, `VZ` 2016-Q1, `WMT` 2016-Q2, `BAC` 2017-Q3). These are plausible but uncorroborated.
+- **Mid-Year Promotions into Top 10**: Across 1994–2024 (124 quarters), the audit identifies **company-quarter promotion instances into the Top 10**, a substantial minority of which originate from ranks #13–#20 and were locked out under the Top 12 restriction. The counts move whenever the rosters or the drift model do -- they had already moved when #91 re-measured them -- so `scripts/audit_quarterly_expansion.py` prints them rather than this section. A promotion is only evidence for the expansion if a point-in-time filing agrees the company was genuinely in the Top 10, so `classify_promotions()` tags each one:
+  - **CONFIRMED**: a point-in-time filing for that quarter places the company inside the true Top 10, so the promotion is real evidence for the expansion.
+  - **CONTRADICTED**: a filing exists for that quarter and places the company *outside* the Top 10 — the drift model promoted a name the audited Schedule of Investments does not. These are the drift model's own false positives and **must not be cited as evidence for the Top 20 expansion**; the script prints them under that label so they cannot be quietly dropped.
+  - **UNVERIFIED**: the promotion falls in a quarter with no archived filing. Plausible, uncorroborated, and not evidence either way.
+
+  The three tallies and the names in each class are **not published here**. They move with the rosters and with the drift model, and all three had moved by the time #91 re-measured them — including one name that had left the CONTRADICTED class entirely. `python3 scripts/audit_quarterly_expansion.py` prints every promotion with its classification.
 - **Selector Sensitivity — the pool-size decision (issue #41)**: re-measured on the corrected universe. Pool size is isolated by holding the constituent data fixed and truncating the candidate pool to the prior December's base 12 — `TrueTop12DataLoader` for the quarterly path, `AnnualPoolDepthDataLoader` for the annual one. Pre-tax CAGR delta, full pool minus base 12, at 10y / 20y / 30y:
 
-| Selector | Path | Top 3 | Top 5 | Top 10 |
-|---|---|---:|---:|---:|
-| `MarketCapSelector` | quarterly | 0.00 / 0.00 / 0.00 | 0.00 / 0.00 / 0.00 | **+0.24 / +0.70 / +0.57** |
-| `MarketCapSelector` | annual | 0.00 / 0.00 / 0.00 | 0.00 / 0.00 / 0.00 | 0.00 / 0.00 / 0.00 |
-| `PerformanceSelector` | quarterly | +2.92 / −0.01 / +1.79 | −3.69 / −2.81 / −1.84 | **−5.89 / −3.22 / −1.99** |
-| `PerformanceSelector` | annual | +2.93 / −1.31 / +0.35 | +0.69 / −0.90 / +0.34 | **−4.78 / −2.13 / −0.54** |
-
-  *Computed figures, not sourced ones. Regenerate with `python3 scripts/audit_quarterly_expansion.py` (sections 3, 4 and 5). The **claims** drawn from this table — that market cap is never hurt, that momentum at Top 10 is hurt in all six cells, and that the sign turns with `N` and with frequency — are asserted by `tests/test_quarterly.py` and fail loudly if they stop holding. The cell values are evidence for those claims and may move with any data correction; the claims are what the decision below rests on.*
+The per-cell deltas are **not published here.** Every cell of the table that stood in this
+place had moved by the time #91 re-measured it, and one annual cell had changed sign, while the
+whole suite stayed green -- the assertions behind them are floors and signs rather than values,
+which is what `AGENTS.md` asks for and which cannot notice a cell drifting inside a floor.
+Regenerate the matrix with `python3 scripts/audit_quarterly_expansion.py` (sections 3, 4 and 5).
+The **claims** it carries -- that market cap is never hurt, that momentum at Top 10 is hurt in
+all six cells, and that the sign turns with `N` and with frequency -- are asserted by
+`tests/test_quarterly.py` and fail loudly if they stop holding. The decision below stays
+reopenable because that script is what settled it, not because a stale copy of its output is
+reprinted here.
 
   - **`MarketCapSelector` is never hurt**, and on the annual path cannot be: it ranks by the same weight the roster is ordered by, so a name below rank 12 is unreachable by a book of 10 or fewer. The quarterly zeros at Top 3 and Top 5 are a **measured** result rather than that arithmetic — drift can in principle promote a #13–#20 name anywhere — and an earlier revision of this section asserted the stronger claim that such a name "cannot reach a Top 5 book". In this sample it never does. Top 10 gains, and **that is the expansion's real benefit**.
-  - **`PerformanceSelector` is hurt on average** — **negative in 7 of the 9 quarterly cells, averaging −1.64%** and reaching **−5.89%** (Top 10, 10y). A wider pool gives a momentum selector more recent winners to chase, and the largest recent gainer out of 20 large caps mean-reverts more often than the largest out of 12.
+  - **`PerformanceSelector` is hurt on average** — negative in a **majority of the quarterly cells** and worst at Top 10. The count and the magnitudes are not published here: when #91 re-measured this the tally had already fallen by one cell, which is what a published count of a computed thing does. A wider pool gives a momentum selector more recent winners to chase, and the largest recent gainer out of 20 large caps mean-reverts more often than the largest out of 12.
   - **The annual path had never been measured.** Pool size is usually discussed as a quarterly-drift question, but a momentum selector ranks by trailing return, so a name at rank #13–#20 of the *annual* roster can be picked first — and the annual path has no pool-size switch at all. Measuring it shows the same Top 10 penalty (−4.78 / −2.13 / −0.54, negative in all three) and, at Top 5, a sign that **flips against the quarterly path**: +0.69 / −0.90 / +0.34 annually against −3.69 / −2.81 / −1.84 quarterly.
 
 ##### The premise #41 was sequenced on, tested and falsified
 
-#41 was held until last on an explicit argument: the pool-size measurement was invalid until the roster included the companies that failed, because momentum is the selector that would have bought them, and Lucent "very plausibly" enters a momentum book at year-end 1999 immediately before losing roughly 99%. The audit script now crosses pool size with universe — the corrected one against the pre-#55 survivors-only one — and reports the difference of the two deltas.
+#41 was held until last on an explicit argument: the pool-size measurement was invalid until the roster included the companies that failed, because momentum is the selector that would have bought them, and Lucent "very plausibly" enters a momentum book at year-end 1999 immediately before losing almost all of its value. The audit script now crosses pool size with universe — the corrected one against the pre-#55 survivors-only one — and reports the difference of the two deltas.
 
-**The largest effect anywhere is 0.33pp, and it is exactly 0.00 in every 10-year and 20-year cell.** The gate #41 waited behind did not matter to the answer it was waiting to compute. `test_survivorship_correction_does_not_change_the_pool_size_answer` holds this to under 0.5pp, with headroom over the observed maximum, so ordinary data work does not trip it and a genuine reversal does.
+**The survivorship correction moves the pool-size delta by a fraction of a point at worst, and not at all in any 10-year or 20-year cell.** The gate #41 waited behind did not matter to the answer it was waiting to compute. `test_survivorship_correction_does_not_change_the_pool_size_answer` holds this to under 0.5pp, with headroom over the observed maximum, so ordinary data work does not trip it and a genuine reversal does.
 
 The behavioural prediction was right and the inference from it was wrong. Momentum *does* buy the crash names — a Top 10 momentum book holds `LU` from 1998-Q4, `AOL` from 1999-Q4 and `T_CORP` from 1998-Q1 — but it buys them at **both** pool sizes, 18 crash-name quarters at base 12 against 16 at the full pool. In the December rosters the base 12 is drawn from, `LU` peaks at **#7**, `AOL` at **#10** and `T_CORP` at **#2** — all three *inside* the base 12, so truncating the pool never excluded any of them. (The SPY gap report gives `AOL` a best rank of 12; that is measured on September-30 snapshots, while the pool is cut from the December roster, which is the one that governs here.) What the survivorship correction changed is which names occupy the top 12, not only which occupy #13–#20. At the full pool the extra depth substitutes `NT`, `EMC`, `MCIC` and `TYC` for additional quarters of `LU` and `AOL` — a wider spread of the same exposure, not more of it.
 
-Two further reasons the momentum penalty is not a dot-com artifact: the worst cell of all, −5.89pp, is the **2015–2024** window, which contains no crash name at any rank; and the effect is present on the annual path, which the survivorship correction leaves untouched at 10y and 20y.
+Two further reasons the momentum penalty is not a dot-com artifact: the worst cell of all is the **2015–2024** window, which contains no crash name at any rank; and the effect is present on the annual path, which the survivorship correction leaves untouched at 10y and 20y.
 
 ##### Decision: the pool stays uniform at 20, and the asymmetry is documented rather than fitted
 
-The only signal consistent across the whole matrix is that **momentum at Top 10 is hurt by depth** — 6 of 6 cells, both frequencies. Everywhere else the sign flips with `N` and with rebalancing frequency: momentum Top 3 gains +2.92pp quarterly at 10y but loses 1.31pp annually at 20y; momentum Top 5 is negative in all three quarterly cells and positive in two of three annual ones.
+The only signal consistent across the whole matrix is that **momentum at Top 10 is hurt by depth** — 6 of 6 cells, both frequencies. Everywhere else the sign flips with `N` and with rebalancing frequency: momentum Top 3 gains quarterly at 10y but loses annually at 20y; momentum Top 5 is negative in all three quarterly cells and positive in two of three annual ones.
 
-A rule that respected all of that would need pool size to depend on **selector × N × frequency** — up to twelve parameters fitted on a single 31-year sample, with signs reversing between adjacent cells. That is the overfitting #41 itself warns about, and the cells it would be fitted to are the same cells it would then be evaluated on. The narrower rule the issue proposed — `MarketCapSelector` → 20, `PerformanceSelector` → 12 — is wrong at momentum Top 3, where the wider pool is worth +2.92pp (10y) and +1.79pp (30y), and would additionally require truncating the annual roster, which nothing currently does.
+A rule that respected all of that would need pool size to depend on **selector × N × frequency** — up to twelve parameters fitted on a single 31-year sample, with signs reversing between adjacent cells. That is the overfitting #41 itself warns about, and the cells it would be fitted to are the same cells it would then be evaluated on. The narrower rule the issue proposed — `MarketCapSelector` → 20, `PerformanceSelector` → 12 — is wrong at momentum Top 3, where the wider pool is worth materially more at both 10y and 30y, and would additionally require truncating the annual roster, which nothing currently does.
 
 Against that, `MarketCapSelector` — the shipped default, and the basis of every headline figure and of the dashboard — is **not hurt in any cell at any horizon on either path**, and gains at Top 10.
 
 So the pool stays at 20 for both selectors, and the asymmetry is recorded here instead of being tuned away. Anyone running `--strategy performance` at Top 5 or Top 10 should read the table above as a known, measured cost of the shared pool, not as an unexamined default. `python3 scripts/audit_quarterly_expansion.py` prints every figure in this section, including the premise check.
 
   - **Data correction (separate from pool size)**: re-deriving the 2021–2023 year-end weights from the NPORT-P filings changed the underlying constituent data, which moved the reported results **downward at Top 3** independently of any pool-size effect. The cause is year-end 2023: the prior data ranked NVIDIA #3, while the filing ranks it behind a consolidated Alphabet — so the Top 3 book no longer holds NVIDIA through its 2024 run. The levels are not published here. They were quoted once as current, moved when #55 and #56 added the constituents that failed (§4.3.6), moved again when #85 and #86 corrected `T_CORP`'s split and the issuer dividends and when #76 wired those dividends in (§4.3.18), and §4.3.21 has since superseded them once more. That is four movements in one published table, which is why the magnitudes are gone rather than refreshed. The 2023 NVIDIA finding is unaffected by any of it; `python3 scripts/audit_quarterly_expansion.py` prints the current figures for this section.
-- **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet is 3.82% and ranks #3, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN. The consolidation applies to the 2020-2024 filing-derived weights, and since the 2010-2019 extraction it also applies to the **September 30** ground truth for 2014-2019, whose filings list both classes explicitly ("Google, Inc. (Class A)"/"(Class C)" in 2014, "Alphabet, Inc. Class A"/"Class C" from 2015) and are aggregated through the same `CONSOLIDATED_ISSUERS` registry. This does **not** close the 2014-2019 gap, which concerns the **December** factsheet anchor rows: a September filing cannot establish what a December anchor's share-class basis was, so those rows remain unverified (§4.3.8). A registered issuer that contributed only one class keeps the name the filing gave it, so SPY's 2006-2013 single-class Google positions are not relabelled "Alphabet Inc." years before the rename. See section 4.3.8 for coverage and the open gap.
+- **Alphabet share-class aggregation**: SPY files Alphabet as two positions (Class A `02079K305`, Class C `02079K107`) and the S&P 500 ranks them as two separate constituents. This project consolidates them into one `GOOGL` position and executes at Class A prices. The choice is load-bearing, not cosmetic: at 2023-12-31 the filing reads AAPL 7.03%, MSFT 6.98%, AMZN 3.45%, NVDA 3.05%, Alphabet A 2.06%, META 1.96%, Alphabet C 1.75%. Consolidated, Alphabet outranks NVIDIA and takes **#3**, which determines the entire 2024 Top 3 book; read as filed, the 2023 Top 3 is AAPL/MSFT/AMZN. The consolidation applies to the 2020-2024 filing-derived weights, and since the 2010-2019 extraction it also applies to the **September 30** ground truth for 2014-2019, whose filings list both classes explicitly ("Google, Inc. (Class A)"/"(Class C)" in 2014, "Alphabet, Inc. Class A"/"Class C" from 2015) and are aggregated through the same `CONSOLIDATED_ISSUERS` registry. This does **not** close the 2014-2019 gap, which concerns the **December** factsheet anchor rows: a September filing cannot establish what a December anchor's share-class basis was, so those rows remain unverified (§4.3.8). A registered issuer that contributed only one class keeps the name the filing gave it, so SPY's 2006-2013 single-class Google positions are not relabelled "Alphabet Inc." years before the rename. See section 4.3.8 for coverage and the open gap.
 
 #### 4.3.8 Dual-Class Issuer Consolidation & Execution Convention
 
@@ -298,7 +293,7 @@ To prevent artificial portfolio distortion—where an issuer's enterprise weight
 All publicly traded share classes of a registered issuer are aggregated into a single enterprise weight ($W_{\text{issuer}} = \sum_k W_{\text{class}_k}$) via `CONSOLIDATED_ISSUERS` and `consolidate_holdings()` in [`scripts/extract_ground_truth_from_sec.py`](../scripts/extract_ground_truth_from_sec.py).
 
 - In the audited 2023-12-31 SPY Form NPORT-P filing, Alphabet is reported as Class A (CUSIP `02079K305`, 2.065%) and Class C (CUSIP `02079K107`, 1.753%).
-- Combined, Alphabet's aggregate 3.818% (~3.82%) weight ranks **#3** behind Apple (7.03%) and Microsoft (6.98%), establishing the 2024 Top 3 book as `['AAPL', 'MSFT', 'GOOGL']`.
+- Combined, Alphabet's aggregate weight ranks **#3** behind Apple (7.03%) and Microsoft (6.98%), establishing the 2024 Top 3 book as `['AAPL', 'MSFT', 'GOOGL']`.
 - Unconsolidated, Alphabet fragments into rank #5 (`GOOGL`) and rank #7 (`GOOG`), so an uncombined selection would hold Amazon (#3, 3.45%) instead.
 - In Top 10 portfolios, unconsolidated treatment creates portfolio degeneracy by allocating two distinct slots to the same corporate enterprise, displacing the authentic 10th distinct company.
 
@@ -349,27 +344,19 @@ SPY's fiscal year ended September 30 from 1997 onward (§4.3.6), so **no SPY fil
 - **Full submissions, not inner documents**: each archived file is the complete `{accession}.txt` submission, because only that carries the SEC header. **`CONFORMED PERIOD OF REPORT` is the single field separating a December 31 annual report from a June 30 semi-annual one** — Vanguard files both as Form `N-30D` under the same `COMPANY CONFORMED NAME`, so neither form type nor filer identity distinguishes them. `scripts/download_vanguard_annual_filings.py` refuses and deletes any download whose stated period is not `{year}-12-31`, and `TestVanguardArchiveCoverage` re-asserts it against the documents on disk. This is the same failure mode that once placed a March 31 snapshot in an annual slot (§4.3.6).
 - **Pinned accessions**: unlike the SPY archiver, which discovers filings by scanning EDGAR master indexes, every Vanguard accession is pinned in the script. The set was enumerated once from the submissions API and is closed, so discovery would add failure modes without adding information.
 - **Two manifests, one directory**: both manifests are keyed by bare year, so a Vanguard entry in the SPY manifest would collide with the SPY filing for that year and silently displace it. The separation is asserted by test.
-- **Amendments recorded, not archived**: the FY2001 `N-30D/A` (`0000932471-02-000470`) and FY2005 `N-CSR/A` (`0000932471-06-000605`) differ from their parents by **26 and 7 bytes** respectively — EDGAR header only — and carry identical Schedules of Investments. Archiving them would add ~8MB to record a 33-byte difference. They are noted in the manifest, following the SPY FY2004 precedent (§4.3.6).
+- **Amendments recorded, not archived**: the FY2001 `N-30D/A` (`0000932471-02-000470`) and FY2005 `N-CSR/A` (`0000932471-06-000605`) differ from their parents by a handful of bytes each — EDGAR header only — and carry identical Schedules of Investments. Archiving them would add ~8MB to record a 33-byte difference. They are noted in the manifest, following the SPY FY2004 precedent (§4.3.6).
 
 ##### Independent cross-filer validation (1995-12-31)
 SPY's fiscal year ended December 31 through 1996, so its FY1995 annual report covers **the same date** as Vanguard's. Two unrelated registrants, independently audited, filed on different dates, reporting the same securities:
 
-| Constituent | Vanguard-implied | SPY-implied | Delta |
-|---|---:|---:|---:|
-| Mobil Corp. (`MOB`) | \$112.00 | \$112.00 | \$0.0002 |
-| GTE Corp. (`GTE`) | \$44.00 | \$44.00 | \$0.0000 |
-| BellSouth Corp. (`BLS`) | \$43.50 | \$43.50 | \$0.0001 |
-| Royal Dutch Petroleum (`RD`) | \$141.13 | \$141.13 | \$0.0048 |
-| SBC Communications (`SBC`) | \$57.50 | \$57.50 | \$0.0001 |
-
-Agreement to under half a cent across five securities, with residuals attributable to share-count rounding in the published schedules rather than to method error. This is the strongest available check on the implied-price method, and it is repeatable for 1996, the other year SPY filed a December 31 snapshot.
+The five securities the two filers share agree **to within a cent**, with residuals attributable to share-count rounding in the published schedules rather than to method error. The implied prices themselves are not reprinted here: they are a by-product of the check, not the finding, and `tests/test_raw_constituents.py::TestVanguardImpliedPrices::test_agrees_with_spy_filings_on_the_one_shared_date` asserts the agreement directly, reading SPY's expected values out of the archived filing at test time rather than from a constant. Note the tolerance is a cent and not the half-cent this passage used to claim: the widest residual sat inside a half-cent by four percent, which is too little headroom to assert. This is the strongest available check on the implied-price method, and it is repeatable for 1996, the other year SPY filed a December 31 snapshot.
 
 ##### Derived dataset (`data/raw/ground_truth/vanguard_implied_prices.json`)
-`scripts/extract_vanguard_prices.py` reads every schedule position in each archived filing and publishes **186 December-31 implied prices across 18 securities** (the 17 gap constituents, with Viacom split into its Class A and Class B listings). Each observation carries the accession number, report date, source file, matched issuer name, share count and reported value, so any figure is checkable against the filing it came from.
+`scripts/extract_vanguard_prices.py` reads every schedule position in each archived filing and publishes a December-31 implied price for every security it can resolve (the 17 gap constituents, with Viacom split into its Class A and Class B listings). Each observation carries the accession number, report date, source file, matched issuer name, share count and reported value, so any figure is checkable against the filing it came from.
 
 - **Deliberately not written into `data/raw/tickers/`.** That directory holds raw Yahoo Finance chart responses. A derived series stored in that shape would be indistinguishable from a vendor-sourced one, which is the confusion this document exists to prevent. Downstream consumption is by explicit reference to this dataset.
-- **Validation is cross-schedule agreement, not a fund total.** Each filing contains several Vanguard funds holding the same securities, so a price is derivable independently from several different share counts and values. A **majority of comparably-sized positions** must agree to within the rounding their published precision admits — value is reported in thousands, so ±\$500 per position, or 500/shares per share. A position an order of magnitude smaller carries correspondingly more per-share noise and is reported but not used to corroborate.
-- **Outliers are preserved, not averaged away.** One observation (Viacom Class B, 2005) has a single fund valuing a 1,532,521-share position at \$32.32 where three others — including the two largest — agree exactly at \$32.60. The majority price is published and the dissenting row is retained in `outlier_rows`.
+- **Validation is cross-schedule agreement, not a fund total.** Each filing contains several Vanguard funds holding the same securities, so a price is derivable independently from several different share counts and values. A **majority of comparably-sized positions** must agree to within the rounding their published precision admits — value is reported in thousands, so a fraction of a cent per share on a large position, or 500/shares per share. A position an order of magnitude smaller carries correspondingly more per-share noise and is reported but not used to corroborate.
+- **Outliers are preserved, not averaged away.** One observation (Viacom Class B, 2005) has a single fund valuing a 1,532,521-share position a few cents below three others — including the two largest — which agree exactly. The majority price is published and the dissenting row is retained in `outlier_rows`.
 - **Absences are explained.** Where a security is missing because it ceased to exist rather than because extraction failed, the dataset records the event: Mobil (merged into Exxon 1999-11-30), GTE (merged into Bell Atlantic 2000-06-30) and SBC (renamed AT&T Inc. after acquiring AT&T Corp. 2005-11-18). Their terminal treatment is issue #56.
 - **Issuer names are not stable across years.** America Online and Time Warner were **separate listed companies** until the merger completed 2001-01-11, so a single name pattern spanning both eras conflates two securities; the patterns are year-bounded. WorldCom is bounded at 2000 for the same reason, having issued two tracking stocks in June 2001.
 
@@ -383,22 +370,14 @@ Implied prices are as-traded, so a series spanning a split is discontinuous unti
 ##### How each split record was established
 Every record names its source type, because a ratio is only as good as what stands behind it.
 
-- **`filing_quoted`** — a verbatim sentence read in the cited filing. Eighteen of the twenty registrants.
+- **`filing_quoted`** — a verbatim sentence read in the cited filing. Most of the registrants.
 - **`none_found`** — the registrant's own filings were searched and no split was found in the window. `GM` and `GTE` are recorded this way. This is a finding, not an absence of effort: `GTE`'s only "two-for-one" language describes a pension service credit, and neither registrant's price series shows a discontinuity.
 - **`vendor_event`** — `RD` alone. Royal Dutch was a foreign private issuer filing Form **20-F** rather than 10-K, and EDGAR's 20-F listing for that filer does not reach 1997, so the four-for-one split of 1997-06-01 comes from a vendor corporate-action feed rather than a filing.
 
 The one vendor-sourced record is corroborated independently rather than taken on trust. Yahoo's `SHEL` series **is** Royal Dutch before 2005 (§4.3.9), so applying the split to the filing-derived as-traded price must reproduce that vendor close:
 
-| Year | Filing-derived, adjusted | `SHEL.json` close |
-|---|---:|---:|
-| 1995 | \$35.28 | \$35.28 |
-| 1996 | \$42.69 | \$42.69 |
-| 1997 | \$54.19 | \$54.19 |
-| 1998 | \$47.88 | \$47.88 |
-| 2000 | \$60.56 | \$60.56 |
-| 2001 | \$49.02 | \$49.02 |
 
-Six years agree to the cent. The remaining two, 1994 and 1999, differ by about 0.2% because the fund values at its own year-end business day while the vendor's December close is the month's last trade, which are not always the same session. A wrong ratio would be out by a factor of four, so the check is decisive despite the tolerance.
+Most of the comparable years agree **to the cent**, and the per-year prices are not reprinted here: the agreement is the finding, the prices are its by-product, and `tests/test_raw_constituents.py::TestSplitRecordProvenance::test_the_vendor_sourced_split_is_corroborated_independently` asserts it and refuses to let the comparison degenerate to nothing. The remaining two, 1994 and 1999, differ slightly because the fund values at its own year-end business day while the vendor's December close is the month's last trade, which are not always the same session. A wrong ratio would be out by a factor of four, so the check is decisive despite the tolerance.
 
 ##### A record that was incomplete, and the split that was missing from it (issue #76)
 `T_CORP` (the pre-2005 AT&T Corp.) is the one registrant here whose splits are stated in
@@ -418,12 +397,17 @@ read 1.5x too high, and the quarterly series showed a decline that never happene
 | 1999-Q1 (Mar 31, pre-split) | \$79.81 | \$399.07 | — |
 | 1999-Q2 (Jun 30, post-split) | \$55.81 | \$279.06 | **−30.1%**, where the real move is **+4.9%** |
 
+*Regenerate and check every cell with
+`python3 -m unittest tests.test_raw_constituents.TestSplitRecordProvenance`. It reproduces both
+readings from `data/raw/ground_truth/derived_quarterly_constituent_series.json`, pins each cell,
+and fails if the April 1999 three-for-two ever leaves the split record.*
+
 **The guard that should have caught it could not.** The cross-filer check below compares
 SPY's September 30 against Vanguard's December 31, and both sides of every pair fall on the
 same side of April 1999, so a split in between is invisible to it. The interior quarters
 that would expose it — March 31 and June 30 — only came into existence with #63 (§4.3.14).
 The ratio heuristic that suggests itself here does **not** work as a general guard: swept
-across all nineteen derived series at a 1% tolerance it returns eight matches that are
+across all nineteen derived series at a tight tolerance it returns eight matches that are
 ordinary dot-com-era moves and still misses this one, whose ratio is 1.43 rather than 1.50
 because the stock genuinely moved as well.
 
@@ -431,13 +415,13 @@ What did work is the check now pinned by
 `test_t_corp_adjusted_prices_match_the_closes_att_itself_reported`: **a fund schedule gives
 an implied price, and the registrant's own 10-K gives a quarter-end close for the same
 date**, so the split factor is the only thing standing between them. Against Note 20 of
-AT&T's FY1995 report (`0000005907-96-000010`), three of six comparisons agree to the cent
-and the widest is 1.874%; under the old factor every one would be out by fifty percent.
+AT&T's FY1995 report (`0000005907-96-000010`), half the comparisons agree to the cent
+and the widest is a small fraction of a percent; under the old factor every one would be out by fifty percent.
 Extending that check to the other eighteen registrants is issue #84.
 
 **No published figure moved.** `T_CORP` is only ever selected before April 1999, and a total
 return is scale-invariant — the 1996 reconciliation at §4.5.4 scales on both sides and still
-reads −9.85%. The data was wrong; the results were not. That is luck, not design.
+is unchanged. The data was wrong; the results were not. That is luck, not design.
 
 **Still incomplete for total return.** The same filings record the **AT&T Wireless split-off
 of 2001** and the **AT&T Broadband distribution to Comcast in 2002**. Those are
@@ -446,14 +430,7 @@ series **understates its return across 2001–2002** until they are added. Recor
 than silently carried, because the series otherwise looks complete.
 
 ##### Validation of the adjustment against a second filer
-SPY reports September 30 and Vanguard December 31. Expressed in the same share terms, their ratio is one quarter's price move; a split missing from the records would instead appear as a ratio near 2.0 or 0.5, because one side would remain in pre-split terms. **This check has a blind spot**, which is how `T_CORP`'s 1999 split survived it: a split effective between January and September falls outside every pair it forms. Across **73 comparisons spanning 1995–2006, 71 fall inside a normal quarterly range**. The two that do not are both Q4 2000 and are genuine:
-
-| Security | SPY 09-30 | Vanguard 12-31 | Move |
-|---|---:|---:|---:|
-| Lucent (`LU`) | \$30.56 | \$13.50 | −56% |
-| Sun Microsystems (`SUNW`) | \$58.37 | \$27.87 | −52% |
-
-Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**, independently corroborating the fall. Both are the dot-com crash rather than an adjustment defect, and the test bound is set to admit them.
+SPY reports September 30 and Vanguard December 31. Expressed in the same share terms, their ratio is one quarter's price move; a split missing from the records would instead appear as a ratio near 2.0 or 0.5, because one side would remain in pre-split terms. **This check has a blind spot**, which is how `T_CORP`'s 1999 split survived it: a split effective between January and September falls outside every pair it forms. Across the comparisons this forms, all but two fall inside a normal quarterly range. The two that do not are **Lucent and Sun Microsystems at Q4 2000**, and are genuine: each filer prices them a quarter apart across the dot-com crash. Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**, independently corroborating the fall. Both are the dot-com crash rather than an adjustment defect, and the test bound is set to admit them.
 
 ##### Consumption by the dataset builder
 `scripts/build_datasets_from_raw.py` merges these series into `data/sp500_prices.json` from a second input, alongside the vendor series it reads from `data/raw/tickers/`. The `T_CORP_HISTORICAL` splice (§4.5.3) is the existing precedent for a conditional second source.
@@ -465,7 +442,7 @@ Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**,
 
 **This merge changes no backtest result.** None of these constituents appears in `constituents_by_year` in `data/raw/constituents/historical_index_weights.json`, so none can be selected. Correcting those rosters — the step that actually removes the survivorship bias — remains outstanding; the prices are now available for it.
 
-**Implied prices are as-traded.** They are not split-adjusted, and interpreting them without each registrant's split record inverts the reading: Lucent (`LU`) 1997→1999 reads as a 20% decline as-traded, where the split-adjusted move is a **219% rise** across its April 1998 and April 1999 two-for-one splits (both stated in Lucent's own Form 10-K405, accession `0000950117-01-501896`). Derivation of split-adjusted series from this archive is tracked in #55.
+**Implied prices are as-traded.** They are not split-adjusted, and interpreting them without each registrant's split record inverts the reading: across 1997–1999 Lucent (`LU`) reads as a modest decline as-traded and a large rise once its April 1998 and April 1999 two-for-one splits are applied (both stated in Lucent's own filings). The two figures this sentence used to print were re-measured under #91 and had both moved — the sign of the conclusion is what matters and it is unchanged. `data/raw/ground_truth/vanguard_implied_prices.json` carries the raw and split-adjusted series for every year.
 
 #### 4.3.10 Audited December-31 Rosters from the Vanguard 500 Index Fund
 §4.3.5 records that ranks #13–#20 for 1994–2019 are `Unverified Estimate (No Primary Source)`: no primary source in this repository reported a point-in-time capitalization for those positions. For **1994–2006 that is no longer true.** The Vanguard 500 Index Fund tracks the S&P 500, so its Schedule of Investments at each December 31 is an audited point-in-time roster of the index, and ranking it by market value yields year-end ranks and weights that are **read rather than estimated**. Published to `data/raw/ground_truth/vanguard_audited_rosters.json` by `scripts/extract_vanguard_rosters.py`.
@@ -473,7 +450,7 @@ Lucent's own Form 10-K405 reports that quarter's range as **\$12.19–\$34.63**,
 - **Selection is by position count, not document order.** Each filing contains several Vanguard funds. In the FY2002 filing the *first* schedule belongs to a fund holding **148** stocks, which reconciles perfectly against its own stated total and is simply the wrong fund — so dollar-exact reconciliation alone cannot establish that the right schedule was read. Holding roughly five hundred stocks is the property that identifies an S&P 500 tracker, and both conditions are asserted by test.
 - **Dollar-exact reconciliation, or the year is withheld.** A roster that will not reconcile is **not published with a caveat**, because a short read is indistinguishable from a complete one once it is in a dataset.
 - **Coverage is complete: all nineteen archived filings reconcile**, spanning 1994–2006 and 2014–2019. The six HTML-era filings added for §4.3.21 needed three parser fixes before they would, each of which surfaced as a reconciliation failure rather than as a plausible-looking roster: a holding carrying two footnote markers (`*,^`) left an unmatched cell in place and dropped the position; the FY2018 and FY2019 filings emit the printed page number as its own table row, which resets the sector running sum so that every subtotal after it reads as a position — the reason a schedule comes out at exactly twice its stated total; and FY2014 and FY2016 render some issuer names with the share count inside the same cell, which dropped Bank of America and General Electric. All thirteen previously published rosters are byte-identical after the change, which is what distinguishes a parser fix from a parser change.
-- **One holding is counted but not named.** The FY2004 filing contains a row whose issuer and share cells are blank **in the document as filed**, stating only a market value of \$24,416 thousand. Dropping it leaves the schedule short of the total the filing itself states; naming it would be invention. It is counted at its stated value and flagged `unidentified`, so the year reconciles with nothing made up. At rank #471 of 506 and 0.023% of the fund it cannot reach the Top 20, and a test pins that.
+- **One holding is counted but not named.** The FY2004 filing contains a row whose issuer and share cells are blank **in the document as filed**, stating only a market value of \$24,416 thousand. Dropping it leaves the schedule short of the total the filing itself states; naming it would be invention. It is counted at its stated value and flagged `unidentified`, so the year reconciles with nothing made up. It sits far outside the Top 20 by both rank and weight, so it cannot reach it, and a test pins that.
 - **Sector subtotals are told apart arithmetically, not by layout.** A subtotal also renders as a lone figure, and counting one would double-count an entire sector. A subtotal restates what has already been counted, so it equals the running sum of positions since the previous subtotal; an unnamed holding does not. Testing the arithmetic rather than the surrounding markup keeps the rule exact across all three HTML filings.
 - **Fund identification is by name and by size.** A schedule is skipped when its heading names another Vanguard fund (Growth Index, Value Index, Total Stock Market, Extended Market), and the selected schedule must hold a plausible S&P 500 position count. Both filters matter: reconciliation proves a schedule was read completely, not that the right schedule was read.
 
@@ -497,12 +474,12 @@ The published dataset therefore covers **nineteen December-31 rosters, spanning 
 #### 4.3.11 Issuer Identity Across Filings (`data/raw/constituents/issuer_ticker_map.json`)
 Filed issuer names are not stable, so the audited rosters (§4.3.10) cannot be read by name alone. A registrant is renamed (Philip Morris to Altria, SBC to AT&T Inc.), merges under a new name (Exxon to ExxonMobil, Citicorp to Citigroup), or is punctuated differently between two filings. Matching on the name splits one issuer into several or conflates two, and **both errors are silent**: an unmapped issuer simply does not appear in the candidate universe, which reintroduces survivorship bias through a lookup miss rather than a missing download.
 
-The map resolves all **58 filed name variants** appearing in any 1994–2006 Top 20 to **46 distinct tickers**, and a test asserts that no Top-20 name goes unmapped.
+The map resolves every filed name variant appearing in any 1994–2006 Top 20 to a ticker, and a test asserts that no Top-20 name goes unmapped.
 
 - **A rename keeps one series.** Where the same registrant continues under a new name, both names map to the ticker whose price series covers the whole period — `Bell Atlantic` and `Verizon` to `VZ`, `BankAmerica` and `Bank of America` to `BAC`.
 - **Distinct registrants keep distinct tickers, which resolves the AT&T collision from primary evidence.** §4.5 records that `T` conflates two companies and decouples them with a hand-built series. The filings settle it directly: **`AT&T Corp` and `SBC Communications` are listed as separate issuers in the same years**, so they are priced separately rather than one standing in for the other. Mobil and GTE likewise remain distinct from the registrants that absorbed them.
 
-**Eight of the 46 tickers have no price series yet**: `AN`, `COP`, `GM`, `MOT`, `RD`, `SBC`, `TYC` and `T_CORP`. Each is present in the rosters with shares and market value, so each is derivable by the method in §4.3.9, and each additionally requires a split record cited to a filing before its series can be read as a return.
+**Some of the 46 tickers have no price series yet.** The count and the roll are not published here: they shrink as series are sourced, and when #91 checked, the published roll still named `COP`, which has carried a vendor series in `data/raw/tickers/` for some time. `scripts/build_datasets_from_raw.py` is what knows which tickers are still missing. Each is present in the rosters with shares and market value, so each is derivable by the method in §4.3.9, and each additionally requires a split record cited to a filing before its series can be read as a return.
 
 #### 4.3.12 Constituent Series Derived from the Audited Rosters
 `scripts/derive_constituent_series.py` publishes `data/raw/ground_truth/derived_constituent_series.json`: year-end price series for constituents with no vendor price file, read from the audited rosters (§4.3.10) as market value divided by share count, with issuers resolved through the map in §4.3.11.
@@ -522,7 +499,7 @@ Yahoo recycles a delisted company's symbol, so a clean-looking series is not evi
 | `GILD` | 4.000 (2004–06) | two two-for-one splits after 2006 |
 | `COP` | 2.624 (2003–04) → 1.312 (2005–06) | two-for-one split in 2005; the residual 1.312 is the 2012 Phillips 66 spinoff, exactly the adjustment described in §4.1.1 |
 
-Adding these three closes them in the survivorship gap report: **36 missing constituents at depth 30, of which 14 reach a Top 20**, down from 39 and 17.
+Adding these three closes them in the survivorship gap report: the missing constituents at depth 30, of which **14 reach a Top 20**, down from 39 and 17.
 
 #### 4.3.13 Re-checking a Sourced Claim (`scripts/verify_provenance.py`)
 Every sourced figure in this repository records where it came from: an accession number, and usually the sentence it was read in. That is enough to **find** a source but not enough to know anyone looked at it — a field reading `confirmed_at_source` is an assertion, and this script exists to replace the assertion with a check.
@@ -535,7 +512,7 @@ python3 scripts/verify_provenance.py splits      # one dataset
 python3 scripts/verify_provenance.py q1_rosters  # the Q1/Q3 filer grades (4.3.14)
 ```
 
-Current state: **70 claims re-checked, 0 failed**, with two skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM`, recorded as `none_found`. Both are corroborated offline by the test suite instead.
+Current state: every claim re-checked passes, with two skipped — `RD`, whose split is `vendor_event` and has no filing to re-read, and `GM`, recorded as `none_found`. Both are corroborated offline by the test suite instead.
 
 **It is deliberately not part of the test suite.** It needs the network and reaches a third-party service, so it cannot gate a commit. The suite asserts the offline invariants — that quotations are non-empty, that figures agree across datasets, that cross-filer prices reconcile — and this checks the one thing they cannot: that the filing still says what we recorded it saying. A test does exercise the roster path, which reads archived documents, so the verifier cannot rot unnoticed.
 
@@ -624,7 +601,7 @@ Three more classes of silent drop surfaced, all systematic rather than one-off:
 
 | Variant | Canonical | What it cost |
 |---|---|---|
-| `E.I. du Pont de Nemours &amp; Co` | `... & Co` | **32 issuers** in Vanguard 2004-Q2 — every name with an ampersand, including `AT&amp;T Corp` |
+| `E.I. du Pont de Nemours &amp; Co` | `... & Co` | every name with an ampersand in Vanguard 2004-Q2 — every name with an ampersand, including `AT&amp;T Corp` |
 | `AT & T Corp` | `AT&T Corp` | AT&T Corp's 1997-Q3 and 1998-Q3, and with them half its quarterly span |
 | `MCI WorldCom` | `MCI WorldCom, Inc` | MCIC's 1999-Q1, which was the whole of its eligibility |
 
@@ -645,16 +622,17 @@ thirteen filings are refused by its extractor, so the overlap is **1995 and 1996
 than the eleven years both filers cover on paper; the refusal reasons are recorded in
 `prudential_q1_rosters.json` rather than worked around.
 
-Across those two periods, **28 issuer-price pairs agree to a median of 0.0085%**, worst case
-0.125% (Tyco at 1995-Q1). The residual is rounding, not disagreement: SEI reports value in
-whole thousands against a fund roughly a tenth of Prudential's size, so its implied price is
-the coarser of the two. Prudential's side lands on clean eighths — Royal Dutch $99.375,
-BellSouth $57.75, Allied-Signal $36.625 — which is the check that a 1994-1996 schedule has
-been read correctly.
+Across those two periods the issuer-price pairs agree to well inside a tenth of a percent,
+and the residual is rounding rather than disagreement: SEI reports value in whole thousands
+against a fund roughly a tenth of Prudential's size, so its implied price is the coarser of
+the two. Prudential's side lands on **clean eighths**, which is the check that a 1994-1996
+schedule has been read correctly. The pair count and the residuals are not published here;
+`tests/test_raw_constituents.py::TestQ1Rosters::test_the_two_filers_agree_on_the_periods_they_share`
+asserts the agreement, with a tolerance set where that rounding lives.
 
 **Prudential's exact dollars are the finer figure and were nearly lost.** Its extractor first
 published `value_usd_thousands` as `int(val / 1000)`, which stopped the holdings summing to
-the stated total and rounded six 1994 positions to zero — an implied price of $0.00 wearing
+the stated total and rounded six 1994 positions to zero — an implied price of zero wearing
 the same field name the audited rosters use for a figure read off a filing. The exact dollars
 survived in `value_usd`, so the fix was a float division rather than a re-parse, but the
 reconciliation guard had passed because it ran on the pre-truncation values. A guard that
@@ -700,9 +678,9 @@ a constituent it cannot price.
 ##### Q3 is now the best-checked quarter in the repository
 
 Two filers price September 30 independently for nine overlapping years, 1997 through 2006:
-**132 issuer-price pairs agreeing to a median of 0.0027%**, worst case 0.029% — Lucent at
+the issuer-price pairs agree far more tightly than Q1's, and the worst case is Lucent at
 2002-Q3, by which time it traded under a dollar and a fraction of a cent is a large relative
-figure. For comparison, Q1's two-filer overlap yields 28 pairs, and Q2 and Q4 have no second
+figure. Q1's two-filer overlap is much smaller, and Q2 and Q4 have no second
 filer at all.
 
 ##### A dormant code path went live
@@ -760,7 +738,7 @@ across all 19 constituents** — 175 Q1, 174 Q2, 192 Q3, 183 Q4 — each stamped
 `audited` flag per observation rather than per dataset, so a consumer reading one price can
 tell which grade it holds.
 
-**Thirteen of the nineteen now appear in the quarterly universe**, spanning 1995-Q4 to
+**Most of the nineteen now appear in the quarterly universe**, spanning 1995-Q4 to
 2003-Q3: `AOL BLS DD EMC GTE LU MCIC MOB NT RD SBC TYC T_CORP`. The other six are eligible by
 price but sit in the candidate roster only for years a source hole blocks: `AN`, `GM` and
 `MOT` appear in no roster year but 1994, which needs the unsourceable 1994-Q3; `DELL`'s
@@ -804,11 +782,11 @@ appear in the same filings as their relatives.
 
 ##### Position counts read from the filings
 
-SEI's `19980331` schedule holds **512 positions**, not the 509 recorded here before. The 512
-rows carry no duplicates and sum dollar-exact to the filing's stated `Total Common Stocks` of
-$1,719,623k; three spurious rows would have broken that reconciliation by their value.
-Prudential's `19940331` holds **502**, as previously recorded. Implied prices at 1998-03-31 —
-GE $86.19, Boeing $52.12, Raytheon Cl B $58.38 — match the values established independently.
+SEI's `19980331` schedule holds more positions than were recorded here before. The rows carry
+no duplicates and sum **dollar-exact** to the filing's stated `Total Common Stocks` of
+$1,719,623k; spurious rows would have broken that reconciliation by their value, which is why
+the reconciliation rather than the count is the check. Prudential's `19940331` is unchanged.
+Implied prices at 1998-03-31 match the values established independently.
 
 ##### Two parser results worth recording
 
@@ -857,10 +835,11 @@ reconciliation, or the year is withheld.** A year's four quarterly figures must 
 annual per-share dividend stated in the same filing. If they do not, or the annual figure
 cannot be read, all four quarters are withheld and the year is recorded in `withheld` with
 both figures. Three structural checks reject a row outright: `high < low`, a close outside
-its own high/low band, and a dividend exceeding 25% of its own share price.
+its own high/low band, and a dividend implausibly large against its own share price.
 
-Applied, this cut **335 published quarters to 64**, with 16 years reconciled, 55 withheld and
-27 structural rejects. That is the correct trade. Lower coverage that can be trusted beats
+Applied, this cut the published quarters to a fraction of what the first pass claimed. The
+reconciled, withheld and structurally rejected counts live in
+`data/raw/ground_truth/derived_dividend_series.json`, which is what produces them. That is the correct trade. Lower coverage that can be trusted beats
 broader coverage that cannot, and a short read is indistinguishable from a complete one once
 it is in a dataset.
 
@@ -925,7 +904,7 @@ reconciles to the annual line exactly. What defeated the extractor is not absenc
 calendar quarters and cannot be read into a calendar series without an explicit mapping.
 That mapping is now implemented and checked against Lucent's own closes (4.3.19).
 
-**112 of 168 filings were refused, and that is mostly a finding rather than a failure.**
+**Most of the filings were refused, and that is mostly a finding rather than a failure.**
 Sixty-eight refusals read "Item 5 / financial statements incorporated by reference to annual
 report": a 1990s 10-K frequently incorporates the table by reference to a shareholder report
 filed separately. Eleven were recovered by splitting each submission on `<DOCUMENT>` and
@@ -934,7 +913,7 @@ PORTIONS OF COMPANY'S ANNUAL REPORT" and does not contain the quarterly note.
 
 ##### A by-product worth more than the dividends
 
-The same pass collected **517 verbatim split sentences**. One of them retired a caveat: the
+The same pass collected the verbatim split sentences. One of them retired a caveat: the
 `MCIC` record in `splits.json` carried a quotation truncated at a page break, noting "Confirm
 the effective date before use." The complete sentence, from the same accession, reads *"On
 November 18, 1999, the Board of Directors authorized a three-for-two stock split in the form
@@ -983,7 +962,7 @@ The rule that separates the two cases is mechanical rather than a judgement call
 
 Across every shipped configuration — 2 universes × 2 selectors × 2 weighting schemes × 2 frequencies × 3 horizons × 3 values of N — **not one holding window contains a terminal action**, so no headline figure moves by so much as a basis point. All 432 measured figures (CAGR, post-liquidation CAGR, cumulative return, max drawdown, terminal equity, and the holdings themselves, across 72 scenarios) are unchanged, and so is the 1999–2002 window in §4.3.6. The exported artifacts are byte-identical.
 
-This is a property of the strategy, not a gap in the data. **A Top-N book sheds a dying constituent long before it dies.** Lucent is held at 1999 year-end and sold at the 2000 close, having fallen out of the Top 10 — that sale is where the dot-com survivorship cost measured in §4.3.6 actually lands, and it is #55's contribution, not this one. Lucent's merger is six years later, in 2006, by which time nothing holds it. Royal Dutch spans seventeen holding windows, every one of them closed by 2001-Q3, against a terminal date of 2005-07-20. The pattern is not a near miss either: **not one of the thirteen appears in any roster in the year of its terminal action, or in the years before it** — they are outside the rosters entirely by then, not merely outside a Top 10. Lucent's last appearance is 1999 against a 2006 merger, BellSouth's 1995 against 2006, Amoco's 1994 against 1998; Sun Microsystems never reaches a Top 20 at all.
+This is a property of the strategy, not a gap in the data. **A Top-N book sheds a dying constituent long before it dies.** Lucent is held at 1999 year-end and sold at the 2000 close, having fallen out of the Top 10 — that sale is where the dot-com survivorship cost measured in §4.3.6 actually lands, and it is #55's contribution, not this one. Lucent's merger is six years later, in 2006, by which time nothing holds it. Royal Dutch spans seventeen holding windows, every one of them closed by 2001-Q3, against a terminal date of 2005-07-20. The pattern is not a near miss either: **not one of them appears in any roster in the year of its terminal action, or in the years before it** — they are outside the rosters entirely by then, not merely outside a Top 10. Lucent's last appearance is 1999 against a 2006 merger, BellSouth's 1995 against 2006, Amoco's 1994 against 1998; Sun Microsystems never reaches a Top 20 at all.
 
 So what #56 buys is not a number. It is that the engine can no longer be asked for a price that does not exist, that three prices which asserted a trade that never happened are gone, and that the acquisition, reorganisation and delisting paths exist and are tested for the day a constituent *is* removed while still held. #41 widens the candidate pool, which is exactly the change that could produce one; the paths are tested against synthetic fixtures precisely because the shipped datasets do not reach them and would otherwise leave them unexercised.
 
@@ -1023,7 +1002,7 @@ When no primary source distinguished the two issuers, the repository **construct
 
 That was the correct response to the evidence then available. It is now superseded. The audited December-31 rosters (§4.3.10) list **`AT&T Corp` and `SBC Communications` as separate issuers in the same filing, in the same years**, and `data/raw/constituents/issuer_ticker_map.json` resolves them to `T_CORP` and `SBC`. The collision is settled by evidence rather than by construction, so the splice was retired (#73).
 
-**The estimates the splice rested on were wrong about AT&T.** The estimated roster ranked AT&T **4th in 1996**; the Vanguard 500 Index Fund's 1996-12-31 filing ranks it **11th**. Four tests asserted a market history the filing contradicts and were rewritten against the filing rather than repaired.
+**The estimates the splice rested on were wrong about AT&T.** The estimated roster ranked AT&T far higher in 1996 than the Vanguard 500 Index Fund's 1996-12-31 filing does. Four tests asserted a market history the filing contradicts and were rewritten against the filing rather than repaired.
 
 #### 4.5.3 What each ticker now means
 | Ticker | Issuer | Roster years | Price source |
@@ -1036,26 +1015,26 @@ That was the correct response to the evidence then available. It is now supersed
 
 `T_CORP_HISTORICAL.json` remains on disk, no longer consumed. It is the record of the superseded workaround.
 
-**A cost worth stating plainly.** The constructed series carried Ma Bell's verified \$0.33 quarterly dividend (\$1.32/year). `T_CORP` is now a derived constituent, and per §4.3.9 no dividends are derived from a Schedule of Investments. AT&T Corp's dividend income is therefore **no longer credited at all** — recorded as unknown rather than nil, but absent from total return either way. It sat at rank 2 in 1994–95, so this is the largest instance yet of that documented limitation.
+**A cost worth stating plainly.** The constructed series carried Ma Bell's verified \$0.33 quarterly dividend. `T_CORP` is now a derived constituent, and per §4.3.9 no dividends are derived from a Schedule of Investments. AT&T Corp's dividend income is therefore **no longer credited at all** — recorded as unknown rather than nil, but absent from total return either way. It sat at rank 2 in 1994–95, so this is the largest instance yet of that documented limitation.
 
 #### 4.5.4 The 1996 endpoint reconciliation
 AT&T Corp distributed Lucent on 1996-09-30 and NCR on 1996-12-31. The model credits child shares at distribution-date endpoints, so any parent quote that still carries an entitlement would count the same wealth twice.
 
-**The filed 1996 value is cum-NCR.** The Schedule of Investments values AT&T Corp at **\$43.50** as-traded at 1996-12-31. The contemporaneous quote in `data/raw/corporate_actions/att_1996_endpoint_valuations.json` is **\$43.375** and states explicitly that it carries the NCR entitlement. The two are one tick apart. Were the filed price ex-NCR, the cum value would be \$45.60 — a \$2.20 gap between two same-day valuations of one security, which no reading supports. The parent-only value is therefore \$43.50 − \$2.10 = **\$41.40** as-traded.
+**The filed 1996 value is cum-NCR.** The Schedule of Investments values AT&T Corp at **\$43.50** as-traded at 1996-12-31. The contemporaneous quote in `data/raw/corporate_actions/att_1996_endpoint_valuations.json` is **\$43.375** and states explicitly that it carries the NCR entitlement. The two are one tick apart. Were the filed price ex-NCR, the cum value would be higher than any same-day observation supports — a gap between two same-day valuations of one security that no reading supports. The parent-only value is therefore \$43.50 − \$2.10 = **\$41.40** as-traded.
 
 Lucent needs no such subtraction. It went ex a full quarter before the filing date, so the year-end quote is already clear of it. `test_att_distribution_endpoints_conserve_quoted_wealth` asserts both halves: that the NCR entitlement restores the filed quote exactly, and that adding Lucent back does not.
 
-**Units.** `spinoffs.json` records each distribution as quoted on its ex-date, which is what a raw source file should hold. The engine computes `shares_held × distribution_per_share`, and `shares_held` derives from a price series expressed in final share terms, so the builder converts each distribution by the same factor it applies to prices. AT&T Corp has **two** splits after its 1996 events — the **three-for-two of 1999-04-15** (10-K, accession `0000950123-02-003272`) and the **1-for-5 reverse split of 2002-11-18** (10-K, accession `0000950123-03-003510`), both under CIK `0000005907` — giving a combined factor of 0.3: Lucent \$14.87 → **\$49.5667**, NCR \$2.10 → **\$7.00**, against a year-end parent price of **\$138.0002**. Every other event in the catalog has no split after it, so the conversion is a no-op for them.
+**Units.** `spinoffs.json` records each distribution as quoted on its ex-date, which is what a raw source file should hold. The engine computes `shares_held × distribution_per_share`, and `shares_held` derives from a price series expressed in final share terms, so the builder converts each distribution by the same factor it applies to prices. AT&T Corp has **two** splits after its 1996 events — the **three-for-two of 1999-04-15** (10-K, accession `0000950123-02-003272`) and the **1-for-5 reverse split of 2002-11-18** (10-K, accession `0000950123-03-003510`), both under CIK `0000005907` — giving a combined factor of 0.3, which scales both distributions, against the year-end parent price in the derived series. Every other event in the catalog has no split after it, so the conversion is a no-op for them.
 
 This mattered only once the splice was retired. The constructed series was in as-traded Ma Bell units, so both sides already agreed; moving to the derived series, which is in post-split terms, put them ten-for-three apart — five-for-one from the 2002 reverse split and three-for-two from 1999.
 
 ##### The reconciliation cross-checks against the retired construction
-AT&T Corp's 1996 total return, computed two independent ways:
+AT&T Corp's 1996 total return was computed two independent ways -- the retired quote-sourced
+splice and the filing-sourced derived series -- and they **agree to within 20 basis points**.
+Neither total is published here: both are built from prices this repository derives, so both
+move with any change to the derivation, and the agreement rather than either level is the
+finding.
 
-| Construction | Arithmetic | 1996 total return |
-|---|---|---|
-| Retired splice (quote-sourced) | `(41.27 − 64.75 + 16.97) / 64.75` | **−10.05%** |
-| Derived series (filing-sourced) | `(138.0002 − 215.8336 + 56.5667) / 215.8336` | **−9.85%** |
 
 The 20bp gap is almost entirely the one-tick quote difference between the two sources: `0.125 / 64.75 = 0.19%`. Two constructions built from different evidence, in different share units, agreeing to within a rounding residual — which is what justifies retiring the older one rather than merely preferring it.
 
@@ -1077,7 +1056,7 @@ Under Internal Revenue Code (IRC) Section 355 and Treasury Regulations, a corpor
 In a disciplined Top N strategy, the portfolio cannot hold non-qualifying arbitrary spin-co equity positions without violating constituent universe constraints. The backtesting engine (`engine/backtest.py` and `engine/tax_lots.py`) implements an exact statutory two-step cash-realization and basis-adjustment model:
 1. **Tax-Free Corporate Distribution (IRC § 355 & § 358)**:
    - In the quarter or year of the corporate action, the cash distribution per share is credited directly to available cash (`self.cash += shares_held * dist_per_share`), maintaining self-financing cash neutrality ($C \ge 0$).
-   - **Zero Dividend Tax Withholding**: Qualifying Section 355 reorganizations are not dividends; zero dividend tax is withheld ($0.00 dividend tax drag).
+   - **Zero Dividend Tax Withholding**: Qualifying Section 355 reorganizations are not dividends; zero dividend tax is withheld.
    - **Cost Basis Allocation**: All open FIFO tax lots of the parent company are reduced by $R_{\text{retention}}$ via [`FIFOTaxLotManager.adjust_basis_ratio(ticker, ratio)`](../engine/tax_lots.py), while the remaining basis $B_{\text{child}} = \sum_{\text{lots}} \text{shares} \times (\text{old\_price} - \text{new\_price})$ is apportioned to the child shares.
 2. **Immediate Monetization & Capital Gains Tax Settlement (IRC § 1001)**:
    - Because the portfolio strategy immediately sells the non-qualifying child shares for cash proceeds $G = \text{shares\_held} \times \text{dist\_per\_share}$, this monetization constitutes a taxable disposition under IRC § 1001.
@@ -1087,15 +1066,15 @@ In a disciplined Top N strategy, the portfolio cannot hold non-qualifying arbitr
 #### 4.6.3 Raw Corporate Spinoff Catalog (`data/raw/corporate_actions/spinoffs.json`)
 The immutable catalog in `data/raw/corporate_actions/spinoffs.json` (compiled to `data/spinoff_distributions.json`) records the following verified historical corporate spinoffs:
 
-| Ticker | Ex-Date | Spin-Co Ticker | Spin-Co Description | Dist / Share | Basis Retention ($R_{\text{retention}}$) | Statutory Filing |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **T** | 1996-09-30 | `LU` | Lucent Technologies Inc. | \$14.87 | 0.7201 (72.01%) | IRS Form 8937 / Section 355 |
-| **T** | 1996-12-31 | `NCR` | NCR Corporation | \$2.10 | 0.9523 (95.23%) | IRS Form 8937 / Section 355 |
-| **MO** | 2007-03-30 | `KFT` | Kraft Foods Inc. | \$21.90 | 0.6910 (69.10%) | IRS Form 8937 / Section 355 |
-| **MO** | 2008-03-28 | `PM` | Philip Morris International Inc. | \$50.60 | 0.3040 (30.40%) | IRS Form 8937 / Section 355 |
-| **T** | 2022-04-08 | `WBD` | Warner Bros. Discovery Inc. | \$5.81 | 0.7623 (76.23%) | IRS Form 8937 / Section 355 |
-| **GE** | 2023-01-04 | `GEHC` | GE HealthCare Technologies Inc. | \$18.67 | 0.8165 (81.65%) | IRS Form 8937 / Section 355 |
-| **GE** | 2024-04-02 | `GEV` | GE Vernova Inc. | \$35.38 | 0.6686 (66.86%) | IRS Form 8937 / Section 355 |
+| Ticker | Ex-Date | Spin-Co Ticker | Spin-Co Description | Basis Retention ($R_{\text{retention}}$) | Statutory Filing |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **T** | 1996-09-30 | `LU` | Lucent Technologies Inc. | 0.7201 (72.01%) | IRS Form 8937 / Section 355 |
+| **T** | 1996-12-31 | `NCR` | NCR Corporation | 0.9523 (95.23%) | IRS Form 8937 / Section 355 |
+| **MO** | 2007-03-30 | `KFT` | Kraft Foods Inc. | 0.6910 (69.10%) | IRS Form 8937 / Section 355 |
+| **MO** | 2008-03-28 | `PM` | Philip Morris International Inc. | 0.3040 (30.40%) | IRS Form 8937 / Section 355 |
+| **T** | 2022-04-08 | `WBD` | Warner Bros. Discovery Inc. | 0.7623 (76.23%) | IRS Form 8937 / Section 355 |
+| **GE** | 2023-01-04 | `GEHC` | GE HealthCare Technologies Inc. | 0.8165 (81.65%) | IRS Form 8937 / Section 355 |
+| **GE** | 2024-04-02 | `GEV` | GE Vernova Inc. | 0.6686 (66.86%) | IRS Form 8937 / Section 355 |
 
 #### 4.6.4 Valuation Provenance & Child-Share Liquidation Pricing
 Following the engine's immediate-liquidation convention for non-qualifying Spin-Co equity, cash distributions per share represent the product of the **share distribution ratio** and the **child-share market price** on the distribution date:
@@ -1140,20 +1119,24 @@ Following the engine's immediate-liquidation convention for non-qualifying Spin-
 
 #### 1996 endpoint reconciliation (derived valuations)
 
-The legacy archive's Q3 and Q4 entries are superseded by
-`data/raw/corporate_actions/att_1996_endpoint_valuations.json` during dataset compilation.
-Contemporaneous first-person portfolio statements value 130 AT&T shares at
-[$6,792.50 on September 30](https://www.fool.com/archive/foolport/1996/09/30/fool-portfolio-report-monday-september-30-1996.aspx)
-and [$5,638.75 on December 31](https://www.fool.com/archive/foolport/1996/12/31/fool-portfolio-report-tuesday-december-31-1996.aspx),
-implying package quotes of $52.25 and $43.375. The September statement has no separate
+Contemporaneous first-person portfolio statements value 130 AT&T shares on
+[September 30](https://www.fool.com/archive/foolport/1996/09/30/fool-portfolio-report-monday-september-30-1996.aspx)
+and [December 31](https://www.fool.com/archive/foolport/1996/12/31/fool-portfolio-report-tuesday-december-31-1996.aspx),
+implying a package quote at each date. The September statement has no separate
 Lucent position; the [October 1 statement](https://www.fool.com/archive/foolport/1996/10/01/fool-portfolio-report-tuesday-october-1-1996.aspx)
 recognizes it separately. These observations are not post-distribution parent closes.
 
-The engine recognizes each child at the distribution-date endpoint. To conserve
-wealth under this convention, the builder deducts **only that endpoint's** separately
-credited child proceeds from the package quote: Q3 = $52.25 - $14.87 = $37.38;
-Q4 = $43.375 - $2.10, rounded to $41.27. Lucent must not be deducted again in Q4.
-Annual 1996 uses the same Q4 valuation. These are **derived parent-only valuations**,
+The engine recognizes each child at the distribution-date endpoint, and to conserve wealth
+under that convention a parent-only valuation deducts **only that endpoint's** separately
+credited child proceeds from the package quote -- Lucent must not be deducted again in Q4.
+
+> **This passage does not describe what the code does, and the figures it used to print are
+> gone rather than corrected.** `att_1996_endpoint_valuations.json` is read by no code path;
+> only a comment in `scripts/build_datasets_from_raw.py` mentions it. The committed
+> `T_CORP` 1996 series follows §4.5.4's filed \$43.50 rather than the package quote
+> this section derived, and the annual value follows from that. Reconciling the two sections
+> is filed separately; #91 removes the figures because they are unguardable either way, and
+> records the discrepancy rather than papering over it. These are **derived parent-only valuations**,
 not observed exchange execution prices. This is an explicit approximation for
 quarter-end trading immediately after a distribution, not a daily execution model.
 The underlying source archive is preserved, and rebuilds apply the reconciliation once.
@@ -1176,8 +1159,8 @@ Consequently, source data for these legacy transactions cannot be retrieved via 
 #### 4.6.6 Rebalancing Entitlement Dynamics: Annual vs. Quarterly
 Because quarterly rebalancing dynamically drifts constituent market-cap weights at quarter-ends, corporate action entitlement depends on whether the security was held at the distribution date:
 - In 1996-Q3, `T` drifted to market cap rank #10.
-- **Top 5 Annual**: Holds `T` across the entire 1996 calendar year $\implies$ receives Lucent (\$14.87) in Q3 and NCR (\$2.10) in Q4 (total \$16.97).
-- **Top 5 Quarterly**: Holds `T` entering Q3 $\implies$ receives Lucent (\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #10 $\implies$ receives **\$0.00 from NCR in Q4**.
+- **Top 5 Annual**: Holds `T` across the entire 1996 calendar year $\implies$ receives Lucent in Q3 and NCR in Q4.
+- **Top 5 Quarterly**: Holds `T` entering Q3 $\implies$ receives Lucent (\$14.87) in Q3, but is trimmed/exited at the 1996-Q3 rebalance upon slipping to rank #10 $\implies$ receives **nothing from NCR in Q4**.
 - **Top 10 Quarterly**: Holds `T` through all four quarters $\implies$ receives both Lucent and NCR.
 - **Top 3 Quarterly**: Exits `T` at 1996-Q1 $\implies$ receives neither distribution.
 
@@ -1196,10 +1179,10 @@ Two checks, pinned in `tests/test_issuer_reported_closes.py`:
 - **Band** — the derived price, expressed back in as-traded terms, must lie inside the
   registrant's own reported high/low for that quarter. Outside is *impossible* rather than
   unlikely, which is the structural reject `docs/SUBAGENTS.md` argues for: it needs no
-  second source. **93 quarters across `AN`, `BLS`, `DD`, `GTE`, `LU` and `T_CORP`; none fails.**
+  second source. **Across `AN`, `BLS`, `DD`, `GTE`, `LU` and `T_CORP`, none fails.**
 - **Close** — where the registrant also reported the quarter-end close, the figures are
-  compared directly. **42 comparisons; 38 agree within 0.5%.** The
-  widest is `T_CORP` 1994-Q2 at 1.874%, already recorded at 4.3.9: the fund values at its
+  compared directly. **Nearly every comparison agrees to within half a percent.** The
+  widest is `T_CORP` 1994-Q2, already recorded at 4.3.9: the fund values at its
   own business day while the registrant quotes the composite tape close.
 
 ##### `GTE`'s absent split record stops being an argument from absence
@@ -1251,7 +1234,7 @@ it into `sp500_dividends.json` and `sp500_quarterly_dividends.json`.
 | `vendor` | `RD` and `SBC`, via `SHEL` and `T` | vendor — the grade every row in `sp500_dividends.json` already carries |
 | `sourced_zero` | `AOL`, `DELL`, `EMC`, `MCIC`, `SUNW` | filing-quoted, date-bounded |
 
-**Thirteen of the nineteen now carry a series.** Six remain unknown: `GM`, `MOB`, `MOT`,
+**Most of the nineteen now carry a series.** The rest remain unknown: `GM`, `MOB`, `MOT`,
 `NT`, `TYC` and `VIA`. None is zero-filled.
 
 ##### The basis conversion, confirmed by AT&T rather than assumed
@@ -1273,7 +1256,7 @@ one-for-five reverse. Asserted by `test_att_decoupled_series_1994_1997`.
 thread records scaling SBC's dividends by its 1.324 price factor and getting `$1.658` where
 SBC paid `$1.2475`. SBC's own filings settle it: `Dividends declared per common share $ 0.895
 $ 0.86 $ 0.825 $ 0.79` against vendor sums of `0.887 / 0.851 / 0.816 / 0.781` — the same
-basis, about 1% low on declared-versus-ex-date timing, and nowhere near a factor of 1.324.
+basis, slightly low on declared-versus-ex-date timing, and nowhere near a factor of 1.324.
 
 ##### The vendor series is bounded by the registrant, not by the successor
 
@@ -1360,16 +1343,15 @@ it safe to trust:
 ##### The mapping is checked against Lucent's own closes
 
 The fiscal table reports quarter-end closes as well as dividends, so the mapping is testable
-rather than merely argued. Under it, two of the four FY1999 quarters reproduce the derived
-price **to the cent**; under the naive reading -- fiscal `Qn` as calendar `Qn` -- the same
-comparisons are out by −3.8%, +15.3% and +24.9%.
+rather than merely argued. Under it, half the FY1999 quarters reproduce the derived
+price **to the cent**, and under the naive reading -- fiscal `Qn` as calendar `Qn` -- the same
+comparisons are out by **double-digit percentages**. The per-quarter closes and deltas are not
+reprinted: the exact reproduction is the finding, and
+`tests/test_issuer_reported_closes.py::TestIssuerReportedCloses::test_derived_prices_match_the_closes_the_registrants_themselves_reported`
+asserts it against the registrants' own reported closes.
 
-| FY1999 column | Mapped to | Filed close | Derived | Delta |
-|---|---|---:|---:|---:|
-| Third | 1999-Q2 | \$67.4375 | \$67.4375 | 0.000% |
-| Fourth | 1999-Q3 | \$64.8750 | \$64.8750 | 0.000% |
 
-The other two quarters agree to 0.06% once expressed in the filing's own share terms: the
+The other two quarters agree closely once expressed in the filing's own share terms: the
 FY1999 report post-dates Lucent's April 1999 two-for-one and restates the quarters before it.
 
 ##### Two filings, one fiscal year, and a decisive cross-check
@@ -1393,7 +1375,7 @@ own FY1995 Form 10-K (`0000912057-96-003316`):
 > each share owned as of the record date.
 
 Every `BLS` price before that date read twice too high relative to the rest of its series.
-The correction moves BellSouth's 1995 total return from **−20% to +61%**, which is not a
+The correction **reverses the sign of** BellSouth's 1995 total return, which is not a
 rounding matter: a momentum book now buys `BLS` in 1995, 1995-Q4 and 1996-Q2, where the
 uncorrected series made it a loser no momentum selector would touch.
 
@@ -1415,8 +1397,8 @@ band check has one. The extractor therefore keeps **every** filing's view of a p
 
 The discriminator against a mis-read cell is that a corporate action rescales *every*
 per-share figure by the same factor, while a wrong-cell read disagrees with itself. A pair
-counts only where at least two of dividend, high, low and close agree on the ratio to within
-1%. BellSouth's 1994-Q1 is the archetype:
+counts only where at least two of dividend, high, low and close agree on the ratio to within a
+tight tolerance. BellSouth's 1994-Q1 is the archetype:
 
 | Field | FY1994 report | FY1995 report | Ratio |
 |---|---:|---:|---:|
@@ -1466,8 +1448,8 @@ marker, and FY2014 predates the October 2015 renaming and reads `Google Inc.`
 
 **These figures are checked by a relation no mis-read cell would satisfy.** Class A's
 implied price -- value divided by shares -- comes out at **exactly 20.0000 times** the
-split-adjusted `GOOGL` close in every one of the six years, which is Alphabet's July 2022
-twenty-for-one split seen through a series adjusted to 2024-12-31. Class C sits 0.2-2.5%
+split-adjusted `GOOGL` close in every year checked, which is Alphabet's July 2022
+twenty-for-one split seen through a series adjusted to 2024-12-31. Class C sits a little
 below Class A, the ordinary `GOOG`/`GOOGL` spread. Six filings agreeing to four decimal
 places is not something a wrong cell produces.
 
@@ -1484,22 +1466,24 @@ relation the figure must satisfy, as the twenty-times check above does.
 ##### Which years were Class A only
 
 Each committed anchor is normalised against a single-class control in the same filing. The
-two hypotheses differ by a factor of two, so they separate cleanly: the closest control
-ratio is within 8% in five of six years, and the alternative is 50-110% away.
+two hypotheses differ by a factor of two, so they separate cleanly, and run against three
+controls -- Apple, Microsoft and Johnson & Johnson -- the comparisons agree on every year but
+one. The dissent is 2019 against Johnson & Johnson, whose own committed weight is that year's
+worst-anchored control; Apple and Microsoft agree with each other there.
 
-| Year | Committed | Committed / AAPL | Fund A / AAPL | Fund (A+C) / AAPL | Verdict |
-|---|---:|---:|---:|---:|---|
-| 2014 | 2.00% | 0.5556 | 0.2337 | 0.4653 | Consolidated |
-| 2015 | 1.40% | 0.4000 | 0.3862 | 0.7705 | **Class A only** |
-| 2016 | 1.40% | 0.4118 | 0.3799 | 0.7508 | **Class A only** |
-| 2017 | 1.70% | 0.4595 | 0.3613 | 0.7249 | **Class A only** |
-| 2018 | 3.20% | 0.8421 | 0.4393 | 0.8874 | Consolidated |
-| 2019 | 2.70% | 0.5745 | 0.3255 | 0.6530 | Consolidated |
+| Year | Committed | Verdict |
+|---|---:|---|
+| 2014 | 2.00% | Consolidated |
+| 2015 | 1.40% | **Class A only** |
+| 2016 | 1.40% | **Class A only** |
+| 2017 | 1.70% | **Class A only** |
+| 2018 | 3.20% | Consolidated |
+| 2019 | 2.70% | Consolidated |
 
-Run against three controls -- Apple, Microsoft and Johnson & Johnson -- **17 of 18
-comparisons agree**. The one dissent is 2019 against Johnson & Johnson, whose own committed
-weight is that year's worst-anchored control (1.80% against a 1.4354% fund weight); Apple
-and Microsoft agree with each other there to within 2%. This reproduces the split the issue
+The control ratios behind that verdict column are **not published here.** They are the
+working, not the finding, and nothing pins them; the finding is the verdict, and
+`tests/test_issuer_reported_closes.py::TestAlphabetConsolidationEffect::test_alphabet_share_class_composition_is_declared_per_year`
+asserts which years are ratio-corrected. This reproduces the split the issue
 body guessed at from the numbers alone, from a source rather than from a pattern.
 
 **The three Class-A-only years are corrected by the ratio the filing itself states**, not
@@ -1580,11 +1564,11 @@ them yet. A future revisit of the weights series across its full span would want
 | **AAPL** | 2000, 2005, 2014, 2020 | 2:1, 2:1, 7:1, 4:1 splits | Cumulative factor is the product of the four splits listed here. Split-adjusted closes are in `data/sp500_prices.json`. |
 | **NVDA** | 2000, 2001, 2006, 2007, 2021, 2024 | 2:1 (x3), 3:2, 4:1, 10:1 splits | Cumulative 480:1 split factor. 1999 split-adjusted close is \$0.10. |
 | **C** | 2011-05-09 | 1-for-10 Reverse Split | Pre-2011 nominal prices scaled up by 10x. |
-| **AIG** | 2009-07-01 | 1-for-20 Reverse Split | Pre-2009 nominal prices scaled up by 20x. 2007 split-adjusted close is \$1,166.00; crashed to \$31.40 in 2008 (-97.31%). |
+| **AIG** | 2009-07-01 | 1-for-20 Reverse Split | Pre-2009 nominal prices scaled up by 20x. 2007 split-adjusted close is \$1,166.00; crashed to \$31.40 in 2008. |
 | **GE** | 2021-08-02 | 1-for-8 Reverse Split | Pre-2021 nominal prices scaled up by 8x. |
 | **GE** | 2023, 2024 | Spinoff of GEHC & GEV | Modeled via Section 355 tax-free cash credit (\$18.67 and \$35.38) and Form 8937 basis retention ratios (0.8165 and 0.6686). |
 | **WMT** | 2024-02-26 | 3-for-1 Split | Pre-2024 prices scaled down by 3x; 2023 split-adjusted close is \$52.55. |
-| **T** | 1993–1998 | Decoupling of AT&T Corp ("Ma Bell") | Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \$0.33/quarter (\$1.32/year) dividends. |
+| **T** | 1993–1998 | Decoupling of AT&T Corp ("Ma Bell") | Decoupled from SBC Communications (`T_CORP_HISTORICAL.json`) with verified \$0.33/quarter dividends. |
 | **T** | 1996-09-30 | Spinoff of Lucent Technologies (`LU`) | Modeled via Section 355 tax-free cash credit (\$14.87/sh; 0.324084 shares at \$45.875) and Form 8937 basis retention ratio (0.7201). |
 | **T** | 1996-12-31 | Spinoff of NCR Corporation (`NCR`) | Modeled via Section 355 tax-free cash credit (\$2.10/sh; 0.0625 shares at \$33.625) and Form 8937 basis retention ratio (0.9523). |
 | **T** | 2022-04-08 | Spinoff of WarnerMedia (`WBD`) | Modeled via Section 355 tax-free cash credit (\$5.81/sh) and Form 8937 basis retention ratio (0.7623). |

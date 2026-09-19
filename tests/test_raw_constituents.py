@@ -1993,6 +1993,51 @@ class TestSplitRecordProvenance(unittest.TestCase):
         self.assertTrue(three_for_two["quoted_sentence"].strip())
         self.assertNotEqual(three_for_two["accession_number"], record["accession_number"])
 
+    def test_the_1999_split_artifact_is_exactly_what_4_3_9_publishes(self):
+        """The two figures AGENTS.md names as earning their place, pinned.
+
+        AGENTS.md cites this passage as the archetype of computed arithmetic that *is* the
+        explanation: "-30.1% against a real move of +4.9% is the split artifact the passage
+        exists to describe". So the figures stay published, and a `claim` guard is not
+        enough for them -- #91 measured that floors let magnitudes drift. This pins both.
+
+        It is also a regression test on the split record itself. Drop T_CORP's April 1999
+        three-for-two and Q1's factor falls back to Q2's, the corrected move collapses into
+        the artifact, and this fails.
+        """
+        with open(
+            ROOT / "data" / "raw" / "ground_truth" / "derived_quarterly_constituent_series.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
+            series = json.load(f)["series_by_ticker"]["T_CORP"]
+
+        q1, q2 = series["1999-Q1"], series["1999-Q2"]
+
+        # The split straddles the two quarters: Q1 carries one more factor than Q2.
+        self.assertEqual(q1["split_factor"], 0.3)
+        self.assertEqual(q2["split_factor"], 0.2)
+        self.assertAlmostEqual(q1["price_usd"], 79.81, places=2)
+        self.assertAlmostEqual(q2["price_usd"], 55.81, places=2)
+
+        corrected = q2["split_adjusted_price_usd"] / q1["split_adjusted_price_usd"] - 1.0
+        self.assertAlmostEqual(corrected * 100.0, 4.9, places=1)
+
+        # What the series read before the split was recorded: Q1 adjusted at Q2's factor.
+        # The erroneous column is computed from the UNROUNDED implied price, not from the
+        # rounded `price_usd` the as-traded column displays: 35559000 / 445525 is 79.8137,
+        # and 79.8137 / 0.2 is 399.07, where 79.81 / 0.2 would give 399.05. Both columns of
+        # the published table are right; they round at different points. Pinning the rounded
+        # value here would put this test two cents away from the document it guards.
+        unrounded_q1 = q1["value_usd_thousands"] * 1000.0 / q1["shares"]
+        self.assertAlmostEqual(unrounded_q1 / q2["split_factor"], 399.07, places=2)
+        self.assertAlmostEqual(q2["split_adjusted_price_usd"], 279.06, places=2)
+
+        artifact = q2["split_adjusted_price_usd"] / (
+            unrounded_q1 / q2["split_factor"]
+        ) - 1.0
+        self.assertAlmostEqual(artifact * 100.0, -30.1, places=1)
+
     def test_t_corp_adjusted_prices_match_the_closes_att_itself_reported(self):
         """The check that found the missing split, pinned so it cannot come back.
 
