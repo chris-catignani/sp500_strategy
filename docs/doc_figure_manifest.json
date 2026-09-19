@@ -306,15 +306,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.5",
-      "figure": "50%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative ungrounded ownership estimate; explanation needs float adjustment direction not magnitude"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.5",
       "figure": "0.51%",
       "occurrence": 1,
       "verdict": "sourced",
@@ -421,42 +412,6 @@
       "note": "SPY 2024-12-31 Form NPORT-P XML filing weight for NFLX (#20)",
       "evidence_quote": "parsed directly from SPY's December 31 XML filings",
       "source_ref": "0001752724-25-043826"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.5",
-      "figure": "100 rows",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative table artifact row count; computed and unasserted"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.5",
-      "figure": "312 rows",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative table artifact row count; computed and unasserted"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.5",
-      "figure": "208 rows",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative table artifact row count; computed and unasserted"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "56 primary SEC EDGAR regulatory filings",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative file count in regulatory archive; explanation does not depend on magnitude"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -626,21 +581,12 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.6",
-      "figure": "55 verified regulatory filing quarters",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative sample size label for overall reconciliation accuracy"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
       "figure": "89.8%",
       "occurrence": 1,
       "verdict": "derivation",
       "guard": null,
       "note": "Average Top 10 match accuracy across all 55 verified regulatory filing quarters",
-      "evidence_quote": "Across all **55 verified regulatory filing quarters** (20 XML + 35 N-30D reports), average Top 10 match accuracy is **89.8%**",
+      "evidence_quote": "- Across every verified regulatory filing quarter, average Top 10 match accuracy is **89.8%** (494/550).",
       "rot_exposed": true
     },
     {
@@ -651,26 +597,8 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Operands of 89.8%; our own Top 10 match count across 55 verified quarters",
-      "evidence_quote": "- Across all **55 verified regulatory filing quarters** (20 XML + 35 N-30D reports), average Top 10 match accuracy is **89.8%** (494/550).",
+      "evidence_quote": "- Across every verified regulatory filing quarter, average Top 10 match accuracy is **89.8%** (494/550).",
       "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "90.4%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative historical match accuracy measured before archiving semi-annual reports"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "416/460",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Operands of 90.4%, which is itself `remove`; deleting the percentage and leaving the ratio republishes the claim"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -680,7 +608,7 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Match accuracy across the ten March 31 semi-annual reports",
-      "evidence_quote": "archiving the ten March 31 semi-annual reports widened the sample by ten quarters that reconcile at **87.0%** (87/100)",
+      "evidence_quote": "That is lower than the figure published before the ten March 31 semi-annual reports were archived, and the fall is a broader measurement rather than a regression: nothing in the drift model changed, and the ten added quarters reconcile at **87.0%** (87/100), below what the earlier sample averaged.\n  - Across the historical Form N-30D quarters (1995–2019), accuracy is **85.7%** (300/350).",
       "rot_exposed": true
     },
     {
@@ -691,26 +619,8 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Operands of 87.0% across the ten March 31 semi-annual reports",
-      "evidence_quote": "This is down from the 90.4% (416/460) measured over 45 quarters: nothing in the drift model changed, but archiving the ten March 31 semi-annual reports widened the sample by ten quarters that reconcile at **87.0%** (87/100), which is below the 90.4% the earlier sample averaged.",
+      "evidence_quote": "That is lower than the figure published before the ten March 31 semi-annual reports were archived, and the fall is a broader measurement rather than a regression: nothing in the drift model changed, and the ten added quarters reconcile at **87.0%** (87/100), below what the earlier sample averaged.\n  - Across the historical Form N-30D quarters (1995–2019), accuracy is **85.7%** (300/350).",
       "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "90.4%",
-      "occurrence": 2,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Repeat mention of historical 45-quarter match accuracy"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "35 historical Form quarters ( – )",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Sample size for historical Form N-30D quarters"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -720,7 +630,7 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Average Top 10 match accuracy across 35 historical Form N-30D quarters",
-      "evidence_quote": "Across the **35 historical Form N-30D quarters (1995–2019)**, accuracy is **85.7%** (300/350).",
+      "evidence_quote": "- Across the historical Form N-30D quarters (1995–2019), accuracy is **85.7%** (300/350).",
       "rot_exposed": true
     },
     {
@@ -731,7 +641,7 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Operands of 85.7% across the 35 historical Form N-30D quarters",
-      "evidence_quote": "- Across the **35 historical Form N-30D quarters (1995–2019)**, accuracy is **85.7%** (300/350).",
+      "evidence_quote": "- Across the historical Form N-30D quarters (1995–2019), accuracy is **85.7%** (300/350).",
       "rot_exposed": true
     },
     {
@@ -777,39 +687,12 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.6",
-      "figure": "83.3%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative baseline match accuracy for older fixed-width filings"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "125/150",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Operands of 83.3%, which is itself `remove`; deleting the percentage and leaving the ratio republishes the claim"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "20 modern Form XML quarters ( – )",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Sample size for modern Form NPORT-P XML quarters"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
       "figure": "97.0%",
       "occurrence": 1,
       "verdict": "derivation",
       "guard": null,
       "note": "Headline match accuracy across 20 modern XML quarters including circular Q4s",
-      "evidence_quote": "Across all **20 modern Form NPORT-P XML quarters (2020–2024)**, the headline figure is **97.0%** (194/200).",
+      "evidence_quote": "- Across the modern Form NPORT-P XML quarters (2020–2024), the headline figure is **97.0%** (194/200).\n  - **Out-of-sample: 96.0%** (144/150) across the **15 NPORT-P quarters that are genuine tests**.",
       "rot_exposed": true
     },
     {
@@ -820,7 +703,7 @@
       "verdict": "derivation",
       "guard": null,
       "note": "Operands of 97.0% across the 20 modern NPORT-P quarters",
-      "evidence_quote": "- Across all **20 modern Form NPORT-P XML quarters (2020–2024)**, the headline figure is **97.0%** (194/200).\n  - **Out-of-sample: 96.0%** (144/150) across the **15 NPORT-P quarters that are genuine tests**.",
+      "evidence_quote": "- Across the modern Form NPORT-P XML quarters (2020–2024), the headline figure is **97.0%** (194/200).\n  - **Out-of-sample: 96.0%** (144/150) across the **15 NPORT-P quarters that are genuine tests**.",
       "rot_exposed": true
     },
     {
@@ -892,228 +775,12 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.6",
-      "figure": "14.37%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "13.72%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−0.64pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "13.26%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "12.96%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−0.31pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "13.19%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "12.12%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−1.07pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "13.79%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "13.60%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−0.19pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "12.94%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "12.66%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−0.28pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "13.48%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "12.80%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−0.68pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "0.006-0.056pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream performance consequence of survivorship correction; previously mis-tokenised as `-0.056pp`"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "0.00pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
       "figure": "one of the 17",
       "occurrence": 1,
       "verdict": "decision-evidence",
       "guard": null,
       "note": "No roster after 2004 names a filing-derived constituent; the claim that makes survivorship a 30-year phenomenon",
       "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−32.85% with the full universe against −22.58% without it",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−31.94%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "−25.78%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.6",
-      "figure": "0.64pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of survivorship correction; direction matters, magnitude does not"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -1318,105 +985,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
-      "figure": "26.88%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded 10y Top 3 MarketCap CAGR before 2021-2023 weight re-derivation"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "24.49%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded 10y Top 3 MarketCap CAGR after 2021-2023 weight re-derivation"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "16.39%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded 20y Top 3 MarketCap CAGR before weight re-derivation"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "15.29%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded 20y Top 3 MarketCap CAGR after weight re-derivation"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "15.16%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded 30y Top 3 MarketCap CAGR before weight re-derivation"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "14.43%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded 30y Top 3 MarketCap CAGR after weight re-derivation"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "3.4%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded prior data weight for NVIDIA ranking #3 at year-end 2023"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "3.06%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Filing weight for NVIDIA behind Alphabet at year-end 2023"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "24.49%",
-      "occurrence": 2,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Current measured level after subsequent data improvements; illustrative level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "14.44%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Current measured level after subsequent data improvements; illustrative level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
-      "figure": "13.77%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Current measured level after subsequent data improvements; illustrative level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.7",
       "figure": "7.03%",
       "occurrence": 1,
       "verdict": "decision-evidence",
@@ -1448,7 +1016,7 @@
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.7",
       "figure": "3.06%",
-      "occurrence": 2,
+      "occurrence": 1,
       "verdict": "decision-evidence",
       "guard": null,
       "note": "NVIDIA weight at 2023-12-31 justifying Alphabet consolidation ranking impact",
@@ -1731,24 +1299,6 @@
       "note": "S&P Dow Jones Indices year-end factsheet anchor weight for 2019",
       "evidence_quote": "Year-end factsheet anchors",
       "source_ref": "data/raw/constituents/historical_index_weights.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.8",
-      "figure": "1.65%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative approximation of uncombined Class A weight"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.8",
-      "figure": "3.30%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative approximation of consolidated weight"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -2606,87 +2156,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.14",
-      "figure": "13.79%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "13.60%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "12.94%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "12.66%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "13.48%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "12.80%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "13.60%",
-      "occurrence": 2,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "12.67%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
-      "figure": "12.84%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream strategy CAGR consequence of quarterly constituent coverage; direction matters, magnitude does not"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.14",
       "figure": "512 positions",
       "occurrence": 1,
       "verdict": "derivation",
@@ -2771,15 +2240,6 @@
       "note": "Stated net assets of Vanguard 500 Index Fund on same date",
       "evidence_quote": "But the 500 Index Fund held $103.9bn that day.",
       "source_ref": "0000932471-05-001231"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.15",
-      "figure": "$5",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Illustrative quality threshold of anomalous dividend values in unvalidated first pass"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -3519,15 +2979,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.6.4",
-      "figure": "$38.25",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unsupported legacy parent-price cross-check explicitly removed"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.4",
       "figure": "95.23%",
       "occurrence": 1,
       "verdict": "sourced",
@@ -3990,24 +3441,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.6.4",
-      "figure": "$56.50",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded legacy archive Q3 entry; direction of replacement matters rather than magnitude"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.4",
-      "figure": "$43.50",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Superseded legacy archive Q4 entry; direction of replacement matters rather than magnitude"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.6.4",
       "figure": "$6,792.50",
       "occurrence": 1,
       "verdict": "sourced",
@@ -4305,192 +3738,12 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "4.3.18",
-      "figure": "Twelve of the 72",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream count of scenarios moved by wiring sourced dividends; its own +0.006pp is already `remove`"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "+0.006pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of wiring sourced dividends; unpinned delta"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "+0.056pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream portfolio performance consequence of wiring sourced dividends; unpinned delta"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "13.7665",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream 30y Top 3 annual CAGR after wiring sourced dividends; unpinned level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "(+0.044)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the sourced-dividend impact table; downstream performance consequence"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "13.6016",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream 30y Top 3 quarterly CAGR after wiring sourced dividends; unpinned level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "(+0.006)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the sourced-dividend impact table; downstream performance consequence"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "13.0065",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream 30y Top 5 annual CAGR after wiring sourced dividends; unpinned level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "(+0.050)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the sourced-dividend impact table; downstream performance consequence"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "12.6680",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream 30y Top 5 quarterly CAGR after wiring sourced dividends; unpinned level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "(+0.011)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the sourced-dividend impact table; downstream performance consequence"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "12.1749",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream 30y Top 10 annual CAGR after wiring sourced dividends; unpinned level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "(+0.056)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the sourced-dividend impact table; downstream performance consequence"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "12.8356",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream 30y Top 10 quarterly CAGR after wiring sourced dividends; unpinned level"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "(+0.039)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the sourced-dividend impact table; downstream performance consequence"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "0.0003-0.0006pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Shift in market-cap cells from Lucent and BellSouth corrections; previously mis-tokenised as `-0.0006pp`"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
       "figure": "0.1pp",
       "occurrence": 1,
       "verdict": "decision-evidence",
       "guard": null,
       "note": "Asserted bound in TestDerivedDividendEffect that dividend effect is under 0.1pp",
       "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "−0.68pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream decline previously attributed to survivorship in #63; illustrative comparison"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "0.056pp",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Maximum portion of #63 decline accounted for by missing dividends; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "−0.179",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream momentum selector delta on Top 10 quarterly; unpinned"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.18",
-      "figure": "−0.124",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Downstream momentum selector delta on Top 10 equal-weighted quarterly; unpinned"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -5092,249 +4345,6 @@
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "24.49%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "21.68%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−2.81)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "21.97%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "21.82%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−0.15)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "19.99%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "19.39%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−0.60)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "14.44%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "13.14%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−1.30)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "13.69%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "13.62%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−0.07)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "13.13%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "12.84%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−0.29)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "13.77%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "12.90%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−0.87)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "13.01%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "12.96%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−0.05)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "12.18%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "11.99%",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Unpinned downstream CAGR outcome explicitly noted as not pinned; illustrative"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "4.3.21",
-      "figure": "(−0.19)",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Delta cell in the `What moved` table; downstream performance consequence, explicitly unpinned by its own footnote"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
       "figure": "$5.34",
       "occurrence": 1,
@@ -5358,16 +4368,6 @@
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
-      "figure": "$0.33",
-      "occurrence": 1,
-      "verdict": "wrong",
-      "guard": null,
-      "note": "AAPL 1994 split-adjusted year-end close Controller review (#91): re-measured against data/sp500_prices.json and the published value does not match. Marked `wrong`; per AGENTS.md a stale published figure is removed rather than refreshed, which is PR 2. Evidence: no archived series carries this value; data/raw/tickers/AAPL.json reads $0.3482 at 1994-12",
-      "evidence_quote": "1994 split-adjusted close is \\$0.33."
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "5",
       "figure": "$0.10",
       "occurrence": 1,
       "verdict": "sourced",
@@ -5375,16 +4375,6 @@
       "note": "NVDA 1999 split-adjusted year-end close",
       "evidence_quote": "1999 split-adjusted close is \\$0.10.",
       "source_ref": "data/raw/tickers/NVDA.json"
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "5",
-      "figure": "$496.80",
-      "occurrence": 1,
-      "verdict": "wrong",
-      "guard": null,
-      "note": "Citigroup 2006 split-adjusted year-end close Controller review (#91): re-measured against data/sp500_prices.json and the published value does not match. Marked `wrong`; per AGENTS.md a stale published figure is removed rather than refreshed, which is PR 2. Evidence: no archived series carries this value; data/raw/tickers/C.json reads $557.00 at 2006-12",
-      "evidence_quote": "2006 split-adjusted close is \\$496.80."
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
@@ -5449,35 +4439,14 @@
       "verdict": "sourced",
       "guard": null,
       "note": "Walmart 2023 split-adjusted year-end close",
-      "evidence_quote": "2023 split-adjusted close is \\$52.55; 2024 close is \\$88.93 (+69.23% return).",
+      "evidence_quote": "| **WMT** | 2024-02-26 | 3-for-1 Split | Pre-2024 prices scaled down by 3x; 2023 split-adjusted close is \\$52.55.",
       "source_ref": "data/raw/tickers/WMT.json"
     },
     {
       "document": "docs/DATA_PROVENANCE.md",
       "section": "5",
-      "figure": "$88.93",
-      "occurrence": 1,
-      "verdict": "wrong",
-      "guard": null,
-      "note": "Walmart 2024 year-end close Controller review (#91): re-measured against data/sp500_prices.json and the published value does not match. Marked `wrong`; per AGENTS.md a stale published figure is removed rather than refreshed, which is PR 2. Evidence: no archived series carries this value; data/raw/tickers/WMT.json reads $90.35 at 2024-12",
-      "evidence_quote": "2023 split-adjusted close is \\$52.55; 2024 close is \\$88.93 (+69.23% return)."
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "5",
-      "figure": "+69.23%",
-      "occurrence": 1,
-      "verdict": "derivation",
-      "guard": null,
-      "note": "Walmart 2023-2024 return percentage (($88.93 - $52.55) / $52.55)",
-      "evidence_quote": "2023 split-adjusted close is \\$52.55; 2024 close is \\$88.93 (+69.23% return).",
-      "rot_exposed": true
-    },
-    {
-      "document": "docs/DATA_PROVENANCE.md",
-      "section": "5",
       "figure": "$0.33",
-      "occurrence": 2,
+      "occurrence": 1,
       "verdict": "sourced",
       "guard": null,
       "note": "Ma Bell verified quarterly dividend per share",
@@ -5658,15 +4627,6 @@
       "verdict": "not-a-claim",
       "guard": null,
       "note": "Parameter value in tax rate tier list ($0% tax tier); definition, not a data claim"
-    },
-    {
-      "document": "README.md",
-      "section": "preamble",
-      "figure": "three of the six",
-      "occurrence": 1,
-      "verdict": "remove",
-      "guard": null,
-      "note": "Computed count published in README.md, which AGENTS.md holds to no computed figure at all; the sentence already states the claim qualitatively and points at 4.3.21"
     },
     {
       "document": "README.md",

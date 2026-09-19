@@ -542,6 +542,23 @@ class TestDerivedConstituentSeries(unittest.TestCase):
         ]
         self.assertEqual(derived_in_2004, [(19, "DELL")])
 
+    def test_lucent_peaks_at_rank_7_and_cannot_reach_a_top_3_or_top_5_book(self):
+        """LU's best roster rank is 7, which is why Top 3 and Top 5 cannot see it.
+
+        §4.3.6 argues that the 1999-2002 dot-com damage is a Top 10 phenomenon and that
+        Top 3 and Top 5 are unchanged across that window. That argument is rank
+        arithmetic, not a backtest: a name that never ranks above 7 cannot enter a book
+        of three or five, whatever it then does to its price.
+        """
+        best = min(
+            rank
+            for roster in self.constituents.values()
+            for rank, entry in enumerate(roster, start=1)
+            if entry["ticker"] == "LU"
+        )
+        self.assertEqual(best, 7)
+        self.assertGreater(best, 5)
+
     def test_from_2004_onward_every_derived_constituent_ranks_outside_the_top_10(self):
         """From 2004 onward, every derived constituent in a roster ranks outside the top 10.
 
