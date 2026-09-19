@@ -1,23 +1,25 @@
 {
   "description": "Quarter-end price series for S&P 500 constituents with no vendor price file, derived as market value divided by share count from the March-31 schedules of SEI Index Funds and Prudential (Q1), the Vanguard June-30 semi-annual rosters (Q2), the SPY September-30 annual filings (Q3) and the Vanguard December-31 annual rosters (Q4).",
   "sources": {
-    "Q1": "data/raw/ground_truth/sei_q1_rosters.json (1995-2003, 2005-2006) and data/raw/ground_truth/prudential_q1_rosters.json (1994). 2004 has no Q1 from either filer: SEI's schedule is corrupt as filed -- its Microsoft value reads '0,600' in EDGAR's own bytes, short by exactly the 40,000k the reconciliation misses -- and Prudential's 2004 is the HTML era its extractor refuses. Reconstructing the missing digit from the reconciliation gap would be an inferred figure wearing a filing's provenance, so the year is absent instead.",
+    "Q1": "data/raw/ground_truth/sei_q1_rosters.json (1995-2003, 2005-2006) and data/raw/ground_truth/prudential_q1_rosters.json (1994, 2004). 2004 is the one year SEI cannot supply: its schedule is corrupt as filed -- the Microsoft value reads '0,600' in EDGAR's own bytes, short by exactly the 40,000k the reconciliation misses. Reconstructing the missing digit from the reconciliation gap would be an inferred figure wearing a filing's provenance, so that filing stays refused and Prudential's HTML-era schedule supplies the quarter instead (#83).",
     "Q2": "data/raw/ground_truth/vanguard_semiannual_rosters.json",
     "Q3": "SPY September-30 annual filings in data/raw/ground_truth/sec_filings/",
     "Q4": "data/raw/ground_truth/vanguard_audited_rosters.json"
   },
   "issuer_resolution": "data/raw/constituents/issuer_ticker_map.json",
   "split_records": "data/raw/corporate_actions/splits.json",
-  "grade": "MIXED, recorded per observation in the audited flag. Audited: Q1 from 1995 (SEI's Report of Independent Accountants covers its March-31 statement of net assets and confirms the securities with the custodian), Q3 (September 30 is SPY's fiscal year end from 1997) and Q4 (December 31 is Vanguard's). Unaudited: Q2, Vanguard's semi-annual, and Q1 1994 alone, which comes from Prudential because SEI's series starts in 1995. Do not read these as one grade. Audit status here was read out of each filing; the submissions API's fiscalYearEnd reports 0930 for SEI and is wrong for that trust.",
+  "grade": "MIXED, recorded per observation in the audited flag. Audited: Q1 from 1995 (SEI's Report of Independent Accountants covers its March-31 statement of net assets and confirms the securities with the custodian), Q3 (September 30 is SPY's fiscal year end from 1997) and Q4 (December 31 is Vanguard's). Unaudited: Q2, Vanguard's semi-annual, and the two Q1s that come from Prudential rather than SEI -- 1994, before SEI's series starts, and 2004, where SEI's filing is refused. Do not read these as one grade. Audit status here was read out of each filing; the submissions API's fiscalYearEnd reports 0930 for SEI and is wrong for that trust.",
   "cross_filer_validation": {
     "Q1": {
-      "note": "Ten of Prudential's thirteen filings are refused by its extractor, so the overlap is two years rather than the eleven both filers cover on paper. The refusals are recorded in prudential_q1_rosters.json.",
+      "note": "Most of Prudential's thirteen filings are refused by its extractor, so the overlap is narrower than the eleven years both filers cover on paper. The surviving years are listed in overlapping_periods below and the refusals, with their reasons, in prudential_q1_rosters.json.",
       "overlapping_periods": [
         "1995-Q1",
-        "1996-Q1"
+        "1996-Q1",
+        "2005-Q1",
+        "2006-Q1"
       ],
       "published_source": "SEI Index Funds (audited)",
-      "issuers_compared": 28,
+      "issuers_compared": 48,
       "max_relative_difference": 0.001252,
       "worst_pair": {
         "period": "1995-Q1",
@@ -251,6 +253,166 @@
           "prudential_price_usd": 61.75,
           "difference_usd": -0.0028,
           "relative_difference": 4.5e-05
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "BLS",
+          "sei_price_usd": 26.2896,
+          "prudential_price_usd": 26.29,
+          "difference_usd": -0.0004,
+          "relative_difference": 1.3e-05
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "DD",
+          "sei_price_usd": 51.2415,
+          "prudential_price_usd": 51.24,
+          "difference_usd": 0.0015,
+          "relative_difference": 2.9e-05
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "DELL",
+          "sei_price_usd": 38.4191,
+          "prudential_price_usd": 38.42,
+          "difference_usd": -0.0009,
+          "relative_difference": 2.4e-05
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "EMC",
+          "sei_price_usd": 12.3212,
+          "prudential_price_usd": 12.32,
+          "difference_usd": 0.0012,
+          "relative_difference": 9.4e-05
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "GM",
+          "sei_price_usd": 29.3936,
+          "prudential_price_usd": 29.39,
+          "difference_usd": 0.0036,
+          "relative_difference": 0.000123
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "JNJ",
+          "sei_price_usd": 67.1596,
+          "prudential_price_usd": 67.16,
+          "difference_usd": -0.0004,
+          "relative_difference": 7e-06
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "LU",
+          "sei_price_usd": 2.7495,
+          "prudential_price_usd": 2.75,
+          "difference_usd": -0.0005,
+          "relative_difference": 0.000166
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "MOT",
+          "sei_price_usd": 14.9693,
+          "prudential_price_usd": 14.97,
+          "difference_usd": -0.0007,
+          "relative_difference": 4.8e-05
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "SBC",
+          "sei_price_usd": 23.6909,
+          "prudential_price_usd": 23.69,
+          "difference_usd": 0.0009,
+          "relative_difference": 3.8e-05
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "SUNW",
+          "sei_price_usd": 4.0407,
+          "prudential_price_usd": 4.04,
+          "difference_usd": 0.0007,
+          "relative_difference": 0.000164
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "TYC",
+          "sei_price_usd": 33.7996,
+          "prudential_price_usd": 33.8,
+          "difference_usd": -0.0004,
+          "relative_difference": 1.1e-05
+        },
+        {
+          "period": "2005-Q1",
+          "ticker": "VIA",
+          "sei_price_usd": 34.8288,
+          "prudential_price_usd": 34.83,
+          "difference_usd": -0.0012,
+          "relative_difference": 3.3e-05
+        },
+        {
+          "period": "2006-Q1",
+          "ticker": "BLS",
+          "sei_price_usd": 34.6488,
+          "prudential_price_usd": 34.65,
+          "difference_usd": -0.0012,
+          "relative_difference": 3.5e-05
+        },
+        {
+          "period": "2006-Q1",
+          "ticker": "DD",
+          "sei_price_usd": 42.2126,
+          "prudential_price_usd": 42.21,
+          "difference_usd": 0.0026,
+          "relative_difference": 6.1e-05
+        },
+        {
+          "period": "2006-Q1",
+          "ticker": "EMC",
+          "sei_price_usd": 13.6304,
+          "prudential_price_usd": 13.63,
+          "difference_usd": 0.0004,
+          "relative_difference": 2.8e-05
+        },
+        {
+          "period": "2006-Q1",
+          "ticker": "GM",
+          "sei_price_usd": 21.2717,
+          "prudential_price_usd": 21.27,
+          "difference_usd": 0.0017,
+          "relative_difference": 8e-05
+        },
+        {
+          "period": "2006-Q1",
+          "ticker": "JNJ",
+          "sei_price_usd": 59.2201,
+          "prudential_price_usd": 59.22,
+          "difference_usd": 0.0001,
+          "relative_difference": 2e-06
+        },
+        {
+          "period": "2006-Q1",
+          "ticker": "MOT",
+          "sei_price_usd": 22.9103,
+          "prudential_price_usd": 22.91,
+          "difference_usd": 0.0003,
+          "relative_difference": 1.5e-05
+        },
+        {
+          "period": "2006-Q1",
+          "ticker": "SUNW",
+          "sei_price_usd": 5.1302,
+          "prudential_price_usd": 5.13,
+          "difference_usd": 0.0002,
+          "relative_difference": 3.3e-05
+        },
+        {
+          "period": "2006-Q1",
+          "ticker": "TYC",
+          "sei_price_usd": 26.8791,
+          "prudential_price_usd": 26.88,
+          "difference_usd": -0.0009,
+          "relative_difference": 3.2e-05
         }
       ]
     },
@@ -1874,6 +2036,20 @@
         "split_adjusted_price_usd": 20.2999,
         "split_source_accession": "0000950123-03-003510"
       },
+      "2004-Q1": {
+        "price_usd": 19.57,
+        "matched_name": "AT&T Corp.",
+        "rank": 153,
+        "shares": 180166,
+        "value_usd_thousands": 3525.849,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 19.57,
+        "split_source_accession": "0000950123-03-003510"
+      },
       "2004-Q2": {
         "price_usd": 14.63,
         "matched_name": "AT&amp;T Corp",
@@ -2956,6 +3132,20 @@
         "split_adjusted_price_usd": 53.3999,
         "split_source_accession": "0000950124-07-001502"
       },
+      "2004-Q1": {
+        "price_usd": 47.1,
+        "matched_name": "General Motors Corp.",
+        "rank": 86,
+        "shares": 132078,
+        "value_usd_thousands": 6220.874,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 47.1,
+        "split_source_accession": "0000950124-07-001502"
+      },
       "2004-Q2": {
         "price_usd": 46.59,
         "matched_name": "General Motors Corp",
@@ -3670,6 +3860,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 45.89,
+        "split_source_accession": "0001036050-98-000429"
+      },
+      "2004-Q1": {
+        "price_usd": 42.22,
+        "matched_name": "E.I. du Pont de Nemours & Co.",
+        "rank": 56,
+        "shares": 228244,
+        "value_usd_thousands": 9636.462,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 42.22,
         "split_source_accession": "0001036050-98-000429"
       },
       "2004-Q2": {
@@ -5050,6 +5254,20 @@
         "split_adjusted_price_usd": 28.3,
         "split_source_accession": "0001047469-99-007204"
       },
+      "2004-Q1": {
+        "price_usd": 27.69,
+        "matched_name": "BellSouth Corp.",
+        "rank": 45,
+        "shares": 426856,
+        "value_usd_thousands": 11819.643,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 27.69,
+        "split_source_accession": "0001047469-99-007204"
+      },
       "2004-Q2": {
         "price_usd": 26.22,
         "matched_name": "BellSouth Corp",
@@ -5736,6 +5954,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 14.07,
+        "split_source_accession": "0000950131-00-006101"
+      },
+      "2004-Q1": {
+        "price_usd": 17.6,
+        "matched_name": "Motorola, Inc.",
+        "rank": 59,
+        "shares": 535013,
+        "value_usd_thousands": 9416.229,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 17.6,
         "split_source_accession": "0000950131-00-006101"
       },
       "2004-Q2": {
@@ -7200,6 +7432,20 @@
         "split_adjusted_price_usd": 26.5,
         "split_source_accession": "0000912057-00-054429"
       },
+      "2004-Q1": {
+        "price_usd": 28.65,
+        "matched_name": "Tyco International Ltd.",
+        "rank": 42,
+        "shares": 456580,
+        "value_usd_thousands": 13081.017,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 28.65,
+        "split_source_accession": "0000912057-00-054429"
+      },
       "2004-Q2": {
         "price_usd": 33.14,
         "matched_name": "Tyco International Ltd",
@@ -7916,6 +8162,20 @@
         "split_adjusted_price_usd": 4.49,
         "split_source_accession": "0000912057-01-532905"
       },
+      "2004-Q1": {
+        "price_usd": 4.16,
+        "matched_name": "Sun Microsystems, Inc.(a)",
+        "rank": 177,
+        "shares": 733796,
+        "value_usd_thousands": 3052.591,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 4.16,
+        "split_source_accession": "0000912057-01-532905"
+      },
       "2004-Q2": {
         "price_usd": 4.34,
         "matched_name": "Sun Microsystems, Inc",
@@ -8604,6 +8864,20 @@
         "split_adjusted_price_usd": 26.07,
         "split_source_accession": "0000732717-99-000007"
       },
+      "2004-Q1": {
+        "price_usd": 24.54,
+        "matched_name": "SBC Communications, Inc.",
+        "rank": 24,
+        "shares": 763001,
+        "value_usd_thousands": 18724.044,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 24.54,
+        "split_source_accession": "0000732717-99-000007"
+      },
       "2004-Q2": {
         "price_usd": 24.25,
         "matched_name": "SBC Communications Inc",
@@ -9164,6 +9438,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 44.38,
+        "split_source_accession": "0000950130-00-001551"
+      },
+      "2004-Q1": {
+        "price_usd": 39.21,
+        "matched_name": "Viacom, Inc.",
+        "rank": 31,
+        "shares": 405252,
+        "value_usd_thousands": 15889.931,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 39.21,
         "split_source_accession": "0000950130-00-001551"
       },
       "2004-Q2": {
@@ -9868,6 +10156,20 @@
         "split_adjusted_price_usd": 12.92,
         "split_source_accession": "0000912057-01-007516"
       },
+      "2004-Q1": {
+        "price_usd": 13.61,
+        "matched_name": "EMC Corp.(a)",
+        "rank": 74,
+        "shares": 551804,
+        "value_usd_thousands": 7510.053,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 13.61,
+        "split_source_accession": "0000912057-01-007516"
+      },
       "2004-Q2": {
         "price_usd": 11.4,
         "matched_name": "EMC Corp",
@@ -10500,6 +10802,20 @@
         "split_adjusted_price_usd": 33.96,
         "split_source_accession": "0000950134-99-003281"
       },
+      "2004-Q1": {
+        "price_usd": 33.62,
+        "matched_name": "Dell, Inc.(a)",
+        "rank": 21,
+        "shares": 589140,
+        "value_usd_thousands": 19806.887,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 33.62,
+        "split_source_accession": "0000950134-99-003281"
+      },
       "2004-Q2": {
         "price_usd": 35.82,
         "matched_name": "Dell Inc",
@@ -11102,6 +11418,20 @@
         "audited": true,
         "split_factor": 1.0,
         "split_adjusted_price_usd": 2.84,
+        "split_source_accession": "0000950117-01-501896"
+      },
+      "2004-Q1": {
+        "price_usd": 4.11,
+        "matched_name": "Lucent Technologies, Inc.(a)",
+        "rank": 142,
+        "shares": 944767,
+        "value_usd_thousands": 3882.992,
+        "report_date": "2004-03-31",
+        "accession_number": "0001193125-04-097446",
+        "source_file": "data/raw/ground_truth/sec_filings/PRUDENTIAL_2004_Q1_N-CSRS_0001193125-04-097446.txt",
+        "audited": false,
+        "split_factor": 1.0,
+        "split_adjusted_price_usd": 4.11,
         "split_source_accession": "0000950117-01-501896"
       },
       "2004-Q2": {

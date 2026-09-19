@@ -539,7 +539,7 @@ annual report carries a Report of Independent Accountants; a semi-annual does no
 | Quarter | Source | Years | Grade |
 |---|---|---|---|
 | Q1 (Mar 31) | SEI Index Funds (CIK 766589) | 1995-2003, 2005-2006 | **audited** |
-| Q1 (Mar 31) | Prudential / Dryden (CIK 887991) | 1994 only | unaudited |
+| Q1 (Mar 31) | Prudential / Dryden (CIK 887991) | 1994, 2004 | unaudited |
 | Q2 (Jun 30) | Vanguard 500 Index Fund semi-annual | 1994-2004, 2006 | unaudited |
 | Q3 (Sep 30) | SPDR S&P 500 Trust annual | 1997-2009 | **audited** |
 | Q3 (Sep 30) | SEI Index Funds semi-annual | 1995-1996 | unaudited |
@@ -617,16 +617,21 @@ have been found by looking harder at the names already known.
 ##### Two filers at March 31, and what they agree on
 
 SEI and Prudential both file at March 31, so Q1 is the only quarter that can be checked by
-pricing the same issuer on the same date from two independent filings. Ten of Prudential's
-thirteen filings are refused by its extractor, so the overlap is **1995 and 1996** rather
-than the eleven years both filers cover on paper; the refusal reasons are recorded in
-`prudential_q1_rosters.json` rather than worked around.
+pricing the same issuer on the same date from two independent filings. Most of Prudential's
+thirteen filings are refused by its extractor, so the overlap is narrower than the eleven
+years both filers cover on paper; the refusal reasons are recorded in
+`prudential_q1_rosters.json` rather than worked around, and the surviving periods are listed
+in that file's sibling `derived_quarterly_constituent_series.json` under
+`cross_filer_validation`. Reading Prudential's HTML era (#83) **doubled** the overlap, from
+two periods to four.
 
-Across those two periods the issuer-price pairs agree to well inside a tenth of a percent,
-and the residual is rounding rather than disagreement: SEI reports value in whole thousands
+Across those periods the issuer-price pairs agree to well inside a tenth of a percent, and
+the residual is rounding rather than disagreement: SEI reports value in whole thousands
 against a fund roughly a tenth of Prudential's size, so its implied price is the coarser of
-the two. Prudential's side lands on **clean eighths**, which is the check that a 1994-1996
-schedule has been read correctly. The pair count and the residuals are not published here;
+the two. In the pre-decimalisation years Prudential's side lands on **clean eighths**, which
+is the check that a 1994-1996 schedule has been read correctly; the 2005 and 2006 overlaps
+are decimal and carry no such tell, which is why they lean on the cross-filer agreement
+instead. The pair count and the residuals are not published here;
 `tests/test_raw_constituents.py::TestQ1Rosters::test_the_two_filers_agree_on_the_periods_they_share`
 asserts the agreement, with a tolerance set where that rounding lives.
 
@@ -637,6 +642,46 @@ the same field name the audited rosters use for a figure read off a filing. The 
 survived in `value_usd`, so the fix was a float division rather than a re-parse, but the
 reconciliation guard had passed because it ran on the pre-truncation values. A guard that
 checks a different number from the one published is not checking the published number.
+
+##### Prudential's HTML era, and three things a reconciliation cannot tell you (issue #83)
+
+Prudential's 2004-2006 schedules are HTML tables rather than the fixed-width blocks of
+1994-1996, and its extractor refused all three with `could not locate STOCK INDEX FUND
+schedule header`. That was a **heading-match failure, not a row-parsing failure**: the rows
+were always there, in a regular table, and they reconcile dollar-exact. Both eras now share
+one guard function, so the two readers cannot drift into guarding different things.
+
+Reading them turned up three defects that a passing reconciliation would not have named.
+
+- **The footer anchor changes mid-era.** 2004 prints `Total common stocks`. 2005 and 2006
+  print no such line at all -- their long-term investments section *is* the common stocks
+  section, and `Total long-term investments` is the only total on the page. Anchoring on the
+  first phrase alone refuses the 2005 and 2006 filings; anchoring on the second alone would
+  reconcile a common-stock roster against a total covering whatever else the section held.
+  So the fallback is taken only after checking that common stock is the section's sole
+  asset class, and a filing where it is not is refused. That check is asserted against a
+  doctored filing built for the purpose, because a guard that has never fired is a guard
+  nobody has seen work.
+- **A name filter shortened a read by one row.** Requiring a run of letters in the
+  description column rejects `3M Co.`, which has no three consecutive letters. 2004 then
+  parsed 499 positions falling $14,769,184 short -- exactly 3M's value. The reconciliation
+  caught the shortfall and could say nothing about its cause; the row is now asserted by
+  name, shares and value.
+- **A fair-valued zero is a figure, not an absence.** 2005-Q1 carries Seagate Technology at
+  49,665 shares and a printed value of `0`, footnoted *non-income producing* and *fair
+  valued*. A positive-value filter drops the row **without disturbing the reconciliation**,
+  because the row is worth nothing -- the roster then reports one position fewer than the
+  schedule lists and says so nowhere. It is kept and flagged `no_value_printed`, the same
+  marker SEI's blank-column JWP row carries, which is what stops the derivation dividing by
+  its share count and publishing an implied price of zero as a figure read off a filing.
+
+All three filings are single-fund documents -- the trust "currently consists of one fund,
+which is the Dryden Stock Index Fund" -- so there is no sibling schedule to mistake this one
+for, and the reader checks the running page header names that fund before reading a row.
+Closing the quarter moved no published figure, which was measured and not assumed: `DELL`
+gains 2003-Q4 through 2004-Q3 in the candidate universe at a weight under nine thousandths,
+far below any Top 10 cut, and `run_backtest.py --frequency quarterly` is unchanged in every
+cell.
 
 ##### One filer, two grades: SEI also supplies Q3
 
@@ -697,17 +742,19 @@ correct; they had simply never been reachable from the quarterly path before.
 | Gap | Cause |
 |---|---|
 | **Q3 1994** | SPY's archive begins at `19970930`, and SEI's September series begins in 1995 -- `19940930` carries only an `NSAR-A`, a statistical form and not a shareholder report. No source. |
-| **Q1 2004** | SEI's schedule is corrupt **as filed**: the Microsoft value reads `0,600`, short by exactly the 40,000k the reconciliation misses. EDGAR's own bytes are byte-identical to the archived copy. Prudential's 2004 is the HTML era its extractor refuses. |
 | Q2 2005 | The FY2005 semi-annual is refused for cause (see below). |
 | Anything after 2006 | Only Q3 exists; the other three filers stop. |
 
-The 2004 hole is worth stating plainly because it would be so easy to close wrongly. The
-missing digit can be computed from the reconciliation gap. Doing so would put a figure that
-was *derived from an arithmetic identity* beside figures *read off filings*, under the same
-field name and with the same accession cited. That is the substitution this document exists
-to prevent, so 2004 is absent instead, and the absence propagates: DELL's roster years are
-2003 and 2004, which require 2004-Q1 and 2005-Q2, so DELL never becomes a quarterly
-candidate despite having thirteen years of prices.
+**SEI's 2004 schedule stays refused, and 2004-Q1 is sourced anyway.** The two facts are
+independent, and keeping them apart is the point. SEI's schedule is corrupt *as filed* --
+its Microsoft value reads `0,600`, short by exactly the 40,000k the reconciliation misses,
+and EDGAR's own bytes are byte-identical to the archived copy. The missing digit can be
+computed from the reconciliation gap, and computing it would put a figure *derived from an
+arithmetic identity* beside figures *read off filings*, under the same field name and with
+the same accession cited. That is the substitution this document exists to prevent, so that
+filing remains refused with its reason recorded. What closed the quarter was a second filer
+reporting the same date: Prudential's March-31 2004 schedule, read for the first time
+by #83.
 
 ##### Partial coverage is safe only if eligibility asks the right question
 
@@ -733,18 +780,21 @@ constituent has.
 
 ##### What this bought
 
-`data/raw/ground_truth/derived_quarterly_constituent_series.json` holds **724 observations
-across all 19 constituents** — 175 Q1, 174 Q2, 192 Q3, 183 Q4 — each stamped with an
-`audited` flag per observation rather than per dataset, so a consumer reading one price can
-tell which grade it holds.
+`data/raw/ground_truth/derived_quarterly_constituent_series.json` now holds observations in
+every quarter for all 19 constituents, each stamped with an `audited` flag **per observation
+rather than per dataset**, so a consumer reading one price can tell which grade it holds.
+The counts are not published here, because they move with every filing read and a figure
+nobody re-measures goes stale in place — this one did, and was found two readings behind.
+`python3 scripts/derive_quarterly_constituent_series.py` prints the census.
 
 **Most of the nineteen now appear in the quarterly universe**, spanning 1995-Q4 to
 2003-Q3: `AOL BLS DD EMC GTE LU MCIC MOB NT RD SBC TYC T_CORP`. The other six are eligible by
 price but sit in the candidate roster only for years a source hole blocks: `AN`, `GM` and
-`MOT` appear in no roster year but 1994, which needs the unsourceable 1994-Q3; `DELL`'s
-roster years are 2003 and 2004, which need the corrupt 2004-Q1 and the refused 2005-Q2;
-and `SUNW` and `VIA` reach no candidate roster in any year, so no amount of pricing
-admits them.
+`MOT` appear in no roster year but 1994, which needs the unsourceable 1994-Q3; and `SUNW`
+and `VIA` reach no candidate roster in any year, so no amount of pricing admits them.
+`DELL` has since been admitted in part: its roster years are 2003 and 2004, and closing
+2004-Q1 (#83) admitted the first of them, so it now appears from 2003-Q4 to 2004-Q3. Its
+2004 roster year still needs the refused 2005-Q2 (#96) and remains out.
 
 The measured effect is confined to the 30-year S&P 500 quarterly strategies, which are the
 only ones whose window reaches these years. The magnitudes are not published here -- §4.3.18
