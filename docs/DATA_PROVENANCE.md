@@ -1060,15 +1060,15 @@ In a disciplined Top N strategy, the portfolio cannot hold non-qualifying arbitr
 #### 4.6.3 Raw Corporate Spinoff Catalog (`data/raw/corporate_actions/spinoffs.json`)
 The immutable catalog in `data/raw/corporate_actions/spinoffs.json` (compiled to `data/spinoff_distributions.json`) records the following verified historical corporate spinoffs:
 
-| Ticker | Ex-Date | Spin-Co Ticker | Spin-Co Description | Dist / Share | Basis Retention ($R_{\text{retention}}$) | Statutory Filing |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **T** | 1996-09-30 | `LU` | Lucent Technologies Inc. | \$14.87 | 0.7201 (72.01%) | IRS Form 8937 / Section 355 |
-| **T** | 1996-12-31 | `NCR` | NCR Corporation | \$2.10 | 0.9523 (95.23%) | IRS Form 8937 / Section 355 |
-| **MO** | 2007-03-30 | `KFT` | Kraft Foods Inc. | \$21.90 | 0.6910 (69.10%) | IRS Form 8937 / Section 355 |
-| **MO** | 2008-03-28 | `PM` | Philip Morris International Inc. | \$50.60 | 0.3040 (30.40%) | IRS Form 8937 / Section 355 |
-| **T** | 2022-04-08 | `WBD` | Warner Bros. Discovery Inc. | \$5.81 | 0.7623 (76.23%) | IRS Form 8937 / Section 355 |
-| **GE** | 2023-01-04 | `GEHC` | GE HealthCare Technologies Inc. | \$18.67 | 0.8165 (81.65%) | IRS Form 8937 / Section 355 |
-| **GE** | 2024-04-02 | `GEV` | GE Vernova Inc. | \$35.38 | 0.6686 (66.86%) | IRS Form 8937 / Section 355 |
+| Ticker | Ex-Date | Spin-Co Ticker | Spin-Co Description | Basis Retention ($R_{\text{retention}}$) | Statutory Filing |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **T** | 1996-09-30 | `LU` | Lucent Technologies Inc. | 0.7201 (72.01%) | IRS Form 8937 / Section 355 |
+| **T** | 1996-12-31 | `NCR` | NCR Corporation | 0.9523 (95.23%) | IRS Form 8937 / Section 355 |
+| **MO** | 2007-03-30 | `KFT` | Kraft Foods Inc. | 0.6910 (69.10%) | IRS Form 8937 / Section 355 |
+| **MO** | 2008-03-28 | `PM` | Philip Morris International Inc. | 0.3040 (30.40%) | IRS Form 8937 / Section 355 |
+| **T** | 2022-04-08 | `WBD` | Warner Bros. Discovery Inc. | 0.7623 (76.23%) | IRS Form 8937 / Section 355 |
+| **GE** | 2023-01-04 | `GEHC` | GE HealthCare Technologies Inc. | 0.8165 (81.65%) | IRS Form 8937 / Section 355 |
+| **GE** | 2024-04-02 | `GEV` | GE Vernova Inc. | 0.6686 (66.86%) | IRS Form 8937 / Section 355 |
 
 #### 4.6.4 Valuation Provenance & Child-Share Liquidation Pricing
 Following the engine's immediate-liquidation convention for non-qualifying Spin-Co equity, cash distributions per share represent the product of the **share distribution ratio** and the **child-share market price** on the distribution date:
@@ -1113,20 +1113,24 @@ Following the engine's immediate-liquidation convention for non-qualifying Spin-
 
 #### 1996 endpoint reconciliation (derived valuations)
 
-The legacy archive's Q3 and Q4 entries are superseded by
-`data/raw/corporate_actions/att_1996_endpoint_valuations.json` during dataset compilation.
-Contemporaneous first-person portfolio statements value 130 AT&T shares at
-[$6,792.50 on September 30](https://www.fool.com/archive/foolport/1996/09/30/fool-portfolio-report-monday-september-30-1996.aspx)
-and [$5,638.75 on December 31](https://www.fool.com/archive/foolport/1996/12/31/fool-portfolio-report-tuesday-december-31-1996.aspx),
-implying package quotes of $52.25 and $43.375. The September statement has no separate
+Contemporaneous first-person portfolio statements value 130 AT&T shares on
+[September 30](https://www.fool.com/archive/foolport/1996/09/30/fool-portfolio-report-monday-september-30-1996.aspx)
+and [December 31](https://www.fool.com/archive/foolport/1996/12/31/fool-portfolio-report-tuesday-december-31-1996.aspx),
+implying a package quote at each date. The September statement has no separate
 Lucent position; the [October 1 statement](https://www.fool.com/archive/foolport/1996/10/01/fool-portfolio-report-tuesday-october-1-1996.aspx)
 recognizes it separately. These observations are not post-distribution parent closes.
 
-The engine recognizes each child at the distribution-date endpoint. To conserve
-wealth under this convention, the builder deducts **only that endpoint's** separately
-credited child proceeds from the package quote: Q3 = $52.25 - $14.87 = $37.38;
-Q4 = $43.375 - $2.10, rounded to $41.27. Lucent must not be deducted again in Q4.
-Annual 1996 uses the same Q4 valuation. These are **derived parent-only valuations**,
+The engine recognizes each child at the distribution-date endpoint, and to conserve wealth
+under that convention a parent-only valuation deducts **only that endpoint's** separately
+credited child proceeds from the package quote -- Lucent must not be deducted again in Q4.
+
+> **This passage does not describe what the code does, and the figures it used to print are
+> gone rather than corrected.** `att_1996_endpoint_valuations.json` is read by no code path;
+> only a comment in `scripts/build_datasets_from_raw.py` mentions it. The committed
+> `T_CORP` 1996 series follows §4.5.4's filed \$43.50 rather than the package quote
+> this section derived, and the annual value follows from that. Reconciling the two sections
+> is filed separately; #91 removes the figures because they are unguardable either way, and
+> records the discrepancy rather than papering over it. These are **derived parent-only valuations**,
 not observed exchange execution prices. This is an explicit approximation for
 quarter-end trading immediately after a distribution, not a daily execution model.
 The underlying source archive is preserved, and rebuilds apply the reconciliation once.
