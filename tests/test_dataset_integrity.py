@@ -295,6 +295,8 @@ class TestDerivedConstituentSeries(unittest.TestCase):
             cls.prices = json.load(f)
         with open(ROOT / "data" / "sp500_dividends.json", "r", encoding="utf-8") as f:
             cls.dividends = json.load(f)
+        with open(ROOT / "data" / "sp500_constituents.json", "r", encoding="utf-8") as f:
+            cls.constituents = json.load(f)
 
     def test_each_derived_constituent_reaches_the_built_dataset(self):
         for ticker in self.derived:
@@ -496,6 +498,65 @@ class TestDerivedConstituentSeries(unittest.TestCase):
                     f"{ticker} is a quarterly candidate but has no price where an open "
                     f"position would be valued",
                 )
+
+    def test_exactly_seventeen_derived_constituents_ever_appear_in_a_roster(self):
+        """Exactly 17 of the 19 derived constituents ever appear in an annual roster.
+
+        SUNW and VIA never appear in any roster.
+        """
+        all_roster_tickers = {
+            entry["ticker"] for roster in self.constituents.values() for entry in roster
+        }
+        present = set(self.derived) & all_roster_tickers
+        absent = set(self.derived) - all_roster_tickers
+        expected_absent = {"SUNW", "VIA"}
+        expected_present = {
+            "AN", "AOL", "BLS", "DD", "DELL", "EMC", "GM", "GTE",
+            "LU", "MCIC", "MOB", "MOT", "NT", "RD", "SBC", "T_CORP", "TYC",
+        }
+        self.assertEqual(absent, expected_absent)
+        self.assertEqual(present, expected_present)
+        self.assertEqual(len(present), 17)
+        self.assertEqual(len(absent), 2)
+
+    def test_no_roster_from_2005_onward_names_a_derived_constituent(self):
+        """No roster from 2005 onward names a derived constituent (2005–2024 inclusive)."""
+        derived_set = set(self.derived)
+        for year_int in range(2005, 2025):
+            year = str(year_int)
+            roster_tickers = {entry["ticker"] for entry in self.constituents[year]}
+            overlap = roster_tickers & derived_set
+            self.assertEqual(
+                overlap, set(),
+                f"Year {year} roster contains derived constituents: {overlap}",
+            )
+
+    def test_the_last_derived_constituent_in_any_roster_is_dell_at_rank_19_in_2004(self):
+        """The last derived constituent in any annual roster is DELL in 2004 at rank 19."""
+        derived_set = set(self.derived)
+        roster_2004 = self.constituents["2004"]
+        derived_in_2004 = [
+            (rank, entry["ticker"])
+            for rank, entry in enumerate(roster_2004, start=1)
+            if entry["ticker"] in derived_set
+        ]
+        self.assertEqual(derived_in_2004, [(19, "DELL")])
+
+    def test_from_2004_onward_every_derived_constituent_ranks_outside_the_top_10(self):
+        """From 2004 onward, every derived constituent in a roster ranks outside the top 10.
+
+        This makes the survivorship effect a 30-year phenomenon: a 10-year or 20-year run
+        begins in 2014 or 2004 and cannot select one.
+        """
+        derived_set = set(self.derived)
+        for year_int in range(2004, 2025):
+            year = str(year_int)
+            top10_tickers = [entry["ticker"] for entry in self.constituents[year][:10]]
+            top10_derived = [t for t in top10_tickers if t in derived_set]
+            self.assertEqual(
+                top10_derived, [],
+                f"Year {year} has derived constituents in top 10: {top10_derived}",
+            )
 
 
 if __name__ == "__main__":
